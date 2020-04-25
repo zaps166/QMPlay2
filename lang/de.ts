@@ -427,7 +427,7 @@
     </message>
     <message>
         <source>Vulkan Yadif spatial check</source>
-        <translation type="unfinished"></translation>
+        <translation>Vulkan Yadif räumliche Überprüfung</translation>
     </message>
 </context>
 <context>
@@ -1783,11 +1783,11 @@
     </message>
     <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zero-Copy-Decodierung auf Intel-Hardware (experimentell)</translation>
     </message>
     <message>
         <source>Better performance, but can cause garbage or might not work at all.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bessere Leistung, kann aber Müll verursachen oder funktioniert möglicherweise überhaupt nicht.</translation>
     </message>
 </context>
 <context>
@@ -1887,15 +1887,15 @@
     <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation type="unfinished">Shader Compiler/Link-Fehler</translation>
+        <translation>Shader Compiler/Link-Fehler</translation>
     </message>
     <message>
         <source>Can&apos;t init %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>texture map error</source>
-        <translation type="unfinished">Textur-Map-Fehler</translation>
+        <translation>Textur-Map-Fehler</translation>
     </message>
 </context>
 <context>
@@ -1950,7 +1950,7 @@
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Renderer Einstellungen</translation>
     </message>
 </context>
 <context>
@@ -2275,7 +2275,7 @@
     </message>
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
-        <translation type="unfinished"></translation>
+        <translation>Denken Sie daran, dass Audio/Video/Untertitel aktiviert sind</translation>
     </message>
     <message>
         <source>Partially checked means that there is a delay between click and pausing</source>
@@ -2928,11 +2928,11 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Changing OpenGL mode</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenGL-Modus ändern</translation>
     </message>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
-        <translation type="unfinished"></translation>
+        <translation>Um einen neuen OpenGL-Modus einzurichten, wird das Programm erneut gestartet!</translation>
     </message>
     <message>
         <source>To apply the icons change, the program will start again!</source>
@@ -2940,7 +2940,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Legacy-Videoausgabepriorität</translation>
     </message>
     <message>
         <source>Legacy</source>
@@ -2952,47 +2952,47 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>active</source>
-        <translation type="unfinished"></translation>
+        <translation>aktivieren</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>deaktivieren</translation>
     </message>
     <message>
         <source>Changing renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Renderer ändern</translation>
     </message>
     <message>
         <source>To set up a new renderer, the program will start again!</source>
-        <translation type="unfinished"></translation>
+        <translation>Um einen neuen Renderer einzurichten, wird das Programm erneut gestartet!</translation>
     </message>
     <message>
         <source>Vertical synchronization (V-Sync)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertikale Synchronisation (V-Sync)</translation>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation type="unfinished">Compositor im Vollbildmodus umgehen</translation>
+        <translation>Compositor im Vollbildmodus umgehen</translation>
     </message>
     <message>
         <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwenden Sie QMPlay2-Videoausgangsmodule. Dies wird auch verwendet, wenn andere Renderer nich&apos;t verfügbar sind.</translation>
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwenden Sie OpenGL für das gesamte Fenster</translation>
     </message>
     <message>
         <source>This can improve performance if X11 compositor supports it</source>
-        <translation type="unfinished">Dies kann die Leistung verbessern, wenn X11 Compositor dies unterstützt</translation>
+        <translation>Dies kann die Leistung verbessern, wenn X11 Compositor dies unterstützt</translation>
     </message>
     <message>
         <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dies kann die Leistung verbessern. Einige Grafiktreiber können abstürzen, wenn sie aktiviert sind.</translation>
     </message>
     <message>
         <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwenden Sie QOpenGLWidget (Render-to-Texture) und aktivieren Sie OpenGL für Visualisierungen. Bei vorsichtiger Verwendung kann die Leistung der Videowiedergabe beeinträchtigt werden.</translation>
     </message>
     <message>
         <source>Renderer:</source>
@@ -3000,7 +3000,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Renderer settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Renderer Einstellungen</translation>
     </message>
     <message>
         <source>Vulkan</source>
@@ -3008,45 +3008,47 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwenden Sie GPU-Deinterlacing für CPU-decodierte Videos</translation>
     </message>
     <message>
         <source>High quality image scaling down</source>
-        <translation type="unfinished"></translation>
+        <translation>Hochwertige Bildverkleinerung</translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation type="unfinished"></translation>
+        <translation>Hochwertige Bildskalierung</translation>
     </message>
     <message>
         <source>First available device</source>
-        <translation type="unfinished"></translation>
+        <translation>Erstes verfügbares Gerät</translation>
     </message>
     <message>
         <source>No supported devices found</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine unterstützten Geräte gefunden</translation>
     </message>
     <message>
         <source>Partially checked (default):
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Teilweise geprüft (Standard):
+  - MAILBOX (reißfrei) ist der bevorzugte derzeitige Modus
+  - FIFO (V-Sync) sollte nicht im Fenstermodus verwendet werden</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erlaube exklusiven Vollbild. Dies kann die Leistung verbessern.</translation>
     </message>
     <message>
         <source>Very slow if used with sharpness</source>
-        <translation type="unfinished"></translation>
+        <translation>Sehr langsam, wenn es mit Schärfe verwendet wird</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerät</translation>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
-        <translation type="unfinished"></translation>
+        <translation>Erzwingen Sie das Deinterlacing von Vulkan Yadif für alle Hardware-Decoder</translation>
     </message>
 </context>
 <context>

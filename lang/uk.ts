@@ -3032,8 +3032,8 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
         <translation>Частково вибрано (за замовчуванням):
-  - MAILBOX (tear-free) є найкращим сучасним режимом
-  - FIFO (V-Sync) не слід використовувати у віконному режимі</translation>
+  - MAILBOX (tear-free) є найкращим сучасним режимом
+  - FIFO (V-Sync) не слід використовувати у віконному режимі</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
