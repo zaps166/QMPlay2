@@ -100,31 +100,44 @@ D3D11VAVulkan::D3D11VAVulkan(AVBufferRef *hwDeviceBufferRef, bool zeroCopyAllowe
             m_linearImage = true;
             break;
     }
-    if (m_zeroCopy)
-    {
-        qDebug() << "D3D11VA :: Zero-copy mode";
-        return;
-    }
 
-    if (physicalDevice->checkExtensions({VK_KHR_WIN32_KEYED_MUTEX_EXTENSION_NAME})) try
+    auto isMemoryImportable = [&](vk::ExternalMemoryHandleTypeFlagBits externalMemoryHandleType) {
+        try
+        {
+            const auto externalMemoryFeatures = Image::getExternalMemoryProperties(
+                physicalDevice,
+                externalMemoryHandleType,
+                vk::Format::eR8Unorm,
+                m_linearImage
+            ).externalMemoryFeatures;
+            if (externalMemoryFeatures & vk::ExternalMemoryFeatureFlagBits::eImportable)
+                return true;
+        }
+        catch (const vk::SystemError &e)
+        {}
+        return false;
+    };
+
+    if (!m_zeroCopy && physicalDevice->checkExtensions({VK_KHR_WIN32_KEYED_MUTEX_EXTENSION_NAME}))
     {
-        // Check if Vulkan driver can import KMT handler. E.g. Intel is unable to import it.
-        auto externalMemoryProperties = Image::getExternalMemoryProperties(
-            physicalDevice,
-            vk::ExternalMemoryHandleTypeFlagBits::eD3D11TextureKmt,
-            vk::Format::eR8Unorm,
-            m_linearImage
-        );
-        if (externalMemoryProperties.externalMemoryFeatures & vk::ExternalMemoryFeatureFlagBits::eImportable)
+        if (isMemoryImportable(vk::ExternalMemoryHandleTypeFlagBits::eD3D11TextureKmt))
         {
             m_hasKMT = true;
             m_externalMemoryHandleType = vk::ExternalMemoryHandleTypeFlagBits::eD3D11TextureKmt;
         }
-    } catch (const vk::SystemError &e) {
-        Q_UNUSED(e)
     }
 
-    qDebug() << "D3D11VA ::" << (m_linearImage ? "Linear" : "Tiled") << "mode" << (m_hasKMT ? "KMT" : "");
+    if (!m_hasKMT && !isMemoryImportable(m_externalMemoryHandleType))
+    {
+        QMPlay2Core.logError("D3D11VA :: Can't interoperate with Direct3D");
+        m_error = true;
+        return;
+    }
+
+    if (m_zeroCopy)
+        qDebug() << "D3D11VA :: Zero-copy mode";
+    else
+        qDebug() << "D3D11VA ::" << (m_linearImage ? "Linear" : "Tiled") << "mode" << (m_hasKMT ? "KMT" : "");
 }
 D3D11VAVulkan::~D3D11VAVulkan()
 {
@@ -342,6 +355,9 @@ HWInterop::SyncDataPtr D3D11VAVulkan::sync(
 
 bool D3D11VAVulkan::init()
 {
+    if (m_error)
+        return false;
+
     if (m_zeroCopy)
         return true;
 
@@ -583,7 +599,7 @@ bool D3D11VAVulkan::createImageInterop(const shared_ptr<Device> &device, Frame &
 
     return true;
 } catch (const vk::SystemError &e) {
-    qDebug() << e.what();
+    QMPlay2Core.logError(QString("D3D11VA :: %1").arg(e.what()));
     return false;
 }
 bool D3D11VAVulkan::createImageInteropZeroCopy(const shared_ptr<Device> &device, Frame &frame, shared_ptr<Image> &image)

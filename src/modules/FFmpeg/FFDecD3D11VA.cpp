@@ -208,7 +208,10 @@ bool FFDecD3D11VA::open(StreamInfo &streamInfo)
         // Don't enforce the Direct3D device, because exporting the  shared
         // handle might not work.
         if (!comparePrimaryDevice())
+        {
+            QMPlay2Core.logError("D3D11VA :: Primary device doesn't match");
             return false;
+        }
 
         av_hwdevice_ctx_create(&m_hwDeviceBufferRef, AV_HWDEVICE_TYPE_D3D11VA, nullptr, nullptr, 0);
         if (!m_hwDeviceBufferRef)
