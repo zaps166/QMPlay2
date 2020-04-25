@@ -1,3 +1,20 @@
+Changes in QMPlay2 20.xx.xx:
+    - add Vulkan renderer (default, Linux and Windows only):
+        - bypass compositor option (exclusive fullscreen),
+        - VA-API, CUVID, D3D11VA interoperation,
+        - high quality video scale options,
+        - Yadif deinterlacing on GPU,
+        - faster subtitles rendering,
+        - deep color support,
+        - zero-copy decoding,
+    - remove option to enforce of video copy to host memory for OpenGL renderer,
+    - add renderer settings page: Vulkan (default), OpenGL, Legacy,
+    - add PCH compilation with CMake >= 3.16 (disabled by default),
+    - a lot of code changes (e.g. use more FFmpeg structures),
+    - remove high quality video scaling for OpenGL,
+    - update translation files,
+    - require C++14,
+
 Changes in QMPlay2 19.12.19:
     - fix VA-API low quality deinterlaced image on AMD GPUs (workaround for driver bug),
     - fix VA-API GLX regression,
