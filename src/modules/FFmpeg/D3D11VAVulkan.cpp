@@ -139,7 +139,7 @@ QString D3D11VAVulkan::name() const
 
 void D3D11VAVulkan::map(Frame &frame)
 {
-    if (frame.vulkanImage() || !frame.isHW())
+    if (m_error || frame.vulkanImage() || !frame.isHW())
         return;
 
     m_formatVk = (frame.pixelFormat() == AV_PIX_FMT_P016)

@@ -104,7 +104,7 @@ QString CuvidVulkan::name() const
 
 void CuvidVulkan::map(Frame &frame) try
 {
-    if (frame.vulkanImage())
+    if (m_error || frame.vulkanImage())
         return;
 
     cu::ContextGuard cuCtxGuard(m_cuCtx);

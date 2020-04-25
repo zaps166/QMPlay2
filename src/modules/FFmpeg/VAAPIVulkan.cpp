@@ -30,7 +30,7 @@ QString VAAPIVulkan::name() const
 
 void VAAPIVulkan::map(Frame &frame)
 {
-    if (frame.vulkanImage())
+    if (m_error || frame.vulkanImage())
         return;
 
     lock_guard<mutex> locker(m_mutex);
