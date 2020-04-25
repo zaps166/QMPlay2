@@ -80,8 +80,6 @@ VideoThr::~VideoThr()
     playC.osd = nullptr;
     delete subtitles;
     delete sDec;
-    if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
-        QMPlay2Core.gpuInstance()->clearVideoOutput();
 }
 
 void VideoThr::setDec(Decoder *dec)
@@ -106,6 +104,8 @@ bool VideoThr::videoWriterSet()
 
 void VideoThr::stop(bool terminate)
 {
+    if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
+        QMPlay2Core.gpuInstance()->clearVideoOutput();
     playC.videoSeekPos = -1;
     AVThread::stop(terminate);
 }
