@@ -62,12 +62,8 @@ VideoThr::VideoThr(PlayClass &playC, const QStringList &pluginsName) :
 {
     if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
     {
-        writer = QMPlay2Core.gpuInstance()->getVideoOutput();
-        if (!writer)
-        {
-            writer = QMPlay2Core.gpuInstance()->createOrGetVideoOutput();
-            videoWriter()->open();
-        }
+        writer = QMPlay2Core.gpuInstance()->createOrGetVideoOutput();
+        videoWriter()->open();
     }
     else
     {

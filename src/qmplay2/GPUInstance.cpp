@@ -75,8 +75,8 @@ shared_ptr<GPUInstance> GPUInstance::create()
 
 shared_ptr<HWDecContext> GPUInstance::getHWDecContext() const
 {
-    if (auto videoWriter = getVideoOutput())
-        return videoWriter->hwDecContext();
+    if (m_videoWriter)
+        return m_videoWriter->hwDecContext();
     return nullptr;
 }
 
@@ -85,6 +85,10 @@ bool GPUInstance::setHWDecContextForVideoOutput(const shared_ptr<HWDecContext> &
     return createOrGetVideoOutput()->setHWDecContext(hwDecContext);
 }
 
+void GPUInstance::clearVideoOutput()
+{
+    m_videoWriter = nullptr;
+}
 void GPUInstance::resetVideoOutput()
 {
     delete m_videoWriter;

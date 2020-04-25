@@ -35,10 +35,6 @@ public:
     virtual QMPlay2CoreClass::Renderer renderer() const = 0;
 
     virtual VideoWriter *createOrGetVideoOutput() = 0;
-    inline VideoWriter *getVideoOutput() const
-    {
-        return m_videoWriter;
-    }
 
     std::shared_ptr<HWDecContext> getHWDecContext() const;
 
@@ -50,10 +46,7 @@ public:
 
     bool setHWDecContextForVideoOutput(const std::shared_ptr<HWDecContext> &hwDecContext);
 
-    inline void clearVideoOutput()
-    {
-        m_videoWriter = nullptr;
-    }
+    void clearVideoOutput();
     void resetVideoOutput();
 
 protected:
