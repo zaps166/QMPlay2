@@ -91,6 +91,9 @@ extern cuExternalMemoryGetMappedBuffer externalMemoryGetMappedBuffer;
 using cuDestroyExternalMemory = CUresult CUDAAPI (*)(CUexternalMemory extMem);
 extern cuDestroyExternalMemory destroyExternalMemory;
 
+using cuDeviceGetPCIBusId = CUresult CUDAAPI (*)(char *pciBusId, int len, int device);
+extern cuDeviceGetPCIBusId deviceGetPCIBusId;
+
 using cuMemFree = CUresult CUDAAPI (*)(CUdeviceptr dptr);
 extern cuMemFree memFree;
 

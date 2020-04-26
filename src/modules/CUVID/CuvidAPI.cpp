@@ -47,6 +47,7 @@ cuStreamDestroyType streamDestroy = nullptr;
 cuImportExternalMemory importExternalMemory = nullptr;
 cuExternalMemoryGetMappedBuffer externalMemoryGetMappedBuffer = nullptr;
 cuDestroyExternalMemory destroyExternalMemory = nullptr;
+cuDeviceGetPCIBusId deviceGetPCIBusId = nullptr;
 cuMemFree memFree = nullptr;
 cuCtxDestroyType ctxDestroy = nullptr;
 
@@ -108,6 +109,7 @@ bool load(bool doInit, bool gl, bool vk)
             importExternalMemory = (cuImportExternalMemory)lib.resolve("cuImportExternalMemory");
             externalMemoryGetMappedBuffer = (cuExternalMemoryGetMappedBuffer)lib.resolve("cuExternalMemoryGetMappedBuffer");
             destroyExternalMemory = (cuDestroyExternalMemory)lib.resolve("cuDestroyExternalMemory");
+            deviceGetPCIBusId = (cuDeviceGetPCIBusId)lib.resolve("cuDeviceGetPCIBusId");
             memFree = (cuMemFree)lib.resolve("cuMemFree_v2");
 
             hasPointers &=

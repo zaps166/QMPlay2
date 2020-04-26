@@ -78,7 +78,32 @@ CuvidVulkan::CuvidVulkan(const shared_ptr<CUcontext> &cuCtx)
     : CuvidHWInterop(cuCtx)
     , m_vkImagePool(static_pointer_cast<Instance>(QMPlay2Core.gpuInstance())->createImagePool())
 {
-    m_error = !m_vkImagePool->instance()->physicalDevice()->checkExtensions({
+    auto physicalDevice = m_vkImagePool->instance()->physicalDevice();
+
+    if (!physicalDevice->hasPciBusInfo() || !cu::deviceGetPCIBusId)
+    {
+        if (physicalDevice->properties().vendorID != 0x10de /* NVIDIA */)
+        {
+            QMPlay2Core.logError("CUVID :: Not an NVIDIA device");
+            m_error = true;
+            return;
+        }
+    }
+    else
+    {
+        char cuPCIBusId[13] = {};
+        if (cu::deviceGetPCIBusId(cuPCIBusId, sizeof(cuPCIBusId), 0) == CUDA_SUCCESS)
+        {
+            if (physicalDevice->linuxPCIPath() != cuPCIBusId)
+            {
+                QMPlay2Core.logError("CUVID :: Primary CUDA device doesn't match");
+                m_error = true;
+                return;
+            }
+        }
+    }
+
+    m_error = !physicalDevice->checkExtensions({
         VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME,
 #ifdef VK_USE_PLATFORM_WIN32_KHR
         VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME,
@@ -88,6 +113,7 @@ CuvidVulkan::CuvidVulkan(const shared_ptr<CUcontext> &cuCtx)
         VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME,
 #endif
     });
+
     if (!m_error && cu::streamCreate(&m_cuStream, CU_STREAM_DEFAULT) != CUDA_SUCCESS)
         m_error = true;
 }
