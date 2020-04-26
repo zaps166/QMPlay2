@@ -446,26 +446,29 @@ void Window::render()
             m.clearedImages.clear();
 
         const uint32_t imageIdx = m.swapChain->acquireNextImage(&suboptimal);
-        beginRenderPass(imageIdx);
+        if (!suboptimal || m.swapChain->maybeSuboptimal())
+        {
+            beginRenderPass(imageIdx);
 
-        maybeClear(imageIdx);
-        renderVideo();
-        if (!osdLockers.empty())
-            renderOSD();
+            maybeClear(imageIdx);
+            renderVideo();
+            if (!osdLockers.empty())
+                renderOSD();
 
-        m.commandBuffer->endRenderPass();
+            m.commandBuffer->endRenderPass();
 
-        auto submitInfo = m.swapChain->getSubmitInfo();
-        HWInterop::SyncDataPtr syncData;
-        if (m_vkHwInterop)
-            syncData = m_vkHwInterop->sync({m_frame}, &submitInfo);
+            auto submitInfo = m.swapChain->getSubmitInfo();
+            HWInterop::SyncDataPtr syncData;
+            if (m_vkHwInterop)
+                syncData = m_vkHwInterop->sync({m_frame}, &submitInfo);
 
-        m.queueLocker = m.queue->lock();
-        m.commandBuffer->endSubmitAndWait(false, [&] {
-            m.swapChain->present(imageIdx, &suboptimal);
-            vulkanInstance()->presentQueued(this);
-        }, move(submitInfo));
-        m.queueLocker.unlock(); // It is not unlocked in case of exception
+            m.queueLocker = m.queue->lock();
+            m.commandBuffer->endSubmitAndWait(false, [&] {
+                m.swapChain->present(imageIdx, &suboptimal);
+                vulkanInstance()->presentQueued(this);
+            }, move(submitInfo));
+            m.queueLocker.unlock(); // It is not unlocked in case of exception
+        }
     }
     catch (const vk::OutOfDateKHRError &e)
     {
