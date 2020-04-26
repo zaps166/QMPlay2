@@ -67,7 +67,8 @@ private:
     QCommonStyle commonStyle;
     int pixels;
     Qt::KeyboardModifiers m_pressedKeyModifiers = Qt::NoModifier;
-    bool canPopup, is_floating, isBreeze, canHideIDWCursor, doubleClicked;
+    bool canPopup, is_floating, canHideIDWCursor, doubleClicked;
+    QMargins m_contentMarginsBackup;
     double touchZoom;
     bool m_workaround = false;
 private slots:

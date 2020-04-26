@@ -94,9 +94,6 @@ VideoDock::VideoDock() :
         mouseMoveEvent(nullptr);
     });
 
-    if ((isBreeze = QApplication::style()->objectName() == "breeze"))
-        setStyle(&commonStyle);
-
     canHideIDWCursor = false;
     doubleClicked = false;
 }
@@ -105,14 +102,18 @@ void VideoDock::fullScreen(bool b)
 {
     if (b)
     {
+
         is_floating = isFloating();
 
         setTitleBarVisible(false);
         setFeatures(DockWidget::NoDockWidgetFeatures);
         setFloating(false);
 
-        if (!isBreeze)
-            setStyle(&commonStyle);
+        m_contentMarginsBackup = contentsMargins();
+        setContentsMargins(0, 0, 0, 0);
+
+        // FIXME: Is it still needed for something?
+        setStyle(&commonStyle);
 
         m_workaround = true;
     }
@@ -134,8 +135,9 @@ void VideoDock::fullScreen(bool b)
         setFeatures(DockWidget::AllDockWidgetFeatures);
         setFloating(is_floating);
 
-        if (!isBreeze)
-            setStyle(nullptr);
+        setContentsMargins(m_contentMarginsBackup);
+
+        setStyle(nullptr);
 
         m_workaround = false;
     }
