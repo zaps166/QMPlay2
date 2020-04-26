@@ -39,7 +39,7 @@ class DXVA2OpenGL : public OpenGLHWInterop
 {
 public:
     DXVA2OpenGL(AVBufferRef *hwDeviceBufferRef);
-    ~DXVA2OpenGL() final;
+    ~DXVA2OpenGL();
 
     QString name() const override;
 

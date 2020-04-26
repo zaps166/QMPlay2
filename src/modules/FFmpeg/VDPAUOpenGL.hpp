@@ -27,7 +27,7 @@ class VDPAUOpenGL : public OpenGLHWInterop
 {
 public:
     VDPAUOpenGL(const std::shared_ptr<VDPAU> &vdpau);
-    ~VDPAUOpenGL() final;
+    ~VDPAUOpenGL();
 
     QString name() const override;
 

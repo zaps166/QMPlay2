@@ -29,7 +29,7 @@ class VAAPIOpenGL : public OpenGLHWInterop
 
 public:
     VAAPIOpenGL(const std::shared_ptr<VAAPI> &vaapi);
-    ~VAAPIOpenGL() final;
+    ~VAAPIOpenGL();
 
     QString name() const override;
 
