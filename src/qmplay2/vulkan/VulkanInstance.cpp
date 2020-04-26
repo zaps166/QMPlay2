@@ -28,6 +28,10 @@
 #include <QVulkanInstance>
 #include <QResource>
 
+#ifdef Q_OS_WIN
+#   include <QRegularExpression>
+#endif
+
 namespace QmVk {
 
 constexpr auto s_queueFlags = vk::QueueFlagBits::eGraphics | vk::QueueFlagBits::eCompute;
@@ -371,6 +375,43 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
 } catch (const vk::SystemError &e) {
     Q_UNUSED(e)
     return false;
+}
+void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalDevices) const
+{
+#ifdef Q_OS_WIN
+    for (;;)
+    {
+        DISPLAY_DEVICE displayDevice = {};
+        displayDevice.cb = sizeof(displayDevice);
+        if (!EnumDisplayDevicesA(nullptr, 0, &displayDevice, 0))
+            break;
+
+        if (!(displayDevice.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE))
+            continue;
+
+        const QRegularExpression rx(R"(VEN_([0-9a-f]+)&DEV_([0-9a-f]+))", QRegularExpression::CaseInsensitiveOption);
+        const auto match = rx.match(displayDevice.DeviceID);
+
+        bool okVen = false, okDev = false;
+        const uint32_t ven = match.captured(1).toUInt(&okVen, 16);
+        const uint32_t dev = match.captured(2).toUInt(&okDev, 16);
+        if (okVen && okDev)
+        {
+            auto it = find_if(physicalDevices.begin(), physicalDevices.end(), [&](const shared_ptr<PhysicalDevice> &physicalDevice) {
+                const auto &properties = physicalDevice->properties();
+                return (properties.vendorID == ven && properties.deviceID == dev);
+            });
+            if (it != physicalDevices.begin() && it != physicalDevices.end())
+            {
+                auto primaryPhysicalDevice = move(*it);
+                physicalDevices.erase(it);
+                physicalDevices.insert(physicalDevices.begin(), move(primaryPhysicalDevice));
+            }
+        }
+
+        break;
+    }
+#endif
 }
 
 vk::PhysicalDeviceFeatures Instance::requiredPhysicalDeviceFeatures()

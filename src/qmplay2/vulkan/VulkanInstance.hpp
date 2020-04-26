@@ -80,6 +80,7 @@ public:
 
 private:
     bool isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevice) const override final;
+    void sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalDevices) const override final;
 
 private:
     static vk::PhysicalDeviceFeatures requiredPhysicalDeviceFeatures();
