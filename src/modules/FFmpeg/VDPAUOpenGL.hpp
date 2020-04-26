@@ -59,7 +59,7 @@ private:
     void deleteGlSurface(VDPAUOutputSurface &surface);
 
 private:
-    using GLvdpauSurfaceNV = GLintptr;
+    using GLvdpauSurfaceNV = intptr_t;
 
     std::shared_ptr<VDPAU> m_vdpau;
 
