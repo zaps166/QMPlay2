@@ -448,6 +448,11 @@ void Window::render()
         const uint32_t imageIdx = m.swapChain->acquireNextImage(&suboptimal);
         if (!suboptimal || m.swapChain->maybeSuboptimal())
         {
+            auto submitInfo = m.swapChain->getSubmitInfo();
+            HWInterop::SyncDataPtr syncData;
+            if (m_vkHwInterop)
+                syncData = m_vkHwInterop->sync({m_frame}, &submitInfo);
+
             beginRenderPass(imageIdx);
 
             maybeClear(imageIdx);
@@ -456,11 +461,6 @@ void Window::render()
                 renderOSD();
 
             m.commandBuffer->endRenderPass();
-
-            auto submitInfo = m.swapChain->getSubmitInfo();
-            HWInterop::SyncDataPtr syncData;
-            if (m_vkHwInterop)
-                syncData = m_vkHwInterop->sync({m_frame}, &submitInfo);
 
             m.queueLocker = m.queue->lock();
             m.commandBuffer->endSubmitAndWait(false, [&] {
