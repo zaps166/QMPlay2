@@ -102,7 +102,6 @@ void VideoDock::fullScreen(bool b)
 {
     if (b)
     {
-
         is_floating = isFloating();
 
         setTitleBarVisible(false);
