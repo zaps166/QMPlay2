@@ -107,10 +107,20 @@ QString Functions::Url(QString url, const QString &pth)
         return url;
     }
 
+    const auto oldErrorMode = ::SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
+    auto driveBits = GetLogicalDrives() & 0x3ffffff;
+    ::SetErrorMode(oldErrorMode);
+
     QStringList drives;
-    QFileInfoList fIL = QDir::drives();
-    for (const QFileInfo &fI : asConst(fIL))
-        drives += getUrlScheme(fI.path());
+    char driveLetter[] = "A";
+    while (driveBits)
+    {
+        if (driveBits & 1)
+            drives.append(driveLetter);
+        ++driveLetter[0];
+        driveBits >>= 1;
+    }
+
     if (drives.contains(scheme))
     {
         url = "file://" + url;
