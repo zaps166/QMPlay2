@@ -30,10 +30,10 @@
 #include <QFileDialog>
 #include <QTreeWidget>
 #include <QListWidget>
+#include <QWindow>
+#include <QScreen>
 #ifdef Q_OS_MACOS
     #include <QProcess>
-    #include <QScreen>
-    #include <QWindow>
 #endif
 #ifdef Q_OS_WIN
     #include <QWinThumbnailToolButton>
@@ -1636,7 +1636,37 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 {
     if ((fullScreen || isCompactView) && (e->buttons() == Qt::NoButton || videoDock->isTouch))
     {
-        const int trigger1 = qMax<int>( 5, ceil(0.003 * (videoDock->isTouch ? 8 : 1) * width()));
+        bool canDisplayLeftPanel = fullScreen;
+        if (canDisplayLeftPanel)
+        {
+            const auto winScreen = windowHandle()->screen();
+            const auto winScreenGeo = winScreen->geometry();
+            if (winScreenGeo.x() != 0)
+            {
+                const auto screens = QGuiApplication::screens();
+                for (auto &&screen : screens)
+                {
+                    if (screen == winScreen)
+                        continue;
+
+                    auto geo = screen->geometry();
+                    if (geo.x() >= winScreenGeo.x())
+                        continue;
+
+                    geo.moveLeft(winScreenGeo.x());
+                    if (winScreenGeo.intersects(geo))
+                    {
+                        canDisplayLeftPanel = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        const int trigger1 = canDisplayLeftPanel
+            ? qMax<int>( 5, ceil(0.003 * (videoDock->isTouch ? 8 : 1) * width()))
+            : 0
+        ;
         const int trigger2 = qMax<int>(15, ceil(0.025 * (videoDock->isTouch ? 4 : 1) * width()));
         if (videoDock->touchEnded)
             videoDock->isTouch = videoDock->touchEnded = false;
@@ -1646,11 +1676,11 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
             mPosX = videoDock->mapFromGlobal(e->globalPos()).x();
 
         /* ToolBar */
-        if (!playlistDock->isVisible() && mPosX > trigger1)
+        if (!playlistDock->isVisible() && mPosX >= trigger1)
             showToolBar(e->pos().y() >= height() - mainTB->height() - statusBar->height() + 10);
 
         /* DockWidgets */
-        if (fullScreen && !playlistDock->isVisible() && mPosX <= trigger1)
+        if (canDisplayLeftPanel && !playlistDock->isVisible() && mPosX <= trigger1)
         {
             showToolBar(true); //Before restoring dock widgets - show toolbar and status bar
             restoreState(fullScreenDockWidgetState);
