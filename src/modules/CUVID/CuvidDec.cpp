@@ -707,6 +707,8 @@ bool CuvidDec::loadLibrariesAndInit()
         }
 #endif
         g_loadState = (cuvid::load() && cu::load(doInit, initGL, initVK));
+        if (g_loadState == 0)
+            QMPlay2Core.logError("CUVID :: Unable to get function pointers");
     }
 
     return (g_loadState == 1);
