@@ -129,7 +129,7 @@ D3D11VAVulkan::D3D11VAVulkan(AVBufferRef *hwDeviceBufferRef, bool zeroCopyAllowe
 
     if (!m_hasKMT && !isMemoryImportable(m_externalMemoryHandleType))
     {
-        QMPlay2Core.logError("D3D11VA :: Can't interoperate with Direct3D");
+        QMPlay2Core.logError("D3D11VA :: Can't interoperate with Vulkan");
         m_error = true;
         return;
     }
