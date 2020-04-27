@@ -99,7 +99,6 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_D3D11V
             list(APPEND FFmpeg_HDR DXVA2OpenGL.hpp)
             list(APPEND FFmpeg_SRC DXVA2OpenGL.cpp)
         endif()
-        set(DXVA2 dxva2)
     endif()
 
     if(USE_FFMPEG_D3D11VA) #D3D11VA
@@ -139,7 +138,6 @@ endif()
 
 target_link_libraries(${PROJECT_NAME}
     ${FFmpeg_LIBS}
-    ${DXVA2}
     libqmplay2
 )
 

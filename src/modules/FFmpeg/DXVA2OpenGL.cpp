@@ -23,6 +23,8 @@
 #include <CppUtils.hpp>
 #include <Frame.hpp>
 
+#include <QLibrary>
+
 extern "C"
 {
     #include <libavutil/hwcontext.h>
@@ -383,6 +385,12 @@ bool DXVA2OpenGL::checkCodec(const QByteArray &codecName, bool b10)
 
 bool DXVA2OpenGL::initVideoProcessor()
 {
+    QLibrary dxva2("dxva2.dll");
+    if (dxva2.load())
+        DXVA2CreateVideoService = reinterpret_cast<DXVA2CreateVideoServiceFn>(dxva2.resolve("DXVA2CreateVideoService"));
+    if (!DXVA2CreateVideoService)
+        return false;
+
     auto d3dDev9 = getD3dDevice9();
     if (!d3dDev9)
         return false;

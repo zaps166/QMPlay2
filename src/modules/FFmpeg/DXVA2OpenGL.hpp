@@ -74,6 +74,9 @@ public:
     AVBufferRef *m_hwDeviceBufferRef = nullptr;
 
 private:
+    using DXVA2CreateVideoServiceFn = HRESULT(WINAPI *)(IDirect3DDevice9 *, REFIID, void **);
+    DXVA2CreateVideoServiceFn DXVA2CreateVideoService = nullptr;
+
     PFNWGLDXOPENDEVICENVPROC wglDXOpenDeviceNV = nullptr;
     PFNWGLDXSETRESOURCESHAREHANDLENVPROC wglDXSetResourceShareHandleNV = nullptr;
     PFNWGLDXREGISTEROBJECTNVPROC wglDXRegisterObjectNV = nullptr;
