@@ -276,7 +276,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 #endif
     avformat_network_init();
 
-#if defined(USE_VULKAN)
+#if defined(USE_VULKAN) && !defined(Q_OS_ANDROID)
     settings->init("Renderer", "vulkan");
 #elif defined(USE_OPENGL)
     settings->init("Renderer", "opengl");
