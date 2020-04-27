@@ -36,14 +36,6 @@
 
 using namespace QmVk;
 
-#ifdef VK_USE_PLATFORM_WIN32_KHR
-    constexpr auto g_vkMemType = vk::ExternalMemoryHandleTypeFlagBits::eOpaqueWin32;
-    constexpr auto g_cuMemType = CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32;
-#else
-    constexpr auto g_vkMemType = vk::ExternalMemoryHandleTypeFlagBits::eOpaqueFd;
-    constexpr auto g_cuMemType = CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD;
-#endif
-
 class CudaCustomData : public MemoryObjectBase::CustomData
 {
 public:
@@ -111,7 +103,12 @@ CuvidVulkan::CuvidVulkan(const shared_ptr<CUcontext> &cuCtx)
         }
     }
 
-    m_error = !physicalDevice->checkExtensions({
+    auto cantInteroperateError = [this] {
+        QMPlay2Core.logError("CUVID :: Can't interoperate with Vulkan");
+        m_error = true;
+    };
+
+    if (!physicalDevice->checkExtensions({
         VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME,
 #ifdef VK_USE_PLATFORM_WIN32_KHR
         VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME,
@@ -120,30 +117,64 @@ CuvidVulkan::CuvidVulkan(const shared_ptr<CUcontext> &cuCtx)
         VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
         VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME,
 #endif
-    });
-
-    bool isMemoryExportable = false;
-    try
-    {
-        const auto externalMemoryFeatures = Image::getExternalMemoryProperties(
-            physicalDevice,
-            g_vkMemType,
-            vk::Format::eR8Unorm,
-            true
-        ).externalMemoryFeatures;
-        if (externalMemoryFeatures & vk::ExternalMemoryFeatureFlagBits::eExportable)
-            isMemoryExportable = true;
-    }
-    catch (const vk::SystemError &e)
-    {}
-    if (!isMemoryExportable)
-    {
-        QMPlay2Core.logError("CUVID :: Can't interoperate with Vulkan");
-        m_error = true;
+    })) {
+        cantInteroperateError();
         return;
     }
 
-    if (!m_error && cu::streamCreate(&m_cuStream, CU_STREAM_DEFAULT) != CUDA_SUCCESS)
+    auto isMemoryExportable = [&] {
+        try
+        {
+            const auto externalMemoryFeatures = Image::getExternalMemoryProperties(
+                physicalDevice,
+                m_vkMemType,
+                vk::Format::eR8Unorm,
+                true
+            ).externalMemoryFeatures;
+            if (externalMemoryFeatures & vk::ExternalMemoryFeatureFlagBits::eExportable)
+                return true;
+        }
+        catch (const vk::SystemError &e)
+        {}
+        return false;
+    };
+
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    m_vkMemType = vk::ExternalMemoryHandleTypeFlagBits::eOpaqueWin32;
+    m_cuMemType = CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32;
+
+    m_vkSemHandleType = vk::ExternalSemaphoreHandleTypeFlagBits::eOpaqueWin32;
+    m_cuSemHandleType = CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32;
+
+    if (!isMemoryExportable())
+    {
+        m_vkMemType = vk::ExternalMemoryHandleTypeFlagBits::eOpaqueWin32Kmt;
+        m_cuMemType = CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_KMT;
+
+        m_vkSemHandleType = vk::ExternalSemaphoreHandleTypeFlagBits::eOpaqueWin32Kmt;
+        m_cuSemHandleType = CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_KMT;
+
+        if (!physicalDevice->checkExtension(VK_KHR_WIN32_KEYED_MUTEX_EXTENSION_NAME) || !isMemoryExportable())
+        {
+            cantInteroperateError();
+            return;
+        }
+    }
+#else
+    m_vkMemType = vk::ExternalMemoryHandleTypeFlagBits::eOpaqueFd;
+    m_cuMemType = CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD;
+
+    m_vkSemHandleType = vk::ExternalSemaphoreHandleTypeFlagBits::eOpaqueFd;
+    m_cuSemHandleType = CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD;
+
+    if (!isMemoryExportable())
+    {
+        cantInteroperateError();
+        return;
+    }
+#endif
+
+    if (cu::streamCreate(&m_cuStream, CU_STREAM_DEFAULT) != CUDA_SUCCESS)
         m_error = true;
 }
 CuvidVulkan::~CuvidVulkan()
@@ -171,7 +202,7 @@ void CuvidVulkan::map(Frame &frame) try
 
     auto img = m_vkImagePool->assignLinearDeviceLocalExport(
         frame,
-        g_vkMemType
+        m_vkMemType
     );
     if (!img)
     {
@@ -187,15 +218,15 @@ void CuvidVulkan::map(Frame &frame) try
         auto cudaCustomDataUnique = make_unique<CudaCustomData>(m_cuCtx);
 
         CUDA_EXTERNAL_MEMORY_HANDLE_DESC externalMemHandleDesc = {};
-        externalMemHandleDesc.type = g_cuMemType;
+        externalMemHandleDesc.type = m_cuMemType;
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
         // Ownership is not transferred to the CUDA driver
-        cudaCustomDataUnique->handle = img->exportMemoryWin32(g_vkMemType);
+        cudaCustomDataUnique->handle = img->exportMemoryWin32(m_vkMemType);
         externalMemHandleDesc.handle.win32.handle = cudaCustomDataUnique->handle;
 #else
         // Ownership is transferred to the CUDA driver
-        externalMemHandleDesc.handle.fd = img->exportMemoryFd(g_vkMemType);
+        externalMemHandleDesc.handle.fd = img->exportMemoryFd(m_vkMemType);
 #endif
 
         externalMemHandleDesc.size = img->memorySize();
@@ -344,15 +375,7 @@ void CuvidVulkan::ensureSemaphore()
 
     destroySemaphore();
 
-#ifdef VK_USE_PLATFORM_WIN32_KHR
-    constexpr auto vkSemHandleType = vk::ExternalSemaphoreHandleTypeFlagBits::eOpaqueWin32;
-    constexpr auto cuSemHandleType = CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32;
-#else
-    constexpr auto vkSemHandleType = vk::ExternalSemaphoreHandleTypeFlagBits::eOpaqueFd;
-    constexpr auto cuSemHandleType = CU_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD;
-#endif
-
-    m_semaphore = Semaphore::createExport(device, vkSemHandleType);
+    m_semaphore = Semaphore::createExport(device, m_vkSemHandleType);
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     m_semaphoreHandle = m_semaphore->exportWin32Handle();
 #else
@@ -360,7 +383,7 @@ void CuvidVulkan::ensureSemaphore()
 #endif
 
     CUDA_EXTERNAL_SEMAPHORE_HANDLE_DESC cuExternalSemaphoreHandleDesc = {};
-    cuExternalSemaphoreHandleDesc.type = cuSemHandleType;
+    cuExternalSemaphoreHandleDesc.type = m_cuSemHandleType;
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     // Ownership is not transferred to the CUDA driver
     cuExternalSemaphoreHandleDesc.handle.win32.handle = m_semaphoreHandle;

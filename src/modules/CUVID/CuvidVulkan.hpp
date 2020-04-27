@@ -49,6 +49,12 @@ private:
     const std::shared_ptr<QmVk::ImagePool> m_vkImagePool;
     CUstream m_cuStream = nullptr;
 
+    vk::ExternalMemoryHandleTypeFlagBits m_vkMemType;
+    CUexternalMemoryHandleType m_cuMemType;
+
+    vk::ExternalSemaphoreHandleTypeFlagBits m_vkSemHandleType;
+    CUexternalSemaphoreHandleType m_cuSemHandleType;
+
     std::shared_ptr<QmVk::Semaphore> m_semaphore;
     CUexternalSemaphore m_cuSemaphore = nullptr;
 #ifdef VK_USE_PLATFORM_WIN32_KHR
