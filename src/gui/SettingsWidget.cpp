@@ -889,6 +889,19 @@ void SettingsWidget::createRendererSettings()
         auto hqUpscale = new QCheckBox(tr("High quality image scaling up"));
         auto bypassCompositor = createBypassCompositor();
 
+#ifdef Q_OS_WIN
+        auto noExclusiveFullScreenDevIDs = std::make_shared<QSet<QByteArray>>();
+
+        connect(devices, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+                this, [=](int idx) {
+            if (devices->count() <= 1)
+                return;
+            if (idx == 0)
+                idx = 1;
+            bypassCompositor->setEnabled(!noExclusiveFullScreenDevIDs->contains(devices->itemData(idx).toByteArray()));
+        });
+#endif
+
         connect(rendererStacked, &QStackedWidget::currentChanged,
                 this, [=](int idx) {
             if (devices->count() > 0 || idx != renderers->findData("vulkan"))
@@ -897,14 +910,24 @@ void SettingsWidget::createRendererSettings()
             const auto storedID = settings->getByteArray("Vulkan/Device");
             int idIdx = 0;
 
+            devices->blockSignals(true);
             for (auto &&physicalDevice : QmVk::Instance::enumerateSupportedPhysicalDevices())
             {
                 const auto &properties = physicalDevice->properties();
                 const auto id = QmVk::Instance::getPhysicalDeviceID(properties);
+#ifdef Q_OS_WIN
+                if (bypassCompositor->isEnabled())
+                {
+                    if (!physicalDevice->checkExtension(VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME))
+                        noExclusiveFullScreenDevIDs->insert(id);
+                }
+#endif
                 devices->addItem(properties.deviceName, id);
                 if (idIdx == 0 && !storedID.isEmpty() && storedID == id)
                     idIdx = devices->count();
             }
+            devices->setCurrentIndex(-1);
+            devices->blockSignals(false);
 
             if (devices->count() > 0)
             {

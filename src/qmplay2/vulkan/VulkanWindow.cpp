@@ -192,11 +192,16 @@ void Window::setConfig(
        setX11BypassCompositor(bypassCompositor);
     }
 #ifdef Q_OS_WIN
-    else if (m_widget->property("bypassCompositor").toBool() != bypassCompositor)
+    else
     {
-        m_widget->setProperty("bypassCompositor", bypassCompositor);
-        resetSwapChainAndGraphicsPipelines(false);
-        maybeRequestUpdate();
+        if (!m_physicalDevice->checkExtension(VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME))
+            bypassCompositor = true;
+        if (m_widget->property("bypassCompositor").toBool() != bypassCompositor)
+        {
+            m_widget->setProperty("bypassCompositor", bypassCompositor);
+            resetSwapChainAndGraphicsPipelines(false);
+            maybeRequestUpdate();
+        }
     }
 #endif
 }
