@@ -158,7 +158,7 @@ void Instance::init()
     });
 
     if (!m_qVulkanInstance->create())
-        throw vk::InitializationFailedError(QString("Can't create Vulkan instance (0x%1)").arg(m_qVulkanInstance->errorCode(), 0, 16).toStdString());
+        throw vk::InitializationFailedError("Can't create Vulkan instance");
 
 #ifdef QT_DEBUG
     if (!m_qVulkanInstance->layers().contains("VK_LAYER_KHRONOS_validation"))
