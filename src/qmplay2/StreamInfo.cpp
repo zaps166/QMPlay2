@@ -61,6 +61,7 @@ QString StreamInfo::getTagName(const QString &tag)
 StreamInfo::StreamInfo()
 {
     memset(static_cast<AVCodecParameters *>(this), 0, sizeof(AVCodecParameters));
+    format = -1;
     resetSAR();
 }
 StreamInfo::StreamInfo(AVCodecParameters *codecpar)
