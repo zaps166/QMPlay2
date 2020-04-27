@@ -36,6 +36,14 @@
 
 using namespace QmVk;
 
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    constexpr auto g_vkMemType = vk::ExternalMemoryHandleTypeFlagBits::eOpaqueWin32;
+    constexpr auto g_cuMemType = CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32;
+#else
+    constexpr auto g_vkMemType = vk::ExternalMemoryHandleTypeFlagBits::eOpaqueFd;
+    constexpr auto g_cuMemType = CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD;
+#endif
+
 class CudaCustomData : public MemoryObjectBase::CustomData
 {
 public:
@@ -114,6 +122,27 @@ CuvidVulkan::CuvidVulkan(const shared_ptr<CUcontext> &cuCtx)
 #endif
     });
 
+    bool isMemoryExportable = false;
+    try
+    {
+        const auto externalMemoryFeatures = Image::getExternalMemoryProperties(
+            physicalDevice,
+            g_vkMemType,
+            vk::Format::eR8Unorm,
+            true
+        ).externalMemoryFeatures;
+        if (externalMemoryFeatures & vk::ExternalMemoryFeatureFlagBits::eExportable)
+            isMemoryExportable = true;
+    }
+    catch (const vk::SystemError &e)
+    {}
+    if (!isMemoryExportable)
+    {
+        QMPlay2Core.logError("CUVID :: Can't interoperate with Vulkan");
+        m_error = true;
+        return;
+    }
+
     if (!m_error && cu::streamCreate(&m_cuStream, CU_STREAM_DEFAULT) != CUDA_SUCCESS)
         m_error = true;
 }
@@ -135,14 +164,6 @@ void CuvidVulkan::map(Frame &frame) try
 
     cu::ContextGuard cuCtxGuard(m_cuCtx);
 
-#ifdef VK_USE_PLATFORM_WIN32_KHR
-    constexpr auto vkMemType = vk::ExternalMemoryHandleTypeFlagBits::eOpaqueWin32;
-    constexpr auto cuMemType = CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32;
-#else
-    constexpr auto vkMemType = vk::ExternalMemoryHandleTypeFlagBits::eOpaqueFd;
-    constexpr auto cuMemType = CU_EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD;
-#endif
-
     const int pictureIndex = frame.customData();
 
     if (m_validPictures.count(pictureIndex) == 0)
@@ -150,7 +171,7 @@ void CuvidVulkan::map(Frame &frame) try
 
     auto img = m_vkImagePool->assignLinearDeviceLocalExport(
         frame,
-        vkMemType
+        g_vkMemType
     );
     if (!img)
     {
@@ -166,15 +187,15 @@ void CuvidVulkan::map(Frame &frame) try
         auto cudaCustomDataUnique = make_unique<CudaCustomData>(m_cuCtx);
 
         CUDA_EXTERNAL_MEMORY_HANDLE_DESC externalMemHandleDesc = {};
-        externalMemHandleDesc.type = cuMemType;
+        externalMemHandleDesc.type = g_cuMemType;
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
         // Ownership is not transferred to the CUDA driver
-        cudaCustomDataUnique->handle = img->exportMemoryWin32(vkMemType);
+        cudaCustomDataUnique->handle = img->exportMemoryWin32(g_vkMemType);
         externalMemHandleDesc.handle.win32.handle = cudaCustomDataUnique->handle;
 #else
         // Ownership is transferred to the CUDA driver
-        externalMemHandleDesc.handle.fd = img->exportMemoryFd(vkMemType);
+        externalMemHandleDesc.handle.fd = img->exportMemoryFd(g_vkMemType);
 #endif
 
         externalMemHandleDesc.size = img->memorySize();
