@@ -118,7 +118,7 @@ D3D11VAVulkan::D3D11VAVulkan(AVBufferRef *hwDeviceBufferRef, bool zeroCopyAllowe
         return false;
     };
 
-    if (!m_zeroCopy && physicalDevice->checkExtensions({VK_KHR_WIN32_KEYED_MUTEX_EXTENSION_NAME}))
+    if (!m_zeroCopy && physicalDevice->checkExtension(VK_KHR_WIN32_KEYED_MUTEX_EXTENSION_NAME))
     {
         if (isMemoryImportable(vk::ExternalMemoryHandleTypeFlagBits::eD3D11TextureKmt))
         {
