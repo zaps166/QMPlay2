@@ -756,10 +756,13 @@ void SettingsWidget::createRendererSettings()
 #endif
 
     const auto chosenRenderer = settings->getString("Renderer");
+    int activeRenderer = -1;
 
     for (int i = renderers->count() - 1; i >= 0; --i)
     {
         const bool active = (renderers->itemData(i).toString() == currentRendererName);
+        if (active)
+            activeRenderer = i;
         renderers->setItemText(i, renderers->itemText(i) + " (" + (active ? tr("active") : tr("inactive")) + ")");
     }
 
@@ -1011,9 +1014,8 @@ void SettingsWidget::createRendererSettings()
         rendererStacked->setCurrentIndex(idx);
     });
 
-    const int idx = renderers->findData(chosenRenderer);
-    if (idx > -1)
-        renderers->setCurrentIndex(idx);
+    if (activeRenderer > -1)
+        renderers->setCurrentIndex(activeRenderer);
 
     auto widget = new QWidget;
     auto layout = new QGridLayout(widget);
