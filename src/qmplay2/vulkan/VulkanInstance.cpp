@@ -215,7 +215,6 @@ void Instance::obtainPhysicalDevice()
 
 AVPixelFormats Instance::supportedPixelFormats() const
 {
-
     auto checkImageFormat = [this](vk::Format format) {
         auto fmtProps = m_physicalDevice->getFormatProperties(format);
         if (!(fmtProps.linearTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage))
