@@ -408,6 +408,20 @@ void Window::render()
     if (!ensureDevice())
         return;
 
+    auto submitCommandBuffer = [this] {
+        // In some cases the command buffer has image copy or mipmap generation commands,
+        // so we have to submit the command buffer to prevent desynchronization with
+        // local variables inside the Image class.
+        try
+        {
+            m.commandBuffer->endSubmitAndWait();
+        }
+        catch (const vk::SystemError &e)
+        {
+            handleException(e);
+        }
+    };
+
     try
     {
         if (!ensureHWImageMapped())
@@ -483,6 +497,7 @@ void Window::render()
     catch (const vk::SurfaceLostKHRError &e)
     {
         Q_UNUSED(e)
+        submitCommandBuffer();
         resetSurface();
         return;
     }
@@ -494,6 +509,7 @@ void Window::render()
 
     if (outOfDate || (suboptimal && !m.swapChain->maybeSuboptimal()))
     {
+        submitCommandBuffer();
         resetSwapChainAndGraphicsPipelines(true);
         maybeRequestUpdate();
     }
