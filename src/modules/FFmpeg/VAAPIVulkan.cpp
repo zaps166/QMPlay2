@@ -12,9 +12,22 @@
 #include <QDebug>
 
 #include <va/va_drmcommon.h>
+#include <linux/dma-buf.h>
+#include <sys/ioctl.h>
 #include <unistd.h>
 
 using namespace QmVk;
+
+struct FDCustomData : public MemoryObjectBase::CustomData
+{
+    ~FDCustomData()
+    {
+        for (auto &&fd : fds)
+            ::close(fd);
+    }
+
+    vector<int> fds;
+};
 
 VAAPIVulkan::VAAPIVulkan(const shared_ptr<VAAPI> &vaapi)
     : m_vkInstance(static_pointer_cast<Instance>(QMPlay2Core.gpuInstance()))
@@ -107,6 +120,12 @@ void VAAPIVulkan::map(Frame &frame)
                     format,
                     isLinear
                 );
+
+                auto fdCustomData = make_unique<FDCustomData>();
+                for (auto &&fdDescriptor : fdDescriptors)
+                    fdCustomData->fds.push_back(::dup(fdDescriptor.first));
+                vkImage->setCustomData(move(fdCustomData));
+
                 vkImage->importFD(
                     fdDescriptors,
                     offsets,
@@ -148,25 +167,29 @@ HWInterop::SyncDataPtr VAAPIVulkan::sync(const vector<Frame> &frames, vk::Submit
 {
     Q_UNUSED(submitInfo)
 
-    unique_lock<mutex> locker;
-
     for (auto &&frame : frames)
     {
-        if (!frame.isHW() || !frame.vulkanImage())
+        if (!frame.isHW())
             continue;
 
-        if (!locker.owns_lock())
-            locker = unique_lock<mutex>(m_mutex);
-
-        VASurfaceID id = frame.hwData();
-        if (m_availableSurfaces.count(id) == 0)
+        auto image = frame.vulkanImage();
+        if (!image)
             continue;
 
-        if (vaSyncSurface(m_vaapi->VADisp, id) != VA_STATUS_SUCCESS)
+        const auto &fds = image->customData<FDCustomData>()->fds;
+        for (auto &&fd : fds)
         {
-            QMPlay2Core.logError("VA-API :: Unable to sync surface");
-            m_error = true;
-            break;
+            const dma_buf_sync sync = {
+                DMA_BUF_SYNC_START | DMA_BUF_SYNC_RW
+            };
+            ioctl(fd, DMA_BUF_IOCTL_SYNC, &sync);
+        }
+        for (auto &&fd : fds)
+        {
+            const dma_buf_sync sync = {
+                DMA_BUF_SYNC_END | DMA_BUF_SYNC_RW
+            };
+            ioctl(fd, DMA_BUF_IOCTL_SYNC, &sync);
         }
     }
 
