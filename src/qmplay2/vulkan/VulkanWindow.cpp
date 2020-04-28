@@ -404,17 +404,19 @@ void Window::render()
 {
     bool suboptimal = false;
     bool outOfDate = false;
+    bool canSubmitCommandBufferFromError = false;
 
     if (!ensureDevice())
         return;
 
-    auto submitCommandBuffer = [this] {
+    auto submitCommandBuffer = [&] {
         // In some cases the command buffer has image copy or mipmap generation commands,
         // so we have to submit the command buffer to prevent desynchronization with
         // local variables inside the Image class.
         try
         {
-            m.commandBuffer->endSubmitAndWait();
+            if (canSubmitCommandBufferFromError)
+                m.commandBuffer->endSubmitAndWait();
         }
         catch (const vk::SystemError &e)
         {
@@ -431,6 +433,7 @@ void Window::render()
             return;
 
         m.commandBuffer->resetAndBegin();
+        canSubmitCommandBufferFromError = true;
 
         ensureSwapChain();
 
@@ -472,6 +475,7 @@ void Window::render()
             if (m_vkHwInterop)
                 syncData = m_vkHwInterop->sync({m_frame}, &submitInfo);
 
+            canSubmitCommandBufferFromError = false;
             beginRenderPass(imageIdx);
 
             maybeClear(imageIdx);
