@@ -925,7 +925,7 @@ void SettingsWidget::createRendererSettings()
                         noExclusiveFullScreenDevIDs->insert(id);
                 }
 #endif
-                devices->addItem(properties.deviceName, id);
+                devices->addItem(static_cast<const char *>(properties.deviceName), id);
                 if (idIdx == 0 && !storedID.isEmpty() && storedID == id)
                     idIdx = devices->count();
             }
