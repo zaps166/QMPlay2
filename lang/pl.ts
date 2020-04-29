@@ -3257,7 +3257,7 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <name>VAAPI</name>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation>Nie obsługiwany algorytm usuwania przeplotu</translation>
+        <translation>Nieobsługiwany algorytm usuwania przeplotu</translation>
     </message>
     <message>
         <source>Cannot open video filters</source>
@@ -3268,15 +3268,15 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>Nie obsługiwany filtr ostrości obrazu</translation>
+        <translation>Nieobsługiwany filtr ostrości obrazu</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation>Nie obsługiwany algorytm usuwania przeplotu</translation>
+        <translation>Nieobsługiwany algorytm usuwania przeplotu</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
-        <translation>Nie obsługiwany filtr redukcji szumów</translation>
+        <translation>Nieobsługiwany filtr redukcji szumów</translation>
     </message>
 </context>
 <context>
