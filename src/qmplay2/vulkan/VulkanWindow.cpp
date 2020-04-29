@@ -671,7 +671,7 @@ void Window::renderOSD()
         }
         else
         {
-            multiplier = QVector2D(1.0, 1.0);
+            multiplier = QVector2D(1.0f, 1.0f);
             osdPipeline = m.osdAssPipeline;
             osdDescriptorPool = m.osdAssDescriptorPool;
             memObjectDescrs = &osdAssMemoryObjects[osdAssMemoryObjectsIdx++];
@@ -687,8 +687,8 @@ void Window::renderOSD()
             m_subsRect.y() * 2.0f / winSize.height()
         );
         mat.translate(
-            img->rect.x() * 2.0f * multiplier.x() / winSize.width(),
-            img->rect.y() * 2.0f * multiplier.y() / winSize.height()
+            img->rect.x() * 2.0f * multiplier.x() / (winSize.width()  - 1.0f),
+            img->rect.y() * 2.0f * multiplier.y() / (winSize.height() - 1.0f)
         );
         mat.scale(
             img->rect.width()  * 2.0f * multiplier.x() / winSize.width(),
