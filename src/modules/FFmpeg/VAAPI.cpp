@@ -246,14 +246,9 @@ void VAAPI::maybeInitVPP(int surfaceW, int surfaceH)
                         }
                         if (vpp_deint_type != VAProcDeinterlacingNone)
                         {
-                            VAProcFilterParameterBufferDeinterlacing deint_params = {
-                                VAProcFilterDeinterlacing,
-                                vpp_deint_type,
-                                0,
-#if VA_MAJOR_VERSION >= 1
-                                {}
-#endif
-                            };
+                            VAProcFilterParameterBufferDeinterlacing deint_params = {};
+                            deint_params.type = VAProcFilterDeinterlacing;
+                            deint_params.algorithm = vpp_deint_type;
                             if (vaCreateBuffer(VADisp, context_vpp, VAProcFilterParameterBufferType, sizeof deint_params, 1, &deint_params, &m_vppDeintBuff) != VA_STATUS_SUCCESS)
                                 m_vppDeintBuff = VA_INVALID_ID;
                         }
