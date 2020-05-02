@@ -879,8 +879,8 @@ void Window::ensureVideoPipeline()
         createInfo.renderPass = m.renderPass;
         createInfo.size = m.swapChain->size();
         createInfo.pushConstantsSize = sizeof(VertPushConstants);
-        createInfo.vertexBindingDescrs = vertexBindingDescrs;
-        createInfo.vertexAttrDescrs = vertexAttrDescrs;
+        createInfo.vertexBindingDescrs = move(vertexBindingDescrs);
+        createInfo.vertexAttrDescrs = move(vertexAttrDescrs);
         m.videoPipeline = GraphicsPipeline::create(createInfo);
     }
 
