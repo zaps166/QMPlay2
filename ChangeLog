@@ -1,19 +1,19 @@
-Changes in QMPlay2 20.xx.xx:
+Changes in QMPlay2 20.05.02:
     - add Vulkan renderer (default, Linux and Windows only):
         - bypass compositor option (exclusive fullscreen),
         - VA-API, CUVID, D3D11VA interoperation,
-        - high quality video scale options,
+        - high quality video scaling options,
         - Yadif deinterlacing on GPU,
         - faster subtitles rendering,
         - deep color support,
         - zero-copy decoding,
     - remove option to enforce of video copy to host memory for OpenGL renderer,
     - don't open left panel on fullscreen when there is a screen on the left,
+    - fix video dock margins issue on fullscreen with some Qt styles,
     - add renderer settings page: Vulkan (default), OpenGL, Legacy,
     - add PCH compilation with CMake >= 3.16 (disabled by default),
     - a lot of code changes (e.g. use more FFmpeg structures),
     - remove high quality video scaling for OpenGL,
-    - fix video dock margins issue on fullscreen,
     - update translation files,
     - require C++14,
 
