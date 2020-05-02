@@ -254,8 +254,13 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     }
     if (m_vaapiVulkan)
     {
-        if (m_vaapi->m_vendor.contains("intel", Qt::CaseInsensitive) && !QMPlay2Core.getSettings().getBool("Vulkan/ForceVulkanYadif"))
-            m_filter = make_shared<DeintHWPrepareFilter>();
+        if (!QMPlay2Core.getSettings().getBool("Vulkan/ForceVulkanYadif") && m_vaapi->m_vendor.contains("intel", Qt::CaseInsensitive))
+        {
+            // Use QMPlay2 Vulkan deinterlacing to workaround an Intel Media Driver bug
+            // https://github.com/intel/media-driver/issues/804
+            if (!m_vaapi->m_vendor.contains("Intel iHD"))
+                m_filter = make_shared<DeintHWPrepareFilter>();
+        }
         m_hasHWDecContext = true;
     }
 #endif
