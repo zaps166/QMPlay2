@@ -1024,7 +1024,7 @@ void Window::fillVerticesBuffer()
     verticesBuffer->unmap();
 
     if (m.verticesStagingBuffer)
-        m.verticesStagingBuffer->copyTo(m.verticesBuffer, *m.commandBuffer);
+        m.verticesStagingBuffer->copyTo(m.verticesBuffer, m.commandBuffer);
 }
 
 bool Window::ensureHWImageMapped()
@@ -1221,12 +1221,12 @@ void Window::ensureMipmaps()
 
     if (m.shouldUpdateImageMipmap)
     {
-        m.image->copyTo(m.imageMipmap, *m.commandBuffer);
+        m.image->copyTo(m.imageMipmap, m.commandBuffer);
         m.shouldUpdateImageMipmap = false;
     }
     else if (mustRegenerateMipmaps)
     {
-        m.imageMipmap->maybeGenerateMipmaps(*m.commandBuffer);
+        m.imageMipmap->maybeGenerateMipmaps(m.commandBuffer);
     }
 }
 bool Window::mustGenerateMipmaps()
