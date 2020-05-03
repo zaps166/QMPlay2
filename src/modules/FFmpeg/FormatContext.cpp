@@ -736,7 +736,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
     if (avformat_find_stream_info(formatCtx, nullptr) < 0)
         return false;
 
-    isStreamed = !isLocal && formatCtx->duration <= 0; //QMPLAY2_NOPTS_VALUE is negative
+    isStreamed = !isLocal && formatCtx->duration <= 0; // AV_NOPTS_VALUE is negative
 
 #ifdef QMPlay2_libavdevice
     forceCopy = name().contains("v4l2"); //Workaround for v4l2 - if many buffers are referenced demuxer doesn't produce proper timestamps (FFmpeg BUG?).
