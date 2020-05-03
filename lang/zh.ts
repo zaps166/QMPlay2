@@ -63,11 +63,11 @@
     </message>
     <message>
         <source>Programmer</source>
-        <translation>开发人员</translation>
+        <translation>作者</translation>
     </message>
     <message>
         <source>Contributors</source>
-        <translation>协助开发人员</translation>
+        <translation>协助开发</translation>
     </message>
 </context>
 <context>
@@ -415,7 +415,7 @@
     </message>
     <message>
         <source>Parity (if not detected automatically)</source>
-        <translation>奇偶校验 (如果没有自动检测)</translation>
+        <translation>奇偶校验（如果没有自动检测）</translation>
     </message>
     <message>
         <source>Deinterlacing method</source>
@@ -1259,7 +1259,7 @@
     </message>
     <message>
         <source>Are you sure you want to quit?</source>
-        <translation>您确定要退出吗?</translation>
+        <translation>您确定要退出吗？</translation>
     </message>
     <message>
         <source>QMPlay2 is doing something in the background.</source>
@@ -1356,7 +1356,7 @@
     </message>
     <message>
         <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
-        <translation>MicroDVD 字幕使用指定的帧率 (如果存在)</translation>
+        <translation>MicroDVD 字幕使用指定的帧率（如果存在）</translation>
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
@@ -1536,7 +1536,7 @@
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
-        <translation>低分辨率解码(仅某些解码器)</translation>
+        <translation>低分辨率解码（仅某些解码器）</translation>
     </message>
     <message>
         <source>Hurry up</source>
@@ -1990,7 +1990,7 @@
     </message>
     <message>
         <source>Set subtitles delay (sec.)</source>
-        <translation>设置字幕延时(秒)</translation>
+        <translation>设置字幕延时（秒）</translation>
     </message>
     <message>
         <source>Loaded subtitles</source>
@@ -2014,11 +2014,11 @@
     </message>
     <message>
         <source>Set video delay (sec.)</source>
-        <translation>设置视频延时(秒)</translation>
+        <translation>设置视频延时（秒）</translation>
     </message>
     <message>
         <source>Set playback speed (sec.)</source>
-        <translation>设置回放速度(秒)</translation>
+        <translation>设置回放速度（秒）</translation>
     </message>
     <message>
         <source>A-B Repeat</source>
@@ -2192,7 +2192,7 @@
     </message>
     <message>
         <source>Video to audio sync (frame skipping)</source>
-        <translation>音视频同步(跳帧)</translation>
+        <translation>音视频同步（跳帧）</translation>
     </message>
     <message>
         <source>Fade sound</source>
@@ -2208,19 +2208,19 @@
     </message>
     <message>
         <source>Short seeking (left and right arrows)</source>
-        <translation>短跳转(左右方向键)</translation>
+        <translation>短跳转（左右方向键）</translation>
     </message>
     <message>
         <source>Long seeking (up and down arrows)</source>
-        <translation>长跳转(上下方向键)</translation>
+        <translation>长跳转（上下方向键）</translation>
     </message>
     <message>
         <source>Local buffer size (A/V packages count)</source>
-        <translation>本地缓冲大小(音视频包计数)</translation>
+        <translation>本地缓冲大小（音视频包计数）</translation>
     </message>
     <message>
         <source>Network buffer size (A/V packages count)</source>
-        <translation>网络缓冲大小(音视频包计数)</translation>
+        <translation>网络缓冲大小（音视频包计数）</translation>
     </message>
     <message>
         <source>Percent of packages for backwards rewinding</source>
@@ -2291,7 +2291,7 @@
     </message>
     <message>
         <source>&amp;Stop</source>
-        <translation>暂停</translation>
+        <translation>停止</translation>
     </message>
     <message>
         <source>&amp;Next</source>
@@ -2299,7 +2299,7 @@
     </message>
     <message>
         <source>&amp;Previous</source>
-        <translation>前一个</translation>
+        <translation>上一个</translation>
     </message>
     <message>
         <source>Seek &amp;forward</source>
@@ -2497,11 +2497,11 @@
     </message>
     <message>
         <source>Are you sure you want to clear the list?</source>
-        <translation>您确定要清除列表吗?</translation>
+        <translation>您确定要清除列表吗？</translation>
     </message>
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
-        <translation>您确定要删除非分组项吗?</translation>
+        <translation>您确定要删除非分组项吗？</translation>
     </message>
 </context>
 <context>
@@ -3206,7 +3206,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Application is up-to-date</source>
-        <translation>程序版本最新</translation>
+        <translation>程序已是最新版本</translation>
     </message>
     <message>
         <source>Download update</source>
