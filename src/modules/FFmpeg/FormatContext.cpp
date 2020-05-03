@@ -26,6 +26,8 @@
 #include <Settings.hpp>
 #include <Packet.hpp>
 
+#include <limits>
+
 extern "C"
 {
     #include <libavformat/avformat.h>
@@ -735,6 +737,27 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
     if (avformat_find_stream_info(formatCtx, nullptr) < 0)
         return false;
+
+    // Determine the duration of WavPack if not known
+    if (isLocal && formatCtx->nb_streams == 1 && formatCtx->duration == AV_NOPTS_VALUE)
+    {
+        const auto stream = formatCtx->streams[0];
+        if (stream->codecpar->codec_id == AV_CODEC_ID_WAVPACK)
+        {
+            if (av_seek_frame(formatCtx, 0, std::numeric_limits<int64_t>::max(), AVSEEK_FLAG_BACKWARD) >= 0)
+            {
+                AVPacket pkt;
+                av_init_packet(&pkt);
+                if (av_read_frame(formatCtx, &pkt) == 0)
+                {
+                    if (pkt.dts != AV_NOPTS_VALUE)
+                        formatCtx->duration = av_rescale_q(pkt.dts + pkt.duration, stream->time_base, {1, AV_TIME_BASE});
+                    av_packet_unref(&pkt);
+                }
+            }
+            av_seek_frame(formatCtx, 0, 0, AVSEEK_FLAG_BACKWARD);
+        }
+    }
 
     isStreamed = !isLocal && formatCtx->duration <= 0; // AV_NOPTS_VALUE is negative
 
