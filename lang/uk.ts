@@ -1892,7 +1892,7 @@
     </message>
     <message>
         <source>Can&apos;t init %1</source>
-        <translation>Неможливо ініціалізувати %1&gt;</translation>
+        <translation>Неможливо ініціалізувати %1</translation>
     </message>
     <message>
         <source>texture map error</source>
@@ -1951,7 +1951,7 @@
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation>&amp;Параметри рендера&gt;</translation>
+        <translation>&amp;Параметри рендера</translation>
     </message>
 </context>
 <context>
@@ -2941,19 +2941,19 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation>Спадковий пріоритет виведення відео&gt;</translation>
+        <translation>Спадковий пріоритет виведення відео</translation>
     </message>
     <message>
         <source>Legacy</source>
-        <translation>Старішого типу&gt;</translation>
+        <translation>Старішого типу</translation>
     </message>
     <message>
         <source>OpenGL</source>
-        <translation>OpenGL&gt;</translation>
+        <translation>OpenGL</translation>
     </message>
     <message>
         <source>active</source>
-        <translation>активний&gt;</translation>
+        <translation>активний</translation>
     </message>
     <message>
         <source>inactive</source>
