@@ -290,10 +290,9 @@ bool Frame::isHW() const
         case AV_PIX_FMT_VDPAU:
         case AV_PIX_FMT_VAAPI:
         case AV_PIX_FMT_VIDEOTOOLBOX:
-//        case AV_PIX_FMT_CUDA:
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(55, 78, 100)
         case AV_PIX_FMT_D3D11:
-//        case AV_PIX_FMT_DRM_PRIME:
-//        case AV_PIX_FMT_OPENCL:
+#endif
             return true;
     }
     return false;
@@ -306,7 +305,9 @@ quintptr Frame::hwData(int idx) const
         case AV_PIX_FMT_VDPAU:
         case AV_PIX_FMT_VAAPI:
         case AV_PIX_FMT_VIDEOTOOLBOX:
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(55, 78, 100)
         case AV_PIX_FMT_D3D11:
+#endif
             return reinterpret_cast<quintptr>(m_frame->data[idx]);
     }
     return s_invalidCustomData;
