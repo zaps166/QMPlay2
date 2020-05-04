@@ -410,6 +410,8 @@ void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalD
 
         break;
     }
+#else
+    Q_UNUSED(physicalDevices)
 #endif
 }
 
