@@ -259,9 +259,16 @@ void Radio::replyFinished(NetworkReply *reply)
                 QStringList list;
                 for (const QJsonValue &data : json.array())
                 {
-                    if (data.isObject())
-                        list += data.toObject()["name"].toString();
+                    if (!data.isObject())
+                        continue;
+
+                    const auto name = data.toObject()["name"].toString();
+                    if (name.trimmed().isEmpty())
+                        continue;
+
+                    list += data.toObject()["name"].toString();
                 }
+                list.removeDuplicates();
                 m_searchInfo[idx].first = list;
                 if (ui->searchByComboBox->currentIndex() == idx)
                     setSearchInfo(list);
