@@ -2674,6 +2674,22 @@ QMPlay2 nie będzie skalować ikon!</translation>
         <source>Save radio station list</source>
         <translation>Zapisz listę stacji radiowych</translation>
     </message>
+    <message>
+        <source>Tag</source>
+        <translation>Znacznik</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation>Kraj</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Język</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation>Stan</translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

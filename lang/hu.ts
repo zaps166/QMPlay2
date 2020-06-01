@@ -2674,6 +2674,22 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
         <source>Save radio station list</source>
         <translation>Rádióállomás lista mentése</translation>
     </message>
+    <message>
+        <source>Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation type="unfinished">Ország</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation type="unfinished">Nyelv</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

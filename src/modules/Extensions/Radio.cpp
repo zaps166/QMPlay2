@@ -73,12 +73,11 @@ Radio::Radio(Module &module) :
 
     ui->myRadioListWidget->installEventFilter(this);
 
-    // Texts must be compatible with Radio Browser API
-    ui->searchByComboBox->addItem("Name");
-    ui->searchByComboBox->addItem("Tag", "tags");
-    ui->searchByComboBox->addItem("Country", "countries");
-    ui->searchByComboBox->addItem("Language", "languages");
-    ui->searchByComboBox->addItem("State", "states");
+    ui->searchByComboBox->addItem(tr("Name"), QStringList{"Name", ""});
+    ui->searchByComboBox->addItem(tr("Tag"), QStringList{"Tag", "tags"});
+    ui->searchByComboBox->addItem(tr("Country"), QStringList{"Country", "countries"});
+    ui->searchByComboBox->addItem(tr("Language"), QStringList{"Language", "languages"});
+    ui->searchByComboBox->addItem(tr("State"), QStringList{"State", "states"});
 
     ui->radioView->setModel(m_radioBrowserModel);
     ui->radioView->setIconSize({m_radioBrowserModel->elementHeight(), m_radioBrowserModel->elementHeight()});
@@ -215,7 +214,7 @@ void Radio::qmplay2RadioStationsFinished()
 void Radio::searchData()
 {
     const QString text = ui->searchComboBox->lineEdit()->text();
-    m_radioBrowserModel->searchRadios(text, ui->searchByComboBox->itemText(ui->searchByComboBox->currentIndex()));
+    m_radioBrowserModel->searchRadios(text, ui->searchByComboBox->itemData(ui->searchByComboBox->currentIndex()).toStringList().at(0));
     ui->radioView->setEnabled(false);
     ui->filterEdit->clear();
 }
@@ -332,7 +331,7 @@ void Radio::on_qmplay2RadioListWidget_itemDoubleClicked(QListWidgetItem *item)
 
 void Radio::on_searchByComboBox_activated(int idx)
 {
-    const QString toDownload = ui->searchByComboBox->itemData(idx).toString();
+    const QString toDownload = ui->searchByComboBox->itemData(idx).toStringList().at(1);
     if (!toDownload.isEmpty())
     {
         if (m_nameItems.isEmpty())
