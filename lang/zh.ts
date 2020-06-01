@@ -562,11 +562,11 @@
     </message>
     <message>
         <source>Programs</source>
-        <translation>程序</translation>
+        <translation>节目</translation>
     </message>
     <message>
         <source>Program</source>
-        <translation>程序</translation>
+        <translation>节目</translation>
     </message>
 </context>
 <context>
@@ -821,7 +821,7 @@
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
-        <translation>指向性频率: %1 赫兹</translation>
+        <translation>指定频率: %1 赫兹</translation>
     </message>
 </context>
 <context>
@@ -2676,19 +2676,19 @@ QMPlay2 将不会增加图标！</translation>
     </message>
     <message>
         <source>Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>标签</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished">国家</translation>
+        <translation>国家</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation type="unfinished">语言</translation>
+        <translation>语言</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>州</translation>
     </message>
 </context>
 <context>
