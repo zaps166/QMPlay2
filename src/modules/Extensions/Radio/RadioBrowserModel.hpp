@@ -24,7 +24,7 @@
 
 #include <memory>
 
-constexpr const char *g_radioBrowserBaseApiUrl = "http://www.radio-browser.info/webservice/json";
+constexpr const char *g_radioBrowserBaseApiUrl = "http://all.api.radio-browser.info/json";
 
 class NetworkAccess;
 class NetworkReply;
