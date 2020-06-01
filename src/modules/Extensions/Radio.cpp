@@ -266,7 +266,7 @@ void Radio::replyFinished(NetworkReply *reply)
                     if (name.trimmed().isEmpty())
                         continue;
 
-                    list += data.toObject()["name"].toString();
+                    list += name;
                 }
                 list.removeDuplicates();
                 m_searchInfo[idx].first = list;
