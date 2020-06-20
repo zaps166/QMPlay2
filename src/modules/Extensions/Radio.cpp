@@ -251,11 +251,11 @@ void Radio::on_saveMyRadioStationButton_clicked()
 
 void Radio::on_myRadioListWidget_itemDoubleClicked(QListWidgetItem *item)
 {
-    firstTabItemDoubleClicked(item);
-}
-void Radio::on_qmplay2RadioListWidget_itemDoubleClicked(QListWidgetItem *item)
-{
-    firstTabItemDoubleClicked(item);
+    if (item)
+    {
+        QMPlay2Core.addNameForUrl(item->data(Qt::UserRole).toString(), item->text());
+        emit QMPlay2Core.processParam("open", item->data(Qt::UserRole).toString());
+    }
 }
 
 void Radio::on_searchByComboBox_activated(int idx)
@@ -337,15 +337,6 @@ void Radio::radioBrowserOpenHomePage()
     const QModelIndex index = ui->radioView->currentIndex();
     if (index.isValid())
         QDesktopServices::openUrl(m_radioBrowserModel->getHomePageUrl(index));
-}
-
-void Radio::firstTabItemDoubleClicked(QListWidgetItem *item)
-{
-    if (item)
-    {
-        QMPlay2Core.addNameForUrl(item->data(Qt::UserRole).toString(), item->text());
-        emit QMPlay2Core.processParam("open", item->data(Qt::UserRole).toString());
-    }
 }
 
 void Radio::radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param)

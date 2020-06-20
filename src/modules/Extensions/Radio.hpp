@@ -62,7 +62,6 @@ private slots:
     void on_saveMyRadioStationButton_clicked();
 
     void on_myRadioListWidget_itemDoubleClicked(QListWidgetItem *item);
-    void on_qmplay2RadioListWidget_itemDoubleClicked(QListWidgetItem *item);
 
     void on_searchByComboBox_activated(int idx);
     void on_addRadioBrowserStationButton_clicked();
@@ -75,8 +74,6 @@ private slots:
     void radioBrowserOpenHomePage();
 
 private:
-    void firstTabItemDoubleClicked(QListWidgetItem *item);
-
     void radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param);
 
     void addMyRadioStation(const QString &name, const QString &address, QListWidgetItem *item = nullptr);
