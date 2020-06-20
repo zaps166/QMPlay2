@@ -2615,10 +2615,6 @@ QMPlay2 nie będzie skalować ikon!</translation>
         <translation>Adres</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>Stacje radiowe QMPlay2</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>Moje stacje radiowe</translation>
     </message>
@@ -2629,10 +2625,6 @@ QMPlay2 nie będzie skalować ikon!</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>Usuń zaznaczoną stację radiową</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation></translation>
     </message>
     <message>
         <source>Play</source>

@@ -2611,10 +2611,6 @@ QMPlay2 will not scale up icons!</source>
         <translation>Adresse</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2624,10 +2620,6 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Remove selected radio station</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

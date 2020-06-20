@@ -2615,10 +2615,6 @@ QMPlay2 will not scale up icons!</source>
         <translation>Radio de Internet</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>Emisoras de radio de QMPlay2</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>Mis emisoras de radio</translation>
     </message>
@@ -2629,10 +2625,6 @@ QMPlay2 will not scale up icons!</source>
     <message>
         <source>Remove selected radio station</source>
         <translation>Borrar la emisora de radio seleccionada</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation>Explorador de radios</translation>
     </message>
     <message>
         <source>Play</source>

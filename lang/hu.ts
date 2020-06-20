@@ -2595,10 +2595,6 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
 <context>
     <name>Radio</name>
     <message>
-        <source>Radio Browser</source>
-        <translation>Rádió böngésző</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>Saját rádióállomások</translation>
     </message>
@@ -2613,10 +2609,6 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>Kiválasztott állomás eltávolítása</translation>
-    </message>
-    <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>QMPlay2 rádióállomások</translation>
     </message>
     <message>
         <source>Adding a new radio station</source>

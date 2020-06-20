@@ -2612,10 +2612,6 @@ QMPlay2 не будет отображать значки!</translation>
         <translation>Адрес</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>Радиостанции QMPlay2</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>Мои радиостанции</translation>
     </message>
@@ -2626,10 +2622,6 @@ QMPlay2 не будет отображать значки!</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>Удалить выбранную радиостанцию</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation>Обзор радио</translation>
     </message>
     <message>
         <source>Play</source>

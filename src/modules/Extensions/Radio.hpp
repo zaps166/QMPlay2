@@ -20,7 +20,6 @@
 
 #include <QMPlay2Extensions.hpp>
 
-#include <QTabWidget>
 #include <QPointer>
 #include <QIcon>
 #include <QMap>
@@ -36,7 +35,7 @@ class NetworkReply;
 class QTimer;
 class QMenu;
 
-class Radio final : public QTabWidget, public QMPlay2Extensions
+class Radio final : public QWidget, public QMPlay2Extensions
 {
     Q_OBJECT
 
@@ -48,10 +47,6 @@ public:
 
 private slots:
     void visibilityChanged(const bool v);
-
-    void tabChanged(int index);
-
-    void qmplay2RadioStationsFinished();
 
     void searchData();
     void searchFinished();
@@ -102,13 +97,11 @@ private:
 
     Ui::Radio *ui;
 
-    QPointer<NetworkReply> m_qmplay2RadioStationsReply;
     bool m_once = false;
     DockWidget *m_dw;
 
     QMap<int, QPair<QStringList, QPointer<NetworkReply>>> m_searchInfo;
     RadioBrowserModel *m_radioBrowserModel;
-    QTimer *m_tabChangedOnVisibilityTimer;
     QMenu *m_radioBrowserMenu;
     QTimer *m_loadIconsTimer;
     QStringList m_nameItems;

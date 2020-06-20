@@ -2615,10 +2615,6 @@ QMPlay2 не масштабуватиме іконки!</translation>
         <translation>Адреса</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>Радіостанції QMPlay2</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>Мої радіостанції</translation>
     </message>
@@ -2629,10 +2625,6 @@ QMPlay2 не масштабуватиме іконки!</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>Видалити вибрану радіостанцію</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation>Оглядач радіо</translation>
     </message>
     <message>
         <source>Play</source>

@@ -31,7 +31,6 @@
 #include <QJsonObject>
 #include <QScrollBar>
 #include <QJsonArray>
-#include <QMimeData>
 #include <qevent.h>
 #include <QTimer>
 #include <QMenu>
@@ -45,7 +44,6 @@ Radio::Radio(Module &module) :
     ui(new Ui::Radio),
     m_dw(new DockWidget),
     m_radioBrowserModel(new RadioBrowserModel(this)),
-    m_tabChangedOnVisibilityTimer(new QTimer(this)),
     m_radioBrowserMenu(new QMenu(this)),
     m_loadIconsTimer(new QTimer(this)),
     m_net(new NetworkAccess(this))
@@ -59,9 +57,6 @@ Radio::Radio(Module &module) :
     m_loadIconsTimer->setInterval(10);
 
     ui->setupUi(this);
-
-    setTabIcon(0, m_radioIcon);
-    setTabIcon(1, QMPlay2Core.getQMPlay2Icon());
 
     ui->addMyRadioStationButton->setIcon(QMPlay2Core.getIconFromTheme("list-add"));
     ui->editMyRadioStationButton->setIcon(QMPlay2Core.getIconFromTheme("document-properties"));
@@ -94,7 +89,6 @@ Radio::Radio(Module &module) :
     connect(m_radioBrowserMenu->addAction(tr("Open radio website")), SIGNAL(triggered(bool)), this, SLOT(radioBrowserOpenHomePage()));
 
     connect(m_dw, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
-    connect(this, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     connect(m_radioBrowserModel, SIGNAL(radiosAdded()), m_loadIconsTimer, SLOT(start()));
     connect(m_radioBrowserModel, SIGNAL(searchFinished()), this, SLOT(searchFinished()));
     connect(ui->radioView->verticalScrollBar(), SIGNAL(valueChanged(int)), m_loadIconsTimer, SLOT(start()));
@@ -104,11 +98,6 @@ Radio::Radio(Module &module) :
     connect(ui->searchComboBox->lineEdit(), SIGNAL(returnPressed()), this, SLOT(searchData()));
     connect(ui->searchComboBox, SIGNAL(activated(int)), this, SLOT(searchData()));
     connect(m_net, SIGNAL(finished(NetworkReply *)), this, SLOT(replyFinished(NetworkReply *)));
-
-    m_tabChangedOnVisibilityTimer->setSingleShot(true);
-    connect(m_tabChangedOnVisibilityTimer, &QTimer::timeout, this, [=] {
-        tabChanged(currentIndex());
-    });
 }
 Radio::~Radio()
 {
@@ -127,7 +116,6 @@ Radio::~Radio()
             sets().set("Radio/ColumnSizes", columnSizes.toBase64());
         }
 
-        sets().set("Radio/CurrentTab", currentIndex());
         sets().set("Radio/SearchByIndex", ui->searchByComboBox->currentIndex());
     }
     delete ui;
@@ -140,75 +128,11 @@ DockWidget *Radio::getDockWidget()
 
 void Radio::visibilityChanged(const bool v)
 {
-    if (v)
+    if (v && !m_once)
     {
-        if (!m_once)
-        {
-            restoreSettings();
-            m_once = true;
-        }
-        m_tabChangedOnVisibilityTimer->start(0);
+        restoreSettings();
+        m_once = true;
     }
-    else
-    {
-        m_tabChangedOnVisibilityTimer->stop();
-    }
-}
-
-void Radio::tabChanged(int index)
-{
-    if (index == 1 && !m_qmplay2RadioStationsReply && ui->qmplay2RadioListWidget->count() == 0)
-    {
-        m_qmplay2RadioStationsReply = m_net->start("https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/RadioList.json");
-        connect(m_qmplay2RadioStationsReply, SIGNAL(finished()), this, SLOT(qmplay2RadioStationsFinished()));
-        ui->qmplay2RadioListWidget->setEnabled(false);
-    }
-}
-
-void Radio::qmplay2RadioStationsFinished()
-{
-    NetworkReply *reply = qobject_cast<NetworkReply *>(sender());
-    if (!reply->hasError())
-    {
-        const QJsonDocument json = QJsonDocument::fromJson(reply->readAll());
-        if (json.isArray())
-        {
-            QString groupName;
-            for (const QJsonValue &radioItemValue : json.array())
-            {
-                const QJsonObject &radioItem = radioItemValue.toObject();
-                const QString name = radioItem["Name"].toString();
-                if (!name.isEmpty())
-                {
-                    QListWidgetItem *item = new QListWidgetItem(ui->qmplay2RadioListWidget);
-                    const QString url = radioItem["Url"].toString();
-                    if (url.isEmpty())
-                    {
-                        QFont groupFont;
-                        groupFont.setBold(true);
-                        groupFont.setPointSize(groupFont.pointSize() + 2);
-
-                        item->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
-                        item->setIcon(QMPlay2Core.getQMPlay2Icon());
-                        item->setText("\n-- " + name + " --\n");
-                        item->setFont(groupFont);
-
-                        groupName = name;
-                    }
-                    else
-                    {
-                        const QImage icon = QImage::fromData(QByteArray::fromBase64(radioItem["Icon"].toString().toLatin1()));
-                        item->setIcon(icon.isNull() ? m_radioIcon : QPixmap::fromImage(icon));
-                        item->setData(Qt::ToolTipRole, groupName);
-                        item->setData(Qt::UserRole, url);
-                        item->setText(name);
-                    }
-                }
-            }
-        }
-    }
-    reply->deleteLater();
-    ui->qmplay2RadioListWidget->setEnabled(true);
 }
 
 void Radio::searchData()
@@ -246,8 +170,6 @@ void Radio::loadIcons()
 
 void Radio::replyFinished(NetworkReply *reply)
 {
-    if (reply == m_qmplay2RadioStationsReply)
-        return;
     if (!reply->hasError())
     {
         const int idx = m_searchInfo.key({{}, reply}, -1);
@@ -476,8 +398,6 @@ void Radio::restoreSettings()
     if (!ui->radioBrowserSplitter->restoreState(QByteArray::fromBase64(sets().getByteArray("Radio/RadioBrowserSplitter"))))
         ui->radioBrowserSplitter->setSizes({width() * 1 / 4, width() * 3 / 4});
 
-    setCurrentIndex(sets().getInt("Radio/CurrentTab"));
-
     const int searchByIdx = qBound(0, sets().getInt("Radio/SearchByIndex"), ui->searchByComboBox->count() - 1);
     if (searchByIdx > 0)
     {
@@ -535,5 +455,5 @@ bool Radio::eventFilter(QObject *watched, QEvent *event)
                 break;
         }
     }
-    return QTabWidget::eventFilter(watched, event);
+    return QWidget::eventFilter(watched, event);
 }

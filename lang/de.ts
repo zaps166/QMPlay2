@@ -2614,10 +2614,6 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
         <translation>Adresse</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>QMPlayer Radio Station</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>Meine Radio Station</translation>
     </message>
@@ -2628,10 +2624,6 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>Lösche gewählte Radio Station</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation>Radio-Browser </translation>
     </message>
     <message>
         <source>Play</source>

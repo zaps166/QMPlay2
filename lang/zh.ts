@@ -2615,10 +2615,6 @@ QMPlay2 将不会增加图标！</translation>
         <translation>地址</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>QMPlay2 电台</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>我的电台</translation>
     </message>
@@ -2629,10 +2625,6 @@ QMPlay2 将不会增加图标！</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>移除选定的电台</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation>Radio Browser</translation>
     </message>
     <message>
         <source>Play</source>
