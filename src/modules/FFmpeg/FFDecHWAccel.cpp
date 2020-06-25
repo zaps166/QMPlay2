@@ -67,6 +67,11 @@ int FFDecHWAccel::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPix
 
     decodeFirstStep(encodedPacket, flush);
 
+    if (hurryUp > 1)
+        codec_ctx->skip_frame = AVDISCARD_NONREF;
+    else if (hurryUp == 0)
+        codec_ctx->skip_frame = AVDISCARD_DEFAULT;
+
     const int bytesConsumed = decodeStep(frameFinished);
     m_hasCriticalError = (bytesConsumed < 0);
 
