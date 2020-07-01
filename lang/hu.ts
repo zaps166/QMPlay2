@@ -3510,6 +3510,10 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <source>Preferred quality</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Published time</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>YouTubeDL</name>

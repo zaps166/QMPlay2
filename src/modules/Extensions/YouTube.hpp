@@ -114,12 +114,15 @@ private:
     void deleteReplies();
 
     void setAutocomplete(const QByteArray &data);
-    void setSearchResults(QString data);
+    void setSearchResults(const QByteArray &data);
 
     QStringList getYouTubeVideo(const QString &param, const QString &url, IOController<YouTubeDL> &youTubeDL);
 
-    void preparePlaylist(const QString &data, QTreeWidgetItem *tWI);
+    void preparePlaylist(const QByteArray &data, QTreeWidgetItem *tWI);
 
+    QJsonDocument getYtInitialData(const QByteArray &data);
+
+private:
     DockWidget *dw;
 
     QIcon youtubeIcon, videoIcon;

@@ -3512,6 +3512,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <source>Preferred quality</source>
         <translation>Preferowana jakość</translation>
     </message>
+    <message>
+        <source>Published time</source>
+        <translation>Czas publikacji</translation>
+    </message>
 </context>
 <context>
     <name>YouTubeDL</name>

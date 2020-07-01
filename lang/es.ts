@@ -3510,6 +3510,10 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
         <source>Preferred quality</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Published time</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>YouTubeDL</name>

@@ -3511,6 +3511,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <source>Preferred quality</source>
         <translation>Bevorzugte Qualität</translation>
     </message>
+    <message>
+        <source>Published time</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>YouTubeDL</name>

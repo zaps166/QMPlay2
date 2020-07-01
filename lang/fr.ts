@@ -3505,6 +3505,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>Preferred quality</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Published time</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>YouTubeDL</name>
