@@ -3514,7 +3514,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Published time</source>
-        <translation type="unfinished"></translation>
+        <translation>发布时间</translation>
     </message>
 </context>
 <context>
