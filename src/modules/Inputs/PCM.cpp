@@ -77,7 +77,7 @@ int PCM::bitrate() const
 
 bool PCM::seek(double s, bool)
 {
-    const int filePos = offset + (s * srate * chn * bytes[fmt]);
+    const int64_t filePos = offset + qRound64(s * srate * chn) * bytes[fmt];
     return reader->seek(filePos);
 }
 bool PCM::read(Packet &decoded, int &idx)
