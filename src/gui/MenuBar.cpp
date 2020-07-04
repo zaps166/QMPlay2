@@ -243,9 +243,7 @@ MenuBar::Player::Player(MenuBar *parent) :
         newAction(Player::tr("Detach from receiving &commands"), this, detach, false, QIcon(), false);
     }
 
-    if (!QMPlay2CoreClass::canSuspend())
-        suspend = nullptr;
-    else
+    if (QMPlay2Core.canSuspend())
     {
         addSeparator();
         newAction(Player::tr("Suspend after playbac&k is finished"), this, suspend, false, QIcon(), true);

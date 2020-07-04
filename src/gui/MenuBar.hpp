@@ -102,7 +102,8 @@ public:
 
         Repeat *repeat;
         AspectRatio *aRatio;
-        QAction *togglePlay, *stop, *next, *prev, *prevFrame, *nextFrame, *abRepeat, *seekF, *seekB, *lSeekB, *lSeekF, *speedUp, *slowDown, *setSpeed, *switchARatio, *zoomIn, *zoomOut, *reset, *volUp, *volDown, *toggleMute, *detach, *suspend;
+        QAction *togglePlay, *stop, *next, *prev, *prevFrame, *nextFrame, *abRepeat, *seekF, *seekB, *lSeekB, *lSeekF, *speedUp, *slowDown, *setSpeed, *switchARatio, *zoomIn, *zoomOut, *reset, *volUp, *volDown, *toggleMute, *detach;
+        QAction *suspend = nullptr;
     };
 
     class Playback : public QMenu

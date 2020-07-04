@@ -68,9 +68,6 @@ public:
 
     static QString getLongFromShortLanguage(const QString &lng);
 
-    static bool canSuspend();
-    static void suspend();
-
     static int getCPUFlags();
 
 #ifdef USE_OPENGL
@@ -79,6 +76,9 @@ public:
 
     void init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName);
     void quit();
+
+    bool canSuspend();
+    void suspend();
 
     QStringList getModules(const QString &type, int typeLen) const;
 
@@ -253,6 +253,8 @@ private:
     std::shared_ptr<GPUInstance> m_gpuInstance;
 
     CommonJS *m_commonJS = nullptr;
+
+    int m_suspend = 0;
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()

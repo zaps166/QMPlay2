@@ -45,6 +45,8 @@
     #include <powrprof.h>
 #elif defined Q_OS_MACOS
     #include <QStandardPaths>
+#elif !defined Q_OS_ANDROID
+    #include <QProcess>
 #endif
 
 #include <cstdarg>
@@ -56,6 +58,19 @@ extern "C"
     #include <libavutil/cpu.h>
     #include <libavutil/log.h>
 }
+
+#if !defined(Q_OS_ANDROID) && !defined(Q_OS_WIN) && !defined(Q_OS_MACOS)
+static QStringList getDBusSuspendArgs(const QString &method, const QString &name, const QString &pathSuffix = QString())
+{
+    return {
+        "--system",
+        "--print-reply",
+        "--dest=org.freedesktop." + name,
+        "/org/freedesktop/" + name + pathSuffix,
+        "org.freedesktop." + name + ".Manager." + method
+     };
+};
+#endif
 
 /**/
 
@@ -161,27 +176,6 @@ QString QMPlay2CoreClass::getLongFromShortLanguage(const QString &lng)
 {
     const QString lang = QLocale::languageToString(QLocale(lng).language());
     return lang == "C" ? lng : lang;
-}
-
-bool QMPlay2CoreClass::canSuspend()
-{
-#if defined Q_OS_LINUX
-    return !system("systemctl --help 2> /dev/null | grep -q suspend");
-#elif defined Q_OS_WIN || defined Q_OS_MACOS
-    return true;
-#else
-    return false;
-#endif
-}
-void QMPlay2CoreClass::suspend()
-{
-#if defined Q_OS_LINUX
-    Q_UNUSED(system("systemctl suspend > /dev/null 2>&1 &"));
-#elif defined Q_OS_WIN
-    SetSuspendState(false, false, false);
-#elif defined Q_OS_MACOS
-    Q_UNUSED(system("pmset sleepnow > /dev/null 2>&1 &"));
-#endif
 }
 
 int QMPlay2CoreClass::getCPUFlags()
@@ -396,6 +390,63 @@ void QMPlay2CoreClass::quit()
     delete translator;
     delete settings;
     m_gpuInstance.reset();
+}
+
+bool QMPlay2CoreClass::canSuspend()
+{
+#if defined Q_OS_WIN || defined Q_OS_MACOS
+    m_suspend = 1;
+    return true;
+#elif !defined O_OS_ANDROID
+    auto checkSuspendDBus = [](const QStringList &args) {
+        QProcess p;
+        p.start("dbus-send", args);
+        if (!p.waitForStarted() || !p.waitForFinished())
+            return false;
+        return (p.readAllStandardOutput().split('\n').value(1).simplified().replace("\"", "").split(' ').value(1).compare("yes", Qt::CaseInsensitive) == 0);
+    };
+    if (checkSuspendDBus(getDBusSuspendArgs("CanSuspend", "login1")))
+    {
+        m_suspend = 1;
+        return true;
+    }
+    if (checkSuspendDBus(getDBusSuspendArgs("CanSuspend", "ConsoleKit", "/Manager")))
+    {
+        m_suspend = 2;
+        return true;
+    }
+#endif
+    return false;
+}
+void QMPlay2CoreClass::suspend()
+{
+    if (m_suspend == 0)
+        return;
+
+#if defined Q_OS_WIN
+    SetSuspendState(false, false, false);
+#elif defined Q_OS_MACOS
+    Q_UNUSED(system("pmset sleepnow > /dev/null 2>&1 &"));
+#elif !defined Q_OS_ANDROID
+    QStringList args;
+    switch (m_suspend)
+    {
+        case 1:
+            args = getDBusSuspendArgs("Suspend", "login1");
+            break;
+        case 2:
+            args = getDBusSuspendArgs("Suspend", "ConsoleKit", "/Manager");
+            break;
+        default:
+            return;
+    }
+    args += "boolean:true";
+
+    QProcess p;
+    p.start("dbus-send", args);
+    if (p.waitForStarted())
+        p.waitForFinished();
+#endif
 }
 
 QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const

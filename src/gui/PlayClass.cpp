@@ -1229,7 +1229,7 @@ void PlayClass::demuxThrFinished()
         doSuspend = false;
         emit uncheckSuspend();
         if (canDoSuspend)
-            QMPlay2CoreClass::suspend();
+            QMPlay2Core.suspend();
     }
 }
 
