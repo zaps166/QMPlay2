@@ -397,7 +397,7 @@ bool QMPlay2CoreClass::canSuspend()
 #if defined Q_OS_WIN || defined Q_OS_MACOS
     m_suspend = 1;
     return true;
-#elif !defined O_OS_ANDROID
+#elif !defined Q_OS_ANDROID
     auto checkSuspendDBus = [](const QStringList &args) {
         QProcess p;
         p.start("dbus-send", args);
