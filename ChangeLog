@@ -1,3 +1,15 @@
+Changes in QMPlay2 20.07.04:
+    - discard some frames on hardware decoding if hardware is too slow (was removed in 20.05.02),
+    - add workaround for VA-API/Vulkan for AMD GPUs on Mesa 20.1,
+    - use D-Bus for suspend (systemd and ConsoleKit),
+    - fix compilation with older FFmpeg version,
+    - fix duration for some WavPack files,
+    - remove QMPlay2 radio stations list,
+    - add architecture to about window,
+    - fix seeking on raw audio data,
+    - fix OpenGL linking on Linux,
+    - fix YouTube search,
+
 Changes in QMPlay2 20.05.02:
     - add Vulkan renderer (default, Linux and Windows only):
         - bypass compositor option (exclusive fullscreen),
