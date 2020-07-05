@@ -403,7 +403,7 @@ bool QMPlay2CoreClass::canSuspend()
         p.start("dbus-send", args);
         if (!p.waitForStarted() || !p.waitForFinished())
             return false;
-        return (p.readAllStandardOutput().split('\n').value(1).simplified().replace("\"", "").split(' ').value(1).compare("yes", Qt::CaseInsensitive) == 0);
+        return (p.readAllStandardOutput().split('\n').value(1).simplified().replace("\"", "").split(' ').value(1).toLower() == "yes");
     };
     if (checkSuspendDBus(getDBusSuspendArgs("CanSuspend", "login1")))
     {
