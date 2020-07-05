@@ -314,19 +314,21 @@ if(APPLE)
     )
 endif()
 
+if(USE_LIBASS AND (NOT WIN32 OR CMAKE_HOST_WIN32))
+    list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
+endif()
+
 if(WIN32)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
         powrprof
         winmm
     )
+
     set(CUSTOM_LIBQMPLAY2_LIBRARIES "" CACHE STRING "Custom libraries for libqmplay2")
-    mark_as_advanced(CUSTOM_LIBQMPLAY2_LIBRARIES)
     if(CUSTOM_LIBQMPLAY2_LIBRARIES)
         separate_arguments(CUSTOM_LIBQMPLAY2_LIBRARIES)
         list(APPEND LIBQMPLAY2_LIBS ${CUSTOM_LIBQMPLAY2_LIBRARIES})
-    elseif(USE_LIBASS)
-        list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
     endif()
 
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
@@ -334,10 +336,6 @@ else()
     install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
     if(NOT APPLE)
         install(FILES ${QMPLAY2_HDR} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/QMPlay2")
-    endif()
-
-    if(USE_LIBASS)
-        list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
     endif()
 endif()
 

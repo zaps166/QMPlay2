@@ -1,6 +1,20 @@
 cmake_minimum_required(VERSION 3.1)
 project(QMPlay2)
 
+if(WIN32)
+    set(CUSTOM_INCLUDE_DIR "" CACHE STRING "Custom include directory")
+    set(CUSTOM_LINK_DIR "" CACHE STRING "Custom link directory")
+
+    if(CUSTOM_INCLUDE_DIR)
+        set(CMAKE_INCLUDE_PATH ${CUSTOM_INCLUDE_DIR})
+        include_directories(${CUSTOM_INCLUDE_DIR})
+    endif()
+    if(CUSTOM_LINK_DIR)
+        set(CMAKE_LIBRARY_PATH ${CUSTOM_LINK_DIR})
+        link_directories(${CUSTOM_LINK_DIR})
+    endif()
+endif()
+
 # Set default build type as Release
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
