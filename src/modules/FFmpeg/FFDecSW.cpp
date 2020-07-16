@@ -236,8 +236,10 @@ int FFDecSW::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
     {
         if (frame->best_effort_timestamp != AV_NOPTS_VALUE)
             ts = frame->best_effort_timestamp * av_q2d(m_timeBase);
-        else
+        else if (encodedPacket.hasDts() || encodedPacket.hasPts())
             ts = encodedPacket.ts();
+        else
+            ts = qQNaN();
     }
     else
     {
