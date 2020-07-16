@@ -18,6 +18,7 @@
 
 #include <InfoDock.hpp>
 
+#include <QGuiApplication>
 #include <QMouseEvent>
 #include <QScrollBar>
 #include <QLabel>
@@ -93,6 +94,14 @@ InfoDock::InfoDock()
     clear();
 
     connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
+
+    auto setInfoEditStyleSheet = [this] {
+        infoE->document()->setDefaultStyleSheet("a {color: " + infoE->palette().text().color().name() + "; text-decoration: none;}");
+    };
+    connect(qGuiApp, &QGuiApplication::paletteChanged,
+            this, setInfoEditStyleSheet,
+            Qt::QueuedConnection);
+    setInfoEditStyleSheet();
 }
 
 void InfoDock::setInfo(const QString &info, bool _videoPlaying, bool _audioPlaying)

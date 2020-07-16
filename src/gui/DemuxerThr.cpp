@@ -741,7 +741,7 @@ void DemuxerThr::addSubtitleStream(bool currentPlaying, QString &subtitlesStream
     if (currentPlaying)
         subtitlesStreams += "<u>";
     else
-        subtitlesStreams += "<a style='text-decoration: none; color: black;' href='stream:" + streamName + QString::number(i) + "'>";
+        subtitlesStreams += "<a href='stream:" + streamName + QString::number(i) + "'>";
     subtitlesStreams += "<li><b>" + tr("Stream") + " " + QString::number(subtitlesStreamCount) + "</b></li>";
     if (currentPlaying)
         subtitlesStreams += "</u>";
@@ -896,7 +896,7 @@ void DemuxerThr::emitInfo()
                     videoStreams += "<u>";
                 }
                 else
-                    videoStreams += "<a style='text-decoration: none; color: black;' href='stream:video" + QString::number(i) + "'>";
+                    videoStreams += "<a href='stream:video" + QString::number(i) + "'>";
                 videoStreams += "<b>" + tr("Stream") + " " + QString::number(++videoStreamCount) + "</b>";
                 if (currentPlaying)
                     videoStreams += "</u>" + getWriterName((AVThread *)playC.vThr);
@@ -930,7 +930,7 @@ void DemuxerThr::emitInfo()
                     audioStreams += "<u>";
                 }
                 else
-                    audioStreams += "<a style='text-decoration: none; color: black;' href='stream:audio" + QString::number(i) + "'>";
+                    audioStreams += "<a href='stream:audio" + QString::number(i) + "'>";
                 audioStreams += "<b>" + tr("Stream") + " " + QString::number(++audioStreamCount) + "</b>";
                 if (currentPlaying)
                     audioStreams += "</u>" + getWriterName((AVThread *)playC.aThr);
