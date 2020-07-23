@@ -97,6 +97,7 @@ InfoDock::InfoDock()
 
     auto setInfoEditStyleSheet = [this] {
         infoE->document()->setDefaultStyleSheet("a {color: " + infoE->palette().text().color().name() + "; text-decoration: none;}");
+        infoE->setHtml(m_info);
     };
     connect(qGuiApp, &QGuiApplication::paletteChanged,
             this, setInfoEditStyleSheet,
@@ -107,7 +108,7 @@ InfoDock::InfoDock()
 void InfoDock::setInfo(const QString &info, bool _videoPlaying, bool _audioPlaying)
 {
     int scroll = infoE->verticalScrollBar()->value();
-    infoE->setHtml(info);
+    infoE->setHtml(m_info = info);
     infoE->verticalScrollBar()->setValue(scroll);
     videoPlaying = _videoPlaying;
     audioPlaying = _audioPlaying;
@@ -167,6 +168,7 @@ void InfoDock::updateBuffered(qint64 backwardBytes, qint64 remainingBytes, doubl
 }
 void InfoDock::clear()
 {
+    m_info.clear();
     infoE->clear();
     videoPlaying = audioPlaying = interlacedVideo = false;
     videoBR = audioBR = -1;

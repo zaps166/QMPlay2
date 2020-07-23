@@ -55,6 +55,8 @@ private:
     QLabel *bitrateAndFPS, *buffer;
     TextEdit *infoE;
 
+    QString m_info;
+
     bool videoPlaying, audioPlaying, interlacedVideo;
     int audioBR, videoBR;
     double videoFPS, videoRealFPS;

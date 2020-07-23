@@ -852,7 +852,7 @@ void DemuxerThr::emitInfo()
         info += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
         info += "<li>";
         if (!streams.isEmpty())
-            info += "<a href='stream:" + streams + "'>";
+            info += "<a style='text-decoration: underline;' href='stream:" + streams + "'>";
         if (currentPlaying == currentPlayingWanted)
             info += "<b>";
         info += tr("Program") + " " + QString::number(program.number);
@@ -873,7 +873,7 @@ void DemuxerThr::emitInfo()
             once = true;
         }
         info += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
-        info += "<li><a href='seek:" + QString::number(chapter.start) + "'>" + (chapter.title.isEmpty() ? tr("Chapter") + " " + QString::number(++chapterCount) : chapter.title) + "</a></li>";
+        info += "<li><a style='text-decoration: underline;' href='seek:" + QString::number(chapter.start) + "'>" + (chapter.title.isEmpty() ? tr("Chapter") + " " + QString::number(++chapterCount) : chapter.title) + "</a></li>";
         info += "</ul>";
     }
 
