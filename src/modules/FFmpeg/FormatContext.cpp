@@ -719,6 +719,13 @@ bool FormatContext::open(const QString &_url, const QString &param)
     // Useful, e.g. CUVID decoder needs valid PTS
     formatCtx->flags |= AVFMT_FLAG_GENPTS;
 
+    // enable sdp file & reduce udp latency
+    if (url.endsWith("sdp"))
+    {
+        av_dict_set(&options, "protocol_whitelist", "file,udp,rtp", 0);
+        formatCtx->flags |= AVFMT_FLAG_NOBUFFER;
+    }
+
     OpenFmtCtxThr *openThr = new OpenFmtCtxThr(formatCtx, url.toUtf8(), inputFmt, options, abortCtx);
     formatCtx = openThr->getFormatCtx();
     openThr->drop();
