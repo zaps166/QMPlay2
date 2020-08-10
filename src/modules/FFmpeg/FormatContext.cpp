@@ -723,7 +723,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
     if (url.endsWith("sdp"))
     {
         av_dict_set(&options, "protocol_whitelist", "file,udp,rtp", 0);
-        formatCtx->flags |= AVFMT_FLAG_NOBUFFER;
+        formatCtx->flags |= AVFMT_FLAG_NOBUFFER | AVFMT_FLAG_FLUSH_PACKETS;
     }
 
     OpenFmtCtxThr *openThr = new OpenFmtCtxThr(formatCtx, url.toUtf8(), inputFmt, options, abortCtx);

@@ -81,6 +81,7 @@ AVCodec *FFDec::init(StreamInfo &streamInfo)
 }
 bool FFDec::openCodec(AVCodec *codec)
 {
+    codec_ctx->flags |= AV_CODEC_FLAG_LOW_DELAY;
     if (avcodec_open2(codec_ctx, codec, nullptr))
         return false;
     packet = av_packet_alloc();
