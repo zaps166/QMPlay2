@@ -722,7 +722,9 @@ bool FormatContext::open(const QString &_url, const QString &param)
     // enable sdp file & reduce udp latency
     if (url.endsWith("sdp"))
     {
-        av_dict_set(&options, "protocol_whitelist", "file,udp,rtp", 0);
+        // this appends udp,rtp after default whitelist
+        av_dict_set(&options, "protocol_whitelist", "file,crypto,data,udp,rtp", 0);
+        // this reduces live stream latency
         formatCtx->flags |= AVFMT_FLAG_NOBUFFER | AVFMT_FLAG_FLUSH_PACKETS;
     }
 
