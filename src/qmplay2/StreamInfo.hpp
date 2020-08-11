@@ -100,6 +100,8 @@ public:
     bool must_decode = false;
     AVRational time_base = {1, 10000};
 
+    bool is_local = true;
+
     // Video only
     AVRational fps = {0, 1};
     double rotation = qQNaN();

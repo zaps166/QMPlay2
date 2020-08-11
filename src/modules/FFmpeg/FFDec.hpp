@@ -64,6 +64,8 @@ protected:
     AVRational m_timeBase;
     bool codecIsOpen;
 
+    bool isLocal;
+
 #ifdef USE_VULKAN
     std::shared_ptr<QmVk::ImagePool> m_vkImagePool;
 #endif

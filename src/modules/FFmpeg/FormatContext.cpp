@@ -722,6 +722,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
     // enable sdp file & reduce udp latency
     if (url.endsWith("sdp"))
     {
+        isLocal = false;
         // this appends udp,rtp after default whitelist
         av_dict_set(&options, "protocol_whitelist", "file,crypto,data,udp,rtp", 0);
         // this reduces live stream latency
@@ -798,6 +799,8 @@ bool FormatContext::open(const QString &_url, const QString &param)
             index_map[i] = -1;
         else
         {
+            streamInfo->is_local = isLocal;
+
             index_map[i] = streamsInfo.count();
             streamsInfo += streamInfo;
         }
