@@ -70,7 +70,7 @@ sudo dnf install qmplay2
 ## YouTube
 
 You can change the default audio and video quality of YouTube contents. Click on the "Settings" icon on the left of the search bar, change the order of audio and/or video quality priorities and apply changes.
-If the chosen quality won't be found on YouTube content, QMPlay2 will try to use the next entry on the quality list.
+If the chosen quality can't be found on YouTube content, QMPlay2 will try using the next entry on the quality list.
 
 YouTube videos don't work without external "youtube-dl" software, so QMPlay2 will download it automatically. You can remove downloaded "youtube-dl" from settings.
 
@@ -111,15 +111,15 @@ VA-API + OpenGL uses EGL for OpenGL context creation. On X11 QMPlay2 tries to de
 ## Deinterlacing
 
 Video interlacing is automatically detected by QMPlay2. Go to "Settings->Video filters" for more options.
-If you have fast CPU (or low video resolution) you can use "Yadif 2x" deinterlacing filter for better quality.
+If you have fast CPU (or low video resolution), you can use "Yadif 2x" deinterlacing filter for better quality.
 
 You can enable deinterlacing filter on non-interlaced video if necessary (some interlaced videos may not have interlacing data),
-but remember to revert this settings on any other video! Otherwise the video quality will be worse and performance will be worse!
+but remember to revert this setting on any other video! Otherwise the video quality and performance will be worse!
 
-Hardware accelerated video decoding uses its own video filtering, so the CPU deinterlacing method (e.g. "Yadif 2x") does nothing in this case.
+Hardware-accelerated video decoding uses its own video filtering, so the CPU deinterlacing method (e.g. "Yadif 2x") does nothing in this case.
 Of course you can adjust other deinterlacing settings in case of hardware acceleration.
 
-Vulkan renderer has Yadif deinterlacing filter which is used by default for CPU decoded videos. You can change this behavior it in Vulkan renderer settings. Moreover Yadif Vulkan filter is used for hardware decoded videos.
+Vulkan renderer has Yadif deinterlacing filter which is used by default for CPU decoded videos. You can change this behavior in Vulkan renderer settings. Moreover, Yadif Vulkan filter is used for hardware-decoded videos.
 
 Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as video output may not be properly deinterlaced.
 
@@ -147,15 +147,15 @@ Go to "Options->settings" and check "Read and display still images".
 
 You can specify a `CustomUserAgent` in `QMPlay2.ini` file in `General` section.
 
-### Signle instance
+### Single instance
 
 You can force single instance for QMPlay2: set "Allow only one instance" in "Settings->General settings".
 
 ## Multimedia keys
 
-In Windows and macOS multimedia keys should work automatically.
+In Windows and macOS, multimedia keys should work automatically.
 
-In Linux/BSD you must associate keys with commands:
+In Linux/BSD, you must associate keys with commands:
 - using QMPlay2 binary, see: `QMPlay2 -h`,
 - using MPRIS2:
 	- Toggle play/pause: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause`.
@@ -191,7 +191,7 @@ For CMake build be sure that you have CMake 3.1 or higher.
 - TagLib >= 1.7 (>= 1.9 recommended),
 - libass - for OSD and non-graphical subtitles.
 
-#### For modules (some of them can be automatically not used if not found):
+#### For modules (some of them can be automatically disabled if not found):
 - FFmpeg (necessary module): libva (VA-API) and libvdpau (VDPAU, X11 only),
 - Chiptune: libgme (kode54 version is recommended) and libsidplayfp,
 - DirectX (Windows only): DirectDraw SDK (included in mingw-w64),
@@ -213,12 +213,12 @@ $ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib li
 ### Running the compilation for Linux/BSD using CMake:
 
 - Install all needed packages and dependencies (in devel version) using package manager or compile it from sources.
-- You can use `cmake-gui` for graphical configuration. Otherwise follow below instructions:
+- You can use `cmake-gui` for graphical configuration. Otherwise follow the instructions below:
 	- create a "build" directory and go to it: `mkdir build && cd build`,
 	- run CMake (also you can run with arguments which you want): `cmake ..`,
 	- check the summary - which features are enabled - you can set/force them manually,
-	- if CMake finishes wihout errors, run: `make -j8` (replace 8 with numbers of CPU threads),
-	- if compiling finishes wihout errors, install it: `sudo make -j8 install`.
+	- if CMake finishes without errors, run: `make -j8` (replace 8 with numbers of CPU threads),
+	- if compiling finishes without errors, install it: `sudo make -j8 install`.
 
 CMake options (option - default value: description):
 - CMake options and the default settings:
@@ -261,7 +261,7 @@ CMake options (option - default value: description):
 	- `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
 	- `FIND_HWACCEL_DRIVERS_PATH` - `OFF`: Find drivers path for hwaccel, useful for universal package.
 
-Using other Qt installation using CMake:
+Using other Qt installation of CMake:
 - `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
 - `Qt5DBus_DIR`: path to the Qt5DBus cmake directory (e.g. `~/qtbase/lib/cmake/Qt5DBus`).
 - `Qt5LinguistTools_DIR`: path to the Qt5LinguistTools cmake directory (e.g. `~/qtbase/lib/cmake/Qt5LinguistTools`).
@@ -274,7 +274,7 @@ You can strip binaries during installation to save disk space: `sudo make -j8 in
 
 Example commands (execute it in QMPlay2 directory with source code):
 
-- Simple installation (rely on autodetection, `strip` reduces size but it makes that debugging is impossible):
+- Simple installation (rely on autodetection, `strip` reduces size, but it makes debugging unavailable):
 
 ```sh
 $ mkdir build
@@ -323,7 +323,7 @@ $ sudo make uninstall
 #### Windows (cross-compilation):
 
 - Install all required MinGW packages (I recommend AUR MinGW packages).
-- Some libraries are incompatible, uses unneeded dependencies or doesn't exist in repository - you should built them on your own.
+- Some libraries are incompatible, use unneeded dependencies or don't exist in repository - you should built them on your own.
 - Run `cmake` from cross-compilation toolchain.
 
 ##### Other information for Windows
