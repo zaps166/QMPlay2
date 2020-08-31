@@ -369,7 +369,7 @@ bool PlayClass::isPlaying() const
     return demuxThr && demuxThr->isRunning();
 }
 
-void PlayClass::loadSubsFile(const QString &fileName)
+void PlayClass::loadSubsFile(const QString &fileName, const QList<StreamInfo *> *streams)
 {
     bool subsLoaded = false;
     if (demuxThr && vThr && ass && subtitlesEnabled)
@@ -406,6 +406,11 @@ void PlayClass::loadSubsFile(const QString &fileName)
                             ass->addFont(fontName.toUtf8(), fontData);
                     }
                 }
+
+                if (streams)
+                    loadAssFonts(*streams);
+                else if (demuxThr->demuxer)
+                    loadAssFonts(demuxThr->demuxer->streamsInfo());
 
                 ass->initASS(fileData);
                 loaded = true;
@@ -648,6 +653,15 @@ bool PlayClass::setAudioParams(quint8 realChannels, quint32 realSampleRate)
     if (QMPlay2Core.getSettings().getBool("ForceChannels"))
         chn = QMPlay2Core.getSettings().getUInt("Channels");
     return aThr->setParams(realChannels, realSampleRate, chn, srate, QMPlay2Core.getSettings().getBool("ResamplerFirst"));
+}
+
+void PlayClass::loadAssFonts(const QList<StreamInfo *> &streams)
+{
+    for (auto &&stream : streams)
+    {
+        if (stream->codec_type == AVMEDIA_TYPE_ATTACHMENT && (stream->codec_name == "TTF" || stream->codec_name == "OTF") && stream->extradata_size > 0)
+            ass->addFont(stream->title, stream->getExtraData());
+    }
 }
 
 inline void PlayClass::emitSetVideoCheckState()
@@ -1504,7 +1518,9 @@ void PlayClass::load(Demuxer *demuxer)
             subsMutex.unlock();
 
             if (subtitlesEnabled && fileSubsList.count() && chosenSubtitlesStream < 0)
-                loadSubsFile(fileSubsList[fileSubsList.count() - 1]);
+            {
+                loadSubsFile(fileSubsList[fileSubsList.count() - 1], &streams);
+            }
             else
             {
                 if (subtitlesEnabled)
@@ -1524,9 +1540,7 @@ void PlayClass::load(Demuxer *demuxer)
                     QByteArray assHeader = streams[subtitlesStream]->getExtraData();
                     if (!assHeader.isEmpty() && (streams[subtitlesStream]->codec_name == "ssa" || streams[subtitlesStream]->codec_name == "ass"))
                     {
-                        for (int i = 0; i < streams.count(); ++i)
-                            if (streams[i]->codec_type == AVMEDIA_TYPE_ATTACHMENT && (streams[i]->codec_name == "TTF" || streams[i]->codec_name == "OTF") && streams[i]->extradata_size > 0)
-                                ass->addFont(streams[i]->title, streams[i]->getExtraData());
+                        loadAssFonts(streams);
                     }
                     else
                     {

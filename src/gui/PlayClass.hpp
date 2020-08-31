@@ -29,6 +29,7 @@
 #include <QStringList>
 #include <QWaitCondition>
 
+class StreamInfo;
 class QMPlay2OSD;
 class DemuxerThr;
 class VideoThr;
@@ -82,7 +83,7 @@ public:
         return pos;
     }
 
-    void loadSubsFile(const QString &);
+    void loadSubsFile(const QString &, const QList<StreamInfo *> *streams = nullptr);
 
     void messageAndOSD(const QString &, bool onStatusBar = true, double duration = 1.0);
 
@@ -118,6 +119,8 @@ private:
     void updateABRepeatInfo(bool showDisabledInfo);
 
     bool setAudioParams(quint8 realChannels, quint32 realSampleRate);
+
+    void loadAssFonts(const QList<StreamInfo *> &streams);
 
     inline void emitSetVideoCheckState();
 
