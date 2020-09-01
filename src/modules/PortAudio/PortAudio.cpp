@@ -97,7 +97,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     QFormLayout *layout = new QFormLayout(this);
     layout->addRow(enabledB);
     layout->addRow(tr("Playback device") + ": ", devicesB);
-    layout->addRow(tr("Delay") + ": ", delayB);
+    layout->addRow(tr("Maximum latency") + ": ", delayB);
 #ifdef Q_OS_MACOS
     layout->addRow(bitPerfect);
 #endif
