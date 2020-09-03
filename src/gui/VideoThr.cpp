@@ -400,10 +400,14 @@ void VideoThr::run()
         playC.fillBufferB = true;
 
         /* Subtitles packet */
-        Packet sPacket;
+        QVector<Packet> sPackets;
         playC.sPackets.lock();
-        if (playC.sPackets.canFetch())
-            sPacket = playC.sPackets.fetch();
+        while (playC.sPackets.canFetch())
+        {
+            auto packet = playC.sPackets.fetch();
+            if (!packet.isEmpty())
+                sPackets.push_back(move(packet));
+        }
         playC.sPackets.unlock();
 
         mutex.lock();
@@ -417,9 +421,10 @@ void VideoThr::run()
         const double subsPts = playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync;
         QList<const QMPlay2OSD *> osdList, osdListToDelete;
         playC.subsMutex.lock();
+        const bool canDeleteSubs = (deleteSubs && static_cast<bool>(subtitles));
         if (sDec) //Image subs (pgssub, dvdsub, ...)
         {
-            if (!sDec->decodeSubtitle(sPacket, subsPts, subtitles, QSize(W, H), playC.flushVideo))
+            if (!sDec->decodeSubtitle(sPackets, subsPts, subtitles, QSize(W, H), playC.flushVideo))
             {
                 osdListToDelete += subtitles;
                 subtitles = nullptr;
@@ -427,7 +432,7 @@ void VideoThr::run()
         }
         else
         {
-            if (!sPacket.isEmpty())
+            for (auto &&sPacket : asConst(sPackets))
             {
                 const QByteArray sPacketData = QByteArray::fromRawData((const char *)sPacket.data(), sPacket.size());
                 if (playC.ass->isASS())
@@ -444,7 +449,7 @@ void VideoThr::run()
         if (subtitles)
         {
             const bool hasDuration = subtitles->duration() >= 0.0;
-            if (deleteSubs || (subtitles->isStarted() && subsPts < subtitles->pts()) || (hasDuration && subsPts > subtitles->pts() + subtitles->duration()))
+            if (canDeleteSubs || (subtitles->isStarted() && subsPts < subtitles->pts()) || (hasDuration && subsPts > subtitles->pts() + subtitles->duration()))
             {
                 osdListToDelete += subtitles;
                 subtitles = nullptr;

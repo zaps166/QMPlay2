@@ -111,9 +111,9 @@ int Decoder::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
     ts = encodedPacket.ts();
     return decoded.size();
 }
-bool Decoder::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush)
+bool Decoder::decodeSubtitle(const QVector<Packet> &encodedPackets, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush)
 {
-    Q_UNUSED(encodedPacket)
+    Q_UNUSED(encodedPackets)
     Q_UNUSED(pos)
     Q_UNUSED(osd)
     Q_UNUSED(size)
