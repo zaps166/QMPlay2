@@ -70,7 +70,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
     QFormLayout *layout = new QFormLayout(this);
     layout->addRow(enabledB);
-    layout->addRow(tr("Delay") + ": ", delayB);
+    layout->addRow(tr("Maximum latency") + ": ", delayB);
 }
 
 void ModuleSettingsWidget::saveSettings()
