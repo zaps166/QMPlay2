@@ -1416,8 +1416,8 @@
         <translation>Tranches</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Différer</translation>
+        <source>Maximum latency</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Refresh time</source>

@@ -1419,8 +1419,8 @@
         <translation>Kawałki</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Opóźnienie</translation>
+        <source>Maximum latency</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Refresh time</source>

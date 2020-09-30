@@ -1418,8 +1418,8 @@
         <translation>Scheiben</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Verzögerung</translation>
+        <source>Maximum latency</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Refresh time</source>

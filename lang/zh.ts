@@ -1419,8 +1419,8 @@
         <translation>片</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>延时</translation>
+        <source>Maximum latency</source>
+        <translation>最大延迟</translation>
     </message>
     <message>
         <source>Refresh time</source>
