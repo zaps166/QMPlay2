@@ -1471,8 +1471,8 @@
         <translation>Repetición de eco</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Retardo</translation>
+        <source>Maximum latency</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Software decoder</source>

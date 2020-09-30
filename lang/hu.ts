@@ -1351,8 +1351,8 @@
         <translation>sec</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Késleltetés</translation>
+        <source>Maximum latency</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Playback device</source>

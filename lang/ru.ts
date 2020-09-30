@@ -1416,8 +1416,8 @@
         <translation>Фрагменты</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Задержка</translation>
+        <source>Maximum latency</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Refresh time</source>
