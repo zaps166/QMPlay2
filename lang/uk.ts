@@ -1420,7 +1420,7 @@
     </message>
     <message>
         <source>Maximum latency</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальна затримка</translation>
     </message>
     <message>
         <source>Refresh time</source>
