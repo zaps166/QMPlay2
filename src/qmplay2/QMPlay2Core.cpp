@@ -389,7 +389,11 @@ void QMPlay2CoreClass::quit()
     delete qtTranslator;
     delete translator;
     delete settings;
-    m_gpuInstance.reset();
+    if (m_gpuInstance)
+    {
+        m_gpuInstance->prepareDestroy();
+        m_gpuInstance.reset();
+    }
 }
 
 bool QMPlay2CoreClass::canSuspend()

@@ -148,6 +148,11 @@ Instance::~Instance()
     delete m_qVulkanInstance;
 }
 
+void Instance::prepareDestroy()
+{
+    m_physicalDevice.reset();
+}
+
 void Instance::init()
 {
 #ifdef QT_DEBUG

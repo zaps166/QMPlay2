@@ -55,6 +55,8 @@ public:
     Instance(Priv);
     ~Instance();
 
+    void prepareDestroy() override;
+
 private:
     void init();
 

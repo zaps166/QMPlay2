@@ -73,6 +73,10 @@ shared_ptr<GPUInstance> GPUInstance::create()
     return nullptr;
 }
 
+void GPUInstance::prepareDestroy()
+{
+}
+
 shared_ptr<HWDecContext> GPUInstance::getHWDecContext() const
 {
     if (m_videoWriter)

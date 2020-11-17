@@ -31,6 +31,8 @@ public:
 public:
     virtual ~GPUInstance() = default;
 
+    virtual void prepareDestroy();
+
     virtual QString name() const = 0;
     virtual QMPlay2CoreClass::Renderer renderer() const = 0;
 
