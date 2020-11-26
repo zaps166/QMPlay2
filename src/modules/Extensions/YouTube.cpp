@@ -18,6 +18,7 @@
 
 #include <YouTube.hpp>
 
+#include <Functions.hpp>
 #include <YouTubeDL.hpp>
 #include <LineEdit.hpp>
 
@@ -1076,13 +1077,10 @@ QJsonDocument YouTube::getYtInitialData(const QByteArray &data)
     if (idx < 0)
         return QJsonDocument();
 
-    int idx2 = data.indexOf("\n", idx);
+    int idx2 = Functions::findJsonEnd(data, idx);
     if (idx2 < 0)
         return QJsonDocument();
 
-    auto jsonData = data.mid(idx, idx2 - idx).trimmed();
-    if (jsonData.endsWith(';'))
-        jsonData.chop(1);
-
+    const auto jsonData = data.mid(idx, idx2 - idx);
     return QJsonDocument::fromJson(jsonData);
 }
