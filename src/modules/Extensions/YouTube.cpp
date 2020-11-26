@@ -414,14 +414,8 @@ bool YouTube::canConvertAddress() const
 QString YouTube::matchAddress(const QString &url) const
 {
     const QUrl qurl(url);
-
-    if (!qurl.scheme().startsWith("http"))
-        return QString();
-
-    const auto host = qurl.host();
-    if (host.contains("youtube.") || host.contains("youtu.be") || host.contains("invidio.us"))
+    if (qurl.scheme().startsWith("http") && (qurl.host().contains("youtube.") || qurl.host().contains("youtu.be")))
         return "YouTube";
-
     return QString();
 }
 QList<YouTube::AddressPrefix> YouTube::addressPrefixList(bool img) const
