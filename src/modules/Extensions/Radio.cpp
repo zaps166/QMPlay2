@@ -298,7 +298,7 @@ void Radio::on_searchByComboBox_activated(int idx)
 }
 void Radio::on_addRadioBrowserStationButton_clicked()
 {
-    QDesktopServices::openUrl(QUrl("http://www.radio-browser.info/gui/#!/add"));
+    QDesktopServices::openUrl(QUrl("http://www.radio-browser.info/#!/add"));
 }
 void Radio::on_radioView_doubleClicked(const QModelIndex &index)
 {
