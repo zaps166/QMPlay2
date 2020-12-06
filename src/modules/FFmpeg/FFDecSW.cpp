@@ -469,6 +469,9 @@ void FFDecSW::setPixelFormat()
 
     for (const AVPixelFormat pixFmt : asConst(supportedPixelFormats))
     {
+        if (!sws_isSupportedOutput(pixFmt))
+            continue;
+
         auto pixDesc = av_pix_fmt_desc_get(pixFmt);
         Q_ASSERT(pixDesc);
 
