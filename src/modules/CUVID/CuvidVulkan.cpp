@@ -94,7 +94,7 @@ CuvidVulkan::CuvidVulkan(const shared_ptr<CUcontext> &cuCtx)
         char cuPCIBusId[13] = {};
         if (cu::deviceGetPCIBusId(cuPCIBusId, sizeof(cuPCIBusId), 0) == CUDA_SUCCESS)
         {
-            if (physicalDevice->linuxPCIPath() != cuPCIBusId)
+            if (QString::fromStdString(physicalDevice->linuxPCIPath()).compare(cuPCIBusId, Qt::CaseInsensitive) != 0)
             {
                 QMPlay2Core.logError("CUVID :: Primary CUDA device doesn't match");
                 m_error = true;
