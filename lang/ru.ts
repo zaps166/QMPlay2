@@ -3508,7 +3508,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Published time</source>
+        <source>Publish time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

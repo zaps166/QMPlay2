@@ -3511,7 +3511,7 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Published time</source>
+        <source>Publish time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

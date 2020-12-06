@@ -3513,7 +3513,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>首选质量</translation>
     </message>
     <message>
-        <source>Published time</source>
+        <source>Publish time</source>
         <translation>发布时间</translation>
     </message>
 </context>
