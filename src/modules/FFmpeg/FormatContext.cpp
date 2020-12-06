@@ -719,21 +719,32 @@ bool FormatContext::open(const QString &_url, const QString &param)
     // Useful, e.g. CUVID decoder needs valid PTS
     formatCtx->flags |= AVFMT_FLAG_GENPTS;
 
+    if (url.endsWith("sdp"))
+        av_dict_set(&options, "protocol_whitelist", "file,crypto,data,udp,rtp", 0);
+
     OpenFmtCtxThr *openThr = new OpenFmtCtxThr(formatCtx, url.toUtf8(), inputFmt, options, abortCtx);
     formatCtx = openThr->getFormatCtx();
     openThr->drop();
     if (!formatCtx || disabledDemuxers.contains(name()))
         return false;
 
-    if (name().startsWith("image2") || name().endsWith("_pipe"))
+    if (name() == "sdp")
+    {
+        isLocal = false;
+    }
+    else if (name().startsWith("image2") || name().endsWith("_pipe"))
     {
         if (!settings.getBool("StillImages"))
             return false;
         stillImage = true;
     }
-
-    if (name() == "mp3")
+    else if (name() == "mp3")
+    {
         formatCtx->flags |= AVFMT_FLAG_FAST_SEEK; //This should be set before "avformat_open_input", but seems to be working for MP3...
+    }
+
+    if (!isLocal)
+        formatCtx->flags |= AVFMT_FLAG_NOBUFFER;
 
     if (avformat_find_stream_info(formatCtx, nullptr) < 0)
         return false;
