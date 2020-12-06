@@ -777,7 +777,7 @@ void YouTube::setSearchResults(const QByteArray &data)
 
             const bool isVideo = !videoRenderer.isEmpty() && playlistRenderer.isEmpty();
 
-            QString title, contentId, length, user, publishedTime, viewCount, thumbnail, url;
+            QString title, contentId, length, user, publishTime, viewCount, thumbnail, url;
 
             if (isVideo)
             {
@@ -788,7 +788,7 @@ void YouTube::setSearchResults(const QByteArray &data)
 
                 length = videoRenderer["lengthText"].toObject()["simpleText"].toString();
                 user = videoRenderer["ownerText"].toObject()["runs"].toArray().at(0).toObject()["text"].toString();
-                publishedTime = videoRenderer["publishedTimeText"].toObject()["simpleText"].toString();
+                publishTime = videoRenderer["publishedTimeText"].toObject()["simpleText"].toString();
                 viewCount = videoRenderer["shortViewCountText"].toObject()["simpleText"].toString();
                 thumbnail = videoRenderer["thumbnail"].toObject()["thumbnails"].toArray().at(0).toObject()["url"].toString();
 
@@ -822,9 +822,12 @@ void YouTube::setSearchResults(const QByteArray &data)
             QString tooltip;
             tooltip += QString("%1: %2\n").arg(resultsW->headerItem()->text(0), tWI->text(0));
             tooltip += QString("%1: %2\n").arg(isVideo ? resultsW->headerItem()->text(1) : tr("Playlist"), isVideo ? tWI->text(1) : tr("yes"));
-            tooltip += QString("%1: %2\n").arg(resultsW->headerItem()->text(2), tWI->text(2));
-            tooltip += QString("%1: %2\n").arg(tr("Published time"), publishedTime);
-            tooltip += QString("%1: %2").arg(tr("View count"), viewCount);
+            tooltip += QString("%1: %2").arg(resultsW->headerItem()->text(2), tWI->text(2));
+            if (isVideo)
+            {
+                tooltip += QString("\n%1: %2\n").arg(tr("Publish time"), publishTime);
+                tooltip += QString("%1: %2").arg(tr("View count"), viewCount);
+            }
             tWI->setToolTip(0, tooltip);
 
             tWI->setData(0, Qt::UserRole, url);
