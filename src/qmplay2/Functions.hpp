@@ -149,8 +149,6 @@ namespace Functions
 
     QMPLAY2SHAREDLIB_EXPORT QByteArray textWithFallbackEncoding(const QByteArray &data);
 
-    QMPLAY2SHAREDLIB_EXPORT int findJsonEnd(const QByteArray &data, int idx = 0);
-
     struct LumaCoefficients
     {
         float cR, cG, cB;
