@@ -3513,7 +3513,7 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <translation>Preferowana jakość</translation>
     </message>
     <message>
-        <source>Published time</source>
+        <source>Publish time</source>
         <translation>Czas publikacji</translation>
     </message>
 </context>

@@ -3515,7 +3515,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>解像度</translation>
     </message>
     <message>
-        <source>Published time</source>
+        <source>Publish time</source>
         <translation>公開日</translation>
     </message>
 </context>

@@ -3512,7 +3512,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <translation>Bevorzugte Qualität</translation>
     </message>
     <message>
-        <source>Published time</source>
+        <source>Publish time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
