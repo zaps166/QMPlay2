@@ -40,6 +40,7 @@
 #include <QMimeData>
 #include <QSpinBox>
 #include <QAction>
+#include <QLabel>
 #include <QMenu>
 #include <QUrl>
 
@@ -52,7 +53,7 @@ static inline QString toPercentEncoding(const QString &txt)
     return txt.toUtf8().toPercentEncoding();
 }
 
-static inline QString getYtUrl(const QString &title, const int page, const int sortByIdx)
+static inline QString getYtUrl(const QString &title, const int sortByIdx)
 {
     static constexpr const char *sortBy[4] {
         "",             // Relevance ("&sp=CAA%253D")
@@ -61,7 +62,7 @@ static inline QString getYtUrl(const QString &title, const int page, const int s
         "&sp=CAE%253D", // Rating
     };
     Q_ASSERT(sortByIdx >= 0 && sortByIdx <= 3);
-    return QString(YOUTUBE_URL "/results?search_query=%1%2&page=%3").arg(toPercentEncoding(title), sortBy[sortByIdx]).arg(page);
+    return QString(YOUTUBE_URL "/results?search_query=%1%2").arg(toPercentEncoding(title), sortBy[sortByIdx]);
 }
 static inline QString getAutocompleteUrl(const QString &text)
 {
@@ -203,26 +204,18 @@ void ResultsYoutube::contextMenu(const QPoint &point)
 
 /**/
 
-PageSwitcher::PageSwitcher(QWidget *youTubeW)
+PageSwitcher::PageSwitcher(YouTube *youTubeW)
 {
-    prevB = new QToolButton;
-    connect(prevB, SIGNAL(clicked()), youTubeW, SLOT(prev()));
-    prevB->setAutoRaise(true);
-    prevB->setArrowType(Qt::LeftArrow);
-
-    currPageB = new QSpinBox;
-    connect(currPageB, SIGNAL(editingFinished()), youTubeW, SLOT(chPage()));
-    currPageB->setMinimum(1);
-    currPageB->setMaximum(50); //1000 wyników, po 20 wyników na stronę
+    currPageB = new QLabel;
 
     nextB = new QToolButton;
-    connect(nextB, SIGNAL(clicked()), youTubeW, SLOT(next()));
+    connect(nextB, &QToolButton::clicked,
+            youTubeW, &YouTube::chPage);
     nextB->setAutoRaise(true);
     nextB->setArrowType(Qt::RightArrow);
 
     QHBoxLayout *hLayout = new QHBoxLayout(this);
     hLayout->setContentsMargins(0, 0, 0, 0);
-    hLayout->addWidget(prevB);
     hLayout->addWidget(currPageB);
     hLayout->addWidget(nextB);
 }
@@ -247,7 +240,6 @@ const QStringList YouTube::getQualityPresets()
 
 YouTube::YouTube(Module &module) :
     completer(new QCompleter(new QStringListModel(this), this)),
-    currPage(1),
     net(this)
 {
     youtubeIcon = QIcon(":/youtube.svgz");
@@ -479,23 +471,9 @@ QVector<QAction *> YouTube::getActions(const QString &name, double, const QStrin
     return {};
 }
 
-void YouTube::next()
-{
-    pageSwitcher->currPageB->setValue(pageSwitcher->currPageB->value() + 1);
-    chPage();
-}
-void YouTube::prev()
-{
-    pageSwitcher->currPageB->setValue(pageSwitcher->currPageB->value() - 1);
-    chPage();
-}
 void YouTube::chPage()
 {
-    if (currPage != pageSwitcher->currPageB->value())
-    {
-        currPage = pageSwitcher->currPageB->value();
-        search();
-    }
+    search();
 }
 
 void YouTube::searchTextEdited(const QString &text)
@@ -515,12 +493,24 @@ void YouTube::search()
         autocompleteReply->deleteLater();
     if (searchReply)
         searchReply->deleteLater();
+    if (continuationReply)
+        continuationReply->deleteLater();
     resultsW->clear();
     if (!title.isEmpty())
     {
+        pageSwitcher->setEnabled(false);
         if (lastTitle != title || sender() == searchE || sender() == searchB || qobject_cast<QAction *>(sender()))
-            currPage = 1;
-        searchReply = net.start(getYtUrl(title, currPage, m_sortByIdx));
+        {
+            m_currPage = 1;
+            searchReply = net.start(getYtUrl(title, m_sortByIdx));
+        }
+        else
+        {
+            continuationReply = net.start(
+                QString(YOUTUBE_URL "/youtubei/v1/search?key=%1").arg(m_apiKey),
+                getContinuationJson()
+            );
+        }
         progressB->setRange(0, 0);
         progressB->show();
     }
@@ -528,6 +518,7 @@ void YouTube::search()
     {
         pageSwitcher->hide();
         progressB->hide();
+        clearContinuation();
     }
     lastTitle = title;
 }
@@ -543,6 +534,7 @@ void YouTube::netFinished(NetworkReply *reply)
             lastTitle.clear();
             progressB->hide();
             pageSwitcher->hide();
+            clearContinuation();
             emit QMPlay2Core.sendMessage(tr("Connection error"), YouTubeName, 3);
         }
     }
@@ -556,7 +548,15 @@ void YouTube::netFinished(NetworkReply *reply)
         }
         else if (reply == searchReply)
         {
-            setSearchResults(replyData);
+            m_apiKey = QRegularExpression(R"|("INNERTUBE_API_KEY"\s*:\s*"(.+?)")|").match(replyData).captured(1);
+            m_clientName = QRegularExpression(R"|("INNERTUBE_CLIENT_NAME"\s*:\s*"(.+?)")|").match(replyData).captured(1);
+            m_clientVersion = QRegularExpression(R"|("INNERTUBE_CLIENT_VERSION"\s*:\s*"(.+?)")|").match(replyData).captured(1);
+            setSearchResults(getYtInitialData(replyData).object(), false);
+        }
+        else if (reply == continuationReply)
+        {
+            ++m_currPage;
+            setSearchResults(QJsonDocument::fromJson(replyData).object(), true);
         }
         else if (linkReplies.contains(reply))
         {
@@ -725,6 +725,29 @@ void YouTube::deleteReplies()
         imageReplies.takeFirst()->deleteLater();
 }
 
+void YouTube::clearContinuation()
+{
+    m_apiKey.clear();
+    m_clientName.clear();
+    m_clientVersion.clear();
+    m_continuationToken.clear();
+}
+QByteArray YouTube::getContinuationJson()
+{
+    QJsonObject client;
+    client["clientName"] = m_clientName;
+    client["clientVersion"] = m_clientVersion;
+
+    QJsonObject context;
+    context["client"] = client;
+
+    QJsonObject continuation;
+    continuation["continuation"] = m_continuationToken;
+    continuation["context"] = context;
+
+    return QJsonDocument(continuation).toJson(QJsonDocument::Compact);
+}
+
 void YouTube::setAutocomplete(const QByteArray &data)
 {
     QJsonParseError jsonErr;
@@ -751,24 +774,51 @@ void YouTube::setAutocomplete(const QByteArray &data)
     if (searchE->hasFocus())
         completer->complete();
 }
-void YouTube::setSearchResults(const QByteArray &data)
+void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation)
 {
-    const auto json = getYtInitialData(data);
+    QJsonArray items;
 
-    const auto sectionListRendererContents = json.object()
-        ["contents"].toObject()
-        ["twoColumnSearchResultsRenderer"].toObject()
-        ["primaryContents"].toObject()
-        ["sectionListRenderer"].toObject()
-        ["contents"].toArray()
-    ;
+    if (isContinuation)
+    {
+        const auto onResponseReceivedCommands = jsonObj
+            ["onResponseReceivedCommands"].toArray()
+        ;
+        for (auto &&val : onResponseReceivedCommands)
+        {
+            items = val.toObject()
+                ["appendContinuationItemsAction"].toObject()
+                ["continuationItems"].toArray()
+            ;
+            if (!items.isEmpty())
+                break;
+        }
+    }
+    else
+    {
+        items = jsonObj
+            ["contents"].toObject()
+            ["twoColumnSearchResultsRenderer"].toObject()
+            ["primaryContents"].toObject()
+            ["sectionListRenderer"].toObject()
+            ["contents"].toArray()
+        ;
+    }
 
-    for (auto &&obj : sectionListRendererContents)
+    for (auto &&obj : items)
     {
         const auto contents = obj.toObject()
             ["itemSectionRenderer"].toObject()
             ["contents"].toArray()
         ;
+
+        const auto token = obj.toObject()
+            ["continuationItemRenderer"].toObject()
+            ["continuationEndpoint"].toObject()
+            ["continuationCommand"].toObject()
+            ["token"].toString()
+        ;
+        if (!token.isEmpty())
+            m_continuationToken = token;
 
         for (auto &&obj : contents)
         {
@@ -853,8 +903,12 @@ void YouTube::setSearchResults(const QByteArray &data)
 
     if (resultsW->topLevelItemCount() > 0)
     {
-        pageSwitcher->currPageB->setValue(currPage);
-        pageSwitcher->show();
+        if (!m_apiKey.isEmpty() && !m_clientName.isEmpty() && !m_clientVersion.isEmpty() && !m_continuationToken.isEmpty())
+        {
+            pageSwitcher->currPageB->setText(QString::number(m_currPage));
+            pageSwitcher->setEnabled(true);
+            pageSwitcher->show();
+        }
 
         progressB->setMaximum(linkReplies.count() + imageReplies.count());
         progressB->setValue(0);

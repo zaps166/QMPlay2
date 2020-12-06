@@ -59,14 +59,16 @@ private slots:
 
 /**/
 
+class YouTube;
+
 class PageSwitcher final : public QWidget
 {
     Q_OBJECT
 public:
-    PageSwitcher(QWidget *youTubeW);
+    PageSwitcher(YouTube *youTubeW);
 
-    QToolButton *prevB, *nextB;
-    QSpinBox *currPageB;
+    QToolButton *nextB;
+    QLabel *currPageB;
 };
 
 /**/
@@ -96,11 +98,10 @@ public:
 
     QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
 
-private slots:
-    void next();
-    void prev();
+public:
     void chPage();
 
+private slots:
     void searchTextEdited(const QString &text);
     void search();
 
@@ -113,8 +114,11 @@ private:
 
     void deleteReplies();
 
+    void clearContinuation();
+    QByteArray getContinuationJson();
+
     void setAutocomplete(const QByteArray &data);
-    void setSearchResults(const QByteArray &data);
+    void setSearchResults(const QJsonObject &jsonObj, bool isContinuation);
 
     QStringList getYouTubeVideo(const QString &param, const QString &url, IOController<YouTubeDL> &youTubeDL);
 
@@ -135,9 +139,8 @@ private:
 
     QString lastTitle;
     QCompleter *completer;
-    int currPage;
 
-    QPointer<NetworkReply> autocompleteReply, searchReply;
+    QPointer<NetworkReply> autocompleteReply, searchReply, continuationReply;
     QList<NetworkReply *> linkReplies, imageReplies;
     NetworkAccess net;
 
@@ -149,6 +152,9 @@ private:
 
     QMutex m_itagsMutex;
     QList<int> m_videoItags, m_audioItags, m_hlsItags, m_singleUrlItags;
+
+    QString m_apiKey, m_clientName, m_clientVersion, m_continuationToken;
+    int m_currPage = 1;
 };
 
 #define YouTubeName "YouTube Browser"
