@@ -128,7 +128,7 @@ QString FFReader::name() const
 bool FFReader::open()
 {
     AVDictionary *options = nullptr;
-    const QString url = Functions::prepareFFmpegUrl(getUrl(), options);
+    const QString url = Functions::prepareFFmpegUrl(getUrl(), options, false);
 
     OpenAvioThr *openThr = new OpenAvioThr(url.toUtf8(), options, abortCtx);
     avioCtx = openThr->getAvioCtx();
