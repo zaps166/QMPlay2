@@ -1,4 +1,4 @@
-Changes in QMPlay2 20.12.xx:
+Changes in QMPlay2 20.12.07:
     - fix displaying of subtitles from media file in some rare cases,
     - load fonts from media file when using subtitles from file,
     - fix inactive streams text color in Information panel,
