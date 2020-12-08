@@ -1419,7 +1419,7 @@
     </message>
     <message>
         <source>Maximum latency</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale Latenz</translation>
     </message>
     <message>
         <source>Refresh time</source>
@@ -1743,7 +1743,7 @@
     </message>
     <message>
         <source>Try to automatically reconnect live streams on error</source>
-        <translation> Versuche, Live-Streams bei einem Fehler automatisch neu zu verbinden</translation>
+        <translation type="unfinished">Versuche, Live-Streams bei einem Fehler automatisch neu zu verbinden</translation>
     </message>
     <message>
         <source>Decode MPEG4 videos</source>
@@ -1902,7 +1902,7 @@
     <name>Options</name>
     <message>
         <source>Op&amp;tions</source>
-        <translation>Optionen</translation>
+        <translation>Op&amp;tionen</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
@@ -1922,19 +1922,19 @@
     </message>
     <message>
         <source>&amp;Profiles</source>
-        <translation>Profile</translation>
+        <translation>&amp;Profile</translation>
     </message>
     <message>
         <source>&amp;New Profile</source>
-        <translation>Neues Profil</translation>
+        <translation>&amp;Neues Profil</translation>
     </message>
     <message>
         <source>&amp;Copy Profile</source>
-        <translation>Profil kopieren</translation>
+        <translation>Profil &amp;kopieren</translation>
     </message>
     <message>
         <source>&amp;Default</source>
-        <translation>Standard</translation>
+        <translation>&amp;Standard</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -1942,7 +1942,7 @@
     </message>
     <message>
         <source>Enter new profile name:</source>
-        <translation>Neuen Profilnamen eingeben</translation>
+        <translation>Neuen Profilnamen eingeben:</translation>
     </message>
     <message>
         <source>&amp;Playback settings</source>
@@ -2072,7 +2072,7 @@
     <name>Playback</name>
     <message>
         <source>&amp;Playback</source>
-        <translation>Wiedergabe</translation>
+        <translation>&amp;Wiedergabe</translation>
     </message>
     <message>
         <source>&amp;Enable audio</source>
@@ -2084,7 +2084,7 @@
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>Video Verzögerung angeben</translation>
+        <translation>&amp;Video Verzögerung angeben</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
@@ -2318,15 +2318,15 @@
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translation>Schneller</translation>
+        <translation>&amp;Schneller</translation>
     </message>
     <message>
         <source>Slowe&amp;r</source>
-        <translation>Langsamer</translation>
+        <translation>Langsame&amp;r</translation>
     </message>
     <message>
         <source>Zoom i&amp;n</source>
-        <translation>Reinzoomen</translation>
+        <translation>Rei&amp;nzoomen</translation>
     </message>
     <message>
         <source>Zoom ou&amp;t</source>
@@ -2334,7 +2334,7 @@
     </message>
     <message>
         <source>&amp;Mute</source>
-        <translation>Stumm</translation>
+        <translation>Stu&amp;mm</translation>
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
@@ -2667,19 +2667,19 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     </message>
     <message>
         <source>Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Tag</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished">Land</translation>
+        <translation>Land</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation type="unfinished">Sprache</translation>
+        <translation>Sprache</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Staat</translation>
     </message>
 </context>
 <context>
@@ -2725,7 +2725,7 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>Wiedergabeliste wiederholen</translation>
+        <translation>&amp;Wiedergabeliste wiederholen</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
@@ -2733,7 +2733,7 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation>Zufällige Wiedergabe der Gruppe</translation>
+        <translation>Zufällige Wiedergabe der &amp;Gruppe</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
@@ -2791,7 +2791,7 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     <name>SIDPlay</name>
     <message>
         <source>Track</source>
-        <translation>Pfad</translation>
+        <translation>Stück</translation>
     </message>
 </context>
 <context>
@@ -2952,11 +2952,11 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Legacy</source>
-        <translation type="unfinished"></translation>
+        <translation>Legacy</translation>
     </message>
     <message>
         <source>OpenGL</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenGL</translation>
     </message>
     <message>
         <source>active</source>
@@ -3004,7 +3004,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Renderer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Renderer:</translation>
     </message>
     <message>
         <source>Renderer settings</source>
@@ -3012,7 +3012,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Vulkan</source>
-        <translation type="unfinished"></translation>
+        <translation>Vulkan</translation>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
@@ -3052,7 +3052,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation>Gerät</translation>
+        <translation>Gerät:</translation>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
@@ -3171,7 +3171,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Track</source>
-        <translation>Pfad</translation>
+        <translation>Stück</translation>
     </message>
     <message>
         <source>Cover</source>
@@ -3513,7 +3513,8 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Publish time</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>kann ich nicht nachvollziehen, da Youtube nicht geht</translatorcomment>
+        <translation type="unfinished">Veröffentlichung</translation>
     </message>
 </context>
 <context>
