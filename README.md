@@ -22,7 +22,7 @@ Table of Contents
 
 ## Installation
 
-#### Easy installation on Windows (XP or higher)
+#### Easy installation on Windows
 
 - [Download](https://github.com/zaps166/QMPlay2/releases/latest) the Windows installer.
 
