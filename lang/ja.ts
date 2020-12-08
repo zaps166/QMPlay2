@@ -2682,7 +2682,7 @@ QMPlay2はアイコンを拡大しません！</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>状態</translation>
+        <translation>州</translation>
     </message>
 </context>
 <context>
