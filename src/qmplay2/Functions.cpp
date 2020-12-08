@@ -806,11 +806,7 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool de
 
         if (url.startsWith("http"))
             av_dict_set(&options, "icy", icy ? "1" : "0", 0);
-#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(57, 56, 100)
         av_dict_set(&options, "user_agent", userAgent, 0);
-#else
-        av_dict_set(&options, "user-agent", userAgent, 0);
-#endif
 
         if (!cookies.isEmpty())
             av_dict_set(&options, "headers", "Cookie: " + cookies + "\r\n", 0);

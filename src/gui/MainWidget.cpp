@@ -423,7 +423,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
     bool noplay = false;
-    for (const auto &argument : asConst(arguments))
+    for (const auto &argument : qAsConst(arguments))
     {
         const QString &param = argument.first;
         const QString &data  = argument.second;
@@ -1722,7 +1722,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
                 playlistDock->show();
                 infoDock->show();
 
-                for (QMPlay2Extensions *QMPlay2Ext : asConst(visibleQMPlay2Extensions))
+                for (QMPlay2Extensions *QMPlay2Ext : qAsConst(visibleQMPlay2Extensions))
                     if (!QMPlay2Ext->isVisualization())
                         if (DockWidget *dw = QMPlay2Ext->getDockWidget())
                         {

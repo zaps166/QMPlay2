@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.9)
 project(libqmplay2)
 
 set(QMPLAY2_HDR
@@ -45,7 +45,6 @@ set(QMPLAY2_HDR
     Notifies.hpp
     NotifiesTray.hpp
     MkvMuxer.hpp
-    CppUtils.hpp
     Sphere.hpp
     X11BypassCompositor.hpp
     VideoOutputCommon.hpp
@@ -190,20 +189,12 @@ if(USE_VULKAN)
 
     # Compiled shaders QRC generation
 
-    if(${CMAKE_VERSION} VERSION_GREATER "3.9.0" OR ${CMAKE_VERSION} VERSION_EQUAL "3.9.0")
-        set(USE_TMP_FILE ON)
-    endif()
-
     set(VULKAN_SHADER_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/vulkan_shaders.qrc")
     list(APPEND QMPLAY2_VULKAN_SRC
         ${VULKAN_SHADER_QRC_FILE}
     )
 
-    if(USE_TMP_FILE)
-        set(VULKAN_SHADER_QRC_FILE_TMP "${VULKAN_SHADER_QRC_FILE}.tmp")
-    else()
-        set(VULKAN_SHADER_QRC_FILE_TMP ${VULKAN_SHADER_QRC_FILE})
-    endif()
+    set(VULKAN_SHADER_QRC_FILE_TMP "${VULKAN_SHADER_QRC_FILE}.tmp")
 
     foreach(SHADER_COMPILED_FILE ${QMVK_SHADER_COMPILED_FILES})
         get_filename_component(SHADER_COMPILED_FILE_NAME ${SHADER_COMPILED_FILE} NAME)
@@ -218,13 +209,11 @@ if(USE_VULKAN)
         " </qresource>\n</RCC>\n"
     )
 
-    if(USE_TMP_FILE)
-        add_custom_command(
-            OUTPUT ${VULKAN_SHADER_QRC_FILE}
-            DEPENDS ${QMVK_SHADER_COMPILED_FILES}
-            COMMAND ${CMAKE_COMMAND} -E copy ${VULKAN_SHADER_QRC_FILE_TMP} ${VULKAN_SHADER_QRC_FILE}
-        )
-    endif()
+    add_custom_command(
+        OUTPUT ${VULKAN_SHADER_QRC_FILE}
+        DEPENDS ${QMVK_SHADER_COMPILED_FILES}
+        COMMAND ${CMAKE_COMMAND} -E copy ${VULKAN_SHADER_QRC_FILE_TMP} ${VULKAN_SHADER_QRC_FILE}
+    )
 
     # No need to add VulkanShaders target dependency to libqmplay2,
     # because generated QRC file is added into source file list.

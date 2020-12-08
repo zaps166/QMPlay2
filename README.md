@@ -169,17 +169,17 @@ Don't forget to update submodules: `git submodule update --init`.
 
 ### CMake requirements
 
-For CMake build be sure that you have CMake 3.1 or higher.
+For CMake build be sure that you have CMake 3.9 or higher.
 
 ### You need devel packages:
 
 #### Necessary:
-- Qt5 >= 5.6.0 (>= 5.6.3; >= 5.9.1 recommended; >= 5.10 for Vulkan):
+- Qt5 >= 5.10:
     - Qt5DBus - Linux/BSD only,
     - Qt5Svg - for SVG icons,
     - Qt5Qml - for MediaBrowser,
     - Qt5WinExtras - for Windows,
-- FFmpeg >= 3.3 (>= 4.0 is recommended at compilation time for VA-API and VDPAU deinterlacing filters):
+- FFmpeg >= 4.0:
     - libavformat - requires OpenSSL or GnuTLS for https support,
     - libavcodec - for FFmpeg module only,
     - libswscale,
@@ -188,7 +188,7 @@ For CMake build be sure that you have CMake 3.1 or higher.
     - libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
 
 #### Important:
-- TagLib >= 1.7 (>= 1.9 recommended),
+- TagLib >= 1.9,
 - libass - for OSD and non-graphical subtitles.
 
 #### For modules (some of them can be automatically disabled if not found):

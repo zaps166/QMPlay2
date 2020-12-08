@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.9)
 project(QMPlay2)
 
 if(WIN32)
-    find_package(Qt5WinExtras 5.6 REQUIRED)
+    find_package(Qt5WinExtras 5.10 REQUIRED)
 endif()
 
 set(GUI_HDR

@@ -22,8 +22,6 @@
 #include <Main.hpp>
 
 #define TAGLIB_VERSION ((TAGLIB_MAJOR_VERSION << 8) | TAGLIB_MINOR_VERSION)
-#define TAGLIB18 (TAGLIB_VERSION >= 0x108)
-#define TAGLIB19 (TAGLIB_VERSION >= 0x109)
 #define TAGLIB1B (TAGLIB_VERSION >= 0x10B)
 
 #ifdef TAGLIB_FULL_INCLUDE_PATH
@@ -32,8 +30,8 @@
     #include <taglib.h>
 #endif
 
-#if TAGLIB_VERSION < 0x107
-    #error Taglib 1.7 or newer is needed! You can also remove taglib from "gui.pro".
+#if TAGLIB_VERSION < 0x109
+    #error Taglib 1.9 or newer is needed!
 #endif
 
 #ifdef TAGLIB_FULL_INCLUDE_PATH
@@ -51,15 +49,11 @@
     #include <taglib/wavfile.h>
     #include <taglib/apefile.h>
     #include <taglib/fileref.h>
-    #if TAGLIB18
-        #include <taglib/modfile.h>
-        #include <taglib/s3mfile.h>
-        #include <taglib/itfile.h>
-        #include <taglib/xmfile.h>
-    #endif
-    #if TAGLIB19
-        #include <taglib/opusfile.h>
-    #endif
+    #include <taglib/modfile.h>
+    #include <taglib/s3mfile.h>
+    #include <taglib/itfile.h>
+    #include <taglib/xmfile.h>
+    #include <taglib/opusfile.h>
 #else
     #include <trueaudiofile.h>
     #include <oggflacfile.h>
@@ -75,26 +69,18 @@
     #include <wavfile.h>
     #include <apefile.h>
     #include <fileref.h>
-    #if TAGLIB18
-        #include <modfile.h>
-        #include <s3mfile.h>
-        #include <itfile.h>
-        #include <xmfile.h>
-    #endif
-    #if TAGLIB19
-        #include <opusfile.h>
-    #endif
+    #include <modfile.h>
+    #include <s3mfile.h>
+    #include <itfile.h>
+    #include <xmfile.h>
+    #include <opusfile.h>
 #endif
 using namespace TagLib;
 
 #define instanceOf(p, t) (dynamic_cast<t *>(&p) == &p)
 static inline bool isOgg(File &file)
 {
-    return instanceOf(file, Ogg::Vorbis::File) || instanceOf(file, Ogg::FLAC::File) || instanceOf(file, Ogg::Speex::File)
-#if TAGLIB19
-    || instanceOf(file, Ogg::Opus::File)
-#endif
-    ;
+    return instanceOf(file, Ogg::Vorbis::File) || instanceOf(file, Ogg::FLAC::File) || instanceOf(file, Ogg::Speex::File) || instanceOf(file, Ogg::Opus::File);
 }
 static inline Ogg::XiphComment *getXiphComment(File &file)
 {
@@ -104,10 +90,8 @@ static inline Ogg::XiphComment *getXiphComment(File &file)
         return ((Ogg::FLAC::File &)file).tag();
     else if (instanceOf(file, Ogg::Speex::File))
         return ((Ogg::Speex::File &)file).tag();
-#if TAGLIB19
     else if (instanceOf(file, Ogg::Opus::File))
         return ((Ogg::Opus::File &)file).tag();
-#endif
     return nullptr;
 }
 
@@ -145,12 +129,7 @@ void PictureW::paintEvent(QPaintEvent *)
 
 static inline Tag &getTag(FileRef &fRef, File &file)
 {
-#if TAGLIB19
     return *(instanceOf(file, RIFF::WAV::File) ? ((RIFF::WAV::File &)file).InfoTag() : fRef.tag());
-#else
-    Q_UNUSED(file)
-    return *fRef.tag();
-#endif
 }
 
 static void removeXiphComment(Ogg::XiphComment *xiphComment)
@@ -235,7 +214,6 @@ bool TagEditor::open(const QString &fileName)
     fRef = new FileRef(fileName.toLocal8Bit(), false);
 #endif
 
-#if TAGLIB19
     // TagLib can't load Ogg Opus file if file extension is ".ogg"
     if (fRef->isNull() && fileName.endsWith(".ogg", Qt::CaseInsensitive))
     {
@@ -254,13 +232,11 @@ bool TagEditor::open(const QString &fileName)
             delete file;
         }
     }
-#endif
 
     if (!fRef->isNull() && fRef->tag())
     {
         File &file = *fRef->file();
 
-#if TAGLIB19
         /* Copy ID3v2 to InfoTag */
         if (instanceOf(file, RIFF::WAV::File))
         {
@@ -277,7 +253,6 @@ bool TagEditor::open(const QString &fileName)
                 infoTag.setTrack(tag.track());
             }
         }
-#endif
 
         const Tag &tag = getTag(*fRef, file);
         bool hasTags = !tag.isEmpty();
@@ -302,9 +277,7 @@ bool TagEditor::open(const QString &fileName)
                 if (instanceOf(file, MPEG::File))
                 {
                     MPEG::File &mpegF = (MPEG::File &)file;
-#if TAGLIB19
                     if (mpegF.hasID3v2Tag())
-#endif
                         id3v2 = mpegF.ID3v2Tag();
                 }
                 else if (instanceOf(file, RIFF::AIFF::File))
@@ -356,14 +329,12 @@ bool TagEditor::open(const QString &fileName)
                         case MP4::CoverArt::PNG:
                             pictureMimeType = "image/png";
                             break;
-#if TAGLIB18
                         case MP4::CoverArt::BMP:
                             pictureMimeType = "image/bmp";
                             break;
                         case MP4::CoverArt::GIF:
                             pictureMimeType = "image/gif";
                             break;
-#endif
                         default:
                             break;
                     }
@@ -528,12 +499,10 @@ bool TagEditor::save()
                         format = MP4::CoverArt::JPEG;
                     else if (pictureMimeType == "image/png")
                         format = MP4::CoverArt::PNG;
-#if TAGLIB18
                     else if (pictureMimeType == "image/bmp")
                         format = MP4::CoverArt::BMP;
                     else if (pictureMimeType == "image/gif")
                         format = MP4::CoverArt::GIF;
-#endif
                     if (format)
                     {
                         MP4::CoverArtList coverArtList;
@@ -597,9 +566,7 @@ bool TagEditor::save()
             {
                 FLAC::File &flacF = (FLAC::File &)file;
                 flacF.removePictures();
-#if TAGLIB19
                 if (flacF.hasXiphComment())
-#endif
                     removeXiphComment(flacF.xiphComment());
             }
             else if (instanceOf(file, RIFF::AIFF::File))
@@ -612,7 +579,6 @@ bool TagEditor::save()
                         id3v2->removeFrame(*it);
                 }
             }
-#if TAGLIB18
             else if (instanceOf(file, Mod::File) || instanceOf(file, S3M::File) || instanceOf(file, IT::File) || instanceOf(file, XM::File))
             {
                 Mod::Tag *modTag = nullptr;
@@ -627,18 +593,13 @@ bool TagEditor::save()
                 if (modTag)
                     modTag->setTrackerName(String::null);
             }
-#endif
         }
 
         /* Remove ID3 tags from FLAC::File */
         if (mustSave && instanceOf(file, FLAC::File))
         {
             FLAC::File &flacF = (FLAC::File &)file;
-#if TAGLIB19
             if (flacF.hasID3v1Tag() || flacF.hasID3v2Tag())
-#else
-            if (flacF.ID3v1Tag() || flacF.ID3v2Tag())
-#endif
             {
 #if TAGLIB1B
                 flacF.strip(FLAC::File::ID3v1 | FLAC::File::ID3v2);
@@ -658,7 +619,6 @@ bool TagEditor::save()
             }
         }
 
-#if TAGLIB19
         /* No ID3v2 in WAV, only InfoTag */
         if (mustSave && instanceOf(file, RIFF::WAV::File))
         {
@@ -666,7 +626,6 @@ bool TagEditor::save()
             wavF.save(wavF.InfoTag()->isEmpty() ? RIFF::WAV::File::NoTags : RIFF::WAV::File::Info);
             mustSave = false;
         }
-#endif
 
         return mustSave ? fRef->save() : (fRef ? true : result);
     }

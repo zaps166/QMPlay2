@@ -784,8 +784,8 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation)
         ;
         for (auto &&val : onResponseReceivedCommands)
         {
-            items = val.toObject()
-                ["appendContinuationItemsAction"].toObject()
+            items = val
+                ["appendContinuationItemsAction"]
                 ["continuationItems"].toArray()
             ;
             if (!items.isEmpty())
@@ -795,25 +795,25 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation)
     else
     {
         items = jsonObj
-            ["contents"].toObject()
-            ["twoColumnSearchResultsRenderer"].toObject()
-            ["primaryContents"].toObject()
-            ["sectionListRenderer"].toObject()
+            ["contents"]
+            ["twoColumnSearchResultsRenderer"]
+            ["primaryContents"]
+            ["sectionListRenderer"]
             ["contents"].toArray()
         ;
     }
 
-    for (auto &&obj : items)
+    for (const QJsonValue &obj : items)
     {
-        const auto contents = obj.toObject()
-            ["itemSectionRenderer"].toObject()
+        const auto contents = obj
+            ["itemSectionRenderer"]
             ["contents"].toArray()
         ;
 
-        const auto token = obj.toObject()
-            ["continuationItemRenderer"].toObject()
-            ["continuationEndpoint"].toObject()
-            ["continuationCommand"].toObject()
+        const auto token = obj
+            ["continuationItemRenderer"]
+            ["continuationEndpoint"]
+            ["continuationCommand"]
             ["token"].toString()
         ;
         if (!token.isEmpty())
@@ -821,8 +821,8 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation)
 
         for (auto &&obj : contents)
         {
-            const auto videoRenderer = obj.toObject()["videoRenderer"].toObject();
-            const auto playlistRenderer = obj.toObject()["playlistRenderer"].toObject();
+            const auto videoRenderer = obj["videoRenderer"].toObject();
+            const auto playlistRenderer = obj["playlistRenderer"].toObject();
 
             const bool isVideo = !videoRenderer.isEmpty() && playlistRenderer.isEmpty();
 
@@ -830,32 +830,32 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation)
 
             if (isVideo)
             {
-                title = videoRenderer["title"].toObject()["runs"].toArray().at(0).toObject()["text"].toString();
+                title = videoRenderer["title"]["runs"].toArray().at(0)["text"].toString();
                 contentId = videoRenderer["videoId"].toString();
                 if (title.isEmpty() || contentId.isEmpty())
                     continue;
 
-                length = videoRenderer["lengthText"].toObject()["simpleText"].toString();
-                user = videoRenderer["ownerText"].toObject()["runs"].toArray().at(0).toObject()["text"].toString();
-                publishTime = videoRenderer["publishedTimeText"].toObject()["simpleText"].toString();
-                viewCount = videoRenderer["shortViewCountText"].toObject()["simpleText"].toString();
-                thumbnail = videoRenderer["thumbnail"].toObject()["thumbnails"].toArray().at(0).toObject()["url"].toString();
+                length = videoRenderer["lengthText"]["simpleText"].toString();
+                user = videoRenderer["ownerText"]["runs"].toArray().at(0)["text"].toString();
+                publishTime = videoRenderer["publishedTimeText"]["simpleText"].toString();
+                viewCount = videoRenderer["shortViewCountText"]["simpleText"].toString();
+                thumbnail = videoRenderer["thumbnail"]["thumbnails"].toArray().at(0)["url"].toString();
 
                 url = YOUTUBE_URL "/watch?v=" + contentId;
             }
             else
             {
-                title = playlistRenderer["title"].toObject()["simpleText"].toString();
+                title = playlistRenderer["title"]["simpleText"].toString();
                 contentId = playlistRenderer["playlistId"].toString();
                 if (title.isEmpty() || contentId.isEmpty())
                     continue;
 
-                user = playlistRenderer["longBylineText"].toObject()["runs"].toArray().at(0).toObject()["text"].toString();
+                user = playlistRenderer["longBylineText"]["runs"].toArray().at(0)["text"].toString();
                 thumbnail = playlistRenderer
-                    ["thumbnailRenderer"].toObject()
-                    ["playlistVideoThumbnailRenderer"].toObject()
-                    ["thumbnail"].toObject()
-                    ["thumbnails"].toArray().at(0).toObject()
+                    ["thumbnailRenderer"]
+                    ["playlistVideoThumbnailRenderer"]
+                    ["thumbnail"]
+                    ["thumbnails"].toArray().at(0)
                     ["url"].toString()
                 ;
 
@@ -1033,7 +1033,7 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         if (subtitlesForLang.isEmpty())
             subtitlesForLang = subtitles[QMPlay2Core.getLanguage()].toArray();
 
-        for (auto &&subtitlesFmtVal : asConst(subtitlesForLang))
+        for (auto &&subtitlesFmtVal : qAsConst(subtitlesForLang))
         {
             const auto subtitlesFmt = subtitlesFmtVal.toObject();
             if (subtitlesFmt.isEmpty())
@@ -1065,12 +1065,12 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
     else
     {
         QString url = "FFmpeg://{";
-        for (auto &&urlPart : asConst(urls))
+        for (auto &&urlPart : qAsConst(urls))
             url += "[" + urlPart + "]";
         url += "}";
 
         QString ext;
-        for (auto &&extPart : asConst(exts))
+        for (auto &&extPart : qAsConst(exts))
             ext += "[" + extPart + "]";
 
         result += url;
@@ -1085,28 +1085,24 @@ void YouTube::preparePlaylist(const QByteArray &data, QTreeWidgetItem *tWI)
 {
     QStringList playlist;
 
-    const auto json = getYtInitialData(data);
-
-    const auto contents = json.object()
-        ["contents"].toObject()
-        ["twoColumnBrowseResultsRenderer"].toObject()
-        ["tabs"].toArray().at(0).toObject()
-        ["tabRenderer"].toObject()
-        ["content"].toObject()
-        ["sectionListRenderer"].toObject()
-        ["contents"].toArray().at(0).toObject()
-        ["itemSectionRenderer"].toObject()
-        ["contents"].toArray().at(0).toObject()
-        ["playlistVideoListRenderer"].toObject()
+    const auto contents = getYtInitialData(data)
+        ["contents"]
+        ["twoColumnBrowseResultsRenderer"]
+        ["tabs"].toArray().at(0)
+        ["tabRenderer"]
+        ["content"]
+        ["sectionListRenderer"]
+        ["contents"].toArray().at(0)
+        ["itemSectionRenderer"]
+        ["contents"].toArray().at(0)
+        ["playlistVideoListRenderer"]
         ["contents"].toArray()
     ;
 
     for (auto &&obj : contents)
     {
-        const auto playlistRenderer = obj.toObject()["playlistVideoRenderer"].toObject();
-
-        const auto title = playlistRenderer["title"].toObject()["runs"].toArray().at(0).toObject()["text"].toString();
-        const auto videoId = playlistRenderer["videoId"].toString();
+        const auto title = obj["playlistVideoRenderer"]["title"]["runs"].toArray().at(0)["text"].toString();
+        const auto videoId = obj["playlistVideoRenderer"]["videoId"].toString();
         if (title.isEmpty() || videoId.isEmpty())
             continue;
 

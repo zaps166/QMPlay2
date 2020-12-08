@@ -152,7 +152,7 @@ private:
             bool pending = false;
             do
             {
-                for (const std::shared_ptr<VideoFilter> &vFilter : asConst(videoFilters.filters))
+                for (const std::shared_ptr<VideoFilter> &vFilter : qAsConst(videoFilters.filters))
                 {
                     pending |= vFilter->filter(queue);
                     if (queue.isEmpty())
@@ -275,7 +275,7 @@ void VideoFilters::clearBuffers()
     if (!filters.isEmpty())
     {
         filtersThr.waitForFinished(true);
-        for (auto &&vFilter : asConst(filters))
+        for (auto &&vFilter : qAsConst(filters))
             vFilter->clearBuffer();
     }
     outputQueue.clear();

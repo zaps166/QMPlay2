@@ -270,9 +270,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     codec_ctx->hw_device_ctx = av_buffer_ref(m_vaapi->m_hwDeviceBufferRef);
     codec_ctx->get_format = vaapiGetFormat;
     codec_ctx->thread_count = 1;
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 18, 100)
     codec_ctx->extra_hw_frames = 4;
-#endif
     if (!openCodec(codec))
         return false;
 

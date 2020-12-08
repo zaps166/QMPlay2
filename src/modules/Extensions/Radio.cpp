@@ -184,7 +184,7 @@ void Radio::replyFinished(NetworkReply *reply)
                     if (!data.isObject())
                         continue;
 
-                    const auto name = data.toObject()["name"].toString();
+                    const auto name = data["name"].toString();
                     if (name.trimmed().isEmpty())
                         continue;
 

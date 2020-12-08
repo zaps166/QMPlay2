@@ -432,7 +432,7 @@ void VideoThr::run()
         }
         else
         {
-            for (auto &&sPacket : asConst(sPackets))
+            for (auto &&sPacket : qAsConst(sPackets))
             {
                 const QByteArray sPacketData = QByteArray::fromRawData((const char *)sPacket.data(), sPacket.size());
                 if (playC.ass->isASS())

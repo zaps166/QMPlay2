@@ -35,7 +35,7 @@ FFDemux::FFDemux(Module &module) :
 FFDemux::~FFDemux()
 {
     streams_info.clear();
-    for (const FormatContext *fmtCtx : asConst(formatContexts))
+    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
         delete fmtCtx;
 }
 
@@ -156,7 +156,7 @@ bool FFDemux::localStream() const
 bool FFDemux::seek(double pos, bool backward)
 {
     bool seeked = false;
-    for (FormatContext *fmtCtx : asConst(formatContexts))
+    for (FormatContext *fmtCtx : qAsConst(formatContexts))
     {
         if (fmtCtx->seek(pos, backward))
             seeked |= true;
@@ -203,13 +203,13 @@ bool FFDemux::read(Packet &encoded, int &idx)
 }
 void FFDemux::pause()
 {
-    for (FormatContext *fmtCtx : asConst(formatContexts))
+    for (FormatContext *fmtCtx : qAsConst(formatContexts))
         fmtCtx->pause();
 }
 void FFDemux::abort()
 {
     QMutexLocker mL(&mutex);
-    for (FormatContext *fmtCtx : asConst(formatContexts))
+    for (FormatContext *fmtCtx : qAsConst(formatContexts))
         fmtCtx->abort();
     abortFetchTracks = true;
 }

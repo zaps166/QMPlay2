@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.9)
 project(QMPlay2)
 
 if(WIN32)
@@ -43,19 +43,16 @@ else()
     find_package(DummyPkgConfig REQUIRED)
 endif()
 
-find_package(Qt5Widgets 5.6 REQUIRED)
-if(Qt5Widgets_VERSION VERSION_LESS 5.6.3)
-    message(AUTHOR_WARNING "Qt5 >= 5.6.3, >= 5.9.1 is recommended")
-endif()
+find_package(Qt5Widgets 5.10 REQUIRED)
 
-pkg_check_modules(LIBAVFORMAT REQUIRED libavformat>=57.71.100)
-pkg_check_modules(LIBAVCODEC REQUIRED libavcodec>=57.89.100)
-pkg_check_modules(LIBSWSCALE REQUIRED libswscale>=4.6.100)
-pkg_check_modules(LIBAVUTIL REQUIRED libavutil>=55.58.100)
-pkg_check_modules(LIBSWRESAMPLE REQUIRED libswresample>=2.7.100)
+pkg_check_modules(LIBAVFORMAT REQUIRED libavformat>=58.12.100)
+pkg_check_modules(LIBAVCODEC REQUIRED libavcodec>=58.18.100)
+pkg_check_modules(LIBSWSCALE REQUIRED libswscale>=5.1.100)
+pkg_check_modules(LIBAVUTIL REQUIRED libavutil>=56.14.100)
+pkg_check_modules(LIBSWRESAMPLE REQUIRED libswresample>=3.1.100)
 
 # Add FFmpeg link directories here, because it must be global.
-# "target_link_directories" is supported since CMake 3.13, but QMPlay2 supports CMake 3.1.
+# "target_link_directories" is supported since CMake 3.13, but QMPlay2 supports CMake 3.9.
 link_directories(
     ${LIBAVFORMAT_LIBRARY_DIRS}
     ${LIBAVCODEC_LIBRARY_DIRS}
@@ -70,7 +67,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-if(${CMAKE_VERSION} VERSION_GREATER "3.16.0" OR ${CMAKE_VERSION} VERSION_EQUAL "3.16.0")
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
     option(USE_PCH "Use precompiled headers" OFF)
     add_feature_info(PCH USE_PCH "Use precompiled headers")
 endif()
@@ -109,7 +106,7 @@ if(USE_OPENGL)
     add_definitions(-DUSE_OPENGL)
 endif()
 
-if(NOT APPLE AND (Qt5Gui_VERSION VERSION_GREATER "5.10.0" OR Qt5Gui_VERSION VERSION_EQUAL "5.10.0"))
+if(NOT APPLE)
     get_target_property(Qt5GuiFeatures Qt5::Gui INTERFACE_QT_ENABLED_FEATURES)
     list(FIND Qt5GuiFeatures "vulkan" Qt5Vulkan)
     if(${Qt5Vulkan} GREATER -1)

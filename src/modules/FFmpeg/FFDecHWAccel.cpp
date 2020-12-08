@@ -32,7 +32,6 @@ FFDecHWAccel::~FFDecHWAccel()
 
 bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
 {
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 9, 100)
     const AVHWDeviceType requestedType = av_hwdevice_find_type_by_name(hwaccelName);
     if (requestedType == AV_HWDEVICE_TYPE_NONE)
         return false;
@@ -46,13 +45,6 @@ bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
             return true;
     }
     return false;
-#else
-    AVHWAccel *hwAccel = nullptr;
-    while ((hwAccel = av_hwaccel_next(hwAccel)))
-        if (hwAccel->id == codec_ctx->codec_id && strstr(hwAccel->name, hwaccelName))
-            break;
-    return hwAccel;
-#endif
 }
 
 bool FFDecHWAccel::hasHWDecContext() const

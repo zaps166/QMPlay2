@@ -584,11 +584,10 @@ void MediaBrowser::downloadScripts(const QByteArray &jsonData)
     bool removed = false, downloading = false;
     for (auto &&jsonVal : jsonArr)
     {
-        const auto jsonObj = jsonVal.toObject();
-        const auto name = jsonObj["Name"].toString();
-        const auto path = jsonObj["Path"].toString();
-        const auto version = jsonObj["Version"].toInt();
-        const auto apiVersion = jsonObj["ApiVersion"].toInt();
+        const auto name = jsonVal["Name"].toString();
+        const auto path = jsonVal["Path"].toString();
+        const auto version = jsonVal["Version"].toInt();
+        const auto apiVersion = jsonVal["ApiVersion"].toInt();
         if (name.isEmpty() || version <= 0 || apiVersion != g_mediaBrowserApiVersion)
             continue;
 

@@ -35,7 +35,7 @@ void Module::videoDeintSave()
 void Module::setInstances(bool &restartPlaying)
 {
     QMutexLocker locker(&mutex);
-    for (ModuleCommon *mc : asConst(instances))
+    for (ModuleCommon *mc : qAsConst(instances))
         if (!mc->set())
             restartPlaying = true;
 }

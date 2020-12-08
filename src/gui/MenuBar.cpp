@@ -385,12 +385,7 @@ MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
     connect(videoAdjustmentMenu, &VideoFilters::aboutToShow, [] {
         if (QWidget *parent = QMPlay2GUI.videoAdjustment->parentWidget())
         {
-            if (qstrcmp(parent->metaObject()->className(), "QMacNativeWidget") == 0)
-            {
-                // Needed for Qt 5.6.3
-                QMPlay2GUI.videoAdjustment->update();
-            }
-            else if (qstrcmp(parent->metaObject()->className(), "QMenu") == 0)
+            if (qstrcmp(parent->metaObject()->className(), "QMenu") == 0)
             {
                 QTimer::singleShot(0, [parent] {
                     QMPlay2GUI.videoAdjustment->setGeometry(QRect(QPoint(), parent->sizeHint()));

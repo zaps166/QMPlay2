@@ -49,9 +49,7 @@ vk::Format Instance::fromFFmpegPixelFormat(int avPixFmt)
     {
         case AV_PIX_FMT_GRAY8:
             return vk::Format::eR8Unorm;
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(55, 78, 100)
         case AV_PIX_FMT_GRAY9:
-#endif
         case AV_PIX_FMT_GRAY10:
         case AV_PIX_FMT_GRAY12:
 #if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(56, 22, 100)
@@ -254,9 +252,7 @@ AVPixelFormats Instance::supportedPixelFormats() const
     if (checkImageFormat(vk::Format::eR16Unorm) && checkImageFormat(vk::Format::eR16G16Unorm))
     {
         pixelFormats += {
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(55, 78, 100)
             AV_PIX_FMT_GRAY9,
-#endif
             AV_PIX_FMT_GRAY10,
             AV_PIX_FMT_GRAY12,
 #if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(56, 22, 100)

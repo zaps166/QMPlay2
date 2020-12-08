@@ -40,7 +40,6 @@
 
 #include <QMPlay2OSD.hpp>
 #include <Functions.hpp>
-#include <CppUtils.hpp>
 #include <Sphere.hpp>
 
 #include <QGuiApplication>
@@ -535,7 +534,7 @@ vector<unique_lock<mutex>> Window::prepareOSD(bool &changed)
     lockers.reserve(1 + m_osd.size());
     lockers.push_back(move(locker));
 
-    for (auto &&osd : asConst(m_osd))
+    for (auto &&osd : qAsConst(m_osd))
     {
         lockers.push_back(osd->lock());
 
@@ -592,7 +591,7 @@ void Window::renderOSD()
 
     vector<const QMPlay2OSD::Image *> osdImages;
 
-    for (auto &&osd : asConst(m_osd))
+    for (auto &&osd : qAsConst(m_osd))
     {
         osd->iterate([&](const QMPlay2OSD::Image &image) {
             if (image.dataBufferView->buffer()->device() != m.device)

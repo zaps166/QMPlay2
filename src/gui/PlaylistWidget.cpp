@@ -1038,7 +1038,7 @@ void PlaylistWidget::createExtensionsMenu()
             actions = QMPlay2Ext->getActions(entryName, entryLength, url, addressPrefixName, param);
         else
             actions = QMPlay2Ext->getActions(entryName, entryLength, entryUrl);
-        for (QAction *act : asConst(actions))
+        for (QAction *act : qAsConst(actions))
         {
             act->setParent(extensions);
             extensions->addAction(act);

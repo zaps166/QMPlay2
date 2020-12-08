@@ -19,7 +19,6 @@
 #include <Downloader.hpp>
 
 #include <Functions.hpp>
-#include <CppUtils.hpp>
 #include <MkvMuxer.hpp>
 #include <Demuxer.hpp>
 #include <Packet.hpp>
@@ -368,7 +367,7 @@ void DownloadItemW::startConversion()
     deleteConvertProcess();
 
     m_convertProcess = new QProcess(this);
-    m_convertProcessConn[0] = connect(m_convertProcess, Overload<int>::of(&QProcess::finished), this, [this](int exitCode) {
+    m_convertProcessConn[0] = connect(m_convertProcess, qOverload<int>(&QProcess::finished), this, [this](int exitCode) {
         if (exitCode == 0)
         {
             sizeL->setText(tr(g_downloadComplete));

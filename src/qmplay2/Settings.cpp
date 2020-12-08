@@ -18,8 +18,6 @@
 
 #include <Settings.hpp>
 
-#include <CppUtils.hpp>
-
 Settings::Settings(const QString &name) :
     QSettings(QMPlay2Core.getSettingsDir() + QMPlay2Core.getSettingsProfile() + name + ".ini", QSettings::IniFormat)
 {}
@@ -81,7 +79,7 @@ QVariant Settings::get(const QString &key, const QVariant &def) const
 
 void Settings::flushCache()
 {
-    for (const QString &key : asConst(toRemove))
+    for (const QString &key : qAsConst(toRemove))
         QSettings::remove(key);
     toRemove.clear();
 

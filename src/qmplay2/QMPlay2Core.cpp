@@ -21,7 +21,6 @@
 #include <VideoFilters.hpp>
 #include <GPUInstance.hpp>
 #include <Functions.hpp>
-#include <CppUtils.hpp>
 #ifdef USE_QML
 #   include <CommonJS.hpp>
 #endif
@@ -265,9 +264,6 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
 
     av_log_set_level(AV_LOG_ERROR);
     av_log_set_callback(avQMPlay2LogHandler);
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
-    av_register_all();
-#endif
     avformat_network_init();
 
 #if defined(USE_VULKAN) && !defined(Q_OS_ANDROID)
@@ -300,7 +296,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
         }
 
         QStringList pluginsName;
-        for (const QFileInfo &fInfo : asConst(pluginsList))
+        for (const QFileInfo &fInfo : qAsConst(pluginsList))
         {
             if (QLibrary::isLibrary(fInfo.filePath()))
             {
@@ -373,7 +369,7 @@ void QMPlay2CoreClass::quit()
 {
     if (settingsDir.isEmpty())
         return;
-    for (Module *pluginInstance : asConst(pluginsInstance))
+    for (Module *pluginInstance : qAsConst(pluginsInstance))
         delete pluginInstance;
     pluginsInstance.clear();
     videoFilters.clear();

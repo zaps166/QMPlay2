@@ -20,7 +20,6 @@
 
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
-#include <CppUtils.hpp>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -63,7 +62,7 @@ void RadioBrowserModel::searchRadios(const QString &text, const QString &searchB
 {
     const QByteArray postData = searchBy.toLatin1().toLower() + "=" + text.toUtf8().toPercentEncoding();
 
-    for (const std::shared_ptr<Column> &column : asConst(m_rows))
+    for (const std::shared_ptr<Column> &column : qAsConst(m_rows))
         delete column->iconReply;
     delete m_replySearch;
 
@@ -84,7 +83,7 @@ void RadioBrowserModel::loadIcons(const int first, const int last)
         if (!column->iconReply && !column->iconUrl.isEmpty())
         {
             column->iconReply = m_net->start(column->iconUrl);
-            for (const std::shared_ptr<Column> &c : asConst(m_rows))
+            for (const std::shared_ptr<Column> &c : qAsConst(m_rows))
             {
                 if (c.get() == column)
                     continue;
@@ -283,7 +282,7 @@ void RadioBrowserModel::setFiltrText(const QString &text)
     else
     {
         m_rowsToDisplay.clear();
-        for (const std::shared_ptr<Column> &column : asConst(m_rows))
+        for (const std::shared_ptr<Column> &column : qAsConst(m_rows))
         {
             if (column->name.contains(text, Qt::CaseInsensitive))
                 m_rowsToDisplay.append(column);
@@ -307,11 +306,11 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
 
                 const QPixmap radioIcon = QIcon(":/radio.svgz").pixmap(elementHeight(), elementHeight());
 
-                for (auto &&itemValue : arrayItems)
+                for (auto &&item : arrayItems)
                 {
-                    if (!itemValue.isObject())
+                    if (!item.isObject())
                         continue;
-                    const QJsonObject item = itemValue.toObject();
+
                     QString streamInfo = item["codec"].toString();
                     if (!streamInfo.isEmpty())
                     {

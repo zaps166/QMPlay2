@@ -21,7 +21,6 @@
 #include <NetworkAccess.hpp>
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
-#include <CppUtils.hpp>
 
 #include <QStandardPaths>
 #include <QJsonDocument>
@@ -110,7 +109,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
         else
         {
             *streamUrl = "FFmpeg://{";
-            for (const QString &tmpUrl : asConst(ytdlStdout))
+            for (const QString &tmpUrl : qAsConst(ytdlStdout))
                 *streamUrl += "[" + tmpUrl + "]";
             *streamUrl += "}";
         }
@@ -120,7 +119,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
     if (extension)
     {
         QStringList extensions;
-        for (const QString &tmpUrl : asConst(ytdlStdout))
+        for (const QString &tmpUrl : qAsConst(ytdlStdout))
         {
             if (tmpUrl.contains("mp4"))
                 extensions += ".mp4";
@@ -137,7 +136,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
         }
         if (extensions.count() == 1)
             *extension = extensions.at(0);
-        else for (const QString &tmpExt : asConst(extensions))
+        else for (const QString &tmpExt : qAsConst(extensions))
             *extension += "[" + tmpExt + "]";
     }
 }
@@ -185,7 +184,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 
             // Verify if URLs has printable characters, because sometimes we
             // can get binary garbage at output (especially on Openload).
-            for (const QString &line : asConst(result))
+            for (const QString &line : qAsConst(result))
             {
                 if (line.startsWith("http"))
                 {
@@ -235,10 +234,10 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
                 const QString url = result.at(i - 1);
 
                 const QJsonDocument json = QJsonDocument::fromJson(result.at(i).toUtf8());
-                for (const QJsonValue &formats : json.object()["formats"].toArray())
+                for (const QJsonValue &formats : json["formats"].toArray())
                 {
-                    if (url == formats.toObject()["url"].toString())
-                        QMPlay2Core.addCookies(url, formats.toObject()["http_headers"].toObject()["Cookie"].toString().toUtf8());
+                    if (url == formats["url"].toString())
+                        QMPlay2Core.addCookies(url, formats["http_headers"]["Cookie"].toString().toUtf8());
                 }
 
                 result.removeAt(i);
@@ -468,7 +467,7 @@ void YouTubeDL::startProcess(QStringList args)
                     "python3",
                 };
                 pythonCmdsToCheck.removeOne(pythonCmd);
-                for (auto &&pythonCmd : asConst(pythonCmdsToCheck))
+                for (auto &&pythonCmd : qAsConst(pythonCmdsToCheck))
                 {
                     if (QStandardPaths::findExecutable(pythonCmd).endsWith(pythonCmd))
                     {

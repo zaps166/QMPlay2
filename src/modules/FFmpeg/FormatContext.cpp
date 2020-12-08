@@ -22,7 +22,6 @@
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
 #include <OggHelper.hpp>
-#include <CppUtils.hpp>
 #include <Settings.hpp>
 #include <Packet.hpp>
 
@@ -221,7 +220,7 @@ FormatContext::~FormatContext()
         av_packet_free(&packet);
     }
     delete oggHelper;
-    for (StreamInfo *streamInfo : asConst(streamsInfo))
+    for (StreamInfo *streamInfo : qAsConst(streamsInfo))
         delete streamInfo;
 }
 

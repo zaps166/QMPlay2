@@ -20,7 +20,6 @@
 
 #include <QMPlay2Core.hpp>
 #include <ImgScaler.hpp>
-#include <CppUtils.hpp>
 #include <Frame.hpp>
 
 #include <QLibrary>
@@ -65,7 +64,7 @@ DXVA2OpenGL::~DXVA2OpenGL()
     {
         for (int i = 0; i < s_numRenderTargets; ++i)
         {
-            for (auto &&renderTarget : asConst(m_renderTargets[i].surfaces))
+            for (auto &&renderTarget : qAsConst(m_renderTargets[i].surfaces))
                 renderTarget->Release();
         }
     }
@@ -363,7 +362,7 @@ bool DXVA2OpenGL::checkCodec(const QByteArray &codecName, bool b10)
 
         for (UINT i = 0; i < count; ++i)
         {
-            for (const GUID *guid : asConst(neededCodecGUIDs))
+            for (const GUID *guid : qAsConst(neededCodecGUIDs))
             {
                 if (IsEqualGUID(codecGUIDs[i], *guid))
                 {
