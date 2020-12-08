@@ -113,8 +113,10 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
 #endif
 
 /* MainWidget */
-MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
-    updater(this)
+MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
+#ifdef UPDATES
+    : updater(this)
+#endif
 {
     QMPlay2GUI.videoAdjustment = new VideoAdjustmentW;
     QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
@@ -453,8 +455,10 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
         QMPlay2MacExtensions::registerMacOSMediaKeys(std::bind(&MainWidget::processParam, this, std::placeholders::_1, QString()));
 #endif
 
+#ifdef UPDATES
     if (settings.getBool("AutoUpdates"))
         updater.downloadUpdate();
+#endif
 }
 MainWidget::~MainWidget()
 {

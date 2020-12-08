@@ -32,7 +32,6 @@ set(GUI_HDR
     ScreenSaver.hpp
     ShortcutHandler.hpp
     KeyBindingsDialog.hpp
-    Updater.hpp
     RepeatMode.hpp
     PanGestureEventFilter.hpp
     EventFilterWorkarounds.hpp
@@ -64,7 +63,6 @@ set(GUI_SRC
     VolWidget.cpp
     ShortcutHandler.cpp
     KeyBindingsDialog.cpp
-    Updater.cpp
     EventFilterWorkarounds.cpp
 )
 
@@ -99,6 +97,12 @@ endif()
 qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
 set_property(SOURCE ${GUI_FORM_HDR} PROPERTY SKIP_AUTOMOC ON)
 
+if(USE_UPDATES)
+    list(APPEND GUI_HDR Updater.hpp)
+    list(APPEND GUI_SRC Updater.cpp)
+    add_definitions(-DUPDATES)
+endif()
+
 if(USE_TAGLIB)
     find_package(TagLib REQUIRED)
     include_directories(${TAGLIB_INCLUDE_DIRS})
@@ -131,7 +135,9 @@ if(WIN32)
     list(APPEND GUI_SRC Windows/icons.rc)
 
     # updater
-    add_definitions(-DUPDATER)
+    if(USE_UPDATES)
+        add_definitions(-DUPDATER)
+    endif()
 
     # additional Windows sources
     list(APPEND GUI_SRC

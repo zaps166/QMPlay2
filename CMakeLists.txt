@@ -94,6 +94,9 @@ endif()
 
 add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DQT_USE_FAST_OPERATOR_PLUS)
 
+option(USE_UPDATES "Build with software updates" ON)
+add_feature_info(Updates USE_UPDATES "Build with software updates")
+
 if(WIN32)
     option(USE_CMD "Show CMD when running QMPlay2" OFF)
     mark_as_advanced(USE_CMD)

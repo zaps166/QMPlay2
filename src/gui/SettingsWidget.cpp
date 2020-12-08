@@ -151,8 +151,10 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("ShowDirCovers", true);
     QMPSettings.init("AutoOpenVideoWindow", true);
     QMPSettings.init("AutoRestoreMainWindowOnVideo", true);
+#ifdef UPDATES
     if (!QMPSettings.contains("AutoUpdates"))
         QMPSettings.init("AutoUpdates", !QFile::exists(QMPlay2Core.getShareDir() + "noautoupdates"));
+#endif
     QMPSettings.init("MainWidget/TabPositionNorth", false);
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
     QMPSettings.init("AllowOnlyOneInstance", false);
@@ -383,9 +385,14 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         generalSettingsPage->autoOpenVideoWindowB->setChecked(QMPSettings.getBool("AutoOpenVideoWindow"));
         generalSettingsPage->autoRestoreMainWindowOnVideoB->setChecked(QMPSettings.getBool("AutoRestoreMainWindowOnVideo"));
 
+#ifdef UPDATES
         generalSettingsPage->autoUpdatesB->setChecked(QMPSettings.getBool("AutoUpdates"));
-#ifndef UPDATER
+# ifndef UPDATER
         generalSettingsPage->autoUpdatesB->setText(tr("Automatically check for updates"));
+# endif
+#else
+        delete generalSettingsPage->autoUpdatesB;
+        generalSettingsPage->autoUpdatesB = nullptr;
 #endif
 
         if (Notifies::hasBoth())
@@ -1120,7 +1127,9 @@ void SettingsWidget::apply()
             QMPSettings.set("EnlargeCovers", generalSettingsPage->enlargeSmallCoversB->isChecked());
             QMPSettings.set("AutoOpenVideoWindow", generalSettingsPage->autoOpenVideoWindowB->isChecked());
             QMPSettings.set("AutoRestoreMainWindowOnVideo", generalSettingsPage->autoRestoreMainWindowOnVideoB->isChecked());
+#ifdef UPDATES
             QMPSettings.set("AutoUpdates", generalSettingsPage->autoUpdatesB->isChecked());
+#endif
             QMPSettings.set("MainWidget/TabPositionNorth", generalSettingsPage->tabsNorths->isChecked());
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
             QMPSettings.set("AllowOnlyOneInstance", generalSettingsPage->allowOnlyOneInstance->isChecked());

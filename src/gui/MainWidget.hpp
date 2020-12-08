@@ -187,7 +187,9 @@ private:
 #endif
     QAction *lockWidgetsAct;
 
+#ifdef UPDATES
     Updater updater;
+#endif
 
 #ifdef Q_OS_WIN
     QWinTaskbarProgress *m_taskBarProgress = nullptr;
