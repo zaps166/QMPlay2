@@ -94,7 +94,9 @@ private slots:
     void setAppearance();
     void setKeyBindings();
     void clearCoversCache();
+#ifdef USE_YOUTUBEDL
     void removeYouTubeDl();
+#endif
     void resetSettings();
     void profileListIndexChanged(int index);
     void removeProfile();

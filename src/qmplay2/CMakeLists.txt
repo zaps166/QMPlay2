@@ -42,7 +42,6 @@ set(QMPLAY2_HDR
     CPU.hpp
     Version.hpp
     VideoAdjustment.hpp
-    YouTubeDL.hpp
     Notifies.hpp
     NotifiesTray.hpp
     MkvMuxer.hpp
@@ -88,7 +87,6 @@ set(QMPLAY2_SRC
     PacketBuffer.cpp
     NetworkAccess.cpp
     Version.cpp
-    YouTubeDL.cpp
     Notifies.cpp
     NotifiesTray.cpp
     MkvMuxer.cpp
@@ -263,6 +261,15 @@ if(USE_QML)
     )
     add_definitions(-DUSE_QML)
     set(QML Qt5::Qml)
+endif()
+
+if(USE_YOUTUBEDL)
+    list(APPEND QMPLAY2_HDR
+        YouTubeDL.hpp
+    )
+    list(APPEND QMPLAY2_SRC
+        YouTubeDL.cpp
+    )
 endif()
 
 set(QMPLAY2_RESOURCES

@@ -159,6 +159,13 @@ if(USE_EXTENSIONS)
     add_feature_info(YouTube USE_YOUTUBE "Build with YouTube support")
 endif()
 
+if(USE_YOUTUBE OR USE_MEDIABROWSER)
+    set(USE_YOUTUBEDL ON)
+    add_definitions(-DUSE_YOUTUBEDL)
+else()
+    set(USE_YOUTUBEDL OFF)
+endif()
+
 if(USE_EXTENSIONS AND NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     option(USE_MPRIS2 "Build Extensions with MPRIS2 support" ON)
     add_feature_info(MPRIS2 USE_MPRIS2 "Build Extensions with MPRIS2 support")

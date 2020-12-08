@@ -22,7 +22,9 @@
 #include <OtherVFiltersW.hpp>
 #include <OSDSettingsW.hpp>
 #include <Functions.hpp>
-#include <YouTubeDL.hpp>
+#ifdef USE_YOUTUBEDL
+#   include <YouTubeDL.hpp>
+#endif
 #include <Notifies.hpp>
 #include <Main.hpp>
 #ifdef USE_VULKAN
@@ -430,8 +432,13 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         const QIcon viewRefresh = QMPlay2Core.getIconFromTheme("view-refresh");
         generalSettingsPage->clearCoversCache->setIcon(viewRefresh);
         connect(generalSettingsPage->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
+#ifdef USE_YOUTUBEDL
         generalSettingsPage->removeYtDlB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
         connect(generalSettingsPage->removeYtDlB, SIGNAL(clicked()), this, SLOT(removeYouTubeDl()));
+#else
+        generalSettingsPage->removeYtDlB->deleteLater();
+        generalSettingsPage->removeYtDlB = nullptr;
+#endif
         generalSettingsPage->resetSettingsB->setIcon(viewRefresh);
         connect(generalSettingsPage->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
     }
@@ -1407,6 +1414,7 @@ void SettingsWidget::clearCoversCache()
         }
     }
 }
+#ifdef USE_YOUTUBEDL
 void SettingsWidget::removeYouTubeDl()
 {
     const QString filePath = YouTubeDL::getFilePath();
@@ -1417,6 +1425,7 @@ void SettingsWidget::removeYouTubeDl()
         QFile::remove(filePath);
     }
 }
+#endif
 void SettingsWidget::resetSettings()
 {
     if (QMessageBox::question(this, tr("Confirm settings deletion"), tr("Do you really want to clear all settings?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
