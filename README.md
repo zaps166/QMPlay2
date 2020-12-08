@@ -158,10 +158,10 @@ In Windows and macOS, multimedia keys should work automatically.
 In Linux/BSD, you must associate keys with commands:
 - using QMPlay2 binary, see: `QMPlay2 -h`,
 - using MPRIS2:
-	- Toggle play/pause: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause`.
-	- Next: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next`
-	- Prev: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous`
-	- Stop: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop`
+    - Toggle play/pause: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause`.
+    - Next: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next`
+    - Prev: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous`
+    - Stop: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop`
 
 ## Installation from sources
 
@@ -175,17 +175,17 @@ For CMake build be sure that you have CMake 3.1 or higher.
 
 #### Necessary:
 - Qt5 >= 5.6.0 (>= 5.6.3; >= 5.9.1 recommended; >= 5.10 for Vulkan):
-	- Qt5DBus - Linux/BSD only,
-	- Qt5Svg - for SVG icons,
-	- Qt5Qml - for MediaBrowser,
-	- Qt5WinExtras - for Windows,
+    - Qt5DBus - Linux/BSD only,
+    - Qt5Svg - for SVG icons,
+    - Qt5Qml - for MediaBrowser,
+    - Qt5WinExtras - for Windows,
 - FFmpeg >= 3.3 (>= 4.0 is recommended at compilation time for VA-API and VDPAU deinterlacing filters):
-	- libavformat - requires OpenSSL or GnuTLS for https support,
-	- libavcodec - for FFmpeg module only,
-	- libswscale,
-	- libavutil,
-	- libswresample,
-	- libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
+    - libavformat - requires OpenSSL or GnuTLS for https support,
+    - libavcodec - for FFmpeg module only,
+    - libswscale,
+    - libavutil,
+    - libswresample,
+    - libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
 
 #### Important:
 - TagLib >= 1.7 (>= 1.9 recommended),
@@ -214,52 +214,55 @@ $ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib li
 
 - Install all needed packages and dependencies (in devel version) using package manager or compile it from sources.
 - You can use `cmake-gui` for graphical configuration. Otherwise follow the instructions below:
-	- create a "build" directory and go to it: `mkdir build && cd build`,
-	- run CMake (also you can run with arguments which you want): `cmake ..`,
-	- check the summary - which features are enabled - you can set/force them manually,
-	- if CMake finishes without errors, run: `make -j8` (replace 8 with numbers of CPU threads),
-	- if compiling finishes without errors, install it: `sudo make -j8 install`.
+    - create a "build" directory and go to it: `mkdir build && cd build`,
+    - run CMake (also you can run with arguments which you want): `cmake ..`,
+    - check the summary - which features are enabled - you can set/force them manually,
+    - if CMake finishes without errors, run: `make -j8` (replace 8 with numbers of CPU threads),
+    - if compiling finishes without errors, install it: `sudo make -j8 install`.
 
 CMake options (option - default value: description):
 - CMake options and the default settings:
-	- `CMAKE_INSTALL_PREFIX` - mostly it is `/usr/local`: installation directory.
-	- `CMAKE_BUILD_TYPE` - `Release`.
-	- `LANGUAGES` - `All` - a space-separated list of translations to compile into QMPlay2.
-	- `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
-	- `SET_INSTALL_RPATH` - non-Windows only, `ON` on macOS, `OFF` anywhere else: sets RPATH after installation.
-	- `USE_FFMPEG` - ON: enable/disable FFmpeg module.
-	- `USE_FFMPEG_VAAPI`: autodetect: enabled if libva, libva-drm, and egl exist.
-	- `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exists.
-	- `USE_FFMPEG_AVDEVICE` - autodetect on Linux, `OFF` on non-Linux OS: it allows to use e.g. V4L2 devices.
-	- `USE_INPUTS` - ON: enable/disable Inputs module.
-	- `USE_MODPLUG` - ON: enable/disable Modplug module.
-	- `USE_EXTENSIONS` - ON: enable/disable Extensions module.
-	- `USE_MPRIS2` - Linux/BSD only, `ON`: enable/disable MPRIS2 in Extensions module.
-	- `USE_VISUALIZATIONS` - ON: enable/disable Visualizations module.
-	- `USE_AUDIOFILTERS` - ON: enable/disable AudioFilters module.
-	- `USE_VIDEOFILTERS` - ON: enable/disable VideoFilters module.
-	- `USE_OPENGL` - `ON`: enable/disable OpenGL support.
-	- `USE_VULKAN` - autodetect: enable/disable Vulkan support.
-	- `USE_GLSLC` - `OFF`: enable/disable GLSL -> SPIR-V shader compilation when building QMPlay2.
-	- `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist: enable/disable AudioCD module.
-	- `USE_ALSA` - `ON` on Linux: enable/disable ALSA module.
-	- `USE_PORTAUDIO` - `ON` on non-Linux OS: enable/disable PortAudio module.
-	- `USE_PULSEAUDIO` - autodetect on Linux/BSD, `OFF` anywhere else: enable/disable PulseAudio module.
-	- `USE_XVIDEO` - autodetect on X11: enabled if libxv exists: enable/disable XVideo module.
-	- `USE_CHIPTUNE_GME` - autodetect: enabled if libgme exists.
-	- `USE_CHIPTUNE_SID` - autodetect: enabled if libsidplayfp exists.
-	- `USE_TAGLIB` - `ON`: enable/disable tag editor.
-	- `USE_CMD` - Windows only, `OFF`.
-	- `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
-	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
-	- `USE_CUVID` - `ON`: enable/disable CUVID module.
-	- `USE_LYRICS` - `ON`: enable/disable lyrics module.
-	- `USE_MEDIABROWSER` - `ON`: enable/disable MediaBrowser module.
-	- `USE_ASAN` - `OFF`: enable/disable address sanitizer.
-	- `USE_UBSAN` - `OFF`: enable/disable undefined behavior sanitizer.
-	- `USE_LINK_TIME_OPTIMIZATION` - `OFF`: enable/disable Link Time Optimization for release builds.
-	- `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
-	- `FIND_HWACCEL_DRIVERS_PATH` - `OFF`: Find drivers path for hwaccel, useful for universal package.
+    - `CMAKE_INSTALL_PREFIX` - mostly it is `/usr/local`: installation directory.
+    - `CMAKE_BUILD_TYPE` - `Release`.
+    - `LANGUAGES` - `All` - a space-separated list of translations to compile into QMPlay2.
+    - `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
+    - `SET_INSTALL_RPATH` - non-Windows only, `ON` on macOS, `OFF` anywhere else: sets RPATH after installation.
+    - `USE_FFMPEG` - ON: enable/disable FFmpeg module.
+    - `USE_FFMPEG_VAAPI`: autodetect: enabled if libva, libva-drm, and egl exist.
+    - `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exists.
+    - `USE_FFMPEG_AVDEVICE` - autodetect on Linux, `OFF` on non-Linux OS: it allows to use e.g. V4L2 devices.
+    - `USE_INPUTS` - ON: enable/disable Inputs module.
+    - `USE_MODPLUG` - ON: enable/disable Modplug module.
+    - `USE_EXTENSIONS` - ON: enable/disable Extensions module.
+    - `USE_MPRIS2` - Linux/BSD only, `ON`: enable/disable MPRIS2 in Extensions module.
+    - `USE_VISUALIZATIONS` - ON: enable/disable Visualizations module.
+    - `USE_AUDIOFILTERS` - ON: enable/disable AudioFilters module.
+    - `USE_VIDEOFILTERS` - ON: enable/disable VideoFilters module.
+    - `USE_OPENGL` - `ON`: enable/disable OpenGL support.
+    - `USE_VULKAN` - autodetect: enable/disable Vulkan support.
+    - `USE_GLSLC` - `OFF`: enable/disable GLSL -> SPIR-V shader compilation when building QMPlay2.
+    - `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist: enable/disable AudioCD module.
+    - `USE_ALSA` - `ON` on Linux: enable/disable ALSA module.
+    - `USE_PORTAUDIO` - `ON` on non-Linux OS: enable/disable PortAudio module.
+    - `USE_PULSEAUDIO` - autodetect on Linux/BSD, `OFF` anywhere else: enable/disable PulseAudio module.
+    - `USE_XVIDEO` - autodetect on X11: enabled if libxv exists: enable/disable XVideo module.
+    - `USE_CHIPTUNE_GME` - autodetect: enabled if libgme exists.
+    - `USE_CHIPTUNE_SID` - autodetect: enabled if libsidplayfp exists.
+    - `USE_TAGLIB` - `ON`: enable/disable tag editor.
+    - `USE_CMD` - Windows only, `OFF`.
+    - `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
+    - `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
+    - `USE_CUVID` - `ON`: enable/disable CUVID module.
+    - `USE_LYRICS` - `ON`: enable/disable lyrics module.
+    - `USE_MEDIABROWSER` - `ON`: enable/disable MediaBrowser module.
+    - `USE_RADIO` - `ON`: enable/disable Radio Browser module.
+    - `USE_YOUTUBE` - `ON`: enable/disable YouTube module.
+    - `USE_ASAN` - `OFF`: enable/disable address sanitizer.
+    - `USE_UBSAN` - `OFF`: enable/disable undefined behavior sanitizer.
+    - `USE_LINK_TIME_OPTIMIZATION` - `OFF`: enable/disable Link Time Optimization for release builds.
+    - `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
+    - `USE_UPDATES` - `ON`: enable/disable software updates.
+    - `FIND_HWACCEL_DRIVERS_PATH` - `OFF`: Find drivers path for hwaccel, useful for universal package.
 
 Using other Qt installation of CMake:
 - `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
