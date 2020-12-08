@@ -19,11 +19,15 @@
 #include <Extensions.hpp>
 
 #include <Downloader.hpp>
-#include <YouTube.hpp>
+#ifdef USE_YOUTUBE
+    #include <YouTube.hpp>
+#endif
 #ifdef USE_LASTFM
     #include <LastFM.hpp>
 #endif
-#include <Radio.hpp>
+#ifdef USE_RADIO
+    #include <Radio.hpp>
+#endif
 #ifdef USE_MPRIS2
     #include <MPRIS2.hpp>
 #endif
@@ -39,17 +43,25 @@
 
 Extensions::Extensions() :
     Module("Extensions"),
-    downloader(":/downloader.svgz"), youtube(":/youtube.svgz"), radio(":/radio.svgz")
+    downloader(":/downloader.svgz")
 {
     m_icon = QIcon(":/Extensions.svgz");
 
 #ifdef USE_LASTFM
     lastfm = QIcon(":/lastfm.svgz");
 #endif
+#ifdef USE_YOUTUBE
+    youtube = QIcon(":/youtube.svgz");
+#endif
+#ifdef USE_RADIO
+    radio = QIcon(":/radio.svgz");
+#endif
 
+#ifdef USE_YOUTUBE
     init("YouTube/ShowUserName", false);
     init("YouTube/Subtitles", true);
     init("YouTube/SortBy", 0);
+#endif
 
 #ifdef USE_LASTFM
     init("LastFM/DownloadCovers", true);
@@ -68,11 +80,15 @@ QList<Extensions::Info> Extensions::getModulesInfo(const bool) const
 {
     QList<Info> modulesInfo;
     modulesInfo += Info(DownloaderName, QMPLAY2EXTENSION, downloader);
+#ifdef USE_YOUTUBE
     modulesInfo += Info(YouTubeName, QMPLAY2EXTENSION, youtube);
+#endif
 #ifdef USE_LASTFM
     modulesInfo += Info(LastFMName, QMPLAY2EXTENSION, lastfm);
 #endif
+#ifdef USE_RADIO
     modulesInfo += Info(RadioName, QMPLAY2EXTENSION, radio);
+#endif
 #ifdef USE_LYRICS
     modulesInfo += Info(LyricsName, QMPLAY2EXTENSION);
 #endif
@@ -88,14 +104,18 @@ void *Extensions::createInstance(const QString &name)
 {
     if (name == DownloaderName)
         return static_cast<QMPlay2Extensions *>(new Downloader(*this));
+#ifdef USE_YOUTUBE
     else if (name == YouTubeName)
         return static_cast<QMPlay2Extensions *>(new YouTube(*this));
+#endif
 #ifdef USE_LASTFM
     else if (name == LastFMName)
         return static_cast<QMPlay2Extensions *>(new LastFM(*this));
 #endif
+#ifdef USE_RADIO
     else if (name == RadioName)
         return static_cast<QMPlay2Extensions *>(new Radio(*this));
+#endif
 #ifdef USE_LYRICS
     else if (name == LyricsName)
         return static_cast<QMPlay2Extensions *>(new Lyrics(*this));
@@ -141,6 +161,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     MPRIS2B->setChecked(sets().getBool("MPRIS2/Enabled"));
 #endif
 
+#ifdef USE_YOUTUBE
     QGroupBox *youTubeB = new QGroupBox("YouTube");
 
     userNameB = new QCheckBox(tr("Show user name in search results"));
@@ -162,6 +183,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     layout->addWidget(new QLabel(tr("Preferred quality") + ": "), 2, 0, 1, 1);
     layout->addWidget(qualityPreset, 2, 1, 1, 1);
     layout->setMargin(2);
+#endif
 
 #ifdef USE_LASTFM
     QGroupBox *lastFMB = new QGroupBox("LastFM");
@@ -206,7 +228,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #ifdef USE_MPRIS2
     mainLayout->addWidget(MPRIS2B);
 #endif
+#ifdef USE_YOUTUBE
     mainLayout->addWidget(youTubeB);
+#endif
 #ifdef USE_LASTFM
     mainLayout->addWidget(lastFMB);
 #endif
@@ -230,9 +254,11 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("MPRIS2/Enabled", MPRIS2B->isChecked());
 #endif
 
+#ifdef USE_YOUTUBE
     sets().set("YouTube/ShowUserName", userNameB->isChecked());
     sets().set("YouTube/Subtitles", subtitlesB->isChecked());
     sets().set("YouTube/QualityPreset", qualityPreset->currentText());
+#endif
 
 #ifdef USE_LASTFM
     sets().set("LastFM/DownloadCovers", downloadCoversGB->isChecked());

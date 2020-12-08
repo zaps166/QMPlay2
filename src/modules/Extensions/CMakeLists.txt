@@ -3,27 +3,16 @@ project(Extensions)
 
 set(Extensions_HDR
     Extensions.hpp
-    YouTube.hpp
     Downloader.hpp
-    Radio.hpp
-    Radio/RadioBrowserModel.hpp
 )
 
 set(Extensions_SRC
     Extensions.cpp
-    YouTube.cpp
     Downloader.cpp
-    Radio.cpp
-    Radio/RadioBrowserModel.cpp
-)
-
-set(Extensions_FORMS
-    Radio/Radio.ui
 )
 
 set(Extensions_RESOURCES
     icons.qrc
-    js.qrc
 )
 
 if(USE_MPRIS2)
@@ -48,11 +37,33 @@ endif()
 if(USE_MEDIABROWSER)
     list(APPEND Extensions_HDR MediaBrowser.hpp MediaBrowserJS.hpp)
     list(APPEND Extensions_SRC MediaBrowser.cpp MediaBrowserJS.cpp)
+    list(APPEND Extensions_RESOURCES js.qrc)
     add_definitions(-DUSE_MEDIABROWSER)
     if(JS_SKIP_SSE2_CHECK)
         add_definitions(-DJS_SKIP_SSE2_CHECK)
     endif()
     set(QML Qt5::Qml)
+endif()
+
+if(USE_RADIO)
+    list(APPEND Extensions_HDR
+        Radio.hpp
+        Radio/RadioBrowserModel.hpp
+    )
+    list(APPEND Extensions_SRC
+        Radio.cpp
+        Radio/RadioBrowserModel.cpp
+    )
+    set(Extensions_FORMS
+        Radio/Radio.ui
+    )
+    add_definitions(-DUSE_RADIO)
+endif()
+
+if(USE_YOUTUBE)
+    list(APPEND Extensions_HDR YouTube.hpp)
+    list(APPEND Extensions_SRC YouTube.cpp)
+    add_definitions(-DUSE_YOUTUBE)
 endif()
 
 qt5_wrap_ui(Extensions_FORM_HDR ${Extensions_FORMS})

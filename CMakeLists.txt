@@ -127,15 +127,6 @@ if(NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     add_feature_info("Freedesktop notifications" USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications")
 endif()
 
-option(USE_MEDIABROWSER "Build with MediaBrowser support" ON)
-add_feature_info(MediaBrowser USE_MEDIABROWSER "Build with MediaBrowser support")
-
-option(USE_LASTFM "Build with LastFM support" ON)
-add_feature_info(LastFM USE_LASTFM "Build with LastFM support")
-
-option(USE_LYRICS "Build with lyrics support" ON)
-add_feature_info(Lyrics USE_LYRICS "Build with lyrics support")
-
 option(USE_LIBASS "Build with libass support" ON)
 add_feature_info(libass USE_LIBASS "Build with libass support")
 
@@ -147,6 +138,23 @@ add_feature_info(Modplug USE_MODPLUG "Build with Modplug module")
 
 option(USE_EXTENSIONS "Build with Extensions module" ON)
 add_feature_info(Extensions USE_EXTENSIONS "Build with Extensions module")
+
+if(USE_EXTENSIONS)
+    option(USE_MEDIABROWSER "Build with MediaBrowser support" ON)
+    add_feature_info(MediaBrowser USE_MEDIABROWSER "Build with MediaBrowser support")
+
+    option(USE_LASTFM "Build with LastFM support" ON)
+    add_feature_info(LastFM USE_LASTFM "Build with LastFM support")
+
+    option(USE_LYRICS "Build with lyrics support" ON)
+    add_feature_info(Lyrics USE_LYRICS "Build with lyrics support")
+
+    option(USE_RADIO "Build with Radio Browser support" ON)
+    add_feature_info(Radio USE_RADIO "Build with Radio Browser support")
+
+    option(USE_YOUTUBE "Build with YouTube support" ON)
+    add_feature_info(YouTube USE_YOUTUBE "Build with YouTube support")
+endif()
 
 if(USE_EXTENSIONS AND NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     option(USE_MPRIS2 "Build Extensions with MPRIS2 support" ON)
