@@ -50,10 +50,6 @@
 
 #include <algorithm>
 
-#if defined(QMPLAY2_CPU_X86_32) && !defined(JS_SKIP_SSE2_CHECK)
-#    include <libavutil/cpu.h>
-#endif
-
 Q_LOGGING_CATEGORY(mb, "MediaBrowser")
 
 constexpr const char *g_mediaBrowserBaseUrl = "https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/";
@@ -501,14 +497,6 @@ void MediaBrowser::completionsReady()
 
 bool MediaBrowser::scanScripts()
 {
-#if defined(QMPLAY2_CPU_X86_32) && !defined(JS_SKIP_SSE2_CHECK)
-    if (!(QMPlay2CoreClass::getCPUFlags() & AV_CPU_FLAG_SSE2))
-    {
-        qCCritical(mb) << "SSE2 capable CPU is required";
-        return false;
-    }
-#endif
-
     const auto lastName = m_providersB->currentText();
 
     m_providersB->clear();
