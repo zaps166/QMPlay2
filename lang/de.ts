@@ -1743,7 +1743,7 @@
     </message>
     <message>
         <source>Try to automatically reconnect live streams on error</source>
-        <translation type="unfinished">Versuche, Live-Streams bei einem Fehler automatisch neu zu verbinden</translation>
+        <translation>Versuche, Live-Streams bei einem Fehler automatisch neu zu verbinden</translation>
     </message>
     <message>
         <source>Decode MPEG4 videos</source>
@@ -3513,8 +3513,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Publish time</source>
-        <translatorcomment>kann ich nicht nachvollziehen, da Youtube nicht geht</translatorcomment>
-        <translation type="unfinished">Veröffentlichung</translation>
+        <translation>Veröffentlichung</translation>
     </message>
 </context>
 <context>
