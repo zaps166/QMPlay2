@@ -730,6 +730,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
     if (name() == "sdp")
     {
         isLocal = false;
+        formatCtx->flags |= AVFMT_FLAG_NOBUFFER;
     }
     else if (name().startsWith("image2") || name().endsWith("_pipe"))
     {
@@ -741,9 +742,6 @@ bool FormatContext::open(const QString &_url, const QString &param)
     {
         formatCtx->flags |= AVFMT_FLAG_FAST_SEEK; //This should be set before "avformat_open_input", but seems to be working for MP3...
     }
-
-    if (!isLocal)
-        formatCtx->flags |= AVFMT_FLAG_NOBUFFER;
 
     if (avformat_find_stream_info(formatCtx, nullptr) < 0)
         return false;
