@@ -1322,7 +1322,7 @@
     <name>MediaBrowserResults</name>
     <message>
         <source>Enqueue</source>
-        <translation>有効</translation>
+        <translation>プレイリストに追加</translation>
     </message>
     <message>
         <source>Play</source>
