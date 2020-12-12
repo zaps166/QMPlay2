@@ -2111,7 +2111,7 @@
     </message>
     <message>
         <source>&amp;Speed up video</source>
-        <translation>ビデオのを速くする</translation>
+        <translation>ビデオを速くする</translation>
     </message>
     <message>
         <source>&amp;Playback</source>
