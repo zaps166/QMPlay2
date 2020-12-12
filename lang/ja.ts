@@ -1315,14 +1315,14 @@
     </message>
     <message>
         <source>Search on %1</source>
-        <translation>検索中 %1</translation>
+        <translation>%1を検索中</translation>
     </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>
     <message>
         <source>Enqueue</source>
-        <translation>格納</translation>
+        <translation>有効</translation>
     </message>
     <message>
         <source>Play</source>
@@ -1972,7 +1972,7 @@
     </message>
     <message>
         <source>Video delay</source>
-        <translation>ビデオの遅延</translation>
+        <translation>ビデオを遅くする</translation>
     </message>
     <message>
         <source>Volume</source>
@@ -2012,7 +2012,7 @@
     </message>
     <message>
         <source>Subtitles delay</source>
-        <translation>字幕の遅延</translation>
+        <translation>字幕を遅くする</translation>
     </message>
     <message>
         <source>Set video delay (sec.)</source>
@@ -2079,7 +2079,7 @@
     </message>
     <message>
         <source>&amp;Delay video</source>
-        <translation>ビデオの遅延</translation>
+        <translation>ビデオを遅くする</translation>
     </message>
     <message>
         <source>Scale down sub&amp;titles</source>
@@ -2099,7 +2099,7 @@
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
-        <translation>字幕の遅延</translation>
+        <translation>字幕を遅くする</translation>
     </message>
     <message>
         <source>&amp;Screen shot</source>
@@ -2111,7 +2111,7 @@
     </message>
     <message>
         <source>&amp;Speed up video</source>
-        <translation>ビデオのスピードを上げる</translation>
+        <translation>ビデオのを速くする</translation>
     </message>
     <message>
         <source>&amp;Playback</source>
