@@ -2668,19 +2668,19 @@ QMPlay2 не масштабуватиме іконки!</translation>
     </message>
     <message>
         <source>Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>мітка</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished">Країна</translation>
+        <translation>Країна</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation type="unfinished">Мова</translation>
+        <translation>Мова</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Штат</translation>
     </message>
 </context>
 <context>
