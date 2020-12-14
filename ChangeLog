@@ -2,7 +2,7 @@ Changes in QMPlay2 20.12.07:
     - fix displaying of subtitles from media file in some rare cases,
     - load fonts from media file when using subtitles from file,
     - fix inactive streams text color in Information panel,
-    - add japanese language file (harujisaku),
+    - add Japanese language file (harujisaku),
     - fix CUVID/Vulkan on some hardware,
     - improve CMake files for Windows,
     - fix "wmalossless" audio time,
