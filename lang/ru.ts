@@ -2571,10 +2571,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Font cache is being updated, please wait</source>
-        <translation>Подождите, обновляется кеш шрифта</translation>
-    </message>
-    <message>
         <source>QMPlay2 has been updated to version</source>
         <translation>QMPlay2 был обновлен ​​до версии</translation>
     </message>

@@ -2578,10 +2578,6 @@
         <translation>QMPlay2 ha sido actualizado a la versión</translation>
     </message>
     <message>
-        <source>Font cache is being updated, please wait</source>
-        <translation>La caché de fuentes se está actualizando, por favor espere</translation>
-    </message>
-    <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
         <translation>QMPlay2 no ha sido actualizado. ¿Quiere efectuar la actualización (recomendado)?</translation>
     </message>

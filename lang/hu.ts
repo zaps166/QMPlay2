@@ -2587,10 +2587,6 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
         <translation>A QMPlay2 nincs frissítve. Szeretnéd elindítani a frissítést (ajánlott)?</translation>
     </message>
-    <message>
-        <source>Font cache is being updated, please wait</source>
-        <translation>A betűtípus gyorsítótár frissítése folyamatban van, kérlek várj</translation>
-    </message>
 </context>
 <context>
     <name>Radio</name>

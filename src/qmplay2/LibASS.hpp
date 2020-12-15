@@ -42,10 +42,6 @@ class BufferPool;
 class QMPLAY2SHAREDLIB_EXPORT LibASS
 {
 public:
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-    static bool slowFontCacheUpdate();
-#endif
-
     static bool isDummy();
 
     LibASS(Settings &);

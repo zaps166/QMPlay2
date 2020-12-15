@@ -43,54 +43,9 @@
 
 #include <cmath>
 
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-    #include <QProgressBar>
-    #include <QVBoxLayout>
-    #include <QLabel>
-
-    class UpdateFC : public QThread
-    {
-    public:
-        UpdateFC(LibASS *ass) :
-            ass(ass)
-        {
-            start();
-            if (!wait(500))
-            {
-                QDialog d(QMPlay2GUI.mainW);
-                d.setWindowTitle(QCoreApplication::applicationName());
-                QLabel l(QObject::tr("Font cache is being updated, please wait"));
-                QProgressBar p;
-                p.setRange(0, 0);
-                QVBoxLayout la(&d);
-                la.addWidget(&l);
-                la.addWidget(&p);
-                d.open();
-                d.setMinimumSize(d.size());
-                d.setMaximumSize(d.size());
-                do
-                    el.processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents);
-                while (isRunning());
-            }
-        }
-    private:
-        void run()
-        {
-            ass->initOSD();
-            SetFileAttributesW((WCHAR *)QString(QDir::homePath() + "/fontconfig").utf16(), FILE_ATTRIBUTE_HIDDEN);
-            el.wakeUp();
-        }
-        LibASS *ass;
-        QEventLoop el;
-    };
-#endif
-
 PlayClass::PlayClass() :
     demuxThr(nullptr), vThr(nullptr), aThr(nullptr),
     aRatioName("auto"),
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-    firsttimeUpdateCache(true),
-#endif
     ass(nullptr), osd(nullptr)
 {
     doSilenceBreak = doSilenceOnStart = false;
@@ -1420,16 +1375,7 @@ void PlayClass::load(Demuxer *demuxer)
                     ass->setFontScale(subtitlesScale);
                     ass->setARatio(aspect_ratio);
                     ass->setZoom(zoom);
-
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-                    if (LibASS::slowFontCacheUpdate() && firsttimeUpdateCache)
-                    {
-                        UpdateFC updateFC(ass);
-                        firsttimeUpdateCache = false;
-                    }
-                    else
-#endif
-                        ass->initOSD();
+                    ass->initOSD();
 
                     emit videoStarted(noVideo);
 

@@ -79,13 +79,6 @@ static inline int toASSAlignment(int align)
 
 /**/
 
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-bool LibASS::slowFontCacheUpdate()
-{
-    return ass_library_version() < 0x01300000 || QSysInfo::windowsVersion() < QSysInfo::WV_6_0;
-}
-#endif
-
 bool LibASS::isDummy()
 {
     return false;
@@ -600,13 +593,6 @@ inline void LibASS::calcSize()
 }
 
 #else // QMPLAY2_LIBASS
-
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-bool LibASS::slowFontCacheUpdate()
-{
-    return false;
-}
-#endif
 
 bool LibASS::isDummy()
 {

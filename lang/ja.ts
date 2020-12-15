@@ -2580,10 +2580,6 @@
         <translation>QMPlay2のバージョンが上がりました。バージョン</translation>
     </message>
     <message>
-        <source>Font cache is being updated, please wait</source>
-        <translation>フォントキャッシュが更新されています。しばらくお待ち下さい</translation>
-    </message>
-    <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
         <translation>QMPlay2は更新されていません。アップデートを実行（推奨）しますか？</translation>
     </message>

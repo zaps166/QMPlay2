@@ -155,9 +155,6 @@ private:
     bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled, doSuspend, doRepeat, allowAccurateSeek, paramsForced = false;
     QTimer timTerminate;
 
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-    bool firsttimeUpdateCache;
-#endif
     LibASS *ass;
 
     QMutex osdMutex, subsMutex;
