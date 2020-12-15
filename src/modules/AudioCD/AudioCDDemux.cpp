@@ -366,8 +366,6 @@ bool AudioCDDemux::freedb_query(cddb_disc_t *&cddb_disc)
         cddb_disc_add_track(cddb_disc, pcddb_track);
     }
 
-    bool useNetwork = false;
-
     cddb_disc_calc_discid(cddb_disc);
     if (cddb_disc_get_discid(cddb_disc) == discID)
         cddb_cache_only(cddb);
@@ -391,8 +389,6 @@ bool AudioCDDemux::freedb_query(cddb_disc_t *&cddb_disc)
                 cddb_set_http_proxy_password(cddb, QString(QByteArray::fromBase64(sets.getByteArray("Proxy/Password"))).toLocal8Bit());
             }
         }
-
-        useNetwork = true;
     }
 
     if (cddb_query(cddb, cddb_disc) > 0)
