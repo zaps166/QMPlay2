@@ -376,8 +376,8 @@ bool AudioCDDemux::freedb_query(cddb_disc_t *&cddb_disc)
         discID = cddb_disc_get_discid(cddb_disc);
 
         cddb_set_timeout(cddb, 3);
-        cddb_http_enable(cddb);
-        cddb_set_server_port(cddb, 80);
+        cddb_set_server_name(cddb, "gnudb.gnudb.org");
+        cddb_set_server_port(cddb, 8880);
 
         Settings sets("QMPlay2");
         if (sets.getBool("Proxy/Use"))
@@ -395,19 +395,14 @@ bool AudioCDDemux::freedb_query(cddb_disc_t *&cddb_disc)
         useNetwork = true;
     }
 
-    for (int i = 0; i <= useNetwork; ++i)
+    if (cddb_query(cddb, cddb_disc) > 0)
     {
-        if (cddb_query(cddb, cddb_disc) > 0)
+        do if (cddb_disc_get_discid(cddb_disc) == discID)
         {
-            do if (cddb_disc_get_discid(cddb_disc) == discID)
-            {
-                cddb_read(cddb, cddb_disc);
-                cddb_destroy(cddb);
-                return true;
-            } while (cddb_query_next(cddb, cddb_disc));
-        }
-        if (useNetwork && !i)
-            cddb_set_server_name(cddb, "freedb.musicbrainz.org");
+            cddb_read(cddb, cddb_disc);
+            cddb_destroy(cddb);
+            return true;
+        } while (cddb_query_next(cddb, cddb_disc));
     }
 
     cddb_disc_destroy(cddb_disc);
