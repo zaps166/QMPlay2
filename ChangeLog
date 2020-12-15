@@ -1,3 +1,7 @@
+Changes in QMPlay2 20.12.16:
+    - fix playback of some network streams,
+    - change CDDB server to gnudb.org,
+
 Changes in QMPlay2 20.12.07:
     - fix displaying of subtitles from media file in some rare cases,
     - load fonts from media file when using subtitles from file,
