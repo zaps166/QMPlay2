@@ -2380,8 +2380,8 @@
         <translation>スキップ</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>停止後</translation>
+        <source>&amp;Stop after playing</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>

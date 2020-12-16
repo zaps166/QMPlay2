@@ -2378,8 +2378,8 @@
         <translation>&amp;Saltar</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>Parar despué&amp;s</translation>
+        <source>&amp;Stop after playing</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2668,7 +2668,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished">País</translation>
+        <translation>País</translation>
     </message>
     <message>
         <source>Language</source>

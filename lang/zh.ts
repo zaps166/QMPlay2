@@ -2378,8 +2378,8 @@
         <translation>跳过</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>停止于</translation>
+        <source>&amp;Stop after playing</source>
+        <translation>播放后停止</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>

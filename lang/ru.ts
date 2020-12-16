@@ -2375,8 +2375,8 @@
         <translation>&amp;Пропустить</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>&amp;Остановить после этого</translation>
+        <source>&amp;Stop after playing</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2665,11 +2665,11 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished">Страна</translation>
+        <translation>Страна</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation type="unfinished">Язык</translation>
+        <translation>Язык</translation>
     </message>
     <message>
         <source>State</source>

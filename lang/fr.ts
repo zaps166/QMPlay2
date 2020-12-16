@@ -2375,7 +2375,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
+        <source>&amp;Stop after playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2668,7 +2668,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Language</source>
-        <translation type="unfinished">Langue</translation>
+        <translation>Langue</translation>
     </message>
     <message>
         <source>State</source>

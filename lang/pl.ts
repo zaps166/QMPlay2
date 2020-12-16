@@ -2378,8 +2378,8 @@
         <translation>&amp;Pomiń</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>Z&amp;atrzymaj po</translation>
+        <source>&amp;Stop after playing</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
