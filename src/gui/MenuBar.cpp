@@ -172,7 +172,7 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
     addSeparator();
     newAction(Playlist::tr("&Enqueue"), this, queue, false, QIcon(), false);
     newAction(Player::tr("&Skip"), this, skip, false, QIcon(), false);
-    newAction(Player::tr("&Stop after"), this, stopAfter, false, QIcon(), false);
+    newAction(Player::tr("&Stop after playing"), this, stopAfter, false, QIcon(), false);
     addSeparator();
     newAction(Playlist::tr("&Properties"), this, entryProperties, false, QMPlay2Core.getIconFromTheme("document-properties"), false);
 }

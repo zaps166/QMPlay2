@@ -2290,8 +2290,8 @@
         <translation>&amp;Kihagyás</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>&amp;Megállítás utána</translation>
+        <source>&amp;Stop after playing</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Player</source>
@@ -2668,11 +2668,11 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished">Ország</translation>
+        <translation>Ország</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation type="unfinished">Nyelv</translation>
+        <translation>Nyelv</translation>
     </message>
     <message>
         <source>State</source>

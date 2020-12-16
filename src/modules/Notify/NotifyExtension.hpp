@@ -58,4 +58,4 @@ private:
     std::unique_ptr<NotifyService> m_notifyService;
 };
 
-#define NotifyExtensionName "Aditional Notifications"
+#define NotifyExtensionName "Additional Notifications"
