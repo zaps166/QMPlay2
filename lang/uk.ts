@@ -580,8 +580,8 @@
         <translation>Зупинка завантаження</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Розмір</translation>
+        <source>File size</source>
+        <translation>Розмір файлу</translation>
     </message>
     <message>
         <source>Download again</source>

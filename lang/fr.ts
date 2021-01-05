@@ -580,8 +580,8 @@
         <translation>Arrêter le téléchargement</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Taille</translation>
+        <source>File size</source>
+        <translation>Taille du fichier</translation>
     </message>
     <message>
         <source>Download complete</source>

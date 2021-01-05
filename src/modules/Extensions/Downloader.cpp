@@ -232,7 +232,7 @@ void DownloadItemW::setSizeAndFilePath(qint64 size, const QString &filePath)
 {
     if (!finished)
     {
-        sizeL->setText(tr("Size") + ": " + (size > -1 ? Functions::sizeString(size) : "?"));
+        sizeL->setText(tr("File size") + ": " + (size > -1 ? Functions::sizeString(size) : "?"));
         speedProgressW->progressB->setRange(0, (size != -1) ? 100 : 0);
         this->filePath = filePath;
     }

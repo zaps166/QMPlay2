@@ -600,8 +600,8 @@
         <translation>Letöltés megállítása</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Méret</translation>
+        <source>File size</source>
+        <translation>Fájlméret</translation>
     </message>
     <message>
         <source>Conversion aborted</source>

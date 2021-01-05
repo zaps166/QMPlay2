@@ -580,8 +580,8 @@
         <translation>Zatrzymaj pobieranie</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Rozmiar</translation>
+        <source>File size</source>
+        <translation>Rozmiar pliku</translation>
     </message>
     <message>
         <source>Download again</source>

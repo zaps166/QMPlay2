@@ -588,8 +588,8 @@
         <translation>接続を待機</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>サイズ</translation>
+        <source>File size</source>
+        <translation>ファイルサイズ</translation>
     </message>
     <message>
         <source>Download complete</source>
