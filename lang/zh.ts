@@ -580,8 +580,8 @@
         <translation>停止下载</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>尺寸</translation>
+        <source>File size</source>
+        <translation>文件大小</translation>
     </message>
     <message>
         <source>Download complete</source>
@@ -1004,7 +1004,7 @@
     </message>
     <message>
         <source>Automatically delete ungrouped entries</source>
-        <translation>自动删除未分组项</translation>
+        <translation>自动删除未分组项目</translation>
     </message>
     <message>
         <source>Hide artist metadata</source>
@@ -1500,11 +1500,11 @@
     </message>
     <message>
         <source>Add entry to the directories context menu</source>
-        <translation>增加目录快捷菜单项</translation>
+        <translation>增加目录快捷菜单项目</translation>
     </message>
     <message>
         <source>Add entry to the drives context menu</source>
-        <translation>增加驱动器快捷菜单项</translation>
+        <translation>增加驱动器快捷菜单项目</translation>
     </message>
     <message>
         <source>Enqueue in QMPlay2</source>
@@ -1752,7 +1752,7 @@
     </message>
     <message>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
-        <translation>如果您遇到 (DivX5) 视频解码问题则停用</translation>
+        <translation>如果您遇到 MPEG4 (DivX5) 视频解码问题则停用</translation>
     </message>
     <message>
         <source>Bit-perfect audio</source>
@@ -2406,11 +2406,11 @@
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
-        <translation>删除所选项</translation>
+        <translation>删除所选项目</translation>
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
-        <translation>删除未分组项</translation>
+        <translation>删除未分组项目</translation>
     </message>
     <message>
         <source>&amp;Clear list</source>
@@ -2434,7 +2434,7 @@
     </message>
     <message>
         <source>&amp;Find entries</source>
-        <translation>查找项</translation>
+        <translation>查找项目</translation>
     </message>
     <message>
         <source>&amp;Collapse all</source>
@@ -2485,7 +2485,7 @@
     </message>
     <message>
         <source>Filter entries</source>
-        <translation>过滤项</translation>
+        <translation>过滤项目</translation>
     </message>
     <message>
         <source>Playlist is being loaded now...</source>
@@ -2493,7 +2493,7 @@
     </message>
     <message>
         <source>Visible entries</source>
-        <translation>可见项</translation>
+        <translation>可见项目</translation>
     </message>
     <message>
         <source>Are you sure you want to clear the list?</source>
@@ -2501,7 +2501,7 @@
     </message>
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
-        <translation>您确定要删除非分组项吗？</translation>
+        <translation>您确定要删除非分组项目吗？</translation>
     </message>
 </context>
 <context>
@@ -2714,7 +2714,7 @@ QMPlay2 将不会增加图标！</translation>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
-        <translation>重复当前项</translation>
+        <translation>重复当前项目</translation>
     </message>
     <message>
         <source>&amp;Group repeating</source>

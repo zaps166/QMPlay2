@@ -580,8 +580,8 @@
         <translation>Download stoppen</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Größe</translation>
+        <source>File size</source>
+        <translation>Dateigröße</translation>
     </message>
     <message>
         <source>Download complete</source>

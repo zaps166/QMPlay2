@@ -588,8 +588,8 @@
         <translation>Esperando la conexión</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Tamaño</translation>
+        <source>File size</source>
+        <translation>Tamaño de archivo</translation>
     </message>
     <message>
         <source>Download complete</source>

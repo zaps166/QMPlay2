@@ -580,8 +580,8 @@
         <translation>Остановка загрузки</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Размер</translation>
+        <source>File size</source>
+        <translation>Размер файла</translation>
     </message>
     <message>
         <source>Download complete</source>
