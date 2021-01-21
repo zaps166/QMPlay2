@@ -43,6 +43,7 @@
     #include <windows.h>
     #include <powrprof.h>
 #elif defined Q_OS_MACOS
+    #include <QOperatingSystemVersion>
     #include <QStandardPaths>
 #elif !defined Q_OS_ANDROID
     #include <QProcess>
@@ -185,7 +186,18 @@ int QMPlay2CoreClass::getCPUFlags()
 #ifdef USE_OPENGL
 bool QMPlay2CoreClass::isGlOnWindowForced()
 {
-    static bool forced = (QApplication::platformName().startsWith("wayland") || QApplication::platformName() == "android");
+    static bool forced = [] {
+#ifdef Q_OS_MACOS
+#   if defined(MAC_OS_X_VERSION_10_14) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14)
+        return (QOperatingSystemVersion::current() <= QOperatingSystemVersion::MacOSHighSierra);
+#   else
+#       warning "Compiling OpenGL with SDK older than 10.14, native OpenGL window is disabled!"
+        return true;
+#   endif
+#else
+        return (QApplication::platformName().startsWith("wayland") || QApplication::platformName() == "android");
+#endif
+    }();
     return forced;
 }
 #endif
