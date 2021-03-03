@@ -468,7 +468,7 @@ QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
     if (type == "videoWriters")
         defaultModules << "OpenGL 2" << "XVideo";
     else if (type == "audioWriters")
-        defaultModules << "PulseAudio" << "ALSA";
+        defaultModules << "PipeWire" << "PulseAudio" << "ALSA";
 #elif defined Q_OS_WIN
     if (type == "videoWriters")
         defaultModules << "OpenGL 2" << "DirectDraw";

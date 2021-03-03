@@ -425,7 +425,13 @@ void AudioThr::run()
                     }
 
                     oneFrame = false;
-                    writer->write(dataToWrite);
+
+                    do
+                    {
+                        const int ret = writer->write(dataToWrite);
+                        if (ret >= 0 || !writer->readyWrite())
+                            break;
+                    } while (!br && !br2);
                 }
                 else
                 {

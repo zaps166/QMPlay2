@@ -1,0 +1,5 @@
+<RCC>
+    <qresource>
+        <file alias="PipeWire.svgz">PipeWire.svgz</file>
+    </qresource>
+</RCC>

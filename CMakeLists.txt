@@ -251,6 +251,12 @@ endif()
 option(USE_PULSEAUDIO "Build with PulseAudio module" ${LIBPULSE_FOUND})
 add_feature_info(PulseAudio USE_PULSEAUDIO "Build with PulseAudio module")
 
+if(NOT DEFINED USE_PIPEWIRE)
+    pkg_check_modules(LIBPIPEWIRE libpipewire-0.3)
+endif()
+option(USE_PIPEWIRE "Build with PipeWire module" ${LIBPIPEWIRE_FOUND})
+add_feature_info(PipeWire USE_PIPEWIRE "Build with PipeWire module")
+
 if(NOT DEFINED USE_XVIDEO)
     pkg_check_modules(LIB_X11_XV x11 xv)
 endif()

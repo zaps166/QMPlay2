@@ -54,6 +54,10 @@ if(USE_PULSEAUDIO)
     add_subdirectory(PulseAudio)
 endif()
 
+if(USE_PIPEWIRE)
+    add_subdirectory(PipeWire)
+endif()
+
 if(USE_XVIDEO)
     add_subdirectory(XVideo)
 endif()
