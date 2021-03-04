@@ -203,7 +203,7 @@ bool PipeWireWriter::open()
     }
     pw_registry_add_listener(m_registry, &m_registryListener, &registryEvents, this);
 
-    m_coreInitSeq = pw_core_sync(m_core, PW_ID_CORE, m_coreInitSeq);
+    updateCoreInitSeq();
 
     if (pw_thread_loop_start(m_threadLoop) != 0)
     {
@@ -260,6 +260,8 @@ void PipeWireWriter::onRegistryEventGlobal(uint32_t id, uint32_t permissions, co
         return;
 
     m_hasSinks = true;
+
+    updateCoreInitSeq();
 }
 
 void PipeWireWriter::onStateChanged(pw_stream_state old, pw_stream_state state, const char *error)
@@ -327,6 +329,11 @@ void PipeWireWriter::onProcess()
     d.chunk->stride = m_stride;
 
     pw_stream_queue_buffer(m_stream, b);
+}
+
+void PipeWireWriter::updateCoreInitSeq()
+{
+    m_coreInitSeq = pw_core_sync(m_core, PW_ID_CORE, m_coreInitSeq);
 }
 
 void PipeWireWriter::recreateStream()

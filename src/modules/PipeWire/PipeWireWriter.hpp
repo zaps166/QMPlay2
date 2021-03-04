@@ -57,6 +57,8 @@ private:
     void onStateChanged(pw_stream_state old, pw_stream_state state, const char *error);
     void onProcess();
 
+    void updateCoreInitSeq();
+
     void recreateStream();
     void destroyStream();
 
