@@ -1638,7 +1638,8 @@ void MainWidget::keyPressEvent(QKeyEvent *e)
 }
 void MainWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    if ((fullScreen || isCompactView) && (e->buttons() == Qt::NoButton || videoDock->isTouch))
+    static bool inRestoreState = false;
+    if (!inRestoreState && (fullScreen || isCompactView) && (e->buttons() == Qt::NoButton || videoDock->isTouch))
     {
         const bool isToolbarVisible = mainTB->isVisible();
 
@@ -1690,7 +1691,10 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
         if (canDisplayLeftPanel && !playlistDock->isVisible() && mPosX <= trigger1)
         {
             showToolBar(true); //Before restoring dock widgets - show toolbar and status bar
+
+            inRestoreState = true;
             restoreState(fullScreenDockWidgetState);
+            inRestoreState = false;
 
             const QList<QDockWidget *> tDW = tabifiedDockWidgets(infoDock);
             bool reloadQMPlay2Extensions = false;
