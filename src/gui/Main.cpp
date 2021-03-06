@@ -45,6 +45,9 @@
 #ifdef CHECK_FOR_EGL
     #include <QLibrary>
 #endif
+#ifdef Q_OS_MACOS
+    #include <QSurfaceFormat>
+#endif
 
 #include <clocale>
 #include <csignal>
@@ -610,6 +613,12 @@ int main(int argc, char *argv[])
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #ifndef USE_OPENGL
     QGuiApplication::setAttribute(Qt::AA_ForceRasterWidgets);
+#endif
+
+#ifdef Q_OS_MACOS
+    auto fmt = QSurfaceFormat::defaultFormat();
+    fmt.setColorSpace(QSurfaceFormat::sRGBColorSpace);
+    QSurfaceFormat::setDefaultFormat(fmt);
 #endif
 
 #ifndef Q_OS_WIN
