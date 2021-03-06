@@ -26,6 +26,7 @@
 #include <Functions.hpp>
 #include <SubsDec.hpp>
 
+#include <QVersionNumber>
 #include <QApplication>
 #include <QMouseEvent>
 #include <QFileInfo>
@@ -342,8 +343,7 @@ bool VideoDock::event(QEvent *e)
         case QEvent::Move:
             if (m_workaround)
             {
-                const auto versionSplitted = QString(qVersion()).split('.');
-                if (versionSplitted.count() == 3 && versionSplitted[0].toInt() * 0x100 + versionSplitted[1].toInt() >= 0x050C)
+                if (QVersionNumber::fromString(qVersion()) >= QVersionNumber(5, 12, 0))
                 {
                     // Something is wrong with enter/leave events after going full screen in some configurations since Qt 5.12,
                     // do some mouse movements - Qt will see this as mouse move enter and move events.
