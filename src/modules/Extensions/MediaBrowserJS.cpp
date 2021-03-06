@@ -32,8 +32,12 @@ MediaBrowserJS::MediaBrowserJS(const QString &commonCode, const int lineNumber, 
 
     auto globalObject = m_engine.globalObject();
     globalObject.setProperty(
-        "engine",
-        m_commonJS.insertJSEngine(&m_engine)
+        "NetworkAccess",
+        m_engine.newQMetaObject(&NetworkAccessJS::staticMetaObject)
+    );
+    globalObject.setProperty(
+        "QTreeWidgetItem",
+        m_engine.newQMetaObject(&TreeWidgetItemJS::staticMetaObject)
     );
     globalObject.setProperty(
         "common",

@@ -23,9 +23,6 @@ public:
     CommonJS(QObject *parent = nullptr);
     ~CommonJS();
 
-    int insertJSEngine(QJSEngine *engine);
-    QJSEngine *getEngine(const int id);
-
     int insertNetworkReply(NetworkReply *networkReply);
     NetworkReply *getNetworkReply(const int id) const;
     void removeNetworkReply(const int id);
@@ -33,10 +30,6 @@ public:
     int insertIOController(IOController<> *ioCtrl);
     IOController<> *getIOController(const int id) const;
     void removeIOController(const int id);
-
-public: // QJSEngine::newQMetaObject() is available since Qt 5.8, so use these methods for Qt 5.6 compatibility
-    Q_INVOKABLE QJSValue newNetworkAccess(int engineId);
-    Q_INVOKABLE QJSValue newQTreeWidgetItem(int engineId);
 
 public:
     Q_INVOKABLE bool abortNetworkReply(const int id);
@@ -72,10 +65,6 @@ public:
     Q_INVOKABLE  QString getNameForUrl(const QString &url);
 
 private:
-    mutable QMutex m_jsEngineMutex;
-    int m_jsEngineId = 0;
-    QHash<int, QJSEngine *> m_jsEngines;
-
     mutable QMutex m_networkReplyMutex;
     int m_networkReplyId = 0;
     QHash<int, NetworkReply *> m_networkReplies;
