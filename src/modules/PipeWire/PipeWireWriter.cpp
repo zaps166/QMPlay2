@@ -128,7 +128,8 @@ qint64 PipeWireWriter::write(const QByteArray &arr)
     if (m_paused.exchange(false))
     {
         LoopLocker locker(m_threadLoop);
-        pw_stream_set_active(m_stream, true);
+        if (m_streamPaused)
+            pw_stream_set_active(m_stream, true);
     }
 
     const int dataFrames = arr.size() / m_stride;
@@ -334,11 +335,9 @@ void PipeWireWriter::onProcess()
     }
     else
     {
-        if (m_silence && m_paused)
-            pw_stream_set_active(m_stream, false);
-
         memset(d.data, 0, m_bufferSize);
-        m_silence = true;
+        if (!m_silence.exchange(true))
+            m_silenceElapsed.start();
     }
 
     signalLoop(true, false);
@@ -348,6 +347,9 @@ void PipeWireWriter::onProcess()
     d.chunk->stride = m_stride;
 
     pw_stream_queue_buffer(m_stream, b);
+
+    if (m_silence && m_paused && m_silenceElapsed.isValid() && m_silenceElapsed.elapsed() >= 1000)
+        pw_stream_set_active(m_stream, false);
 }
 
 void PipeWireWriter::updateCoreInitSeq()
@@ -434,11 +436,6 @@ void PipeWireWriter::recreateStream()
         m_err = true;
         return;
     }
-
-    pw_stream_set_active(m_stream, false);
-
-    m_paused = true;
-    m_silence = true;
 
     modParam("delay", 2.0 * m_nFrames / m_rate);
 }

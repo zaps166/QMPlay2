@@ -21,6 +21,7 @@
 #include <Writer.hpp>
 
 #include <QCoreApplication>
+#include <QElapsedTimer>
 
 #include <atomic>
 
@@ -102,6 +103,8 @@ private:
     std::atomic_bool m_streamPaused {false};
     std::atomic_bool m_ignoreStateChange {false};
     std::atomic_bool m_err {false};
+
+    QElapsedTimer m_silenceElapsed;
 };
 
 #define PipeWireWriterName "PipeWire"
