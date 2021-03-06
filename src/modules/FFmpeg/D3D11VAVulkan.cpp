@@ -571,7 +571,8 @@ bool D3D11VAVulkan::createImageInterop(const shared_ptr<Device> &device, Frame &
         device,
         imageSize,
         m_formatVk,
-        m_linearImage
+        m_linearImage,
+        m_externalMemoryHandleType
     );
 
     if (m_zeroCopy)

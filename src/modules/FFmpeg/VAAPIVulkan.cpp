@@ -128,11 +128,14 @@ void VAAPIVulkan::map(Frame &frame)
 
             try
             {
+                constexpr auto externalMemoryHandleType = vk::ExternalMemoryHandleTypeFlagBits::eDmaBufEXT;
+
                 vkImage = Image::createExternalImport(
                     device,
                     vk::Extent2D(frame.width(), frame.height()),
                     format,
-                    isLinear
+                    isLinear,
+                    externalMemoryHandleType
                 );
 
                 auto fdCustomData = make_unique<FDCustomData>();
@@ -143,7 +146,7 @@ void VAAPIVulkan::map(Frame &frame)
                 vkImage->importFD(
                     fdDescriptors,
                     offsets,
-                    vk::ExternalMemoryHandleTypeFlagBits::eDmaBufEXT
+                    externalMemoryHandleType
                 );
             }
             catch (const vk::SystemError &e)
