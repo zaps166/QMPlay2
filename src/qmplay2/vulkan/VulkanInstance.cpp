@@ -387,11 +387,11 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
 void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalDevices) const
 {
 #ifdef Q_OS_WIN
-    for (;;)
+    for (DWORD devIdx = 0;; ++devIdx)
     {
         DISPLAY_DEVICE displayDevice = {};
         displayDevice.cb = sizeof(displayDevice);
-        if (!EnumDisplayDevicesA(nullptr, 0, &displayDevice, 0))
+        if (!EnumDisplayDevicesA(nullptr, devIdx, &displayDevice, 0))
             break;
 
         if (!(displayDevice.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE))
