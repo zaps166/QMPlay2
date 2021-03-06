@@ -1337,7 +1337,6 @@ bool Window::event(QEvent *e)
         case QEvent::FocusAboutToChange:
         case QEvent::Enter:
         case QEvent::Leave:
-        case QEvent::Wheel:
         case QEvent::TabletMove:
         case QEvent::TabletPress:
         case QEvent::TabletRelease:
@@ -1349,6 +1348,8 @@ bool Window::event(QEvent *e)
         case QEvent::InputMethodQuery:
         case QEvent::TouchCancel:
             return QCoreApplication::sendEvent(parent(), e);
+        case QEvent::Wheel:
+            return QCoreApplication::sendEvent(const_cast<QWidget *>(QMPlay2Core.getVideoDock()), e);
 #endif
         default:
             break;
