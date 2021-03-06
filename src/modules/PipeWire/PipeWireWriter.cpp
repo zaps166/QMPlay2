@@ -21,6 +21,35 @@
 #include <QDebug>
 #include <QtMath>
 
+class LoopLocker
+{
+public:
+    LoopLocker(pw_thread_loop *threadLoop)
+        : m_threadLoop(threadLoop)
+    {
+        if (m_threadLoop)
+            pw_thread_loop_lock(m_threadLoop);
+    }
+    ~LoopLocker()
+    {
+        unlock();
+    }
+
+    void unlock()
+    {
+        if (m_threadLoop)
+        {
+            pw_thread_loop_unlock(m_threadLoop);
+            m_threadLoop = nullptr;
+        }
+    }
+
+private:
+    pw_thread_loop *m_threadLoop = nullptr;
+};
+
+/**/
+
 PipeWireWriter::PipeWireWriter(Module &module)
 {
     addParam("delay");
@@ -98,9 +127,8 @@ qint64 PipeWireWriter::write(const QByteArray &arr)
 
     if (m_paused.exchange(false))
     {
-        pw_thread_loop_lock(m_threadLoop);
+        LoopLocker locker(m_threadLoop);
         pw_stream_set_active(m_stream, true);
-        pw_thread_loop_unlock(m_threadLoop);
     }
 
     const int dataFrames = arr.size() / m_stride;
@@ -114,17 +142,13 @@ qint64 PipeWireWriter::write(const QByteArray &arr)
     {
         if (m_waitForProcessed)
         {
-            pw_thread_loop_lock(m_threadLoop);
+            LoopLocker locker(m_threadLoop);
             while (!m_err && !m_processed)
             {
                 if (pw_thread_loop_timed_wait(m_threadLoop, 1) != 0)
-                {
-                    pw_thread_loop_unlock(m_threadLoop);
                     return -1;
-                }
             }
             m_processed = false;
-            pw_thread_loop_unlock(m_threadLoop);
 
             m_waitForProcessed = false;
         }
@@ -211,13 +235,12 @@ bool PipeWireWriter::open()
         return false;
     }
 
-    pw_thread_loop_lock(m_threadLoop);
+    LoopLocker locker(m_threadLoop);
     while (!m_initDone)
     {
         if (pw_thread_loop_timed_wait(m_threadLoop, 2) != 0)
             break;
     }
-    pw_thread_loop_unlock(m_threadLoop);
 
     return m_initDone && m_hasSinks;
 }
@@ -231,15 +254,11 @@ void PipeWireWriter::onCoreEventDone(uint32_t id, int seq)
 {
     if (id == PW_ID_CORE && seq == m_coreInitSeq)
     {
-        pw_thread_loop_lock(m_threadLoop);
-
         spa_hook_remove(&m_registryListener);
         spa_hook_remove(&m_coreListener);
 
         m_initDone = true;
         pw_thread_loop_signal(m_threadLoop, false);
-
-        pw_thread_loop_unlock(m_threadLoop);
     }
 }
 
@@ -365,12 +384,11 @@ void PipeWireWriter::recreateStream()
     );
     pw_properties_setf(props, PW_KEY_NODE_LATENCY, "%u/%u", m_nFrames, m_rate);
 
-    pw_thread_loop_lock(m_threadLoop);
+    LoopLocker locker(m_threadLoop);
 
     m_stream = pw_stream_new(m_core, "Playback", props);
     if (!m_stream)
     {
-        pw_thread_loop_unlock(m_threadLoop);
         m_err = true;
         return;
     }
@@ -413,7 +431,6 @@ void PipeWireWriter::recreateStream()
     );
     if (connectErr != 0)
     {
-        pw_thread_loop_unlock(m_threadLoop);
         m_err = true;
         return;
     }
@@ -422,8 +439,6 @@ void PipeWireWriter::recreateStream()
 
     m_paused = true;
     m_silence = true;
-
-    pw_thread_loop_unlock(m_threadLoop);
 
     modParam("delay", 2.0 * m_nFrames / m_rate);
 }
@@ -434,22 +449,18 @@ void PipeWireWriter::destroyStream()
 
     if (getParam("drain").toBool())
     {
-        pw_thread_loop_lock(m_threadLoop);
+        LoopLocker locker(m_threadLoop);
         while (!m_streamPaused && !m_silence && !m_err)
         {
             if (pw_thread_loop_timed_wait(m_threadLoop, 1) != 0)
                 break;
         }
-        pw_thread_loop_unlock(m_threadLoop);
     }
 
+    LoopLocker locker(m_threadLoop);
     m_ignoreStateChange = true;
-
-    pw_thread_loop_lock(m_threadLoop);
     pw_stream_disconnect(m_stream);
     pw_stream_destroy(m_stream);
-    pw_thread_loop_unlock(m_threadLoop);
-
     m_ignoreStateChange = false;
 
     m_stream = nullptr;
@@ -457,14 +468,9 @@ void PipeWireWriter::destroyStream()
 
 void PipeWireWriter::signalLoop(bool onProcessDone, bool err)
 {
-    const bool inThread = pw_thread_loop_in_thread(m_threadLoop);
-    if (!inThread)
-        pw_thread_loop_lock(m_threadLoop);
     if (err)
         m_err = true;
     if (onProcessDone)
         m_processed = true;
     pw_thread_loop_signal(m_threadLoop, false);
-    if (!inThread)
-        pw_thread_loop_unlock(m_threadLoop);
 }
