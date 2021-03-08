@@ -1955,6 +1955,13 @@
     </message>
 </context>
 <context>
+    <name>PipeWireWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation type="unfinished">Nie można otworzyć strumienia wyjścia dźwięku</translation>
+    </message>
+</context>
+<context>
     <name>PlayClass</name>
     <message>
         <source>Stopped</source>
@@ -2379,7 +2386,7 @@
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation type="unfinished"></translation>
+        <translation>Z&amp;atrzymaj po odtworzeniu</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>

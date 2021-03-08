@@ -1952,6 +1952,13 @@
     </message>
 </context>
 <context>
+    <name>PipeWireWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation type="unfinished">Не удалось открыть поток вывода звука</translation>
+    </message>
+</context>
+<context>
     <name>PlayClass</name>
     <message>
         <source>Stopped</source>

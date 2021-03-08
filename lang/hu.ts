@@ -1955,6 +1955,13 @@
     </message>
 </context>
 <context>
+    <name>PipeWireWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation type="unfinished">Nem sikerült a hangkimeneti adatfolyam megnyitása</translation>
+    </message>
+</context>
+<context>
     <name>PlayClass</name>
     <message>
         <source>Loaded subtitles</source>

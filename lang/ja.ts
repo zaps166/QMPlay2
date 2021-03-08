@@ -1957,6 +1957,13 @@
     </message>
 </context>
 <context>
+    <name>PipeWireWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PlayClass</name>
     <message>
         <source>Subtitles off</source>
