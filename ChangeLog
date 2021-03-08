@@ -1,3 +1,10 @@
+Changes in QMPlay2 21.03.09:
+    - drop support for Qt < 5.10, CMake < 3.9, TagLib < 1.9, FFmpeg < 4.0,
+    - fix possible freeze on Windows when Vulkan is enabled,
+    - add PipeWire audio output,
+    - fix YouTube videos,
+    - minor fixes,
+
 Changes in QMPlay2 20.12.16:
     - fix playback of some network streams,
     - change CDDB server to gnudb.org,
