@@ -1960,7 +1960,7 @@
     <name>PipeWireWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオを開けません</translation>
     </message>
 </context>
 <context>

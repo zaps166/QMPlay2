@@ -1958,7 +1958,7 @@
     <name>PipeWireWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el flujo de salida de audio</translation>
     </message>
 </context>
 <context>
