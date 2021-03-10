@@ -29,6 +29,7 @@
 #include <Module.hpp>
 
 #include <QLoggingCategory>
+#include <QStandardPaths>
 #include <QApplication>
 #include <QLibraryInfo>
 #include <QTranslator>
@@ -44,7 +45,6 @@
     #include <powrprof.h>
 #elif defined Q_OS_MACOS
     #include <QOperatingSystemVersion>
-    #include <QStandardPaths>
 #elif !defined Q_OS_ANDROID
     #include <QProcess>
 #endif
@@ -212,15 +212,27 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
     langDir = shareDir + "lang/";
 
     if (Version::isPortable())
+    {
         settingsDir = QCoreApplication::applicationDirPath() + "/settings/";
+    }
     else
     {
 #if defined(Q_OS_WIN)
         settingsDir = QFileInfo(QSettings(QSettings::IniFormat, QSettings::UserScope, QString()).fileName()).absolutePath() + "/QMPlay2/";
 #elif defined(Q_OS_MACOS)
-        settingsDir = Functions::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation).value(0, settingsDir));
+        settingsDir = Functions::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).value(0));
 #else
-        settingsDir = QDir::homePath() + "/.qmplay2/";
+        const QString configSettingsDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).value(0) + "/QMPlay2/");
+        const QString homeSettingsDir(QDir::homePath() + "/.qmplay2/");
+        if (QFileInfo(configSettingsDir).isDir() || !QFileInfo(homeSettingsDir).isDir())
+        {
+            settingsDir = configSettingsDir;
+        }
+        else
+        {
+            // Backward compatibility
+            settingsDir = homeSettingsDir;
+        }
 #endif
     }
     QDir(settingsDir).mkpath(".");
