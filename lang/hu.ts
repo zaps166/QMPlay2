@@ -1958,7 +1958,7 @@
     <name>PipeWireWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation type="unfinished">Nem sikerült a hangkimeneti adatfolyam megnyitása</translation>
+        <translation>Nem sikerült a hangkimeneti adatfolyam megnyitása</translation>
     </message>
 </context>
 <context>
