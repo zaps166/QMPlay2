@@ -346,3 +346,4 @@ You can look at [Arch Linux PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tre
 
 - QMPlay2 contains modified libmodplug sources which are used by Modplug module.
 - QMPlay2 uses Concept icons created by Alexey Varfolomeev.
+- If you cannot take a screenshot with QMPlay2, you may be able to take it by setting [Playback Settings]-> [Decoder Priority] to the top level of the FFmpegD3D11VA decoder.
