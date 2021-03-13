@@ -1770,10 +1770,13 @@ void MainWidget::closeEvent(QCloseEvent *e)
 
     Settings &settings = QMPlay2Core.getSettings();
 
-    if (!fullScreen && !isCompactView)
-        settings.set("MainWidget/DockWidgetState", saveState());
-    else
-        settings.set("MainWidget/DockWidgetState", dockWidgetState);
+    if (wasShow)
+    {
+        if (!fullScreen && !isCompactView)
+            settings.set("MainWidget/DockWidgetState", saveState());
+        else
+            settings.set("MainWidget/DockWidgetState", dockWidgetState);
+    }
     settings.set("MainWidget/FullScreenDockWidgetState", fullScreenDockWidgetState);
     settings.set("MainWidget/AlwaysOnTop", !!(windowFlags() & Qt::WindowStaysOnTopHint));
 #ifndef Q_OS_MACOS
