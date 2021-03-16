@@ -49,6 +49,10 @@ using namespace std;
 #include <QImage>
 #include <QDir>
 
+#ifdef Q_OS_WIN
+#   include <windows.h>
+#endif
+
 #include <cmath>
 
 VideoThr::VideoThr(PlayClass &playC, const QStringList &pluginsName) :
@@ -76,6 +80,9 @@ VideoThr::~VideoThr()
 {
     QMPlay2GUI.videoAdjustment->enableControls();
     QMPlay2GUI.screenSaver->unInhibit(0);
+#ifdef Q_OS_WIN
+    setHighTimerResolution<false>();
+#endif
     delete playC.osd;
     playC.osd = nullptr;
     delete subtitles;
@@ -727,6 +734,29 @@ void VideoThr::run()
     }
 }
 
+#ifdef Q_OS_WIN
+template<bool h>
+inline void VideoThr::setHighTimerResolution()
+{
+    if (h)
+    {
+        if (!m_timerPrecision)
+        {
+            timeBeginPeriod(1);
+            m_timerPrecision = true;
+        }
+    }
+    else
+    {
+        if (m_timerPrecision)
+        {
+            timeEndPeriod(1);
+            m_timerPrecision = false;
+        }
+    }
+}
+#endif
+
 void VideoThr::write(Frame videoFrame, quint32 lastSeq)
 {
     canWrite = true;
@@ -739,6 +769,10 @@ void VideoThr::write(Frame videoFrame, quint32 lastSeq)
         return;
 
     QMPlay2GUI.screenSaver->inhibit(0);
+#ifdef Q_OS_WIN
+    setHighTimerResolution<true>();
+#endif
+
     videoWriter()->writeVideo(videoFrame);
 }
 void VideoThr::screenshot(Frame videoFrame)
@@ -789,5 +823,8 @@ void VideoThr::screenshot(Frame videoFrame)
 void VideoThr::pause()
 {
     QMPlay2GUI.screenSaver->unInhibit(0);
+#ifdef Q_OS_WIN
+    setHighTimerResolution<false>();
+#endif
     writer->pause();
 }

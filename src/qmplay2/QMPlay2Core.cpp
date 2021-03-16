@@ -282,10 +282,6 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
     QCoreApplication::installTranslator(qtTranslator);
     setLanguage();
 
-#ifdef Q_OS_WIN
-    timeBeginPeriod(1); //Set the timer for 1ms resolution (for Sleep ())
-#endif
-
     av_log_set_level(AV_LOG_ERROR);
     av_log_set_callback(avQMPlay2LogHandler);
     avformat_network_init();
@@ -401,9 +397,6 @@ void QMPlay2CoreClass::quit()
     shareDir.clear();
     langDir.clear();
     avformat_network_deinit();
-#ifdef Q_OS_WIN
-    timeEndPeriod(1);
-#endif
     QCoreApplication::removeTranslator(qtTranslator);
     QCoreApplication::removeTranslator(translator);
     delete qtTranslator;

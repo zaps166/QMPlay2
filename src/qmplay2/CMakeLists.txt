@@ -318,7 +318,6 @@ if(WIN32)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
         powrprof
-        winmm
     )
 
     set(CUSTOM_LIBQMPLAY2_LIBRARIES "" CACHE STRING "Custom libraries for libqmplay2")
