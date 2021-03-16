@@ -790,7 +790,7 @@ int main(int argc, char *argv[])
         qmplay2Gui.loadIcons();
         {
             const QIcon svgIcon = QIcon(":/QMPlay2.svgz");
-            if (!svgIcon.availableSizes().isEmpty())
+            if (svgIcon.availableSizes().size() == 1)
                 QMessageBox::warning(nullptr, QString(), QObject::tr("QtSvg icon engine plugin doesn't exist.\nQMPlay2 will not scale up icons!"));
         }
 
