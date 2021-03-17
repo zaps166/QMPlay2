@@ -1671,7 +1671,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
         }
 
         const int trigger1 = canDisplayLeftPanel
-            ? qMax<int>(5, ceil((isToolbarVisible ? 0.05 : 0.003) * (videoDock->isTouch ? 8 : 1) * width()))
+            ? qMax<int>(5, ceil(0.003 * (videoDock->isTouch ? 8 : 1) * width()))
             : 0
         ;
         const int trigger2 = qMax<int>(15, ceil(0.025 * (videoDock->isTouch ? 4 : 1) * width()));
