@@ -40,6 +40,7 @@
 #include <QMessageBox>
 #include <QStyleOption>
 #include <QGuiApplication>
+#include <QRegularExpression>
 
 extern "C"
 {
@@ -48,6 +49,7 @@ extern "C"
 }
 
 #include <cmath>
+#include <vector>
 
 static inline void swapArray(quint8 *a, quint8 *b, int size)
 {
@@ -988,4 +990,54 @@ bool Functions::isX11EGL()
 {
     static bool isEGL = (QString(qgetenv("QT_XCB_GL_INTEGRATION")).compare("xcb_egl", Qt::CaseInsensitive) == 0);
     return isEGL;
+}
+
+bool Functions::compareText(const QString &a, const QString &b)
+{
+    QRegularExpression rx(R"(\d+)");
+
+    auto fillMatches = [](auto &&matchIt, auto &&matches) {
+        while (matchIt.hasNext())
+        {
+            const auto match = matchIt.next();
+            matches.emplace_back(match.capturedStart(), match.captured().length());
+        }
+    };
+
+    std::vector<std::pair<int, int>> matchesA, matchesB;
+    fillMatches(rx.globalMatch(a), matchesA);
+    fillMatches(rx.globalMatch(b), matchesB);
+
+    const int n = qMin(matchesA.size(), matchesB.size());
+    if (n > 0)
+    {
+        auto newA = a;
+        auto newB = b;
+        for (int i = n - 1; i >= 0; --i)
+        {
+            const auto &matchA = matchesA[i];
+            const auto &matchB = matchesB[i];
+
+            const int lenA = matchA.second;
+            const int lenB = matchB.second;
+
+            const int diff = qAbs(lenA - lenB);
+
+            if (diff > 0)
+            {
+                const QString zeros(diff, QChar('0'));
+                if (lenA > lenB)
+                {
+                    newB.insert(matchB.first, zeros);
+                }
+                else if (lenB > lenA)
+                {
+                    newA.insert(matchA.first, zeros);
+                }
+            }
+        }
+        return (newA < newB);
+    }
+
+    return (a < b);
 }

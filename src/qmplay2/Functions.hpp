@@ -157,4 +157,6 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT QMatrix4x4 getYUVtoRGBmatrix(const LumaCoefficients &lumaCoeff, bool limited);
 
     QMPLAY2SHAREDLIB_EXPORT bool isX11EGL();
+
+    QMPLAY2SHAREDLIB_EXPORT bool compareText(const QString &a, const QString &b);
 }
