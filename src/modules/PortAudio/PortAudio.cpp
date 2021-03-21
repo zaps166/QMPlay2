@@ -24,12 +24,9 @@ PortAudio::PortAudio() :
 {
     m_icon = QIcon(":/PortAudio.svgz");
 
-    initialized = (Pa_Initialize() == paNoError);
     init("WriterEnabled", true);
 #if defined Q_OS_MACOS
     init("Delay", 0.03);
-#elif defined Q_OS_WIN
-    init("Delay", 0.15);
 #else
     init("Delay", 0.10);
 #endif
@@ -37,8 +34,6 @@ PortAudio::PortAudio() :
 }
 PortAudio::~PortAudio()
 {
-    if (initialized)
-        Pa_Terminate();
 }
 
 QList<PortAudio::Info> PortAudio::getModulesInfo(const bool showDisabled) const
@@ -50,7 +45,7 @@ QList<PortAudio::Info> PortAudio::getModulesInfo(const bool showDisabled) const
 }
 void *PortAudio::createInstance(const QString &name)
 {
-    if (name == PortAudioWriterName && initialized && getBool("WriterEnabled"))
+    if (name == PortAudioWriterName && getBool("WriterEnabled"))
         return new PortAudioWriter(*this);
     return nullptr;
 }

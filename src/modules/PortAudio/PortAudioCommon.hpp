@@ -26,5 +26,5 @@ namespace PortAudioCommon
 {
     QString getOutputDeviceName(const PaDeviceInfo *deviceInfo);
     QStringList getOutputDeviceNames();
-    int getDeviceIndexForOutput(const QString &name, const int chn);
+    int getDeviceIndexForOutput(const QString &name, const int chn = 0);
 }

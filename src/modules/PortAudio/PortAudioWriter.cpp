@@ -19,44 +19,39 @@
 #include <PortAudioWriter.hpp>
 #include <QMPlay2Core.hpp>
 
+#include <QElapsedTimer>
+#include <QThread>
+#include <QDebug>
+
 #ifdef Q_OS_WIN
-    #define MMSYSERR_NODRIVER 6
+#   include <audioclient.h>
 #endif
 
 #ifdef Q_OS_MACOS
     #include "3rdparty/CoreAudio/AudioDeviceList.h"
     #include "3rdparty/CoreAudio/AudioDevice.h"
-    constexpr double g_defaultHighAudioDelay = 0.2;
-#else
-    constexpr double g_defaultHighAudioDelay = 0.1;
 #endif
 
-PortAudioWriter::PortAudioWriter(Module &module) :
-    stream(nullptr),
-    sample_rate(0),
-    err(false)
+PortAudioWriter::PortAudioWriter(Module &module)
 {
     addParam("delay");
     addParam("chn");
     addParam("rate");
     addParam("drain");
 
-    memset(&outputParameters, 0, sizeof outputParameters);
-    outputParameters.sampleFormat = paFloat32;
-    outputParameters.hostApiSpecificStreamInfo = nullptr;
+    m_outputParameters.sampleFormat = paFloat32;
+    m_outputParameters.hostApiSpecificStreamInfo = nullptr;
 
     SetModule(module);
 }
 PortAudioWriter::~PortAudioWriter()
 {
-#ifdef Q_OS_MACOS
-    if (coreAudioDevice)
-    {
-        coreAudioDevice->ResetNominalSampleRate();
-        delete coreAudioDevice;
-    }
-#endif
     close();
+#ifdef Q_OS_MACOS
+    delete m_coreAudioDevice;
+#endif
+    if (m_initialized)
+        Pa_Terminate();
 }
 
 bool PortAudioWriter::set()
@@ -64,22 +59,32 @@ bool PortAudioWriter::set()
     bool restartPlaying = false;
     const double delay = sets().getDouble("Delay");
     const QString newOutputDevice = sets().getString("OutputDevice");
-    if (outputDevice != newOutputDevice)
+#ifdef Q_OS_MACOS
+    const bool bitPerfect = sets().getBool("BitPerfect");
+#endif
+    if (m_outputDevice != newOutputDevice)
     {
-        outputDevice = newOutputDevice;
+        m_outputDevice = newOutputDevice;
         restartPlaying = true;
     }
-    if (outputParameters.suggestedLatency != delay)
+    if (!qFuzzyCompare(m_outputParameters.suggestedLatency, delay))
     {
-        outputParameters.suggestedLatency = delay;
+        m_outputParameters.suggestedLatency = delay;
         restartPlaying = true;
     }
+#ifdef Q_OS_MACOS
+    if (m_bitPerfect != bitPerfect)
+    {
+        m_bitPerfect = bitPerfect;
+        restartPlaying = true;
+    }
+#endif
     return !restartPlaying && sets().getBool("WriterEnabled");
 }
 
 bool PortAudioWriter::readyWrite() const
 {
-    return stream && !err;
+    return m_stream && !m_err;
 }
 
 bool PortAudioWriter::processParams(bool *paramsCorrected)
@@ -88,43 +93,44 @@ bool PortAudioWriter::processParams(bool *paramsCorrected)
 
     int chn = getParam("chn").toInt();
 
-    const int devIdx = PortAudioCommon::getDeviceIndexForOutput(outputDevice, chn);
-    if (outputParameters.device != devIdx)
+    const int devIdx = PortAudioCommon::getDeviceIndexForOutput(m_outputDevice, chn);
+    if (m_outputParameters.device != devIdx)
     {
-        outputParameters.device = devIdx;
+        m_outputParameters.device = devIdx;
         resetAudio = true;
     }
 
     if (paramsCorrected)
     {
-        const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(outputParameters.device);
-        if (deviceInfo && deviceInfo->maxOutputChannels < chn)
+        const int newChn = getRequiredDeviceChn(chn);
+        if (newChn > 0)
         {
-            modParam("chn", (chn = deviceInfo->maxOutputChannels));
+            chn = newChn;
+            modParam("chn", chn);
             *paramsCorrected = true;
         }
     }
 
-    if (outputParameters.channelCount != chn)
+    if (m_outputParameters.channelCount != chn)
     {
         resetAudio = true;
-        outputParameters.channelCount = chn;
+        m_outputParameters.channelCount = chn;
     }
 
     int rate = getParam("rate").toInt();
-    if (sample_rate != rate)
+    if (m_sampleRate != rate)
     {
         resetAudio = true;
-        sample_rate = rate;
+        m_sampleRate = rate;
     }
 
-    if (resetAudio || err)
+    if (resetAudio || m_err)
     {
         close();
         if (!openStream())
         {
             QMPlay2Core.logError("PortAudio :: " + tr("Cannot open audio output stream"));
-            err = true;
+            m_err = true;
         }
     }
 
@@ -135,59 +141,31 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
     if (!readyWrite())
         return 0;
 
-    if (Pa_IsStreamStopped(stream))
+    if (Pa_IsStreamStopped(m_stream))
     {
         if (!startStream())
-            return playbackError();
-        fullBufferReached = false;
-        underflows = 0;
-    }
-    else
-    {
-        const int diff = Pa_GetStreamWriteAvailable(stream) - outputLatency * sample_rate;
-        if (diff <= 0)
-            fullBufferReached = true;
-        else if (fullBufferReached)
         {
-            //Reset stream to prevent potential short audio garbage on Windows
-            Pa_AbortStream(stream);
-            if (!startStream())
-                return playbackError();
-            fullBufferReached = false;
+            playbackError();
+            return 0;
         }
     }
-
-#ifdef Q_OS_LINUX //FIXME: Does OSS on FreeBSD need channel swapping? Also don't do it on const data.
-    const int chn = outputParameters.channelCount;
-    if (chn == 6 || chn == 8)
-    {
-        float *audio_buffer = (float *)arr.data();
-        for (int i = 0; i < arr.size() / 4; i += chn)
-        {
-            float tmp = audio_buffer[i+2];
-            audio_buffer[i+2] = audio_buffer[i+4];
-            audio_buffer[i+4] = tmp;
-            tmp = audio_buffer[i+3];
-            audio_buffer[i+3] = audio_buffer[i+5];
-            audio_buffer[i+5] = tmp;
-        }
-    }
-#endif
 
     if (!writeStream(arr))
     {
         bool isError = true;
 
 #ifdef Q_OS_WIN
-        if (isNoDriverError() && reopenStream()) //"writeStream()" must fail only on "paUnanticipatedHostError"
+        if (isDeviceInvalidated() && reopenStream()) //"writeStream()" must fail only on "paUnanticipatedHostError"
         {
             isError = !writeStream(arr);
-            fullBufferReached = false;
         }
 #endif
 
         if (isError)
-            return playbackError();
+        {
+            playbackError();
+            return 0;
+        }
     }
 
     return arr.size();
@@ -195,25 +173,22 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
 void PortAudioWriter::pause()
 {
     if (readyWrite())
-        Pa_StopStream(stream);
+    {
+        drain();
+        Pa_AbortStream(m_stream);
+    }
 }
 
 QString PortAudioWriter::name() const
 {
     QString name = PortAudioWriterName;
-    if (stream)
+    if (m_stream)
     {
-        if (const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(outputParameters.device))
+        if (const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(m_outputParameters.device))
             name += " (" + PortAudioCommon::getOutputDeviceName(deviceInfo) + ")";
 #ifdef Q_OS_MACOS
-        if (const PaStreamInfo *strInfo = Pa_GetStreamInfo(stream))
-        {
-            name += QStringLiteral(", %1Hz").arg(strInfo->sampleRate);
-        }
-        if (coreAudioDevice)
-        {
-            name += QStringLiteral(" -> %1Hz").arg(coreAudioDevice->CurrentNominalSampleRate());
-        }
+        if (m_coreAudioDevice)
+            name += QStringLiteral(", %1Hz").arg(m_coreAudioDevice->CurrentNominalSampleRate());
 #endif
     }
     return name;
@@ -221,7 +196,33 @@ QString PortAudioWriter::name() const
 
 bool PortAudioWriter::open()
 {
-    return true;
+    if (Pa_Initialize() == paNoError)
+    {
+        m_initialized = true;
+        return true;
+    }
+    return false;
+}
+
+int PortAudioWriter::getRequiredDeviceChn(int chn)
+{
+    const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(m_outputParameters.device);
+    if (!deviceInfo)
+        return 0;
+
+    auto isWASAPI = [&] {
+#ifdef Q_OS_WIN
+        if (auto hostApiInfo = Pa_GetHostApiInfo(deviceInfo->hostApi))
+            return (hostApiInfo->type == paWASAPI);
+#endif
+        return false;
+    };
+
+    const int maxOutChn = deviceInfo->maxOutputChannels;
+    if (maxOutChn < chn || (isWASAPI() && maxOutChn > 2 && maxOutChn != chn))
+        return maxOutChn;
+
+    return 0;
 }
 
 /**/
@@ -229,24 +230,32 @@ bool PortAudioWriter::open()
 bool PortAudioWriter::openStream()
 {
     PaStream *newStream = nullptr;
-    if (Pa_OpenStream(&newStream, nullptr, &outputParameters, sample_rate, 0, paDitherOff, nullptr, nullptr) == paNoError)
+    if (Pa_OpenStream(&newStream, nullptr, &m_outputParameters, m_sampleRate, 0, paDitherOff, nullptr, nullptr) == paNoError)
     {
-        stream = newStream;
-        outputLatency = Pa_GetStreamInfo(stream)->outputLatency;
-        modParam("delay", outputLatency);
+        m_stream = newStream;
+        m_outputLatency = Pa_GetStreamInfo(m_stream)->outputLatency;
+        modParam("delay", m_outputLatency);
 #ifdef Q_OS_MACOS
-        if (sets().getBool("BitPerfect"))
+        if (m_bitPerfect)
         {
-            const QString devName(Pa_GetDeviceInfo(outputParameters.device)->name);
+            const QString devName(Pa_GetDeviceInfo(m_outputParameters.device)->name);
             const AudioDeviceList::DeviceDict devDict = AudioDeviceList().GetDict();
             if (devDict.contains(devName))
             {
-                coreAudioDevice = AudioDevice::GetDevice(devDict[devName], false, coreAudioDevice);
-                if (coreAudioDevice)
-                {
-                    coreAudioDevice->SetNominalSampleRate(sample_rate);
-                }
+                m_coreAudioDevice = AudioDevice::GetDevice(devDict[devName], false, m_coreAudioDevice);
+                if (m_coreAudioDevice)
+                    m_coreAudioDevice->SetNominalSampleRate(m_sampleRate);
             }
+            else
+            {
+                delete m_coreAudioDevice;
+                m_coreAudioDevice = nullptr;
+            }
+        }
+        else
+        {
+            delete m_coreAudioDevice;
+            m_coreAudioDevice = nullptr;
         }
 #endif
         return true;
@@ -255,70 +264,91 @@ bool PortAudioWriter::openStream()
 }
 bool PortAudioWriter::startStream()
 {
-    const PaError e = Pa_StartStream(stream);
+    const PaError e = Pa_StartStream(m_stream);
     if (e != paNoError)
     {
 #ifdef Q_OS_WIN
-        if (e == paUnanticipatedHostError && isNoDriverError())
+        if (e == paUnanticipatedHostError && isDeviceInvalidated())
             return reopenStream();
 #endif
         return false;
     }
     return true;
 }
-inline bool PortAudioWriter::writeStream(const QByteArray &arr)
+bool PortAudioWriter::writeStream(const QByteArray &arr)
 {
-    const PaError e = Pa_WriteStream(stream, arr.constData(), arr.size() / outputParameters.channelCount / sizeof(float));
-    if (e != paNoError)
-        fullBufferReached = false;
-    if (e == paOutputUnderflowed)
-    {
-        if (outputParameters.suggestedLatency < g_defaultHighAudioDelay && ++underflows >= 10)
-        {
-            // Increase delay and try again - useful e.g. on VirtualBox and Bluetooth audio.
-            outputParameters.suggestedLatency = g_defaultHighAudioDelay;
-            if (!reopenStream())
-                return false;
-            return true;
-        }
-    }
-    else if (underflows > 0)
-    {
-        --underflows;
-    }
+    const PaError e = Pa_WriteStream(m_stream, arr.constData(), arr.size() / m_outputParameters.channelCount / sizeof(float));
     return (e != paUnanticipatedHostError);
 }
-qint64 PortAudioWriter::playbackError()
+void PortAudioWriter::playbackError()
 {
-    QMPlay2Core.logError("PortAudio :: " + tr("Playback error"));
-    err = true;
-    return 0;
+    if (!m_dontShowError)
+        QMPlay2Core.logError("PortAudio :: " + tr("Playback error"));
+    m_err = true;
 }
 
 #ifdef Q_OS_WIN
-bool PortAudioWriter::isNoDriverError() const
+bool PortAudioWriter::isDeviceInvalidated() const
 {
     const PaHostErrorInfo *errorInfo = Pa_GetLastHostErrorInfo();
-    return errorInfo && errorInfo->hostApiType == paMME && errorInfo->errorCode == MMSYSERR_NODRIVER;
+    return errorInfo && errorInfo->hostApiType == paWASAPI && errorInfo->errorCode == AUDCLNT_E_DEVICE_INVALIDATED;
 }
-#endif
 bool PortAudioWriter::reopenStream()
 {
-    Pa_CloseStream(stream);
+    Pa_CloseStream(m_stream);
+    m_stream = nullptr;
+
+    Pa_Terminate();
+    if (Pa_Initialize() != paNoError)
+    {
+        m_initialized = false;
+        return false;
+    }
+
+    m_outputParameters.device = PortAudioCommon::getDeviceIndexForOutput(m_outputDevice);
+    if (getRequiredDeviceChn(m_outputParameters.channelCount) > 0)
+    {
+        QMPlay2Core.processParam("RestartPlaying");
+        m_dontShowError = true;
+        return false;
+    }
+
     if (openStream())
-        return (Pa_StartStream(stream) == paNoError);
-    stream = nullptr;
+        return (Pa_StartStream(m_stream) == paNoError);
+
     return false;
+}
+#endif
+
+void PortAudioWriter::drain()
+{
+    const qint64 maxTime = m_outputLatency * 1000.0;
+
+    QElapsedTimer et;
+    et.start();
+
+    do
+    {
+        const double avail = Pa_GetStreamWriteAvailable(m_stream) - m_outputLatency * m_sampleRate;
+        if (avail < 0.0)
+            QThread::msleep(10);
+        else
+            break;
+    } while (et.elapsed() <= maxTime);
 }
 
 void PortAudioWriter::close()
 {
-    if (stream)
+    if (m_stream)
     {
-        if (!err && getParam("drain").toBool())
-            Pa_StopStream(stream);
-        Pa_CloseStream(stream);
-        stream = nullptr;
+        if (!m_err && getParam("drain").toBool())
+            drain();
+        Pa_CloseStream(m_stream);
+        m_stream = nullptr;
     }
-    err = false;
+#ifdef Q_OS_MACOS
+    if (m_coreAudioDevice)
+        m_coreAudioDevice->ResetNominalSampleRate();
+#endif
+    m_err = false;
 }

@@ -30,8 +30,6 @@ private:
     void *createInstance(const QString &) override;
 
     SettingsWidget *getSettingsWidget() override;
-
-    bool initialized;
 };
 
 /**/

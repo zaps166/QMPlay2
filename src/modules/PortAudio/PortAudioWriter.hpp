@@ -32,6 +32,7 @@ class AudioDevice;
 class PortAudioWriter final : public Writer
 {
     Q_DECLARE_TR_FUNCTIONS(PortAudioWriter)
+
 public:
     PortAudioWriter(Module &);
 private:
@@ -49,29 +50,35 @@ private:
 
     bool open() override;
 
-    /**/
+private:
+    int getRequiredDeviceChn(int chn);
 
     bool openStream();
     bool startStream();
-    inline bool writeStream(const QByteArray &arr);
-    qint64 playbackError();
+    bool writeStream(const QByteArray &arr);
+    void playbackError();
 
 #ifdef Q_OS_WIN
-    bool isNoDriverError() const;
-#endif
+    bool isDeviceInvalidated() const;
     bool reopenStream();
+#endif
+
+    void drain();
 
     void close();
 
-    QString outputDevice;
-    PaStreamParameters outputParameters;
-    PaStream *stream;
-    int sample_rate;
-    double outputLatency;
-    bool err, fullBufferReached;
-    int underflows;
+private:
+    QString m_outputDevice;
+    PaStreamParameters m_outputParameters = {};
+    PaStream *m_stream = nullptr;
+    int m_sampleRate = 0;
+    double m_outputLatency = 0.0;
+    bool m_initialized = false;
+    bool m_err = false;
+    bool m_dontShowError = false;
 #ifdef Q_OS_MACOS
-    AudioDevice *coreAudioDevice = nullptr;
+    bool m_bitPerfect = false;
+    AudioDevice *m_coreAudioDevice = nullptr;
 #endif
 };
 
