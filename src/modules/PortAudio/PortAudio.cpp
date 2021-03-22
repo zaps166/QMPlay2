@@ -25,8 +25,12 @@ PortAudio::PortAudio() :
     m_icon = QIcon(":/PortAudio.svgz");
 
     init("WriterEnabled", true);
-#if defined Q_OS_MACOS
+#if defined(Q_OS_MACOS)
     init("Delay", 0.03);
+    init("BitPerfect", false);
+#elif defined(Q_OS_WIN)
+    init("Delay", 0.10);
+    init("Exclusive", false);
 #else
     init("Delay", 0.10);
 #endif
@@ -83,6 +87,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     int idx = devicesB->findText(sets().getString("OutputDevice"));
     devicesB->setCurrentIndex(idx < 0 ? 0 : idx);
 
+#ifdef Q_OS_WIN
+    m_exclusive = new QCheckBox(tr("Exclusive mode"));
+    m_exclusive->setChecked(sets().getBool("Exclusive"));
+#endif
+
 #ifdef Q_OS_MACOS
     bitPerfect = new QCheckBox(tr("Bit-perfect audio"));
     bitPerfect->setChecked(sets().getBool("BitPerfect"));
@@ -93,6 +102,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     layout->addRow(enabledB);
     layout->addRow(tr("Playback device") + ": ", devicesB);
     layout->addRow(tr("Maximum latency") + ": ", delayB);
+#ifdef Q_OS_WIN
+    layout->addRow(m_exclusive);
+#endif
 #ifdef Q_OS_MACOS
     layout->addRow(bitPerfect);
 #endif
@@ -103,6 +115,9 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("WriterEnabled", enabledB->isChecked());
     sets().set("OutputDevice", devicesB->currentIndex() == 0 ? QString() : devicesB->currentText());
     sets().set("Delay", delayB->value());
+#ifdef Q_OS_WIN
+    sets().set("Exclusive", m_exclusive->isChecked());
+#endif
 #ifdef Q_OS_MACOS
     sets().set("BitPerfect", bitPerfect->isChecked());
 #endif

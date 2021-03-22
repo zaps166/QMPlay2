@@ -21,7 +21,11 @@
 #include <Writer.hpp>
 
 #include <PortAudioCommon.hpp>
+
 #include <portaudio.h>
+#ifdef Q_OS_WIN
+#   include <pa_win_wasapi.h>
+#endif
 
 #include <QCoreApplication>
 
@@ -51,7 +55,7 @@ private:
     bool open() override;
 
 private:
-    int getRequiredDeviceChn(int chn);
+    bool deviceNeedsChangeParams(int *newChn = nullptr, int *newRate = nullptr);
 
     bool openStream();
     bool startStream();
@@ -76,6 +80,10 @@ private:
     bool m_initialized = false;
     bool m_err = false;
     bool m_dontShowError = false;
+#ifdef Q_OS_WIN
+    bool m_exclusive = false;
+    PaWasapiStreamInfo mWasapiStreamInfo = {};
+#endif
 #ifdef Q_OS_MACOS
     bool m_bitPerfect = false;
     AudioDevice *m_coreAudioDevice = nullptr;
