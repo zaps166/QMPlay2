@@ -112,8 +112,13 @@ void VAAPIVulkan::map(Frame &frame)
             MemoryObject::FdDescriptors fdDescriptors(vaSurfaceDescr.num_objects);
             for (uint32_t i = 0; i < vaSurfaceDescr.num_objects; ++i)
             {
-                if (i == 0 && vaSurfaceDescr.objects[i].drm_format_modifier != 0)
-                    isLinear = false;
+                if (i == 0)
+                {
+                    // 0x0000000000000000 - linear, 0x00ffffffffffffff - invalid
+                    const auto drmFmtMod = vaSurfaceDescr.objects[i].drm_format_modifier;
+                    if (drmFmtMod != 0ull && drmFmtMod != 0xffffffffffffffull)
+                        isLinear = false;
+                }
 
                 fdDescriptors[i].first = vaSurfaceDescr.objects[i].fd;
                 fdDescriptors[i].second = (vaSurfaceDescr.objects[i].size > 0)
