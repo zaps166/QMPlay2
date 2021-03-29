@@ -909,7 +909,7 @@ void SettingsWidget::createRendererSettings()
 #ifdef Q_OS_WIN
         auto noExclusiveFullScreenDevIDs = std::make_shared<QSet<QByteArray>>();
 
-        connect(devices, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+        connect(devices, qOverload<int>(&QComboBox::currentIndexChanged),
                 this, [=](int idx) {
             if (devices->count() <= 1)
                 return;
@@ -1023,7 +1023,7 @@ void SettingsWidget::createRendererSettings()
     }
 #endif
 
-    connect(renderers, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+    connect(renderers, qOverload<int>(&QComboBox::currentIndexChanged),
             this, [=](int idx) {
         rendererStacked->setCurrentIndex(idx);
     });
