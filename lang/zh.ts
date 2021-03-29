@@ -1790,6 +1790,10 @@
         <source>Better performance, but can cause garbage or might not work at all.</source>
         <translation>性能更佳，但会产生垃圾或可能完全不起作用。</translation>
     </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

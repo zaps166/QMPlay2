@@ -1792,6 +1792,10 @@
         <source>Better performance, but can cause garbage or might not work at all.</source>
         <translation>パフォーマンスは向上しますがゴミが発生したり全く機能しない場合があります。</translation>
     </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

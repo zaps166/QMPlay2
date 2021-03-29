@@ -1787,6 +1787,10 @@
         <source>Better performance, but can cause garbage or might not work at all.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

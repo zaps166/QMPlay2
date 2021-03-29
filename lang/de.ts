@@ -1789,6 +1789,10 @@
         <source>Better performance, but can cause garbage or might not work at all.</source>
         <translation>Bessere Leistung, kann aber Müll verursachen oder funktioniert möglicherweise überhaupt nicht.</translation>
     </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

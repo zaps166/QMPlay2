@@ -1790,6 +1790,10 @@
         <source>Better performance, but can cause garbage or might not work at all.</source>
         <translation>Краща продуктивність, але може спричинити проблеми з зображенням або взагалі не працювати.</translation>
     </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
