@@ -191,7 +191,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("Vulkan/YadifSpatialCheck", true);
     QMPSettings.init("Vulkan/HQScaleDown", false);
     QMPSettings.init("Vulkan/HQScaleUp", false);
-    QMPSettings.init("Vulkan/BypassCompositor", false);
+    QMPSettings.init("Vulkan/BypassCompositor", true);
 
     QMPSettings.init("ShortSeek", 5);
     QMPSettings.init("LongSeek", 30);
