@@ -1792,7 +1792,7 @@
     </message>
     <message>
         <source>Exclusive mode</source>
-        <translation type="unfinished"></translation>
+        <translation>独占模式</translation>
     </message>
 </context>
 <context>
