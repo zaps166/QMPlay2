@@ -501,7 +501,7 @@ void YouTube::search()
         if (lastTitle != title || sender() == searchE || sender() == searchB || qobject_cast<QAction *>(sender()))
         {
             m_currPage = 1;
-            searchReply = net.start(getYtUrl(title, m_sortByIdx));
+            searchReply = net.start(getYtUrl(title, m_sortByIdx), QByteArray(), "Cookie: \r\n");
         }
         else
         {
