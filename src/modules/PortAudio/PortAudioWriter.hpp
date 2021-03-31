@@ -82,7 +82,7 @@ private:
     bool m_dontShowError = false;
 #ifdef Q_OS_WIN
     bool m_exclusive = false;
-    PaWasapiStreamInfo mWasapiStreamInfo = {};
+    PaWasapiStreamInfo m_wasapiStreamInfo = {};
 #endif
 #ifdef Q_OS_MACOS
     bool m_bitPerfect = false;

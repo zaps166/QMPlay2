@@ -42,12 +42,12 @@ PortAudioWriter::PortAudioWriter(Module &module)
     m_outputParameters.sampleFormat = paFloat32;
 
 #ifdef Q_OS_WIN
-    mWasapiStreamInfo.size = sizeof(PaWasapiStreamInfo);
-    mWasapiStreamInfo.hostApiType = paWASAPI;
-    mWasapiStreamInfo.version = 1;
-    mWasapiStreamInfo.streamCategory = eAudioCategoryMedia;
+    m_wasapiStreamInfo.size = sizeof(PaWasapiStreamInfo);
+    m_wasapiStreamInfo.hostApiType = paWASAPI;
+    m_wasapiStreamInfo.version = 1;
+    m_wasapiStreamInfo.streamCategory = eAudioCategoryMedia;
 
-    m_outputParameters.hostApiSpecificStreamInfo = &mWasapiStreamInfo;
+    m_outputParameters.hostApiSpecificStreamInfo = &m_wasapiStreamInfo;
 #endif
 
     SetModule(module);
@@ -69,18 +69,18 @@ bool PortAudioWriter::set()
     const QString newOutputDevice = sets().getString("OutputDevice");
 #ifdef Q_OS_WIN
     const bool exclusive = sets().getBool("Exclusive");
-    if (m_exclusive != exclusive || mWasapiStreamInfo.flags == 0 || mWasapiStreamInfo.threadPriority == 0)
+    if (m_exclusive != exclusive || m_wasapiStreamInfo.flags == 0 || m_wasapiStreamInfo.threadPriority == 0)
     {
         m_exclusive = exclusive;
         if (m_exclusive)
         {
-            mWasapiStreamInfo.flags = paWinWasapiExclusive | paWinWasapiThreadPriority;
-            mWasapiStreamInfo.threadPriority = eThreadPriorityProAudio;
+            m_wasapiStreamInfo.flags = paWinWasapiExclusive | paWinWasapiThreadPriority;
+            m_wasapiStreamInfo.threadPriority = eThreadPriorityProAudio;
         }
         else
         {
-            mWasapiStreamInfo.flags = paWinWasapiThreadPriority | paWinWasapiAutoConvert;
-            mWasapiStreamInfo.threadPriority = eThreadPriorityAudio;
+            m_wasapiStreamInfo.flags = paWinWasapiThreadPriority | paWinWasapiAutoConvert;
+            m_wasapiStreamInfo.threadPriority = eThreadPriorityAudio;
         }
         restartPlaying = true;
     }
