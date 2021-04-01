@@ -886,7 +886,7 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation)
             {
                 tWI->setDisabled(true);
 
-                auto linkReply = net.start(url);
+                auto linkReply = net.start(url, QByteArray(), "Cookie: \r\n");
                 linkReply->setProperty("tWI", QVariant::fromValue((void *)tWI));
                 linkReplies += linkReply;
             }
