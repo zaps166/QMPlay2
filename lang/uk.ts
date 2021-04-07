@@ -1792,7 +1792,7 @@
     </message>
     <message>
         <source>Exclusive mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Монопольний режим</translation>
     </message>
 </context>
 <context>
