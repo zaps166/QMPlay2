@@ -46,7 +46,8 @@
 #elif defined Q_OS_MACOS
     #include <QOperatingSystemVersion>
 #elif !defined Q_OS_ANDROID
-    #include <QProcess>
+    #include <QDBusConnection>
+    #include <QDBusInterface>
 #endif
 
 #include <cstdarg>
@@ -59,16 +60,34 @@ extern "C"
     #include <libavutil/log.h>
 }
 
-#if !defined(Q_OS_ANDROID) && !defined(Q_OS_WIN) && !defined(Q_OS_MACOS)
-static QStringList getDBusSuspendArgs(const QString &method, const QString &name, const QString &pathSuffix = QString())
+#if defined DBUS_SUSPEND
+class DBusSuspend
 {
-    return {
-        "--system",
-        "--print-reply",
-        "--dest=org.freedesktop." + name,
-        "/org/freedesktop/" + name + pathSuffix,
-        "org.freedesktop." + name + ".Manager." + method
-     };
+public:
+    DBusSuspend(const QDBusConnection &connection, const QString &name, const QString &pathSuffix = QString())
+        : m_suspendIface(
+              "org.freedesktop." + name,
+              "/org/freedesktop/" + name + pathSuffix,
+              "org.freedesktop." + name + ".Manager",
+              connection
+          )
+    {}
+
+    bool canSuspend()
+    {
+        if (m_suspendIface.isValid())
+            return (m_suspendIface.call("CanSuspend").arguments().at(0).toString().toLower() == "yes");
+        return false;
+    }
+
+    void suspend()
+    {
+        if (m_suspendIface.isValid())
+            m_suspendIface.call("Suspend", QVariant::fromValue(true));
+    }
+
+private:
+    QDBusInterface m_suspendIface;
 };
 #endif
 
@@ -414,20 +433,14 @@ bool QMPlay2CoreClass::canSuspend()
 #if defined Q_OS_WIN || defined Q_OS_MACOS
     m_suspend = 1;
     return true;
-#elif !defined Q_OS_ANDROID
-    auto checkSuspendDBus = [](const QStringList &args) {
-        QProcess p;
-        p.start("dbus-send", args);
-        if (!p.waitForStarted() || !p.waitForFinished())
-            return false;
-        return (p.readAllStandardOutput().split('\n').value(1).simplified().replace("\"", "").split(' ').value(1).toLower() == "yes");
-    };
-    if (checkSuspendDBus(getDBusSuspendArgs("CanSuspend", "login1")))
+#elif defined DBUS_SUSPEND
+    auto connection = QDBusConnection::systemBus();
+    if (DBusSuspend(connection, "login1").canSuspend())
     {
         m_suspend = 1;
         return true;
     }
-    if (checkSuspendDBus(getDBusSuspendArgs("CanSuspend", "ConsoleKit", "/Manager")))
+    if (DBusSuspend(connection, "ConsoleKit", "/Manager").canSuspend())
     {
         m_suspend = 2;
         return true;
@@ -444,25 +457,19 @@ void QMPlay2CoreClass::suspend()
     SetSuspendState(false, false, false);
 #elif defined Q_OS_MACOS
     Q_UNUSED(system("pmset sleepnow > /dev/null 2>&1 &"));
-#elif !defined Q_OS_ANDROID
-    QStringList args;
+#elif defined DBUS_SUSPEND
+    auto connection = QDBusConnection::systemBus();
     switch (m_suspend)
     {
         case 1:
-            args = getDBusSuspendArgs("Suspend", "login1");
+            DBusSuspend(connection, "login1").suspend();
             break;
         case 2:
-            args = getDBusSuspendArgs("Suspend", "ConsoleKit", "/Manager");
+            DBusSuspend(connection, "ConsoleKit", "/Manager").suspend();
             break;
         default:
             return;
     }
-    args += "boolean:true";
-
-    QProcess p;
-    p.start("dbus-send", args);
-    if (p.waitForStarted())
-        p.waitForFinished();
 #endif
 }
 
