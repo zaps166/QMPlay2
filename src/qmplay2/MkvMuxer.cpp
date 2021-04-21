@@ -126,5 +126,6 @@ bool MkvMuxer::write(Packet &packet, const int idx)
     pkt.size = packet.size();
     pkt.stream_index = idx;
 
-    return (av_interleaved_write_frame(m_ctx, &pkt) >= 0);
+    const int err = av_interleaved_write_frame(m_ctx, &pkt);
+    return (err == 0 || err == AVERROR(EINVAL));
 }
