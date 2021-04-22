@@ -32,6 +32,7 @@
 #include <QScrollBar>
 #include <QJsonArray>
 #include <qevent.h>
+#include <QBuffer>
 #include <QTimer>
 #include <QMenu>
 #include <QUrl>
@@ -103,7 +104,8 @@ Radio::~Radio()
 {
     if (m_once)
     {
-        Settings("Radio").set("Radia", getMyRadios());
+        if (m_storeMyRadios)
+            Settings("Radio").set("Radia", getMyRadios());
 
         sets().set("Radio/RadioBrowserSplitter", ui->radioBrowserSplitter->saveState().toBase64());
 
@@ -208,7 +210,7 @@ void Radio::on_addMyRadioStationButton_clicked()
     {
         const QString address = QInputDialog::getText(this, m_newStationTxt, tr("Address"), QLineEdit::Normal, "http://", &ok).simplified();
         if (ok && !address.isEmpty())
-            addMyRadioStation(name, address);
+            addMyRadioStation(name, address, QPixmap());
     }
 }
 void Radio::on_editMyRadioStationButton_clicked()
@@ -222,13 +224,14 @@ void Radio::on_editMyRadioStationButton_clicked()
         {
             const QString address = QInputDialog::getText(this, newStationTxt, tr("Address"), QLineEdit::Normal, item->data(Qt::UserRole).toString(), &ok).simplified();
             if (ok && !address.isEmpty())
-                addMyRadioStation(name, address, item);
+                addMyRadioStation(name, address, QPixmap(), item);
         }
     }
 }
 void Radio::on_removeMyRadioStationButton_clicked()
 {
     delete ui->myRadioListWidget->currentItem();
+    m_storeMyRadios = true;
 }
 void Radio::on_loadMyRadioStationButton_clicked()
 {
@@ -236,6 +239,7 @@ void Radio::on_loadMyRadioStationButton_clicked()
     if (!filePath.isEmpty())
     {
         loadMyRadios(QSettings(filePath, QSettings::IniFormat).value("Radia").toStringList());
+        m_storeMyRadios = true;
     }
 }
 void Radio::on_saveMyRadioStationButton_clicked()
@@ -323,7 +327,8 @@ void Radio::radioBrowserAdd()
     {
         const QString title = m_radioBrowserModel->getName(index);
         const QString url = m_radioBrowserModel->getUrl(index).toString();
-        addMyRadioStation(title, url);
+        const QPixmap icon = m_radioBrowserModel->getIcon(index);
+        addMyRadioStation(title, url, icon);
     }
 }
 void Radio::radioBrowserEnqueue()
@@ -347,7 +352,7 @@ void Radio::radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &p
     emit QMPlay2Core.processParam(param, url);
 }
 
-void Radio::addMyRadioStation(const QString &name, const QString &address, QListWidgetItem *item)
+void Radio::addMyRadioStation(const QString &name, const QString &address, const QPixmap &icon, QListWidgetItem *item)
 {
     if (!item)
     {
@@ -357,11 +362,14 @@ void Radio::addMyRadioStation(const QString &name, const QString &address, QList
             return;
         }
         item = new QListWidgetItem(ui->myRadioListWidget);
-        item->setIcon(m_radioIcon);
+        item->setIcon(icon.isNull() ? m_radioIcon : icon);
+        item->setData(Qt::UserRole + 1, !icon.isNull());
         ui->myRadioListWidget->setCurrentItem(item);
     }
     item->setText(name);
     item->setData(Qt::UserRole, address);
+    if (m_once)
+        m_storeMyRadios = true;
 }
 
 void Radio::setSearchInfo(const QStringList &list)
@@ -401,7 +409,25 @@ QStringList Radio::getMyRadios() const
 {
     QStringList myRadios;
     for (QListWidgetItem *item : ui->myRadioListWidget->findItems(QString(), Qt::MatchContains))
-        myRadios += item->text() + '\n' + item->data(Qt::UserRole).toString();
+    {
+        QString radio = item->text() + "\n" + item->data(Qt::UserRole).toString();
+        if (item->data(Qt::UserRole + 1).toBool())
+        {
+            const auto icon = item->icon();
+            const auto pixmap = icon.pixmap(icon.availableSizes().value(0));
+            if (!pixmap.isNull())
+            {
+                QByteArray data;
+                QBuffer buffer(&data);
+                if (pixmap.save(&buffer, "PNG", 80))
+                {
+                    radio += "\n";
+                    radio += data.toBase64();
+                }
+            }
+        }
+        myRadios += radio;
+    }
     return myRadios;
 }
 void Radio::loadMyRadios(const QStringList &radios)
@@ -410,8 +436,12 @@ void Radio::loadMyRadios(const QStringList &radios)
     for (const QString &entry : radios)
     {
         const QStringList radioDescr = entry.split('\n');
-        if (radioDescr.count() == 2)
-            addMyRadioStation(radioDescr[0], radioDescr[1]);
+        QPixmap pixmap;
+        if (radioDescr.count() == 3)
+            pixmap.loadFromData(QByteArray::fromBase64(radioDescr[2].toLatin1()));
+        else if (radioDescr.count() != 2)
+            continue;
+        addMyRadioStation(radioDescr[0], radioDescr[1], pixmap);
     }
 }
 

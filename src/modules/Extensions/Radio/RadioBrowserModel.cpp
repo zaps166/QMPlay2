@@ -37,6 +37,7 @@ struct Column
     QString iconUrl;
     QPointer<NetworkReply> iconReply;
     QPixmap icon;
+    bool hasIcon = false;
 
     QString name, streamInfo, country, tags;
     qint32 rating;
@@ -100,15 +101,20 @@ void RadioBrowserModel::loadIcons(const int first, const int last)
 
 QString RadioBrowserModel::getName(const QModelIndex &index) const
 {
-    return m_rowsToDisplay.value(index.row())->name;
+    return m_rowsToDisplay[index.row()]->name;
 }
 QUrl RadioBrowserModel::getUrl(const QModelIndex &index) const
 {
-    return QUrl(m_rowsToDisplay.value(index.row())->url);
+    return QUrl(m_rowsToDisplay[index.row()]->url);
+}
+QPixmap RadioBrowserModel::getIcon(const QModelIndex &index) const
+{
+    const auto column = m_rowsToDisplay[index.row()];
+    return column->hasIcon ? column->icon : QPixmap();
 }
 QUrl RadioBrowserModel::getHomePageUrl(const QModelIndex &index) const
 {
-    return QUrl(m_rowsToDisplay.value(index.row())->homePageUrl);
+    return QUrl(m_rowsToDisplay[index.row()]->homePageUrl);
 }
 
 QModelIndex RadioBrowserModel::index(int row, int column, const QModelIndex &parent) const
@@ -361,6 +367,7 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
                         item["favicon"].toString(),
                         nullptr,
                         radioIcon,
+                        false,
 
                         item["name"].toString(),
                         streamInfo,
@@ -394,6 +401,8 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
                             column->icon = QPixmap(s * dpr, s * dpr);
                             column->icon.setDevicePixelRatio(dpr);
                             column->icon.fill(Qt::transparent);
+
+                            column->hasIcon = true;
 
                             QPainter painter(&column->icon);
                             Functions::drawPixmap(painter, QPixmap::fromImage(image), m_widget, Qt::SmoothTransformation, Qt::KeepAspectRatio, {s, s});

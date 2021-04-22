@@ -46,7 +46,7 @@ public:
 
     QString getName(const QModelIndex &index) const;
     QUrl getUrl(const QModelIndex &index) const;
-    QUrl getEditUrl(const QModelIndex &index) const;
+    QPixmap getIcon(const QModelIndex &index) const;
     QUrl getHomePageUrl(const QModelIndex &index) const;
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
