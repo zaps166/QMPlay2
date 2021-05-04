@@ -21,7 +21,10 @@
 #include <StreamInfo.hpp>
 #include <Packet.hpp>
 
-#include <QDebug>
+#include <QLoggingCategory>
+#include <QMap>
+
+Q_LOGGING_CATEGORY(mux, "MkvMuxer")
 
 extern "C"
 {
@@ -35,11 +38,19 @@ extern "C"
 
 using namespace std;
 
-MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo)
+struct MkvMuxer::Priv
 {
-    if (avformat_alloc_output_context2(&m_ctx, nullptr, "matroska", nullptr) < 0)
+    AVFormatContext *ctx = nullptr;
+    AVPacket *pkt = nullptr;
+    QMap<int, int64_t> lastDts;
+};
+
+MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo)
+    : p(*new Priv)
+{
+    if (avformat_alloc_output_context2(&p.ctx, nullptr, "matroska", nullptr) < 0)
         return;
-    if (avio_open(&m_ctx->pb, fileName.toUtf8(), AVIO_FLAG_WRITE) < 0)
+    if (avio_open(&p.ctx->pb, fileName.toUtf8(), AVIO_FLAG_WRITE) < 0)
         return;
     for (StreamInfo *streamInfo : streamsInfo)
     {
@@ -47,7 +58,7 @@ MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsIn
         if (!codec)
             return;
 
-        AVStream *stream = avformat_new_stream(m_ctx, nullptr);
+        AVStream *stream = avformat_new_stream(p.ctx, nullptr);
         if (!stream)
             return;
 
@@ -86,46 +97,71 @@ MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsIn
 
         // TODO: Metadata
     }
-    if (avformat_write_header(m_ctx, nullptr) < 0)
+    if (avformat_write_header(p.ctx, nullptr) < 0)
         return;
-    m_ok = true;
+    p.pkt = av_packet_alloc();
 }
 MkvMuxer::~MkvMuxer()
 {
-    if (m_ctx)
+    if (p.ctx)
     {
-        if (m_ctx->pb)
+        if (p.ctx->pb)
         {
-            if (m_ok)
+            if (p.pkt)
             {
-                av_interleaved_write_frame(m_ctx, nullptr); // Flush interleaving queue
-                av_write_trailer(m_ctx);
+                av_interleaved_write_frame(p.ctx, nullptr); // Flush interleaving queue
+                av_write_trailer(p.ctx);
+                av_packet_free(&p.pkt);
             }
-            avio_close(m_ctx->pb);
-            m_ctx->pb = nullptr;
+            avio_close(p.ctx->pb);
+            p.ctx->pb = nullptr;
         }
-        avformat_free_context(m_ctx);
+        avformat_free_context(p.ctx);
     }
+}
+
+bool MkvMuxer::isOk() const
+{
+    return static_cast<bool>(p.pkt);
 }
 
 bool MkvMuxer::write(Packet &packet, const int idx)
 {
-    const double timeBase = av_q2d(m_ctx->streams[idx]->time_base);
+    const double timeBase = av_q2d(p.ctx->streams[idx]->time_base);
 
-    AVPacket pkt;
-    av_init_packet(&pkt);
-
-    pkt.duration = round(packet.duration() / timeBase);
+    p.pkt->duration = round(packet.duration() / timeBase);
     if (packet.hasDts())
-        pkt.dts = round(packet.dts() / timeBase);
+        p.pkt->dts = round(packet.dts() / timeBase);
     if (packet.hasPts())
-        pkt.pts = round(packet.pts() / timeBase);
-    pkt.flags = packet.hasKeyFrame() ? AV_PKT_FLAG_KEY : 0;
-    pkt.buf = packet.getBufferRef();
-    pkt.data = packet.data();
-    pkt.size = packet.size();
-    pkt.stream_index = idx;
+        p.pkt->pts = round(packet.pts() / timeBase);
+    p.pkt->flags = packet.hasKeyFrame() ? AV_PKT_FLAG_KEY : 0;
+    p.pkt->buf = packet.getBufferRef();
+    p.pkt->data = packet.data();
+    p.pkt->size = packet.size();
+    p.pkt->stream_index = idx;
 
-    const int err = av_interleaved_write_frame(m_ctx, &pkt);
-    return (err == 0 || err == AVERROR(EINVAL));
+    bool dtsOk = false;
+    auto it = p.lastDts.find(idx);
+    if (it == p.lastDts.end())
+    {
+        if (p.pkt->dts != AV_NOPTS_VALUE)
+        {
+            p.lastDts[idx] = p.pkt->dts;
+            dtsOk = true;
+        }
+    }
+    else
+    {
+        const auto lastDts = it.value();
+        if (p.pkt->dts != AV_NOPTS_VALUE && p.pkt->dts >= lastDts)
+            dtsOk = true;
+    }
+    if (!dtsOk)
+    {
+        qCWarning(mux) << "Skipping packet with invalid dts in stream" << idx;
+        return true;
+    }
+
+    const int err = av_interleaved_write_frame(p.ctx, p.pkt);
+    return (err == 0);
 }
