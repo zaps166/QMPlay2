@@ -28,8 +28,11 @@
 #include <QVulkanInstance>
 #include <QResource>
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
 #   include <QRegularExpression>
+#elif defined(Q_OS_LINUX)
+#   include <QFile>
+#   include <QDir>
 #endif
 
 namespace QmVk {
@@ -386,7 +389,12 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
 }
 void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalDevices) const
 {
-#ifdef Q_OS_WIN
+    auto setAsFirst = [&](auto &&it) {
+        auto primaryPhysicalDevice = move(*it);
+        physicalDevices.erase(it);
+        physicalDevices.insert(physicalDevices.begin(), move(primaryPhysicalDevice));
+    };
+#if defined(Q_OS_WIN)
     for (DWORD devIdx = 0;; ++devIdx)
     {
         DISPLAY_DEVICE displayDevice = {};
@@ -411,16 +419,34 @@ void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalD
             });
             if (it != physicalDevices.begin() && it != physicalDevices.end())
             {
-                auto primaryPhysicalDevice = move(*it);
-                physicalDevices.erase(it);
-                physicalDevices.insert(physicalDevices.begin(), move(primaryPhysicalDevice));
+                setAsFirst(it);
             }
         }
 
         break;
     }
+#elif defined(Q_OS_LINUX)
+    const auto cards = QDir("/sys/class/drm").entryInfoList({"renderD*"}, QDir::Dirs);
+    for (auto &&card : cards)
+    {
+        QFile f(card.filePath() + "/device/boot_vga");
+        char c = 0;
+        if (f.open(QFile::ReadOnly) && f.getChar(&c) && c == '1')
+        {
+            const auto cardRealPath = card.symLinkTarget();
+            auto it = find_if(physicalDevices.begin(), physicalDevices.end(), [&](const shared_ptr<PhysicalDevice> &physicalDevice) {
+                return cardRealPath.contains(QString::fromStdString(physicalDevice->linuxPCIPath()));
+            });
+            if (it != physicalDevices.begin() && it != physicalDevices.end())
+            {
+                setAsFirst(it);
+            }
+            break;
+        }
+    }
 #else
     Q_UNUSED(physicalDevices)
+    Q_UNUSED(setAsFirst)
 #endif
 }
 
