@@ -321,8 +321,15 @@ void Window::onMatrixChange()
 void Window::initResources() try
 {
     m.device = m_instance->device();
+    if (m.device && *m.device->physicalDevice() != *m_physicalDevice)
+    {
+        m_instance->resetDevice(m.device);
+        m.device.reset();
+    }
     if (!m.device)
+    {
         m.device = m_instance->createDevice(m_physicalDevice);
+    }
 
     m.queue = m.device->queue();
 
