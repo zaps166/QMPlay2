@@ -45,9 +45,6 @@ AudioThr::AudioThr(PlayClass &playC, const QStringList &pluginsName) :
     filters = AudioFilter::open();
 
     connect(this, SIGNAL(pauseVisSig(bool)), this, SLOT(pauseVis(bool)));
-#ifdef Q_OS_WIN
-    startTimer(500);
-#endif
 
     if (QMPlay2GUI.mainW->property("fullScreen").toBool())
         QMPlay2GUI.screenSaver->inhibit(1);
@@ -178,9 +175,6 @@ void AudioThr::run()
     bool paused = false;
     bool oneFrame = false;
     tmp_br = tmp_time = 0;
-#ifdef Q_OS_WIN
-    canUpdatePos = canUpdateBitrate = false;
-#endif
     while (!br)
     {
         double delay = 0.0, audio_pts = 0.0; //"audio_pts" odporny na zerowanie przy przewijaniu
@@ -200,9 +194,6 @@ void AudioThr::run()
 
             if ((playC.paused && !oneFrame) || (!hasAPackets && !hasBufferedSamples) || playC.waitForData || (playC.audioSeekPos <= 0.0 && playC.videoSeekPos > 0.0))
             {
-#ifdef Q_OS_WIN
-                canUpdatePos = canUpdateBitrate = false;
-#endif
                 tmp_br = tmp_time = 0;
                 if (playC.paused && !paused)
                 {
@@ -274,12 +265,8 @@ void AudioThr::run()
 
             if (tmp_time >= 1000.0)
             {
-#ifdef Q_OS_WIN
-                canUpdateBitrate = true;
-#else
                 emit playC.updateBitrateAndFPS(round((tmp_br << 3) / tmp_time), -1);
                 tmp_br = tmp_time = 0;
-#endif
             }
 
             if (m_resamplerFirst && sndResampler.isOpen())
@@ -341,11 +328,7 @@ void AudioThr::run()
                     audio_pts = playC.audio_current_pts = ts - delay;
                     if (!playC.vThr && playC.audioSeekPos <= 0)
                     {
-#ifdef Q_OS_WIN
-                        playC.chPos(playC.audio_current_pts, playC.flushAudio);
-#else
                         playC.chPos(playC.audio_current_pts);
-#endif
                     }
                 }
 
@@ -367,10 +350,6 @@ void AudioThr::run()
                 tmp_time += playC.audio_last_delay * 1000.0;
                 if (!qIsNaN(ts))
                     ts += playC.audio_last_delay;
-
-#ifdef Q_OS_WIN
-                canUpdatePos = true;
-#endif
 
                 if (playC.skipAudioFrame <= 0.0 || oneFrame)
                 {
@@ -467,26 +446,6 @@ inline uint AudioThr::currentSampleRate() const
 {
     return m_resamplerFirst ? sample_rate : realSample_rate;
 }
-
-#ifdef Q_OS_WIN
-void AudioThr::timerEvent(QTimerEvent *)
-{
-    if (br || !isRunning())
-        return;
-    if (canUpdatePos)
-    {
-        if (!playC.vThr)
-            emit playC.updatePos(playC.pos);
-        canUpdatePos = false;
-    }
-    if (canUpdateBitrate)
-    {
-        emit playC.updateBitrateAndFPS(round((tmp_br << 3) / tmp_time), -1);
-        canUpdateBitrate = false;
-        tmp_time = tmp_br = 0;
-    }
-}
-#endif
 
 void AudioThr::pauseVis(bool b)
 {
