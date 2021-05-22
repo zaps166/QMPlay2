@@ -79,6 +79,7 @@ private:
     double m_outputLatency = 0.0;
     bool m_initialized = false;
     bool m_err = false;
+    bool m_streamOpen = false;
     bool m_dontShowError = false;
 #ifdef Q_OS_WIN
     bool m_exclusive = false;

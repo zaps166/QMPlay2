@@ -110,7 +110,7 @@ bool PortAudioWriter::set()
 
 bool PortAudioWriter::readyWrite() const
 {
-    return m_stream && !m_err;
+    return m_streamOpen && !m_err;
 }
 
 bool PortAudioWriter::processParams(bool *paramsCorrected)
@@ -286,6 +286,7 @@ bool PortAudioWriter::openStream()
     PaStream *newStream = nullptr;
     if (Pa_OpenStream(&newStream, nullptr, &m_outputParameters, m_sampleRate, 0, paDitherOff, nullptr, nullptr) == paNoError)
     {
+        m_streamOpen = true;
         m_stream = newStream;
         m_outputLatency = Pa_GetStreamInfo(m_stream)->outputLatency;
         modParam("delay", m_outputLatency);
