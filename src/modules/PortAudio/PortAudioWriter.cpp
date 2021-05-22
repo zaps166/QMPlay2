@@ -32,6 +32,70 @@
     #include "3rdparty/CoreAudio/AudioDevice.h"
 #endif
 
+#ifdef Q_OS_WIN
+WASAPINotifications::WASAPINotifications(PortAudioWriter *writer)
+    : m_writer(writer)
+{
+    CoCreateInstance(
+        CLSID_MMDeviceEnumerator,
+        nullptr,
+        CLSCTX_INPROC_SERVER,
+        IID_IMMDeviceEnumerator,
+        reinterpret_cast<void **>(&m_deviceEnumerator)
+    );
+    if (m_deviceEnumerator)
+        m_deviceEnumerator->RegisterEndpointNotificationCallback(this);
+}
+WASAPINotifications::~WASAPINotifications()
+{
+    if (m_deviceEnumerator)
+        m_deviceEnumerator->UnregisterEndpointNotificationCallback(this);
+}
+
+HRESULT WASAPINotifications::OnDeviceStateChanged(LPCWSTR pwstrDeviceId, DWORD dwNewState)
+{
+    Q_UNUSED(pwstrDeviceId)
+    Q_UNUSED(dwNewState)
+    return S_OK;
+}
+HRESULT WASAPINotifications::OnDeviceAdded(LPCWSTR pwstrDeviceId)
+{
+    Q_UNUSED(pwstrDeviceId)
+    return S_OK;
+}
+HRESULT WASAPINotifications::OnDeviceRemoved(LPCWSTR pwstrDeviceId)
+{
+    Q_UNUSED(pwstrDeviceId)
+    return S_OK;
+}
+HRESULT WASAPINotifications::OnDefaultDeviceChanged(EDataFlow flow, ERole role, LPCWSTR pwstrDeviceId)
+{
+    if (flow == eRender && role == eMultimedia)
+        m_writer->wasapiDefaultDeviceId(QString::fromWCharArray(pwstrDeviceId));
+    return S_OK;
+}
+HRESULT WASAPINotifications::OnPropertyValueChanged(LPCWSTR pwstrDeviceId, const PROPERTYKEY key)
+{
+    Q_UNUSED(pwstrDeviceId)
+    Q_UNUSED(key)
+    return S_OK;
+}
+
+HRESULT WASAPINotifications::QueryInterface(const IID &iid, void **ppUnk)
+{
+    *ppUnk = nullptr;
+    return E_NOINTERFACE;
+}
+ULONG WASAPINotifications::AddRef()
+{
+    return 1;
+}
+ULONG WASAPINotifications::Release()
+{
+    return 0;
+}
+#endif
+
 PortAudioWriter::PortAudioWriter(Module &module)
 {
     addParam("delay");
@@ -48,6 +112,8 @@ PortAudioWriter::PortAudioWriter(Module &module)
     m_wasapiStreamInfo.streamCategory = eAudioCategoryMedia;
 
     m_outputParameters.hostApiSpecificStreamInfo = &m_wasapiStreamInfo;
+
+    m_wasapiNotifications = new WASAPINotifications(this);
 #endif
 
     SetModule(module);
@@ -55,6 +121,9 @@ PortAudioWriter::PortAudioWriter(Module &module)
 PortAudioWriter::~PortAudioWriter()
 {
     close();
+#ifdef Q_OS_WIN
+    delete m_wasapiNotifications;
+#endif
 #ifdef Q_OS_MACOS
     delete m_coreAudioDevice;
 #endif
@@ -164,6 +233,21 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
     if (!readyWrite())
         return 0;
 
+#ifdef Q_OS_WIN
+    if (m_outputDevice.isEmpty())
+    {
+        m_defaultDeviceIdMutex.lock();
+        const bool defaultDeviceChanged = (!m_paDefaultDeviceId.isEmpty() && !m_defaultDeviceId.isEmpty() && m_paDefaultDeviceId != m_defaultDeviceId);
+        m_defaultDeviceIdMutex.unlock();
+
+        if (defaultDeviceChanged && !reopenStream())
+        {
+            playbackError();
+            return 0;
+        }
+    }
+#endif
+
     if (Pa_IsStreamStopped(m_stream))
     {
         if (!startStream())
@@ -178,7 +262,6 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
         bool isError = true;
 
 #ifdef Q_OS_WIN
-
         if (isDeviceInvalidated() && reopenStream()) //"writeStream()" must fail only on "paUnanticipatedHostError"
         {
             isError = !writeStream(arr);
@@ -291,6 +374,21 @@ bool PortAudioWriter::openStream()
         m_stream = newStream;
         m_outputLatency = Pa_GetStreamInfo(m_stream)->outputLatency;
         modParam("delay", m_outputLatency);
+
+#ifdef Q_OS_WIN
+        IMMDevice *paImmDevice = nullptr;
+        m_paDefaultDeviceId.clear();
+        if (PaWasapi_GetIMMDevice(Pa_GetDefaultOutputDevice(), reinterpret_cast<void **>(&paImmDevice)) == paNoError)
+        {
+            wchar_t *id = nullptr;
+            if (paImmDevice->GetId(&id) == S_OK && id)
+            {
+                m_paDefaultDeviceId = QString::fromWCharArray(id);
+                CoTaskMemFree(id);
+            }
+        }
+#endif
+
 #ifdef Q_OS_MACOS
         if (m_bitPerfect)
         {
@@ -371,8 +469,11 @@ bool PortAudioWriter::reopenStream()
         return false;
     }
 
-    if (openStream())
-        return (Pa_StartStream(m_stream) == paNoError);
+    if (openStream() && Pa_StartStream(m_stream) == paNoError)
+    {
+        emit QMPlay2Core.updateInformationPanel();
+        return true;
+    }
 
     return false;
 }
@@ -401,3 +502,11 @@ void PortAudioWriter::close()
 #endif
     m_err = false;
 }
+
+#ifdef Q_OS_WIN
+void PortAudioWriter::wasapiDefaultDeviceId(const QString &defaultDeviceId)
+{
+    QMutexLocker locker(&m_defaultDeviceIdMutex);
+    m_defaultDeviceId = defaultDeviceId;
+}
+#endif

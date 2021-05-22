@@ -47,6 +47,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 if(WIN32)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE -DINITGUID)
     set(CUSTOM_PORTAUDIO_LIBRARIES "" CACHE STRING "Custom libraries for PortAudio")
 endif()
 
