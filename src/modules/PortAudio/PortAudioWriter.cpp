@@ -178,6 +178,7 @@ qint64 PortAudioWriter::write(const QByteArray &arr)
         bool isError = true;
 
 #ifdef Q_OS_WIN
+
         if (isDeviceInvalidated() && reopenStream()) //"writeStream()" must fail only on "paUnanticipatedHostError"
         {
             isError = !writeStream(arr);
@@ -346,7 +347,9 @@ void PortAudioWriter::playbackError()
 bool PortAudioWriter::isDeviceInvalidated() const
 {
     const PaHostErrorInfo *errorInfo = Pa_GetLastHostErrorInfo();
-    return errorInfo && errorInfo->hostApiType == paWASAPI && errorInfo->errorCode == AUDCLNT_E_DEVICE_INVALIDATED;
+    if (errorInfo && errorInfo->hostApiType == paWASAPI)
+        return (errorInfo->errorCode == AUDCLNT_E_DEVICE_INVALIDATED || errorInfo->errorCode == AUDCLNT_E_RESOURCES_INVALIDATED);
+    return false;
 }
 bool PortAudioWriter::reopenStream()
 {
