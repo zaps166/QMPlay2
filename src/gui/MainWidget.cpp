@@ -513,21 +513,28 @@ void MainWidget::focusChanged(QWidget *old, QWidget *now)
 
 void MainWidget::processParam(const QString &param, const QString &data)
 {
+    auto getItemsToPlay = [&] {
+        auto items = data.split('\n', QString::SkipEmptyParts);
+        for (auto &&item : items)
+            item = Functions::maybeExtensionAddress(item);
+        return items;
+    };
+
     if (param == "open")
     {
         QMPlay2Core.getSettings().remove("Pos");
         QMPlay2Core.getSettings().remove("Url");
         if (data.contains('\n'))
-            playlistDock->addAndPlay(data.split('\n', QString::SkipEmptyParts));
+            playlistDock->addAndPlay(getItemsToPlay());
         else
-            playlistDock->addAndPlay(data);
+            playlistDock->addAndPlay(Functions::maybeExtensionAddress(data));
     }
     else if (param == "enqueue")
     {
         if (data.contains('\n'))
-            playlistDock->add(data.split('\n', QString::SkipEmptyParts));
+            playlistDock->add(getItemsToPlay());
         else
-            playlistDock->add(data);
+            playlistDock->add(Functions::maybeExtensionAddress(data));
     }
     else if (param == "play")
         playlistDock->start();
