@@ -431,7 +431,8 @@ void DemuxerThr::run()
     connect(&QMPlay2Core, &QMPlay2CoreClass::updateInformationPanel,
             &o, [this] {
         Q_ASSERT(QThread::currentThread() != thread());
-        emitInfo();
+        if (demuxer)
+            emitInfo();
     });
 
     if (forwardPackets == 1 || localStream || unknownLength)
