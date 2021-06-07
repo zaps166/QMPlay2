@@ -17,7 +17,6 @@
 */
 
 #include <VDPAU.hpp>
-#include <FFCommon.hpp>
 
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
@@ -38,10 +37,6 @@ VDPAU::VDPAU(AVBufferRef *hwDeviceBufferRef)
     m_supportedPixelFormats = {
         AV_PIX_FMT_NV12
     };
-
-#ifdef FIND_HWACCEL_DRIVERS_PATH
-    FFCommon::setDriversPath("vdpau", "VDPAU_DRIVER_PATH");
-#endif
 
     addParam("Deinterlace");
     addParam("DeinterlaceFlags");

@@ -165,6 +165,10 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo)
     AVBufferRef *hwDeviceBufferRef = nullptr;
     if (!m_vdpau)
     {
+#ifdef FIND_HWACCEL_DRIVERS_PATH
+        FFCommon::setDriversPath("vdpau", "VDPAU_DRIVER_PATH");
+#endif
+
         if (av_hwdevice_ctx_create(&hwDeviceBufferRef, AV_HWDEVICE_TYPE_VDPAU, nullptr, nullptr, 0) != 0)
             return false;
 
