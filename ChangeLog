@@ -1,3 +1,19 @@
+Changes in QMPlay2 21.06.07:
+    - use WASAPI via PortAudio on Windows (including exclusive mode),
+    - set default config directory to "~/.config/QMPlay2" (Linux),
+    - use QtDBus API for suspend instead of QProcess (Linux),
+    - improve playlist sorting for entries with numbers,
+    - VA-API fix for Vulkan and new Radeon/Mesa driver,
+    - fix setting the VDPAU driver path for AppImage,
+    - fix SVG icon engine warning after KDE update,
+    - enable bypass compositor by default (Vulkan),
+    - update YouTube browser for YouTube changes,
+    - fix downloading of some network streams,
+    - add PT_BR translations (fabianski7),
+    - store/restore radio station image,
+    - fix default Vulkan GPU on Linux,
+    - other minor fixes,
+
 Changes in QMPlay2 21.03.09:
     - drop support for Qt < 5.10, CMake < 3.9, TagLib < 1.9, FFmpeg < 4.0,
     - fix possible freeze on Windows when Vulkan is enabled,
