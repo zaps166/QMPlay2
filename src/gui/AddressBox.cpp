@@ -23,10 +23,13 @@
 #include <Module.hpp>
 #include <Main.hpp>
 
+#include <QGuiApplication>
 #include <QGridLayout>
+#include <QClipboard>
 #include <QDir>
+#include <QUrl>
 
-AddressBox::AddressBox(Qt::Orientation o, QString url)
+AddressBox::AddressBox(Qt::Orientation o, QString url, const QString &choice)
 {
     if (url.isNull())
         pB.addItem(QMPlay2Core.getQMPlay2Icon(), tr("Autodetect address"), AUTODETECT);
@@ -49,6 +52,15 @@ AddressBox::AddressBox(Qt::Orientation o, QString url)
     for (const QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
         for (const QMPlay2Extensions::AddressPrefix &addressPrefix : QMPlay2Ext->addressPrefixList())
             pB.addItem(addressPrefix.icon, addressPrefix, MODULE);
+
+    const int pBIdx = pB.findText(choice);
+
+    if (url.isNull() && pBIdx < 2)
+    {
+        const auto text = QGuiApplication::clipboard()->text();
+        if (text.contains("://") && text.indexOf("://") == text.indexOf(":") && QUrl(text).isValid())
+            url = text;
+    }
 
     if (!url.isEmpty())
     {
@@ -106,7 +118,10 @@ AddressBox::AddressBox(Qt::Orientation o, QString url)
             break;
     }
 
-    pBIdxChanged();
+    if (pBIdx > -1 && pBIdx != pB.currentIndex())
+        pB.setCurrentIndex(pBIdx);
+    else
+        pBIdxChanged();
 }
 
 QString AddressBox::url() const

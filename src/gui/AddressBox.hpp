@@ -27,16 +27,16 @@ class AddressBox : public QWidget
 public:
     enum PrefixType {AUTODETECT = 'D', DIRECT = 'A', MODULE = 'M'};
 
-    AddressBox(Qt::Orientation, QString url = QString());
+    AddressBox(Qt::Orientation, QString url = QString(), const QString &choice = QString());
 
     inline void setFocus()
     {
         aE.setFocus();
     }
 
-    inline QComboBox &getComboBox()
+    inline QString getCurrentText() const
     {
-        return pB;
+        return pB.currentText();
     }
 
     inline PrefixType currentPrefixType() const
