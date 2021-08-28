@@ -21,6 +21,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#ifdef _MSC_VER
+#  define _USE_MATH_DEFINES
+#endif
+
 #include <cmath>
 #include <stdlib.h>
 #include <memory.h>

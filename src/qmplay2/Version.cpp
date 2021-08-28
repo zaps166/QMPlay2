@@ -29,7 +29,7 @@
 
 QByteArray Version::get()
 {
-    static const QByteArray ver = QMPlay2Version + (isPortable() ? "-portable" : QByteArray());
+    static const QByteArray ver = QByteArray(QMPlay2Version) + (isPortable() ? "-portable" : QByteArray());
     return ver;
 }
 QByteArray Version::userAgent()

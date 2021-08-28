@@ -53,10 +53,11 @@ extern "C"
 
 static inline void swapArray(quint8 *a, quint8 *b, int size)
 {
-    quint8 t[size];
+    quint8 *t = new quint8[size];
     memcpy(t, a, size);
     memcpy(a, b, size);
     memcpy(b, t, size);
+    delete[] t;
 }
 
 static inline QWindow *getNativeWindow(const QWidget *w)

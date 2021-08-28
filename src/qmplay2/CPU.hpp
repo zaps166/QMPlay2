@@ -25,3 +25,10 @@
     #define QMPLAY2_CPU_X86_64
     #define QMPLAY2_CPU_X86
 #endif
+
+// Workaround for MSVC to use CPP de-interlacer.
+#ifdef _MSC_VER
+#  undef QMPLAY2_CPU_X86_32
+#  undef QMPLAY2_CPU_X86_64
+#  undef QMPLAY2_CPU_X86
+#endif

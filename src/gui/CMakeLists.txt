@@ -208,6 +208,14 @@ endif()
 
 if(WIN32)
     set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Custom libraries for GUI")
+    if(USE_VCPKG)
+        set_target_properties(${PROJECT_NAME} PROPERTIES
+            VS_DEBUGGER_COMMAND "${CMAKE_INSTALL_PREFIX}/$<TARGET_FILE_NAME:${PROJECT_NAME}>"
+            VS_DEBUGGER_ENVIRONMENT "PATH=%PATH%;$ENV{VCPKG_ROOT}/installed/x64-windows/bin/;")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -DBUILD_TYPE=$(Configuration) -P ../../cmake_install.cmake)
+    endif()
+          
     target_link_libraries(${PROJECT_NAME} Qt5::WinExtras winmm)
 elseif(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -224,6 +232,7 @@ endif()
 
 if(WIN32)
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/)
+    install(FILES $<TARGET_FILE:Qt5::WinExtras> DESTINATION ${CMAKE_INSTALL_PREFIX})
 elseif(APPLE)
     install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
 

@@ -53,14 +53,16 @@ bool SndResampler::create(int _src_samplerate, int _src_channels, int _dst_sampl
     av_opt_set_int(snd_convert_ctx, "linear_interp", true, 0);
     if (dst_channels > src_channels)
     {
-        double matrix[dst_channels][src_channels];
-        memset(matrix, 0, sizeof matrix);
+        const int matrix_size = dst_channels * src_channels;
+        double *matrix = new double[matrix_size];
+        memset(matrix, 0, matrix_size);
         for (int i = 0, c = 0; i < dst_channels; i++)
         {
-            matrix[i][c] = 1.0;
+            *(matrix + i*dst_channels + c) = 1.0;
             c = (c + 1) % src_channels;
         }
         swr_set_matrix(snd_convert_ctx, (const double *)matrix, src_channels);
+        delete[] matrix;
     }
 
     if (swr_init(snd_convert_ctx))

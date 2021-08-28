@@ -37,10 +37,18 @@ WASAPINotifications::WASAPINotifications(PortAudioWriter *writer)
     : m_writer(writer)
 {
     CoCreateInstance(
+#ifdef _MSC_VER
+        __uuidof(MMDeviceEnumerator),
+#else
         CLSID_MMDeviceEnumerator,
+#endif
         nullptr,
         CLSCTX_INPROC_SERVER,
+#ifdef _MSC_VER
+        __uuidof(IMMDeviceEnumerator),
+#else
         IID_IMMDeviceEnumerator,
+#endif
         reinterpret_cast<void **>(&m_deviceEnumerator)
     );
     if (m_deviceEnumerator)

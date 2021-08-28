@@ -336,7 +336,43 @@ $ sudo make uninstall
  - `CMAKE_INCLUDE_PATH`- where to find QMPlay2 dependency includes,
  - `CUSTOM_*_LIBRARIES` - additional custom libraries for linker (useful for static linking),
 - I use my own PKGBUILDs for many MinGW libraries.
-- Visual Studio can't compile QMPlay2.
+
+#### Windows (Visual Studio / 64-bit only):
+
+Visual Studio can compile QMPlay2, but the built executable is so unstable that it's not suitable for practical use at the moment.
+
+##### Preparation
+
+- Install Visual Studio 2019.
+- Download and install Qt5 for Windows (MSVC 64bit).
+- Install [vckpg](https://vcpkg.io/).
+    - Make sure `VCPKG_ROOT` environment variable is set to your installed vcpkg root directory. (e.g. `C:\src\vcpkg`)
+- Install some packages by vcpkg:
+    - pkgconf - `vcpkg install pkgconf:x64-windows`
+    - PortAudio - `vcpkg install portaudio:x64-windows`
+    - FFmpeg (with features) - `vcpkg install ffmpeg[avcodec,avdevice,avfilter,avformat,core,swresample,swscale,ass,nvcodec]:x64-windows`
+
+##### Build
+
+- Open Qt5 command prompt and run below commands to make VS projects:
+
+```cmd
+> cd d:\path\to\QMPlay2-master
+> mkdir build
+> cd build
+> C:\Qt\Tools\CMake_64\bin\cmake.exe .. -DCMAKE_INSTALL_PREFIX=../install -DUSE_OPENGL=off
+```
+
+- Open generated QMPlay2.sln.
+- Set QMPlay2 project as start up project.
+- Build the solution.
+
+Note:
+
+- This build method has not supported the OpenGL yet.
+- Most build options have not been tested yet.
+- Make sure specify the `CMAKE_INSTALL_PREFIX` because VS debugger run the executable in that directory.
+
 
 ## Building package RPM, DEB or any other
 

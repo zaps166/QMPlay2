@@ -221,7 +221,7 @@ double DysonCompressor::filter(QByteArray &data, bool flush)
                     lastrgain = gain;
             }
 
-            float sampled[channels];
+            float *sampled = new float[channels];
             for (int c = 0; c < channels; ++c)
                 sampled[c] = samplesdelayed.at(c).at(ndelayptr);
 
@@ -253,7 +253,7 @@ double DysonCompressor::filter(QByteArray &data, bool flush)
 
             float ngain = MAXLEVEL;
 
-            double newsample[channels];
+            double *newsample = new double[channels];
             for (int c = 0; c < channels; ++c)
             {
                 newsample[c] = sampled[c] * npeakgain;
@@ -291,6 +291,9 @@ double DysonCompressor::filter(QByteArray &data, bool flush)
             const double sqrtrpeakgain = sqrt(rpeakgain1);
             for (int c = 0; c < channels; ++c)
                 currentsamples[c] = newsample[c] * sqrtrpeakgain;
+
+            delete[] newsample;
+            delete[] sampled;
         }
 
         if (toRemove > 0)
