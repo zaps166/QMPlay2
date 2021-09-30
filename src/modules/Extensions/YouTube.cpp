@@ -21,6 +21,7 @@
 #include <YouTubeDL.hpp>
 #include <LineEdit.hpp>
 
+#include <QtGlobal>
 #include <QLoggingCategory>
 #include <QStringListModel>
 #include <QDesktopServices>
@@ -142,6 +143,12 @@ void ResultsYoutube::copyPageURL()
         QApplication::clipboard()->setMimeData(mimeData);
     }
 }
+void ResultsYoutube::showRelated()
+{
+    QTreeWidgetItem *tWI = currentItem();
+    const QString contentId = tWI->data(2, Qt::UserRole).toString();
+    emit requestRelated(contentId);
+}
 
 void ResultsYoutube::contextMenu(const QPoint &point)
 {
@@ -197,6 +204,9 @@ void ResultsYoutube::contextMenu(const QPoint &point)
             }
         }
     }
+
+    if (!isPlaylist(tWI))
+        menu->addAction(tr("Show related"), this, SLOT(showRelated()));
 
     menu->popup(viewport()->mapToGlobal(point));
 }
@@ -340,6 +350,7 @@ YouTube::YouTube(Module &module) :
     sortByB->setAutoRaise(true);
 
     resultsW = new ResultsYoutube;
+    connect(resultsW, SIGNAL(requestRelated(const QString)), this, SLOT(fetchRelated(const QString)));
 
     progressB = new QProgressBar;
     progressB->hide();
@@ -496,6 +507,8 @@ void YouTube::search()
         searchReply->deleteLater();
     if (continuationReply)
         continuationReply->deleteLater();
+    if (relatedReply)
+        relatedReply->deleteLater();
     resultsW->clear();
     if (!title.isEmpty())
     {
@@ -524,11 +537,59 @@ void YouTube::search()
     lastTitle = title;
 }
 
+void YouTube::fetchRelated(const QString &contentId)
+{
+    deleteReplies();
+    if (autocompleteReply)
+        autocompleteReply->deleteLater();
+    if (searchReply)
+        searchReply->deleteLater();
+    if (continuationReply)
+        continuationReply->deleteLater();
+    if (relatedReply)
+        relatedReply->deleteLater();
+
+    resultsW->clear();
+
+    pageSwitcher->setEnabled(false);
+    m_currPage = 1;
+
+    // construct JSON postdata for request
+    QJsonObject client;
+    client["clientName"] = m_clientName;
+    client["clientVersion"] = m_clientVersion;
+
+    QJsonObject context;
+    context["client"] = client;
+
+    QJsonObject relatedJSON;
+    relatedJSON["videoId"] = contentId;
+    relatedJSON["context"] = context;
+
+    relatedReply = net.start(
+                QString(YOUTUBE_URL "/youtubei/v1/next?key=%1").arg(m_apiKey),
+                QJsonDocument(relatedJSON).toJson(QJsonDocument::Compact), "Cookie: \r\n");
+
+    progressB->setRange(0, 0);
+    progressB->show();
+}
+
+void YouTube::handleRelatedReply(QByteArray replyData)
+{
+    const QJsonObject replyJson = QJsonDocument::fromJson(QString(replyData).toUtf8()).object();
+
+    setRelatedResults(replyJson, false);
+
+    if (progressB->isVisible())
+        progressB->hide();
+}
+
+
 void YouTube::netFinished(NetworkReply *reply)
 {
     if (reply->hasError())
     {
-        if (reply == searchReply)
+        if (reply == searchReply || reply == relatedReply)
         {
             deleteReplies();
             resultsW->clear();
@@ -553,6 +614,10 @@ void YouTube::netFinished(NetworkReply *reply)
             m_clientName = QRegularExpression(R"|("INNERTUBE_CLIENT_NAME"\s*:\s*"(.+?)")|").match(replyData).captured(1);
             m_clientVersion = QRegularExpression(R"|("INNERTUBE_CLIENT_VERSION"\s*:\s*"(.+?)")|").match(replyData).captured(1);
             setSearchResults(getYtInitialData(replyData).object(), false);
+        }
+        else if (reply == relatedReply)
+        {
+            handleRelatedReply(replyData);
         }
         else if (reply == continuationReply)
         {
@@ -883,6 +948,8 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation)
 
             tWI->setData(0, Qt::UserRole, url);
             tWI->setData(1, Qt::UserRole, !isVideo);
+            tWI->setData(2, Qt::UserRole, contentId);
+
 
             if (!isVideo)
             {
@@ -899,6 +966,110 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation)
                 imageReply->setProperty("tWI", QVariant::fromValue((void *)tWI));
                 imageReplies += imageReply;
             }
+        }
+    }
+
+    if (resultsW->topLevelItemCount() > 0)
+    {
+        if (!m_apiKey.isEmpty() && !m_clientName.isEmpty() && !m_clientVersion.isEmpty() && !m_continuationToken.isEmpty())
+        {
+            pageSwitcher->currPageB->setText(QString::number(m_currPage));
+            pageSwitcher->setEnabled(true);
+            pageSwitcher->show();
+        }
+
+        progressB->setMaximum(linkReplies.count() + imageReplies.count());
+        progressB->setValue(0);
+    }
+}
+
+void YouTube::setRelatedResults(const QJsonObject &jsonObj, bool isContinuation)
+{
+    QJsonArray items;
+
+    items = jsonObj
+        ["contents"]
+        ["twoColumnWatchNextResults"]
+        ["secondaryResults"]
+        ["secondaryResults"]
+        ["results"].toArray();
+
+    for (const QJsonValue &obj : items)
+    {
+        const auto videoRenderer = obj["compactVideoRenderer"].toObject();
+        const auto playlistRenderer = obj["compactPlaylistRenderer"].toObject();
+
+        const bool isVideo = !videoRenderer.isEmpty() && playlistRenderer.isEmpty();
+
+        if ( videoRenderer.isEmpty() && playlistRenderer.isEmpty() )
+            continue;
+
+
+        QString title, contentId, length, user, publishTime, viewCount, thumbnail, url;
+
+        if (isVideo)
+        {
+            title = videoRenderer["title"]["simpleText"].toString();
+            contentId = videoRenderer["videoId"].toString();
+            if (title.isEmpty() || contentId.isEmpty())
+                continue;
+
+            length = videoRenderer["lengthText"]["simpleText"].toString();
+            user = videoRenderer["longBylineText"]["runs"].toArray().at(0)["text"].toString();
+            publishTime = videoRenderer["publishedTimeText"]["simpleText"].toString();
+            viewCount = videoRenderer["shortViewCountText"]["simpleText"].toString();
+            thumbnail = videoRenderer["thumbnail"]["thumbnails"].toArray().at(0)["url"].toString();
+
+            url = YOUTUBE_URL "/watch?v=" + contentId;
+        }
+        else
+        {
+            title = playlistRenderer["title"]["simpleText"].toString();
+            contentId = playlistRenderer["playlistId"].toString();
+            if (title.isEmpty() || contentId.isEmpty())
+                continue;
+
+            user = playlistRenderer["longBylineText"]["simpleText"].toString();
+            thumbnail = playlistRenderer["thumbnail"]["thumbnails"].toArray().at(0)["url"].toString();
+
+            url = YOUTUBE_URL "/playlist?list=" + contentId;
+        }
+
+        auto tWI = new QTreeWidgetItem(resultsW);
+
+        tWI->setText(0, title);
+        tWI->setText(1, isVideo ? length : tr("Playlist"));
+        tWI->setText(2, user);
+
+        QString tooltip;
+        tooltip += QString("%1: %2\n").arg(resultsW->headerItem()->text(0), tWI->text(0));
+        tooltip += QString("%1: %2\n").arg(isVideo ? resultsW->headerItem()->text(1) : tr("Playlist"), isVideo ? tWI->text(1) : tr("yes"));
+        tooltip += QString("%1: %2").arg(resultsW->headerItem()->text(2), tWI->text(2));
+        if (isVideo)
+        {
+            tooltip += QString("\n%1: %2\n").arg(tr("Publish time"), publishTime);
+            tooltip += QString("%1: %2").arg(tr("View count"), viewCount);
+        }
+        tWI->setToolTip(0, tooltip);
+
+        tWI->setData(0, Qt::UserRole, url);
+        tWI->setData(1, Qt::UserRole, !isVideo);
+        tWI->setData(2, Qt::UserRole, contentId);
+
+        if (!isVideo)
+        {
+            tWI->setDisabled(true);
+
+            auto linkReply = net.start(url, QByteArray(), "Cookie: \r\n");
+            linkReply->setProperty("tWI", QVariant::fromValue((void *)tWI));
+            linkReplies += linkReply;
+        }
+
+        if (!thumbnail.isEmpty())
+        {
+            auto imageReply = net.start(thumbnail);
+            imageReply->setProperty("tWI", QVariant::fromValue((void *)tWI));
+            imageReplies += imageReply;
         }
     }
 

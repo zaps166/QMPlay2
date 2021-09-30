@@ -45,6 +45,11 @@ public:
     ResultsYoutube();
     ~ResultsYoutube();
 
+signals:
+    /// Signals when related items are requested for an item.
+    /** Is listened to by YouTube::fetchRelated(). */
+    void requestRelated(const QString contentId);
+
 private:
     void playOrEnqueue(const QString &param, QTreeWidgetItem *tWI, const QString &addrParam = QString());
 
@@ -53,6 +58,9 @@ private slots:
 
     void openPage();
     void copyPageURL();
+
+    /// Called when user clicks on "Show related" in context menu, gets the item's contentId and triggers requestRelated().
+    void showRelated();
 
     void contextMenu(const QPoint &p);
 };
@@ -105,6 +113,13 @@ private slots:
     void searchTextEdited(const QString &text);
     void search();
 
+    /// Fetches related items for video given by contentId.
+    /** Creates a network request for related items. The reply is handled by handleRelatedReply(). */
+    void fetchRelated(const QString &contentId);
+
+    /// Handles reply for request sent by fetchRelated().
+    void handleRelatedReply(QByteArray replyData);
+
     void netFinished(NetworkReply *reply);
 
     void searchMenu();
@@ -119,6 +134,9 @@ private:
 
     void setAutocomplete(const QByteArray &data);
     void setSearchResults(const QJsonObject &jsonObj, bool isContinuation);
+
+    /// Writes list of related items into YT browser widget.
+    void setRelatedResults(const QJsonObject &jsonObj, bool isContinuation);
 
     QStringList getYouTubeVideo(const QString &param, const QString &url, IOController<YouTubeDL> &youTubeDL);
 
@@ -140,7 +158,7 @@ private:
     QString lastTitle;
     QCompleter *completer;
 
-    QPointer<NetworkReply> autocompleteReply, searchReply, continuationReply;
+    QPointer<NetworkReply> autocompleteReply, searchReply, continuationReply, relatedReply;
     QList<NetworkReply *> linkReplies, imageReplies;
     NetworkAccess net;
 
