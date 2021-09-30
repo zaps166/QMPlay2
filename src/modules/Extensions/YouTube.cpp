@@ -21,7 +21,6 @@
 #include <YouTubeDL.hpp>
 #include <LineEdit.hpp>
 
-#include <QtGlobal>
 #include <QLoggingCategory>
 #include <QStringListModel>
 #include <QDesktopServices>
