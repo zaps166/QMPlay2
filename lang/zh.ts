@@ -2794,6 +2794,10 @@ QMPlay2 将不会增加图标！</translation>
         <source>Audio only</source>
         <translation>仅音频</translation>
     </message>
+    <message>
+        <source>Show related</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SIDPlay</name>

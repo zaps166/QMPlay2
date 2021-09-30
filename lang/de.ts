@@ -2793,6 +2793,10 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
         <source>Audio only</source>
         <translation>Nur Audio</translation>
     </message>
+    <message>
+        <source>Show related</source>
+        <translation>Ähnliche anzeigen</translation>
+    </message>
 </context>
 <context>
     <name>SIDPlay</name>

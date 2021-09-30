@@ -2794,6 +2794,10 @@ QMPlay2 nie będzie skalować ikon!</translation>
         <source>Audio only</source>
         <translation>Tylko dźwięk</translation>
     </message>
+    <message>
+        <source>Show related</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SIDPlay</name>

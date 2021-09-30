@@ -2791,6 +2791,10 @@ QMPlay2 не будет отображать значки!</translation>
         <source>Audio only</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Show related</source>
+        <translation>Показать похожие</translation>
+    </message>
 </context>
 <context>
     <name>SIDPlay</name>
