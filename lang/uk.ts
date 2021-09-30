@@ -2794,6 +2794,10 @@ QMPlay2 не масштабуватиме іконки!</translation>
         <source>Audio only</source>
         <translation>Лише аудіо</translation>
     </message>
+    <message>
+        <source>Show related</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SIDPlay</name>

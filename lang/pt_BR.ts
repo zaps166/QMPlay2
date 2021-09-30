@@ -2805,6 +2805,10 @@ QMPlay2 will not scale up icons!</source>
         <source>Copy page address</source>
         <translation>Copiar endereço da página</translation>
     </message>
+    <message>
+        <source>Show related</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SIDPlay</name>
@@ -3218,7 +3222,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Hz</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hz</translation>
     </message>
 </context>
 <context>

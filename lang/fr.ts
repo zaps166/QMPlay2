@@ -2790,6 +2790,10 @@ QMPlay2 will not scale up icons!</source>
         <source>Audio only</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Show related</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SIDPlay</name>

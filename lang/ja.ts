@@ -2796,6 +2796,10 @@ QMPlay2はアイコンを拡大しません！</translation>
         <source>Audio only</source>
         <translation>オーディオのみ</translation>
     </message>
+    <message>
+        <source>Show related</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SIDPlay</name>
