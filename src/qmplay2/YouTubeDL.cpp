@@ -22,6 +22,7 @@
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
 
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -36,9 +37,9 @@ static QMutex g_mutex(QMutex::Recursive);
 
 QString YouTubeDL::getFilePath()
 {
-    return QMPlay2Core.getSettingsDir() + "youtube-dl"
+    return QMPlay2Core.getSettingsDir() + "yt-dlp"
 #ifdef Q_OS_WIN
-    ".exe"
+    "_x86.exe"
 #endif
     ;
 }
@@ -305,9 +306,9 @@ bool YouTubeDL::download()
 {
     // Mutex must be locked here
 
-    const QString downloadUrl = "https://yt-dl.org/downloads/latest/youtube-dl"
+    const QString downloadUrl = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp"
 #ifdef Q_OS_WIN
-    ".exe"
+    "_x86.exe"
 #endif
     ;
 
@@ -389,29 +390,11 @@ bool YouTubeDL::update()
         {
             qCritical() << "youtube-dl update failed:" << updateOutput;
         }
-        else if (m_process.exitCode() == 0 && !updateOutput.contains("up-to-date"))
+        else if (m_process.exitCode() == 0 && !updateOutput.contains(QRegularExpression(R"(up\Wto\Wdate)")))
         {
-#ifdef Q_OS_WIN
-            const QString updatedFile = m_ytDlPath + ".new";
-            QFile::remove(Functions::filePath(m_ytDlPath) + "youtube-dl-updater.bat");
-            if (QFile::exists(updatedFile))
-            {
-                Functions::s_wait(0.2); // Wait 200 ms to be sure that file is closed
-                QFile::remove(m_ytDlPath);
-                if (QFile::rename(updatedFile, m_ytDlPath))
-                {
-#endif
-                    QMPlay2Core.setWorking(false);
-                    emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully updated!"), g_name);
-                    return true;
-#ifdef Q_OS_WIN
-                }
-            }
-            else
-            {
-                qDebug() << "Updated youtube-dl file:" + updatedFile + "not found!";
-            }
-#endif
+            QMPlay2Core.setWorking(false);
+            emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" has been successfully updated!"), g_name);
+            return true;
         }
     }
     else if (updating && m_aborted)
