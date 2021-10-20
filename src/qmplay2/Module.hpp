@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -22,7 +22,6 @@
 #include <QWidget>
 #include <QMutex>
 
-#include <CppUtils.hpp>
 #include <Settings.hpp>
 
 class ModuleCommon;
@@ -125,7 +124,7 @@ template<typename T>
 void Module::setInstance()
 {
     QMutexLocker locker(&mutex);
-    for (ModuleCommon *mc : asConst(instances))
+    for (ModuleCommon *mc : qAsConst(instances))
     {
         T *t = dynamic_cast<T *>(mc);
         if (t)
@@ -135,7 +134,7 @@ void Module::setInstance()
 
 /**/
 
-#define QMPLAY2_MODULES_API_VERSION 13
+#define QMPLAY2_MODULES_API_VERSION 15
 
 #define QMPLAY2_EXPORT_MODULE(ModuleClass) \
     extern "C" Q_DECL_EXPORT quint32 getQMPlay2ModuleAPIVersion() \

@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -55,6 +55,8 @@ public:
     Instance(Priv);
     ~Instance();
 
+    void prepareDestroy() override;
+
 private:
     void init();
 
@@ -80,6 +82,7 @@ public:
 
 private:
     bool isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevice) const override final;
+    void sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalDevices) const override final;
 
 private:
     static vk::PhysicalDeviceFeatures requiredPhysicalDeviceFeatures();

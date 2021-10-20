@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -27,7 +27,7 @@ class VDPAUOpenGL : public OpenGLHWInterop
 {
 public:
     VDPAUOpenGL(const std::shared_ptr<VDPAU> &vdpau);
-    ~VDPAUOpenGL() final;
+    ~VDPAUOpenGL();
 
     QString name() const override;
 
@@ -59,7 +59,7 @@ private:
     void deleteGlSurface(VDPAUOutputSurface &surface);
 
 private:
-    using GLvdpauSurfaceNV = GLintptr;
+    using GLvdpauSurfaceNV = intptr_t;
 
     std::shared_ptr<VDPAU> m_vdpau;
 

@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -20,7 +20,6 @@
 
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
-#include <CppUtils.hpp>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -38,6 +37,7 @@ struct Column
     QString iconUrl;
     QPointer<NetworkReply> iconReply;
     QPixmap icon;
+    bool hasIcon = false;
 
     QString name, streamInfo, country, tags;
     qint32 rating;
@@ -63,7 +63,7 @@ void RadioBrowserModel::searchRadios(const QString &text, const QString &searchB
 {
     const QByteArray postData = searchBy.toLatin1().toLower() + "=" + text.toUtf8().toPercentEncoding();
 
-    for (const std::shared_ptr<Column> &column : asConst(m_rows))
+    for (const std::shared_ptr<Column> &column : qAsConst(m_rows))
         delete column->iconReply;
     delete m_replySearch;
 
@@ -84,7 +84,7 @@ void RadioBrowserModel::loadIcons(const int first, const int last)
         if (!column->iconReply && !column->iconUrl.isEmpty())
         {
             column->iconReply = m_net->start(column->iconUrl);
-            for (const std::shared_ptr<Column> &c : asConst(m_rows))
+            for (const std::shared_ptr<Column> &c : qAsConst(m_rows))
             {
                 if (c.get() == column)
                     continue;
@@ -101,15 +101,20 @@ void RadioBrowserModel::loadIcons(const int first, const int last)
 
 QString RadioBrowserModel::getName(const QModelIndex &index) const
 {
-    return m_rowsToDisplay.value(index.row())->name;
+    return m_rowsToDisplay[index.row()]->name;
 }
 QUrl RadioBrowserModel::getUrl(const QModelIndex &index) const
 {
-    return QUrl(m_rowsToDisplay.value(index.row())->url);
+    return QUrl(m_rowsToDisplay[index.row()]->url);
+}
+QPixmap RadioBrowserModel::getIcon(const QModelIndex &index) const
+{
+    const auto column = m_rowsToDisplay[index.row()];
+    return column->hasIcon ? column->icon : QPixmap();
 }
 QUrl RadioBrowserModel::getHomePageUrl(const QModelIndex &index) const
 {
-    return QUrl(m_rowsToDisplay.value(index.row())->homePageUrl);
+    return QUrl(m_rowsToDisplay[index.row()]->homePageUrl);
 }
 
 QModelIndex RadioBrowserModel::index(int row, int column, const QModelIndex &parent) const
@@ -283,7 +288,7 @@ void RadioBrowserModel::setFiltrText(const QString &text)
     else
     {
         m_rowsToDisplay.clear();
-        for (const std::shared_ptr<Column> &column : asConst(m_rows))
+        for (const std::shared_ptr<Column> &column : qAsConst(m_rows))
         {
             if (column->name.contains(text, Qt::CaseInsensitive))
                 m_rowsToDisplay.append(column);
@@ -307,11 +312,11 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
 
                 const QPixmap radioIcon = QIcon(":/radio.svgz").pixmap(elementHeight(), elementHeight());
 
-                for (auto &&itemValue : arrayItems)
+                for (auto &&item : arrayItems)
                 {
-                    if (!itemValue.isObject())
+                    if (!item.isObject())
                         continue;
-                    const QJsonObject item = itemValue.toObject();
+
                     QString streamInfo = item["codec"].toString();
                     if (!streamInfo.isEmpty())
                     {
@@ -362,6 +367,7 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
                         item["favicon"].toString(),
                         nullptr,
                         radioIcon,
+                        false,
 
                         item["name"].toString(),
                         streamInfo,
@@ -395,6 +401,8 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
                             column->icon = QPixmap(s * dpr, s * dpr);
                             column->icon.setDevicePixelRatio(dpr);
                             column->icon.fill(Qt::transparent);
+
+                            column->hasIcon = true;
 
                             QPainter painter(&column->icon);
                             Functions::drawPixmap(painter, QPixmap::fromImage(image), m_widget, Qt::SmoothTransformation, Qt::KeepAspectRatio, {s, s});

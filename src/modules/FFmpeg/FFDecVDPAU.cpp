@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -134,6 +134,9 @@ void FFDecVDPAU::downloadVideoFrame(Frame &decoded)
 
 bool FFDecVDPAU::open(StreamInfo &streamInfo)
 {
+    if (streamInfo.codec_type != AVMEDIA_TYPE_VIDEO)
+        return false;
+
     if (Functions::isX11EGL() && QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
         return false;
 
@@ -162,6 +165,10 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo)
     AVBufferRef *hwDeviceBufferRef = nullptr;
     if (!m_vdpau)
     {
+#ifdef FIND_HWACCEL_DRIVERS_PATH
+        FFCommon::setDriversPath("vdpau", "VDPAU_DRIVER_PATH");
+#endif
+
         if (av_hwdevice_ctx_create(&hwDeviceBufferRef, AV_HWDEVICE_TYPE_VDPAU, nullptr, nullptr, 0) != 0)
             return false;
 
@@ -186,9 +193,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo)
     codec_ctx->hw_device_ctx = hwDeviceBufferRef;
     codec_ctx->get_format = vdpauGetFormat;
     codec_ctx->thread_count = 1;
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 18, 100)
     codec_ctx->extra_hw_frames = 4;
-#endif
     if (!openCodec(codec))
         return false;
 

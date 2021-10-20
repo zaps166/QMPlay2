@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -342,7 +342,7 @@ void EqualizerGUI::setSliders()
 {
     const QString objectName = sender()->objectName();
     graph.hide();
-    for (QSlider *slider : asConst(sliders))
+    for (QSlider *slider : qAsConst(sliders))
     {
         const bool isPreamp = (sliders.at(0) == slider);
 
@@ -377,7 +377,7 @@ void EqualizerGUI::addPreset()
         }
 
         QMap<int, int> values;
-        for (QSlider *slider : asConst(sliders))
+        for (QSlider *slider : qAsConst(sliders))
         {
             const bool isPreamp = (sliders.at(0) == slider);
             if (isPreamp)
@@ -432,7 +432,7 @@ void EqualizerGUI::setPresetValues()
         QMap<int, int> values = getPresetValues(act->text());
         if (values.count() > 1)
         {
-            for (QSlider *slider : asConst(sliders))
+            for (QSlider *slider : qAsConst(sliders))
             {
                 QCheckBox *checkB = getSliderCheckBox(slider);
                 const bool isPreamp = (sliders.at(0) == slider);

@@ -22,7 +22,7 @@ Table of Contents
 
 ## Installation
 
-#### Easy installation on Windows (XP or higher)
+#### Easy installation on Windows
 
 - [Download](https://github.com/zaps166/QMPlay2/releases/latest) the Windows installer.
 
@@ -70,7 +70,7 @@ sudo dnf install qmplay2
 ## YouTube
 
 You can change the default audio and video quality of YouTube contents. Click on the "Settings" icon on the left of the search bar, change the order of audio and/or video quality priorities and apply changes.
-If the chosen quality won't be found on YouTube content, QMPlay2 will try to use the next entry on the quality list.
+If the chosen quality can't be found on YouTube content, QMPlay2 will try using the next entry on the quality list.
 
 YouTube videos don't work without external "youtube-dl" software, so QMPlay2 will download it automatically. You can remove downloaded "youtube-dl" from settings.
 
@@ -89,14 +89,14 @@ If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you sh
 
 ## Hardware acceleration
 
-QMPlay2 supports hardware video decoding: CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), VDPAU/VA-API (X11 for VDPAU, Linux/BSD only) and VideoToolBox (macOS only).
+QMPlay2 supports hardware video decoding: CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), D3D11VA (Vulkan, Windows 8 and higher) VDPAU/VA-API (X11 for VDPAU, Linux/BSD only) and VideoToolBox (macOS only).
 Hardware acceleration is disabled by default, but you can enable it in "Settings->Playback settings":
 - move hardware accelerated decoder on decoders list to the top,
 - apply settings.
 
 ### Hardware acceleration important information:
 - CUVID, DXVA2, VDPAU and VA-API use OpenGL video output, so OpenGL features are available, but CPU filters won't work.
-- CUVID and VA-API use Vulkan video output, so Vulkan features are available, but CPU filters won't work.
+- CUVID. D3D11VA and VA-API use Vulkan video output, so Vulkan features are available, but CPU filters won't work.
 - DXVA2 requires "WGL_NV_DX_interop" extension.
 - DXVA2 and VDPAU don't work with Vulkan.
 - VDPAU, VA-API, CUVID and DXVA2 have its own deinterlacing filters. Their settings are available in "Settings->Video filters".
@@ -111,15 +111,15 @@ VA-API + OpenGL uses EGL for OpenGL context creation. On X11 QMPlay2 tries to de
 ## Deinterlacing
 
 Video interlacing is automatically detected by QMPlay2. Go to "Settings->Video filters" for more options.
-If you have fast CPU (or low video resolution) you can use "Yadif 2x" deinterlacing filter for better quality.
+If you have fast CPU (or low video resolution), you can use "Yadif 2x" deinterlacing filter for better quality.
 
 You can enable deinterlacing filter on non-interlaced video if necessary (some interlaced videos may not have interlacing data),
-but remember to revert this settings on any other video! Otherwise the video quality will be worse and performance will be worse!
+but remember to revert this setting on any other video! Otherwise the video quality and performance will be worse!
 
-Hardware accelerated video decoding uses its own video filtering, so the CPU deinterlacing method (e.g. "Yadif 2x") does nothing in this case.
+Hardware-accelerated video decoding uses its own video filtering, so the CPU deinterlacing method (e.g. "Yadif 2x") does nothing in this case.
 Of course you can adjust other deinterlacing settings in case of hardware acceleration.
 
-Vulkan renderer has Yadif deinterlacing filter which is used by default for CPU decoded videos. You can change this behavior it in Vulkan renderer settings. Moreover Yadif Vulkan filter is used for hardware decoded videos.
+Vulkan renderer has Yadif deinterlacing filter which is used by default for CPU decoded videos. You can change this behavior in Vulkan renderer settings. Moreover, Yadif Vulkan filter is used for hardware-decoded videos.
 
 Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as video output may not be properly deinterlaced.
 
@@ -147,21 +147,21 @@ Go to "Options->settings" and check "Read and display still images".
 
 You can specify a `CustomUserAgent` in `QMPlay2.ini` file in `General` section.
 
-### Signle instance
+### Single instance
 
 You can force single instance for QMPlay2: set "Allow only one instance" in "Settings->General settings".
 
 ## Multimedia keys
 
-In Windows and macOS multimedia keys should work automatically.
+In Windows and macOS, multimedia keys should work automatically.
 
-In Linux/BSD you must associate keys with commands:
+In Linux/BSD, you must associate keys with commands:
 - using QMPlay2 binary, see: `QMPlay2 -h`,
 - using MPRIS2:
-	- Toggle play/pause: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause`.
-	- Next: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next`
-	- Prev: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous`
-	- Stop: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop`
+    - Toggle play/pause: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause`.
+    - Next: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next`
+    - Prev: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous`
+    - Stop: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop`
 
 ## Installation from sources
 
@@ -169,29 +169,29 @@ Don't forget to update submodules: `git submodule update --init`.
 
 ### CMake requirements
 
-For CMake build be sure that you have CMake 3.1 or higher.
+For CMake build be sure that you have CMake 3.9 or higher.
 
 ### You need devel packages:
 
 #### Necessary:
-- Qt5 >= 5.6.0 (>= 5.6.3; >= 5.9.1 recommended; >= 5.10 for Vulkan):
-	- Qt5DBus - Linux/BSD only,
-	- Qt5Svg - for SVG icons,
-	- Qt5Qml - for MediaBrowser,
-	- Qt5WinExtras - for Windows,
-- FFmpeg >= 3.3 (>= 4.0 is recommended at compilation time for VA-API and VDPAU deinterlacing filters):
-	- libavformat - requires OpenSSL or GnuTLS for https support,
-	- libavcodec - for FFmpeg module only,
-	- libswscale,
-	- libavutil,
-	- libswresample,
-	- libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
+- Qt5 >= 5.10:
+    - Qt5DBus - Linux/BSD only,
+    - Qt5Svg - for SVG icons,
+    - Qt5Qml - for MediaBrowser,
+    - Qt5WinExtras - for Windows,
+- FFmpeg >= 4.0:
+    - libavformat - requires OpenSSL or GnuTLS for https support,
+    - libavcodec - for FFmpeg module only,
+    - libswscale,
+    - libavutil,
+    - libswresample,
+    - libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
 
 #### Important:
-- TagLib >= 1.7 (>= 1.9 recommended),
+- TagLib >= 1.9,
 - libass - for OSD and non-graphical subtitles.
 
-#### For modules (some of them can be automatically not used if not found):
+#### For modules (some of them can be automatically disabled if not found):
 - FFmpeg (necessary module): libva (VA-API) and libvdpau (VDPAU, X11 only),
 - Chiptune: libgme (kode54 version is recommended) and libsidplayfp,
 - DirectX (Windows only): DirectDraw SDK (included in mingw-w64),
@@ -213,55 +213,58 @@ $ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib li
 ### Running the compilation for Linux/BSD using CMake:
 
 - Install all needed packages and dependencies (in devel version) using package manager or compile it from sources.
-- You can use `cmake-gui` for graphical configuration. Otherwise follow below instructions:
-	- create a "build" directory and go to it: `mkdir build && cd build`,
-	- run CMake (also you can run with arguments which you want): `cmake ..`,
-	- check the summary - which features are enabled - you can set/force them manually,
-	- if CMake finishes wihout errors, run: `make -j8` (replace 8 with numbers of CPU threads),
-	- if compiling finishes wihout errors, install it: `sudo make -j8 install`.
+- You can use `cmake-gui` for graphical configuration. Otherwise follow the instructions below:
+    - create a "build" directory and go to it: `mkdir build && cd build`,
+    - run CMake (also you can run with arguments which you want): `cmake ..`,
+    - check the summary - which features are enabled - you can set/force them manually,
+    - if CMake finishes without errors, run: `make -j8` (replace 8 with numbers of CPU threads),
+    - if compiling finishes without errors, install it: `sudo make -j8 install`.
 
 CMake options (option - default value: description):
 - CMake options and the default settings:
-	- `CMAKE_INSTALL_PREFIX` - mostly it is `/usr/local`: installation directory.
-	- `CMAKE_BUILD_TYPE` - `Release`.
-	- `LANGUAGES` - `All` - a space-separated list of translations to compile into QMPlay2.
-	- `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
-	- `SET_INSTALL_RPATH` - non-Windows only, `ON` on macOS, `OFF` anywhere else: sets RPATH after installation.
-	- `USE_FFMPEG` - ON: enable/disable FFmpeg module.
-	- `USE_FFMPEG_VAAPI`: autodetect: enabled if libva, libva-drm, and egl exist.
-	- `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exists.
-	- `USE_FFMPEG_AVDEVICE` - autodetect on Linux, `OFF` on non-Linux OS: it allows to use e.g. V4L2 devices.
-	- `USE_INPUTS` - ON: enable/disable Inputs module.
-	- `USE_MODPLUG` - ON: enable/disable Modplug module.
-	- `USE_EXTENSIONS` - ON: enable/disable Extensions module.
-	- `USE_MPRIS2` - Linux/BSD only, `ON`: enable/disable MPRIS2 in Extensions module.
-	- `USE_VISUALIZATIONS` - ON: enable/disable Visualizations module.
-	- `USE_AUDIOFILTERS` - ON: enable/disable AudioFilters module.
-	- `USE_VIDEOFILTERS` - ON: enable/disable VideoFilters module.
-	- `USE_OPENGL` - `ON`: enable/disable OpenGL support.
-	- `USE_VULKAN` - autodetect: enable/disable Vulkan support.
-	- `USE_GLSLC` - `OFF`: enable/disable GLSL -> SPIR-V shader compilation when building QMPlay2.
-	- `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist: enable/disable AudioCD module.
-	- `USE_ALSA` - `ON` on Linux: enable/disable ALSA module.
-	- `USE_PORTAUDIO` - `ON` on non-Linux OS: enable/disable PortAudio module.
-	- `USE_PULSEAUDIO` - autodetect on Linux/BSD, `OFF` anywhere else: enable/disable PulseAudio module.
-	- `USE_XVIDEO` - autodetect on X11: enabled if libxv exists: enable/disable XVideo module.
-	- `USE_CHIPTUNE_GME` - autodetect: enabled if libgme exists.
-	- `USE_CHIPTUNE_SID` - autodetect: enabled if libsidplayfp exists.
-	- `USE_TAGLIB` - `ON`: enable/disable tag editor.
-	- `USE_CMD` - Windows only, `OFF`.
-	- `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
-	- `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
-	- `USE_CUVID` - `ON`: enable/disable CUVID module.
-	- `USE_LYRICS` - `ON`: enable/disable lyrics module.
-	- `USE_MEDIABROWSER` - `ON`: enable/disable MediaBrowser module.
-	- `USE_ASAN` - `OFF`: enable/disable address sanitizer.
-	- `USE_UBSAN` - `OFF`: enable/disable undefined behavior sanitizer.
-	- `USE_LINK_TIME_OPTIMIZATION` - `OFF`: enable/disable Link Time Optimization for release builds.
-	- `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
-	- `FIND_HWACCEL_DRIVERS_PATH` - `OFF`: Find drivers path for hwaccel, useful for universal package.
+    - `CMAKE_INSTALL_PREFIX` - mostly it is `/usr/local`: installation directory.
+    - `CMAKE_BUILD_TYPE` - `Release`.
+    - `LANGUAGES` - `All` - a space-separated list of translations to compile into QMPlay2.
+    - `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
+    - `SET_INSTALL_RPATH` - non-Windows only, `ON` on macOS, `OFF` anywhere else: sets RPATH after installation.
+    - `USE_FFMPEG` - ON: enable/disable FFmpeg module.
+    - `USE_FFMPEG_VAAPI`: autodetect: enabled if libva, libva-drm, and egl exist.
+    - `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exists.
+    - `USE_FFMPEG_AVDEVICE` - autodetect on Linux, `OFF` on non-Linux OS: it allows to use e.g. V4L2 devices.
+    - `USE_INPUTS` - ON: enable/disable Inputs module.
+    - `USE_MODPLUG` - ON: enable/disable Modplug module.
+    - `USE_EXTENSIONS` - ON: enable/disable Extensions module.
+    - `USE_MPRIS2` - Linux/BSD only, `ON`: enable/disable MPRIS2 in Extensions module.
+    - `USE_VISUALIZATIONS` - ON: enable/disable Visualizations module.
+    - `USE_AUDIOFILTERS` - ON: enable/disable AudioFilters module.
+    - `USE_VIDEOFILTERS` - ON: enable/disable VideoFilters module.
+    - `USE_OPENGL` - `ON`: enable/disable OpenGL support.
+    - `USE_VULKAN` - autodetect: enable/disable Vulkan support.
+    - `USE_GLSLC` - `OFF`: enable/disable GLSL -> SPIR-V shader compilation when building QMPlay2.
+    - `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist: enable/disable AudioCD module.
+    - `USE_ALSA` - `ON` on Linux: enable/disable ALSA module.
+    - `USE_PORTAUDIO` - `ON` on non-Linux OS: enable/disable PortAudio module.
+    - `USE_PULSEAUDIO` - autodetect on Linux/BSD, `OFF` anywhere else: enable/disable PulseAudio module.
+    - `USE_XVIDEO` - autodetect on X11: enabled if libxv exists: enable/disable XVideo module.
+    - `USE_CHIPTUNE_GME` - autodetect: enabled if libgme exists.
+    - `USE_CHIPTUNE_SID` - autodetect: enabled if libsidplayfp exists.
+    - `USE_TAGLIB` - `ON`: enable/disable tag editor.
+    - `USE_CMD` - Windows only, `OFF`.
+    - `USE_LASTFM` - `ON`: enable/disable LastFM in Extensions module.
+    - `USE_LIBASS` - `ON`: enable/disable libass (subtitles engine) dependency.
+    - `USE_CUVID` - `ON`: enable/disable CUVID module.
+    - `USE_LYRICS` - `ON`: enable/disable lyrics module.
+    - `USE_MEDIABROWSER` - `ON`: enable/disable MediaBrowser module.
+    - `USE_RADIO` - `ON`: enable/disable Radio Browser module.
+    - `USE_YOUTUBE` - `ON`: enable/disable YouTube module.
+    - `USE_ASAN` - `OFF`: enable/disable address sanitizer.
+    - `USE_UBSAN` - `OFF`: enable/disable undefined behavior sanitizer.
+    - `USE_LINK_TIME_OPTIMIZATION` - `OFF`: enable/disable Link Time Optimization for release builds.
+    - `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
+    - `USE_UPDATES` - `ON`: enable/disable software updates.
+    - `FIND_HWACCEL_DRIVERS_PATH` - `OFF`: Find drivers path for hwaccel, useful for universal package.
 
-Using other Qt installation using CMake:
+Using other Qt installation of CMake:
 - `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
 - `Qt5DBus_DIR`: path to the Qt5DBus cmake directory (e.g. `~/qtbase/lib/cmake/Qt5DBus`).
 - `Qt5LinguistTools_DIR`: path to the Qt5LinguistTools cmake directory (e.g. `~/qtbase/lib/cmake/Qt5LinguistTools`).
@@ -274,7 +277,7 @@ You can strip binaries during installation to save disk space: `sudo make -j8 in
 
 Example commands (execute it in QMPlay2 directory with source code):
 
-- Simple installation (rely on autodetection, `strip` reduces size but it makes that debugging is impossible):
+- Simple installation (rely on autodetection, `strip` reduces size, but it makes debugging unavailable):
 
 ```sh
 $ mkdir build
@@ -323,7 +326,7 @@ $ sudo make uninstall
 #### Windows (cross-compilation):
 
 - Install all required MinGW packages (I recommend AUR MinGW packages).
-- Some libraries are incompatible, uses unneeded dependencies or doesn't exist in repository - you should built them on your own.
+- Some libraries are incompatible, use unneeded dependencies or don't exist in repository - you should built them on your own.
 - Run `cmake` from cross-compilation toolchain.
 
 ##### Other information for Windows

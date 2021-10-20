@@ -1,0 +1,10 @@
+Texture2D inImg : register(t0);
+RWBuffer<float2> outImg : register(u0);
+uint linesize : register(c0);
+
+[numthreads(16, 16, 1)]
+
+void main(uint3 dispatchThreadId : SV_DispatchThreadID)
+{
+    outImg[dispatchThreadId.y * linesize + dispatchThreadId.x] = inImg.Load(dispatchThreadId);
+};

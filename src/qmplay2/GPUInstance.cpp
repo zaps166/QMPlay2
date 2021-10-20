@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -73,10 +73,14 @@ shared_ptr<GPUInstance> GPUInstance::create()
     return nullptr;
 }
 
+void GPUInstance::prepareDestroy()
+{
+}
+
 shared_ptr<HWDecContext> GPUInstance::getHWDecContext() const
 {
-    if (auto videoWriter = getVideoOutput())
-        return videoWriter->hwDecContext();
+    if (m_videoWriter)
+        return m_videoWriter->hwDecContext();
     return nullptr;
 }
 
@@ -85,6 +89,10 @@ bool GPUInstance::setHWDecContextForVideoOutput(const shared_ptr<HWDecContext> &
     return createOrGetVideoOutput()->setHWDecContext(hwDecContext);
 }
 
+void GPUInstance::clearVideoOutput()
+{
+    m_videoWriter = nullptr;
+}
 void GPUInstance::resetVideoOutput()
 {
     delete m_videoWriter;

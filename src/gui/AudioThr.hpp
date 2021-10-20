@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -54,10 +54,6 @@ private:
     inline uchar currentChannels() const;
     inline uint currentSampleRate() const;
 
-#ifdef Q_OS_WIN
-    void timerEvent(QTimerEvent *) override;
-#endif
-
     SndResampler sndResampler;
     uchar realChannels, channels;
     uint  realSample_rate, sample_rate;
@@ -68,9 +64,6 @@ private:
     double tmp_time, silence_step;
     volatile double doSilence;
     QMutex silenceChMutex;
-#ifdef Q_OS_WIN
-    bool canUpdatePos, canUpdateBitrate;
-#endif
     bool allowAudioDrain = false;
 
     QVector<QMPlay2Extensions *> visualizations;

@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -38,12 +38,16 @@ cuGraphicsSubResourceGetMappedArrayType graphicsSubResourceGetMappedArray = null
 cuGraphicsUnmapResourcesType graphicsUnmapResources = nullptr;
 cuGraphicsUnregisterResourceType graphicsUnregisterResource = nullptr;
 cuMemcpy2DAsyncType memcpy2DAsync = nullptr;
+cuImportExternalSemaphoreType importExternalSemaphore = nullptr;
+cuSignalExternalSemaphoresAsyncType signalExternalSemaphoresAsync = nullptr;
+cuWaitExternalSemaphoresAsyncType waitExternalSemaphoresAsync = nullptr;
+cuDestroyExternalSemaphoreType destroyExternalSemaphore = nullptr;
 cuStreamCreateType streamCreate = nullptr;
-cuStreamSynchronizeType streamSynchronize = nullptr;
 cuStreamDestroyType streamDestroy = nullptr;
 cuImportExternalMemory importExternalMemory = nullptr;
 cuExternalMemoryGetMappedBuffer externalMemoryGetMappedBuffer = nullptr;
 cuDestroyExternalMemory destroyExternalMemory = nullptr;
+cuDeviceGetPCIBusId deviceGetPCIBusId = nullptr;
 cuMemFree memFree = nullptr;
 cuCtxDestroyType ctxDestroy = nullptr;
 
@@ -96,18 +100,25 @@ bool load(bool doInit, bool gl, bool vk)
         if (vk)
         {
             memcpy2DAsync = (cuMemcpy2DAsyncType)lib.resolve("cuMemcpy2DAsync_v2");
+            importExternalSemaphore = (cuImportExternalSemaphoreType)lib.resolve("cuImportExternalSemaphore");
+            signalExternalSemaphoresAsync = (cuSignalExternalSemaphoresAsyncType)lib.resolve("cuSignalExternalSemaphoresAsync");
+            waitExternalSemaphoresAsync = (cuWaitExternalSemaphoresAsyncType)lib.resolve("cuWaitExternalSemaphoresAsync");
+            destroyExternalSemaphore = (cuDestroyExternalSemaphoreType)lib.resolve("cuDestroyExternalSemaphore");
             streamCreate = (cuStreamCreateType)lib.resolve("cuStreamCreate");
-            streamSynchronize = (cuStreamSynchronizeType)lib.resolve("cuStreamSynchronize");
             streamDestroy = (cuStreamDestroyType)lib.resolve("cuStreamDestroy_v2");
             importExternalMemory = (cuImportExternalMemory)lib.resolve("cuImportExternalMemory");
             externalMemoryGetMappedBuffer = (cuExternalMemoryGetMappedBuffer)lib.resolve("cuExternalMemoryGetMappedBuffer");
             destroyExternalMemory = (cuDestroyExternalMemory)lib.resolve("cuDestroyExternalMemory");
+            deviceGetPCIBusId = (cuDeviceGetPCIBusId)lib.resolve("cuDeviceGetPCIBusId");
             memFree = (cuMemFree)lib.resolve("cuMemFree_v2");
 
             hasPointers &=
                 memcpy2DAsync &&
+                importExternalSemaphore &&
+                signalExternalSemaphoresAsync &&
+                waitExternalSemaphoresAsync &&
+                destroyExternalSemaphore &&
                 streamCreate &&
-                streamSynchronize &&
                 streamDestroy &&
                 importExternalMemory &&
                 externalMemoryGetMappedBuffer &&

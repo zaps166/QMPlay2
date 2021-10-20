@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -40,6 +40,7 @@
 #include <QMessageBox>
 #include <QStyleOption>
 #include <QGuiApplication>
+#include <QRegularExpression>
 
 extern "C"
 {
@@ -48,6 +49,7 @@ extern "C"
 }
 
 #include <cmath>
+#include <vector>
 
 static inline void swapArray(quint8 *a, quint8 *b, int size)
 {
@@ -107,10 +109,20 @@ QString Functions::Url(QString url, const QString &pth)
         return url;
     }
 
+    const auto oldErrorMode = ::SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX);
+    auto driveBits = GetLogicalDrives() & 0x3ffffff;
+    ::SetErrorMode(oldErrorMode);
+
     QStringList drives;
-    QFileInfoList fIL = QDir::drives();
-    for (const QFileInfo &fI : asConst(fIL))
-        drives += getUrlScheme(fI.path());
+    char driveLetter[] = "A";
+    while (driveBits)
+    {
+        if (driveBits & 1)
+            drives.append(driveLetter);
+        ++driveLetter[0];
+        driveBits >>= 1;
+    }
+
     if (drives.contains(scheme))
     {
         url = "file://" + url;
@@ -796,11 +808,7 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool de
 
         if (url.startsWith("http"))
             av_dict_set(&options, "icy", icy ? "1" : "0", 0);
-#if LIBAVFORMAT_VERSION_INT >= AV_VERSION_INT(57, 56, 100)
         av_dict_set(&options, "user_agent", userAgent, 0);
-#else
-        av_dict_set(&options, "user-agent", userAgent, 0);
-#endif
 
         if (!cookies.isEmpty())
             av_dict_set(&options, "headers", "Cookie: " + cookies + "\r\n", 0);
@@ -982,4 +990,54 @@ bool Functions::isX11EGL()
 {
     static bool isEGL = (QString(qgetenv("QT_XCB_GL_INTEGRATION")).compare("xcb_egl", Qt::CaseInsensitive) == 0);
     return isEGL;
+}
+
+bool Functions::compareText(const QString &a, const QString &b)
+{
+    QRegularExpression rx(R"(\d+)");
+
+    auto fillMatches = [](auto &&matchIt, auto &&matches) {
+        while (matchIt.hasNext())
+        {
+            const auto match = matchIt.next();
+            matches.emplace_back(match.capturedStart(), match.captured().length());
+        }
+    };
+
+    std::vector<std::pair<int, int>> matchesA, matchesB;
+    fillMatches(rx.globalMatch(a), matchesA);
+    fillMatches(rx.globalMatch(b), matchesB);
+
+    const int n = qMin(matchesA.size(), matchesB.size());
+    if (n > 0)
+    {
+        auto newA = a;
+        auto newB = b;
+        for (int i = n - 1; i >= 0; --i)
+        {
+            const auto &matchA = matchesA[i];
+            const auto &matchB = matchesB[i];
+
+            const int lenA = matchA.second;
+            const int lenB = matchB.second;
+
+            const int diff = qAbs(lenA - lenB);
+
+            if (diff > 0)
+            {
+                const QString zeros(diff, QChar('0'));
+                if (lenA > lenB)
+                {
+                    newB.insert(matchB.first, zeros);
+                }
+                else if (lenB > lenA)
+                {
+                    newA.insert(matchA.first, zeros);
+                }
+            }
+        }
+        return (newA < newB);
+    }
+
+    return (a < b);
 }

@@ -1,5 +1,19 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.9)
 project(QMPlay2)
+
+if(WIN32)
+    set(CUSTOM_INCLUDE_DIR "" CACHE STRING "Custom include directory")
+    set(CUSTOM_LINK_DIR "" CACHE STRING "Custom link directory")
+
+    if(CUSTOM_INCLUDE_DIR)
+        set(CMAKE_INCLUDE_PATH ${CUSTOM_INCLUDE_DIR})
+        include_directories(${CUSTOM_INCLUDE_DIR})
+    endif()
+    if(CUSTOM_LINK_DIR)
+        set(CMAKE_LIBRARY_PATH ${CUSTOM_LINK_DIR})
+        link_directories(${CUSTOM_LINK_DIR})
+    endif()
+endif()
 
 # Set default build type as Release
 if(NOT CMAKE_BUILD_TYPE)
@@ -11,7 +25,7 @@ if(ANDROID)
         set(ANDROID_EXTRA_LIBS_DIR "${CMAKE_SYSROOT}/usr/lib/arm-linux-androideabi")
     endif()
     set(ANDROID_EXTRA_LIBS
-        "${ANDROID_EXTRA_LIBS_DIR}/libavcodec.so,${ANDROID_EXTRA_LIBS_DIR}/libavformat.so,${ANDROID_EXTRA_LIBS_DIR}/libavutil.so,${ANDROID_EXTRA_LIBS_DIR}/libswresample.so,${ANDROID_EXTRA_LIBS_DIR}/libswscale.so"
+        "${ANDROID_EXTRA_LIBS_DIR}/libavcodec.so,${ANDROID_EXTRA_LIBS_DIR}/libavformat.so,${ANDROID_EXTRA_LIBS_DIR}/libavutil.so,${ANDROID_EXTRA_LIBS_DIR}/libswresample.so,${ANDROID_EXTRA_LIBS_DIR}/libswscale.so,${ANDROID_EXTRA_LIBS_DIR}/libssl_1_1.so,${ANDROID_EXTRA_LIBS_DIR}/libcrypto_1_1.so"
     )
     set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/gui/Android/manifest")
 endif()
@@ -29,19 +43,16 @@ else()
     find_package(DummyPkgConfig REQUIRED)
 endif()
 
-find_package(Qt5Widgets 5.6 REQUIRED)
-if(Qt5Widgets_VERSION VERSION_LESS 5.6.3)
-    message(AUTHOR_WARNING "Qt5 >= 5.6.3, >= 5.9.1 is recommended")
-endif()
+find_package(Qt5Widgets 5.10 REQUIRED)
 
-pkg_check_modules(LIBAVFORMAT REQUIRED libavformat>=57.71.100)
-pkg_check_modules(LIBAVCODEC REQUIRED libavcodec>=57.89.100)
-pkg_check_modules(LIBSWSCALE REQUIRED libswscale>=4.6.100)
-pkg_check_modules(LIBAVUTIL REQUIRED libavutil>=55.58.100)
-pkg_check_modules(LIBSWRESAMPLE REQUIRED libswresample>=2.7.100)
+pkg_check_modules(LIBAVFORMAT REQUIRED libavformat>=58.12.100)
+pkg_check_modules(LIBAVCODEC REQUIRED libavcodec>=58.18.100)
+pkg_check_modules(LIBSWSCALE REQUIRED libswscale>=5.1.100)
+pkg_check_modules(LIBAVUTIL REQUIRED libavutil>=56.14.100)
+pkg_check_modules(LIBSWRESAMPLE REQUIRED libswresample>=3.1.100)
 
 # Add FFmpeg link directories here, because it must be global.
-# "target_link_directories" is supported since CMake 3.13, but QMPlay2 supports CMake 3.1.
+# "target_link_directories" is supported since CMake 3.13, but QMPlay2 supports CMake 3.9.
 link_directories(
     ${LIBAVFORMAT_LIBRARY_DIRS}
     ${LIBAVCODEC_LIBRARY_DIRS}
@@ -56,7 +67,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-if(${CMAKE_VERSION} VERSION_GREATER "3.16.0" OR ${CMAKE_VERSION} VERSION_EQUAL "3.16.0")
+if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
     option(USE_PCH "Use precompiled headers" OFF)
     add_feature_info(PCH USE_PCH "Use precompiled headers")
 endif()
@@ -80,6 +91,9 @@ endif()
 
 add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DQT_USE_FAST_OPERATOR_PLUS)
 
+option(USE_UPDATES "Build with software updates" ON)
+add_feature_info(Updates USE_UPDATES "Build with software updates")
+
 if(WIN32)
     option(USE_CMD "Show CMD when running QMPlay2" OFF)
     mark_as_advanced(USE_CMD)
@@ -92,7 +106,7 @@ if(USE_OPENGL)
     add_definitions(-DUSE_OPENGL)
 endif()
 
-if(NOT APPLE AND (Qt5Gui_VERSION VERSION_GREATER "5.10.0" OR Qt5Gui_VERSION VERSION_EQUAL "5.10.0"))
+if(NOT APPLE)
     get_target_property(Qt5GuiFeatures Qt5::Gui INTERFACE_QT_ENABLED_FEATURES)
     list(FIND Qt5GuiFeatures "vulkan" Qt5Vulkan)
     if(${Qt5Vulkan} GREATER -1)
@@ -111,16 +125,10 @@ add_feature_info(GLSLC USE_GLSLC "Compile Vulkan shaders")
 if(NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     option(USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications" ON)
     add_feature_info("Freedesktop notifications" USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications")
+
+    option(USE_DBUS_SUSPEND "Use D-Bus suspend" ON)
+    add_feature_info("D-Bus suspend" USE_DBUS_SUSPEND "Use D-Bus suspend")
 endif()
-
-option(USE_MEDIABROWSER "Build with MediaBrowser support" ON)
-add_feature_info(MediaBrowser USE_MEDIABROWSER "Build with MediaBrowser support")
-
-option(USE_LASTFM "Build with LastFM support" ON)
-add_feature_info(LastFM USE_LASTFM "Build with LastFM support")
-
-option(USE_LYRICS "Build with lyrics support" ON)
-add_feature_info(Lyrics USE_LYRICS "Build with lyrics support")
 
 option(USE_LIBASS "Build with libass support" ON)
 add_feature_info(libass USE_LIBASS "Build with libass support")
@@ -133,6 +141,30 @@ add_feature_info(Modplug USE_MODPLUG "Build with Modplug module")
 
 option(USE_EXTENSIONS "Build with Extensions module" ON)
 add_feature_info(Extensions USE_EXTENSIONS "Build with Extensions module")
+
+if(USE_EXTENSIONS)
+    option(USE_MEDIABROWSER "Build with MediaBrowser support" ON)
+    add_feature_info(MediaBrowser USE_MEDIABROWSER "Build with MediaBrowser support")
+
+    option(USE_LASTFM "Build with LastFM support" ON)
+    add_feature_info(LastFM USE_LASTFM "Build with LastFM support")
+
+    option(USE_LYRICS "Build with lyrics support" ON)
+    add_feature_info(Lyrics USE_LYRICS "Build with lyrics support")
+
+    option(USE_RADIO "Build with Radio Browser support" ON)
+    add_feature_info(Radio USE_RADIO "Build with Radio Browser support")
+
+    option(USE_YOUTUBE "Build with YouTube support" ON)
+    add_feature_info(YouTube USE_YOUTUBE "Build with YouTube support")
+endif()
+
+if(USE_YOUTUBE OR USE_MEDIABROWSER)
+    set(USE_YOUTUBEDL ON)
+    add_definitions(-DUSE_YOUTUBEDL)
+else()
+    set(USE_YOUTUBEDL OFF)
+endif()
 
 if(USE_EXTENSIONS AND NOT WIN32 AND NOT APPLE AND NOT ANDROID)
     option(USE_MPRIS2 "Build Extensions with MPRIS2 support" ON)
@@ -172,6 +204,11 @@ add_feature_info(VDPAU USE_FFMPEG_VDPAU "Build VDPAU acceleration into FFmpeg")
 if(WIN32)
     option(USE_FFMPEG_DXVA2 "Build DXVA2 acceleration into FFmpeg" ON)
     add_feature_info(DXVA2 USE_FFMPEG_DXVA2 "Build DXVA2 acceleration into FFmpeg")
+
+    if(USE_VULKAN)
+        option(USE_FFMPEG_D3D11VA "Build D3D11VA acceleration into FFmpeg" ON)
+        add_feature_info(DXVA2 USE_FFMPEG_D3D11VA "Build D3D11VA acceleration into FFmpeg")
+    endif()
 endif()
 
 if(APPLE)
@@ -216,6 +253,12 @@ if(NOT DEFINED USE_PULSEAUDIO)
 endif()
 option(USE_PULSEAUDIO "Build with PulseAudio module" ${LIBPULSE_FOUND})
 add_feature_info(PulseAudio USE_PULSEAUDIO "Build with PulseAudio module")
+
+if(NOT DEFINED USE_PIPEWIRE)
+    pkg_check_modules(LIBPIPEWIRE libpipewire-0.3)
+endif()
+option(USE_PIPEWIRE "Build with PipeWire module" ${LIBPIPEWIRE_FOUND})
+add_feature_info(PipeWire USE_PIPEWIRE "Build with PipeWire module")
 
 if(NOT DEFINED USE_XVIDEO)
     pkg_check_modules(LIB_X11_XV x11 xv)
@@ -345,7 +388,7 @@ if(NOT WIN32 AND NOT APPLE)
     set(SOLID_ACTIONS_INSTALL_PATH ${SOLID_ACTIONS_DEFAULT} CACHE STRING "The destination path for the Solid actions (\"None\" to disable)")
 endif()
 
-if(USE_FREEDESKTOP_NOTIFICATIONS OR USE_MPRIS2)
+if(USE_FREEDESKTOP_NOTIFICATIONS OR USE_MPRIS2 OR USE_DBUS_SUSPEND)
     find_package(Qt5DBus REQUIRED)
 endif()
 
@@ -363,6 +406,7 @@ if(USE_VULKAN)
     set(Vulkan_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/src/qmplay2/vulkan/headers/include")
     set(QMVK_LIBRARY_TYPE STATIC)
     set(QMVK_USE_PCH ${USE_PCH})
+    set(QMVK_WAIT_TIMEOUT_MS 2500)
     add_subdirectory(src/qmvk)
 endif()
 add_subdirectory(src/qmplay2)

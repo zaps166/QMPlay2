@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -45,9 +45,6 @@ AudioThr::AudioThr(PlayClass &playC, const QStringList &pluginsName) :
     filters = AudioFilter::open();
 
     connect(this, SIGNAL(pauseVisSig(bool)), this, SLOT(pauseVis(bool)));
-#ifdef Q_OS_WIN
-    startTimer(500);
-#endif
 
     if (QMPlay2GUI.mainW->property("fullScreen").toBool())
         QMPlay2GUI.screenSaver->inhibit(1);
@@ -61,16 +58,16 @@ AudioThr::~AudioThr()
 
 void AudioThr::stop(bool terminate)
 {
-    for (QMPlay2Extensions *vis : asConst(visualizations))
+    for (QMPlay2Extensions *vis : qAsConst(visualizations))
         vis->visState(false);
-    for (AudioFilter *filter : asConst(filters))
+    for (AudioFilter *filter : qAsConst(filters))
         delete filter;
     playC.audioSeekPos = -1;
     AVThread::stop(terminate);
 }
 void AudioThr::clearVisualizations()
 {
-    for (QMPlay2Extensions *vis : asConst(visualizations))
+    for (QMPlay2Extensions *vis : qAsConst(visualizations))
         vis->clearSoundData();
 }
 
@@ -113,9 +110,9 @@ bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate, b
             sample_rate = realSample_rate;
         }
 
-        for (QMPlay2Extensions *vis : asConst(visualizations))
+        for (QMPlay2Extensions *vis : qAsConst(visualizations))
             vis->visState(true, currentChannels(), currentSampleRate());
-        for (AudioFilter *filter : asConst(filters))
+        for (AudioFilter *filter : qAsConst(filters))
             filter->setAudioParameters(currentChannels(), currentSampleRate());
 
         return true;
@@ -178,9 +175,6 @@ void AudioThr::run()
     bool paused = false;
     bool oneFrame = false;
     tmp_br = tmp_time = 0;
-#ifdef Q_OS_WIN
-    canUpdatePos = canUpdateBitrate = false;
-#endif
     while (!br)
     {
         double delay = 0.0, audio_pts = 0.0; //"audio_pts" odporny na zerowanie przy przewijaniu
@@ -191,7 +185,7 @@ void AudioThr::run()
             const bool hasAPackets = playC.aPackets.canFetch();
             bool hasBufferedSamples = false;
             if (playC.endOfStream && !hasAPackets)
-                for (AudioFilter *filter : asConst(filters))
+                for (AudioFilter *filter : qAsConst(filters))
                     if (filter->bufferedSamples())
                     {
                         hasBufferedSamples = true;
@@ -200,9 +194,6 @@ void AudioThr::run()
 
             if ((playC.paused && !oneFrame) || (!hasAPackets && !hasBufferedSamples) || playC.waitForData || (playC.audioSeekPos <= 0.0 && playC.videoSeekPos > 0.0))
             {
-#ifdef Q_OS_WIN
-                canUpdatePos = canUpdateBitrate = false;
-#endif
                 tmp_br = tmp_time = 0;
                 if (playC.paused && !paused)
                 {
@@ -274,12 +265,8 @@ void AudioThr::run()
 
             if (tmp_time >= 1000.0)
             {
-#ifdef Q_OS_WIN
-                canUpdateBitrate = true;
-#else
                 emit playC.updateBitrateAndFPS(round((tmp_br << 3) / tmp_time), -1);
                 tmp_br = tmp_time = 0;
-#endif
             }
 
             if (m_resamplerFirst && sndResampler.isOpen())
@@ -290,7 +277,7 @@ void AudioThr::run()
             }
 
             delay = writer->getParam("delay").toDouble();
-            for (AudioFilter *filter : asConst(filters))
+            for (AudioFilter *filter : qAsConst(filters))
             {
                 if (flushAudio)
                     filter->clearBuffers();
@@ -341,11 +328,7 @@ void AudioThr::run()
                     audio_pts = playC.audio_current_pts = ts - delay;
                     if (!playC.vThr && playC.audioSeekPos <= 0)
                     {
-#ifdef Q_OS_WIN
-                        playC.chPos(playC.audio_current_pts, playC.flushAudio);
-#else
                         playC.chPos(playC.audio_current_pts);
-#endif
                     }
                 }
 
@@ -368,10 +351,6 @@ void AudioThr::run()
                 if (!qIsNaN(ts))
                     ts += playC.audio_last_delay;
 
-#ifdef Q_OS_WIN
-                canUpdatePos = true;
-#endif
-
                 if (playC.skipAudioFrame <= 0.0 || oneFrame)
                 {
                     const double speed = playC.speed;
@@ -389,7 +368,7 @@ void AudioThr::run()
                             data[i] *= vol[i & 1];
                     }
 
-                    for (QMPlay2Extensions *vis : asConst(visualizations))
+                    for (QMPlay2Extensions *vis : qAsConst(visualizations))
                         vis->sendSoundData(decodedChunk);
 
                     QByteArray dataToWrite;
@@ -425,7 +404,13 @@ void AudioThr::run()
                     }
 
                     oneFrame = false;
-                    writer->write(dataToWrite);
+
+                    do
+                    {
+                        const int ret = writer->write(dataToWrite);
+                        if (ret >= 0 || !writer->readyWrite())
+                            break;
+                    } while (!br && !br2);
                 }
                 else
                 {
@@ -462,28 +447,8 @@ inline uint AudioThr::currentSampleRate() const
     return m_resamplerFirst ? sample_rate : realSample_rate;
 }
 
-#ifdef Q_OS_WIN
-void AudioThr::timerEvent(QTimerEvent *)
-{
-    if (br || !isRunning())
-        return;
-    if (canUpdatePos)
-    {
-        if (!playC.vThr)
-            emit playC.updatePos(playC.pos);
-        canUpdatePos = false;
-    }
-    if (canUpdateBitrate)
-    {
-        emit playC.updateBitrateAndFPS(round((tmp_br << 3) / tmp_time), -1);
-        canUpdateBitrate = false;
-        tmp_time = tmp_br = 0;
-    }
-}
-#endif
-
 void AudioThr::pauseVis(bool b)
 {
-    for (QMPlay2Extensions *vis : asConst(visualizations))
+    for (QMPlay2Extensions *vis : qAsConst(visualizations))
         vis->visState(!b, currentChannels(), currentSampleRate());
 }

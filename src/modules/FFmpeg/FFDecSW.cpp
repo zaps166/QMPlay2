@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -236,8 +236,10 @@ int FFDecSW::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
     {
         if (frame->best_effort_timestamp != AV_NOPTS_VALUE)
             ts = frame->best_effort_timestamp * av_q2d(m_timeBase);
-        else
+        else if (encodedPacket.hasDts() || encodedPacket.hasPts())
             ts = encodedPacket.ts();
+        else
+            ts = qQNaN();
     }
     else
     {
@@ -354,7 +356,7 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
 
     return bytesConsumed < 0 ? -1 : bytesConsumed;
 }
-bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush)
+bool FFDecSW::decodeSubtitle(const QVector<Packet> &encodedPackets, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush)
 {
     if (codec_ctx->codec_type != AVMEDIA_TYPE_SUBTITLE)
         return false;
@@ -362,27 +364,28 @@ bool FFDecSW::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD
     if (flush)
         m_subtitles.clear();
 
-    if (encodedPacket.isEmpty())
+    if (encodedPackets.isEmpty())
     {
         if (flush)
             return false;
-        return getFromBitmapSubsBuffer(osd, pos);
     }
-
-    decodeFirstStep(encodedPacket, false);
-
-    m_subtitles.emplace_back();
-    auto &subtitle = m_subtitles.back();
-
-    int gotSubtitles = 0;
-    if (avcodec_decode_subtitle2(codec_ctx, subtitle.av(), &gotSubtitles, packet) >= 0 && gotSubtitles && subtitle.format == 0)
+    else for (auto &&encodedPacket : encodedPackets)
     {
-        subtitle.time = subtitle.start_display_time / 1000.0 + encodedPacket.ts();
-        subtitle.frameSize = size;
-    }
-    else
-    {
-        m_subtitles.pop_back();
+        decodeFirstStep(encodedPacket, false);
+
+        m_subtitles.emplace_back();
+        auto &subtitle = m_subtitles.back();
+
+        int gotSubtitles = 0;
+        if (avcodec_decode_subtitle2(codec_ctx, subtitle.av(), &gotSubtitles, packet) >= 0 && gotSubtitles && subtitle.format == 0)
+        {
+            subtitle.time = subtitle.start_display_time / 1000.0 + encodedPacket.ts();
+            subtitle.frameSize = size;
+        }
+        else
+        {
+            m_subtitles.pop_back();
+        }
     }
 
     return getFromBitmapSubsBuffer(osd, pos);
@@ -464,8 +467,11 @@ void FFDecSW::setPixelFormat()
 
     const QByteArray srcPixFmtName = srcPixDesc->name;
 
-    for (const AVPixelFormat pixFmt : asConst(supportedPixelFormats))
+    for (const AVPixelFormat pixFmt : qAsConst(supportedPixelFormats))
     {
+        if (!sws_isSupportedOutput(pixFmt))
+            continue;
+
         auto pixDesc = av_pix_fmt_desc_get(pixFmt);
         Q_ASSERT(pixDesc);
 
@@ -545,7 +551,7 @@ void FFDecSW::setPixelFormat()
             }
         }
 
-        qDebug().nospace() << "Fallback pixel format:" << desiredPixFmtName;
+        qDebug() << "Fallback pixel format:" << desiredPixFmtName;
         break;
     }
 }

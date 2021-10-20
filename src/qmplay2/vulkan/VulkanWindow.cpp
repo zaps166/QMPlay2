@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -40,7 +40,6 @@
 
 #include <QMPlay2OSD.hpp>
 #include <Functions.hpp>
-#include <CppUtils.hpp>
 #include <Sphere.hpp>
 
 #include <QGuiApplication>
@@ -124,7 +123,14 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     setSurfaceType(VulkanSurface);
     setVulkanInstance(m_instance->qVulkanInstance());
 
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_WIN)
+    switch (m_physicalDevice->properties().vendorID)
+    {
+        case 0x8086: // Intel
+            m_useRenderPassClear = true;
+            break;
+    }
+#elif defined(Q_OS_ANDROID)
     m_useRenderPassClear = true;
 #endif
 
@@ -185,11 +191,16 @@ void Window::setConfig(
        setX11BypassCompositor(bypassCompositor);
     }
 #ifdef Q_OS_WIN
-    else if (m_widget->property("bypassCompositor").toBool() != bypassCompositor)
+    else
     {
-        m_widget->setProperty("bypassCompositor", bypassCompositor);
-        resetSwapChainAndGraphicsPipelines(false);
-        maybeRequestUpdate();
+        if (!m_physicalDevice->checkExtension(VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME))
+            bypassCompositor = true;
+        if (m_widget->property("bypassCompositor").toBool() != bypassCompositor)
+        {
+            m_widget->setProperty("bypassCompositor", bypassCompositor);
+            resetSwapChainAndGraphicsPipelines(false);
+            maybeRequestUpdate();
+        }
     }
 #endif
 }
@@ -310,8 +321,15 @@ void Window::onMatrixChange()
 void Window::initResources() try
 {
     m.device = m_instance->device();
+    if (m.device && *m.device->physicalDevice() != *m_physicalDevice)
+    {
+        m_instance->resetDevice(m.device);
+        m.device.reset();
+    }
     if (!m.device)
+    {
         m.device = m_instance->createDevice(m_physicalDevice);
+    }
 
     m.queue = m.device->queue();
 
@@ -392,9 +410,25 @@ void Window::render()
 {
     bool suboptimal = false;
     bool outOfDate = false;
+    bool canSubmitCommandBufferFromError = false;
 
     if (!ensureDevice())
         return;
+
+    auto submitCommandBuffer = [&] {
+        // In some cases the command buffer has image copy or mipmap generation commands,
+        // so we have to submit the command buffer to prevent desynchronization with
+        // local variables inside the Image class.
+        try
+        {
+            if (canSubmitCommandBufferFromError)
+                m.commandBuffer->endSubmitAndWait();
+        }
+        catch (const vk::SystemError &e)
+        {
+            handleException(e);
+        }
+    };
 
     try
     {
@@ -405,6 +439,7 @@ void Window::render()
             return;
 
         m.commandBuffer->resetAndBegin();
+        canSubmitCommandBufferFromError = true;
 
         ensureSwapChain();
 
@@ -439,21 +474,30 @@ void Window::render()
             m.clearedImages.clear();
 
         const uint32_t imageIdx = m.swapChain->acquireNextImage(&suboptimal);
-        beginRenderPass(imageIdx);
+        if (!suboptimal || m.swapChain->maybeSuboptimal())
+        {
+            auto submitInfo = m.swapChain->getSubmitInfo();
+            HWInterop::SyncDataPtr syncData;
+            if (m_vkHwInterop)
+                syncData = m_vkHwInterop->sync({m_frame}, &submitInfo);
 
-        maybeClear(imageIdx);
-        renderVideo();
-        if (!osdLockers.empty())
-            renderOSD();
+            canSubmitCommandBufferFromError = false;
+            beginRenderPass(imageIdx);
 
-        m.commandBuffer->endRenderPass();
+            maybeClear(imageIdx);
+            renderVideo();
+            if (!osdLockers.empty())
+                renderOSD();
 
-        m.queueLocker = m.queue->lock();
-        m.commandBuffer->endSubmitAndWait(false, [&] {
-            m.swapChain->present(imageIdx, &suboptimal);
-            vulkanInstance()->presentQueued(this);
-        }, m.swapChain->getSubmitInfo());
-        m.queueLocker.unlock(); // It is not unlocked in case of exception
+            m.commandBuffer->endRenderPass();
+
+            m.queueLocker = m.queue->lock();
+            m.commandBuffer->endSubmitAndWait(false, [&] {
+                m.swapChain->present(imageIdx, &suboptimal);
+                vulkanInstance()->presentQueued(this);
+            }, move(submitInfo));
+            m.queueLocker.unlock(); // It is not unlocked in case of exception
+        }
     }
     catch (const vk::OutOfDateKHRError &e)
     {
@@ -463,6 +507,7 @@ void Window::render()
     catch (const vk::SurfaceLostKHRError &e)
     {
         Q_UNUSED(e)
+        submitCommandBuffer();
         resetSurface();
         return;
     }
@@ -474,6 +519,7 @@ void Window::render()
 
     if (outOfDate || (suboptimal && !m.swapChain->maybeSuboptimal()))
     {
+        submitCommandBuffer();
         resetSwapChainAndGraphicsPipelines(true);
         maybeRequestUpdate();
     }
@@ -495,7 +541,7 @@ vector<unique_lock<mutex>> Window::prepareOSD(bool &changed)
     lockers.reserve(1 + m_osd.size());
     lockers.push_back(move(locker));
 
-    for (auto &&osd : asConst(m_osd))
+    for (auto &&osd : qAsConst(m_osd))
     {
         lockers.push_back(osd->lock());
 
@@ -552,7 +598,7 @@ void Window::renderOSD()
 
     vector<const QMPlay2OSD::Image *> osdImages;
 
-    for (auto &&osd : asConst(m_osd))
+    for (auto &&osd : qAsConst(m_osd))
     {
         osd->iterate([&](const QMPlay2OSD::Image &image) {
             if (image.dataBufferView->buffer()->device() != m.device)
@@ -631,7 +677,7 @@ void Window::renderOSD()
         }
         else
         {
-            multiplier = QVector2D(1.0, 1.0);
+            multiplier = QVector2D(1.0f, 1.0f);
             osdPipeline = m.osdAssPipeline;
             osdDescriptorPool = m.osdAssDescriptorPool;
             memObjectDescrs = &osdAssMemoryObjects[osdAssMemoryObjectsIdx++];
@@ -647,8 +693,8 @@ void Window::renderOSD()
             m_subsRect.y() * 2.0f / winSize.height()
         );
         mat.translate(
-            img->rect.x() * 2.0f * multiplier.x() / winSize.width(),
-            img->rect.y() * 2.0f * multiplier.y() / winSize.height()
+            img->rect.x() * 2.0f * multiplier.x() / (winSize.width()  - 1.0f),
+            img->rect.y() * 2.0f * multiplier.y() / (winSize.height() - 1.0f)
         );
         mat.scale(
             img->rect.width()  * 2.0f * multiplier.x() / winSize.width(),
@@ -839,8 +885,8 @@ void Window::ensureVideoPipeline()
         createInfo.renderPass = m.renderPass;
         createInfo.size = m.swapChain->size();
         createInfo.pushConstantsSize = sizeof(VertPushConstants);
-        createInfo.vertexBindingDescrs = vertexBindingDescrs;
-        createInfo.vertexAttrDescrs = vertexAttrDescrs;
+        createInfo.vertexBindingDescrs = move(vertexBindingDescrs);
+        createInfo.vertexAttrDescrs = move(vertexAttrDescrs);
         m.videoPipeline = GraphicsPipeline::create(createInfo);
     }
 
@@ -984,12 +1030,12 @@ void Window::fillVerticesBuffer()
     verticesBuffer->unmap();
 
     if (m.verticesStagingBuffer)
-        m.verticesStagingBuffer->copyTo(m.verticesBuffer, *m.commandBuffer);
+        m.verticesStagingBuffer->copyTo(m.verticesBuffer, m.commandBuffer);
 }
 
 bool Window::ensureHWImageMapped()
 {
-    if (m_vkHwInterop && !m_frame.vulkanImage())
+    if (m_vkHwInterop)
     {
         m_vkHwInterop->map(m_frame);
         if (m_vkHwInterop->hasError())
@@ -1181,12 +1227,12 @@ void Window::ensureMipmaps()
 
     if (m.shouldUpdateImageMipmap)
     {
-        m.image->copyTo(m.imageMipmap, *m.commandBuffer);
+        m.image->copyTo(m.imageMipmap, m.commandBuffer);
         m.shouldUpdateImageMipmap = false;
     }
     else if (mustRegenerateMipmaps)
     {
-        m.imageMipmap->maybeGenerateMipmaps(*m.commandBuffer);
+        m.imageMipmap->maybeGenerateMipmaps(m.commandBuffer);
     }
 }
 bool Window::mustGenerateMipmaps()
@@ -1298,7 +1344,6 @@ bool Window::event(QEvent *e)
         case QEvent::FocusAboutToChange:
         case QEvent::Enter:
         case QEvent::Leave:
-        case QEvent::Wheel:
         case QEvent::TabletMove:
         case QEvent::TabletPress:
         case QEvent::TabletRelease:
@@ -1310,6 +1355,8 @@ bool Window::event(QEvent *e)
         case QEvent::InputMethodQuery:
         case QEvent::TouchCancel:
             return QCoreApplication::sendEvent(parent(), e);
+        case QEvent::Wheel:
+            return QCoreApplication::sendEvent(const_cast<QWidget *>(QMPlay2Core.getVideoDock()), e);
 #endif
         default:
             break;

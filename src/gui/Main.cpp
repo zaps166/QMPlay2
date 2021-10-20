@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -44,6 +44,9 @@
 #include <QDir>
 #ifdef CHECK_FOR_EGL
     #include <QLibrary>
+#endif
+#ifdef Q_OS_MACOS
+    #include <QSurfaceFormat>
 #endif
 
 #include <clocale>
@@ -454,6 +457,10 @@ static QtMessageHandler g_defaultMsgHandler = nullptr;
 static QMutex g_messageHandlerMutex;
 static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &message)
 {
+#ifdef USE_VULKAN
+    if (type == QtWarningMsg && context.category && qstrcmp(context.category, "default") == 0 && message.startsWith("failed to load vulkan", Qt::CaseInsensitive))
+        return;
+#endif
     bool qmplay2Log = false;
     if (QCoreApplication::instance())
     {
@@ -606,6 +613,12 @@ int main(int argc, char *argv[])
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #ifndef USE_OPENGL
     QGuiApplication::setAttribute(Qt::AA_ForceRasterWidgets);
+#endif
+
+#ifdef Q_OS_MACOS
+    auto fmt = QSurfaceFormat::defaultFormat();
+    fmt.setColorSpace(QSurfaceFormat::sRGBColorSpace);
+    QSurfaceFormat::setDefaultFormat(fmt);
 #endif
 
 #ifndef Q_OS_WIN
@@ -777,7 +790,7 @@ int main(int argc, char *argv[])
         qmplay2Gui.loadIcons();
         {
             const QIcon svgIcon = QIcon(":/QMPlay2.svgz");
-            if (!svgIcon.availableSizes().isEmpty())
+            if (svgIcon.availableSizes().size() == 1)
                 QMessageBox::warning(nullptr, QString(), QObject::tr("QtSvg icon engine plugin doesn't exist.\nQMPlay2 will not scale up icons!"));
         }
 

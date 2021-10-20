@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -21,7 +21,6 @@
 #include <VideoFilters.hpp>
 #include <GPUInstance.hpp>
 #include <Functions.hpp>
-#include <CppUtils.hpp>
 #ifdef USE_QML
 #   include <CommonJS.hpp>
 #endif
@@ -30,6 +29,7 @@
 #include <Module.hpp>
 
 #include <QLoggingCategory>
+#include <QStandardPaths>
 #include <QApplication>
 #include <QLibraryInfo>
 #include <QTranslator>
@@ -44,7 +44,10 @@
     #include <windows.h>
     #include <powrprof.h>
 #elif defined Q_OS_MACOS
-    #include <QStandardPaths>
+    #include <QOperatingSystemVersion>
+#elif !defined Q_OS_ANDROID
+    #include <QDBusConnection>
+    #include <QDBusInterface>
 #endif
 
 #include <cstdarg>
@@ -56,6 +59,37 @@ extern "C"
     #include <libavutil/cpu.h>
     #include <libavutil/log.h>
 }
+
+#if defined DBUS_SUSPEND
+class DBusSuspend
+{
+public:
+    DBusSuspend(const QDBusConnection &connection, const QString &name, const QString &pathSuffix = QString())
+        : m_suspendIface(
+              "org.freedesktop." + name,
+              "/org/freedesktop/" + name + pathSuffix,
+              "org.freedesktop." + name + ".Manager",
+              connection
+          )
+    {}
+
+    bool canSuspend()
+    {
+        if (m_suspendIface.isValid())
+            return (m_suspendIface.call("CanSuspend").arguments().at(0).toString().toLower() == "yes");
+        return false;
+    }
+
+    void suspend()
+    {
+        if (m_suspendIface.isValid())
+            m_suspendIface.call("Suspend", QVariant::fromValue(true));
+    }
+
+private:
+    QDBusInterface m_suspendIface;
+};
+#endif
 
 /**/
 
@@ -163,27 +197,6 @@ QString QMPlay2CoreClass::getLongFromShortLanguage(const QString &lng)
     return lang == "C" ? lng : lang;
 }
 
-bool QMPlay2CoreClass::canSuspend()
-{
-#if defined Q_OS_LINUX
-    return !system("systemctl --help 2> /dev/null | grep -q suspend");
-#elif defined Q_OS_WIN || defined Q_OS_MACOS
-    return true;
-#else
-    return false;
-#endif
-}
-void QMPlay2CoreClass::suspend()
-{
-#if defined Q_OS_LINUX
-    Q_UNUSED(system("systemctl suspend > /dev/null 2>&1 &"));
-#elif defined Q_OS_WIN
-    SetSuspendState(false, false, false);
-#elif defined Q_OS_MACOS
-    Q_UNUSED(system("pmset sleepnow > /dev/null 2>&1 &"));
-#endif
-}
-
 int QMPlay2CoreClass::getCPUFlags()
 {
     return av_get_cpu_flags();
@@ -192,7 +205,18 @@ int QMPlay2CoreClass::getCPUFlags()
 #ifdef USE_OPENGL
 bool QMPlay2CoreClass::isGlOnWindowForced()
 {
-    static bool forced = (QApplication::platformName().startsWith("wayland") || QApplication::platformName() == "android");
+    static bool forced = [] {
+#ifdef Q_OS_MACOS
+#   if defined(MAC_OS_X_VERSION_10_14) && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14)
+        return (QOperatingSystemVersion::current() <= QOperatingSystemVersion::MacOSHighSierra);
+#   else
+#       warning "Compiling OpenGL with SDK older than 10.14, native OpenGL window is disabled!"
+        return true;
+#   endif
+#else
+        return (QApplication::platformName().startsWith("wayland") || QApplication::platformName() == "android");
+#endif
+    }();
     return forced;
 }
 #endif
@@ -207,15 +231,27 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
     langDir = shareDir + "lang/";
 
     if (Version::isPortable())
+    {
         settingsDir = QCoreApplication::applicationDirPath() + "/settings/";
+    }
     else
     {
 #if defined(Q_OS_WIN)
         settingsDir = QFileInfo(QSettings(QSettings::IniFormat, QSettings::UserScope, QString()).fileName()).absolutePath() + "/QMPlay2/";
 #elif defined(Q_OS_MACOS)
-        settingsDir = Functions::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation).value(0, settingsDir));
+        settingsDir = Functions::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).value(0));
 #else
-        settingsDir = QDir::homePath() + "/.qmplay2/";
+        const QString configSettingsDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).value(0) + "/QMPlay2/");
+        const QString homeSettingsDir(QDir::homePath() + "/.qmplay2/");
+        if (QFileInfo(configSettingsDir).isDir() || !QFileInfo(homeSettingsDir).isDir())
+        {
+            settingsDir = configSettingsDir;
+        }
+        else
+        {
+            // Backward compatibility
+            settingsDir = homeSettingsDir;
+        }
 #endif
     }
     QDir(settingsDir).mkpath(".");
@@ -265,18 +301,11 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
     QCoreApplication::installTranslator(qtTranslator);
     setLanguage();
 
-#ifdef Q_OS_WIN
-    timeBeginPeriod(1); //Set the timer for 1ms resolution (for Sleep ())
-#endif
-
     av_log_set_level(AV_LOG_ERROR);
     av_log_set_callback(avQMPlay2LogHandler);
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(58, 9, 100)
-    av_register_all();
-#endif
     avformat_network_init();
 
-#if defined(USE_VULKAN)
+#if defined(USE_VULKAN) && !defined(Q_OS_ANDROID)
     settings->init("Renderer", "vulkan");
 #elif defined(USE_OPENGL)
     settings->init("Renderer", "opengl");
@@ -306,7 +335,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
         }
 
         QStringList pluginsName;
-        for (const QFileInfo &fInfo : asConst(pluginsList))
+        for (const QFileInfo &fInfo : qAsConst(pluginsList))
         {
             if (QLibrary::isLibrary(fInfo.filePath()))
             {
@@ -379,7 +408,7 @@ void QMPlay2CoreClass::quit()
 {
     if (settingsDir.isEmpty())
         return;
-    for (Module *pluginInstance : asConst(pluginsInstance))
+    for (Module *pluginInstance : qAsConst(pluginsInstance))
         delete pluginInstance;
     pluginsInstance.clear();
     videoFilters.clear();
@@ -387,15 +416,61 @@ void QMPlay2CoreClass::quit()
     shareDir.clear();
     langDir.clear();
     avformat_network_deinit();
-#ifdef Q_OS_WIN
-    timeEndPeriod(1);
-#endif
     QCoreApplication::removeTranslator(qtTranslator);
     QCoreApplication::removeTranslator(translator);
     delete qtTranslator;
     delete translator;
     delete settings;
-    m_gpuInstance.reset();
+    if (m_gpuInstance)
+    {
+        m_gpuInstance->prepareDestroy();
+        m_gpuInstance.reset();
+    }
+}
+
+bool QMPlay2CoreClass::canSuspend()
+{
+#if defined Q_OS_WIN || defined Q_OS_MACOS
+    m_suspend = 1;
+    return true;
+#elif defined DBUS_SUSPEND
+    auto connection = QDBusConnection::systemBus();
+    if (DBusSuspend(connection, "login1").canSuspend())
+    {
+        m_suspend = 1;
+        return true;
+    }
+    if (DBusSuspend(connection, "ConsoleKit", "/Manager").canSuspend())
+    {
+        m_suspend = 2;
+        return true;
+    }
+#endif
+    return false;
+}
+void QMPlay2CoreClass::suspend()
+{
+    if (m_suspend == 0)
+        return;
+
+#if defined Q_OS_WIN
+    SetSuspendState(false, false, false);
+#elif defined Q_OS_MACOS
+    Q_UNUSED(system("pmset sleepnow > /dev/null 2>&1 &"));
+#elif defined DBUS_SUSPEND
+    auto connection = QDBusConnection::systemBus();
+    switch (m_suspend)
+    {
+        case 1:
+            DBusSuspend(connection, "login1").suspend();
+            break;
+        case 2:
+            DBusSuspend(connection, "ConsoleKit", "/Manager").suspend();
+            break;
+        default:
+            return;
+    }
+#endif
 }
 
 QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
@@ -405,7 +480,7 @@ QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
     if (type == "videoWriters")
         defaultModules << "OpenGL 2" << "XVideo";
     else if (type == "audioWriters")
-        defaultModules << "PulseAudio" << "ALSA";
+        defaultModules << "PipeWire" << "PulseAudio" << "ALSA";
 #elif defined Q_OS_WIN
     if (type == "videoWriters")
         defaultModules << "OpenGL 2" << "DirectDraw";

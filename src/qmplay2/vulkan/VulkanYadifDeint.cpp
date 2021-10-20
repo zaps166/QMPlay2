@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -15,6 +15,8 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#include <Settings.hpp>
 
 #include "../../qmvk/PhysicalDevice.hpp"
 #include "../../qmvk/Device.hpp"
@@ -41,6 +43,7 @@ struct alignas(16) YadifPushConstants
 
 YadifDeint::YadifDeint(const shared_ptr<HWInterop> &hwInterop)
     : VideoFilter(true)
+    , m_spatialCheck(QMPlay2Core.getSettings().getBool("Vulkan/YadifSpatialCheck"))
     , m_instance(m_vkImagePool->instance())
 {
     m_supportedPixelFormats += {
@@ -108,6 +111,11 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
         const uint32_t srcNumPlanes = currImage->numPlanes();
         const bool tff = isTopFieldFirst(currFrame);
 
+        vk::SubmitInfo submitInfo;
+        HWInterop::SyncDataPtr syncData;
+        if (m_vkHwInterop)
+            syncData = m_vkHwInterop->sync({prevFrame, currFrame, nextFrame}, &submitInfo);
+
         m.commandBuffer->resetAndBegin();
         for (uint32_t p = 0; p < 3; ++p)
         {
@@ -135,7 +143,7 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
                 m.computes[p]->groupCount(destImage->size(p))
             );
         }
-        m.commandBuffer->endSubmitAndWait();
+        m.commandBuffer->endSubmitAndWait(move(submitInfo));
 
         if (m_deintFlags & DoubleFramerate)
             deinterlaceDoublerCommon(destFrame);

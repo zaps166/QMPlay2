@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -39,7 +39,7 @@ class DXVA2OpenGL : public OpenGLHWInterop
 {
 public:
     DXVA2OpenGL(AVBufferRef *hwDeviceBufferRef);
-    ~DXVA2OpenGL() final;
+    ~DXVA2OpenGL();
 
     QString name() const override;
 
@@ -74,6 +74,9 @@ public:
     AVBufferRef *m_hwDeviceBufferRef = nullptr;
 
 private:
+    using DXVA2CreateVideoServiceFn = HRESULT(WINAPI *)(IDirect3DDevice9 *, REFIID, void **);
+    DXVA2CreateVideoServiceFn DXVA2CreateVideoService = nullptr;
+
     PFNWGLDXOPENDEVICENVPROC wglDXOpenDeviceNV = nullptr;
     PFNWGLDXSETRESOURCESHAREHANDLENVPROC wglDXSetResourceShareHandleNV = nullptr;
     PFNWGLDXREGISTEROBJECTNVPROC wglDXRegisterObjectNV = nullptr;

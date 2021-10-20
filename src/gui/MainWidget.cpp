@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -30,10 +30,10 @@
 #include <QFileDialog>
 #include <QTreeWidget>
 #include <QListWidget>
+#include <QWindow>
+#include <QScreen>
 #ifdef Q_OS_MACOS
     #include <QProcess>
-    #include <QScreen>
-    #include <QWindow>
 #endif
 #ifdef Q_OS_WIN
     #include <QWinThumbnailToolButton>
@@ -113,8 +113,10 @@ static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
 #endif
 
 /* MainWidget */
-MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
-    updater(this)
+MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
+#ifdef UPDATES
+    : updater(this)
+#endif
 {
     QMPlay2GUI.videoAdjustment = new VideoAdjustmentW;
     QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
@@ -421,7 +423,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
     playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
     bool noplay = false;
-    for (const auto &argument : asConst(arguments))
+    for (const auto &argument : qAsConst(arguments))
     {
         const QString &param = argument.first;
         const QString &data  = argument.second;
@@ -453,8 +455,10 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments) :
         QMPlay2MacExtensions::registerMacOSMediaKeys(std::bind(&MainWidget::processParam, this, std::placeholders::_1, QString()));
 #endif
 
+#ifdef UPDATES
     if (settings.getBool("AutoUpdates"))
         updater.downloadUpdate();
+#endif
 }
 MainWidget::~MainWidget()
 {
@@ -509,21 +513,28 @@ void MainWidget::focusChanged(QWidget *old, QWidget *now)
 
 void MainWidget::processParam(const QString &param, const QString &data)
 {
+    auto getItemsToPlay = [&] {
+        auto items = data.split('\n', QString::SkipEmptyParts);
+        for (auto &&item : items)
+            item = Functions::maybeExtensionAddress(item);
+        return items;
+    };
+
     if (param == "open")
     {
         QMPlay2Core.getSettings().remove("Pos");
         QMPlay2Core.getSettings().remove("Url");
         if (data.contains('\n'))
-            playlistDock->addAndPlay(data.split('\n', QString::SkipEmptyParts));
+            playlistDock->addAndPlay(getItemsToPlay());
         else
-            playlistDock->addAndPlay(data);
+            playlistDock->addAndPlay(Functions::maybeExtensionAddress(data));
     }
     else if (param == "enqueue")
     {
         if (data.contains('\n'))
-            playlistDock->add(data.split('\n', QString::SkipEmptyParts));
+            playlistDock->add(getItemsToPlay());
         else
-            playlistDock->add(data);
+            playlistDock->add(Functions::maybeExtensionAddress(data));
     }
     else if (param == "play")
         playlistDock->start();
@@ -1634,10 +1645,44 @@ void MainWidget::keyPressEvent(QKeyEvent *e)
 }
 void MainWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    if ((fullScreen || isCompactView) && (e->buttons() == Qt::NoButton || videoDock->isTouch))
+    static bool inRestoreState = false;
+    if (!inRestoreState && (fullScreen || isCompactView) && (e->buttons() == Qt::NoButton || videoDock->isTouch))
     {
-        const int trigger1 = qMax<int>( 5, ceil(0.003 * (videoDock->isTouch ? 8 : 1) * width()));
+        const bool isToolbarVisible = mainTB->isVisible();
+
+        bool canDisplayLeftPanel = fullScreen;
+        if (canDisplayLeftPanel && !isToolbarVisible)
+        {
+            const auto winScreen = windowHandle()->screen();
+            const auto winScreenGeo = winScreen->geometry();
+            if (winScreenGeo.x() != 0)
+            {
+                const auto screens = QGuiApplication::screens();
+                for (auto &&screen : screens)
+                {
+                    if (screen == winScreen)
+                        continue;
+
+                    auto geo = screen->geometry();
+                    if (geo.x() >= winScreenGeo.x())
+                        continue;
+
+                    geo.moveLeft(winScreenGeo.x());
+                    if (winScreenGeo.intersects(geo))
+                    {
+                        canDisplayLeftPanel = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        const int trigger1 = canDisplayLeftPanel
+            ? qMax<int>(5, ceil(0.003 * (videoDock->isTouch ? 8 : 1) * width()))
+            : 0
+        ;
         const int trigger2 = qMax<int>(15, ceil(0.025 * (videoDock->isTouch ? 4 : 1) * width()));
+
         if (videoDock->touchEnded)
             videoDock->isTouch = videoDock->touchEnded = false;
 
@@ -1646,14 +1691,17 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
             mPosX = videoDock->mapFromGlobal(e->globalPos()).x();
 
         /* ToolBar */
-        if (!playlistDock->isVisible() && mPosX > trigger1)
+        if (!playlistDock->isVisible() && mPosX >= trigger1)
             showToolBar(e->pos().y() >= height() - mainTB->height() - statusBar->height() + 10);
 
         /* DockWidgets */
-        if (fullScreen && !playlistDock->isVisible() && mPosX <= trigger1)
+        if (canDisplayLeftPanel && !playlistDock->isVisible() && mPosX <= trigger1)
         {
             showToolBar(true); //Before restoring dock widgets - show toolbar and status bar
+
+            inRestoreState = true;
             restoreState(fullScreenDockWidgetState);
+            inRestoreState = false;
 
             const QList<QDockWidget *> tDW = tabifiedDockWidgets(infoDock);
             bool reloadQMPlay2Extensions = false;
@@ -1685,7 +1733,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
                 playlistDock->show();
                 infoDock->show();
 
-                for (QMPlay2Extensions *QMPlay2Ext : asConst(visibleQMPlay2Extensions))
+                for (QMPlay2Extensions *QMPlay2Ext : qAsConst(visibleQMPlay2Extensions))
                     if (!QMPlay2Ext->isVisualization())
                         if (DockWidget *dw = QMPlay2Ext->getDockWidget())
                         {
@@ -1729,10 +1777,13 @@ void MainWidget::closeEvent(QCloseEvent *e)
 
     Settings &settings = QMPlay2Core.getSettings();
 
-    if (!fullScreen && !isCompactView)
-        settings.set("MainWidget/DockWidgetState", saveState());
-    else
-        settings.set("MainWidget/DockWidgetState", dockWidgetState);
+    if (wasShow)
+    {
+        if (!fullScreen && !isCompactView)
+            settings.set("MainWidget/DockWidgetState", saveState());
+        else
+            settings.set("MainWidget/DockWidgetState", dockWidgetState);
+    }
     settings.set("MainWidget/FullScreenDockWidgetState", fullScreenDockWidgetState);
     settings.set("MainWidget/AlwaysOnTop", !!(windowFlags() & Qt::WindowStaysOnTopHint));
 #ifndef Q_OS_MACOS

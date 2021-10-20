@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -29,6 +29,7 @@
 #include <QStringList>
 #include <QWaitCondition>
 
+class StreamInfo;
 class QMPlay2OSD;
 class DemuxerThr;
 class VideoThr;
@@ -82,7 +83,7 @@ public:
         return pos;
     }
 
-    void loadSubsFile(const QString &);
+    void loadSubsFile(const QString &, const QList<StreamInfo *> *streams = nullptr);
 
     void messageAndOSD(const QString &, bool onStatusBar = true, double duration = 1.0);
 
@@ -119,6 +120,8 @@ private:
 
     bool setAudioParams(quint8 realChannels, quint32 realSampleRate);
 
+    void loadAssFonts(const QList<StreamInfo *> &streams);
+
     inline void emitSetVideoCheckState();
 
     DemuxerThr *demuxThr;
@@ -152,9 +155,6 @@ private:
     bool quitApp, audioEnabled, videoEnabled, subtitlesEnabled, doSuspend, doRepeat, allowAccurateSeek, paramsForced = false;
     QTimer timTerminate;
 
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-    bool firsttimeUpdateCache;
-#endif
     LibASS *ass;
 
     QMutex osdMutex, subsMutex;

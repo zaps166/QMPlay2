@@ -425,6 +425,10 @@
         <source>software decoding</source>
         <translation>decodificación por software</translation>
     </message>
+    <message>
+        <source>Vulkan Yadif spatial check</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
@@ -584,8 +588,8 @@
         <translation>Esperando la conexión</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Tamaño</translation>
+        <source>File size</source>
+        <translation>Tamaño de archivo</translation>
     </message>
     <message>
         <source>Download complete</source>
@@ -1467,8 +1471,8 @@
         <translation>Repetición de eco</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Retardo</translation>
+        <source>Maximum latency</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Software decoder</source>
@@ -1778,6 +1782,18 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Zero-copy decoding on Intel hardware (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Better performance, but can cause garbage or might not work at all.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1940,6 +1956,13 @@
     <message>
         <source>&amp;Renderer settings</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PipeWireWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation>No se puede abrir el flujo de salida de audio</translation>
     </message>
 </context>
 <context>
@@ -2366,8 +2389,8 @@
         <translation>&amp;Saltar</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>Parar despué&amp;s</translation>
+        <source>&amp;Stop after playing</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2566,10 +2589,6 @@
         <translation>QMPlay2 ha sido actualizado a la versión</translation>
     </message>
     <message>
-        <source>Font cache is being updated, please wait</source>
-        <translation>La caché de fuentes se está actualizando, por favor espere</translation>
-    </message>
-    <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
         <translation>QMPlay2 no ha sido actualizado. ¿Quiere efectuar la actualización (recomendado)?</translation>
     </message>
@@ -2603,10 +2622,6 @@ QMPlay2 will not scale up icons!</source>
         <translation>Radio de Internet</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>Emisoras de radio de QMPlay2</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>Mis emisoras de radio</translation>
     </message>
@@ -2617,10 +2632,6 @@ QMPlay2 will not scale up icons!</source>
     <message>
         <source>Remove selected radio station</source>
         <translation>Borrar la emisora de radio seleccionada</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation>Explorador de radios</translation>
     </message>
     <message>
         <source>Play</source>
@@ -2661,6 +2672,22 @@ QMPlay2 will not scale up icons!</source>
     <message>
         <source>Save radio station list</source>
         <translation>Guardar la lista de emisoras de radio</translation>
+    </message>
+    <message>
+        <source>Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation>País</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3031,6 +3058,10 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
     <message>
         <source>Device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3484,6 +3515,10 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
     <message>
         <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Publish time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

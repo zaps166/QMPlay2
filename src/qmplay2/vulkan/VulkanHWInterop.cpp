@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2017  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -16,38 +16,29 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "../../qmvk/CommandBuffer.hpp"
+#include "../../qmvk/Device.hpp"
+#include "../../qmvk/Queue.hpp"
 
-#include <type_traits>
+#include <vulkan/VulkanInstance.hpp>
+#include <vulkan/VulkanHWInterop.hpp>
 
-template<typename T>
-void asConst(const T &t) = delete;
+namespace QmVk {
 
-template<typename T>
-constexpr typename std::add_const<T>::type &asConst(T &t) noexcept
+bool HWInterop::syncNow(vk::SubmitInfo &submitInfo)
 {
-    return t;
+    if (!m_commandBuffer)
+    {
+        auto device = static_pointer_cast<Instance>(QMPlay2Core.gpuInstance())->device();
+        if (!device)
+            return false;
+
+        m_commandBuffer = CommandBuffer::create(device->queue());
+    }
+
+    m_commandBuffer->resetAndBegin();
+    m_commandBuffer->endSubmitAndWait(move(submitInfo));
+    return true;
 }
 
-template<typename T>
-void asConst(const T &&t) = delete;
-
-template<typename T>
-void asConst(T &&t) = delete;
-
-
-template <typename... Args>
-struct Overload
-{
-    template <typename R, typename T>
-    constexpr auto operator()(R (T::*ptr)(Args...)) const noexcept -> decltype(ptr)
-    {
-        return ptr;
-    }
-
-    template <typename R, typename T>
-    static constexpr auto of(R (T::*ptr)(Args...)) noexcept -> decltype(ptr)
-    {
-        return ptr;
-    }
-};
+}

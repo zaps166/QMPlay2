@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.9)
 project(Chiptune)
 
 set(Chiptune_HDR
@@ -59,14 +59,15 @@ target_link_libraries(${PROJECT_NAME}
 
 if(WIN32)
     set(CUSTOM_CHIPTUNE_LIBRARIES "" CACHE STRING "Custom libraries for Chiptune")
-    mark_as_advanced(CUSTOM_CHIPTUNE_LIBRARIES)
+endif()
+
+if(NOT WIN32 OR CMAKE_HOST_WIN32)
+    target_link_libraries(${PROJECT_NAME} ${Chiptune_LIBS})
 endif()
 
 if(WIN32 AND CUSTOM_CHIPTUNE_LIBRARIES)
     separate_arguments(CUSTOM_CHIPTUNE_LIBRARIES)
     target_link_libraries(${PROJECT_NAME} ${CUSTOM_CHIPTUNE_LIBRARIES})
-else()
-    target_link_libraries(${PROJECT_NAME} ${Chiptune_LIBS})
 endif()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.9)
 project(libqmplay2)
 
 set(QMPLAY2_HDR
@@ -42,11 +42,9 @@ set(QMPLAY2_HDR
     CPU.hpp
     Version.hpp
     VideoAdjustment.hpp
-    YouTubeDL.hpp
     Notifies.hpp
     NotifiesTray.hpp
     MkvMuxer.hpp
-    CppUtils.hpp
     Sphere.hpp
     X11BypassCompositor.hpp
     VideoOutputCommon.hpp
@@ -88,7 +86,6 @@ set(QMPLAY2_SRC
     PacketBuffer.cpp
     NetworkAccess.cpp
     Version.cpp
-    YouTubeDL.cpp
     Notifies.cpp
     NotifiesTray.cpp
     MkvMuxer.cpp
@@ -127,20 +124,18 @@ if(USE_OPENGL)
         opengl/opengl.qrc
     )
 
-    if(NOT WIN32)
-        if(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2)
-            add_definitions(-DOPENGL_ES2)
-            list(APPEND OPENGL_LIBS GLESv2)
-        elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLES)
-            message(SEND_ERROR "OpenGL|ES 1.0 is not supported!")
-        endif()
-    endif()
-
     if(APPLE)
         find_package(OpenGL REQUIRED)
         list(APPEND OPENGL_LIBS ${OPENGL_LIBRARIES})
     elseif(WIN32)
         list(APPEND OPENGL_LIBS opengl32)
+    elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2)
+        add_definitions(-DOPENGL_ES2)
+        list(APPEND OPENGL_LIBS GLESv2)
+    elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLES)
+        message(SEND_ERROR "OpenGL|ES 1.0 is not supported!")
+    else()
+        list(APPEND OPENGL_LIBS GL)
     endif()
 endif()
 
@@ -158,6 +153,7 @@ if(USE_VULKAN)
     )
     set(QMPLAY2_VULKAN_SRC
         vulkan/VulkanBufferPool.cpp
+        vulkan/VulkanHWInterop.cpp
         vulkan/VulkanImagePool.cpp
         vulkan/VulkanInstance.cpp
         vulkan/VulkanWindow.cpp
@@ -193,20 +189,12 @@ if(USE_VULKAN)
 
     # Compiled shaders QRC generation
 
-    if(${CMAKE_VERSION} VERSION_GREATER "3.9.0" OR ${CMAKE_VERSION} VERSION_EQUAL "3.9.0")
-        set(USE_TMP_FILE ON)
-    endif()
-
     set(VULKAN_SHADER_QRC_FILE "${CMAKE_CURRENT_BINARY_DIR}/vulkan_shaders.qrc")
     list(APPEND QMPLAY2_VULKAN_SRC
         ${VULKAN_SHADER_QRC_FILE}
     )
 
-    if(USE_TMP_FILE)
-        set(VULKAN_SHADER_QRC_FILE_TMP "${VULKAN_SHADER_QRC_FILE}.tmp")
-    else()
-        set(VULKAN_SHADER_QRC_FILE_TMP ${VULKAN_SHADER_QRC_FILE})
-    endif()
+    set(VULKAN_SHADER_QRC_FILE_TMP "${VULKAN_SHADER_QRC_FILE}.tmp")
 
     foreach(SHADER_COMPILED_FILE ${QMVK_SHADER_COMPILED_FILES})
         get_filename_component(SHADER_COMPILED_FILE_NAME ${SHADER_COMPILED_FILE} NAME)
@@ -221,13 +209,11 @@ if(USE_VULKAN)
         " </qresource>\n</RCC>\n"
     )
 
-    if(USE_TMP_FILE)
-        add_custom_command(
-            OUTPUT ${VULKAN_SHADER_QRC_FILE}
-            DEPENDS ${QMVK_SHADER_COMPILED_FILES}
-            COMMAND ${CMAKE_COMMAND} -E copy ${VULKAN_SHADER_QRC_FILE_TMP} ${VULKAN_SHADER_QRC_FILE}
-        )
-    endif()
+    add_custom_command(
+        OUTPUT ${VULKAN_SHADER_QRC_FILE}
+        DEPENDS ${QMVK_SHADER_COMPILED_FILES}
+        COMMAND ${CMAKE_COMMAND} -E copy ${VULKAN_SHADER_QRC_FILE_TMP} ${VULKAN_SHADER_QRC_FILE}
+    )
 
     # No need to add VulkanShaders target dependency to libqmplay2,
     # because generated QRC file is added into source file list.
@@ -243,12 +229,19 @@ if(USE_FREEDESKTOP_NOTIFICATIONS)
     list(APPEND QMPLAY2_SRC NotifiesFreedesktop.cpp)
     qt5_add_dbus_interface(QMPLAY2_SRC org.freedesktop.Notifications.xml notifications_interface)
     add_definitions(-DNOTIFIES_FREEDESKTOP)
-    set(DBUS Qt5::DBus)
 elseif(APPLE)
     list(APPEND QMPLAY2_HDR NotifiesMacOS.hpp)
     list(APPEND QMPLAY2_SRC NotifiesMacOS.mm)
     find_package(Qt5MacExtras REQUIRED)
     add_definitions(-DNOTIFIES_MACOS)
+endif()
+
+if(USE_DBUS_SUSPEND)
+    add_definitions(-DDBUS_SUSPEND)
+endif()
+
+if(USE_FREEDESKTOP_NOTIFICATIONS OR USE_DBUS_SUSPEND)
+    set(DBUS Qt5::DBus)
 endif()
 
 if(USE_QML)
@@ -264,6 +257,15 @@ if(USE_QML)
     )
     add_definitions(-DUSE_QML)
     set(QML Qt5::Qml)
+endif()
+
+if(USE_YOUTUBEDL)
+    list(APPEND QMPLAY2_HDR
+        YouTubeDL.hpp
+    )
+    list(APPEND QMPLAY2_SRC
+        YouTubeDL.cpp
+    )
 endif()
 
 set(QMPLAY2_RESOURCES
@@ -315,19 +317,20 @@ if(APPLE)
     )
 endif()
 
+if(USE_LIBASS AND (NOT WIN32 OR CMAKE_HOST_WIN32))
+    list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
+endif()
+
 if(WIN32)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
         powrprof
-        winmm
     )
+
     set(CUSTOM_LIBQMPLAY2_LIBRARIES "" CACHE STRING "Custom libraries for libqmplay2")
-    mark_as_advanced(CUSTOM_LIBQMPLAY2_LIBRARIES)
     if(CUSTOM_LIBQMPLAY2_LIBRARIES)
         separate_arguments(CUSTOM_LIBQMPLAY2_LIBRARIES)
         list(APPEND LIBQMPLAY2_LIBS ${CUSTOM_LIBQMPLAY2_LIBRARIES})
-    elseif(USE_LIBASS)
-        list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
     endif()
 
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
@@ -335,10 +338,6 @@ else()
     install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
     if(NOT APPLE)
         install(FILES ${QMPLAY2_HDR} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/QMPlay2")
-    endif()
-
-    if(USE_LIBASS)
-        list(APPEND LIBQMPLAY2_LIBS ${LIBASS_LIBRARIES})
     endif()
 endif()
 

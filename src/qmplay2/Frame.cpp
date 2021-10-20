@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -290,10 +290,7 @@ bool Frame::isHW() const
         case AV_PIX_FMT_VDPAU:
         case AV_PIX_FMT_VAAPI:
         case AV_PIX_FMT_VIDEOTOOLBOX:
-//        case AV_PIX_FMT_CUDA:
         case AV_PIX_FMT_D3D11:
-//        case AV_PIX_FMT_DRM_PRIME:
-//        case AV_PIX_FMT_OPENCL:
             return true;
     }
     return false;

@@ -425,6 +425,10 @@
         <source>Parity (if not detected automatically)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Vulkan Yadif spatial check</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
@@ -596,8 +600,8 @@
         <translation>Letöltés megállítása</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Méret</translation>
+        <source>File size</source>
+        <translation>Fájlméret</translation>
     </message>
     <message>
         <source>Conversion aborted</source>
@@ -1347,8 +1351,8 @@
         <translation>sec</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Késleltetés</translation>
+        <source>Maximum latency</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Playback device</source>
@@ -1778,6 +1782,18 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Zero-copy decoding on Intel hardware (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Better performance, but can cause garbage or might not work at all.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1940,6 +1956,13 @@
     <message>
         <source>&amp;Renderer settings</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PipeWireWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation>Nem sikerült a hangkimeneti adatfolyam megnyitása</translation>
     </message>
 </context>
 <context>
@@ -2278,8 +2301,8 @@
         <translation>&amp;Kihagyás</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>&amp;Megállítás utána</translation>
+        <source>&amp;Stop after playing</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Player</source>
@@ -2575,17 +2598,9 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
         <translation>A QMPlay2 nincs frissítve. Szeretnéd elindítani a frissítést (ajánlott)?</translation>
     </message>
-    <message>
-        <source>Font cache is being updated, please wait</source>
-        <translation>A betűtípus gyorsítótár frissítése folyamatban van, kérlek várj</translation>
-    </message>
 </context>
 <context>
     <name>Radio</name>
-    <message>
-        <source>Radio Browser</source>
-        <translation>Rádió böngésző</translation>
-    </message>
     <message>
         <source>My radio stations</source>
         <translation>Saját rádióállomások</translation>
@@ -2601,10 +2616,6 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>Kiválasztott állomás eltávolítása</translation>
-    </message>
-    <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>QMPlay2 rádióállomások</translation>
     </message>
     <message>
         <source>Adding a new radio station</source>
@@ -2661,6 +2672,22 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     <message>
         <source>Save radio station list</source>
         <translation>Rádióállomás lista mentése</translation>
+    </message>
+    <message>
+        <source>Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation>Ország</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Nyelv</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3031,6 +3058,10 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     </message>
     <message>
         <source>Device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3484,6 +3515,10 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     </message>
     <message>
         <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Publish time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

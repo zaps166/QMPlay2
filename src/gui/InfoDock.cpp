@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -18,6 +18,7 @@
 
 #include <InfoDock.hpp>
 
+#include <QGuiApplication>
 #include <QMouseEvent>
 #include <QScrollBar>
 #include <QLabel>
@@ -93,12 +94,21 @@ InfoDock::InfoDock()
     clear();
 
     connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
+
+    auto setInfoEditStyleSheet = [this] {
+        infoE->document()->setDefaultStyleSheet("a {color: " + infoE->palette().text().color().name() + "; text-decoration: none;}");
+        infoE->setHtml(m_info);
+    };
+    connect(qGuiApp, &QGuiApplication::paletteChanged,
+            this, setInfoEditStyleSheet,
+            Qt::QueuedConnection);
+    setInfoEditStyleSheet();
 }
 
 void InfoDock::setInfo(const QString &info, bool _videoPlaying, bool _audioPlaying)
 {
     int scroll = infoE->verticalScrollBar()->value();
-    infoE->setHtml(info);
+    infoE->setHtml(m_info = info);
     infoE->verticalScrollBar()->setValue(scroll);
     videoPlaying = _videoPlaying;
     audioPlaying = _audioPlaying;
@@ -158,6 +168,7 @@ void InfoDock::updateBuffered(qint64 backwardBytes, qint64 remainingBytes, doubl
 }
 void InfoDock::clear()
 {
+    m_info.clear();
     infoE->clear();
     videoPlaying = audioPlaying = interlacedVideo = false;
     videoBR = audioBR = -1;

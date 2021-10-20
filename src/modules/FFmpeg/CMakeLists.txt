@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.9)
 project(FFmpeg)
 
 set(FFmpeg_HDR
@@ -51,7 +51,7 @@ if(USE_FFMPEG_AVDEVICE)
     list(APPEND FFmpeg_LIBS ${LIBAVDEVICE_LIBRARIES})
 endif()
 
-if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) # Common HWAccel
+if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_D3D11VA OR USE_FFMPEG_VTB) # Common HWAccel
     list(APPEND FFmpeg_HDR FFDecHWAccel.hpp)
     list(APPEND FFmpeg_SRC FFDecHWAccel.cpp)
 
@@ -99,7 +99,13 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_VTB) #
             list(APPEND FFmpeg_HDR DXVA2OpenGL.hpp)
             list(APPEND FFmpeg_SRC DXVA2OpenGL.cpp)
         endif()
-        set(DXVA2 dxva2)
+    endif()
+
+    if(USE_FFMPEG_D3D11VA) #D3D11VA
+        add_definitions(-DQMPlay2_D3D11VA)
+        list(APPEND FFmpeg_HDR FFDecD3D11VA.hpp D3D11VAVulkan.hpp)
+        list(APPEND FFmpeg_SRC FFDecD3D11VA.cpp D3D11VAVulkan.cpp)
+        list(APPEND FFmpeg_RESOURCES D3D11VA.qrc)
     endif()
 
     if(USE_FFMPEG_VTB)
@@ -132,7 +138,6 @@ endif()
 
 target_link_libraries(${PROJECT_NAME}
     ${FFmpeg_LIBS}
-    ${DXVA2}
     libqmplay2
 )
 

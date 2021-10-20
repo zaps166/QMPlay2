@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -28,8 +28,8 @@
 template<typename T>
 static void convert_samples(const float *src, const int samples, T *int_samples, unsigned channels)
 {
-    const unsigned min = 1 << ((sizeof(T) << 3) - 1);
-    const unsigned max = min - 1;
+    constexpr unsigned min = 1 << ((sizeof(T) << 3) - 1);
+    constexpr unsigned max = min - 1;
     for (int i = 0; i < samples; ++i)
     {
         if (src[i] >= 1.0f)
@@ -37,7 +37,7 @@ static void convert_samples(const float *src, const int samples, T *int_samples,
         else if (src[i] <= -1.0f)
             int_samples[i] = min;
         else
-            int_samples[i] = src[i] * max;
+            int_samples[i] = static_cast<double>(src[i]) * max;
     }
     if (channels == 6 || channels == 8)
     {

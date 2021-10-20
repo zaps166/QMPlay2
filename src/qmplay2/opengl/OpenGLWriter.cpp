@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -243,7 +243,7 @@ void OpenGLWriter::addAdditionalParam(const QString &key)
 
 void OpenGLWriter::initialize(const shared_ptr<OpenGLHWInterop> &hwInterop)
 {
-    for (auto &&additionalParam : asConst(m_additionalParams))
+    for (auto &&additionalParam : qAsConst(m_additionalParams))
         removeParam(additionalParam);
     m_additionalParams.clear();
 
@@ -254,7 +254,7 @@ void OpenGLWriter::initialize(const shared_ptr<OpenGLHWInterop> &hwInterop)
     bool hasBrightness = false, hasContrast = false, hasSharpness = false;
     if (!m_drawable->videoAdjustmentKeys.isEmpty())
     {
-        for (const QString &key : asConst(m_drawable->videoAdjustmentKeys))
+        for (const QString &key : qAsConst(m_drawable->videoAdjustmentKeys))
         {
             if (key == "Brightness")
                 hasBrightness = true;

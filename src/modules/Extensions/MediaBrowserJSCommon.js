@@ -1,16 +1,16 @@
-var Base64Option = {
+const Base64Option = {
     Base64Encoding: 0,
     Base64UrlEncoding: 1,
     KeepTrailingEquals: 0,
     OmitTrailingEquals: 2,
 }
 
-var SortOrder = {
+const SortOrder = {
     AscendingOrder: 0,
     DescendingOrder: 1,
 }
 
-var ResizeMode = {
+const ResizeMode = {
     Interactive: 0,
     Stretch: 1,
     Fixed: 2,
@@ -18,7 +18,7 @@ var ResizeMode = {
     Custom: 2,
 }
 
-var NetworkReplyError = {
+const NetworkReplyError = {
     Ok: 0,
     UnsupportedScheme: 1,
     Connection: 2,
@@ -33,24 +33,24 @@ var NetworkReplyError = {
     Aborted: 11,
 }
 
-var PagesMode = {
+const PagesMode = {
     Single: 0,
     Multi : 1,
     List: 2,
 }
-var CompleterMode = {
+const CompleterMode = {
     None: 0,
     Continuous: 1,
     All: 2,
 }
 
-var ItemDataRole = {
+const ItemDataRole = {
     UserRole: 0x0100,
 }
 
 %1
 
-(function() { return {
+(() => { return {
     getInfo: getInfo,
     prepareWidget: prepareWidget,
     finalize: finalize,

@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -30,7 +30,13 @@ private:
 
     SettingsWidget *getSettingsWidget() override;
 
-    QIcon downloader, youtube, radio;
+    QIcon downloader;
+#ifdef USE_YOUTUBE
+    QIcon youtube;
+#endif
+#ifdef USE_RADIO
+    QIcon radio;
+#endif
 #ifdef USE_LASTFM
     QIcon lastfm;
 #endif
@@ -62,8 +68,10 @@ private:
     QCheckBox *MPRIS2B;
 #endif
 
+#ifdef USE_YOUTUBE
     QCheckBox *userNameB, *subtitlesB;
     QComboBox *qualityPreset;
+#endif
 
 #ifdef USE_LASTFM
     QGroupBox *downloadCoversGB;

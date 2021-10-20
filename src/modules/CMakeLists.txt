@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.9)
 
 if(WIN32)
     set(MODULES_INSTALL_PATH "modules")
@@ -52,6 +52,10 @@ endif()
 
 if(USE_PULSEAUDIO)
     add_subdirectory(PulseAudio)
+endif()
+
+if(USE_PIPEWIRE)
+    add_subdirectory(PipeWire)
 endif()
 
 if(USE_XVIDEO)

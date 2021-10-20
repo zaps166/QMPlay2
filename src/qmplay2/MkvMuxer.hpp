@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -28,6 +28,8 @@ class Packet;
 
 class QMPLAY2SHAREDLIB_EXPORT MkvMuxer
 {
+    struct Priv;
+
     MkvMuxer(const MkvMuxer &) = delete;
     MkvMuxer &operator =(const MkvMuxer &) = delete;
 
@@ -35,18 +37,10 @@ public:
     MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo);
     ~MkvMuxer();
 
-    inline bool isOk() const;
+    bool isOk() const;
 
     bool write(Packet &packet, const int idx);
 
 private:
-    AVFormatContext *m_ctx = nullptr;
-    bool m_ok = false;
+    Priv &p;
 };
-
-/* Inline implementation */
-
-bool MkvMuxer::isOk() const
-{
-    return m_ok;
-}

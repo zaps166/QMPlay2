@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -157,4 +157,6 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT QMatrix4x4 getYUVtoRGBmatrix(const LumaCoefficients &lumaCoeff, bool limited);
 
     QMPLAY2SHAREDLIB_EXPORT bool isX11EGL();
+
+    QMPLAY2SHAREDLIB_EXPORT bool compareText(const QString &a, const QString &b);
 }

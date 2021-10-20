@@ -1,3 +1,73 @@
+Changes in QMPlay2 21.06.07:
+    - use WASAPI via PortAudio on Windows (including exclusive mode),
+    - set default config directory to "~/.config/QMPlay2" (Linux),
+    - use QtDBus API for suspend instead of QProcess (Linux),
+    - improve playlist sorting for entries with numbers,
+    - VA-API fix for Vulkan and new Radeon/Mesa driver,
+    - fix setting the VDPAU driver path for AppImage,
+    - fix SVG icon engine warning after KDE update,
+    - enable bypass compositor by default (Vulkan),
+    - update YouTube browser for YouTube changes,
+    - fix downloading of some network streams,
+    - add PT_BR translations (fabianski7),
+    - store/restore radio station image,
+    - fix default Vulkan GPU on Linux,
+    - other minor fixes,
+
+Changes in QMPlay2 21.03.09:
+    - drop support for Qt < 5.10, CMake < 3.9, TagLib < 1.9, FFmpeg < 4.0,
+    - fix possible freeze on Windows when Vulkan is enabled,
+    - add PipeWire audio output,
+    - fix YouTube videos,
+    - minor fixes,
+
+Changes in QMPlay2 20.12.16:
+    - fix playback of some network streams,
+    - change CDDB server to gnudb.org,
+
+Changes in QMPlay2 20.12.07:
+    - fix displaying of subtitles from media file in some rare cases,
+    - load fonts from media file when using subtitles from file,
+    - fix inactive streams text color in Information panel,
+    - add Japanese language file (harujisaku),
+    - fix CUVID/Vulkan on some hardware,
+    - improve CMake files for Windows,
+    - fix "wmalossless" audio time,
+    - fix YouTube search,
+    - fix for SDP files,
+    - minor fixes,
+
+Changes in QMPlay2 20.07.04:
+    - discard some frames on hardware decoding if hardware is too slow (was removed in 20.05.02),
+    - add workaround for VA-API/Vulkan for AMD GPUs on Mesa 20.1,
+    - use D-Bus for suspend (systemd and ConsoleKit),
+    - fix compilation with older FFmpeg version,
+    - fix duration for some WavPack files,
+    - remove QMPlay2 radio stations list,
+    - add architecture to about window,
+    - fix seeking on raw audio data,
+    - fix OpenGL linking on Linux,
+    - fix YouTube search,
+
+Changes in QMPlay2 20.05.02:
+    - add Vulkan renderer (default, Linux and Windows only):
+        - bypass compositor option (exclusive fullscreen),
+        - VA-API, CUVID, D3D11VA interoperation,
+        - high quality video scaling options,
+        - Yadif deinterlacing on GPU,
+        - faster subtitles rendering,
+        - deep color support,
+        - zero-copy decoding,
+    - remove option to enforce of video copy to host memory for OpenGL renderer,
+    - don't open left panel on fullscreen when there is a screen on the left,
+    - fix video dock margins issue on fullscreen with some Qt styles,
+    - add renderer settings page: Vulkan (default), OpenGL, Legacy,
+    - add PCH compilation with CMake >= 3.16 (disabled by default),
+    - a lot of code changes (e.g. use more FFmpeg structures),
+    - remove high quality video scaling for OpenGL,
+    - update translation files,
+    - require C++14,
+
 Changes in QMPlay2 19.12.19:
     - fix VA-API low quality deinterlaced image on AMD GPUs (workaround for driver bug),
     - fix VA-API GLX regression,

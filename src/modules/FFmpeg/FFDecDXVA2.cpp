@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -124,8 +124,11 @@ void FFDecDXVA2::downloadVideoFrame(Frame &decoded)
 
 bool FFDecDXVA2::open(StreamInfo &streamInfo)
 {
+    if (streamInfo.codec_type != AVMEDIA_TYPE_VIDEO)
+        return false;
+
     m_pixFmt = Frame::convert3PlaneTo2Plane(streamInfo.pixelFormat());
-    if (m_pixFmt != AV_PIX_FMT_NV12 && m_pixFmt != AV_PIX_FMT_P010)
+    if (m_pixFmt != AV_PIX_FMT_NV12 && m_pixFmt != AV_PIX_FMT_P016)
         return false;
 
     AVCodec *codec = init(streamInfo);

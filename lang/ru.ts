@@ -425,6 +425,10 @@
         <source>software decoding</source>
         <translation>программное декодирование</translation>
     </message>
+    <message>
+        <source>Vulkan Yadif spatial check</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
@@ -576,8 +580,8 @@
         <translation>Остановка загрузки</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Размер</translation>
+        <source>File size</source>
+        <translation>Размер файла</translation>
     </message>
     <message>
         <source>Download complete</source>
@@ -1412,8 +1416,8 @@
         <translation>Фрагменты</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Задержка</translation>
+        <source>Maximum latency</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Refresh time</source>
@@ -1775,6 +1779,18 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Zero-copy decoding on Intel hardware (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Better performance, but can cause garbage or might not work at all.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1937,6 +1953,13 @@
     <message>
         <source>&amp;Renderer settings</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PipeWireWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation>Не удалось открыть поток вывода звука</translation>
     </message>
 </context>
 <context>
@@ -2363,8 +2386,8 @@
         <translation>&amp;Пропустить</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>&amp;Остановить после этого</translation>
+        <source>&amp;Stop after playing</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2559,10 +2582,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Font cache is being updated, please wait</source>
-        <translation>Подождите, обновляется кеш шрифта</translation>
-    </message>
-    <message>
         <source>QMPlay2 has been updated to version</source>
         <translation>QMPlay2 был обновлен ​​до версии</translation>
     </message>
@@ -2600,10 +2619,6 @@ QMPlay2 не будет отображать значки!</translation>
         <translation>Адрес</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>Радиостанции QMPlay2</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>Мои радиостанции</translation>
     </message>
@@ -2614,10 +2629,6 @@ QMPlay2 не будет отображать значки!</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>Удалить выбранную радиостанцию</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation>Обзор радио</translation>
     </message>
     <message>
         <source>Play</source>
@@ -2657,6 +2668,22 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Save radio station list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation>Страна</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Язык</translation>
+    </message>
+    <message>
+        <source>State</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3028,6 +3055,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3481,6 +3512,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Preferred quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Publish time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

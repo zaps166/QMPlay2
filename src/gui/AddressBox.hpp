@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -27,16 +27,16 @@ class AddressBox : public QWidget
 public:
     enum PrefixType {AUTODETECT = 'D', DIRECT = 'A', MODULE = 'M'};
 
-    AddressBox(Qt::Orientation, QString url = QString());
+    AddressBox(Qt::Orientation, QString url = QString(), const QString &choice = QString());
 
     inline void setFocus()
     {
         aE.setFocus();
     }
 
-    inline QComboBox &getComboBox()
+    inline QString getCurrentText() const
     {
-        return pB;
+        return pB.currentText();
     }
 
     inline PrefixType currentPrefixType() const

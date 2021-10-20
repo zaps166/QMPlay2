@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -18,15 +18,39 @@
 
 #pragma once
 
+#include <QMPlay2Lib.hpp>
+
 #include <HWDecContext.hpp>
+
+#include <vulkan/vulkan.hpp>
 
 namespace QmVk {
 
-class HWInterop : public HWDecContext
+using namespace std;
+
+class CommandBuffer;
+
+class QMPLAY2SHAREDLIB_EXPORT HWInterop : public HWDecContext
 {
+public:
+    class SyncData
+    {
+    public:
+        virtual ~SyncData() = default;
+    };
+    using SyncDataPtr = std::unique_ptr<SyncData>;
+
 public:
     virtual void map(Frame &frame) = 0;
     virtual void clear() = 0;
+
+    virtual SyncDataPtr sync(const std::vector<Frame> &frames, vk::SubmitInfo *submitInfo = nullptr) = 0;
+
+protected:
+    bool syncNow(vk::SubmitInfo &submitInfo);
+
+private:
+    shared_ptr<CommandBuffer> m_commandBuffer;
 };
 
 }

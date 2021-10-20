@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -111,9 +111,9 @@ int Decoder::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
     ts = encodedPacket.ts();
     return decoded.size();
 }
-bool Decoder::decodeSubtitle(const Packet &encodedPacket, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush)
+bool Decoder::decodeSubtitle(const QVector<Packet> &encodedPackets, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush)
 {
-    Q_UNUSED(encodedPacket)
+    Q_UNUSED(encodedPackets)
     Q_UNUSED(pos)
     Q_UNUSED(osd)
     Q_UNUSED(size)

@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -19,7 +19,6 @@
 #include <Classic.hpp>
 
 #include <Functions.hpp>
-#include <CppUtils.hpp>
 #include <LibASS.hpp>
 
 #include <QStringList>
@@ -247,7 +246,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
         }
 
         initOnce(ok, ass);
-        for (const SubWithoutEnd &sub : asConst(subsWithoutEnd))
+        for (const SubWithoutEnd &sub : qAsConst(subsWithoutEnd))
             ass->addASSEvent(Functions::convertToASS(sub.sub), sub.start, sub.duration);
     }
 

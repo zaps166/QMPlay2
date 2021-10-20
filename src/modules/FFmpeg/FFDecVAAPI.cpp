@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -169,6 +169,9 @@ void FFDecVAAPI::downloadVideoFrame(Frame &decoded)
 
 bool FFDecVAAPI::open(StreamInfo &streamInfo)
 {
+    if (streamInfo.codec_type != AVMEDIA_TYPE_VIDEO)
+        return false;
+
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
     if (pix_fmt == AV_PIX_FMT_YUV420P10 && QMPlay2Core.isVulkanRenderer())
     {
@@ -251,8 +254,13 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     }
     if (m_vaapiVulkan)
     {
-        if (m_vaapi->m_vendor.contains("intel", Qt::CaseInsensitive))
-            m_filter = make_shared<DeintHWPrepareFilter>();
+        if (!QMPlay2Core.getSettings().getBool("Vulkan/ForceVulkanYadif") && m_vaapi->m_vendor.contains("intel", Qt::CaseInsensitive))
+        {
+            // Use QMPlay2 Vulkan deinterlacing to workaround an Intel Media Driver bug
+            // https://github.com/intel/media-driver/issues/804
+            if (!m_vaapi->m_vendor.contains("Intel iHD"))
+                m_filter = make_shared<DeintHWPrepareFilter>();
+        }
         m_hasHWDecContext = true;
     }
 #endif
@@ -262,9 +270,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     codec_ctx->hw_device_ctx = av_buffer_ref(m_vaapi->m_hwDeviceBufferRef);
     codec_ctx->get_format = vaapiGetFormat;
     codec_ctx->thread_count = 1;
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 18, 100)
     codec_ctx->extra_hw_frames = 4;
-#endif
     if (!openCodec(codec))
         return false;
 

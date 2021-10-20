@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -172,7 +172,7 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
     addSeparator();
     newAction(Playlist::tr("&Enqueue"), this, queue, false, QIcon(), false);
     newAction(Player::tr("&Skip"), this, skip, false, QIcon(), false);
-    newAction(Player::tr("&Stop after"), this, stopAfter, false, QIcon(), false);
+    newAction(Player::tr("&Stop after playing"), this, stopAfter, false, QIcon(), false);
     addSeparator();
     newAction(Playlist::tr("&Properties"), this, entryProperties, false, QMPlay2Core.getIconFromTheme("document-properties"), false);
 }
@@ -243,9 +243,7 @@ MenuBar::Player::Player(MenuBar *parent) :
         newAction(Player::tr("Detach from receiving &commands"), this, detach, false, QIcon(), false);
     }
 
-    if (!QMPlay2CoreClass::canSuspend())
-        suspend = nullptr;
-    else
+    if (QMPlay2Core.canSuspend())
     {
         addSeparator();
         newAction(Player::tr("Suspend after playbac&k is finished"), this, suspend, false, QIcon(), true);
@@ -387,12 +385,7 @@ MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
     connect(videoAdjustmentMenu, &VideoFilters::aboutToShow, [] {
         if (QWidget *parent = QMPlay2GUI.videoAdjustment->parentWidget())
         {
-            if (qstrcmp(parent->metaObject()->className(), "QMacNativeWidget") == 0)
-            {
-                // Needed for Qt 5.6.3
-                QMPlay2GUI.videoAdjustment->update();
-            }
-            else if (qstrcmp(parent->metaObject()->className(), "QMenu") == 0)
+            if (qstrcmp(parent->metaObject()->className(), "QMenu") == 0)
             {
                 QTimer::singleShot(0, [parent] {
                     QMPlay2GUI.videoAdjustment->setGeometry(QRect(QPoint(), parent->sizeHint()));

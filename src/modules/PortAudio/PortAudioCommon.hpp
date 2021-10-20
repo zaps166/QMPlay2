@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -26,5 +26,5 @@ namespace PortAudioCommon
 {
     QString getOutputDeviceName(const PaDeviceInfo *deviceInfo);
     QStringList getOutputDeviceNames();
-    int getDeviceIndexForOutput(const QString &name, const int chn);
+    int getDeviceIndexForOutput(const QString &name, const int chn = 0);
 }

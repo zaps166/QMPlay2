@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -20,7 +20,6 @@
 
 #include <QMPlay2Extensions.hpp>
 
-#include <QTabWidget>
 #include <QPointer>
 #include <QIcon>
 #include <QMap>
@@ -36,7 +35,7 @@ class NetworkReply;
 class QTimer;
 class QMenu;
 
-class Radio final : public QTabWidget, public QMPlay2Extensions
+class Radio final : public QWidget, public QMPlay2Extensions
 {
     Q_OBJECT
 
@@ -48,10 +47,6 @@ public:
 
 private slots:
     void visibilityChanged(const bool v);
-
-    void tabChanged(int index);
-
-    void qmplay2RadioStationsFinished();
 
     void searchData();
     void searchFinished();
@@ -67,7 +62,6 @@ private slots:
     void on_saveMyRadioStationButton_clicked();
 
     void on_myRadioListWidget_itemDoubleClicked(QListWidgetItem *item);
-    void on_qmplay2RadioListWidget_itemDoubleClicked(QListWidgetItem *item);
 
     void on_searchByComboBox_activated(int idx);
     void on_addRadioBrowserStationButton_clicked();
@@ -80,11 +74,9 @@ private slots:
     void radioBrowserOpenHomePage();
 
 private:
-    void firstTabItemDoubleClicked(QListWidgetItem *item);
-
     void radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param);
 
-    void addMyRadioStation(const QString &name, const QString &address, QListWidgetItem *item = nullptr);
+    void addMyRadioStation(const QString &name, const QString &address, const QPixmap &icon, QListWidgetItem *item = nullptr);
 
     void setSearchInfo(const QStringList &list);
 
@@ -102,13 +94,12 @@ private:
 
     Ui::Radio *ui;
 
-    QPointer<NetworkReply> m_qmplay2RadioStationsReply;
     bool m_once = false;
+    bool m_storeMyRadios = false;
     DockWidget *m_dw;
 
     QMap<int, QPair<QStringList, QPointer<NetworkReply>>> m_searchInfo;
     RadioBrowserModel *m_radioBrowserModel;
-    QTimer *m_tabChangedOnVisibilityTimer;
     QMenu *m_radioBrowserMenu;
     QTimer *m_loadIconsTimer;
     QStringList m_nameItems;

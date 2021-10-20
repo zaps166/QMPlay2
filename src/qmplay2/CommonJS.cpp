@@ -1,8 +1,6 @@
 #include <CommonJS.hpp>
 
-#include <NetworkAccessJS.hpp>
 #include <NetworkAccess.hpp>
-#include <TreeWidgetJS.hpp>
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
 #include <YouTubeDL.hpp>
@@ -19,29 +17,6 @@ CommonJS::CommonJS(QObject *parent)
 {}
 CommonJS::~CommonJS()
 {}
-
-int CommonJS::insertJSEngine(QJSEngine *engine)
-{
-    if (!engine)
-        return 0;
-
-    QMutexLocker locker(&m_jsEngineMutex);
-    const auto id = ++m_jsEngineId;
-    m_jsEngines[id] = engine;
-
-    connect(engine, &NetworkReply::destroyed,
-            this, [=] {
-        QMutexLocker locker(&m_jsEngineMutex);
-        m_jsEngines.remove(id);
-    });
-
-    return id;
-}
-QJSEngine *CommonJS::getEngine(const int id)
-{
-    QMutexLocker locker(&m_jsEngineMutex);
-    return m_jsEngines[id];
-}
 
 int CommonJS::insertNetworkReply(NetworkReply *networkReply)
 {
@@ -89,19 +64,6 @@ void CommonJS::removeIOController(const int id)
 {
     QMutexLocker locker(&m_ioControllerMutex);
     m_ioControllers.remove(id);
-}
-
-QJSValue CommonJS::newNetworkAccess(int engineId)
-{
-    if (auto jsEngine = getEngine(engineId))
-        return jsEngine->newQObject(new NetworkAccessJS());
-    return QJSValue();
-}
-QJSValue CommonJS::newQTreeWidgetItem(int engineId)
-{
-    if (auto jsEngine = getEngine(engineId))
-        return jsEngine->newQObject(new TreeWidgetItemJS());
-    return QJSValue();
 }
 
 bool CommonJS::abortNetworkReply(const int id)

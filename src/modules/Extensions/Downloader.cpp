@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -19,7 +19,6 @@
 #include <Downloader.hpp>
 
 #include <Functions.hpp>
-#include <CppUtils.hpp>
 #include <MkvMuxer.hpp>
 #include <Demuxer.hpp>
 #include <Packet.hpp>
@@ -233,7 +232,7 @@ void DownloadItemW::setSizeAndFilePath(qint64 size, const QString &filePath)
 {
     if (!finished)
     {
-        sizeL->setText(tr("Size") + ": " + (size > -1 ? Functions::sizeString(size) : "?"));
+        sizeL->setText(tr("File size") + ": " + (size > -1 ? Functions::sizeString(size) : "?"));
         speedProgressW->progressB->setRange(0, (size != -1) ? 100 : 0);
         this->filePath = filePath;
     }
@@ -368,7 +367,7 @@ void DownloadItemW::startConversion()
     deleteConvertProcess();
 
     m_convertProcess = new QProcess(this);
-    m_convertProcessConn[0] = connect(m_convertProcess, Overload<int>::of(&QProcess::finished), this, [this](int exitCode) {
+    m_convertProcessConn[0] = connect(m_convertProcess, qOverload<int>(&QProcess::finished), this, [this](int exitCode) {
         if (exitCode == 0)
         {
             sizeL->setText(tr(g_downloadComplete));

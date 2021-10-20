@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -21,11 +21,11 @@
 #include <CuvidHWInterop.hpp>
 #include <vulkan/VulkanHWInterop.hpp>
 
-#include <atomic>
+#include <mutex>
 
 namespace QmVk {
 class ImagePool;
-class Image;
+class Semaphore;
 }
 
 class CuvidVulkan final : public CuvidHWInterop, public QmVk::HWInterop
@@ -39,7 +39,30 @@ public:
     void map(Frame &frame) override;
     void clear() override;
 
+    SyncDataPtr sync(const std::vector<Frame> &frames, vk::SubmitInfo *submitInfo = nullptr) override;
+
+private:
+    void ensureSemaphore();
+    void destroySemaphore();
+
 private:
     const std::shared_ptr<QmVk::ImagePool> m_vkImagePool;
     CUstream m_cuStream = nullptr;
+
+    vk::ExternalMemoryHandleTypeFlagBits m_vkMemType;
+    CUexternalMemoryHandleType m_cuMemType;
+
+    vk::ExternalSemaphoreHandleTypeFlagBits m_vkSemHandleType;
+    CUexternalSemaphoreHandleType m_cuSemHandleType;
+
+    std::shared_ptr<QmVk::Semaphore> m_semaphore;
+    CUexternalSemaphore m_cuSemaphore = nullptr;
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    HANDLE m_semaphoreHandle = nullptr;
+#else
+    int m_semaphoreHandle = -1;
+#endif
+
+    std::mutex m_picturesToSyncMutex;
+    std::unordered_set<int> m_picturesToSync;
 };

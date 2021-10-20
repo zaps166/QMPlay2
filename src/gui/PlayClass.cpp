@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -43,54 +43,9 @@
 
 #include <cmath>
 
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-    #include <QProgressBar>
-    #include <QVBoxLayout>
-    #include <QLabel>
-
-    class UpdateFC : public QThread
-    {
-    public:
-        UpdateFC(LibASS *ass) :
-            ass(ass)
-        {
-            start();
-            if (!wait(500))
-            {
-                QDialog d(QMPlay2GUI.mainW);
-                d.setWindowTitle(QCoreApplication::applicationName());
-                QLabel l(QObject::tr("Font cache is being updated, please wait"));
-                QProgressBar p;
-                p.setRange(0, 0);
-                QVBoxLayout la(&d);
-                la.addWidget(&l);
-                la.addWidget(&p);
-                d.open();
-                d.setMinimumSize(d.size());
-                d.setMaximumSize(d.size());
-                do
-                    el.processEvents(QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents);
-                while (isRunning());
-            }
-        }
-    private:
-        void run()
-        {
-            ass->initOSD();
-            SetFileAttributesW((WCHAR *)QString(QDir::homePath() + "/fontconfig").utf16(), FILE_ATTRIBUTE_HIDDEN);
-            el.wakeUp();
-        }
-        LibASS *ass;
-        QEventLoop el;
-    };
-#endif
-
 PlayClass::PlayClass() :
     demuxThr(nullptr), vThr(nullptr), aThr(nullptr),
     aRatioName("auto"),
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-    firsttimeUpdateCache(true),
-#endif
     ass(nullptr), osd(nullptr)
 {
     doSilenceBreak = doSilenceOnStart = false;
@@ -369,7 +324,7 @@ bool PlayClass::isPlaying() const
     return demuxThr && demuxThr->isRunning();
 }
 
-void PlayClass::loadSubsFile(const QString &fileName)
+void PlayClass::loadSubsFile(const QString &fileName, const QList<StreamInfo *> *streams)
 {
     bool subsLoaded = false;
     if (demuxThr && vThr && ass && subtitlesEnabled)
@@ -406,6 +361,11 @@ void PlayClass::loadSubsFile(const QString &fileName)
                             ass->addFont(fontName.toUtf8(), fontData);
                     }
                 }
+
+                if (streams)
+                    loadAssFonts(*streams);
+                else if (demuxThr->demuxer)
+                    loadAssFonts(demuxThr->demuxer->streamsInfo());
 
                 ass->initASS(fileData);
                 loaded = true;
@@ -648,6 +608,15 @@ bool PlayClass::setAudioParams(quint8 realChannels, quint32 realSampleRate)
     if (QMPlay2Core.getSettings().getBool("ForceChannels"))
         chn = QMPlay2Core.getSettings().getUInt("Channels");
     return aThr->setParams(realChannels, realSampleRate, chn, srate, QMPlay2Core.getSettings().getBool("ResamplerFirst"));
+}
+
+void PlayClass::loadAssFonts(const QList<StreamInfo *> &streams)
+{
+    for (auto &&stream : streams)
+    {
+        if (stream->codec_type == AVMEDIA_TYPE_ATTACHMENT && (stream->codec_name == "TTF" || stream->codec_name == "OTF") && stream->extradata_size > 0)
+            ass->addFont(stream->title, stream->getExtraData());
+    }
 }
 
 inline void PlayClass::emitSetVideoCheckState()
@@ -1229,7 +1198,7 @@ void PlayClass::demuxThrFinished()
         doSuspend = false;
         emit uncheckSuspend();
         if (canDoSuspend)
-            QMPlay2CoreClass::suspend();
+            QMPlay2Core.suspend();
     }
 }
 
@@ -1281,7 +1250,7 @@ static Decoder *loadStream(
                     defaultStream = i;
                 if (!lang.isEmpty() && chosenLangStream < 0)
                 {
-                    for (const QMPlay2Tag &tag : asConst(streams[i]->other_info))
+                    for (const QMPlay2Tag &tag : qAsConst(streams[i]->other_info))
                     {
                         if (tag.first.toInt() == QMPLAY2_TAG_LANGUAGE)
                         {
@@ -1406,16 +1375,7 @@ void PlayClass::load(Demuxer *demuxer)
                     ass->setFontScale(subtitlesScale);
                     ass->setARatio(aspect_ratio);
                     ass->setZoom(zoom);
-
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-                    if (LibASS::slowFontCacheUpdate() && firsttimeUpdateCache)
-                    {
-                        UpdateFC updateFC(ass);
-                        firsttimeUpdateCache = false;
-                    }
-                    else
-#endif
-                        ass->initOSD();
+                    ass->initOSD();
 
                     emit videoStarted(noVideo);
 
@@ -1504,7 +1464,9 @@ void PlayClass::load(Demuxer *demuxer)
             subsMutex.unlock();
 
             if (subtitlesEnabled && fileSubsList.count() && chosenSubtitlesStream < 0)
-                loadSubsFile(fileSubsList[fileSubsList.count() - 1]);
+            {
+                loadSubsFile(fileSubsList[fileSubsList.count() - 1], &streams);
+            }
             else
             {
                 if (subtitlesEnabled)
@@ -1524,9 +1486,7 @@ void PlayClass::load(Demuxer *demuxer)
                     QByteArray assHeader = streams[subtitlesStream]->getExtraData();
                     if (!assHeader.isEmpty() && (streams[subtitlesStream]->codec_name == "ssa" || streams[subtitlesStream]->codec_name == "ass"))
                     {
-                        for (int i = 0; i < streams.count(); ++i)
-                            if (streams[i]->codec_type == AVMEDIA_TYPE_ATTACHMENT && (streams[i]->codec_name == "TTF" || streams[i]->codec_name == "OTF") && streams[i]->extradata_size > 0)
-                                ass->addFont(streams[i]->title, streams[i]->getExtraData());
+                        loadAssFonts(streams);
                     }
                     else
                     {

@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -24,14 +24,13 @@ class PortAudio final : public Module
 {
 public:
     PortAudio();
-        ~PortAudio();
+    ~PortAudio();
+
 private:
     QList<Info> getModulesInfo(const bool) const override;
     void *createInstance(const QString &) override;
 
     SettingsWidget *getSettingsWidget() override;
-
-    bool initialized;
 };
 
 /**/
@@ -45,14 +44,19 @@ class QComboBox;
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {
     Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
+
 public:
     ModuleSettingsWidget(Module &);
+
 private:
     void saveSettings() override;
 
     QCheckBox *enabledB;
     QComboBox *devicesB;
     QDoubleSpinBox *delayB;
+#ifdef Q_OS_WIN
+    QCheckBox *m_exclusive;
+#endif
 #ifdef Q_OS_MACOS
     QCheckBox *bitPerfect;
 #endif

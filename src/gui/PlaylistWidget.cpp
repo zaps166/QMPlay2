@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -19,6 +19,7 @@
 #include <PlaylistWidget.hpp>
 
 #include <QMPlay2Extensions.hpp>
+#include <Functions.hpp>
 #include <MenuBar.hpp>
 #include <Demuxer.hpp>
 #include <Reader.hpp>
@@ -35,7 +36,26 @@
 
 static inline QStringList getDirEntries(const QString &pth)
 {
-    return QDir(pth).entryList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name | QDir::DirsFirst);
+    auto entries = QDir(pth).entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+
+    std::stable_sort(entries.begin(), entries.end(), [](const QFileInfo &a, const QFileInfo &b) {
+        return Functions::compareText(a.fileName(), b.fileName());
+    });
+
+    QStringList dirEntries;
+    dirEntries.reserve(entries.size());
+    for (auto &&entry : entries)
+    {
+        if (entry.isDir())
+            dirEntries.push_back(entry.fileName());
+    }
+    for (auto &&entry : entries)
+    {
+        if (!entry.isDir())
+            dirEntries.push_back(entry.fileName());
+    }
+
+    return dirEntries;
 }
 static inline void prependPath(QStringList &dirEntries, const QString &pth)
 {
@@ -63,9 +83,24 @@ class PlaylistItem : public QTreeWidgetItem
 public:
     bool operator <(const QTreeWidgetItem &other) const override
     {
-        if (treeWidget() && treeWidget()->sortColumn() == 2)
+        if (auto tw = treeWidget())
         {
-            return (data(2, Qt::UserRole) < other.data(2, Qt::UserRole));
+            switch (tw->sortColumn())
+            {
+                case 0:
+                {
+                    return Functions::compareText(text(0), other.text(0));
+                }
+                case 2:
+                {
+                    bool ok1 = false, ok2 = false;
+                    const auto valA = data(2, Qt::UserRole).toDouble(&ok1);
+                    const auto valB = other.data(2, Qt::UserRole).toDouble(&ok2);
+                    if (ok1 && ok2)
+                        return (valA < valB);
+                    break;
+                }
+            }
         }
         return QTreeWidgetItem::operator <(other);
     }
@@ -1038,7 +1073,7 @@ void PlaylistWidget::createExtensionsMenu()
             actions = QMPlay2Ext->getActions(entryName, entryLength, url, addressPrefixName, param);
         else
             actions = QMPlay2Ext->getActions(entryName, entryLength, entryUrl);
-        for (QAction *act : asConst(actions))
+        for (QAction *act : qAsConst(actions))
         {
             act->setParent(extensions);
             extensions->addAction(act);

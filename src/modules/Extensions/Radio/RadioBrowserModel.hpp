@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -24,7 +24,7 @@
 
 #include <memory>
 
-constexpr const char *g_radioBrowserBaseApiUrl = "http://www.radio-browser.info/webservice/json";
+constexpr const char *g_radioBrowserBaseApiUrl = "http://all.api.radio-browser.info/json";
 
 class NetworkAccess;
 class NetworkReply;
@@ -46,7 +46,7 @@ public:
 
     QString getName(const QModelIndex &index) const;
     QUrl getUrl(const QModelIndex &index) const;
-    QUrl getEditUrl(const QModelIndex &index) const;
+    QPixmap getIcon(const QModelIndex &index) const;
     QUrl getHomePageUrl(const QModelIndex &index) const;
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;

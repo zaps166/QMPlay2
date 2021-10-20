@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -22,7 +22,9 @@
 #include <OtherVFiltersW.hpp>
 #include <OSDSettingsW.hpp>
 #include <Functions.hpp>
-#include <YouTubeDL.hpp>
+#ifdef USE_YOUTUBEDL
+#   include <YouTubeDL.hpp>
+#endif
 #include <Notifies.hpp>
 #include <Main.hpp>
 #ifdef USE_VULKAN
@@ -151,8 +153,10 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("ShowDirCovers", true);
     QMPSettings.init("AutoOpenVideoWindow", true);
     QMPSettings.init("AutoRestoreMainWindowOnVideo", true);
+#ifdef UPDATES
     if (!QMPSettings.contains("AutoUpdates"))
         QMPSettings.init("AutoUpdates", !QFile::exists(QMPlay2Core.getShareDir() + "noautoupdates"));
+#endif
     QMPSettings.init("MainWidget/TabPositionNorth", false);
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
     QMPSettings.init("AllowOnlyOneInstance", false);
@@ -183,9 +187,11 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("Vulkan/VSync", Qt::PartiallyChecked);
 #endif
     QMPSettings.init("Vulkan/AlwaysGPUDeint", true);
-    QMPSettings.init("Vulkan/HQScaleDown", true);
+    QMPSettings.init("Vulkan/ForceVulkanYadif", false);
+    QMPSettings.init("Vulkan/YadifSpatialCheck", true);
+    QMPSettings.init("Vulkan/HQScaleDown", false);
     QMPSettings.init("Vulkan/HQScaleUp", false);
-    QMPSettings.init("Vulkan/BypassCompositor", false);
+    QMPSettings.init("Vulkan/BypassCompositor", true);
 
     QMPSettings.init("ShortSeek", 5);
     QMPSettings.init("LongSeek", 30);
@@ -381,9 +387,14 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         generalSettingsPage->autoOpenVideoWindowB->setChecked(QMPSettings.getBool("AutoOpenVideoWindow"));
         generalSettingsPage->autoRestoreMainWindowOnVideoB->setChecked(QMPSettings.getBool("AutoRestoreMainWindowOnVideo"));
 
+#ifdef UPDATES
         generalSettingsPage->autoUpdatesB->setChecked(QMPSettings.getBool("AutoUpdates"));
-#ifndef UPDATER
+# ifndef UPDATER
         generalSettingsPage->autoUpdatesB->setText(tr("Automatically check for updates"));
+# endif
+#else
+        delete generalSettingsPage->autoUpdatesB;
+        generalSettingsPage->autoUpdatesB = nullptr;
 #endif
 
         if (Notifies::hasBoth())
@@ -421,8 +432,13 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         const QIcon viewRefresh = QMPlay2Core.getIconFromTheme("view-refresh");
         generalSettingsPage->clearCoversCache->setIcon(viewRefresh);
         connect(generalSettingsPage->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
+#ifdef USE_YOUTUBEDL
         generalSettingsPage->removeYtDlB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
         connect(generalSettingsPage->removeYtDlB, SIGNAL(clicked()), this, SLOT(removeYouTubeDl()));
+#else
+        generalSettingsPage->removeYtDlB->deleteLater();
+        generalSettingsPage->removeYtDlB = nullptr;
+#endif
         generalSettingsPage->resetSettingsB->setIcon(viewRefresh);
         connect(generalSettingsPage->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
     }
@@ -753,9 +769,14 @@ void SettingsWidget::createRendererSettings()
     renderers->addItem(tr("Vulkan"), "vulkan");
 #endif
 
+    const auto chosenRenderer = settings->getString("Renderer");
+    int activeRenderer = -1;
+
     for (int i = renderers->count() - 1; i >= 0; --i)
     {
         const bool active = (renderers->itemData(i).toString() == currentRendererName);
+        if (active)
+            activeRenderer = i;
         renderers->setItemText(i, renderers->itemText(i) + " (" + (active ? tr("active") : tr("inactive")) + ")");
     }
 
@@ -765,7 +786,7 @@ void SettingsWidget::createRendererSettings()
         Q_UNUSED(initFilters)
         const auto rendererName = renderers->currentData().toString();
         settings->set("Renderer", rendererName);
-        if (currentRendererName != rendererName)
+        if (currentRendererName != rendererName && chosenRenderer != rendererName)
         {
             QMessageBox::information(this, tr("Changing renderer"), tr("To set up a new renderer, the program will start again!"));
             restartApp();
@@ -880,9 +901,23 @@ void SettingsWidget::createRendererSettings()
         auto devices = new QComboBox;
         auto vsync = createVSync();
         auto gpuDeint = new QCheckBox(tr("Use GPU deinterlacing for CPU-decoded video"));
+        auto forceYadif = new QCheckBox(tr("Force Vulkan Yadif deinterlacing for all hardware decoders"));
         auto hqDownscale = new QCheckBox(tr("High quality image scaling down"));
         auto hqUpscale = new QCheckBox(tr("High quality image scaling up"));
         auto bypassCompositor = createBypassCompositor();
+
+#ifdef Q_OS_WIN
+        auto noExclusiveFullScreenDevIDs = std::make_shared<QSet<QByteArray>>();
+
+        connect(devices, qOverload<int>(&QComboBox::currentIndexChanged),
+                this, [=](int idx) {
+            if (devices->count() <= 1)
+                return;
+            if (idx == 0)
+                idx = 1;
+            bypassCompositor->setEnabled(!noExclusiveFullScreenDevIDs->contains(devices->itemData(idx).toByteArray()));
+        });
+#endif
 
         connect(rendererStacked, &QStackedWidget::currentChanged,
                 this, [=](int idx) {
@@ -892,14 +927,24 @@ void SettingsWidget::createRendererSettings()
             const auto storedID = settings->getByteArray("Vulkan/Device");
             int idIdx = 0;
 
+            devices->blockSignals(true);
             for (auto &&physicalDevice : QmVk::Instance::enumerateSupportedPhysicalDevices())
             {
                 const auto &properties = physicalDevice->properties();
                 const auto id = QmVk::Instance::getPhysicalDeviceID(properties);
-                devices->addItem(properties.deviceName, id);
+#ifdef Q_OS_WIN
+                if (bypassCompositor->isEnabled())
+                {
+                    if (!physicalDevice->checkExtension(VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME))
+                        noExclusiveFullScreenDevIDs->insert(id);
+                }
+#endif
+                devices->addItem(static_cast<const char *>(properties.deviceName), id);
                 if (idIdx == 0 && !storedID.isEmpty() && storedID == id)
                     idIdx = devices->count();
             }
+            devices->setCurrentIndex(-1);
+            devices->blockSignals(false);
 
             if (devices->count() > 0)
             {
@@ -934,6 +979,7 @@ void SettingsWidget::createRendererSettings()
 
         vsync->setCheckState(settings->getWithBounds("Vulkan/VSync", Qt::Unchecked, Qt::Checked));
         gpuDeint->setChecked(settings->getBool("Vulkan/AlwaysGPUDeint"));
+        forceYadif->setChecked(settings->getBool("Vulkan/ForceVulkanYadif"));
         hqDownscale->setChecked(settings->getBool("Vulkan/HQScaleDown"));
         hqUpscale->setChecked(settings->getBool("Vulkan/HQScaleUp"));
         bypassCompositor->setChecked(settings->getBool("Vulkan/BypassCompositor"));
@@ -945,6 +991,7 @@ void SettingsWidget::createRendererSettings()
         layout->addRow(tr("Device:"), devices);
         layout->addRow(vsync);
         layout->addRow(gpuDeint);
+        layout->addRow(forceYadif);
         layout->addRow(hqDownscale);
         layout->addRow(hqUpscale);
         layout->addRow(bypassCompositor);
@@ -966,6 +1013,7 @@ void SettingsWidget::createRendererSettings()
             }
             settings->set("Vulkan/VSync", vsync->checkState());
             settings->set("Vulkan/AlwaysGPUDeint", alwaysGPUDeint);
+            settings->set("Vulkan/ForceVulkanYadif", forceYadif->isChecked());
             settings->set("Vulkan/HQScaleDown", hqDownscale->isChecked());
             settings->set("Vulkan/HQScaleUp", hqUpscale->isChecked());
             settings->set("Vulkan/BypassCompositor", bypassCompositor->isChecked());
@@ -975,14 +1023,13 @@ void SettingsWidget::createRendererSettings()
     }
 #endif
 
-    connect(renderers, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+    connect(renderers, qOverload<int>(&QComboBox::currentIndexChanged),
             this, [=](int idx) {
         rendererStacked->setCurrentIndex(idx);
     });
 
-    const int idx = renderers->findData(settings->getString("Renderer"));
-    if (idx > -1)
-        renderers->setCurrentIndex(idx);
+    if (activeRenderer > -1)
+        renderers->setCurrentIndex(activeRenderer);
 
     auto widget = new QWidget;
     auto layout = new QGridLayout(widget);
@@ -1087,7 +1134,9 @@ void SettingsWidget::apply()
             QMPSettings.set("EnlargeCovers", generalSettingsPage->enlargeSmallCoversB->isChecked());
             QMPSettings.set("AutoOpenVideoWindow", generalSettingsPage->autoOpenVideoWindowB->isChecked());
             QMPSettings.set("AutoRestoreMainWindowOnVideo", generalSettingsPage->autoRestoreMainWindowOnVideoB->isChecked());
+#ifdef UPDATES
             QMPSettings.set("AutoUpdates", generalSettingsPage->autoUpdatesB->isChecked());
+#endif
             QMPSettings.set("MainWidget/TabPositionNorth", generalSettingsPage->tabsNorths->isChecked());
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
             QMPSettings.set("AllowOnlyOneInstance", generalSettingsPage->allowOnlyOneInstance->isChecked());
@@ -1365,6 +1414,7 @@ void SettingsWidget::clearCoversCache()
         }
     }
 }
+#ifdef USE_YOUTUBEDL
 void SettingsWidget::removeYouTubeDl()
 {
     const QString filePath = YouTubeDL::getFilePath();
@@ -1375,6 +1425,7 @@ void SettingsWidget::removeYouTubeDl()
         QFile::remove(filePath);
     }
 }
+#endif
 void SettingsWidget::resetSettings()
 {
     if (QMessageBox::question(this, tr("Confirm settings deletion"), tr("Do you really want to clear all settings?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)

@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -26,6 +26,7 @@
 #include <Functions.hpp>
 #include <SubsDec.hpp>
 
+#include <QVersionNumber>
 #include <QApplication>
 #include <QMouseEvent>
 #include <QFileInfo>
@@ -94,9 +95,6 @@ VideoDock::VideoDock() :
         mouseMoveEvent(nullptr);
     });
 
-    if ((isBreeze = QApplication::style()->objectName() == "breeze"))
-        setStyle(&commonStyle);
-
     canHideIDWCursor = false;
     doubleClicked = false;
 }
@@ -111,8 +109,11 @@ void VideoDock::fullScreen(bool b)
         setFeatures(DockWidget::NoDockWidgetFeatures);
         setFloating(false);
 
-        if (!isBreeze)
-            setStyle(&commonStyle);
+        m_contentMarginsBackup = contentsMargins();
+        setContentsMargins(0, 0, 0, 0);
+
+        // FIXME: Is it still needed for something?
+        setStyle(&commonStyle);
 
         m_workaround = true;
     }
@@ -134,8 +135,9 @@ void VideoDock::fullScreen(bool b)
         setFeatures(DockWidget::AllDockWidgetFeatures);
         setFloating(is_floating);
 
-        if (!isBreeze)
-            setStyle(nullptr);
+        setContentsMargins(m_contentMarginsBackup);
+
+        setStyle(nullptr);
 
         m_workaround = false;
     }
@@ -341,8 +343,7 @@ bool VideoDock::event(QEvent *e)
         case QEvent::Move:
             if (m_workaround)
             {
-                const auto versionSplitted = QString(qVersion()).split('.');
-                if (versionSplitted.count() == 3 && versionSplitted[0].toInt() * 0x100 + versionSplitted[1].toInt() >= 0x050C)
+                if (QVersionNumber::fromString(qVersion()) >= QVersionNumber(5, 12, 0))
                 {
                     // Something is wrong with enter/leave events after going full screen in some configurations since Qt 5.12,
                     // do some mouse movements - Qt will see this as mouse move enter and move events.

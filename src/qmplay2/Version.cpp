@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -25,7 +25,7 @@
 #ifndef QMPlay2GitHEAD
     #define QMPlay2GitHEAD
 #endif
-#define QMPlay2Version "19.12.19" QMPlay2GitHEAD
+#define QMPlay2Version "21.06.07" QMPlay2GitHEAD
 
 QByteArray Version::get()
 {

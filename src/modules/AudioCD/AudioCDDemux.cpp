@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -366,8 +366,6 @@ bool AudioCDDemux::freedb_query(cddb_disc_t *&cddb_disc)
         cddb_disc_add_track(cddb_disc, pcddb_track);
     }
 
-    bool useNetwork = false;
-
     cddb_disc_calc_discid(cddb_disc);
     if (cddb_disc_get_discid(cddb_disc) == discID)
         cddb_cache_only(cddb);
@@ -376,8 +374,8 @@ bool AudioCDDemux::freedb_query(cddb_disc_t *&cddb_disc)
         discID = cddb_disc_get_discid(cddb_disc);
 
         cddb_set_timeout(cddb, 3);
-        cddb_http_enable(cddb);
-        cddb_set_server_port(cddb, 80);
+        cddb_set_server_name(cddb, "gnudb.gnudb.org");
+        cddb_set_server_port(cddb, 8880);
 
         Settings sets("QMPlay2");
         if (sets.getBool("Proxy/Use"))
@@ -391,23 +389,16 @@ bool AudioCDDemux::freedb_query(cddb_disc_t *&cddb_disc)
                 cddb_set_http_proxy_password(cddb, QString(QByteArray::fromBase64(sets.getByteArray("Proxy/Password"))).toLocal8Bit());
             }
         }
-
-        useNetwork = true;
     }
 
-    for (int i = 0; i <= useNetwork; ++i)
+    if (cddb_query(cddb, cddb_disc) > 0)
     {
-        if (cddb_query(cddb, cddb_disc) > 0)
+        do if (cddb_disc_get_discid(cddb_disc) == discID)
         {
-            do if (cddb_disc_get_discid(cddb_disc) == discID)
-            {
-                cddb_read(cddb, cddb_disc);
-                cddb_destroy(cddb);
-                return true;
-            } while (cddb_query_next(cddb, cddb_disc));
-        }
-        if (useNetwork && !i)
-            cddb_set_server_name(cddb, "freedb.musicbrainz.org");
+            cddb_read(cddb, cddb_disc);
+            cddb_destroy(cddb);
+            return true;
+        } while (cddb_query_next(cddb, cddb_disc));
     }
 
     cddb_disc_destroy(cddb_disc);

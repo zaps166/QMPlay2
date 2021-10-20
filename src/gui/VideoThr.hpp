@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -83,6 +83,11 @@ private:
 
     void run() override;
 
+#ifdef Q_OS_WIN
+    template<bool h>
+    inline void setHighTimerResolution();
+#endif
+
     bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrameOrError, decoderError;
     AVRational lastSAR;
     int W, H;
@@ -92,6 +97,10 @@ private:
     QMPlay2OSD *subtitles;
     VideoFilters filters;
     QMutex filtersMutex;
+
+#ifdef Q_OS_WIN
+    bool m_timerPrecision = false;
+#endif
 private slots:
     void write(Frame videoFrame, quint32 lastSeq);
     void screenshot(Frame videoFrame);

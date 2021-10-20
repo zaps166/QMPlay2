@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -28,6 +28,13 @@
 #include <QVulkanInstance>
 #include <QResource>
 
+#if defined(Q_OS_WIN)
+#   include <QRegularExpression>
+#elif defined(Q_OS_LINUX)
+#   include <QFile>
+#   include <QDir>
+#endif
+
 namespace QmVk {
 
 constexpr auto s_queueFlags = vk::QueueFlagBits::eGraphics | vk::QueueFlagBits::eCompute;
@@ -48,7 +55,9 @@ vk::Format Instance::fromFFmpegPixelFormat(int avPixFmt)
         case AV_PIX_FMT_GRAY9:
         case AV_PIX_FMT_GRAY10:
         case AV_PIX_FMT_GRAY12:
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(56, 22, 100)
         case AV_PIX_FMT_GRAY14:
+#endif
         case AV_PIX_FMT_GRAY16:
             return vk::Format::eR16Unorm;
 
@@ -140,6 +149,11 @@ Instance::~Instance()
     delete m_qVulkanInstance;
 }
 
+void Instance::prepareDestroy()
+{
+    m_physicalDevice.reset();
+}
+
 void Instance::init()
 {
 #ifdef QT_DEBUG
@@ -148,12 +162,13 @@ void Instance::init()
 
     m_qVulkanInstance->setExtensions({
         VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME,
+        VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME,
         VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME,
         VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME,
     });
 
     if (!m_qVulkanInstance->create())
-        throw vk::InitializationFailedError(QString("Can't create Vulkan instance (0x%1)").arg(m_qVulkanInstance->errorCode(), 0, 16).toStdString());
+        throw vk::InitializationFailedError("Can't create Vulkan instance");
 
 #ifdef QT_DEBUG
     if (!m_qVulkanInstance->layers().contains("VK_LAYER_KHRONOS_validation"))
@@ -210,7 +225,6 @@ void Instance::obtainPhysicalDevice()
 
 AVPixelFormats Instance::supportedPixelFormats() const
 {
-
     auto checkImageFormat = [this](vk::Format format) {
         auto fmtProps = m_physicalDevice->getFormatProperties(format);
         if (!(fmtProps.linearTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage))
@@ -244,7 +258,9 @@ AVPixelFormats Instance::supportedPixelFormats() const
             AV_PIX_FMT_GRAY9,
             AV_PIX_FMT_GRAY10,
             AV_PIX_FMT_GRAY12,
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(56, 22, 100)
             AV_PIX_FMT_GRAY14,
+#endif
             AV_PIX_FMT_GRAY16,
 
             AV_PIX_FMT_P010,
@@ -284,11 +300,15 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
 {
     auto physicalDeviceExtensions = requiredPhysicalDeviceExtenstions();
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME);
+    physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
 #ifdef VK_USE_PLATFORM_WIN32_KHR
+    physicalDeviceExtensions.push_back(VK_KHR_WIN32_KEYED_MUTEX_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME);
+    physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_WIN32_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
 #else
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME);
+    physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
 #endif
 
     return AbstractInstance::createDevice(
@@ -366,6 +386,68 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
 } catch (const vk::SystemError &e) {
     Q_UNUSED(e)
     return false;
+}
+void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalDevices) const
+{
+    auto setAsFirst = [&](auto &&it) {
+        auto primaryPhysicalDevice = move(*it);
+        physicalDevices.erase(it);
+        physicalDevices.insert(physicalDevices.begin(), move(primaryPhysicalDevice));
+    };
+#if defined(Q_OS_WIN)
+    for (DWORD devIdx = 0;; ++devIdx)
+    {
+        DISPLAY_DEVICE displayDevice = {};
+        displayDevice.cb = sizeof(displayDevice);
+        if (!EnumDisplayDevicesA(nullptr, devIdx, &displayDevice, 0))
+            break;
+
+        if (!(displayDevice.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE))
+            continue;
+
+        const QRegularExpression rx(R"(VEN_([0-9a-f]+)&DEV_([0-9a-f]+))", QRegularExpression::CaseInsensitiveOption);
+        const auto match = rx.match(displayDevice.DeviceID);
+
+        bool okVen = false, okDev = false;
+        const uint32_t ven = match.captured(1).toUInt(&okVen, 16);
+        const uint32_t dev = match.captured(2).toUInt(&okDev, 16);
+        if (okVen && okDev)
+        {
+            auto it = find_if(physicalDevices.begin(), physicalDevices.end(), [&](const shared_ptr<PhysicalDevice> &physicalDevice) {
+                const auto &properties = physicalDevice->properties();
+                return (properties.vendorID == ven && properties.deviceID == dev);
+            });
+            if (it != physicalDevices.begin() && it != physicalDevices.end())
+            {
+                setAsFirst(it);
+            }
+        }
+
+        break;
+    }
+#elif defined(Q_OS_LINUX)
+    const auto cards = QDir("/sys/class/drm").entryInfoList({"renderD*"}, QDir::Dirs);
+    for (auto &&card : cards)
+    {
+        QFile f(card.filePath() + "/device/boot_vga");
+        char c = 0;
+        if (f.open(QFile::ReadOnly) && f.getChar(&c) && c == '1')
+        {
+            const auto cardRealPath = card.symLinkTarget();
+            auto it = find_if(physicalDevices.begin(), physicalDevices.end(), [&](const shared_ptr<PhysicalDevice> &physicalDevice) {
+                return cardRealPath.contains(QString::fromStdString(physicalDevice->linuxPCIPath()));
+            });
+            if (it != physicalDevices.begin() && it != physicalDevices.end())
+            {
+                setAsFirst(it);
+            }
+            break;
+        }
+    }
+#else
+    Q_UNUSED(physicalDevices)
+    Q_UNUSED(setAsFirst)
+#endif
 }
 
 vk::PhysicalDeviceFeatures Instance::requiredPhysicalDeviceFeatures()

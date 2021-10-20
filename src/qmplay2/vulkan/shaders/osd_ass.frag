@@ -13,7 +13,7 @@ layout(binding = 0) uniform textureBuffer osdData;
 
 void main()
 {
-    ivec2 pos = ivec2(ceil(inDataCoord * size));
+    ivec2 pos = ivec2(inDataCoord * size);
     float value = texelFetch(osdData, linesize * pos.y + pos.x)[0];
     outColor = vec4(color.rgb, color.a * value);
 }

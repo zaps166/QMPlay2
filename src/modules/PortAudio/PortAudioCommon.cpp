@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -23,10 +23,13 @@
 
 QString PortAudioCommon::getOutputDeviceName(const PaDeviceInfo *deviceInfo)
 {
-    return QString(Pa_GetHostApiInfo(deviceInfo->hostApi)->name) + ": " + QString::fromLocal8Bit(deviceInfo->name);
+    return QString("%1: %2").arg(Pa_GetHostApiInfo(deviceInfo->hostApi)->name, deviceInfo->name);
 }
 QStringList PortAudioCommon::getOutputDeviceNames()
 {
+    if (Pa_Initialize() != paNoError)
+        return {};
+
     QStringList outputDeviceNames;
     const int numDevices = Pa_GetDeviceCount();
     for (int i = 0; i < numDevices; i++)
@@ -35,6 +38,9 @@ QStringList PortAudioCommon::getOutputDeviceNames()
         if (deviceInfo && deviceInfo->maxOutputChannels > 0)
             outputDeviceNames += getOutputDeviceName(deviceInfo);
     }
+
+    Pa_Terminate();
+
     return outputDeviceNames;
 }
 int PortAudioCommon::getDeviceIndexForOutput(const QString &name, const int chn)
@@ -57,17 +63,6 @@ int PortAudioCommon::getDeviceIndexForOutput(const QString &name, const int chn)
         const char alsaDefault[] = "ALSA: default";
         if (getOutputDeviceNames().contains(alsaDefault))
             return getDeviceIndexForOutput(alsaDefault, 0);
-    }
-#elif defined Q_OS_WIN
-    if (chn <= 2)
-    {
-        const int numDevices = Pa_GetDeviceCount();
-        for (int i = 0; i < numDevices; i++)
-        {
-            const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(i);
-            if (deviceInfo && deviceInfo->maxOutputChannels > 0 && Pa_GetHostApiInfo(deviceInfo->hostApi)->type == paMME)
-                return i; //First MME output device is a "WAVE_MAPPER". The "WAVE_MAPPER" doesn't support multi-channel.
-        }
     }
 #else
     Q_UNUSED(chn)

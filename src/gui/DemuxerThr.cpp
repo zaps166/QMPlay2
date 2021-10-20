@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -431,7 +431,8 @@ void DemuxerThr::run()
     connect(&QMPlay2Core, &QMPlay2CoreClass::updateInformationPanel,
             &o, [this] {
         Q_ASSERT(QThread::currentThread() != thread());
-        emitInfo();
+        if (demuxer)
+            emitInfo();
     });
 
     if (forwardPackets == 1 || localStream || unknownLength)
@@ -741,7 +742,7 @@ void DemuxerThr::addSubtitleStream(bool currentPlaying, QString &subtitlesStream
     if (currentPlaying)
         subtitlesStreams += "<u>";
     else
-        subtitlesStreams += "<a style='text-decoration: none; color: black;' href='stream:" + streamName + QString::number(i) + "'>";
+        subtitlesStreams += "<a href='stream:" + streamName + QString::number(i) + "'>";
     subtitlesStreams += "<li><b>" + tr("Stream") + " " + QString::number(subtitlesStreamCount) + "</b></li>";
     if (currentPlaying)
         subtitlesStreams += "</u>";
@@ -852,7 +853,7 @@ void DemuxerThr::emitInfo()
         info += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
         info += "<li>";
         if (!streams.isEmpty())
-            info += "<a href='stream:" + streams + "'>";
+            info += "<a style='text-decoration: underline;' href='stream:" + streams + "'>";
         if (currentPlaying == currentPlayingWanted)
             info += "<b>";
         info += tr("Program") + " " + QString::number(program.number);
@@ -873,7 +874,7 @@ void DemuxerThr::emitInfo()
             once = true;
         }
         info += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
-        info += "<li><a href='seek:" + QString::number(chapter.start) + "'>" + (chapter.title.isEmpty() ? tr("Chapter") + " " + QString::number(++chapterCount) : chapter.title) + "</a></li>";
+        info += "<li><a style='text-decoration: underline;' href='seek:" + QString::number(chapter.start) + "'>" + (chapter.title.isEmpty() ? tr("Chapter") + " " + QString::number(++chapterCount) : chapter.title) + "</a></li>";
         info += "</ul>";
     }
 
@@ -896,7 +897,7 @@ void DemuxerThr::emitInfo()
                     videoStreams += "<u>";
                 }
                 else
-                    videoStreams += "<a style='text-decoration: none; color: black;' href='stream:video" + QString::number(i) + "'>";
+                    videoStreams += "<a href='stream:video" + QString::number(i) + "'>";
                 videoStreams += "<b>" + tr("Stream") + " " + QString::number(++videoStreamCount) + "</b>";
                 if (currentPlaying)
                     videoStreams += "</u>" + getWriterName((AVThread *)playC.vThr);
@@ -930,7 +931,7 @@ void DemuxerThr::emitInfo()
                     audioStreams += "<u>";
                 }
                 else
-                    audioStreams += "<a style='text-decoration: none; color: black;' href='stream:audio" + QString::number(i) + "'>";
+                    audioStreams += "<a href='stream:audio" + QString::number(i) + "'>";
                 audioStreams += "<b>" + tr("Stream") + " " + QString::number(++audioStreamCount) + "</b>";
                 if (currentPlaying)
                     audioStreams += "</u>" + getWriterName((AVThread *)playC.aThr);
@@ -977,7 +978,7 @@ void DemuxerThr::emitInfo()
         ++i;
     }
     i = 0;
-    for (const QString &fName : asConst(playC.fileSubsList))
+    for (const QString &fName : qAsConst(playC.fileSubsList))
         addSubtitleStream(fName == playC.fileSubs, subtitlesStreams, i++, ++subtitlesStreamCount, "fileSubs", QString(), Functions::fileName(fName));
 
     if (!videoStreams.isEmpty())

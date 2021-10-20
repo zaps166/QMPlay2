@@ -425,6 +425,10 @@
         <source>software decoding</source>
         <translation>Software Decodierung</translation>
     </message>
+    <message>
+        <source>Vulkan Yadif spatial check</source>
+        <translation>Vulkan Yadif räumliche Überprüfung</translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
@@ -576,8 +580,8 @@
         <translation>Download stoppen</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Größe</translation>
+        <source>File size</source>
+        <translation>Dateigröße</translation>
     </message>
     <message>
         <source>Download complete</source>
@@ -1414,8 +1418,8 @@
         <translation>Scheiben</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Verzögerung</translation>
+        <source>Maximum latency</source>
+        <translation>Maximale Latenz</translation>
     </message>
     <message>
         <source>Refresh time</source>
@@ -1739,7 +1743,7 @@
     </message>
     <message>
         <source>Try to automatically reconnect live streams on error</source>
-        <translation> Versuche, Live-Streams bei einem Fehler automatisch neu zu verbinden</translation>
+        <translation>Versuche, Live-Streams bei einem Fehler automatisch neu zu verbinden</translation>
     </message>
     <message>
         <source>Decode MPEG4 videos</source>
@@ -1776,6 +1780,18 @@
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation>Kopiere dekodiertes Video in den CPU-Speicher (langsam)</translation>
+    </message>
+    <message>
+        <source>Zero-copy decoding on Intel hardware (experimental)</source>
+        <translation>Zero-Copy-Decodierung auf Intel-Hardware (experimentell)</translation>
+    </message>
+    <message>
+        <source>Better performance, but can cause garbage or might not work at all.</source>
+        <translation>Bessere Leistung, kann aber Müll verursachen oder funktioniert möglicherweise überhaupt nicht.</translation>
+    </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1875,22 +1891,22 @@
     <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation type="unfinished">Shader Compiler/Link-Fehler</translation>
+        <translation>Shader Compiler/Link-Fehler</translation>
     </message>
     <message>
         <source>Can&apos;t init %1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>texture map error</source>
-        <translation type="unfinished">Textur-Map-Fehler</translation>
+        <translation>Textur-Map-Fehler</translation>
     </message>
 </context>
 <context>
     <name>Options</name>
     <message>
         <source>Op&amp;tions</source>
-        <translation>Optionen</translation>
+        <translation>Op&amp;tionen</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
@@ -1910,19 +1926,19 @@
     </message>
     <message>
         <source>&amp;Profiles</source>
-        <translation>Profile</translation>
+        <translation>&amp;Profile</translation>
     </message>
     <message>
         <source>&amp;New Profile</source>
-        <translation>Neues Profil</translation>
+        <translation>&amp;Neues Profil</translation>
     </message>
     <message>
         <source>&amp;Copy Profile</source>
-        <translation>Profil kopieren</translation>
+        <translation>Profil &amp;kopieren</translation>
     </message>
     <message>
         <source>&amp;Default</source>
-        <translation>Standard</translation>
+        <translation>&amp;Standard</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -1930,7 +1946,7 @@
     </message>
     <message>
         <source>Enter new profile name:</source>
-        <translation>Neuen Profilnamen eingeben</translation>
+        <translation>Neuen Profilnamen eingeben:</translation>
     </message>
     <message>
         <source>&amp;Playback settings</source>
@@ -1938,7 +1954,14 @@
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Renderer Einstellungen</translation>
+    </message>
+</context>
+<context>
+    <name>PipeWireWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation>Kann den Audio Ausgabestrom nicht öffnen</translation>
     </message>
 </context>
 <context>
@@ -2060,7 +2083,7 @@
     <name>Playback</name>
     <message>
         <source>&amp;Playback</source>
-        <translation>Wiedergabe</translation>
+        <translation>&amp;Wiedergabe</translation>
     </message>
     <message>
         <source>&amp;Enable audio</source>
@@ -2072,7 +2095,7 @@
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>Video Verzögerung angeben</translation>
+        <translation>&amp;Video Verzögerung angeben</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
@@ -2263,7 +2286,7 @@
     </message>
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
-        <translation type="unfinished"></translation>
+        <translation>Denken Sie daran, dass Audio/Video/Untertitel aktiviert sind</translation>
     </message>
     <message>
         <source>Partially checked means that there is a delay between click and pausing</source>
@@ -2306,15 +2329,15 @@
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translation>Schneller</translation>
+        <translation>&amp;Schneller</translation>
     </message>
     <message>
         <source>Slowe&amp;r</source>
-        <translation>Langsamer</translation>
+        <translation>Langsame&amp;r</translation>
     </message>
     <message>
         <source>Zoom i&amp;n</source>
-        <translation>Reinzoomen</translation>
+        <translation>Rei&amp;nzoomen</translation>
     </message>
     <message>
         <source>Zoom ou&amp;t</source>
@@ -2322,7 +2345,7 @@
     </message>
     <message>
         <source>&amp;Mute</source>
-        <translation>Stumm</translation>
+        <translation>Stu&amp;mm</translation>
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
@@ -2365,8 +2388,8 @@
         <translation>Überspringen</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>Danach Stoppen</translation>
+        <source>&amp;Stop after playing</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2561,10 +2584,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Font cache is being updated, please wait</source>
-        <translation>Bitte warten, aktualisiere den Schriften-Cache</translation>
-    </message>
-    <message>
         <source>QMPlay2 has been updated to version</source>
         <translation>QMPlay2 wurde aktualisiert auf die Version</translation>
     </message>
@@ -2602,10 +2621,6 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
         <translation>Adresse</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>QMPlayer Radio Station</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>Meine Radio Station</translation>
     </message>
@@ -2616,10 +2631,6 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>Lösche gewählte Radio Station</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation>Radio-Browser </translation>
     </message>
     <message>
         <source>Play</source>
@@ -2660,6 +2671,22 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     <message>
         <source>Save radio station list</source>
         <translation>Radiosenderliste speichern</translation>
+    </message>
+    <message>
+        <source>Tag</source>
+        <translation>Tag</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation>Land</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Sprache</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation>Staat</translation>
     </message>
 </context>
 <context>
@@ -2705,7 +2732,7 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>Wiedergabeliste wiederholen</translation>
+        <translation>&amp;Wiedergabeliste wiederholen</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
@@ -2713,7 +2740,7 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation>Zufällige Wiedergabe der Gruppe</translation>
+        <translation>Zufällige Wiedergabe der &amp;Gruppe</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
@@ -2771,7 +2798,7 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     <name>SIDPlay</name>
     <message>
         <source>Track</source>
-        <translation>Pfad</translation>
+        <translation>Stück</translation>
     </message>
 </context>
 <context>
@@ -2916,11 +2943,11 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Changing OpenGL mode</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenGL-Modus ändern</translation>
     </message>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
-        <translation type="unfinished"></translation>
+        <translation>Um einen neuen OpenGL-Modus einzurichten, wird das Programm erneut gestartet!</translation>
     </message>
     <message>
         <source>To apply the icons change, the program will start again!</source>
@@ -2928,109 +2955,115 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Legacy-Videoausgabepriorität</translation>
     </message>
     <message>
         <source>Legacy</source>
-        <translation type="unfinished"></translation>
+        <translation>Legacy</translation>
     </message>
     <message>
         <source>OpenGL</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenGL</translation>
     </message>
     <message>
         <source>active</source>
-        <translation type="unfinished"></translation>
+        <translation>aktivieren</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>deaktivieren</translation>
     </message>
     <message>
         <source>Changing renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Renderer ändern</translation>
     </message>
     <message>
         <source>To set up a new renderer, the program will start again!</source>
-        <translation type="unfinished"></translation>
+        <translation>Um einen neuen Renderer einzurichten, wird das Programm erneut gestartet!</translation>
     </message>
     <message>
         <source>Vertical synchronization (V-Sync)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertikale Synchronisation (V-Sync)</translation>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation type="unfinished">Compositor im Vollbildmodus umgehen</translation>
+        <translation>Compositor im Vollbildmodus umgehen</translation>
     </message>
     <message>
         <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwenden Sie QMPlay2-Videoausgangsmodule. Dies wird auch verwendet, wenn andere Renderer nich&apos;t verfügbar sind.</translation>
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwenden Sie OpenGL für das gesamte Fenster</translation>
     </message>
     <message>
         <source>This can improve performance if X11 compositor supports it</source>
-        <translation type="unfinished">Dies kann die Leistung verbessern, wenn X11 Compositor dies unterstützt</translation>
+        <translation>Dies kann die Leistung verbessern, wenn X11 Compositor dies unterstützt</translation>
     </message>
     <message>
         <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dies kann die Leistung verbessern. Einige Grafiktreiber können abstürzen, wenn sie aktiviert sind.</translation>
     </message>
     <message>
         <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwenden Sie QOpenGLWidget (Render-to-Texture) und aktivieren Sie OpenGL für Visualisierungen. Bei vorsichtiger Verwendung kann die Leistung der Videowiedergabe beeinträchtigt werden.</translation>
     </message>
     <message>
         <source>Renderer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Renderer:</translation>
     </message>
     <message>
         <source>Renderer settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Renderer Einstellungen</translation>
     </message>
     <message>
         <source>Vulkan</source>
-        <translation type="unfinished"></translation>
+        <translation>Vulkan</translation>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwenden Sie GPU-Deinterlacing für CPU-decodierte Videos</translation>
     </message>
     <message>
         <source>High quality image scaling down</source>
-        <translation type="unfinished"></translation>
+        <translation>Hochwertige Bildverkleinerung</translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation type="unfinished"></translation>
+        <translation>Hochwertige Bildskalierung</translation>
     </message>
     <message>
         <source>First available device</source>
-        <translation type="unfinished"></translation>
+        <translation>Erstes verfügbares Gerät</translation>
     </message>
     <message>
         <source>No supported devices found</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine unterstützten Geräte gefunden</translation>
     </message>
     <message>
         <source>Partially checked (default):
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Teilweise geprüft (Standard):
+  - MAILBOX (reißfrei) ist der bevorzugte derzeitige Modus
+  - FIFO (V-Sync) sollte nicht im Fenstermodus verwendet werden</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erlaube exklusiven Vollbild. Dies kann die Leistung verbessern.</translation>
     </message>
     <message>
         <source>Very slow if used with sharpness</source>
-        <translation type="unfinished"></translation>
+        <translation>Sehr langsam, wenn es mit Schärfe verwendet wird</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gerät:</translation>
+    </message>
+    <message>
+        <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
+        <translation>Erzwingen Sie das Deinterlacing von Vulkan Yadif für alle Hardware-Decoder</translation>
     </message>
 </context>
 <context>
@@ -3145,7 +3178,7 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
         <source>Track</source>
-        <translation>Pfad</translation>
+        <translation>Stück</translation>
     </message>
     <message>
         <source>Cover</source>
@@ -3484,6 +3517,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     <message>
         <source>Preferred quality</source>
         <translation>Bevorzugte Qualität</translation>
+    </message>
+    <message>
+        <source>Publish time</source>
+        <translation>Veröffentlichung</translation>
     </message>
 </context>
 <context>

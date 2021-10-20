@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -49,6 +49,10 @@ using namespace std;
 #include <QImage>
 #include <QDir>
 
+#ifdef Q_OS_WIN
+#   include <windows.h>
+#endif
+
 #include <cmath>
 
 VideoThr::VideoThr(PlayClass &playC, const QStringList &pluginsName) :
@@ -62,12 +66,8 @@ VideoThr::VideoThr(PlayClass &playC, const QStringList &pluginsName) :
 {
     if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
     {
-        writer = QMPlay2Core.gpuInstance()->getVideoOutput();
-        if (!writer)
-        {
-            writer = QMPlay2Core.gpuInstance()->createOrGetVideoOutput();
-            videoWriter()->open();
-        }
+        writer = QMPlay2Core.gpuInstance()->createOrGetVideoOutput();
+        videoWriter()->open();
     }
     else
     {
@@ -80,12 +80,13 @@ VideoThr::~VideoThr()
 {
     QMPlay2GUI.videoAdjustment->enableControls();
     QMPlay2GUI.screenSaver->unInhibit(0);
+#ifdef Q_OS_WIN
+    setHighTimerResolution<false>();
+#endif
     delete playC.osd;
     playC.osd = nullptr;
     delete subtitles;
     delete sDec;
-    if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
-        QMPlay2Core.gpuInstance()->clearVideoOutput();
 }
 
 void VideoThr::setDec(Decoder *dec)
@@ -110,6 +111,8 @@ bool VideoThr::videoWriterSet()
 
 void VideoThr::stop(bool terminate)
 {
+    if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
+        QMPlay2Core.gpuInstance()->clearVideoOutput();
     playC.videoSeekPos = -1;
     AVThread::stop(terminate);
 }
@@ -404,10 +407,14 @@ void VideoThr::run()
         playC.fillBufferB = true;
 
         /* Subtitles packet */
-        Packet sPacket;
+        QVector<Packet> sPackets;
         playC.sPackets.lock();
-        if (playC.sPackets.canFetch())
-            sPacket = playC.sPackets.fetch();
+        while (playC.sPackets.canFetch())
+        {
+            auto packet = playC.sPackets.fetch();
+            if (!packet.isEmpty())
+                sPackets.push_back(move(packet));
+        }
         playC.sPackets.unlock();
 
         mutex.lock();
@@ -421,9 +428,10 @@ void VideoThr::run()
         const double subsPts = playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync;
         QList<const QMPlay2OSD *> osdList, osdListToDelete;
         playC.subsMutex.lock();
+        const bool canDeleteSubs = (deleteSubs && static_cast<bool>(subtitles));
         if (sDec) //Image subs (pgssub, dvdsub, ...)
         {
-            if (!sDec->decodeSubtitle(sPacket, subsPts, subtitles, QSize(W, H), playC.flushVideo))
+            if (!sDec->decodeSubtitle(sPackets, subsPts, subtitles, QSize(W, H), playC.flushVideo))
             {
                 osdListToDelete += subtitles;
                 subtitles = nullptr;
@@ -431,7 +439,7 @@ void VideoThr::run()
         }
         else
         {
-            if (!sPacket.isEmpty())
+            for (auto &&sPacket : qAsConst(sPackets))
             {
                 const QByteArray sPacketData = QByteArray::fromRawData((const char *)sPacket.data(), sPacket.size());
                 if (playC.ass->isASS())
@@ -448,7 +456,7 @@ void VideoThr::run()
         if (subtitles)
         {
             const bool hasDuration = subtitles->duration() >= 0.0;
-            if (deleteSubs || (subtitles->isStarted() && subsPts < subtitles->pts()) || (hasDuration && subsPts > subtitles->pts() + subtitles->duration()))
+            if (canDeleteSubs || (subtitles->isStarted() && subsPts < subtitles->pts()) || (hasDuration && subsPts > subtitles->pts() + subtitles->duration()))
             {
                 osdListToDelete += subtitles;
                 subtitles = nullptr;
@@ -726,6 +734,29 @@ void VideoThr::run()
     }
 }
 
+#ifdef Q_OS_WIN
+template<bool h>
+inline void VideoThr::setHighTimerResolution()
+{
+    if (h)
+    {
+        if (!m_timerPrecision)
+        {
+            timeBeginPeriod(1);
+            m_timerPrecision = true;
+        }
+    }
+    else
+    {
+        if (m_timerPrecision)
+        {
+            timeEndPeriod(1);
+            m_timerPrecision = false;
+        }
+    }
+}
+#endif
+
 void VideoThr::write(Frame videoFrame, quint32 lastSeq)
 {
     canWrite = true;
@@ -738,6 +769,10 @@ void VideoThr::write(Frame videoFrame, quint32 lastSeq)
         return;
 
     QMPlay2GUI.screenSaver->inhibit(0);
+#ifdef Q_OS_WIN
+    setHighTimerResolution<true>();
+#endif
+
     videoWriter()->writeVideo(videoFrame);
 }
 void VideoThr::screenshot(Frame videoFrame)
@@ -758,6 +793,7 @@ void VideoThr::screenshot(Frame videoFrame)
         if (auto vkHwInterop = dynamic_pointer_cast<QmVk::HWInterop>(getHWDecContext()))
         {
             vkHwInterop->map(videoFrame);
+            vkHwInterop->sync({videoFrame});
             if (vkHwInterop->hasError())
                 videoFrame.clear();
         }
@@ -787,5 +823,8 @@ void VideoThr::screenshot(Frame videoFrame)
 void VideoThr::pause()
 {
     QMPlay2GUI.screenSaver->unInhibit(0);
+#ifdef Q_OS_WIN
+    setHighTimerResolution<false>();
+#endif
     writer->pause();
 }

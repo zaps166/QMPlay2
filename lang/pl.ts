@@ -425,6 +425,10 @@
         <source>software decoding</source>
         <translation>dekodowanie programowe</translation>
     </message>
+    <message>
+        <source>Vulkan Yadif spatial check</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
@@ -576,8 +580,8 @@
         <translation>Zatrzymaj pobieranie</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Rozmiar</translation>
+        <source>File size</source>
+        <translation>Rozmiar pliku</translation>
     </message>
     <message>
         <source>Download again</source>
@@ -1415,8 +1419,8 @@
         <translation>Kawałki</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Opóźnienie</translation>
+        <source>Maximum latency</source>
+        <translation>Maksymalne opóźnienie</translation>
     </message>
     <message>
         <source>Refresh time</source>
@@ -1778,6 +1782,18 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation>Kopiuj obraz do pamięci CPU (powolne)</translation>
     </message>
+    <message>
+        <source>Zero-copy decoding on Intel hardware (experimental)</source>
+        <translation>Dekodowanie bez kopii dla układów Intel (eksperymentalne)</translation>
+    </message>
+    <message>
+        <source>Better performance, but can cause garbage or might not work at all.</source>
+        <translation>Lepsza wydajność, ale może powodowac problemy z obrazem albo nie działać wcale.</translation>
+    </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1940,6 +1956,13 @@
     <message>
         <source>&amp;Renderer settings</source>
         <translation>Ustawienia &amp;renderera</translation>
+    </message>
+</context>
+<context>
+    <name>PipeWireWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation>Nie można otworzyć strumienia wyjścia dźwięku</translation>
     </message>
 </context>
 <context>
@@ -2366,8 +2389,8 @@
         <translation>&amp;Pomiń</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>Z&amp;atrzymaj po</translation>
+        <source>&amp;Stop after playing</source>
+        <translation>Z&amp;atrzymaj po odtworzeniu</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2562,10 +2585,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Font cache is being updated, please wait</source>
-        <translation>Czekaj, trwa aktualizacja pamięci podręcznej czcionek</translation>
-    </message>
-    <message>
         <source>QMPlay2 has been updated to version</source>
         <translation>QMPlay2 został zaktualizowany do wersji</translation>
     </message>
@@ -2603,10 +2622,6 @@ QMPlay2 nie będzie skalować ikon!</translation>
         <translation>Adres</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>Stacje radiowe QMPlay2</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>Moje stacje radiowe</translation>
     </message>
@@ -2617,10 +2632,6 @@ QMPlay2 nie będzie skalować ikon!</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>Usuń zaznaczoną stację radiową</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation></translation>
     </message>
     <message>
         <source>Play</source>
@@ -2661,6 +2672,22 @@ QMPlay2 nie będzie skalować ikon!</translation>
     <message>
         <source>Save radio station list</source>
         <translation>Zapisz listę stacji radiowych</translation>
+    </message>
+    <message>
+        <source>Tag</source>
+        <translation>Znacznik</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation>Kraj</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Język</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation>Stan</translation>
     </message>
 </context>
 <context>
@@ -3035,6 +3062,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <source>Device:</source>
         <translation>Urządzenie:</translation>
     </message>
+    <message>
+        <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
+        <translation>Wymuś Yadif poprzez Vulkan dla wszystkich dekoderów sprzętowych</translation>
+    </message>
 </context>
 <context>
     <name>ShortcutHandler</name>
@@ -3241,7 +3272,7 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <name>VAAPI</name>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation>Nie obsługiwany algorytm usuwania przeplotu</translation>
+        <translation>Nieobsługiwany algorytm usuwania przeplotu</translation>
     </message>
     <message>
         <source>Cannot open video filters</source>
@@ -3252,15 +3283,15 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>Nie obsługiwany filtr ostrości obrazu</translation>
+        <translation>Nieobsługiwany filtr ostrości obrazu</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation>Nie obsługiwany algorytm usuwania przeplotu</translation>
+        <translation>Nieobsługiwany algorytm usuwania przeplotu</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
-        <translation>Nie obsługiwany filtr redukcji szumów</translation>
+        <translation>Nieobsługiwany filtr redukcji szumów</translation>
     </message>
 </context>
 <context>
@@ -3487,6 +3518,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>Preferred quality</source>
         <translation>Preferowana jakość</translation>
+    </message>
+    <message>
+        <source>Publish time</source>
+        <translation>Czas publikacji</translation>
     </message>
 </context>
 <context>

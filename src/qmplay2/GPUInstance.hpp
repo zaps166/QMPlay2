@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -31,14 +31,12 @@ public:
 public:
     virtual ~GPUInstance() = default;
 
+    virtual void prepareDestroy();
+
     virtual QString name() const = 0;
     virtual QMPlay2CoreClass::Renderer renderer() const = 0;
 
     virtual VideoWriter *createOrGetVideoOutput() = 0;
-    inline VideoWriter *getVideoOutput() const
-    {
-        return m_videoWriter;
-    }
 
     std::shared_ptr<HWDecContext> getHWDecContext() const;
 
@@ -50,10 +48,7 @@ public:
 
     bool setHWDecContextForVideoOutput(const std::shared_ptr<HWDecContext> &hwDecContext);
 
-    inline void clearVideoOutput()
-    {
-        m_videoWriter = nullptr;
-    }
+    void clearVideoOutput();
     void resetVideoOutput();
 
 protected:

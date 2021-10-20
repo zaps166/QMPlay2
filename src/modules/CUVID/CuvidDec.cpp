@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -70,10 +70,22 @@ static QMutex g_loadMutex;
 static int g_loadState = -1;
 static bool g_initGL = false;
 static bool g_initVK = false;
+static bool g_initialized = false;
 
 bool CuvidDec::canCreateInstance()
 {
     QMutexLocker locker(&g_loadMutex);
+
+    const bool initVK = QMPlay2Core.isVulkanRenderer();
+    const bool initGL = (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL);
+
+    if (initGL != g_initGL || initVK != g_initVK)
+    {
+        g_initGL = initGL;
+        g_initVK = initVK;
+        g_loadState = -1;
+    }
+
     return (g_loadState != 0);
 }
 
@@ -585,7 +597,7 @@ bool CuvidDec::open(StreamInfo &streamInfo)
         }
     }
 
-    if (m_cuvidHwInterop)
+    if (m_cuvidHwInterop && (!QMPlay2Core.isVulkanRenderer() || !QMPlay2Core.getSettings().getBool("Vulkan/ForceVulkanYadif")))
         m_filter = make_shared<DeintHWPrepareFilter>();
 
     return true;
@@ -664,29 +676,6 @@ bool CuvidDec::loadLibrariesAndInit()
 {
     QMutexLocker locker(&g_loadMutex);
 
-    bool doInit = true;
-
-    bool initGL = false;
-    bool initVK = false;
-#ifdef USE_OPENGL
-    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
-        initGL = true;
-#endif
-#ifdef USE_VULKAN
-    if (QMPlay2Core.isVulkanRenderer())
-        initVK = true;
-#endif
-    if ((initGL != g_initGL || initVK != g_initVK) && g_loadState != 0)
-    {
-        g_initGL = initGL;
-        g_initVK = initVK;
-        if (g_loadState == 1)
-        {
-            g_loadState = -1;
-            doInit = false;
-        }
-    }
-
     if (g_loadState == -1)
     {
 #ifdef Q_OS_WIN
@@ -706,7 +695,11 @@ bool CuvidDec::loadLibrariesAndInit()
             }
         }
 #endif
-        g_loadState = (cuvid::load() && cu::load(doInit, initGL, initVK));
+        g_loadState = (cuvid::load() && cu::load(!g_initialized, g_initGL, g_initVK));
+        if (g_loadState)
+            g_initialized = true;
+        else
+            QMPlay2Core.logError("CUVID :: Unable to get function pointers");
     }
 
     return (g_loadState == 1);

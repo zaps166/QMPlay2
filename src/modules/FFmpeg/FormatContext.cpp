@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -22,9 +22,10 @@
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
 #include <OggHelper.hpp>
-#include <CppUtils.hpp>
 #include <Settings.hpp>
 #include <Packet.hpp>
+
+#include <limits>
 
 extern "C"
 {
@@ -219,7 +220,7 @@ FormatContext::~FormatContext()
         av_packet_free(&packet);
     }
     delete oggHelper;
-    for (StreamInfo *streamInfo : asConst(streamsInfo))
+    for (StreamInfo *streamInfo : qAsConst(streamsInfo))
         delete streamInfo;
 }
 
@@ -717,26 +718,56 @@ bool FormatContext::open(const QString &_url, const QString &param)
     // Useful, e.g. CUVID decoder needs valid PTS
     formatCtx->flags |= AVFMT_FLAG_GENPTS;
 
+    if (url.endsWith("sdp"))
+        av_dict_set(&options, "protocol_whitelist", "file,crypto,data,udp,rtp", 0);
+
     OpenFmtCtxThr *openThr = new OpenFmtCtxThr(formatCtx, url.toUtf8(), inputFmt, options, abortCtx);
     formatCtx = openThr->getFormatCtx();
     openThr->drop();
     if (!formatCtx || disabledDemuxers.contains(name()))
         return false;
 
-    if (name().startsWith("image2") || name().endsWith("_pipe"))
+    if (name() == "sdp")
+    {
+        isLocal = false;
+        formatCtx->flags |= AVFMT_FLAG_NOBUFFER;
+    }
+    else if (name().startsWith("image2") || name().endsWith("_pipe"))
     {
         if (!settings.getBool("StillImages"))
             return false;
         stillImage = true;
     }
-
-    if (name() == "mp3")
+    else if (name() == "mp3")
+    {
         formatCtx->flags |= AVFMT_FLAG_FAST_SEEK; //This should be set before "avformat_open_input", but seems to be working for MP3...
+    }
 
     if (avformat_find_stream_info(formatCtx, nullptr) < 0)
         return false;
 
-    isStreamed = !isLocal && formatCtx->duration <= 0; //QMPLAY2_NOPTS_VALUE is negative
+    // Determine the duration of WavPack if not known
+    if (isLocal && formatCtx->nb_streams == 1 && formatCtx->duration == AV_NOPTS_VALUE)
+    {
+        const auto stream = formatCtx->streams[0];
+        if (stream->codecpar->codec_id == AV_CODEC_ID_WAVPACK)
+        {
+            if (av_seek_frame(formatCtx, 0, std::numeric_limits<int64_t>::max(), AVSEEK_FLAG_BACKWARD) >= 0)
+            {
+                AVPacket pkt;
+                av_init_packet(&pkt);
+                if (av_read_frame(formatCtx, &pkt) == 0)
+                {
+                    if (pkt.dts != AV_NOPTS_VALUE)
+                        formatCtx->duration = av_rescale_q(pkt.dts + pkt.duration, stream->time_base, {1, AV_TIME_BASE});
+                    av_packet_unref(&pkt);
+                }
+            }
+            av_seek_frame(formatCtx, 0, 0, AVSEEK_FLAG_BACKWARD);
+        }
+    }
+
+    isStreamed = !isLocal && formatCtx->duration <= 0; // AV_NOPTS_VALUE is negative
 
 #ifdef QMPlay2_libavdevice
     forceCopy = name().contains("v4l2"); //Workaround for v4l2 - if many buffers are referenced demuxer doesn't produce proper timestamps (FFmpeg BUG?).

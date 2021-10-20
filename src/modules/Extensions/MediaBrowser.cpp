@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -49,10 +49,6 @@
 #include <QJsonArray>
 
 #include <algorithm>
-
-#if defined(QMPLAY2_CPU_X86_32) && !defined(JS_SKIP_SSE2_CHECK)
-#    include <libavutil/cpu.h>
-#endif
 
 Q_LOGGING_CATEGORY(mb, "MediaBrowser")
 
@@ -501,14 +497,6 @@ void MediaBrowser::completionsReady()
 
 bool MediaBrowser::scanScripts()
 {
-#if defined(QMPLAY2_CPU_X86_32) && !defined(JS_SKIP_SSE2_CHECK)
-    if (!(QMPlay2CoreClass::getCPUFlags() & AV_CPU_FLAG_SSE2))
-    {
-        qCCritical(mb) << "SSE2 capable CPU is required";
-        return false;
-    }
-#endif
-
     const auto lastName = m_providersB->currentText();
 
     m_providersB->clear();
@@ -596,11 +584,10 @@ void MediaBrowser::downloadScripts(const QByteArray &jsonData)
     bool removed = false, downloading = false;
     for (auto &&jsonVal : jsonArr)
     {
-        const auto jsonObj = jsonVal.toObject();
-        const auto name = jsonObj["Name"].toString();
-        const auto path = jsonObj["Path"].toString();
-        const auto version = jsonObj["Version"].toInt();
-        const auto apiVersion = jsonObj["ApiVersion"].toInt();
+        const auto name = jsonVal["Name"].toString();
+        const auto path = jsonVal["Path"].toString();
+        const auto version = jsonVal["Version"].toInt();
+        const auto apiVersion = jsonVal["ApiVersion"].toInt();
         if (name.isEmpty() || version <= 0 || apiVersion != g_mediaBrowserApiVersion)
             continue;
 

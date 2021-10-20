@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -59,6 +59,14 @@ bool Writer::set()
     {
         m_lastDeviceID = deviceID;
         mustRestart = true;
+    }
+
+    const auto forceVulkanYadif = sets.getBool("Vulkan/ForceVulkanYadif");
+    if (m_forceVulkanYadif != forceVulkanYadif)
+    {
+        m_forceVulkanYadif = forceVulkanYadif;
+        if (m_vkHwInterop)
+            mustRestart = true;
     }
 
     m_window->setConfig(

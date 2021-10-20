@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -155,7 +155,7 @@ std::shared_ptr<QmVk::Image> VideoFilter::vulkanImageFromFrame(
     Frame &frame,
     const std::shared_ptr<QmVk::Device> &device)
 {
-    if (m_vkHwInterop && !frame.vulkanImage() && device)
+    if (m_vkHwInterop && device)
     {
         m_vkHwInterop->map(frame);
         if (m_vkHwInterop->hasError() || !frame.vulkanImage())

@@ -425,6 +425,10 @@
         <source>software decoding</source>
         <translation>програмне декодування</translation>
     </message>
+    <message>
+        <source>Vulkan Yadif spatial check</source>
+        <translation>Просторова перевірка Yadif через Vulkan</translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
@@ -576,8 +580,8 @@
         <translation>Зупинка завантаження</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Розмір</translation>
+        <source>File size</source>
+        <translation>Розмір файлу</translation>
     </message>
     <message>
         <source>Download again</source>
@@ -1415,8 +1419,8 @@
         <translation>Фрагменти</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Затримка</translation>
+        <source>Maximum latency</source>
+        <translation>Максимальна затримка</translation>
     </message>
     <message>
         <source>Refresh time</source>
@@ -1660,7 +1664,7 @@
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation>Використовувати CUVID тільки якщо першим процесором є NVIDIA</translation>
+        <translation>Задіяти CUVID лише якщо першим графічним процесором є NVIDIA</translation>
     </message>
     <message>
         <source>Infinite</source>
@@ -1778,6 +1782,18 @@
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation>Копіювати декодоване відео в пам&apos;ять процесора (повільно)</translation>
     </message>
+    <message>
+        <source>Zero-copy decoding on Intel hardware (experimental)</source>
+        <translation>Декодувати без копіювання для чіпів Intel (експериментально)</translation>
+    </message>
+    <message>
+        <source>Better performance, but can cause garbage or might not work at all.</source>
+        <translation>Краща продуктивність, але може спричинити проблеми з зображенням або взагалі не працювати.</translation>
+    </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation>Монопольний режим</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1880,7 +1896,7 @@
     </message>
     <message>
         <source>Can&apos;t init %1</source>
-        <translation>Неможливо ініціалізувати %1&gt;</translation>
+        <translation>Неможливо ініціалізувати %1</translation>
     </message>
     <message>
         <source>texture map error</source>
@@ -1939,7 +1955,14 @@
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation>&amp;Параметри рендера&gt;</translation>
+        <translation>&amp;Параметри рендера</translation>
+    </message>
+</context>
+<context>
+    <name>PipeWireWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation>Неможливо відкрити вихідний потік звуку</translation>
     </message>
 </context>
 <context>
@@ -2366,8 +2389,8 @@
         <translation>&amp;Пропустити</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>&amp;Зупинити після</translation>
+        <source>&amp;Stop after playing</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2562,10 +2585,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Font cache is being updated, please wait</source>
-        <translation>Зачекайте, оновлюється кеш шрифту</translation>
-    </message>
-    <message>
         <source>QMPlay2 has been updated to version</source>
         <translation>QMPlay2 був оновлений до версії</translation>
     </message>
@@ -2603,10 +2622,6 @@ QMPlay2 не масштабуватиме іконки!</translation>
         <translation>Адреса</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>Радіостанції QMPlay2</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>Мої радіостанції</translation>
     </message>
@@ -2617,10 +2632,6 @@ QMPlay2 не масштабуватиме іконки!</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>Видалити вибрану радіостанцію</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation>Оглядач радіо</translation>
     </message>
     <message>
         <source>Play</source>
@@ -2661,6 +2672,22 @@ QMPlay2 не масштабуватиме іконки!</translation>
     <message>
         <source>Save radio station list</source>
         <translation>Зберети список радіостанцій</translation>
+    </message>
+    <message>
+        <source>Tag</source>
+        <translation>мітка</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation>Країна</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Мова</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation>Штат</translation>
     </message>
 </context>
 <context>
@@ -2929,19 +2956,19 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation>Спадковий пріоритет виведення відео&gt;</translation>
+        <translation>Спадковий пріоритет виведення відео</translation>
     </message>
     <message>
         <source>Legacy</source>
-        <translation>Старішого типу&gt;</translation>
+        <translation>Старішого типу</translation>
     </message>
     <message>
         <source>OpenGL</source>
-        <translation>OpenGL&gt;</translation>
+        <translation>OpenGL</translation>
     </message>
     <message>
         <source>active</source>
-        <translation>активний&gt;</translation>
+        <translation>активний</translation>
     </message>
     <message>
         <source>inactive</source>
@@ -2993,45 +3020,51 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Vulkan</source>
-        <translation type="unfinished"></translation>
+        <translation>Vulkan</translation>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
-        <translation type="unfinished"></translation>
+        <translation>Усунення черезрядковості графічним процесором для відео, декодованого центральним процесором</translation>
     </message>
     <message>
         <source>High quality image scaling down</source>
-        <translation type="unfinished"></translation>
+        <translation>Високоякісне зменшення зображення</translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation type="unfinished"></translation>
+        <translation>Високоякісне збільшення зображення</translation>
     </message>
     <message>
         <source>First available device</source>
-        <translation type="unfinished"></translation>
+        <translation>Перший доступний пристрій</translation>
     </message>
     <message>
         <source>No supported devices found</source>
-        <translation type="unfinished"></translation>
+        <translation>Не знайдено підтримуваних пристроїв</translation>
     </message>
     <message>
         <source>Partially checked (default):
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Частково вибрано (за замовчуванням):
+  - MAILBOX (tear-free) є найкращим сучасним режимом
+  - FIFO (V-Sync) не слід використовувати у віконному режимі</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити для ексклюзивного повноекранного режиму. Може підвищити продуктивність.</translation>
     </message>
     <message>
         <source>Very slow if used with sharpness</source>
-        <translation type="unfinished"></translation>
+        <translation>Дуже повільно при використанні з різкістю зображення</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Пристрій:</translation>
+    </message>
+    <message>
+        <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
+        <translation>Примусово задіяти Yadif через Vulkan для всіх апаратних декодерів</translation>
     </message>
 </context>
 <context>
@@ -3485,6 +3518,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Preferred quality</source>
         <translation>Бажана якість</translation>
+    </message>
+    <message>
+        <source>Publish time</source>
+        <translation>Час публікації</translation>
     </message>
 </context>
 <context>

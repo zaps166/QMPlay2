@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -24,8 +24,9 @@
 #include <QGridLayout>
 #include <QLineEdit>
 
-AddressDialog::AddressDialog(QWidget *p) :
-    QDialog(p), addrB(Qt::Vertical)
+AddressDialog::AddressDialog(QWidget *p)
+    : QDialog(p)
+    , addrB(Qt::Vertical, QString(), QMPlay2Core.getSettings().getString("AddressDialog/Choice"))
 {
     setWindowTitle(tr("Add address"));
 
@@ -33,11 +34,6 @@ AddressDialog::AddressDialog(QWidget *p) :
     buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-
-    QComboBox &pB = addrB.getComboBox();
-    int idx = pB.findText(QMPlay2Core.getSettings().getString("AddressDialog/Choice"));
-    if (idx > -1)
-        pB.setCurrentIndex(idx);
 
     addAndPlayB.setText(tr("Play"));
     addAndPlayB.setChecked(QMPlay2Core.getSettings().getBool("AddressDialog/AddAndPlay", true));
@@ -57,6 +53,6 @@ AddressDialog::~AddressDialog()
     if (result())
     {
         QMPlay2Core.getSettings().set("AddressDialog/AddAndPlay", addAndPlayB.isChecked());
-        QMPlay2Core.getSettings().set("AddressDialog/Choice", addrB.getComboBox().currentText());
+        QMPlay2Core.getSettings().set("AddressDialog/Choice", addrB.getCurrentText());
     }
 }

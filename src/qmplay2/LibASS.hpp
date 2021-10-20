@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -42,10 +42,6 @@ class BufferPool;
 class QMPLAY2SHAREDLIB_EXPORT LibASS
 {
 public:
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-    static bool slowFontCacheUpdate();
-#endif
-
     static bool isDummy();
 
     LibASS(Settings &);

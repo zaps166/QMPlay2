@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -24,12 +24,13 @@ PortAudio::PortAudio() :
 {
     m_icon = QIcon(":/PortAudio.svgz");
 
-    initialized = (Pa_Initialize() == paNoError);
     init("WriterEnabled", true);
-#if defined Q_OS_MACOS
+#if defined(Q_OS_MACOS)
     init("Delay", 0.03);
-#elif defined Q_OS_WIN
-    init("Delay", 0.15);
+    init("BitPerfect", false);
+#elif defined(Q_OS_WIN)
+    init("Delay", 0.10);
+    init("Exclusive", false);
 #else
     init("Delay", 0.10);
 #endif
@@ -37,8 +38,6 @@ PortAudio::PortAudio() :
 }
 PortAudio::~PortAudio()
 {
-    if (initialized)
-        Pa_Terminate();
 }
 
 QList<PortAudio::Info> PortAudio::getModulesInfo(const bool showDisabled) const
@@ -50,7 +49,7 @@ QList<PortAudio::Info> PortAudio::getModulesInfo(const bool showDisabled) const
 }
 void *PortAudio::createInstance(const QString &name)
 {
-    if (name == PortAudioWriterName && initialized && getBool("WriterEnabled"))
+    if (name == PortAudioWriterName && getBool("WriterEnabled"))
         return new PortAudioWriter(*this);
     return nullptr;
 }
@@ -88,6 +87,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     int idx = devicesB->findText(sets().getString("OutputDevice"));
     devicesB->setCurrentIndex(idx < 0 ? 0 : idx);
 
+#ifdef Q_OS_WIN
+    m_exclusive = new QCheckBox(tr("Exclusive mode"));
+    m_exclusive->setChecked(sets().getBool("Exclusive"));
+#endif
+
 #ifdef Q_OS_MACOS
     bitPerfect = new QCheckBox(tr("Bit-perfect audio"));
     bitPerfect->setChecked(sets().getBool("BitPerfect"));
@@ -97,7 +101,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     QFormLayout *layout = new QFormLayout(this);
     layout->addRow(enabledB);
     layout->addRow(tr("Playback device") + ": ", devicesB);
-    layout->addRow(tr("Delay") + ": ", delayB);
+    layout->addRow(tr("Maximum latency") + ": ", delayB);
+#ifdef Q_OS_WIN
+    layout->addRow(m_exclusive);
+#endif
 #ifdef Q_OS_MACOS
     layout->addRow(bitPerfect);
 #endif
@@ -108,6 +115,9 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("WriterEnabled", enabledB->isChecked());
     sets().set("OutputDevice", devicesB->currentIndex() == 0 ? QString() : devicesB->currentText());
     sets().set("Delay", delayB->value());
+#ifdef Q_OS_WIN
+    sets().set("Exclusive", m_exclusive->isChecked());
+#endif
 #ifdef Q_OS_MACOS
     sets().set("BitPerfect", bitPerfect->isChecked());
 #endif

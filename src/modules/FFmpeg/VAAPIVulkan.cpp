@@ -12,9 +12,36 @@
 #include <QDebug>
 
 #include <va/va_drmcommon.h>
+#include <sys/ioctl.h>
 #include <unistd.h>
 
+// linux/dma-buf.h
+
+struct dma_buf_sync {
+    uint64_t flags;
+};
+
+#define DMA_BUF_SYNC_READ (1 << 0)
+#define DMA_BUF_SYNC_WRITE (2 << 0)
+#define DMA_BUF_SYNC_RW (DMA_BUF_SYNC_READ | DMA_BUF_SYNC_WRITE)
+#define DMA_BUF_SYNC_START (0 << 2)
+#define DMA_BUF_SYNC_END (1 << 2)
+
+#define DMA_BUF_BASE 'b'
+#define DMA_BUF_IOCTL_SYNC _IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
+
 using namespace QmVk;
+
+struct FDCustomData : public MemoryObjectBase::CustomData
+{
+    ~FDCustomData()
+    {
+        for (auto &&fd : fds)
+            ::close(fd);
+    }
+
+    vector<int> fds;
+};
 
 VAAPIVulkan::VAAPIVulkan(const shared_ptr<VAAPI> &vaapi)
     : m_vkInstance(static_pointer_cast<Instance>(QMPlay2Core.gpuInstance()))
@@ -30,6 +57,9 @@ QString VAAPIVulkan::name() const
 
 void VAAPIVulkan::map(Frame &frame)
 {
+    if (m_error || frame.vulkanImage())
+        return;
+
     lock_guard<mutex> locker(m_mutex);
 
     const auto format = (frame.pixelFormat() == AV_PIX_FMT_P016)
@@ -82,8 +112,13 @@ void VAAPIVulkan::map(Frame &frame)
             MemoryObject::FdDescriptors fdDescriptors(vaSurfaceDescr.num_objects);
             for (uint32_t i = 0; i < vaSurfaceDescr.num_objects; ++i)
             {
-                if (i == 0 && vaSurfaceDescr.objects[i].drm_format_modifier != 0)
-                    isLinear = false;
+                if (i == 0)
+                {
+                    // 0x0000000000000000 - linear, 0x00ffffffffffffff - invalid
+                    const auto drmFmtMod = vaSurfaceDescr.objects[i].drm_format_modifier;
+                    if (drmFmtMod != 0ull && drmFmtMod != 0xffffffffffffffull)
+                        isLinear = false;
+                }
 
                 fdDescriptors[i].first = vaSurfaceDescr.objects[i].fd;
                 fdDescriptors[i].second = (vaSurfaceDescr.objects[i].size > 0)
@@ -92,22 +127,31 @@ void VAAPIVulkan::map(Frame &frame)
                 ;
             }
 
-            vector<ptrdiff_t> offsets(vaSurfaceDescr.num_layers);
+            vector<vk::DeviceSize> offsets(vaSurfaceDescr.num_layers);
             for (uint32_t i = 0; i < vaSurfaceDescr.num_layers; ++i)
                 offsets[i] = vaSurfaceDescr.layers[i].offset[0];
 
             try
             {
+                constexpr auto externalMemoryHandleType = vk::ExternalMemoryHandleTypeFlagBits::eDmaBufEXT;
+
                 vkImage = Image::createExternalImport(
                     device,
                     vk::Extent2D(frame.width(), frame.height()),
                     format,
-                    isLinear
+                    isLinear,
+                    externalMemoryHandleType
                 );
+
+                auto fdCustomData = make_unique<FDCustomData>();
+                for (auto &&fdDescriptor : fdDescriptors)
+                    fdCustomData->fds.push_back(::dup(fdDescriptor.first));
+                vkImage->setCustomData(move(fdCustomData));
+
                 vkImage->importFD(
                     fdDescriptors,
                     offsets,
-                    vk::ExternalMemoryHandleTypeFlagBits::eDmaBufEXT
+                    externalMemoryHandleType
                 );
             }
             catch (const vk::SystemError &e)
@@ -121,13 +165,6 @@ void VAAPIVulkan::map(Frame &frame)
 
         if (!vkImage)
             m_error = true;
-    }
-
-    if (vaSyncSurface(m_vaapi->VADisp, id) != VA_STATUS_SUCCESS)
-    {
-        QMPlay2Core.logError("VA-API :: Unable to sync surface");
-        m_error = true;
-        vkImage.reset();
     }
 
     if (vkImage)
@@ -146,6 +183,39 @@ void VAAPIVulkan::clear()
     lock_guard<mutex> locker(m_mutex);
     m_availableSurfaces.clear();
     m_images.clear();
+}
+
+HWInterop::SyncDataPtr VAAPIVulkan::sync(const vector<Frame> &frames, vk::SubmitInfo *submitInfo)
+{
+    Q_UNUSED(submitInfo)
+
+    for (auto &&frame : frames)
+    {
+        if (!frame.isHW())
+            continue;
+
+        auto image = frame.vulkanImage();
+        if (!image)
+            continue;
+
+        const auto &fds = image->customData<FDCustomData>()->fds;
+        for (auto &&fd : fds)
+        {
+            const dma_buf_sync sync = {
+                DMA_BUF_SYNC_START | DMA_BUF_SYNC_RW
+            };
+            ioctl(fd, DMA_BUF_IOCTL_SYNC, &sync);
+        }
+        for (auto &&fd : fds)
+        {
+            const dma_buf_sync sync = {
+                DMA_BUF_SYNC_END | DMA_BUF_SYNC_RW
+            };
+            ioctl(fd, DMA_BUF_IOCTL_SYNC, &sync);
+        }
+    }
+
+    return nullptr;
 }
 
 void VAAPIVulkan::insertAvailableSurface(uintptr_t id)

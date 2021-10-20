@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -69,7 +69,7 @@ bool Demuxer::create(const QString &url, IOController<Demuxer> &demuxer, FetchTr
 
 Demuxer::~Demuxer()
 {
-    for (StreamInfo *streamInfo : asConst(streams_info))
+    for (StreamInfo *streamInfo : qAsConst(streams_info))
         delete streamInfo;
 }
 

@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -59,6 +59,12 @@ DeintSettingsW::DeintSettingsW()
     autoParityB = new QCheckBox(tr("Automatically detect parity"));
     autoParityB->setChecked(QMPSettings.getBool("Deinterlace/AutoParity"));
 
+    if (QMPlay2Core.isVulkanRenderer())
+    {
+        m_vkYadifSpatialCheck = new QCheckBox(tr("Vulkan Yadif spatial check"));
+        m_vkYadifSpatialCheck->setChecked(QMPSettings.getBool("Vulkan/YadifSpatialCheck"));
+    }
+
     softwareMethodsCB = new QComboBox;
 
     parityCB = new QComboBox;
@@ -72,6 +78,8 @@ DeintSettingsW::DeintSettingsW()
     layout->addRow(autoDeintB);
     layout->addRow(doublerB);
     layout->addRow(autoParityB);
+    if (m_vkYadifSpatialCheck)
+        layout->addRow(m_vkYadifSpatialCheck);
     layout->addRow(tr("Deinterlacing method") + " (" + tr("software decoding") + "): ", softwareMethodsCB);
     for (QWidget *w : QMPlay2Core.getVideoDeintMethods())
     {
@@ -94,10 +102,8 @@ DeintSettingsW::~DeintSettingsW()
 
 void DeintSettingsW::setSoftwareDeintEnabledDisabled()
 {
-#ifdef USE_VULKAN
     if (QMPlay2Core.isVulkanRenderer())
         softwareMethodsCB->setEnabled(!QMPlay2Core.getSettings().getBool("Vulkan/AlwaysGPUDeint"));
-#endif
 }
 
 void DeintSettingsW::writeSettings()
@@ -107,6 +113,8 @@ void DeintSettingsW::writeSettings()
     QMPSettings.set("Deinterlace/Auto", autoDeintB->isChecked());
     QMPSettings.set("Deinterlace/Doubler", doublerB->isChecked());
     QMPSettings.set("Deinterlace/AutoParity", autoParityB->isChecked());
+    if (m_vkYadifSpatialCheck)
+        QMPSettings.set("Vulkan/YadifSpatialCheck", m_vkYadifSpatialCheck->isChecked());
     QMPSettings.set("Deinterlace/SoftwareMethod", softwareMethodsCB->currentText());
     QMPSettings.set("Deinterlace/TFF", (bool)parityCB->currentIndex());
 
@@ -114,7 +122,7 @@ void DeintSettingsW::writeSettings()
     for (QObject *obj : children())
         if (obj->isWidgetType() && !obj->property("module").isNull())
             videoDeintModules.insert((Module *)obj->property("module").value<void *>());
-    for (Module *module : asConst(videoDeintModules))
+    for (Module *module : qAsConst(videoDeintModules))
         module->videoDeintSave();
 }
 

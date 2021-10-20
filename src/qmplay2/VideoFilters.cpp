@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -152,7 +152,7 @@ private:
             bool pending = false;
             do
             {
-                for (const std::shared_ptr<VideoFilter> &vFilter : asConst(videoFilters.filters))
+                for (const std::shared_ptr<VideoFilter> &vFilter : qAsConst(videoFilters.filters))
                 {
                     pending |= vFilter->filter(queue);
                     if (queue.isEmpty())
@@ -275,7 +275,7 @@ void VideoFilters::clearBuffers()
     if (!filters.isEmpty())
     {
         filtersThr.waitForFinished(true);
-        for (auto &&vFilter : asConst(filters))
+        for (auto &&vFilter : qAsConst(filters))
             vFilter->clearBuffer();
     }
     outputQueue.clear();

@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.9)
 project(QMPlay2)
 
 if(WIN32)
-    find_package(Qt5WinExtras 5.6 REQUIRED)
+    find_package(Qt5WinExtras 5.10 REQUIRED)
 endif()
 
 set(GUI_HDR
@@ -32,7 +32,6 @@ set(GUI_HDR
     ScreenSaver.hpp
     ShortcutHandler.hpp
     KeyBindingsDialog.hpp
-    Updater.hpp
     RepeatMode.hpp
     PanGestureEventFilter.hpp
     EventFilterWorkarounds.hpp
@@ -64,7 +63,6 @@ set(GUI_SRC
     VolWidget.cpp
     ShortcutHandler.cpp
     KeyBindingsDialog.cpp
-    Updater.cpp
     EventFilterWorkarounds.cpp
 )
 
@@ -99,6 +97,12 @@ endif()
 qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
 set_property(SOURCE ${GUI_FORM_HDR} PROPERTY SKIP_AUTOMOC ON)
 
+if(USE_UPDATES)
+    list(APPEND GUI_HDR Updater.hpp)
+    list(APPEND GUI_SRC Updater.cpp)
+    add_definitions(-DUPDATES)
+endif()
+
 if(USE_TAGLIB)
     find_package(TagLib REQUIRED)
     include_directories(${TAGLIB_INCLUDE_DIRS})
@@ -109,7 +113,6 @@ if(USE_TAGLIB)
         add_definitions(-DTAGLIB_FULL_INCLUDE_PATH)
 
         option(TAGLIB_STATIC_LINK "Use TagLib static library" OFF)
-        mark_as_advanced(TAGLIB_STATIC_LINK)
         if(TAGLIB_STATIC_LINK)
             add_definitions(-DTAGLIB_STATIC)
         endif()
@@ -132,7 +135,9 @@ if(WIN32)
     list(APPEND GUI_SRC Windows/icons.rc)
 
     # updater
-    add_definitions(-DUPDATER)
+    if(USE_UPDATES)
+        add_definitions(-DUPDATER)
+    endif()
 
     # additional Windows sources
     list(APPEND GUI_SRC
@@ -144,7 +149,7 @@ elseif(APPLE)
     set(MACOSX_BUNDLE_ICON_FILE "QMPlay2.icns")
     set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${QMPLAY2_VERSION})
-    set(MACOSX_BUNDLE_COPYRIGHT "Copyright (C) 2010-2020  Błażej Szczygieł")
+    set(MACOSX_BUNDLE_COPYRIGHT "Copyright (C) 2010-2021  Błażej Szczygieł")
 
     set(ICNS_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/macOS/QMPlay2.icns")
     set_source_files_properties(${ICNS_FILE_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
@@ -203,18 +208,18 @@ endif()
 
 if(WIN32)
     set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Custom libraries for GUI")
-    mark_as_advanced(CUSTOM_GUI_LIBRARIES)
-    target_link_libraries(${PROJECT_NAME} Qt5::WinExtras)
+    target_link_libraries(${PROJECT_NAME} Qt5::WinExtras winmm)
 elseif(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")
     target_link_libraries(${PROJECT_NAME} ${APPKIT_LIBRARY} ${IOKIT_LIBRARY})
 endif()
+if(USE_TAGLIB AND (NOT WIN32 OR CMAKE_HOST_WIN32))
+    target_link_libraries(${PROJECT_NAME} ${TAGLIB_LIBRARIES})
+endif()
 if(WIN32 AND CUSTOM_GUI_LIBRARIES)
     separate_arguments(CUSTOM_GUI_LIBRARIES)
     target_link_libraries(${PROJECT_NAME} ${CUSTOM_GUI_LIBRARIES})
-elseif(USE_TAGLIB)
-    target_link_libraries(${PROJECT_NAME} ${TAGLIB_LIBRARIES})
 endif()
 
 if(WIN32)

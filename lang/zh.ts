@@ -63,11 +63,11 @@
     </message>
     <message>
         <source>Programmer</source>
-        <translation>开发人员</translation>
+        <translation>作者</translation>
     </message>
     <message>
         <source>Contributors</source>
-        <translation>协助开发人员</translation>
+        <translation>协助开发</translation>
     </message>
 </context>
 <context>
@@ -415,7 +415,7 @@
     </message>
     <message>
         <source>Parity (if not detected automatically)</source>
-        <translation>奇偶校验 (如果没有自动检测)</translation>
+        <translation>奇偶校验（如果没有自动检测）</translation>
     </message>
     <message>
         <source>Deinterlacing method</source>
@@ -424,6 +424,10 @@
     <message>
         <source>software decoding</source>
         <translation>软件解码</translation>
+    </message>
+    <message>
+        <source>Vulkan Yadif spatial check</source>
+        <translation>Vulkan Yadif 空间检查</translation>
     </message>
 </context>
 <context>
@@ -558,11 +562,11 @@
     </message>
     <message>
         <source>Programs</source>
-        <translation>程序</translation>
+        <translation>节目</translation>
     </message>
     <message>
         <source>Program</source>
-        <translation>程序</translation>
+        <translation>节目</translation>
     </message>
 </context>
 <context>
@@ -576,8 +580,8 @@
         <translation>停止下载</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>尺寸</translation>
+        <source>File size</source>
+        <translation>文件大小</translation>
     </message>
     <message>
         <source>Download complete</source>
@@ -817,7 +821,7 @@
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
-        <translation>指向性频率: %1 赫兹</translation>
+        <translation>指定频率: %1 赫兹</translation>
     </message>
 </context>
 <context>
@@ -1000,7 +1004,7 @@
     </message>
     <message>
         <source>Automatically delete ungrouped entries</source>
-        <translation>自动删除未分组项</translation>
+        <translation>自动删除未分组项目</translation>
     </message>
     <message>
         <source>Hide artist metadata</source>
@@ -1255,7 +1259,7 @@
     </message>
     <message>
         <source>Are you sure you want to quit?</source>
-        <translation>您确定要退出吗?</translation>
+        <translation>您确定要退出吗？</translation>
     </message>
     <message>
         <source>QMPlay2 is doing something in the background.</source>
@@ -1352,7 +1356,7 @@
     </message>
     <message>
         <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
-        <translation>MicroDVD 字幕使用指定的帧率 (如果存在)</translation>
+        <translation>MicroDVD 字幕使用指定的帧率（如果存在）</translation>
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
@@ -1415,8 +1419,8 @@
         <translation>片</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>延时</translation>
+        <source>Maximum latency</source>
+        <translation>最大延迟</translation>
     </message>
     <message>
         <source>Refresh time</source>
@@ -1496,11 +1500,11 @@
     </message>
     <message>
         <source>Add entry to the directories context menu</source>
-        <translation>增加目录快捷菜单项</translation>
+        <translation>增加目录快捷菜单项目</translation>
     </message>
     <message>
         <source>Add entry to the drives context menu</source>
-        <translation>增加驱动器快捷菜单项</translation>
+        <translation>增加驱动器快捷菜单项目</translation>
     </message>
     <message>
         <source>Enqueue in QMPlay2</source>
@@ -1532,7 +1536,7 @@
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
-        <translation>低分辨率解码(仅某些解码器)</translation>
+        <translation>低分辨率解码（仅某些解码器）</translation>
     </message>
     <message>
         <source>Hurry up</source>
@@ -1748,7 +1752,7 @@
     </message>
     <message>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
-        <translation>如果您遇到 (DivX5) 视频解码问题则停用</translation>
+        <translation>如果您遇到 MPEG4 (DivX5) 视频解码问题则停用</translation>
     </message>
     <message>
         <source>Bit-perfect audio</source>
@@ -1777,6 +1781,18 @@
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
         <translation>复制解码视频到 CPU 存储（缓慢）</translation>
+    </message>
+    <message>
+        <source>Zero-copy decoding on Intel hardware (experimental)</source>
+        <translation>在英特尔硬件上使用零复制解码（实验）</translation>
+    </message>
+    <message>
+        <source>Better performance, but can cause garbage or might not work at all.</source>
+        <translation>性能更佳，但会产生垃圾或可能完全不起作用。</translation>
+    </message>
+    <message>
+        <source>Exclusive mode</source>
+        <translation>独占模式</translation>
     </message>
 </context>
 <context>
@@ -1943,6 +1959,13 @@
     </message>
 </context>
 <context>
+    <name>PipeWireWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation>无法打开音频输出流</translation>
+    </message>
+</context>
+<context>
     <name>PlayClass</name>
     <message>
         <source>Stopped</source>
@@ -1978,7 +2001,7 @@
     </message>
     <message>
         <source>Set subtitles delay (sec.)</source>
-        <translation>设置字幕延时(秒)</translation>
+        <translation>设置字幕延时（秒）</translation>
     </message>
     <message>
         <source>Loaded subtitles</source>
@@ -2002,11 +2025,11 @@
     </message>
     <message>
         <source>Set video delay (sec.)</source>
-        <translation>设置视频延时(秒)</translation>
+        <translation>设置视频延时（秒）</translation>
     </message>
     <message>
         <source>Set playback speed (sec.)</source>
-        <translation>设置回放速度(秒)</translation>
+        <translation>设置回放速度（秒）</translation>
     </message>
     <message>
         <source>A-B Repeat</source>
@@ -2180,7 +2203,7 @@
     </message>
     <message>
         <source>Video to audio sync (frame skipping)</source>
-        <translation>音视频同步(跳帧)</translation>
+        <translation>音视频同步（跳帧）</translation>
     </message>
     <message>
         <source>Fade sound</source>
@@ -2196,19 +2219,19 @@
     </message>
     <message>
         <source>Short seeking (left and right arrows)</source>
-        <translation>短跳转(左右方向键)</translation>
+        <translation>短跳转（左右方向键）</translation>
     </message>
     <message>
         <source>Long seeking (up and down arrows)</source>
-        <translation>长跳转(上下方向键)</translation>
+        <translation>长跳转（上下方向键）</translation>
     </message>
     <message>
         <source>Local buffer size (A/V packages count)</source>
-        <translation>本地缓冲大小(音视频包计数)</translation>
+        <translation>本地缓冲大小（音视频包计数）</translation>
     </message>
     <message>
         <source>Network buffer size (A/V packages count)</source>
-        <translation>网络缓冲大小(音视频包计数)</translation>
+        <translation>网络缓冲大小（音视频包计数）</translation>
     </message>
     <message>
         <source>Percent of packages for backwards rewinding</source>
@@ -2279,7 +2302,7 @@
     </message>
     <message>
         <source>&amp;Stop</source>
-        <translation>暂停</translation>
+        <translation>停止</translation>
     </message>
     <message>
         <source>&amp;Next</source>
@@ -2287,7 +2310,7 @@
     </message>
     <message>
         <source>&amp;Previous</source>
-        <translation>前一个</translation>
+        <translation>上一个</translation>
     </message>
     <message>
         <source>Seek &amp;forward</source>
@@ -2366,8 +2389,8 @@
         <translation>跳过</translation>
     </message>
     <message>
-        <source>&amp;Stop after</source>
-        <translation>停止于</translation>
+        <source>&amp;Stop after playing</source>
+        <translation>播放后停止</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2394,11 +2417,11 @@
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
-        <translation>删除所选项</translation>
+        <translation>删除所选项目</translation>
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
-        <translation>删除未分组项</translation>
+        <translation>删除未分组项目</translation>
     </message>
     <message>
         <source>&amp;Clear list</source>
@@ -2422,7 +2445,7 @@
     </message>
     <message>
         <source>&amp;Find entries</source>
-        <translation>查找项</translation>
+        <translation>查找项目</translation>
     </message>
     <message>
         <source>&amp;Collapse all</source>
@@ -2473,7 +2496,7 @@
     </message>
     <message>
         <source>Filter entries</source>
-        <translation>过滤项</translation>
+        <translation>过滤项目</translation>
     </message>
     <message>
         <source>Playlist is being loaded now...</source>
@@ -2481,15 +2504,15 @@
     </message>
     <message>
         <source>Visible entries</source>
-        <translation>可见项</translation>
+        <translation>可见项目</translation>
     </message>
     <message>
         <source>Are you sure you want to clear the list?</source>
-        <translation>您确定要清除列表吗?</translation>
+        <translation>您确定要清除列表吗？</translation>
     </message>
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
-        <translation>您确定要删除非分组项吗?</translation>
+        <translation>您确定要删除非分组项目吗？</translation>
     </message>
 </context>
 <context>
@@ -2562,10 +2585,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>Font cache is being updated, please wait</source>
-        <translation>正在更新字体缓存，请稍等</translation>
-    </message>
-    <message>
         <source>QMPlay2 has been updated to version</source>
         <translation>QMPlay2 已更新至版本</translation>
     </message>
@@ -2603,10 +2622,6 @@ QMPlay2 将不会增加图标！</translation>
         <translation>地址</translation>
     </message>
     <message>
-        <source>QMPlay2 radio stations</source>
-        <translation>QMPlay2 电台</translation>
-    </message>
-    <message>
         <source>My radio stations</source>
         <translation>我的电台</translation>
     </message>
@@ -2617,10 +2632,6 @@ QMPlay2 将不会增加图标！</translation>
     <message>
         <source>Remove selected radio station</source>
         <translation>移除选定的电台</translation>
-    </message>
-    <message>
-        <source>Radio Browser</source>
-        <translation>Radio Browser</translation>
     </message>
     <message>
         <source>Play</source>
@@ -2662,6 +2673,22 @@ QMPlay2 将不会增加图标！</translation>
         <source>Save radio station list</source>
         <translation>保存电台列表</translation>
     </message>
+    <message>
+        <source>Tag</source>
+        <translation>标签</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation>国家</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>语言</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation>州</translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
@@ -2698,7 +2725,7 @@ QMPlay2 将不会增加图标！</translation>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
-        <translation>重复当前项</translation>
+        <translation>重复当前项目</translation>
     </message>
     <message>
         <source>&amp;Group repeating</source>
@@ -3035,6 +3062,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>Device:</source>
         <translation>设备：</translation>
     </message>
+    <message>
+        <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
+        <translation>对于所有硬件解码器强制 Vulkan Yadif 反交错</translation>
+    </message>
 </context>
 <context>
     <name>ShortcutHandler</name>
@@ -3190,7 +3221,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Application is up-to-date</source>
-        <translation>程序版本最新</translation>
+        <translation>程序已是最新版本</translation>
     </message>
     <message>
         <source>Download update</source>
@@ -3487,6 +3518,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Preferred quality</source>
         <translation>首选质量</translation>
+    </message>
+    <message>
+        <source>Publish time</source>
+        <translation>发布时间</translation>
     </message>
 </context>
 <context>

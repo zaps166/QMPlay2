@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -20,8 +20,9 @@
 
 #include <QMPlay2Core.hpp>
 #include <ImgScaler.hpp>
-#include <CppUtils.hpp>
 #include <Frame.hpp>
+
+#include <QLibrary>
 
 extern "C"
 {
@@ -63,7 +64,7 @@ DXVA2OpenGL::~DXVA2OpenGL()
     {
         for (int i = 0; i < s_numRenderTargets; ++i)
         {
-            for (auto &&renderTarget : asConst(m_renderTargets[i].surfaces))
+            for (auto &&renderTarget : qAsConst(m_renderTargets[i].surfaces))
                 renderTarget->Release();
         }
     }
@@ -361,7 +362,7 @@ bool DXVA2OpenGL::checkCodec(const QByteArray &codecName, bool b10)
 
         for (UINT i = 0; i < count; ++i)
         {
-            for (const GUID *guid : asConst(neededCodecGUIDs))
+            for (const GUID *guid : qAsConst(neededCodecGUIDs))
             {
                 if (IsEqualGUID(codecGUIDs[i], *guid))
                 {
@@ -383,6 +384,12 @@ bool DXVA2OpenGL::checkCodec(const QByteArray &codecName, bool b10)
 
 bool DXVA2OpenGL::initVideoProcessor()
 {
+    QLibrary dxva2("dxva2.dll");
+    if (dxva2.load())
+        DXVA2CreateVideoService = reinterpret_cast<DXVA2CreateVideoServiceFn>(dxva2.resolve("DXVA2CreateVideoService"));
+    if (!DXVA2CreateVideoService)
+        return false;
+
     auto d3dDev9 = getD3dDevice9();
     if (!d3dDev9)
         return false;

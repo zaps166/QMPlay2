@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -27,6 +27,9 @@
 #endif
 #ifdef QMPlay2_DXVA2
     #include <FFDecDXVA2.hpp>
+#endif
+#ifdef QMPlay2_D3D11VA
+    #include <FFDecD3D11VA.hpp>
 #endif
 #ifdef QMPlay2_VTB
     #include <FFDecVTB.hpp>
@@ -56,9 +59,11 @@ FFmpeg::FFmpeg() :
 #ifdef QMPlay2_VAAPI
     vaapiIcon = QIcon(":/VAAPI.svgz");
 #endif
-#ifdef QMPlay2_DXVA2
-    dxva2Icon = QIcon(":/DXVA2.svgz");
-    if (!QMPlay2Core.isVulkanRenderer())
+#if defined(QMPlay2_DXVA2) || defined(QMPlay2_D3D11VA)
+    dxIcon = QIcon(":/DXVA2.svgz");
+    if (QMPlay2Core.isVulkanRenderer())
+        d3d11vaSupported = (QSysInfo::windowsVersion() >= QSysInfo::WV_6_2);
+    else
         dxva2Supported = (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0);
 #endif
 #ifdef QMPlay2_VTB
@@ -84,6 +89,10 @@ FFmpeg::FFmpeg() :
 #endif
 #ifdef QMPlay2_DXVA2
     init("DecoderDXVA2Enabled", true);
+#endif
+#ifdef QMPlay2_D3D11VA
+    init("DecoderD3D11VAEnabled", true);
+    init("DecoderD3D11VAZeroCopy", false);
 #endif
 #ifdef QMPlay2_VTB
     init("DecoderVTBEnabled", true);
@@ -173,7 +182,11 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 #endif
 #ifdef QMPlay2_DXVA2
     if (showDisabled || (dxva2Supported && getBool("DecoderDXVA2Enabled")))
-        modulesInfo += Info(DecoderDXVA2Name, DECODER, dxva2Icon);
+        modulesInfo += Info(DecoderDXVA2Name, DECODER, dxIcon);
+#endif
+#ifdef QMPlay2_D3D11VA
+    if (showDisabled || (d3d11vaSupported && getBool("DecoderD3D11VAEnabled")))
+        modulesInfo += Info(DecoderD3D11VAName, DECODER, dxIcon);
 #endif
 #ifdef QMPlay2_VTB
     if (showDisabled || getBool("DecoderVTBEnabled"))
@@ -200,6 +213,10 @@ void *FFmpeg::createInstance(const QString &name)
     else if (name == DecoderDXVA2Name && (dxva2Supported && getBool("DecoderDXVA2Enabled")))
         return new FFDecDXVA2(*this);
 #endif
+#ifdef QMPlay2_D3D11VA
+    else if (name == DecoderD3D11VAName && (d3d11vaSupported && getBool("DecoderD3D11VAEnabled")))
+        return new FFDecD3D11VA(*this);
+#endif
 #ifdef QMPlay2_VTB
     else if (name == DecoderVTBName && getBool("DecoderVTBEnabled"))
         return new FFDecVTB(*this);
@@ -211,8 +228,8 @@ void *FFmpeg::createInstance(const QString &name)
 
 FFmpeg::SettingsWidget *FFmpeg::getSettingsWidget()
 {
-#ifdef QMPlay2_DXVA2
-    return new ModuleSettingsWidget(*this, dxva2Supported);
+#if defined(QMPlay2_DXVA2) || defined(QMPlay2_D3D11VA)
+    return new ModuleSettingsWidget(*this, dxva2Supported, d3d11vaSupported);
 #else
     return new ModuleSettingsWidget(*this);
 #endif
@@ -249,8 +266,8 @@ QMPLAY2_EXPORT_MODULE(FFmpeg)
 #include <QSpinBox>
 #include <QLabel>
 
-#ifdef QMPlay2_DXVA2
-ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool dxva2Loaded) :
+#if defined(QMPlay2_DXVA2) || defined(QMPlay2_D3D11VA)
+ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool dxva2, bool d3d11va) :
 #else
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #endif
@@ -301,14 +318,27 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 #endif
 
 #ifdef QMPlay2_DXVA2
-    if (dxva2Loaded)
+    if (dxva2)
     {
         decoderDXVA2EB = new QCheckBox(tr("Decoder") + " DXVA2 - " + tr("hardware decoding"));
         decoderDXVA2EB->setChecked(sets().getBool("DecoderDXVA2Enabled"));
     }
-    else
+#endif
+#ifdef QMPlay2_D3D11VA
+    if (d3d11va)
     {
-        decoderDXVA2EB = nullptr;
+        decoderD3D11VA = new QGroupBox(tr("Decoder") + " D3D11VA - " + tr("hardware decoding"));
+        decoderD3D11VA->setCheckable(true);
+        decoderD3D11VA->setChecked(sets().getBool("DecoderD3D11VAEnabled"));
+
+        d3d11vaZeroCopy = new QCheckBox(tr("Zero-copy decoding on Intel hardware (experimental)"));
+        d3d11vaZeroCopy->setToolTip(tr("Better performance, but can cause garbage or might not work at all."));
+        d3d11vaZeroCopy->setChecked(sets().getBool("DecoderD3D11VAZeroCopy"));
+
+        auto d3d11vaLayout = new QFormLayout;
+        d3d11vaLayout->addWidget(d3d11vaZeroCopy);
+
+        decoderD3D11VA->setLayout(d3d11vaLayout);
     }
 #endif
 
@@ -381,6 +411,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     if (decoderDXVA2EB)
         layout->addWidget(decoderDXVA2EB);
 #endif
+#ifdef QMPlay2_D3D11VA
+    if (decoderD3D11VA)
+        layout->addWidget(decoderD3D11VA);
+#endif
 #ifdef QMPlay2_VTB
     layout->addWidget(decoderVTBEB);
 #endif
@@ -421,6 +455,13 @@ void ModuleSettingsWidget::saveSettings()
     if (decoderDXVA2EB)
     {
         sets().set("DecoderDXVA2Enabled", decoderDXVA2EB->isChecked());
+    }
+#endif
+#ifdef QMPlay2_D3D11VA
+    if (decoderD3D11VA)
+    {
+        sets().set("DecoderD3D11VAEnabled", decoderD3D11VA->isChecked());
+        sets().set("DecoderD3D11VAZeroCopy", d3d11vaZeroCopy->isChecked());
     }
 #endif
 #ifdef QMPlay2_VTB

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.9)
 project(AudioCD)
 
 set(AudioCD_HDR
@@ -38,14 +38,15 @@ target_link_libraries(${PROJECT_NAME}
 
 if(WIN32)
     set(CUSTOM_AUDIOCD_LIBRARIES "" CACHE STRING "Custom libraries for AudioCD")
-    mark_as_advanced(CUSTOM_AUDIOCD_LIBRARIES)
+endif()
+
+if(NOT WIN32 OR CMAKE_HOST_WIN32)
+    target_link_libraries(${PROJECT_NAME} ${LIBCD_LIBRARIES})
 endif()
 
 if(WIN32 AND CUSTOM_AUDIOCD_LIBRARIES)
     separate_arguments(CUSTOM_AUDIOCD_LIBRARIES)
     target_link_libraries(${PROJECT_NAME} ${CUSTOM_AUDIOCD_LIBRARIES})
-else()
-    target_link_libraries(${PROJECT_NAME} ${LIBCD_LIBRARIES})
 endif()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

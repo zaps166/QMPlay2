@@ -1,6 +1,6 @@
 /*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2020  Błażej Szczygieł
+    Copyright (C) 2010-2021  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published
@@ -78,13 +78,6 @@ static inline int toASSAlignment(int align)
 }
 
 /**/
-
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-bool LibASS::slowFontCacheUpdate()
-{
-    return ass_library_version() < 0x01300000 || QSysInfo::windowsVersion() < QSysInfo::WV_6_0;
-}
-#endif
 
 bool LibASS::isDummy()
 {
@@ -600,13 +593,6 @@ inline void LibASS::calcSize()
 }
 
 #else // QMPLAY2_LIBASS
-
-#if defined Q_OS_WIN && !defined Q_OS_WIN64
-bool LibASS::slowFontCacheUpdate()
-{
-    return false;
-}
-#endif
 
 bool LibASS::isDummy()
 {
