@@ -446,7 +446,6 @@ void YouTubeDL::startProcess(QStringList args)
             {
                 QStringList pythonCmdsToCheck {
                     "python",
-                    "python2",
                     "python3",
                 };
                 pythonCmdsToCheck.removeOne(pythonCmd);
