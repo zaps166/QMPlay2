@@ -145,8 +145,11 @@ void ResultsYoutube::copyPageURL()
 void ResultsYoutube::showRelated()
 {
     QTreeWidgetItem *tWI = currentItem();
-    const QString contentId = tWI->data(2, Qt::UserRole).toString();
-    emit requestRelated(contentId);
+    if (tWI)
+    {
+        const QString contentId = tWI->data(2, Qt::UserRole).toString();
+        emit requestRelated(contentId);
+    }
 }
 
 void ResultsYoutube::contextMenu(const QPoint &point)
