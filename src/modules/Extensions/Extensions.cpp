@@ -171,17 +171,27 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     subtitlesB->setToolTip(tr("Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language."));
     subtitlesB->setChecked(sets().getBool("YouTube/Subtitles"));
 
+    int idx;
+
+    m_preferredCodec = new QComboBox;
+    m_preferredCodec->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
+    m_preferredCodec->addItems({"VP9", "H.264"});
+    idx = m_preferredCodec->findText(sets().getString("YouTube/PreferredCodec"));
+    m_preferredCodec->setCurrentIndex(idx > -1 ? idx : 0);
+
     qualityPreset = new QComboBox;
     qualityPreset->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
     qualityPreset->addItems(YouTube::getQualityPresets());
-    int idx = qualityPreset->findText(sets().getString("YouTube/QualityPreset"));
+    idx = qualityPreset->findText(sets().getString("YouTube/QualityPreset"));
     qualityPreset->setCurrentIndex(idx > -1 ? idx : 3);
 
     layout = new QGridLayout(youTubeB);
     layout->addWidget(userNameB, 0, 0, 1, 2);
     layout->addWidget(subtitlesB, 1, 0, 1, 2);
-    layout->addWidget(new QLabel(tr("Preferred quality") + ": "), 2, 0, 1, 1);
-    layout->addWidget(qualityPreset, 2, 1, 1, 1);
+    layout->addWidget(new QLabel(tr("Preferred video codec") + ": "), 2, 0, 1, 1);
+    layout->addWidget(m_preferredCodec, 2, 1, 1, 1);
+    layout->addWidget(new QLabel(tr("Preferred quality") + ": "), 3, 0, 1, 1);
+    layout->addWidget(qualityPreset, 3, 1, 1, 1);
     layout->setMargin(2);
 #endif
 
@@ -258,6 +268,7 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("YouTube/ShowUserName", userNameB->isChecked());
     sets().set("YouTube/Subtitles", subtitlesB->isChecked());
     sets().set("YouTube/QualityPreset", qualityPreset->currentText());
+    sets().set("YouTube/PreferredCodec", m_preferredCodec->currentText());
 #endif
 
 #ifdef USE_LASTFM

@@ -378,6 +378,9 @@ YouTube::~YouTube()
 
 bool YouTube::set()
 {
+    const bool oldPpreferredH264 = m_preferredH264;
+    m_preferredH264 = (sets().getString("YouTube/PreferredCodec") == "H.264");
+
     const auto qualityActions = m_qualityGroup->actions();
     const auto qualityText = sets().getString("YouTube/QualityPreset");
     bool qualityActionChecked = false;
@@ -387,6 +390,8 @@ bool YouTube::set()
         {
             if (qualityAction->text() == qualityText)
             {
+                if (oldPpreferredH264 != m_preferredH264 && qualityAction->isChecked())
+                    qualityAction->setChecked(false); // Force "toggled" signal
                 qualityAction->setChecked(true);
                 qualityActionChecked = true;
                 break;
@@ -394,7 +399,11 @@ bool YouTube::set()
         }
     }
     if (!qualityActionChecked)
+    {
+        if (oldPpreferredH264 != m_preferredH264 && qualityActions[3]->isChecked())
+            qualityActions[3]->setChecked(false); // Force "toggled" signal
         qualityActions[3]->setChecked(true);
+    }
 
     resultsW->setColumnCount(sets().getBool("YouTube/ShowUserName") ? 3 : 2);
     m_allowSubtitles = sets().getBool("YouTube/Subtitles");
@@ -668,117 +677,140 @@ void YouTube::searchMenu()
 
 void YouTube::setItags(int qualityIdx)
 {
-#if 0 // Itag info (incomplete)
-    Video + Audio:
-    43 = 360p WebM (VP8 + Vorbis 128kbps)
-    36 = 180p MP4 (MPEG4 + AAC 32kbps)
-    22 = 720p MP4 (H.264 + AAC 192kbps)
-    18 = 360p MP4 (H.264 + AAC 96kbps)
-     5 = 240p FLV (FLV + MP3 64kbps)
-
-    Video only:
-    247 = Video  720p (VP9)
-    248 = Video 1080p (VP9)
-    271 = Video 1440p (VP9)
-    313 = Video 2160p (VP9)
-    272 = Video 4320p/2160p (VP9)
-
-    302 = Video  720p 60fps (VP9)
-    303 = Video 1080p 60fps (VP9)
-    308 = Video 1440p 60fps (VP9)
-    315 = Video 2160p 60fps (VP9)
-
-    298 = Video  720p 60fps (H.264)
-    299 = Video 1080p 60fps (H.264)
-
-    135 = Video  480p (H.264)
-    136 = Video  720p (H.264)
-    137 = Video 1080p (H.264)
-    264 = Video 1440p (H.264)
-    266 = Video 2160p (H.264)
-
-    170 = Video  480p (VP8)
-    168 = Video  720p (VP8)
-    170 = Video 1080p (VP8)
-
-    Audio only:
-    139 = Audio (AAC 48kbps)
-    140 = Audio (AAC 128kbps)
-    141 = Audio (AAC 256kbps) //?
-
-    171 = Audio (Vorbis 128kbps)
-    172 = Audio (Vorbis 256kbps) //?
-
-    249 = Audio (Opus 50kbps)
-    250 = Audio (Opus 70kbps)
-    251 = Audio (Opus 160kbps)
-#endif
+    // Itag info: https://gist.github.com/AgentOak/34d47c65b1d28829bb17c24c04a0096f
 
     enum
     {
-        _4320p60,
-        _2160p60,
-        _1440p60,
-        _1080p60,
-        _720p60,
-        _2160p,
-        _1440p,
-        _1080p,
-        _720p,
-        _480p,
-        QualityPresetsCount,
+        // Video
+        H264_144p = 160,
+        H264_240p = 133,
+        H264_360p = 134,
+        H264_480p = 135,
+        H264_720p = 136,
+        H264_1080p = 137,
+        H264_1440p = 264,
+        H264_2160p = 266,
+
+        H264_720p60 = 298,
+        H264_1080p60 = 299,
+        H264_1440p60 = 304,
+        H264_2160p60 = 305,
+
+        VP9_144p = 278,
+        VP9_240p = 242,
+        VP9_360p = 243,
+        VP9_480p = 244,
+        VP9_720p = 247,
+        VP9_1080p = 248,
+        VP9_1440p = 271,
+        VP9_2160p = 313,
+
+        VP9_720p60 = 302,
+        VP9_1080p60 = 303,
+        VP9_1440p60 = 308,
+        VP9_2160p60 = 315,
+        VP9_4320p60 = 272,
+
+        // Live video
+        H264_144p_AAC_48 = 91,
+        H264_240p_AAC_48 = 92,
+        H264_360p_AAC_128 = 93,
+        H264_480p_AAC_128 = 94,
+        H264_720p_AAC_256 = 95,
+        H264_1080p_AAC_256 = 96,
+        H264_720p60_AAC_128 = 300,
+        H264_1080p60_AAC_128 = 301,
+
+        // Audio
+        Opus_160 = 251,
+        AAC_128 = 140,
     };
 
-    QList<int> qualityPresets[QualityPresetsCount];
+    enum
     {
-        qualityPresets[_720p60]  << 298 << 302;
-        qualityPresets[_1080p60] << 299 << 303 << qualityPresets[_720p60];
-        qualityPresets[_1440p60] << 308 << qualityPresets[_1080p60];
-        qualityPresets[_2160p60] << 315 << qualityPresets[_1440p60];
-        qualityPresets[_4320p60] << 272 << qualityPresets[_2160p60];
+        Preset_4320p60,
+        Preset_2160p60,
+        Preset_1440p60,
+        Preset_1080p60,
+        Preset_720p60,
+        Preset_2160p,
+        Preset_1440p,
+        Preset_1080p,
+        Preset_720p,
+        Preset_480p,
 
-        qualityPresets[_480p]  << 135 << 134 << 133;
-        qualityPresets[_720p]  << 136 << 247 << qualityPresets[_480p];
-        qualityPresets[_1080p] << 137 << 248 << qualityPresets[_720p];
-        qualityPresets[_1440p] << 264 << 271 << qualityPresets[_1080p];
-        qualityPresets[_2160p] << 266 << 313 << qualityPresets[_1440p];
+        PresetCount,
+    };
+
+    QVector<int> qualityPresets[PresetCount];
+    {
+        if (!m_preferredH264)
+        {
+            qualityPresets[Preset_480p]  << VP9_480p << H264_480p << VP9_360p << H264_360p << VP9_240p << H264_240p << VP9_144p << H264_144p;
+            qualityPresets[Preset_720p]  << VP9_720p << H264_720p << qualityPresets[Preset_480p];
+            qualityPresets[Preset_1080p] << VP9_1080p << H264_1080p << qualityPresets[Preset_720p];
+            qualityPresets[Preset_1440p] << VP9_1440p << H264_1440p << qualityPresets[Preset_1080p];
+            qualityPresets[Preset_2160p] << VP9_2160p << H264_2160p << qualityPresets[Preset_1440p];
+
+            qualityPresets[Preset_720p60]  << VP9_720p60 << H264_720p60;
+            qualityPresets[Preset_1080p60] << VP9_1080p60 << H264_1080p60 << qualityPresets[Preset_720p60];
+            qualityPresets[Preset_1440p60] << VP9_1440p60 << H264_1440p60 << qualityPresets[Preset_1080p60];
+            qualityPresets[Preset_2160p60] << VP9_2160p60 << H264_2160p60 << qualityPresets[Preset_1440p60];
+            qualityPresets[Preset_4320p60] << VP9_4320p60 << qualityPresets[Preset_2160p60];
+        }
+        else
+        {
+            qualityPresets[Preset_480p]  << H264_480p << VP9_480p << H264_360p << VP9_360p << H264_240p << VP9_240p << H264_144p << VP9_144p;
+            qualityPresets[Preset_720p]  << H264_720p << VP9_720p << qualityPresets[Preset_480p];
+            qualityPresets[Preset_1080p] << H264_1080p << VP9_1080p << qualityPresets[Preset_720p];
+            qualityPresets[Preset_1440p] << H264_1440p << VP9_1440p << qualityPresets[Preset_1080p];
+            qualityPresets[Preset_2160p] << H264_2160p << VP9_2160p << qualityPresets[Preset_1440p];
+
+            qualityPresets[Preset_720p60]  << H264_720p60 << VP9_720p60;
+            qualityPresets[Preset_1080p60] << H264_1080p60 << VP9_1080p60 << qualityPresets[Preset_720p60];
+            qualityPresets[Preset_1440p60] << H264_1440p60 << VP9_1440p60 << qualityPresets[Preset_1080p60];
+            qualityPresets[Preset_2160p60] << H264_2160p60 << VP9_2160p60 << qualityPresets[Preset_1440p60];
+            qualityPresets[Preset_4320p60] << VP9_4320p60 << qualityPresets[Preset_2160p60];
+        }
 
         // Append also non-60 FPS itags to 60 FPS itags
-        qualityPresets[_720p60]  += qualityPresets[_720p];
-        qualityPresets[_1080p60] += qualityPresets[_1080p];
-        qualityPresets[_1440p60] += qualityPresets[_1440p];
-        qualityPresets[_2160p60] += qualityPresets[_2160p];
-        qualityPresets[_4320p60] += qualityPresets[_2160p];
+        qualityPresets[Preset_720p60]  << qualityPresets[Preset_720p];
+        qualityPresets[Preset_1080p60] << qualityPresets[Preset_1080p];
+        qualityPresets[Preset_1440p60] << qualityPresets[Preset_1440p];
+        qualityPresets[Preset_2160p60] << qualityPresets[Preset_2160p];
+        qualityPresets[Preset_4320p60] << qualityPresets[Preset_2160p];
     }
 
-    QList<int> liveQualityPresets[QualityPresetsCount];
+    QVector<int> liveQualityPresets[PresetCount];
     {
-        liveQualityPresets[_720p60]  << 300;
-        liveQualityPresets[_1080p60] << 301 << liveQualityPresets[_720p60];
-        liveQualityPresets[_1440p60] << liveQualityPresets[_1080p60];
-        liveQualityPresets[_2160p60] << liveQualityPresets[_1440p60];
-        liveQualityPresets[_4320p60] << liveQualityPresets[_2160p60];
+        liveQualityPresets[Preset_480p]  << H264_480p_AAC_128 << H264_360p_AAC_128 << H264_240p_AAC_48 << H264_144p_AAC_48;
+        liveQualityPresets[Preset_720p]  << H264_720p_AAC_256 << liveQualityPresets[Preset_480p];
+        liveQualityPresets[Preset_1080p] << H264_1080p_AAC_256 << liveQualityPresets[Preset_720p];
+        liveQualityPresets[Preset_1440p] << liveQualityPresets[Preset_1080p];
+        liveQualityPresets[Preset_2160p] << liveQualityPresets[Preset_1440p];
 
-        liveQualityPresets[_480p]  << 94 << 93 << 92 << 91;
-        liveQualityPresets[_720p]  << 95 << liveQualityPresets[_480p];
-        liveQualityPresets[_1080p] << 96 << liveQualityPresets[_720p];
-        liveQualityPresets[_1440p] << 265 << liveQualityPresets[_1080p];
-        liveQualityPresets[_2160p] << 267 << liveQualityPresets[_1440p];
+        liveQualityPresets[Preset_720p60]  << H264_720p60_AAC_128;
+        liveQualityPresets[Preset_1080p60] << H264_1080p60_AAC_128 << liveQualityPresets[Preset_720p60];
+        liveQualityPresets[Preset_1440p60] << liveQualityPresets[Preset_1080p60];
+        liveQualityPresets[Preset_2160p60] << liveQualityPresets[Preset_1440p60];
+        liveQualityPresets[Preset_4320p60] << liveQualityPresets[Preset_2160p60];
 
         // Append also non-60 FPS itags to 60 FPS itags
-        liveQualityPresets[_720p60]  += liveQualityPresets[_720p];
-        liveQualityPresets[_1080p60] += liveQualityPresets[_1080p];
-        liveQualityPresets[_1440p60] += liveQualityPresets[_1440p];
-        liveQualityPresets[_2160p60] += liveQualityPresets[_2160p];
-        liveQualityPresets[_4320p60] += liveQualityPresets[_2160p];
+        liveQualityPresets[Preset_720p60]  += liveQualityPresets[Preset_720p];
+        liveQualityPresets[Preset_1080p60] += liveQualityPresets[Preset_1080p];
+        liveQualityPresets[Preset_1440p60] += liveQualityPresets[Preset_1440p];
+        liveQualityPresets[Preset_2160p60] += liveQualityPresets[Preset_2160p];
+        liveQualityPresets[Preset_4320p60] += liveQualityPresets[Preset_2160p];
     }
 
     QMutexLocker locker(&m_itagsMutex);
     m_videoItags = qualityPresets[qualityIdx];
-    m_audioItags = {251, 171, 140, 250, 249};
+    m_audioItags = {Opus_160, AAC_128};
     m_hlsItags = liveQualityPresets[qualityIdx];
+
+    // Is it still needed?
     m_singleUrlItags = {43, 18};
-    if (qualityIdx != _480p)
+    if (qualityIdx != Preset_480p)
         m_singleUrlItags.prepend(22);
 }
 
@@ -1147,7 +1179,7 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
             itagsData[itag] = {url, "." + ext};
     }
 
-    auto appendUrl = [&](const QList<int> &itags) {
+    auto appendUrl = [&](const QVector<int> &itags) {
         for (auto &&itag : itags)
         {
             auto it = itagsData.constFind(itag);
@@ -1169,7 +1201,10 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
     if (urls.count() != 1 + (audioOnly ? 0 : 1))
     {
         if (!urls.isEmpty())
+        {
             urls.clear();
+            exts.clear();
+        }
         appendUrl(hlsItags);
         if (urls.isEmpty())
             appendUrl(singleUrlItags);
