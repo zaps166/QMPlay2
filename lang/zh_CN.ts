@@ -1796,7 +1796,7 @@
     </message>
     <message>
         <source>Preferred video codec</source>
-        <translation type="unfinished"></translation>
+        <translation type>首选视频编解码器</translation>
     </message>
 </context>
 <context>
