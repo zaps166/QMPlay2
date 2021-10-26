@@ -2796,7 +2796,7 @@ QMPlay2 将不会增加图标！</translation>
     </message>
     <message>
         <source>Show related</source>
-        <translation type="unfinished"></translation>
+        <translation>显示相关内容</translation>
     </message>
 </context>
 <context>
