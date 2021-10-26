@@ -193,7 +193,10 @@ QString QMPlay2CoreClass::getLibDir()
 
 QString QMPlay2CoreClass::getLongFromShortLanguage(const QString &lng)
 {
-    const QString lang = QLocale::languageToString(QLocale(lng).language());
+    const QLocale locale(lng);
+    QString lang = QLocale::languageToString(locale.language());
+    if (lng.contains(QChar('_')))
+        lang += " (" + QLocale::countryToString(locale.country()) + ")";
     return lang == "C" ? lng : lang;
 }
 
