@@ -1791,6 +1791,10 @@
         <source>XVideo outputs</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Preferred video codec</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

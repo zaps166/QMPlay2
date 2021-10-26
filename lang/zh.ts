@@ -1794,6 +1794,10 @@
         <source>Exclusive mode</source>
         <translation>独占模式</translation>
     </message>
+    <message>
+        <source>Preferred video codec</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>

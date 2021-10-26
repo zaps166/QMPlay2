@@ -580,10 +580,6 @@
         <translation>停止下載</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>尺寸</translation>
-    </message>
-    <message>
         <source>Download complete</source>
         <translation>下載完成</translation>
     </message>
@@ -618,6 +614,10 @@
     <message>
         <source>Stop conversion</source>
         <translation>停止轉換</translation>
+    </message>
+    <message>
+        <source>File size</source>
+        <translation type="unfinished">檔案大小</translation>
     </message>
 </context>
 <context>
@@ -731,16 +731,8 @@
         <translation>檔案大小</translation>
     </message>
     <message>
-        <source>Error while writing tags, check that you have permission to modify the file!</source>
-        <translation>標籤寫入錯誤，請檢查是否擁有檔案修改權限！</translation>
-    </message>
-    <message>
         <source>Synchronize with file or directory</source>
         <translation>與檔案或目錄同步</translation>
-    </message>
-    <message>
-        <source>The specified path does not exists</source>
-        <translation>指定位址不存在</translation>
     </message>
     <message>
         <source>Browse for a directory</source>
@@ -761,6 +753,14 @@
     <message>
         <source>Open URL or directory containing chosen file</source>
         <translation>開啟包含已選擇的檔案的位址或目錄</translation>
+    </message>
+    <message>
+        <source>The specified path does not exist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while writing tags, please check if you have permission to modify the file!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1042,72 +1042,72 @@
         <translation>&amp;更新</translation>
     </message>
     <message>
-        <source>Doesn&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
-        <translation>在程式運行後不播放（略過&quot;記住播放位置&quot;選項）。</translation>
-    </message>
-    <message>
-        <source>Ensures that the window will be visible if the application is running.</source>
-        <translation>若程式運行中保持視窗可見。</translation>
-    </message>
-    <message>
-        <source>Toggles fullscreen.</source>
-        <translation>切換全螢幕。</translation>
-    </message>
-    <message>
-        <source>Seeks to the specified value.</source>
-        <translation>尋位至指定的值。</translation>
-    </message>
-    <message>
-        <source>Starts playback.</source>
-        <translation>開始播放。</translation>
-    </message>
-    <message>
-        <source>Stops playback.</source>
-        <translation>停止播放。</translation>
-    </message>
-    <message>
-        <source>Toggles playback.</source>
-        <translation>切換播放狀態。</translation>
-    </message>
-    <message>
-        <source>Terminates the application.</source>
-        <translation>終結應用程式。</translation>
-    </message>
-    <message>
-        <source>Displays this help.</source>
-        <translation>顯示此說明。</translation>
-    </message>
-    <message>
-        <source>Opens and plays specified &lt;url&gt;.</source>
-        <translation>開啟並播放指定的&lt;位址&gt;。</translation>
-    </message>
-    <message>
-        <source>Adds specified &lt;url&gt; to playlist.</source>
-        <translation>加入指定的&lt;位址&gt;至播放列表。</translation>
-    </message>
-    <message>
-        <source>Starts the application with given &lt;profile name&gt;.</source>
-        <translation>啟動應用程式時，套用特定的&lt;設定檔名稱&gt;。</translation>
-    </message>
-    <message>
-        <source>Sets specified volume.</source>
-        <translation>設定指定音量。</translation>
-    </message>
-    <message>
-        <source>Sets specified playback speed.</source>
-        <translation>設定指定播放速度。</translation>
-    </message>
-    <message>
-        <source>Plays next entry on playlist.</source>
-        <translation>播放在播放列表中的下一個項目。</translation>
-    </message>
-    <message>
-        <source>Plays previous entry on playlist.</source>
-        <translation>播放在播放列表中的前一個項目。</translation>
-    </message>
-    <message>
         <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
         <translation>開啟新的QMPlay2實體時播放指定&lt;位址&gt;。</translation>
+    </message>
+    <message>
+        <source>Open and play specified &lt;url&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add specified &lt;url&gt; to playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start the application with given &lt;profile name&gt;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop playback.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ensure that the window will be visible if the application is running.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toggle fullscreen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set specified volume.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set specified playback speed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Seek to the specified value.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play next entry on playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play previous entry on playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Terminate the application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display this help.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1266,10 +1266,6 @@
         <translation>QMPlay2正在背景處理某些工作。</translation>
     </message>
     <message>
-        <source>The update is downloading now.</source>
-        <translation>更新下載中。</translation>
-    </message>
-    <message>
         <source>&amp;Lock widgets</source>
         <translation>&amp;鎖定小工具</translation>
     </message>
@@ -1292,6 +1288,10 @@
     <message>
         <source>&amp;Pause</source>
         <translation>&amp;暫停</translation>
+    </message>
+    <message>
+        <source>The update is being downloaded now.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1655,10 +1655,6 @@
         <translation>顯示可用的字幕</translation>
     </message>
     <message>
-        <source>Displays subtitles from YouTube. Follows default subtitles language and QMPlay2 language.</source>
-        <translation>顯示來自YouTube的字幕。遵循預設字幕語言及QMPlay2語言設定。</translation>
-    </message>
-    <message>
         <source>Decoder enabled</source>
         <translation>解碼器啟用</translation>
     </message>
@@ -1794,6 +1790,14 @@
         <source>Exclusive mode</source>
         <translation>獨占模式</translation>
     </message>
+    <message>
+        <source>Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preferred video codec</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1895,12 +1899,12 @@
         <translation>著色器 編譯/連結 錯誤</translation>
     </message>
     <message>
-        <source>error</source>
-        <translation>錯誤</translation>
-    </message>
-    <message>
         <source>texture map error</source>
         <translation>材質貼圖錯誤</translation>
+    </message>
+    <message>
+        <source>Can&apos;t init %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2476,16 +2480,16 @@
         <translation>&amp;儲存群組</translation>
     </message>
     <message>
-        <source>&amp;Synchronize group</source>
-        <translation>&amp;同步群組</translation>
-    </message>
-    <message>
         <source>&amp;Quick group synchronization</source>
         <translation>&amp;快速群組同步</translation>
     </message>
     <message>
         <source>&amp;Always sync</source>
         <translation>&amp;永遠同步</translation>
+    </message>
+    <message>
+        <source>&amp;Synchronize groups</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2499,10 +2503,6 @@
         <translation>篩選項目</translation>
     </message>
     <message>
-        <source>Playlist is loading now...</source>
-        <translation>正在載入播放列表...</translation>
-    </message>
-    <message>
         <source>Visible entries</source>
         <translation>可見的項目</translation>
     </message>
@@ -2513,6 +2513,10 @@
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
         <translation>確定刪除未分組項目？</translation>
+    </message>
+    <message>
+        <source>Playlist is being loaded now...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2896,10 +2900,6 @@ QMPlay2 will not scale up icons!</source>
         <translation>軟體視訊濾鏡</translation>
     </message>
     <message>
-        <source>Confirm clearing the cache covers</source>
-        <translation>確認清除封面快取</translation>
-    </message>
-    <message>
         <source>Do you want to delete all cached covers?</source>
         <translation>要清除所有已快取封面？</translation>
     </message>
@@ -3068,6 +3068,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
         <translation>強制所有硬體解碼器使用 Vulkan Yadif 去交錯</translation>
+    </message>
+    <message>
+        <source>Confirm clearing the cached covers</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3274,34 +3278,34 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>VAAPI</name>
     <message>
-        <source>Not supported deinterlacing algorithm</source>
-        <translation>不支援的去交錯演算法</translation>
-    </message>
-    <message>
         <source>Cannot open video filters</source>
         <translation>無法開啟視訊濾鏡</translation>
     </message>
+    <message>
+        <source>Unsupported deinterlacing algorithm</source>
+        <translation type="unfinished">不支援的去交錯演算法</translation>
+    </message>
 </context>
 <context>
-    <name>VDPAUWriter</name>
+    <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>不支援的圖像銳利化濾鏡</translation>
+        <translation type="unfinished">不支援的圖像銳利化濾鏡</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation>不支援的去交錯演算法</translation>
+        <translation type="unfinished">不支援的去交錯演算法</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
-        <translation>不支援的雜訊抑制濾鏡</translation>
+        <translation type="unfinished">不支援的雜訊抑制濾鏡</translation>
     </message>
 </context>
 <context>
     <name>VFilters</name>
     <message>
-        <source>Produces one extra frame which is average of two neighbour frames</source>
-        <translation>產生以兩相鄰影格的平均值為外加的影格</translation>
+        <source>Produce one extra frame which is average of two neighbour frames</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
