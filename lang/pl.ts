@@ -1796,7 +1796,7 @@
     </message>
     <message>
         <source>Preferred video codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Preferowany kodek wideo</translation>
     </message>
 </context>
 <context>
