@@ -372,7 +372,7 @@ void PipeWireWriter::recreateStream()
     destroyStream(true);
 
     m_stride = sizeof(float) * m_chn;
-    m_nFrames = qBound(64, qCeil((1024.0 / 48000.0) * m_rate), 8192);
+    m_nFrames = qBound(64, 1 << qRound(log2((1024.0 / 48000.0) * m_rate)), 8192);
     m_bufferSize = m_nFrames * m_stride;
     m_writeBufferPos = 0;
     m_buffer = std::make_unique<uint8_t[]>(m_bufferSize);
@@ -420,7 +420,8 @@ void PipeWireWriter::recreateStream()
     params[1] = reinterpret_cast<spa_pod *>(spa_pod_builder_add_object(
         &b,
         SPA_TYPE_OBJECT_ParamBuffers, SPA_PARAM_Buffers,
-        SPA_PARAM_BUFFERS_size, SPA_POD_CHOICE_RANGE_Int(m_bufferSize, m_bufferSize, INT_MAX)
+        SPA_PARAM_BUFFERS_size, SPA_POD_CHOICE_RANGE_Int(m_bufferSize, m_bufferSize, INT_MAX),
+        SPA_PARAM_BUFFERS_buffers, SPA_POD_CHOICE_RANGE_Int(2, 1, 2)
     ));
 
     const int connectErr = pw_stream_connect(
