@@ -61,7 +61,7 @@ private:
     void updateCoreInitSeq();
 
     void recreateStream();
-    void destroyStream();
+    void destroyStream(bool forceDrain);
 
     void signalLoop(bool onProcessDone, bool err);
 

@@ -64,7 +64,7 @@ PipeWireWriter::~PipeWireWriter()
     if (!m_threadLoop)
         return;
 
-    destroyStream();
+    destroyStream(false);
 
     pw_thread_loop_stop(m_threadLoop);
 
@@ -369,7 +369,7 @@ void PipeWireWriter::recreateStream()
         },
     };
 
-    destroyStream();
+    destroyStream(true);
 
     m_stride = sizeof(float) * m_chn;
     m_nFrames = qBound(64, qCeil((1024.0 / 48000.0) * m_rate), 8192);
@@ -439,12 +439,12 @@ void PipeWireWriter::recreateStream()
 
     modParam("delay", 2.0 * m_nFrames / m_rate);
 }
-void PipeWireWriter::destroyStream()
+void PipeWireWriter::destroyStream(bool forceDrain)
 {
     if (!m_stream)
         return;
 
-    if (getParam("drain").toBool())
+    if (forceDrain || getParam("drain").toBool())
     {
         LoopLocker locker(m_threadLoop);
         while (!m_streamPaused && !m_silence && !m_err)
