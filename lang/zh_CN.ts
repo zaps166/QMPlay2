@@ -296,11 +296,11 @@
     </message>
     <message>
         <source>Choose AudioCD image</source>
-        <translation>选择音频 CD 图片</translation>
+        <translation>选择音频 CD 镜像</translation>
     </message>
     <message>
         <source>Supported AudioCD images</source>
-        <translation>支持的音频 CD 图片</translation>
+        <translation>支持的音频 CD 镜像</translation>
     </message>
     <message>
         <source>Choose the drive</source>
@@ -470,7 +470,7 @@
     </message>
     <message>
         <source>codec</source>
-        <translation>解码器</translation>
+        <translation>编解码器</translation>
     </message>
     <message>
         <source>aspect ratio</source>
@@ -1087,7 +1087,7 @@
     </message>
     <message>
         <source>Start the application with given &lt;profile name&gt;.</source>
-        <translation>使用指定的&lt;配置&gt;启动程序。</translation>
+        <translation>使用指定的&lt;配置名&gt;启动程序。</translation>
     </message>
     <message>
         <source>Set specified volume.</source>
@@ -1314,7 +1314,7 @@
     </message>
     <message>
         <source>Search on %1</source>
-        <translation>搜索 %1</translation>
+        <translation>通过 %1 搜索</translation>
     </message>
 </context>
 <context>
@@ -1348,7 +1348,7 @@
     </message>
     <message>
         <source>SRT reading</source>
-        <translation>读取 SRT </translation>
+        <translation>读取 SRT</translation>
     </message>
     <message>
         <source>Classic subtitles reading</source>
@@ -1360,7 +1360,7 @@
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
-        <translation>未指定时字幕的最大持续时间</translation>
+        <translation>未指定长度字幕的最大持续时间</translation>
     </message>
     <message>
         <source>Enabled</source>
@@ -1536,7 +1536,7 @@
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
-        <translation>低分辨率解码（仅某些解码器）</translation>
+        <translation>低分辨率解码（仅某些编解码器）</translation>
     </message>
     <message>
         <source>Hurry up</source>
@@ -2167,7 +2167,7 @@
     </message>
     <message>
         <source>Prevent clipping</source>
-        <translation>阻止翻转</translation>
+        <translation>防止削波</translation>
     </message>
     <message>
         <source>Mouse wheel scrolls music/movie</source>
@@ -2302,7 +2302,7 @@
     <name>Player</name>
     <message>
         <source>&amp;Player</source>
-        <translation>播放</translation>
+        <translation>播放器</translation>
     </message>
     <message>
         <source>&amp;Stop</source>
@@ -2600,7 +2600,7 @@
         <source>QtSvg icon engine plugin doesn&apos;t exist.
 QMPlay2 will not scale up icons!</source>
         <translation>QtSvg 图标引擎插件不存在。
-QMPlay2 将不会增加图标！</translation>
+QMPlay2 将不会放大图标！</translation>
     </message>
 </context>
 <context>
@@ -3521,7 +3521,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Sort search results by ...</source>
-        <translation>搜索结果分类 ...</translation>
+        <translation>搜索结果分类方式 ...</translation>
     </message>
     <message>
         <source>Preferred quality</source>
