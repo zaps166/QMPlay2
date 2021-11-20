@@ -2299,7 +2299,7 @@
     </message>
     <message>
         <source>Amplify (no metadata)</source>
-        <translation type="unfinished"></translation>
+        <translation>Wzmocnienie (brak metadanych)</translation>
     </message>
 </context>
 <context>
