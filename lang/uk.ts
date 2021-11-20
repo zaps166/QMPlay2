@@ -2297,6 +2297,10 @@
         <source>Partially checked means that there is a delay between click and pausing</source>
         <translation>Частково позначене означає, що є затримка між натисканням та паузою</translation>
     </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

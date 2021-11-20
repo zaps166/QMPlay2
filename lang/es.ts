@@ -2297,6 +2297,10 @@
         <source>Partially checked means that there is a delay between click and pausing</source>
         <translation>Marcado parcialmente, significa que hay un retraso entre el clic y la pausa</translation>
     </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

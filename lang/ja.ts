@@ -2299,6 +2299,10 @@
         <source>Partially checked means that there is a delay between click and pausing</source>
         <translation>部分的にチェックするためクリックしてから一時停止までに遅延があります</translation>
     </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

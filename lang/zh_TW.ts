@@ -2297,6 +2297,10 @@
         <source>Partially checked means that there is a delay between click and pausing</source>
         <translation>部份打勾表示按下按鈕與暫停之間有延遲</translation>
     </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

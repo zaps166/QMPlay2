@@ -2294,6 +2294,10 @@
         <source>Partially checked means that there is a delay between click and pausing</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>

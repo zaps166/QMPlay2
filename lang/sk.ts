@@ -1794,6 +1794,10 @@
         <source>Exclusive mode</source>
         <translation>Výhradný režim</translation>
     </message>
+    <message>
+        <source>Preferred video codec</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -2292,6 +2296,10 @@
     <message>
         <source>Partially checked means that there is a delay between click and pausing</source>
         <translation>Čiastočne aktivované znamená, že medzi kliknutím a pozastavením je prestávka</translation>
+    </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2793,6 +2801,10 @@ QMPlay2 nebude zväčšovať ikony!</translation>
     <message>
         <source>Audio only</source>
         <translation>Iba zvuk</translation>
+    </message>
+    <message>
+        <source>Show related</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

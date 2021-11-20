@@ -2305,6 +2305,10 @@
         <source>Remember audio/video/subtitles enabled state</source>
         <translation>Lembrar do estado habilitado do áudio/vídeo/legendas</translation>
     </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
