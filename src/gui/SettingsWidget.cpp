@@ -487,6 +487,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         playbackSettingsPage->longSeekB->setSuffix(" " + playbackSettingsPage->longSeekB->suffix());
         playbackSettingsPage->playIfBufferedB->setSuffix(" " + playbackSettingsPage->playIfBufferedB->suffix());
         playbackSettingsPage->replayGainPreamp->setPrefix(playbackSettingsPage->replayGainPreamp->prefix() + ": ");
+        playbackSettingsPage->replayGainPreampNoMetadata->setPrefix(playbackSettingsPage->replayGainPreampNoMetadata->prefix() + ": ");
 
         tabW->addTab(playbackSettingsWidget, tr("Playback settings"));
 
@@ -514,6 +515,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         playbackSettingsPage->replayGainAlbum->setChecked(QMPSettings.getBool("ReplayGain/Album"));
         playbackSettingsPage->replayGainPreventClipping->setChecked(QMPSettings.getBool("ReplayGain/PreventClipping"));
         playbackSettingsPage->replayGainPreamp->setValue(QMPSettings.getDouble("ReplayGain/Preamp"));
+        playbackSettingsPage->replayGainPreampNoMetadata->setValue(QMPSettings.getDouble("ReplayGain/PreampNoMetadata"));
 
         playbackSettingsPage->wheelActionB->setChecked(QMPSettings.getBool("WheelAction"));
         playbackSettingsPage->wheelSeekB->setChecked(QMPSettings.getBool("WheelSeek"));
@@ -1204,6 +1206,7 @@ void SettingsWidget::apply()
             QMPSettings.set("ReplayGain/Album", playbackSettingsPage->replayGainAlbum->isChecked());
             QMPSettings.set("ReplayGain/PreventClipping", playbackSettingsPage->replayGainPreventClipping->isChecked());
             QMPSettings.set("ReplayGain/Preamp", playbackSettingsPage->replayGainPreamp->value());
+            QMPSettings.set("ReplayGain/PreampNoMetadata", playbackSettingsPage->replayGainPreampNoMetadata->value());
             QMPSettings.set("WheelAction", playbackSettingsPage->wheelActionB->isChecked());
             QMPSettings.set("WheelSeek", playbackSettingsPage->wheelSeekB->isChecked());
             QMPSettings.set("WheelVolume", playbackSettingsPage->wheelVolumeB->isChecked());

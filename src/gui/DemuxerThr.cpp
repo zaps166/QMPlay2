@@ -400,8 +400,14 @@ void DemuxerThr::run()
 
     /* ReplayGain */
     float gain_db = 0.0f, peak = 1.0f;
-    if (!QMPlay2Core.getSettings().getBool("ReplayGain/Enabled") || !demuxer->getReplayGain(QMPlay2Core.getSettings().getBool("ReplayGain/Album"), gain_db, peak))
+    if (!QMPlay2Core.getSettings().getBool("ReplayGain/Enabled"))
+    {
         playC.replayGain = 1.0;
+    }
+    else if (!demuxer->getReplayGain(QMPlay2Core.getSettings().getBool("ReplayGain/Album"), gain_db, peak))
+    {
+        playC.replayGain = pow(10.0, QMPlay2Core.getSettings().getDouble("ReplayGain/PreampNoMetadata") / 20.0);
+    }
     else
     {
         playC.replayGain = pow(10.0, gain_db / 20.0) * pow(10.0, QMPlay2Core.getSettings().getDouble("ReplayGain/Preamp") / 20.0);

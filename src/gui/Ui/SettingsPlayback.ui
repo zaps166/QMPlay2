@@ -84,6 +84,29 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="replayGainPreampNoMetadata">
+            <property name="prefix">
+             <string>Amplify (no metadata)</string>
+            </property>
+            <property name="suffix">
+             <string notr="true"> dB</string>
+            </property>
+            <property name="minimum">
+             <double>-15.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>0.000000000000000</double>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -507,6 +530,7 @@
   <tabstop>replayGainAlbum</tabstop>
   <tabstop>replayGainPreventClipping</tabstop>
   <tabstop>replayGainPreamp</tabstop>
+  <tabstop>replayGainPreampNoMetadata</tabstop>
   <tabstop>wheelActionB</tabstop>
   <tabstop>wheelSeekB</tabstop>
   <tabstop>wheelVolumeB</tabstop>
