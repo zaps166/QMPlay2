@@ -74,19 +74,19 @@
     <name>Add</name>
     <message>
         <source>&amp;Address</source>
-        <translation>位址</translation>
+        <translation>&amp;位址</translation>
     </message>
     <message>
         <source>&amp;Files</source>
-        <translation>檔案</translation>
+        <translation>&amp;檔案</translation>
     </message>
     <message>
         <source>&amp;Directory</source>
-        <translation>目錄</translation>
+        <translation>&amp;目錄</translation>
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation>加入</translation>
+        <translation>&amp;加入</translation>
     </message>
 </context>
 <context>
@@ -206,7 +206,7 @@
     </message>
     <message>
         <source>Wallpaper in the main window</source>
-        <translation>主視窗壁紙</translation>
+        <translation>主視窗桌布</translation>
     </message>
     <message>
         <source>Transparency</source>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>Select wallpaper</source>
-        <translation>選擇壁紙</translation>
+        <translation>選擇桌布</translation>
     </message>
     <message>
         <source>Name</source>
@@ -226,19 +226,19 @@
     </message>
     <message>
         <source>The specified name already exists!</source>
-        <translation>此名稱已存在！</translation>
+        <translation>指定的名稱已存在！</translation>
     </message>
     <message>
         <source>Removing</source>
-        <translation>正在移除</translation>
+        <translation>移除中</translation>
     </message>
     <message>
         <source>Do you want to remove</source>
-        <translation>您要移除吗</translation>
+        <translation>您想要移除</translation>
     </message>
     <message>
         <source>Loading wallpaper</source>
-        <translation>正在載入壁紙</translation>
+        <translation>正在載入桌布</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -265,19 +265,19 @@
     <name>AspectRatio</name>
     <message>
         <source>&amp;Aspect ratio</source>
-        <translation>畫面比例</translation>
+        <translation>&amp;畫面比例</translation>
     </message>
     <message>
         <source>&amp;Disabled</source>
-        <translation>關閉功能</translation>
+        <translation>&amp;關閉功能</translation>
     </message>
     <message>
         <source>&amp;Auto</source>
-        <translation>自動</translation>
+        <translation>&amp;自動</translation>
     </message>
     <message>
         <source>D&amp;epends on size</source>
-        <translation>依照尺寸縮放</translation>
+        <translation>&amp;依照尺寸來縮放</translation>
     </message>
 </context>
 <context>
@@ -331,30 +331,30 @@
     </message>
     <message>
         <source>No AudioCD found!</source>
-        <translation>沒有音訊 CD！</translation>
+        <translation>沒有找到音訊 CD！</translation>
     </message>
 </context>
 <context>
     <name>AudioChannels</name>
     <message>
         <source>&amp;Autodetect</source>
-        <translation>自動偵測</translation>
+        <translation>&amp;自動偵測</translation>
     </message>
     <message>
         <source>&amp;Mono</source>
-        <translation>單聲道</translation>
+        <translation>&amp;單聲道</translation>
     </message>
     <message>
         <source>&amp;Stereo</source>
-        <translation>立體聲</translation>
+        <translation>&amp;立體聲</translation>
     </message>
     <message>
         <source>&amp;Other</source>
-        <translation>其他</translation>
+        <translation>&amp;其他</translation>
     </message>
     <message>
         <source>&amp;Channels</source>
-        <translation>聲道</translation>
+        <translation>&amp;多聲道</translation>
     </message>
 </context>
 <context>
@@ -369,7 +369,7 @@
     </message>
     <message>
         <source>channels</source>
-        <translation>聲道</translation>
+        <translation>聲道數</translation>
     </message>
     <message>
         <source>Hz</source>
@@ -434,7 +434,7 @@
     <name>DemuxerThr</name>
     <message>
         <source>Opening</source>
-        <translation>正在開啟</translation>
+        <translation>開啟中</translation>
     </message>
     <message>
         <source>Playback</source>
@@ -442,11 +442,11 @@
     </message>
     <message>
         <source>Seeking</source>
-        <translation>正在尋找</translation>
+        <translation>跳轉中</translation>
     </message>
     <message>
         <source>Paused</source>
-        <translation>已暫停</translation>
+        <translation>暫停</translation>
     </message>
     <message>
         <source>Address</source>
@@ -538,7 +538,7 @@
     </message>
     <message>
         <source>channels</source>
-        <translation>聲道</translation>
+        <translation>聲道數</translation>
     </message>
     <message>
         <source>mono</source>
@@ -589,7 +589,7 @@
     </message>
     <message>
         <source>Download aborted</source>
-        <translation>下載終止</translation>
+        <translation>下載中止</translation>
     </message>
     <message>
         <source>Download error</source>
@@ -605,7 +605,7 @@
     </message>
     <message>
         <source>Conversion aborted</source>
-        <translation>轉換終止</translation>
+        <translation>轉換中止</translation>
     </message>
     <message>
         <source>Conversion error</source>
@@ -613,7 +613,7 @@
     </message>
     <message>
         <source>Converting...</source>
-        <translation>正在轉換...</translation>
+        <translation>轉換中...</translation>
     </message>
     <message>
         <source>Stop conversion</source>
@@ -636,7 +636,7 @@
     </message>
     <message>
         <source>Clear completed downloads</source>
-        <translation>清除已完成的下載</translation>
+        <translation>清除已完成的下載紀錄</translation>
     </message>
     <message>
         <source>Enter the address for download</source>
@@ -656,7 +656,7 @@
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation>加入</translation>
+        <translation>&amp;加入</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
@@ -740,7 +740,7 @@
     </message>
     <message>
         <source>The specified path does not exist</source>
-        <translation>指定位址不存在</translation>
+        <translation>指定的位址不存在</translation>
     </message>
     <message>
         <source>Browse for a directory</source>
@@ -760,7 +760,7 @@
     </message>
     <message>
         <source>Open URL or directory containing chosen file</source>
-        <translation>開啟包含已選擇檔案的位址或目錄</translation>
+        <translation>開啟包含已選擇的檔案的位址或目錄</translation>
     </message>
 </context>
 <context>
@@ -904,7 +904,7 @@
     </message>
     <message>
         <source>Automatically open video window</source>
-        <translation>自動開啓視訊視窗</translation>
+        <translation>自動開啟視訊視窗</translation>
     </message>
     <message>
         <source>Automatically check and download updates</source>
@@ -1020,26 +1020,26 @@
     </message>
     <message>
         <source>Enlarge small covers</source>
-        <translation>放大小型封面</translation>
+        <translation>放大小型的封面</translation>
     </message>
 </context>
 <context>
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
-        <translation>幫助</translation>
+        <translation>&amp;說明</translation>
     </message>
     <message>
         <source>&amp;About QMPlay2</source>
-        <translation>關於 QMPlay2</translation>
+        <translation>&amp;關於 QMPlay2</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
-        <translation>關於 Qt</translation>
+        <translation>&amp;關於 Qt</translation>
     </message>
     <message>
         <source>&amp;Updates</source>
-        <translation>更新</translation>
+        <translation>&amp;更新</translation>
     </message>
     <message>
         <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
@@ -1047,7 +1047,7 @@
     </message>
     <message>
         <source>Ensure that the window will be visible if the application is running.</source>
-        <translation>請確認如果應用程式運行時視窗可見。</translation>
+        <translation>若程式運行中確保視窗可見。</translation>
     </message>
     <message>
         <source>Toggle fullscreen.</source>
@@ -1055,7 +1055,7 @@
     </message>
     <message>
         <source>Seek to the specified value.</source>
-        <translation>跳轉到指定值。</translation>
+        <translation>跳轉至指定的值。</translation>
     </message>
     <message>
         <source>Start playback.</source>
@@ -1067,27 +1067,27 @@
     </message>
     <message>
         <source>Toggle playback.</source>
-        <translation>切換播放。</translation>
+        <translation>切換播放狀態。</translation>
     </message>
     <message>
         <source>Terminate the application.</source>
-        <translation>終止應用程式</translation>
+        <translation>終結應用程式。</translation>
     </message>
     <message>
         <source>Display this help.</source>
-        <translation>顯示幫助。</translation>
+        <translation>顯示此說明。</translation>
     </message>
     <message>
         <source>Open and play specified &lt;url&gt;.</source>
-        <translation>打開並播放指定的&lt;位址&gt;。</translation>
+        <translation>開啟並播放指定的&lt;位址&gt;。</translation>
     </message>
     <message>
         <source>Add specified &lt;url&gt; to playlist.</source>
-        <translation>將指定的&lt;位址&gt;添加到播放列表。</translation>
+        <translation>加入指定的&lt;位址&gt;至播放列表。</translation>
     </message>
     <message>
         <source>Start the application with given &lt;profile name&gt;.</source>
-        <translation>使用指定的&lt;配置名&gt;啓動應用程式。</translation>
+        <translation>啟動應用程式時，套用指定的&lt;設定檔名稱&gt;。</translation>
     </message>
     <message>
         <source>Set specified volume.</source>
@@ -1099,11 +1099,11 @@
     </message>
     <message>
         <source>Play next entry on playlist.</source>
-        <translation>播放列表的下一項。</translation>
+        <translation>播放在播放列表中的下一個項目。</translation>
     </message>
     <message>
         <source>Play previous entry on playlist.</source>
-        <translation>播放列表的上一項。</translation>
+        <translation>播放在播放列表中的前一個項目。</translation>
     </message>
     <message>
         <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
@@ -1130,11 +1130,11 @@
     </message>
     <message>
         <source>interlaced</source>
-        <translation>交錯</translation>
+        <translation>隔行掃描</translation>
     </message>
     <message>
         <source>visible</source>
-        <translation>可見</translation>
+        <translation>可見的</translation>
     </message>
 </context>
 <context>
@@ -1200,7 +1200,7 @@
     </message>
     <message>
         <source>Channels</source>
-        <translation>聲道</translation>
+        <translation>聲道數</translation>
     </message>
 </context>
 <context>
@@ -1211,7 +1211,7 @@
     </message>
     <message>
         <source>&amp;Play</source>
-        <translation>播放</translation>
+        <translation>&amp;播放</translation>
     </message>
     <message>
         <source>Choose files</source>
@@ -1223,15 +1223,15 @@
     </message>
     <message>
         <source>Pointed position</source>
-        <translation>指定位置</translation>
+        <translation>指定的位置</translation>
     </message>
     <message>
         <source>&amp;Hide</source>
-        <translation>隱藏</translation>
+        <translation>&amp;隱藏</translation>
     </message>
     <message>
         <source>&amp;Show</source>
-        <translation>顯示</translation>
+        <translation>&amp;顯示</translation>
     </message>
     <message>
         <source>Stopped</source>
@@ -1259,7 +1259,7 @@
     </message>
     <message>
         <source>Are you sure you want to quit?</source>
-        <translation>您確認要退出嗎？</translation>
+        <translation>您確定要退出嗎？</translation>
     </message>
     <message>
         <source>QMPlay2 is doing something in the background.</source>
@@ -1271,7 +1271,7 @@
     </message>
     <message>
         <source>&amp;Lock widgets</source>
-        <translation>鎖定小工具</translation>
+        <translation>&amp;鎖定小工具</translation>
     </message>
     <message>
         <source>Save group</source>
@@ -1283,7 +1283,7 @@
     </message>
     <message>
         <source>&amp;Hide menu bar</source>
-        <translation>隱藏選單列</translation>
+        <translation>&amp;隱藏選單列</translation>
     </message>
     <message>
         <source>New window</source>
@@ -1291,7 +1291,7 @@
     </message>
     <message>
         <source>&amp;Pause</source>
-        <translation>暫停</translation>
+        <translation>&amp;暫停</translation>
     </message>
 </context>
 <context>
@@ -1348,7 +1348,7 @@
     </message>
     <message>
         <source>SRT reading</source>
-        <translation>讀取SRT</translation>
+        <translation>讀取 SRT</translation>
     </message>
     <message>
         <source>Classic subtitles reading</source>
@@ -1356,7 +1356,7 @@
     </message>
     <message>
         <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
-        <translation>MicroDVD 字幕使用指定的每秒影格數（若存在）</translation>
+        <translation>MicroDVD 的字幕使用指定的 FPS（若存在）</translation>
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
@@ -1480,7 +1480,7 @@
     </message>
     <message>
         <source>Channel count</source>
-        <translation>聲道數</translation>
+        <translation>聲道總數</translation>
     </message>
     <message>
         <source>Sample rate</source>
@@ -1540,7 +1540,7 @@
     </message>
     <message>
         <source>Hurry up</source>
-        <translation>加快</translation>
+        <translation>使…加快</translation>
     </message>
     <message>
         <source>Number of threads used to decode video</source>
@@ -1572,7 +1572,7 @@
     </message>
     <message>
         <source>Scrobble</source>
-        <translation>分享</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>User name</source>
@@ -1656,7 +1656,7 @@
     </message>
     <message>
         <source>Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language.</source>
-        <translation>顯示 YouTube 字幕。跟隨默認語言和 QMPlay2 語言。</translation>
+        <translation>顯示來自 YouTube 的字幕。遵循預設字幕語言及 QMPlay2 語言設定。</translation>
     </message>
     <message>
         <source>Decoder enabled</source>
@@ -1692,7 +1692,7 @@
     </message>
     <message>
         <source>Body</source>
-        <translation>主體</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Notification timeout</source>
@@ -1724,7 +1724,7 @@
     </message>
     <message>
         <source>Feed level</source>
-        <translation>傳送級別</translation>
+        <translation>饋送級別</translation>
     </message>
     <message>
         <source>Equalizer</source>
@@ -1740,11 +1740,11 @@
     </message>
     <message>
         <source>Additional notifications</source>
-        <translation>額外通知項</translation>
+        <translation>額外的通知項</translation>
     </message>
     <message>
         <source>Try to automatically reconnect live streams on error</source>
-        <translation>發生錯誤時嘗試自動重新連線直播串流</translation>
+        <translation>自動地在發生錯誤時嘗試重新連線直播串流</translation>
     </message>
     <message>
         <source>Decode MPEG4 videos</source>
@@ -1752,11 +1752,11 @@
     </message>
     <message>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
-        <translation>若解碼 MPEG4 影片 (DivX5) 發生問題則關閉功能</translation>
+        <translation>若解碼 MPEG4 影片（DivX5）發生問題則關閉功能</translation>
     </message>
     <message>
         <source>Bit-perfect audio</source>
-        <translation>Bit-perfect 音頻</translation>
+        <translation>Bit-perfect 音訊</translation>
     </message>
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
@@ -1776,7 +1776,7 @@
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation>首選畫質</translation>
+        <translation>偏好畫質</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
@@ -1796,7 +1796,7 @@
     </message>
     <message>
         <source>Preferred video codec</source>
-        <translation>首選視訊編解碼器</translation>
+        <translation>偏好的視訊編解碼器</translation>
     </message>
 </context>
 <context>
@@ -1830,7 +1830,7 @@
     </message>
     <message>
         <source>Playing</source>
-        <translation>正在播放</translation>
+        <translation>播放中</translation>
     </message>
     <message>
         <source>Paused</source>
@@ -1896,11 +1896,11 @@
     <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation>著色器編譯/連結錯誤</translation>
+        <translation>著色器 編譯/連結 錯誤</translation>
     </message>
     <message>
         <source>Can&apos;t init %1</source>
-        <translation>無法初始化 %1</translation>
+        <translation>無法初始化%1</translation>
     </message>
     <message>
         <source>texture map error</source>
@@ -1911,19 +1911,19 @@
     <name>Options</name>
     <message>
         <source>Op&amp;tions</source>
-        <translation>選項</translation>
+        <translation>&amp;選項</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation>設定</translation>
+        <translation>&amp;設定</translation>
     </message>
     <message>
         <source>&amp;Show tray icon</source>
-        <translation>顯示系統匣圖示</translation>
+        <translation>&amp;顯示系統匣圖示</translation>
     </message>
     <message>
         <source>&amp;Modules settings</source>
-        <translation>模組設定</translation>
+        <translation>&amp;模組設定</translation>
     </message>
     <message>
         <source>Create new profile</source>
@@ -1931,19 +1931,19 @@
     </message>
     <message>
         <source>&amp;Profiles</source>
-        <translation>設定檔</translation>
+        <translation>&amp;設定檔</translation>
     </message>
     <message>
         <source>&amp;New Profile</source>
-        <translation>新設定檔</translation>
+        <translation>&amp;新設定檔</translation>
     </message>
     <message>
         <source>&amp;Copy Profile</source>
-        <translation>複製設定檔</translation>
+        <translation>&amp;複製設定檔</translation>
     </message>
     <message>
         <source>&amp;Default</source>
-        <translation>預設</translation>
+        <translation>&amp;預設</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -1955,11 +1955,11 @@
     </message>
     <message>
         <source>&amp;Playback settings</source>
-        <translation>播放設定</translation>
+        <translation>&amp;播放設定</translation>
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation>算繪器設定</translation>
+        <translation>&amp;算繪器設定</translation>
     </message>
 </context>
 <context>
@@ -2041,7 +2041,7 @@
     </message>
     <message>
         <source>disabled</source>
-        <translation>關閉</translation>
+        <translation>功能關閉</translation>
     </message>
     <message>
         <source>from</source>
@@ -2053,15 +2053,15 @@
     </message>
     <message>
         <source>Rotation 270°</source>
-        <translation>旋轉 270 度</translation>
+        <translation>旋轉 270°</translation>
     </message>
     <message>
         <source>Rotation 180°</source>
-        <translation>旋轉 180 度</translation>
+        <translation>旋轉 180°</translation>
     </message>
     <message>
         <source>Rotation 90°</source>
-        <translation>旋轉 90 度</translation>
+        <translation>旋轉 90°</translation>
     </message>
     <message>
         <source>Rotation is not supported by this video output module</source>
@@ -2088,35 +2088,35 @@
     <name>Playback</name>
     <message>
         <source>&amp;Playback</source>
-        <translation>播放</translation>
+        <translation>&amp;播放</translation>
     </message>
     <message>
         <source>&amp;Enable audio</source>
-        <translation>啟用音訊</translation>
+        <translation>&amp;啟用音訊</translation>
     </message>
     <message>
         <source>&amp;Enable video</source>
-        <translation>啟用視訊</translation>
+        <translation>&amp;啟用視訊</translation>
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>設定視訊延遲</translation>
+        <translation>&amp;設定視訊延遲</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
-        <translation>視訊延遲</translation>
+        <translation>&amp;視訊延遲</translation>
     </message>
     <message>
         <source>&amp;Speed up video</source>
-        <translation>視訊加速</translation>
+        <translation>&amp;視訊加速</translation>
     </message>
     <message>
         <source>&amp;Enable subtitles</source>
-        <translation>啟用字幕</translation>
+        <translation>&amp;啟用字幕</translation>
     </message>
     <message>
         <source>Add &amp;subtities from file</source>
-        <translation>從檔案加入字幕</translation>
+        <translation>&amp;從檔案加入字幕</translation>
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
@@ -2124,23 +2124,23 @@
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
-        <translation>字幕延遲</translation>
+        <translation>&amp;字幕延遲</translation>
     </message>
     <message>
         <source>&amp;Speed up subtitles</source>
-        <translation>字幕加速</translation>
+        <translation>&amp;字幕加速</translation>
     </message>
     <message>
         <source>Scale up subt&amp;itles</source>
-        <translation>字幕放大</translation>
+        <translation>&amp;字幕放大</translation>
     </message>
     <message>
         <source>Scale down sub&amp;titles</source>
-        <translation>字幕縮小</translation>
+        <translation>&amp;字幕縮小</translation>
     </message>
     <message>
         <source>&amp;Screen shot</source>
-        <translation>螢幕截圖</translation>
+        <translation>&amp;螢幕截圖</translation>
     </message>
 </context>
 <context>
@@ -2155,11 +2155,11 @@
     </message>
     <message>
         <source>Force channels conversion</source>
-        <translation>強制聲道轉換</translation>
+        <translation>強制聲道數轉換</translation>
     </message>
     <message>
         <source>Use available replay gain</source>
-        <translation>使用可用回放增益</translation>
+        <translation>使用可用的回放增益</translation>
     </message>
     <message>
         <source>Album mode for replay gain</source>
@@ -2267,7 +2267,7 @@
     </message>
     <message>
         <source>Accurate seeking</source>
-        <translation>精確尋位</translation>
+        <translation>精確的跳轉</translation>
     </message>
     <message>
         <source>Store aspect ratio and zoom in config file</source>
@@ -2275,7 +2275,7 @@
     </message>
     <message>
         <source>Unpause when seeking</source>
-        <translation>尋位時解除播放暫停</translation>
+        <translation>跳轉時解除播放暫停</translation>
     </message>
     <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
@@ -2306,194 +2306,194 @@
     <name>Player</name>
     <message>
         <source>&amp;Player</source>
-        <translation>播放器</translation>
+        <translation>&amp;播放器</translation>
     </message>
     <message>
         <source>&amp;Stop</source>
-        <translation>停止</translation>
+        <translation>&amp;停止</translation>
     </message>
     <message>
         <source>&amp;Next</source>
-        <translation>下一個</translation>
+        <translation>&amp;下一個</translation>
     </message>
     <message>
         <source>&amp;Previous</source>
-        <translation>前一個</translation>
+        <translation>&amp;前一個</translation>
     </message>
     <message>
         <source>Seek &amp;forward</source>
-        <translation>向前</translation>
+        <translation>&amp;向前</translation>
     </message>
     <message>
         <source>Seek &amp;backward</source>
-        <translation>向後</translation>
+        <translation>&amp;向後</translation>
     </message>
     <message>
         <source>Long &amp;seek &amp;forward</source>
-        <translation>長距向前</translation>
+        <translation>&amp;長距向前</translation>
     </message>
     <message>
         <source>Long s&amp;eek backward</source>
-        <translation>長距向後</translation>
+        <translation>&amp;長距向後</translation>
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translation>快一點</translation>
+        <translation>&amp;快一點</translation>
     </message>
     <message>
         <source>Slowe&amp;r</source>
-        <translation>慢一點</translation>
+        <translation>&amp;慢一點</translation>
     </message>
     <message>
         <source>Zoom i&amp;n</source>
-        <translation>放大</translation>
+        <translation>&amp;縮小</translation>
     </message>
     <message>
         <source>Zoom ou&amp;t</source>
-        <translation>縮小</translation>
+        <translation>&amp;放大</translation>
     </message>
     <message>
         <source>&amp;Mute</source>
-        <translation>靜音</translation>
+        <translation>&amp;靜音</translation>
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
-        <translation>切換畫面比例</translation>
+        <translation>&amp;切換畫面比例</translation>
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>重設圖像設定</translation>
+        <translation>&amp;重設圖像設定</translation>
     </message>
     <message>
         <source>&amp;Set speed</source>
-        <translation>設定速度</translation>
+        <translation>&amp;設定速度</translation>
     </message>
     <message>
         <source>Next &amp;frame</source>
-        <translation>下一影格</translation>
+        <translation>&amp;下一影格</translation>
     </message>
     <message>
         <source>Volume &amp;up</source>
-        <translation>調升音量</translation>
+        <translation>&amp;調升音量</translation>
     </message>
     <message>
         <source>Volume &amp;down</source>
-        <translation>降低音量</translation>
+        <translation>&amp;降低音量</translation>
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>播放結束後將電腦進入休眠</translation>
+        <translation>&amp;播放結束後將電腦進入休眠</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
-        <translation>A&amp;-B 區段重复</translation>
+        <translation>&amp;A-B 區段重复</translation>
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
-        <translation>與接收命令分離</translation>
+        <translation>&amp;與接收命令分離</translation>
     </message>
     <message>
         <source>&amp;Skip</source>
-        <translation>跳過</translation>
+        <translation>&amp;跳過</translation>
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation>在播放之後停止</translation>
+        <translation>&amp;在播放之後停止</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
-        <translation>先前影格</translation>
+        <translation>&amp;先前的影格</translation>
     </message>
 </context>
 <context>
     <name>Playlist</name>
     <message>
         <source>&amp;Playlist</source>
-        <translation>播放列表</translation>
+        <translation>&amp;播放列表</translation>
     </message>
     <message>
         <source>&amp;Stop loading</source>
-        <translation>停止載入</translation>
+        <translation>&amp;停止載入</translation>
     </message>
     <message>
         <source>Load &amp;list</source>
-        <translation>載入列表</translation>
+        <translation>&amp;載入列表</translation>
     </message>
     <message>
         <source>Save &amp;list</source>
-        <translation>儲存列表</translation>
+        <translation>&amp;儲存列表</translation>
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
-        <translation>移除已選擇項目</translation>
+        <translation>&amp;移除已選擇項目</translation>
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
-        <translation>移除沒有分組的項目</translation>
+        <translation>&amp;移除沒有分組的項目</translation>
     </message>
     <message>
         <source>&amp;Clear list</source>
-        <translation>清除列表</translation>
+        <translation>&amp;清除列表</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>複製</translation>
+        <translation>&amp;複製</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>貼上</translation>
+        <translation>&amp;貼上</translation>
     </message>
     <message>
         <source>&amp;Create &amp;group</source>
-        <translation>建立群組</translation>
+        <translation>&amp;建立群組</translation>
     </message>
     <message>
         <source>&amp;Rename</source>
-        <translation>重新命名</translation>
+        <translation>&amp;重新命名</translation>
     </message>
     <message>
         <source>&amp;Find entries</source>
-        <translation>搜尋項目</translation>
+        <translation>&amp;搜尋項目</translation>
     </message>
     <message>
         <source>&amp;Collapse all</source>
-        <translation>收折全部</translation>
+        <translation>&amp;收折全部</translation>
     </message>
     <message>
         <source>&amp;Expand all</source>
-        <translation>展開全部</translation>
+        <translation>&amp;展開全部</translation>
     </message>
     <message>
         <source>&amp;Go to the playback</source>
-        <translation>至播放中曲目的位置</translation>
+        <translation>&amp;至播放中曲目的位置</translation>
     </message>
     <message>
         <source>&amp;Enqueue</source>
-        <translation>加入佇列</translation>
+        <translation>&amp;加入佇列</translation>
     </message>
     <message>
         <source>&amp;Properties</source>
-        <translation>屬性</translation>
+        <translation>&amp;屬性</translation>
     </message>
     <message>
         <source>&amp;Extensions</source>
-        <translation>擴充功能</translation>
+        <translation>&amp;擴充功能</translation>
     </message>
     <message>
         <source>Save &amp;group</source>
-        <translation>儲存群組</translation>
+        <translation>&amp;儲存群組</translation>
     </message>
     <message>
         <source>&amp;Synchronize groups</source>
-        <translation>同步群組</translation>
+        <translation>&amp;同步群組</translation>
     </message>
     <message>
         <source>&amp;Quick group synchronization</source>
-        <translation>快速群組同步</translation>
+        <translation>&amp;快速群組同步</translation>
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation>永遠同步</translation>
+        <translation>&amp;永遠同步</translation>
     </message>
 </context>
 <context>
@@ -2508,30 +2508,30 @@
     </message>
     <message>
         <source>Playlist is being loaded now...</source>
-        <translation>正在載入播放列表...</translation>
+        <translation>播放列表載入中...</translation>
     </message>
     <message>
         <source>Visible entries</source>
-        <translation>可見項目</translation>
+        <translation>可見的項目</translation>
     </message>
     <message>
         <source>Are you sure you want to clear the list?</source>
-        <translation>您確定清除列表吗？</translation>
+        <translation>您確定要清除列表嗎？</translation>
     </message>
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
-        <translation>您確定刪除未分組項目吗？</translation>
+        <translation>您確定要刪除未分組項目嗎？</translation>
     </message>
 </context>
 <context>
     <name>PlaylistWidget</name>
     <message>
         <source>Un&amp;lock</source>
-        <translation>解除鎖定</translation>
+        <translation>&amp;解除鎖定</translation>
     </message>
     <message>
         <source>&amp;Lock</source>
-        <translation>鎖定</translation>
+        <translation>&amp;鎖定</translation>
     </message>
 </context>
 <context>
@@ -2576,7 +2576,7 @@
     </message>
     <message>
         <source>duplicated module name</source>
-        <translation>模組名稱重複</translation>
+        <translation>重複的模組名稱</translation>
     </message>
     <message>
         <source>mismatch module Qt version</source>
@@ -2598,28 +2598,28 @@
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation>QMPlay2 尚未更新。您要更新嗎（推薦）？</translation>
+        <translation>QMPlay2 尚未更新。您想要更新嗎（推薦）？</translation>
     </message>
     <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
 QMPlay2 will not scale up icons!</source>
         <translation>QtSvg 圖示引擎外掛不存在。
-QMPlay2 將不放大圖示！</translation>
+QMPlay2 將不會放大圖示！</translation>
     </message>
 </context>
 <context>
     <name>Radio</name>
     <message>
         <source>Internet radios</source>
-        <translation>網路電台</translation>
+        <translation>網路廣播電台</translation>
     </message>
     <message>
         <source>Adding a new radio station</source>
-        <translation>正在加入一個新電台</translation>
+        <translation>正在加入一個新的廣播電台</translation>
     </message>
     <message>
         <source>Add new radio station</source>
-        <translation>加入新電台</translation>
+        <translation>加入新的廣播電台</translation>
     </message>
     <message>
         <source>Name</source>
@@ -2631,15 +2631,15 @@ QMPlay2 將不放大圖示！</translation>
     </message>
     <message>
         <source>My radio stations</source>
-        <translation>我的電台</translation>
+        <translation>我的廣播電台</translation>
     </message>
     <message>
         <source>Edit selected radio station</source>
-        <translation>編輯選擇的電台</translation>
+        <translation>編輯選擇的廣播電台</translation>
     </message>
     <message>
         <source>Remove selected radio station</source>
-        <translation>移除選擇的電台</translation>
+        <translation>移除選擇的廣播電台</translation>
     </message>
     <message>
         <source>Play</source>
@@ -2651,35 +2651,35 @@ QMPlay2 將不放大圖示！</translation>
     </message>
     <message>
         <source>Add to my radio stations</source>
-        <translation>加入至我的站台</translation>
+        <translation>加入至我的廣播電台</translation>
     </message>
     <message>
         <source>Open radio website</source>
-        <translation>開啟電台網站</translation>
+        <translation>開啟廣播電台網站</translation>
     </message>
     <message>
         <source>Editing selected radio station</source>
-        <translation>編輯所選擇的電台</translation>
+        <translation>編輯所選擇的廣播電台</translation>
     </message>
     <message>
         <source>Radio station with given name already exists!</source>
-        <translation>已有同名電台！</translation>
+        <translation>特定名稱的廣播電台已存在！</translation>
     </message>
     <message>
         <source>Load radio station list from file</source>
-        <translation>從檔案載入電台</translation>
+        <translation>從檔案載入廣播電台</translation>
     </message>
     <message>
         <source>Save radio station list to file</source>
-        <translation>儲存電台列表到檔案</translation>
+        <translation>儲存廣播電台列表到檔案</translation>
     </message>
     <message>
         <source>Load radio station list</source>
-        <translation>載入電台列表</translation>
+        <translation>載入廣播電台列表</translation>
     </message>
     <message>
         <source>Save radio station list</source>
-        <translation>儲存電台列表</translation>
+        <translation>儲存廣播電台列表</translation>
     </message>
     <message>
         <source>Tag</source>
@@ -2725,43 +2725,43 @@ QMPlay2 將不放大圖示！</translation>
     <name>Repeat</name>
     <message>
         <source>&amp;Repeat</source>
-        <translation>重複</translation>
+        <translation>&amp;重複</translation>
     </message>
     <message>
         <source>&amp;No repeating</source>
-        <translation>不重複</translation>
+        <translation>&amp;不重複</translation>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
-        <translation>重複當前項目</translation>
+        <translation>&amp;重複當前項目</translation>
     </message>
     <message>
         <source>&amp;Group repeating</source>
-        <translation>群組重複</translation>
+        <translation>&amp;群組重複</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>播放列表重複</translation>
+        <translation>&amp;播放列表重複</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
-        <translation>隨機</translation>
+        <translation>&amp;隨機</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation>群組內隨機</translation>
+        <translation>&amp;群組內隨機</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
-        <translation>隨機且重複</translation>
+        <translation>&amp;隨機且重複</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation>群組內隨機且重複</translation>
+        <translation>&amp;群組內隨機且重複</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
-        <translation>在每個檔案播放後停止播放</translation>
+        <translation>&amp;在每個檔案播放後停止播放</translation>
     </message>
 </context>
 <context>
@@ -2804,7 +2804,7 @@ QMPlay2 將不放大圖示！</translation>
     </message>
     <message>
         <source>Show related</source>
-        <translation>顯示相關内容</translation>
+        <translation>顯示相關的</translation>
     </message>
 </context>
 <context>
@@ -2886,7 +2886,7 @@ QMPlay2 將不放大圖示！</translation>
     </message>
     <message>
         <source>Do you really want to clear all settings?</source>
-        <translation>您想要清除所有設定吗?</translation>
+        <translation>您想要清除所有設定嗎?</translation>
     </message>
     <message>
         <source>New language</source>
@@ -2910,7 +2910,7 @@ QMPlay2 將不放大圖示！</translation>
     </message>
     <message>
         <source>Do you want to delete all cached covers?</source>
-        <translation>您要清除所有已快取封面吗？</translation>
+        <translation>您想要清除所有已快取封面？</translation>
     </message>
     <message>
         <source>Changing icons</source>
@@ -2938,16 +2938,16 @@ QMPlay2 將不放大圖示！</translation>
     </message>
     <message>
         <source>Confirm &quot;youtube-dl&quot; deletion</source>
-        <translation>確認刪除 &quot;youtube-dl&quot;</translation>
+        <translation>確認刪除 youtube-dl</translation>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
-        <translation>您要移除 &quot;youtube-dl&quot; 軟體吗？</translation>
+        <translation>您想要移除 &quot;youtube-dl&quot; 軟體嗎？</translation>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
 Partially checked doesn&apos;t affect seeking on slider.</source>
-        <translation>較慢，但更精確尋位。
+        <translation>比較慢但更精確的跳轉。
 部份打勾不影響進度條。</translation>
     </message>
     <message>
@@ -3059,12 +3059,12 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
         <translation>部份勾選（預設）：
-  - MAILBOX (tear-free) 為首選顯示模式
-  - FIFO (V-Sync) 不應在視窗模式使用</translation>
+  - MAILBOX（tear-free）為偏好的顯示模式
+  - FIFO（V-Sync）不應在視窗模式使用</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
-        <translation>允許獨佔全螢幕。這可增進效能。</translation>
+        <translation>允許獨佔式全螢幕。這可增進效能。</translation>
     </message>
     <message>
         <source>Very slow if used with sharpness</source>
@@ -3094,30 +3094,30 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>SimpleVisW</name>
     <message>
         <source>Simple visualization</source>
-        <translation>簡單視覺化效果</translation>
+        <translation>簡單的視覺化效果</translation>
     </message>
 </context>
 <context>
     <name>Sort</name>
     <message>
         <source>&amp;From the shortest to the longest</source>
-        <translation>從最短到最長</translation>
+        <translation>&amp;從最短到最長</translation>
     </message>
     <message>
         <source>&amp;From the longest to the shortest</source>
-        <translation>從最長到最短</translation>
+        <translation>&amp;從最長到最短</translation>
     </message>
     <message>
         <source>&amp;Sort</source>
-        <translation>排序</translation>
+        <translation>&amp;排序</translation>
     </message>
     <message>
         <source>&amp;A-Z</source>
-        <translation>&amp;A 到 Z</translation>
+        <translation>&amp;A-Z</translation>
     </message>
     <message>
         <source>&amp;Z-A</source>
-        <translation>&amp;Z 到 A</translation>
+        <translation>&amp;Z-A</translation>
     </message>
 </context>
 <context>
@@ -3245,7 +3245,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>No update available</source>
-        <translation>無可用更新</translation>
+        <translation>無可用的更新</translation>
     </message>
     <message>
         <source>Error checking for updates</source>
@@ -3273,11 +3273,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Update is available for QMPlay2!</source>
-        <translation>有可用 QMPlay2 更新！</translation>
+        <translation>有可用的 QMPlay2 更新！</translation>
     </message>
     <message>
         <source>New QMPlay2 version: %1</source>
-        <translation>新 QMPlay2 版本: %1</translation>
+        <translation>新的 QMPlay2 版本: %1</translation>
     </message>
 </context>
 <context>
@@ -3310,7 +3310,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>VFilters</name>
     <message>
         <source>Produce one extra frame which is average of two neighbour frames</source>
-        <translation>在相臨兩影格間平均生成一個額外影格</translation>
+        <translation>產生以兩相鄰影格的平均值為外加的影格</translation>
     </message>
 </context>
 <context>
@@ -3395,31 +3395,31 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>VideoFilters</name>
     <message>
         <source>Video &amp;filters</source>
-        <translation>視訊濾鏡</translation>
+        <translation>&amp;視訊濾鏡</translation>
     </message>
     <message>
         <source>&amp;Horizontal flip</source>
-        <translation>水平翻轉</translation>
+        <translation>&amp;水平翻轉</translation>
     </message>
     <message>
         <source>&amp;Vertical flip</source>
-        <translation>垂直翻轉</translation>
+        <translation>&amp;垂直翻轉</translation>
     </message>
     <message>
         <source>&amp;More filters</source>
-        <translation>更多濾鏡</translation>
+        <translation>&amp;更多濾鏡</translation>
     </message>
     <message>
         <source>&amp;Rotate 90°</source>
-        <translation>旋轉 90 度</translation>
+        <translation>&amp;旋轉90度</translation>
     </message>
     <message>
         <source>&amp;Spherical view</source>
-        <translation>球面視圖</translation>
+        <translation>&amp;球面視圖</translation>
     </message>
     <message>
         <source>Video &amp;adjustment</source>
-        <translation>視訊調整</translation>
+        <translation>&amp;視訊調整</translation>
     </message>
 </context>
 <context>
@@ -3455,30 +3455,30 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>Widgets</name>
     <message>
         <source>&amp;Widgets</source>
-        <translation>小工具</translation>
+        <translation>&amp;小工具</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
         <source>&amp;Window</source>
-        <translation>視窗</translation>
+        <translation>&amp;視窗</translation>
     </message>
     <message>
         <source>&amp;Full screen</source>
-        <translation>全螢幕</translation>
+        <translation>&amp;全螢幕</translation>
     </message>
     <message>
         <source>&amp;Compact view</source>
-        <translation>簡潔視圖</translation>
+        <translation>&amp;簡潔視圖</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>關閉</translation>
+        <translation>&amp;關閉</translation>
     </message>
     <message>
         <source>&amp;Always on top</source>
-        <translation>永遠置頂</translation>
+        <translation>&amp;永遠置頂</translation>
     </message>
 </context>
 <context>
@@ -3493,7 +3493,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Search on YouTube</source>
-        <translation>在 YouTube 搜尋</translation>
+        <translation>在 YouTube 上搜尋</translation>
     </message>
     <message>
         <source>Connection error</source>
@@ -3505,7 +3505,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>yes</source>
-        <translation>確認</translation>
+        <translation type="unfinished">確認</translation>
     </message>
     <message>
         <source>Relevance</source>
@@ -3525,11 +3525,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Sort search results by ...</source>
-        <translation>搜尋結果排序方式 ...</translation>
+        <translation>以...排序搜尋結果</translation>
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation>首選畫質</translation>
+        <translation>偏好的畫質</translation>
     </message>
     <message>
         <source>Publish time</source>
@@ -3548,19 +3548,19 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Updating &quot;youtube-dl&quot;, please wait...</source>
-        <translation>正在更新 &quot;youtube-dl&quot;，請稍候...</translation>
+        <translation>正在更新 &quot;youtube-dl&quot; ，請稍候...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; update has been aborted!</source>
-        <translation>&quot;youtube-dl&quot; 更新已被終止！</translation>
+        <translation>&quot;youtube-dl&quot; 更新已被中止！</translation>
     </message>
     <message>
         <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
-        <translation>正在下載 &quot;youtube-dl&quot;，請稍候...</translation>
+        <translation>正在下載 &quot;youtube-dl&quot; ，請稍候...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
-        <translation>&quot;youtube-dl&quot; 下載已被終止！</translation>
+        <translation>&quot;youtube-dl&quot; 下載已被中止！</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has failed!</source>
