@@ -1572,7 +1572,7 @@
     </message>
     <message>
         <source>Scrobble</source>
-        <translation>分享</translation>
+        <translation>共享</translation>
     </message>
     <message>
         <source>User name</source>
@@ -1692,7 +1692,7 @@
     </message>
     <message>
         <source>Body</source>
-        <translation>主体</translation>
+        <translation>正文</translation>
     </message>
     <message>
         <source>Notification timeout</source>
@@ -2299,7 +2299,7 @@
     </message>
     <message>
         <source>Amplify (no metadata)</source>
-        <translation type="unfinished"></translation>
+        <translation>放大（无元数据）</translation>
     </message>
 </context>
 <context>
