@@ -82,7 +82,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     maxLenB->setRange(0.5, 9.5);
     maxLenB->setDecimals(1);
     maxLenB->setSingleStep(0.1);
-    maxLenB->setSuffix(" sek");
+    maxLenB->setSuffix(" " + tr("sec"));
     maxLenB->setValue(sets().getDouble("Sub_max_s"));
 
     QGridLayout *layout = new QGridLayout(this);
