@@ -1796,7 +1796,7 @@
     </message>
     <message>
         <source>Preferred video codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Бажаний відеокодек</translation>
     </message>
 </context>
 <context>
@@ -2299,7 +2299,7 @@
     </message>
     <message>
         <source>Amplify (no metadata)</source>
-        <translation type="unfinished"></translation>
+        <translation>Посилення (без метаданих)</translation>
     </message>
 </context>
 <context>
@@ -2398,7 +2398,7 @@
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Зупинити після відтворення</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2804,7 +2804,7 @@ QMPlay2 не масштабуватиме іконки!</translation>
     </message>
     <message>
         <source>Show related</source>
-        <translation type="unfinished"></translation>
+        <translation>Показати пов’язані</translation>
     </message>
 </context>
 <context>
