@@ -254,7 +254,7 @@
     </message>
     <message>
         <source>Volatile settings</source>
-        <translation>易失性设置</translation>
+        <translation>易变性设置</translation>
     </message>
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
@@ -429,6 +429,14 @@
         <source>Vulkan Yadif spatial check</source>
         <translation>Vulkan Yadif 空间检查</translation>
     </message>
+    <message>
+        <source>Bottom field first</source>
+        <translation>底场优先</translation>
+    </message>
+    <message>
+        <source>Top field first</source>
+        <translation>顶场优先</translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
@@ -573,7 +581,7 @@
     <name>DownloadItemW</name>
     <message>
         <source>Waiting for connection</source>
-        <translation>等待连接</translation>
+        <translation>正在等待连接</translation>
     </message>
     <message>
         <source>Stop downloading</source>
@@ -589,7 +597,7 @@
     </message>
     <message>
         <source>Download aborted</source>
-        <translation>下载终止</translation>
+        <translation>下载被取消</translation>
     </message>
     <message>
         <source>Download error</source>
@@ -605,7 +613,7 @@
     </message>
     <message>
         <source>Conversion aborted</source>
-        <translation>转换终止</translation>
+        <translation>转换被取消</translation>
     </message>
     <message>
         <source>Conversion error</source>
@@ -1035,7 +1043,7 @@
     </message>
     <message>
         <source>About &amp;Qt</source>
-        <translation>关于 &amp;Qt</translation>
+        <translation>关于 Qt</translation>
     </message>
     <message>
         <source>&amp;Updates</source>
@@ -1400,11 +1408,11 @@
     </message>
     <message>
         <source>4x smaller</source>
-        <translation>缩小4倍</translation>
+        <translation>缩小 4 倍</translation>
     </message>
     <message>
         <source>16x smaller</source>
-        <translation>缩小16倍</translation>
+        <translation>缩小 16 倍</translation>
     </message>
     <message>
         <source>Method of multithreaded decoding</source>
@@ -3113,11 +3121,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;A-Z</source>
-        <translation>&amp;A 到 Z</translation>
+        <translation>A 到 Z</translation>
     </message>
     <message>
         <source>&amp;Z-A</source>
-        <translation>&amp;Z 到 A</translation>
+        <translation>Z 到 A</translation>
     </message>
 </context>
 <context>

@@ -68,7 +68,7 @@ DeintSettingsW::DeintSettingsW()
     softwareMethodsCB = new QComboBox;
 
     parityCB = new QComboBox;
-    parityCB->addItems({"Bottom field first", "Top field first"});
+    parityCB->addItems({tr("Bottom field first"), tr("Top field first")});
     parityCB->setCurrentIndex(QMPSettings.getBool("Deinterlace/TFF"));
 
     connect(softwareMethodsCB, SIGNAL(currentIndexChanged(int)), this, SLOT(setSoftwareMethodsToolTip(int)));

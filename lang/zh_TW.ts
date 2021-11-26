@@ -429,6 +429,14 @@
         <source>Vulkan Yadif spatial check</source>
         <translation>Vulkan Yadif 空間核對</translation>
     </message>
+    <message>
+        <source>Bottom field first</source>
+        <translation>底場優先</translation>
+    </message>
+    <message>
+        <source>Top field first</source>
+        <translation>頂場優先</translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
@@ -1400,11 +1408,11 @@
     </message>
     <message>
         <source>4x smaller</source>
-        <translation>縮小4倍</translation>
+        <translation>縮小 4 倍</translation>
     </message>
     <message>
         <source>16x smaller</source>
-        <translation>縮小16倍</translation>
+        <translation>縮小 16 倍</translation>
     </message>
     <message>
         <source>Method of multithreaded decoding</source>
@@ -2061,7 +2069,7 @@
     </message>
     <message>
         <source>Rotation 90°</source>
-        <translation>旋轉 90°</translation>
+        <translation>旋轉 90 度</translation>
     </message>
     <message>
         <source>Rotation is not supported by this video output module</source>
@@ -2382,11 +2390,11 @@
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>&amp;播放結束後將電腦進入休眠</translation>
+        <translation>播放結束後將電腦進入休眠</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
-        <translation>A&amp;-B 區段重复</translation>
+        <translation>A-B 區段重复</translation>
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
@@ -3113,11 +3121,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;A-Z</source>
-        <translation>&amp;A-Z</translation>
+        <translation>A-Z</translation>
     </message>
     <message>
         <source>&amp;Z-A</source>
-        <translation>&amp;Z-A</translation>
+        <translation>Z-A</translation>
     </message>
 </context>
 <context>
