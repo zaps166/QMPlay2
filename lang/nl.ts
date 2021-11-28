@@ -429,6 +429,14 @@
         <source>Parity (if not detected automatically)</source>
         <translation>Paren (indien niet automatisch gedetecteerd)</translation>
     </message>
+    <message>
+        <source>Bottom field first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Top field first</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DemuxerThr</name>
