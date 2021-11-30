@@ -28,6 +28,7 @@
 #include <QWidgetAction>
 #include <QInputDialog>
 #include <QMainWindow>
+#include <qevent.h>
 #include <QDir>
 #ifdef Q_OS_MACOS
     #include <QTimer>
@@ -90,6 +91,21 @@ MenuBar::MenuBar()
 #ifdef Q_OS_MACOS
     widgets->addAction(QString()); //Mac must have got at least one item inside menu, otherwise the menu is not shown
 #endif
+
+    QMPlay2Core.registerProcessWheelEventFn([this](QWheelEvent *e) {
+        auto &settings = QMPlay2Core.getSettings();
+        if (e->orientation() == Qt::Vertical && e->buttons() == Qt::NoButton && settings.getBool("WheelAction"))
+        {
+            if (settings.getBool("WheelSeek"))
+                e->delta() > 0 ? player->seekF->trigger() : player->seekB->trigger();
+            else if (settings.getBool("WheelVolume"))
+                e->delta() > 0 ? player->volUp->trigger() : player->volDown->trigger();
+        }
+    });
+}
+MenuBar::~MenuBar()
+{
+    QMPlay2Core.registerProcessWheelEventFn(nullptr);
 }
 
 MenuBar::Window::Window(MenuBar *parent) :

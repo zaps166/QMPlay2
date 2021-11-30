@@ -55,6 +55,7 @@ private:
     void mouseDoubleClickEvent(QMouseEvent *) override final;
     void paintEvent(QPaintEvent *) override final;
     void changeEvent(QEvent *) override final;
+    void wheelEvent(QWheelEvent *e) override final;
 
     bool eventFilter(QObject *watched, QEvent *event) override final;
 

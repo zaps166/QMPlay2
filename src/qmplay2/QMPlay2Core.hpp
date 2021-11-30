@@ -27,6 +27,7 @@
 #include <QHash>
 #include <QMap>
 
+#include <functional>
 #include <memory>
 
 enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8, DontShowInGUI = 0x10, LogOnce = 0x20};
@@ -35,6 +36,7 @@ template<typename T>
 class QPointer;
 
 class GPUInstance;
+class QWheelEvent;
 class CommonJS;
 class QTranslator;
 class Settings;
@@ -45,6 +47,8 @@ class Module;
 class QMPLAY2SHAREDLIB_EXPORT QMPlay2CoreClass : public QObject
 {
     Q_OBJECT
+
+    using ProcessWheelEventFn = std::function<void(QWheelEvent *)>;
 
 public:
     enum class Renderer
@@ -220,6 +224,9 @@ public:
         return m_commonJS;
     }
 
+    void registerProcessWheelEventFn(const ProcessWheelEventFn &fn);
+    void processWheelEvent(QWheelEvent *e);
+
 private slots:
     void restoreCursorSlot();
     void waitCursorSlot();
@@ -255,6 +262,8 @@ private:
     CommonJS *m_commonJS = nullptr;
 
     int m_suspend = 0;
+
+    ProcessWheelEventFn m_processWheelEventFn;
 };
 
 #define QMPlay2Core QMPlay2CoreClass::instance()

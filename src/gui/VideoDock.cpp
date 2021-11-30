@@ -277,20 +277,11 @@ void VideoDock::moveEvent(QMoveEvent *e)
 }
 void VideoDock::wheelEvent(QWheelEvent *e)
 {
-    if (e->orientation() == Qt::Vertical)
-    {
-        Settings &settings = QMPlay2Core.getSettings();
-        MenuBar::Player *player = QMPlay2GUI.menuBar->player;
-        if (e->buttons() & Qt::LeftButton)
-            e->delta() > 0 ? player->zoomIn->trigger() : player->zoomOut->trigger();
-        else if (e->buttons() == Qt::NoButton && settings.getBool("WheelAction"))
-        {
-            if (settings.getBool("WheelSeek"))
-                e->delta() > 0 ? player->seekF->trigger() : player->seekB->trigger();
-            else if (settings.getBool("WheelVolume"))
-                e->delta() > 0 ? player->volUp->trigger() : player->volDown->trigger();
-        }
-    }
+    auto player = QMPlay2GUI.menuBar->player;
+    if (e->orientation() == Qt::Vertical && (e->buttons() & Qt::LeftButton))
+        e->delta() > 0 ? player->zoomIn->trigger() : player->zoomOut->trigger();
+    else
+        QMPlay2Core.processWheelEvent(e);
     DockWidget::wheelEvent(e);
 }
 void VideoDock::leaveEvent(QEvent *e)

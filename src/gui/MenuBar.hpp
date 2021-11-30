@@ -28,6 +28,7 @@ class MenuBar : public QMenuBar
     Q_OBJECT
 public:
     MenuBar();
+    ~MenuBar();
 
     class Window : public QMenu
     {

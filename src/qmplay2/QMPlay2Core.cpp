@@ -689,6 +689,16 @@ bool QMPlay2CoreClass::isGlOnWindow() const
 #endif
 }
 
+void QMPlay2CoreClass::registerProcessWheelEventFn(const ProcessWheelEventFn &fn)
+{
+    m_processWheelEventFn = fn;
+}
+void QMPlay2CoreClass::processWheelEvent(QWheelEvent *e)
+{
+    if (m_processWheelEventFn)
+        m_processWheelEventFn(e);
+}
+
 void QMPlay2CoreClass::restoreCursorSlot()
 {
     QApplication::restoreOverrideCursor();

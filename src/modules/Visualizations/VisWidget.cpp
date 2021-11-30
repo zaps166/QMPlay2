@@ -133,6 +133,11 @@ void VisWidget::changeEvent(QEvent *event)
         dw->setWidget(this);
     QWidget::changeEvent(event);
 }
+void VisWidget::wheelEvent(QWheelEvent *e)
+{
+    QMPlay2Core.processWheelEvent(e);
+    QWidget::wheelEvent(e);
+}
 
 bool VisWidget::eventFilter(QObject *watched, QEvent *event)
 {
