@@ -754,14 +754,13 @@ bool FormatContext::open(const QString &_url, const QString &param)
         {
             if (av_seek_frame(formatCtx, 0, std::numeric_limits<int64_t>::max(), AVSEEK_FLAG_BACKWARD) >= 0)
             {
-                AVPacket pkt;
-                av_init_packet(&pkt);
-                if (av_read_frame(formatCtx, &pkt) == 0)
+                auto pkt = av_packet_alloc();
+                if (av_read_frame(formatCtx, pkt) == 0)
                 {
-                    if (pkt.dts != AV_NOPTS_VALUE)
-                        formatCtx->duration = av_rescale_q(pkt.dts + pkt.duration, stream->time_base, {1, AV_TIME_BASE});
-                    av_packet_unref(&pkt);
+                    if (pkt->dts != AV_NOPTS_VALUE)
+                        formatCtx->duration = av_rescale_q(pkt->dts + pkt->duration, stream->time_base, {1, AV_TIME_BASE});
                 }
+                av_packet_free(&pkt);
             }
             av_seek_frame(formatCtx, 0, 0, AVSEEK_FLAG_BACKWARD);
         }
