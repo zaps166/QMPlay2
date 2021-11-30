@@ -27,6 +27,7 @@
 
 #include <QVulkanInstance>
 #include <QResource>
+#include <QLibrary>
 
 #if defined(Q_OS_WIN)
 #   include <QRegularExpression>
@@ -180,9 +181,17 @@ void Instance::init()
 
     static_cast<vk::Instance &>(*this) = m_qVulkanInstance->vkInstance();
 
-    AbstractInstance::init(
-        reinterpret_cast<PFN_vkGetInstanceProcAddr>(m_qVulkanInstance->getInstanceProcAddr("vkGetInstanceProcAddr"))
-    );
+    auto vkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(m_qVulkanInstance->getInstanceProcAddr("vkGetInstanceProcAddr"));
+    if (!vkGetInstanceProcAddr && qEnvironmentVariableIsSet("QT_VULKAN_LIB"))
+    {
+        QLibrary vulkanLib(QString::fromUtf8(qgetenv("QT_VULKAN_LIB")));
+        if (vulkanLib.load())
+            vkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(vulkanLib.resolve("vkGetInstanceProcAddr"));
+        if (Q_UNLIKELY(!vkGetInstanceProcAddr))
+            throw vk::InitializationFailedError(("Unable to get \"vkGetInstanceProcAddr\" from " + vulkanLib.fileName()).toUtf8().toStdString());
+    }
+
+    AbstractInstance::init(vkGetInstanceProcAddr);
 
     obtainPhysicalDevice();
 }
