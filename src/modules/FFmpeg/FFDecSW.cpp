@@ -412,7 +412,9 @@ bool FFDecSW::open(StreamInfo &streamInfo)
         {
             codec_ctx->opaque = this;
             codec_ctx->get_buffer2 = vulkanGetVideoBufferStatic;
+#if LIBAVCODEC_VERSION_MAJOR < 60
             codec_ctx->thread_safe_callbacks = 1;
+#endif
         }
     }
     else if (codec_ctx->codec_type == AVMEDIA_TYPE_SUBTITLE)
