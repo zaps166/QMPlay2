@@ -442,22 +442,10 @@ void YouTubeDL::startProcess(QStringList args)
         if (shebang.startsWith("#!") && idx > -1)
         {
             const auto pythonCmd = shebang.mid(idx);
-            if (!QStandardPaths::findExecutable(pythonCmd).endsWith(pythonCmd))
+            if (QStandardPaths::findExecutable(pythonCmd).endsWith(pythonCmd))
             {
-                QStringList pythonCmdsToCheck {
-                    "python",
-                    "python3",
-                };
-                pythonCmdsToCheck.removeOne(pythonCmd);
-                for (auto &&pythonCmd : qAsConst(pythonCmdsToCheck))
-                {
-                    if (QStandardPaths::findExecutable(pythonCmd).endsWith(pythonCmd))
-                    {
-                        args.prepend(program);
-                        program = pythonCmd;
-                        break;
-                    }
-                }
+                args.prepend(program);
+                program = pythonCmd;
             }
         }
         ytDlFile.close();
