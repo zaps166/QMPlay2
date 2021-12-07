@@ -1,3 +1,17 @@
+Changes in QMPlay2 21.12.07:
+    - fix possible crash on Windows when system audio settings was changed during playback,
+    - add option to set negative amplify if replay gain is not stored,
+    - insert URL from clipboard into add address dialog,
+    - add option to show YouTube related videos (ivbauer),
+    - fix some Vulkan problems and crashes,
+    - set VP9 YouTube codec as preferred,
+    - update zh_CN translation (zo-shin),
+    - add Slovak translation (jose1711),
+    - add Dutch translation (Vistaus),
+    - add zh_TW translation (lks-wu),
+    - replace youtube-dl by yt-dlp,
+    - minor PipeWire fixes,
+
 Changes in QMPlay2 21.06.07:
     - use WASAPI via PortAudio on Windows (including exclusive mode),
     - set default config directory to "~/.config/QMPlay2" (Linux),
