@@ -606,10 +606,6 @@ int main(int argc, char *argv[])
 
     qputenv("QT_QPA_UPDATE_IDLE_TIME", "0");
 
-#ifdef CHECK_FOR_EGL
-    checkForEGL();
-#endif
-
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #ifndef USE_OPENGL
     QGuiApplication::setAttribute(Qt::AA_ForceRasterWidgets);
@@ -687,6 +683,11 @@ int main(int argc, char *argv[])
             return 0;
         }
     }
+
+#ifdef CHECK_FOR_EGL
+    if (!help)
+        checkForEGL();
+#endif
 
     qmplay2Gui.cmdLineProfile = std::move(cmdLineProfile);
 
