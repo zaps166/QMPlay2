@@ -367,4 +367,9 @@ if(ANDROID)
         Qt5::AndroidExtras
         ${QML}
     )
+elseif(USE_VULKAN AND NOT WIN32)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        dl
+    )
 endif()
