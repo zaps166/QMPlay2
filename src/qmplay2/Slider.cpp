@@ -98,13 +98,28 @@ void Slider::mousePressEvent(QMouseEvent *e)
         cachedSliderValue = -1;
         canSetValue = false;
     }
-    if (e->buttons() != Qt::LeftButton)
-        QSlider::mousePressEvent(e);
-    else
+
+    const auto style = this->style();
+    if (style->styleHint(QStyle::SH_Slider_PageSetButtons) & e->button())
     {
-        QMouseEvent ev(e->type(), e->pos(), Qt::MidButton, Qt::MidButton, e->modifiers());
-        QSlider::mousePressEvent(&ev);
+        const auto sliderAbsoluteSetButtons = static_cast<Qt::MouseButtons>(style->styleHint(QStyle::SH_Slider_AbsoluteSetButtons));
+        if (sliderAbsoluteSetButtons & (Qt::LeftButton | Qt::MidButton))
+        {
+            Qt::MouseButton sliderAbsoluteSetButton = Qt::NoButton;
+            if (sliderAbsoluteSetButtons & Qt::LeftButton)
+                sliderAbsoluteSetButton = Qt::LeftButton;
+            else if (sliderAbsoluteSetButtons & Qt::MidButton)
+                sliderAbsoluteSetButton = Qt::MidButton;
+
+            QMouseEvent ev(e->type(), e->pos(), sliderAbsoluteSetButton, sliderAbsoluteSetButtons, e->modifiers());
+            QSlider::mousePressEvent(&ev);
+            e->setAccepted(ev.isAccepted());
+
+            return;
+        }
     }
+
+    QSlider::mousePressEvent(e);
 }
 void Slider::mouseReleaseEvent(QMouseEvent *e)
 {
