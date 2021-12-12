@@ -118,6 +118,9 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     : updater(this)
 #endif
 {
+    // Create a widget window here to make sure we don't have RGBA window (e.g. kvantum-theme-matcha enforces it)
+    create();
+
     QMPlay2GUI.videoAdjustment = new VideoAdjustmentW;
     QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
     QMPlay2GUI.mainW = this;
