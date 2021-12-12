@@ -181,6 +181,7 @@ private:
     SettingsWidget *settingsW;
     AboutWidget *aboutW;
     bool isCompactView, wasShow, fullScreen, seekSFocus, m_restoreWindowOnVideo = false;
+    bool m_loaded = false;
 
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
     QAction *hideMenuAct;

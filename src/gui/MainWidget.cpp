@@ -459,6 +459,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     if (settings.getBool("AutoUpdates"))
         updater.downloadUpdate();
 #endif
+    m_loaded = true;
 }
 MainWidget::~MainWidget()
 {
@@ -1817,9 +1818,12 @@ void MainWidget::closeEvent(QCloseEvent *e)
 
     playlistDock->stopThreads();
 
-    if (settings.getBool("AutoDelNonGroupEntries"))
-        playlistDock->delNonGroupEntries(true);
-    playlistDock->save(QMPlay2Core.getSettingsDir() + "Playlist.pls");
+    if (m_loaded)
+    {
+        if (settings.getBool("AutoDelNonGroupEntries"))
+            playlistDock->delNonGroupEntries(true);
+        playlistDock->save(QMPlay2Core.getSettingsDir() + "Playlist.pls");
+    }
 
     playC.stop(true);
 
