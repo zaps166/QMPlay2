@@ -340,7 +340,11 @@ shared_ptr<ImagePool> Instance::createImagePool()
 
 bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevice) const try
 {
+    const auto &properties = physicalDevice->properties();
     const auto &limits = physicalDevice->limits();
+
+    if (properties.deviceType == vk::PhysicalDeviceType::eCpu)
+        return false;
 
     if (limits.maxPushConstantsSize < 128)
         return false;
