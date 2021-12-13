@@ -82,6 +82,7 @@ private:
     bool wasShow;
     int moduleIndex;
 
+    std::function<void()> m_setRenderersCurrentIndexFn;
     std::vector<std::function<void(bool &initFilters)>> m_rendererApplyFunctions;
 private slots:
     void chStyle();

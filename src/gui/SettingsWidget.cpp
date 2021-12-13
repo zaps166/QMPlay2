@@ -1031,7 +1031,12 @@ void SettingsWidget::createRendererSettings()
     });
 
     if (activeRenderer > -1)
-        renderers->setCurrentIndex(activeRenderer);
+    {
+        m_setRenderersCurrentIndexFn = [=] {
+            renderers->setCurrentIndex(activeRenderer);
+            m_setRenderersCurrentIndexFn = nullptr;
+        };
+    }
 
     auto widget = new QWidget;
     auto layout = new QGridLayout(widget);
@@ -1306,6 +1311,9 @@ void SettingsWidget::chModule(QListWidgetItem *w)
 }
 void SettingsWidget::tabCh(int idx)
 {
+    if (idx == 1 && m_setRenderersCurrentIndexFn)
+        m_setRenderersCurrentIndexFn();
+
     if ((idx == 1 || idx == 2) && !modulesList[0]->list->count() && !modulesList[1]->list->count() && !modulesList[2]->list->count())
     {
         const QStringList writers[3] = {QMPlay2Core.getModules("videoWriters", 5), QMPlay2Core.getModules("audioWriters", 5), QMPlay2Core.getModules("decoders", 7)};
