@@ -350,11 +350,13 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
     const auto &properties = physicalDevice->properties();
     const auto &limits = physicalDevice->limits();
 
+    QStringList errors;
+
     if (properties.deviceType == vk::PhysicalDeviceType::eCpu)
-        return false;
+        errors.push_back("Not a GPU");
 
     if (limits.maxPushConstantsSize < 128)
-        return false;
+        errors.push_back("Push constants size is too small");
 
     constexpr auto featuresLen = sizeof(vk::PhysicalDeviceFeatures) / sizeof(vk::Bool32);
     const auto availableFeatures = physicalDevice->getFeatures();
@@ -364,48 +366,82 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
     for (size_t i = 0; i < featuresLen; ++i)
     {
         if (requiredFeaturesArr[i] && !availableFeaturesArr[i])
-            return false;
+        {
+            errors.push_back("Missing one or more required physical device features");
+            break;
+        }
     }
 
-    if (!physicalDevice->checkExtensions(requiredPhysicalDeviceExtenstions()))
-        return false;
+    const auto requiredExtenstions = this->requiredPhysicalDeviceExtenstions();
+    if (!physicalDevice->checkExtensions(requiredExtenstions))
+    {
+        QString names;
+        for (auto &&requiredPhysicalDeviceExtenstion : requiredExtenstions)
+        {
+            names += requiredPhysicalDeviceExtenstion;
+            names += ", ";
+        }
+        names.chop(2);
+        errors.push_back("Missing one or more required physical device extensions: " + names);
+    }
 
-    const auto queueFamilyIndex = physicalDevice->getQueueFamilyIndex(s_queueFlags);
+    uint32_t queueFamilyIndex = ~0u;
+    try
+    {
+        queueFamilyIndex = physicalDevice->getQueueFamilyIndex(s_queueFlags);
+    }
+    catch (const vk::SystemError &e)
+    {
+        errors.push_back(e.what());
+    }
 
-    const auto requiredHostMemoryFlags =
-        vk::MemoryPropertyFlagBits::eHostVisible |
-        vk::MemoryPropertyFlagBits::eHostCoherent |
-        vk::MemoryPropertyFlagBits::eHostCached
-    ;
-    physicalDevice->findMemoryType(requiredHostMemoryFlags);
+    try
+    {
+        const auto requiredHostMemoryFlags =
+            vk::MemoryPropertyFlagBits::eHostVisible |
+            vk::MemoryPropertyFlagBits::eHostCoherent |
+            vk::MemoryPropertyFlagBits::eHostCached
+        ;
+        physicalDevice->findMemoryType(requiredHostMemoryFlags);
+    }
+    catch (const vk::SystemError &e)
+    {
+        errors.push_back(e.what());
+    }
 
     auto checkFormat = [&](vk::Format format, bool img, bool buff) {
         auto fmtProps = physicalDevice->getFormatProperties(format);
         if (img)
         {
             if (!(fmtProps.linearTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage))
-                return false;
+                errors.push_back(QString::fromStdString("Missing linear tiling sampled image for format: " + vk::to_string(format)));
             if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage)))
-                return false;
+                errors.push_back(QString::fromStdString("Missing optimal tiling sampled or storage image for format: " + vk::to_string(format)));
         }
         if (buff)
         {
             if (!(fmtProps.bufferFeatures & vk::FormatFeatureFlagBits::eUniformTexelBuffer))
-                return false;
+                errors.push_back(QString::fromStdString("Missing uniform texel buffer for format: " + vk::to_string(format)));
         }
-        return true;
     };
-    if (!checkFormat(vk::Format::eR8Unorm, true, true))
-        return false;
-    if (!checkFormat(vk::Format::eR8G8Unorm, true, false))
-        return false;
-    if (!checkFormat(vk::Format::eB8G8R8A8Unorm, false, true))
-        return false;
+    checkFormat(vk::Format::eR8Unorm, true, true);
+    checkFormat(vk::Format::eR8G8Unorm, true, false);
+    checkFormat(vk::Format::eB8G8R8A8Unorm, false, true);
 
-    if (!m_qVulkanInstance->supportsPresent(*physicalDevice, queueFamilyIndex, m_testWin))
-        return false;
+    if (queueFamilyIndex != ~0u && !m_qVulkanInstance->supportsPresent(*physicalDevice, queueFamilyIndex, m_testWin))
+        errors.push_back("Present is not supported");
 
-    return true;
+    if (errors.isEmpty())
+        return true;
+
+    QString errorString = "Vulkan :: Discarding \"";
+    errorString += properties.deviceName;
+    errorString += "\", because:";
+    for (auto &&error : qAsConst(errors))
+        errorString += "\n   - " + error;
+    qDebug().noquote() << errorString;
+
+    return false;
 } catch (const vk::SystemError &e) {
     Q_UNUSED(e)
     return false;
