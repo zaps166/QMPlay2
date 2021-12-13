@@ -28,6 +28,7 @@
 #include <QVulkanInstance>
 #include <QResource>
 #include <QLibrary>
+#include <QWindow>
 
 #if defined(Q_OS_WIN)
 #   include <QRegularExpression>
@@ -147,6 +148,7 @@ Instance::Instance(Priv)
 {}
 Instance::~Instance()
 {
+    delete m_testWin;
     delete m_qVulkanInstance;
 }
 
@@ -192,6 +194,11 @@ void Instance::init()
     }
 
     AbstractInstance::init(vkGetInstanceProcAddr);
+
+    m_testWin = new QWindow;
+    m_testWin->setSurfaceType(QWindow::VulkanSurface);
+    m_testWin->setVulkanInstance(m_qVulkanInstance);
+    m_testWin->create();
 
     obtainPhysicalDevice();
 }
@@ -363,7 +370,7 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
     if (!physicalDevice->checkExtensions(requiredPhysicalDeviceExtenstions()))
         return false;
 
-    physicalDevice->getQueueFamilyIndex(s_queueFlags);
+    const auto queueFamilyIndex = physicalDevice->getQueueFamilyIndex(s_queueFlags);
 
     const auto requiredHostMemoryFlags =
         vk::MemoryPropertyFlagBits::eHostVisible |
@@ -393,6 +400,9 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
     if (!checkFormat(vk::Format::eR8G8Unorm, true, false))
         return false;
     if (!checkFormat(vk::Format::eB8G8R8A8Unorm, false, true))
+        return false;
+
+    if (!m_qVulkanInstance->supportsPresent(*physicalDevice, queueFamilyIndex, m_testWin))
         return false;
 
     return true;

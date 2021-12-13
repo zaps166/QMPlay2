@@ -27,6 +27,7 @@
 #include <mutex>
 
 class QVulkanInstance;
+class QWindow;
 
 namespace QmVk {
 
@@ -95,6 +96,8 @@ private:
 
     weak_ptr<Device> m_deviceWeak;
     mutable mutex m_deviceMutex;
+
+    QWindow *m_testWin = nullptr;
 };
 
 /* Inline implementation */
