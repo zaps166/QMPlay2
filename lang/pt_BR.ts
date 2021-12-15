@@ -2180,7 +2180,7 @@
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation type="obsolete">Botão esquerdo do mouse na dock de vídeo alterna a reprodução</translation>
+        <translation>Botão esquerdo do mouse na dock de vídeo alterna a reprodução</translation>
     </message>
     <message>
         <source>Middle mouse button on video dock toggles fullscreen</source>

@@ -2271,7 +2271,7 @@
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation type="obsolete">El botón izquierdo del ratón sobre el vídeo alterna pausa/reprodución</translation>
+        <translation>El botón izquierdo del ratón sobre el vídeo alterna pausa/reprodución</translation>
     </message>
     <message>
         <source>Accurate seeking</source>

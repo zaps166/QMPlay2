@@ -2273,7 +2273,7 @@
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation type="obsolete">マウスがビデオドックから出たら停止する</translation>
+        <translation>マウスがビデオドックから出たら停止する</translation>
     </message>
     <message>
         <source>Accurate seeking</source>

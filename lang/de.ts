@@ -2270,7 +2270,7 @@
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation type="obsolete">Linke Maustaste auf Video-Dock schaltet die Wiedergabe um</translation>
+        <translation>Linke Maustaste auf Video-Dock schaltet die Wiedergabe um</translation>
     </message>
     <message>
         <source>Accurate seeking</source>

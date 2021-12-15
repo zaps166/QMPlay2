@@ -2271,7 +2271,7 @@
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation type="obsolete">Ліва кнопка миші у вікні відео перемикає відтворення</translation>
+        <translation>Ліва кнопка миші у вікні відео перемикає відтворення</translation>
     </message>
     <message>
         <source>Accurate seeking</source>

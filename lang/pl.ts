@@ -2271,7 +2271,7 @@
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation type="obsolete">Lewy przycisk myszy w oknie wideo przełącza odtwarzanie</translation>
+        <translation>Lewy przycisk myszy w oknie wideo przełącza odtwarzanie</translation>
     </message>
     <message>
         <source>Accurate seeking</source>

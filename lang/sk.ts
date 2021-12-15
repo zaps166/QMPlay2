@@ -2271,7 +2271,7 @@
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation type="obsolete">Ľavé tlačidlo v okne videa vypína/zapína prehrávanie</translation>
+        <translation>Ľavé tlačidlo v okne videa vypína/zapína prehrávanie</translation>
     </message>
     <message>
         <source>Accurate seeking</source>

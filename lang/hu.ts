@@ -2271,7 +2271,7 @@
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation type="obsolete">Bal egérgomb a video dokkon megállítja/elindítja a lejátszást</translation>
+        <translation>Bal egérgomb a video dokkon megállítja/elindítja a lejátszást</translation>
     </message>
     <message>
         <source>Accurate seeking</source>
