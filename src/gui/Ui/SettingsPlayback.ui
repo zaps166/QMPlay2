@@ -116,7 +116,7 @@
           <string>Partially checked means that there is a delay between click and pausing</string>
          </property>
          <property name="text">
-          <string>Left mouse button on video dock toggles playback</string>
+          <string>Primary mouse button on video dock toggles playback</string>
          </property>
          <property name="tristate">
           <bool>true</bool>

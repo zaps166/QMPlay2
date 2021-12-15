@@ -2269,8 +2269,8 @@
         <translation>Mausrad ändert die Lautstärke</translation>
     </message>
     <message>
-        <source>Left mouse button on video dock toggles playback</source>
-        <translation>Linke Maustaste auf Video-Dock schaltet die Wiedergabe um</translation>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation type="obsolete">Linke Maustaste auf Video-Dock schaltet die Wiedergabe um</translation>
     </message>
     <message>
         <source>Accurate seeking</source>

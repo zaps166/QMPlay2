@@ -2272,8 +2272,8 @@
         <translation>マウスホイールで音量を変える</translation>
     </message>
     <message>
-        <source>Left mouse button on video dock toggles playback</source>
-        <translation>マウスがビデオドックから出たら停止する</translation>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation type="obsolete">マウスがビデオドックから出たら停止する</translation>
     </message>
     <message>
         <source>Accurate seeking</source>

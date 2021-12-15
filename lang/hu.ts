@@ -2270,8 +2270,8 @@
         <translation>Hang lekeverése</translation>
     </message>
     <message>
-        <source>Left mouse button on video dock toggles playback</source>
-        <translation>Bal egérgomb a video dokkon megállítja/elindítja a lejátszást</translation>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation type="obsolete">Bal egérgomb a video dokkon megállítja/elindítja a lejátszást</translation>
     </message>
     <message>
         <source>Accurate seeking</source>

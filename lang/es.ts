@@ -2270,8 +2270,8 @@
         <translation>La rueda del ratón cambia el volumen</translation>
     </message>
     <message>
-        <source>Left mouse button on video dock toggles playback</source>
-        <translation>El botón izquierdo del ratón sobre el vídeo alterna pausa/reprodución</translation>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation type="obsolete">El botón izquierdo del ratón sobre el vídeo alterna pausa/reprodución</translation>
     </message>
     <message>
         <source>Accurate seeking</source>
