@@ -2270,8 +2270,8 @@
         <translation>Посилення</translation>
     </message>
     <message>
-        <source>Left mouse button on video dock toggles playback</source>
-        <translation>Ліва кнопка миші у вікні відео перемикає відтворення</translation>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation type="obsolete">Ліва кнопка миші у вікні відео перемикає відтворення</translation>
     </message>
     <message>
         <source>Accurate seeking</source>

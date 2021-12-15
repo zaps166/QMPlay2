@@ -2267,7 +2267,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Left mouse button on video dock toggles playback</source>
+        <source>Primary mouse button on video dock toggles playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

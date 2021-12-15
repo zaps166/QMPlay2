@@ -2267,8 +2267,8 @@
         <translation>Усиление</translation>
     </message>
     <message>
-        <source>Left mouse button on video dock toggles playback</source>
-        <translation>Левая кнопка мыши на видео панели переключает воспроизведен</translation>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation type="obsolete">Левая кнопка мыши на видео панели переключает воспроизведен</translation>
     </message>
     <message>
         <source>Accurate seeking</source>

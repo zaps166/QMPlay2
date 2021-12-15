@@ -2270,8 +2270,8 @@
         <translation>鼠标滚轮更改音量</translation>
     </message>
     <message>
-        <source>Left mouse button on video dock toggles playback</source>
-        <translation>鼠标左键点击视频切换回放</translation>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation>鼠标主键点击视频切换回放</translation>
     </message>
     <message>
         <source>Accurate seeking</source>
