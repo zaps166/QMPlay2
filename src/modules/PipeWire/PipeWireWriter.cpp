@@ -385,6 +385,7 @@ void PipeWireWriter::recreateStream()
         nullptr
     );
     pw_properties_setf(props, PW_KEY_NODE_LATENCY, "%u/%u", m_nFrames, m_rate);
+    pw_properties_setf(props, PW_KEY_NODE_RATE, "1/%u", m_rate);
 
     LoopLocker locker(m_threadLoop);
 
