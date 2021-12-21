@@ -122,6 +122,8 @@ private slots:
 
     void uncheckSuspend();
 private:
+    void setStreamsMenu(const QStringList &videoStreams, const QStringList &audioStreams, const QStringList &subsStreams);
+
     void savePlistHelper(const QString &, const QString &, bool);
 
     QMenu *createPopupMenu() override;

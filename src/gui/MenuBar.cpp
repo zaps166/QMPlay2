@@ -346,6 +346,10 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     audioChannels = new AudioChannels(this);
     addMenu(audioChannels);
 
+    audioStreams = new Streams(Streams::tr("&Audio streams"), this);
+    audioStreams->setEnabled(false);
+    addMenu(audioStreams);
+
     addSeparator();
 
     newAction(Playback::tr("&Enable video"), this, toggleVideo, false, QIcon(), true)->setObjectName("toggleVideo");
@@ -357,7 +361,13 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     newAction(Playback::tr("Set &video delay"), this, videoSync, false, QIcon(), false);
     newAction(Playback::tr("&Delay video") + " (100ms)", this, slowDownVideo, true, QIcon(), false);
     newAction(Playback::tr("&Speed up video") + " (100ms)", this, speedUpVideo, true, QIcon(), false);
+
+    videoStreams = new Streams(Streams::tr("&Video streams"), this);
+    videoStreams->setEnabled(false);
+    addMenu(videoStreams);
+
     addSeparator();
+
     newAction(Playback::tr("&Enable subtitles"), this, toggleSubtitles, false, QIcon(), true)->setObjectName("toggleSubtitles");
     toggleSubtitles->setChecked(true);
     newAction(Playback::tr("Add &subtities from file"), this, subsFromFile, false, QIcon(), false);
@@ -366,7 +376,13 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     newAction(Playback::tr("&Speed up subtitles") + " (100ms)", this, speedUpSubtitles, true, QIcon(), false);
     newAction(Playback::tr("Scale up subt&itles"), this, biggerSubtitles, true, QIcon(), false);
     newAction(Playback::tr("Scale down sub&titles"), this, smallerSubtitles, true, QIcon(), false);
+
+    subtitlesStreams = new Streams(Streams::tr("&Subtitles streams"), this);
+    subtitlesStreams->setEnabled(false);
+    addMenu(subtitlesStreams);
+
     addSeparator();
+
     newAction(Playback::tr("&Screen shot"), this, screenShot, true, QIcon(), false);
 }
 MenuBar::Playback::~Playback()
@@ -441,6 +457,11 @@ MenuBar::Playback::AudioChannels::AudioChannels(QMenu *parent) :
     _6->setObjectName("6");
     _8->setObjectName("8");
     other->setEnabled(false);
+}
+MenuBar::Playback::Streams::Streams(const QString &title, QMenu *parent)
+    : QMenu(title, parent)
+    , group(new QActionGroup(this))
+{
 }
 
 MenuBar::Options::Options(MenuBar *parent) :

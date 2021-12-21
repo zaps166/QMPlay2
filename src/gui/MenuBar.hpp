@@ -130,9 +130,18 @@ public:
             QAction *_auto, *_1, *_2, *_4, *_6, *_8, *other;
             QActionGroup *choice;
         };
+        class Streams : public QMenu
+        {
+            Q_DECLARE_TR_FUNCTIONS(Streams)
+        public:
+            Streams(const QString &title, QMenu *parent);
+            QActionGroup *group;
+        };
+
         AudioChannels *audioChannels;
         VideoFilters *videoFilters;
         QAction *toggleAudio, *toggleVideo, *videoSync, *slowDownVideo, *speedUpVideo, *toggleSubtitles, *subsFromFile, *subtitlesSync, *slowDownSubtitles, *speedUpSubtitles, *biggerSubtitles, *smallerSubtitles, *screenShot;
+        Streams *audioStreams, *videoStreams, *subtitlesStreams;
     };
 
     class Options : public QMenu

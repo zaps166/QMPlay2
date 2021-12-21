@@ -222,6 +222,7 @@ signals:
     void playStateChanged(bool);
     void setCurrentPlaying();
     void setInfo(const QString &, bool, bool);
+    void setStreamsMenu(const QStringList &videoStreams, const QStringList &audioStreams, const QStringList &subsStreams);
     void updateCurrentEntry(const QString &, double);
     void playNext(bool playingError);
     void clearCurrentPlaying();

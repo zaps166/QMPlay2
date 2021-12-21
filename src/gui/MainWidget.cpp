@@ -317,10 +317,14 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     connect(&playC, SIGNAL(playStateChanged(bool)), this, SLOT(playStateChanged(bool)));
     connect(&playC, SIGNAL(setCurrentPlaying()), playlistDock, SLOT(setCurrentPlaying()));
     connect(&playC, SIGNAL(setInfo(const QString &, bool, bool)), infoDock, SLOT(setInfo(const QString &, bool, bool)));
+    connect(&playC, &PlayClass::setStreamsMenu, this, &MainWidget::setStreamsMenu);
     connect(&playC, SIGNAL(updateCurrentEntry(const QString &, double)), playlistDock, SLOT(updateCurrentEntry(const QString &, double)));
     connect(&playC, SIGNAL(playNext(bool)), playlistDock, SLOT(next(bool)));
     connect(&playC, SIGNAL(clearCurrentPlaying()), playlistDock, SLOT(clearCurrentPlaying()));
-    connect(&playC, SIGNAL(clearInfo()), infoDock, SLOT(clear()));
+    connect(&playC, &PlayClass::clearInfo, this, [this] {
+        infoDock->clear();
+        setStreamsMenu({}, {}, {});
+    });
     connect(&playC, SIGNAL(quit()), this, SLOT(deleteLater()));
     connect(&playC, SIGNAL(resetARatio()), this, SLOT(resetARatio()));
     connect(&playC, SIGNAL(updateBitrateAndFPS(int, int, double, double, bool)), infoDock, SLOT(updateBitrateAndFPS(int, int, double, double, bool)));
@@ -1480,6 +1484,35 @@ void MainWidget::uncheckSuspend()
 {
     if (menuBar->player->suspend)
         menuBar->player->suspend->setChecked(false);
+}
+
+void MainWidget::setStreamsMenu(const QStringList &videoStreams, const QStringList &audioStreams, const QStringList &subsStreams)
+{
+    auto setActions = [this](const QStringList &streams, MenuBar::Playback::Streams *menu) {
+        menu->clear();
+        for (auto &&videoStream : streams)
+        {
+            auto lines = videoStream.split(QLatin1Char('\n'));
+            Q_ASSERT(lines.size() >= 2);
+
+            auto action = menu->addAction(lines.constFirst());
+            action->setCheckable(true);
+            if (lines.size() == 3)
+                action->setChecked(true);
+
+            menu->group->addAction(action);
+
+            connect(action, &QAction::triggered,
+                    this, [this, data = std::move(lines[1])] {
+                playC.chStream(data);
+            });
+        }
+        menu->setEnabled(!menu->isEmpty());
+    };
+
+    setActions(videoStreams, menuBar->playback->videoStreams);
+    setActions(audioStreams, menuBar->playback->audioStreams);
+    setActions(subsStreams, menuBar->playback->subtitlesStreams);
 }
 
 void MainWidget::savePlistHelper(const QString &title, const QString &fPth, bool saveCurrentGroup)

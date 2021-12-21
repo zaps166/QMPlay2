@@ -731,25 +731,46 @@ void DemuxerThr::updateCoverAndPlaying(bool doCompare)
     }
 }
 
-static void printOtherInfo(const QVector<QMPlay2Tag> &other_info, QString &str)
+void DemuxerThr::addStreamsMenuString(QStringList &streamsMenu, const QString &idxStr, const QString &link, bool current, const QString &additional)
+{
+    QString streamMenu = idxStr;
+    if (!additional.isEmpty())
+        streamMenu.push_back(additional);
+    streamMenu.push_back("\n");
+    streamMenu.push_back(link);
+    if (current)
+        streamMenu.push_back("\n");
+    streamsMenu.push_back(std::move(streamMenu));
+}
+
+static void printOtherInfo(const QVector<QMPlay2Tag> &other_info, QString &str, QString *lang = nullptr)
 {
     for (const QMPlay2Tag &tag : other_info)
+    {
         if (!tag.second.isEmpty())
         {
             QString value = tag.second;
             if (tag.first.toInt() == QMPLAY2_TAG_LANGUAGE)
+            {
                 value = QMPlay2Core.getLanguagesMap().value(value, tag.second).toLower();
+                if (lang)
+                    *lang = value;
+            }
             str += "<li><b>" + StreamInfo::getTagName(tag.first).toLower() + ":</b> " + value + "</li>";
         }
+    }
 }
-void DemuxerThr::addSubtitleStream(bool currentPlaying, QString &subtitlesStreams, int i, int subtitlesStreamCount, const QString &streamName, const QString &codecName, const QString &title, const QVector<QMPlay2Tag> &other_info)
+void DemuxerThr::addSubtitleStream(bool currentPlaying, QString &subtitlesStreams, int i, int subtitlesStreamCount, const QString &streamName, const QString &codecName, const QString &title, QStringList &streamsMenu, const QVector<QMPlay2Tag> &other_info)
 {
+    const QString streamLink = streamName + QString::number(i);
+    const QString streamCountStr = QString::number(subtitlesStreamCount);
+    QString lang;
     subtitlesStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
     if (currentPlaying)
         subtitlesStreams += "<u>";
     else
-        subtitlesStreams += "<a href='stream:" + streamName + QString::number(i) + "'>";
-    subtitlesStreams += "<li><b>" + tr("Stream") + " " + QString::number(subtitlesStreamCount) + "</b></li>";
+        subtitlesStreams += "<a href='stream:" + streamLink + "'>";
+    subtitlesStreams += "<li><b>" + tr("Stream") + " " + streamCountStr + "</b></li>";
     if (currentPlaying)
         subtitlesStreams += "</u>";
     else
@@ -761,8 +782,15 @@ void DemuxerThr::addSubtitleStream(bool currentPlaying, QString &subtitlesStream
         subtitlesStreams += "<li><b>" + tr("loaded from file") + "</b></li>";
     if (!codecName.isEmpty())
         subtitlesStreams += "<li><b>" + tr("format") + ":</b> " + codecName + "</li>";
-    printOtherInfo(other_info, subtitlesStreams);
+    printOtherInfo(other_info, subtitlesStreams, &lang);
     subtitlesStreams += "</ul></ul>";
+
+    QString streamMenuText;
+    if (!lang.isEmpty())
+        streamMenuText.push_back(" (" + lang + ")");
+    if (!title.isEmpty())
+        streamMenuText.push_back(" - " + title);
+    addStreamsMenuString(streamsMenu, streamCountStr, streamLink, currentPlaying, streamMenuText);
 }
 void DemuxerThr::emitInfo()
 {
@@ -888,6 +916,7 @@ void DemuxerThr::emitInfo()
 
     const QList<StreamInfo *> streamsInfo = demuxer->streamsInfo();
     QString videoStreams, audioStreams, subtitlesStreams, attachmentStreams;
+    QStringList videoStreamsMenu, audioStreamsMenu, subtitlesStreamsMenu;
     int videoStreamCount = 0, audioStreamCount = 0, subtitlesStreamCount = 0, i = 0;
     for (StreamInfo *streamInfo : streamsInfo)
     {
@@ -895,6 +924,8 @@ void DemuxerThr::emitInfo()
         {
             case AVMEDIA_TYPE_VIDEO:
             {
+                const QString streamLink = "video" + QString::number(i);
+                const QString streamCountStr = QString::number(++videoStreamCount);
                 const bool currentPlaying = getCurrentPlaying(playC.videoStream, streamsInfo, streamInfo);
                 videoStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'><li>";
                 if (currentPlaying)
@@ -903,8 +934,8 @@ void DemuxerThr::emitInfo()
                     videoStreams += "<u>";
                 }
                 else
-                    videoStreams += "<a href='stream:video" + QString::number(i) + "'>";
-                videoStreams += "<b>" + tr("Stream") + " " + QString::number(++videoStreamCount) + "</b>";
+                    videoStreams += "<a href='stream:" + streamLink + "'>";
+                videoStreams += "<b>" + tr("Stream") + " " + streamCountStr + "</b>";
                 if (currentPlaying)
                     videoStreams += "</u>" + getWriterName((AVThread *)playC.vThr);
                 else
@@ -926,9 +957,17 @@ void DemuxerThr::emitInfo()
                     videoStreams += "<li><b>" + tr("format") + ":</b> " + formatName + "</li>";
                 printOtherInfo(streamInfo->other_info, videoStreams);
                 videoStreams += "</ul></ul>";
+
+                QString streamMenuText;
+                if (!streamInfo->codec_name.isEmpty())
+                    streamMenuText.push_back(" (" + streamInfo->codec_name + ")");
+                addStreamsMenuString(videoStreamsMenu, streamCountStr, streamLink, currentPlaying, streamMenuText);
             } break;
             case AVMEDIA_TYPE_AUDIO:
             {
+                const QString streamLink = "audio" + QString::number(i);
+                const QString streamCountStr = QString::number(++audioStreamCount);
+                QString lang;
                 const bool currentPlaying = getCurrentPlaying(playC.audioStream, streamsInfo, streamInfo);
                 audioStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'><li>";
                 if (currentPlaying)
@@ -937,8 +976,8 @@ void DemuxerThr::emitInfo()
                     audioStreams += "<u>";
                 }
                 else
-                    audioStreams += "<a href='stream:audio" + QString::number(i) + "'>";
-                audioStreams += "<b>" + tr("Stream") + " " + QString::number(++audioStreamCount) + "</b>";
+                    audioStreams += "<a href='stream:" + streamLink + "'>";
+                audioStreams += "<b>" + tr("Stream") + " " + streamCountStr + "</b>";
                 if (currentPlaying)
                     audioStreams += "</u>" + getWriterName((AVThread *)playC.aThr);
                 else
@@ -966,11 +1005,18 @@ void DemuxerThr::emitInfo()
                 const auto formatName = streamInfo->getFormatName();
                 if (!formatName.isEmpty())
                     audioStreams += "<li><b>" + tr("format") + ":</b> " + formatName + "</li>";
-                printOtherInfo(streamInfo->other_info, audioStreams);
+                printOtherInfo(streamInfo->other_info, audioStreams, &lang);
                 audioStreams += "</ul></ul>";
+
+                QString streamMenuText;
+                if (!lang.isEmpty())
+                    streamMenuText.push_back(" - " + lang);
+                if (!streamInfo->codec_name.isEmpty())
+                    streamMenuText.push_back(" (" + streamInfo->codec_name + ")");
+                addStreamsMenuString(audioStreamsMenu, streamCountStr, streamLink, currentPlaying, streamMenuText);
             } break;
             case AVMEDIA_TYPE_SUBTITLE:
-                addSubtitleStream(getCurrentPlaying(playC.subtitlesStream, streamsInfo, streamInfo), subtitlesStreams, i, ++subtitlesStreamCount, "subtitles", streamInfo->codec_name, streamInfo->title, streamInfo->other_info);
+                addSubtitleStream(getCurrentPlaying(playC.subtitlesStream, streamsInfo, streamInfo), subtitlesStreams, i, ++subtitlesStreamCount, "subtitles", streamInfo->codec_name, streamInfo->title, subtitlesStreamsMenu, streamInfo->other_info);
                 break;
             case AVMEDIA_TYPE_ATTACHMENT:
             {
@@ -985,7 +1031,7 @@ void DemuxerThr::emitInfo()
     }
     i = 0;
     for (const QString &fName : qAsConst(playC.fileSubsList))
-        addSubtitleStream(fName == playC.fileSubs, subtitlesStreams, i++, ++subtitlesStreamCount, "fileSubs", QString(), Functions::fileName(fName));
+        addSubtitleStream(fName == playC.fileSubs, subtitlesStreams, i++, ++subtitlesStreamCount, "fileSubs", QString(), Functions::fileName(fName), subtitlesStreamsMenu);
 
     if (!videoStreams.isEmpty())
         info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Video streams") + ":</big></b></p>" + videoStreams;
@@ -998,6 +1044,7 @@ void DemuxerThr::emitInfo()
 
     emit playC.setInfo(info, videoPlaying, audioPlaying);
     emit playC.updateCurrentEntry(formatTitle, demuxer->length());
+    emit playC.setStreamsMenu(videoStreamsMenu, audioStreamsMenu, subtitlesStreamsMenu);
 }
 
 bool DemuxerThr::mustReloadStreams()

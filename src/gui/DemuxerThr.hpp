@@ -74,7 +74,9 @@ private:
 
     void updateCoverAndPlaying(bool doCompare);
 
-    void addSubtitleStream(bool, QString &, int, int, const QString &, const QString &, const QString &, const QVector<QMPlay2Tag> &other_info = QVector<QMPlay2Tag>());
+    void addStreamsMenuString(QStringList &streamsMenu, const QString &idxStr, const QString &link, bool current, const QString &additional);
+
+    void addSubtitleStream(bool, QString &, int, int, const QString &, const QString &, const QString &, QStringList &, const QVector<QMPlay2Tag> &other_info = QVector<QMPlay2Tag>());
 
     bool mustReloadStreams();
     bool bufferedAllPackets(int vS, int aS, int p);
