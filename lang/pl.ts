@@ -1800,7 +1800,7 @@
     </message>
     <message>
         <source>Exclusive mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Tryb na wyłączność</translation>
     </message>
     <message>
         <source>Preferred video codec</source>
@@ -2812,7 +2812,7 @@ QMPlay2 nie będzie skalować ikon!</translation>
     </message>
     <message>
         <source>Show related</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż powiązane wideo</translation>
     </message>
 </context>
 <context>
@@ -3161,6 +3161,21 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>Lyrics</source>
         <translation>Tekst piosenki</translation>
+    </message>
+</context>
+<context>
+    <name>Streams</name>
+    <message>
+        <source>&amp;Audio streams</source>
+        <translation>&amp;Strumienie dźwięku</translation>
+    </message>
+    <message>
+        <source>&amp;Video streams</source>
+        <translation>&amp;Strumienie obrazu</translation>
+    </message>
+    <message>
+        <source>&amp;Subtitles streams</source>
+        <translation>&amp;Strumienie napisów</translation>
     </message>
 </context>
 <context>

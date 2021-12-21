@@ -3163,6 +3163,21 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
 </context>
 <context>
+    <name>Streams</name>
+    <message>
+        <source>&amp;Audio streams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Video streams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Subtitles streams</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TagEditor</name>
     <message>
         <source>Add tags</source>
