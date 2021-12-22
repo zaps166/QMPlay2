@@ -22,6 +22,7 @@
 #include <Main.hpp>
 
 #include <QDialogButtonBox>
+#include <QMessageBox>
 #include <QHeaderView>
 #include <QTableView>
 #include <QBoxLayout>
@@ -57,7 +58,11 @@ void KeyBindingsDialog::clicked(QAbstractButton *button)
     switch (buttons->buttonRole(button))
     {
         case QDialogButtonBox::AcceptRole:
-            QMPlay2GUI.shortcutHandler->save();
+            if (!QMPlay2GUI.shortcutHandler->save())
+            {
+                QMessageBox::warning(this, windowTitle(), tr("Some key shortcuts are duplicated!"));
+                return;
+            }
             break;
         case QDialogButtonBox::RejectRole:
             QMPlay2GUI.shortcutHandler->restore();

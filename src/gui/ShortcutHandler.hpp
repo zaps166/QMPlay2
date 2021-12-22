@@ -43,7 +43,7 @@ public:
 
     void appendAction(QAction *action, const QString &settingsName, const QString &defaultShortcut);
 
-    void save();
+    bool save();
     void restore();
     void reset();
 

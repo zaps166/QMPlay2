@@ -20,6 +20,7 @@
 #include <Settings.hpp>
 
 #include <QAction>
+#include <QDebug>
 
 ShortcutHandler::ShortcutHandler(QObject *parent) :
     QAbstractTableModel(parent)
@@ -106,16 +107,34 @@ void ShortcutHandler::appendAction(QAction *action, const QString &settingsName,
     m_shortcuts[action] = {action->shortcut().toString(), defaultShortcut};
 }
 
-void ShortcutHandler::save()
+bool ShortcutHandler::save()
 {
+    QSet<QString> shortcuts;
+    for (auto it = m_shortcuts.constBegin(), itEnd = m_shortcuts.constEnd(); it != itEnd; ++it)
+    {
+        const QString &shortcut = it.value().first;
+        if (shortcut.isEmpty())
+            continue;
+
+        if (shortcuts.contains(shortcut))
+        {
+            qDebug() << "Duplicated shortcut:" << shortcut;
+            return false;
+        }
+
+        shortcuts.insert(shortcut);
+    }
+
     Settings &settings = QMPlay2Core.getSettings();
     for (auto it = m_shortcuts.constBegin(), itEnd = m_shortcuts.constEnd(); it != itEnd; ++it)
     {
-        const QString shortcut = it.value().first;
+        const QString &shortcut = it.value().first;
         it.key()->setShortcut(shortcut);
         settings.set(it.key()->property("settingsId").toString(), shortcut);
     }
     settings.flush();
+
+    return true;
 }
 void ShortcutHandler::restore()
 {
