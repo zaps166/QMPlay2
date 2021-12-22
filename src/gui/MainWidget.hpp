@@ -122,7 +122,7 @@ private slots:
 
     void uncheckSuspend();
 private:
-    void setStreamsMenu(const QStringList &videoStreams, const QStringList &audioStreams, const QStringList &subsStreams);
+    void setStreamsMenu(const QStringList &videoStreams, const QStringList &audioStreams, const QStringList &subsStreams, const QStringList &chapters, const QStringList &programs);
 
     void savePlistHelper(const QString &, const QString &, bool);
 

@@ -323,7 +323,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     connect(&playC, SIGNAL(clearCurrentPlaying()), playlistDock, SLOT(clearCurrentPlaying()));
     connect(&playC, &PlayClass::clearInfo, this, [this] {
         infoDock->clear();
-        setStreamsMenu({}, {}, {});
+        setStreamsMenu({}, {}, {}, {}, {});
     });
     connect(&playC, SIGNAL(quit()), this, SLOT(deleteLater()));
     connect(&playC, SIGNAL(resetARatio()), this, SLOT(resetARatio()));
@@ -639,7 +639,10 @@ void MainWidget::seek(int pos)
 void MainWidget::seek(double pos)
 {
     if (!seekS->ignoringValueChanged() && playC.isPlaying())
-        playC.seek(pos, (!sender() || sender() == infoDock));
+    {
+        auto sender = this->sender();
+        playC.seek(pos, (!sender || sender == infoDock || qobject_cast<QAction *>(sender)));
+    }
 }
 void MainWidget::playStateChanged(bool b)
 {
@@ -1486,7 +1489,7 @@ void MainWidget::uncheckSuspend()
         menuBar->player->suspend->setChecked(false);
 }
 
-void MainWidget::setStreamsMenu(const QStringList &videoStreams, const QStringList &audioStreams, const QStringList &subsStreams)
+void MainWidget::setStreamsMenu(const QStringList &videoStreams, const QStringList &audioStreams, const QStringList &subsStreams, const QStringList &chapters, const QStringList &programs)
 {
     auto setActions = [this](const QStringList &streams, MenuBar::Playback::Streams *menu) {
         menu->clear();
@@ -1496,16 +1499,30 @@ void MainWidget::setStreamsMenu(const QStringList &videoStreams, const QStringLi
             Q_ASSERT(lines.size() >= 2);
 
             auto action = menu->addAction(lines.constFirst());
-            action->setCheckable(true);
-            if (lines.size() == 3)
-                action->setChecked(true);
+            const bool hasData = !lines.at(1).isEmpty();
 
-            menu->group->addAction(action);
+            if (menu->group)
+            {
+                menu->group->addAction(action);
+                action->setCheckable(true);
+                if (lines.size() == 3)
+                    action->setChecked(true);
+            }
 
-            connect(action, &QAction::triggered,
-                    this, [this, data = std::move(lines[1])] {
-                playC.chStream(data);
-            });
+            if (hasData)
+            {
+                connect(action, &QAction::triggered,
+                        this, [this, data = std::move(lines[1])] {
+                    if (data.startsWith("seek"))
+                        seek(data.midRef(4).toDouble());
+                    else
+                        playC.chStream(data);
+                });
+            }
+            else
+            {
+                action->setEnabled(false);
+            }
         }
         menu->menuAction()->setVisible(!menu->isEmpty());
     };
@@ -1513,6 +1530,8 @@ void MainWidget::setStreamsMenu(const QStringList &videoStreams, const QStringLi
     setActions(videoStreams, menuBar->playback->videoStreams);
     setActions(audioStreams, menuBar->playback->audioStreams);
     setActions(subsStreams, menuBar->playback->subtitlesStreams);
+    setActions(chapters, menuBar->playback->chapters);
+    setActions(programs, menuBar->playback->programs);
 }
 
 void MainWidget::savePlistHelper(const QString &title, const QString &fPth, bool saveCurrentGroup)

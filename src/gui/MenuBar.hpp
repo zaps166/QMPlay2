@@ -134,14 +134,14 @@ public:
         {
             Q_DECLARE_TR_FUNCTIONS(Streams)
         public:
-            Streams(const QString &title, QMenu *parent);
+            Streams(const QString &title, QMenu *parent, bool createGroup = true);
             QActionGroup *group;
         };
 
         AudioChannels *audioChannels;
         VideoFilters *videoFilters;
         QAction *toggleAudio, *toggleVideo, *videoSync, *slowDownVideo, *speedUpVideo, *toggleSubtitles, *subsFromFile, *subtitlesSync, *slowDownSubtitles, *speedUpSubtitles, *biggerSubtitles, *smallerSubtitles, *screenShot;
-        Streams *audioStreams, *videoStreams, *subtitlesStreams;
+        Streams *audioStreams, *videoStreams, *subtitlesStreams, *chapters, *programs;
     };
 
     class Options : public QMenu

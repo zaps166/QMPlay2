@@ -861,6 +861,8 @@ void DemuxerThr::emitInfo()
     if (!demuxer->image().isNull())
         info += "<br/><br/><a href='save_cover'>" + tr("Save cover picture") + "</a>";
 
+    QStringList chaptersMenu, programsMenu;
+
     bool once = false;
     for (const ProgramInfo &program : demuxer->getPrograms())
     {
@@ -884,32 +886,40 @@ void DemuxerThr::emitInfo()
         }
         streams.chop(1);
 
+        const bool isCurrent = (currentPlaying == currentPlayingWanted);
+        const auto programNumberStr = QString::number(program.number);
+
         info += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
         info += "<li>";
         if (!streams.isEmpty())
             info += "<a style='text-decoration: underline;' href='stream:" + streams + "'>";
-        if (currentPlaying == currentPlayingWanted)
+        if (isCurrent)
             info += "<b>";
-        info += tr("Program") + " " + QString::number(program.number);
-        if (currentPlaying == currentPlayingWanted)
+        info += tr("Program") + " " + programNumberStr;
+        if (isCurrent)
             info += "</b>";
         if (!streams.isEmpty())
             info += "</a>";
         info += "</li></ul>";
+
+        addStreamsMenuString(programsMenu, programNumberStr, streams, isCurrent, QString());
     }
 
     int chapterCount = 0;
     once = false;
     for (const ChapterInfo &chapter : demuxer->getChapters())
     {
+        const QString title(chapter.title.isEmpty() ? tr("Chapter") + " " + QString::number(++chapterCount) : chapter.title);
+        const QString seekTo = QString::number(chapter.start);
         if (!once)
         {
             info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Chapters") + ":</big></b></p>";
             once = true;
         }
         info += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
-        info += "<li><a style='text-decoration: underline;' href='seek:" + QString::number(chapter.start) + "'>" + (chapter.title.isEmpty() ? tr("Chapter") + " " + QString::number(++chapterCount) : chapter.title) + "</a></li>";
+        info += "<li><a style='text-decoration: underline;' href='seek:" + seekTo + "'>" + title + "</a></li>";
         info += "</ul>";
+        chaptersMenu.push_back(title + "\nseek" + seekTo);
     }
 
     bool videoPlaying = false, audioPlaying = false;
@@ -1044,7 +1054,7 @@ void DemuxerThr::emitInfo()
 
     emit playC.setInfo(info, videoPlaying, audioPlaying);
     emit playC.updateCurrentEntry(formatTitle, demuxer->length());
-    emit playC.setStreamsMenu(videoStreamsMenu, audioStreamsMenu, subtitlesStreamsMenu);
+    emit playC.setStreamsMenu(videoStreamsMenu, audioStreamsMenu, subtitlesStreamsMenu, chaptersMenu, programsMenu);
 }
 
 bool DemuxerThr::mustReloadStreams()

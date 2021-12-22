@@ -383,6 +383,16 @@ MenuBar::Playback::Playback(MenuBar *parent) :
 
     addSeparator();
 
+    chapters = new Streams(Streams::tr("&Chapters"), this, false);
+    chapters->menuAction()->setVisible(false);
+    addMenu(chapters);
+
+    programs = new Streams(Streams::tr("&Programs"), this);
+    programs->menuAction()->setVisible(false);
+    addMenu(programs);
+
+    addSeparator();
+
     newAction(Playback::tr("&Screen shot"), this, screenShot, true, QIcon(), false);
 }
 MenuBar::Playback::~Playback()
@@ -458,9 +468,9 @@ MenuBar::Playback::AudioChannels::AudioChannels(QMenu *parent) :
     _8->setObjectName("8");
     other->setEnabled(false);
 }
-MenuBar::Playback::Streams::Streams(const QString &title, QMenu *parent)
+MenuBar::Playback::Streams::Streams(const QString &title, QMenu *parent, bool createGroup)
     : QMenu(title, parent)
-    , group(new QActionGroup(this))
+    , group(createGroup ? new QActionGroup(this) : nullptr)
 {
 }
 
