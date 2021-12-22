@@ -347,7 +347,7 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     addMenu(audioChannels);
 
     audioStreams = new Streams(Streams::tr("&Audio streams"), this);
-    audioStreams->setEnabled(false);
+    audioStreams->menuAction()->setVisible(false);
     addMenu(audioStreams);
 
     addSeparator();
@@ -363,7 +363,7 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     newAction(Playback::tr("&Speed up video") + " (100ms)", this, speedUpVideo, true, QIcon(), false);
 
     videoStreams = new Streams(Streams::tr("&Video streams"), this);
-    videoStreams->setEnabled(false);
+    videoStreams->menuAction()->setVisible(false);
     addMenu(videoStreams);
 
     addSeparator();
@@ -378,7 +378,7 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     newAction(Playback::tr("Scale down sub&titles"), this, smallerSubtitles, true, QIcon(), false);
 
     subtitlesStreams = new Streams(Streams::tr("&Subtitles streams"), this);
-    subtitlesStreams->setEnabled(false);
+    subtitlesStreams->menuAction()->setVisible(false);
     addMenu(subtitlesStreams);
 
     addSeparator();

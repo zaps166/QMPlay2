@@ -1507,7 +1507,7 @@ void MainWidget::setStreamsMenu(const QStringList &videoStreams, const QStringLi
                 playC.chStream(data);
             });
         }
-        menu->setEnabled(!menu->isEmpty());
+        menu->menuAction()->setVisible(!menu->isEmpty());
     };
 
     setActions(videoStreams, menuBar->playback->videoStreams);
