@@ -135,6 +135,8 @@ private:
 
     bool getFullScreen() const;
 
+    void addChooseNextStreamKeyShortcuts();
+
 #ifdef Q_OS_WIN
     void setWindowsTaskBarFeatures();
 #endif

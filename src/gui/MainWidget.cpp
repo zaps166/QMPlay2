@@ -374,6 +374,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
 
     QMPlay2GUI.menuBar->setKeyShortcuts();
     QMPlay2GUI.videoAdjustment->setKeyShortcuts();
+    addChooseNextStreamKeyShortcuts();
 
     volW->setVolume(settings.getInt("VolumeL"), settings.getInt("VolumeR"), true);
     if (settings.getBool("Mute"))
@@ -1607,6 +1608,45 @@ inline bool MainWidget::isTrayVisible() const
 bool MainWidget::getFullScreen() const
 {
     return fullScreen;
+}
+
+void MainWidget::addChooseNextStreamKeyShortcuts()
+{
+    auto chooseNextStream = [](const auto &actions) {
+        if (actions.empty())
+            return;
+
+        bool foundChecked = false;
+        for (auto &&action : actions)
+        {
+            if (action->isChecked())
+            {
+                foundChecked = true;
+            }
+            else if (foundChecked)
+            {
+                action->trigger();
+                return;
+            }
+        }
+        actions[0]->trigger();
+    };
+
+    auto nextAudioStream = new QAction(tr("Next audio stream"), this);
+    connect(nextAudioStream, &QAction::triggered,
+            this, [=] {
+        chooseNextStream(menuBar->playback->audioStreams->actions());
+    });
+    addAction(nextAudioStream);
+    QMPlay2GUI.shortcutHandler->appendAction(nextAudioStream, "KeyBindings/NextAudioStream", "Ctrl+1");
+
+    auto nextSubsStream = new QAction(tr("Next subtitles stream"), this);
+    connect(nextSubsStream, &QAction::triggered,
+            this, [=] {
+        chooseNextStream(menuBar->playback->subtitlesStreams->actions());
+    });
+    addAction(nextSubsStream);
+    QMPlay2GUI.shortcutHandler->appendAction(nextSubsStream, "KeyBindings/NextSubsStream", "Ctrl+2");
 }
 
 #ifdef Q_OS_WIN
