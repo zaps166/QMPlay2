@@ -1155,6 +1155,10 @@
         <source>Key bindings settings</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Some key shortcuts are duplicated!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LastFM</name>
@@ -1297,6 +1301,14 @@
     <message>
         <source>&amp;Pause</source>
         <translation>&amp;En pause</translation>
+    </message>
+    <message>
+        <source>Next audio stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next subtitles stream</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

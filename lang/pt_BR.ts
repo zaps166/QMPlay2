@@ -1162,6 +1162,10 @@
         <source>Key bindings settings</source>
         <translation>Configurações de atalhos de teclado</translation>
     </message>
+    <message>
+        <source>Some key shortcuts are duplicated!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LastFM</name>
@@ -1305,6 +1309,14 @@
     <message>
         <source>&amp;Show</source>
         <translation>&amp;Exibir</translation>
+    </message>
+    <message>
+        <source>Next audio stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next subtitles stream</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
