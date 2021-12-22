@@ -74,7 +74,7 @@ private:
 #ifdef USE_VULKAN
 private:
     static int vulkanGetVideoBufferStatic(AVCodecContext *codecCtx, AVFrame *frame, int flags);
-    int vulkanGetVideoBuffer(AVFrame *frame, int flags);
+    int vulkanGetVideoBuffer(AVCodecContext *codecCtx, AVFrame *frame, int flags);
 #endif
 
 private:

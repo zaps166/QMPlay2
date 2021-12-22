@@ -700,9 +700,9 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
 #ifdef USE_VULKAN
 int FFDecSW::vulkanGetVideoBufferStatic(AVCodecContext *codecCtx, AVFrame *frame, int flags)
 {
-    return reinterpret_cast<FFDecSW *>(codecCtx->opaque)->vulkanGetVideoBuffer(frame, flags);
+    return reinterpret_cast<FFDecSW *>(codecCtx->opaque)->vulkanGetVideoBuffer(codecCtx, frame, flags);
 }
-int FFDecSW::vulkanGetVideoBuffer(AVFrame *frame, int flags)
+int FFDecSW::vulkanGetVideoBuffer(AVCodecContext *codecCtx, AVFrame *frame, int flags)
 {
     if (m_dontConvert)
     {
@@ -726,6 +726,6 @@ int FFDecSW::vulkanGetVideoBuffer(AVFrame *frame, int flags)
         if (m_vkImagePool->takeToAVFrame(vk::Extent2D(w, codec_ctx->height), frame, paddingHeight))
             return 0;
     }
-    return avcodec_default_get_buffer2(codec_ctx, frame, flags);
+    return avcodec_default_get_buffer2(codecCtx, frame, flags);
 }
 #endif
