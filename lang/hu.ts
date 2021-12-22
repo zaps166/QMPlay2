@@ -3175,6 +3175,14 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <source>&amp;Subtitles streams</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Chapters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Programs</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TagEditor</name>

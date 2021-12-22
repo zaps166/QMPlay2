@@ -3177,6 +3177,14 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <source>&amp;Subtitles streams</source>
         <translation>&amp;Strumienie napisów</translation>
     </message>
+    <message>
+        <source>&amp;Chapters</source>
+        <translation>&amp;Rozdziały</translation>
+    </message>
+    <message>
+        <source>&amp;Programs</source>
+        <translation>&amp;Programy</translation>
+    </message>
 </context>
 <context>
     <name>TagEditor</name>

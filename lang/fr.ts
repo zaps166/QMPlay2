@@ -3170,6 +3170,14 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>&amp;Subtitles streams</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Chapters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Programs</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TagEditor</name>
