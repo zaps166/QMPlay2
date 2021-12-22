@@ -73,6 +73,7 @@ public:
     static QString getLongFromShortLanguage(const QString &lng);
 
     static int getCPUFlags();
+    static int getCPUMaxAlign();
 
 #ifdef USE_OPENGL
     static bool isGlOnWindowForced();

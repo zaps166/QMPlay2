@@ -48,13 +48,19 @@ void Drawable::draw(const Frame &newVideoFrame, bool canRepaint, bool entireScre
     m_scaleByQt = (imgW > videoFrame.width()) || (imgH > videoFrame.height());
     if (imgScaler.create(videoFrame, m_scaleByQt ? -1 : imgW, m_scaleByQt ? -1 : imgH))
     {
+        auto createImg = [this](int w, int h) {
+            auto imgData = new uint8_t[w * h * 4 + QMPlay2CoreClass::getCPUMaxAlign()];
+            img = QImage(imgData, w, h, QImage::Format_RGB32, [](void *ptr) {
+                delete[] reinterpret_cast<uint8_t *>(ptr);
+            }, imgData);
+        };
         if (m_scaleByQt && (img.width() != videoFrame.width() || img.height() != videoFrame.height()))
         {
-            img = QImage(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
+            createImg(videoFrame.width(), videoFrame.height());
         }
         else if (!m_scaleByQt && (img.width() != imgW || img.height() != imgH))
         {
-            img = QImage(imgW, imgH, QImage::Format_RGB32);
+            createImg(imgW, imgH);
         }
         imgScaler.scale(videoFrame, img.bits());
         if (writer.flip)

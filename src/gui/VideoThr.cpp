@@ -798,8 +798,11 @@ void VideoThr::screenshot(Frame videoFrame)
                 videoFrame.clear();
         }
 #endif
-        img = QImage(W, H, QImage::Format_RGB32);
-        if (!imgScaler.scale(videoFrame, img.bits()))
+        auto imgData = new uint8_t[W * H * 4 + QMPlay2CoreClass::getCPUMaxAlign()];
+        img = QImage(imgData, W, H, QImage::Format_RGB32, [](void *ptr) {
+            delete[] reinterpret_cast<uint8_t *>(ptr);
+        }, imgData);
+        if (!imgScaler.scale(videoFrame, imgData))
             img = QImage();
     }
 

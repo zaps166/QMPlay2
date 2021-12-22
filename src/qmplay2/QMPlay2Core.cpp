@@ -204,6 +204,10 @@ int QMPlay2CoreClass::getCPUFlags()
 {
     return av_get_cpu_flags();
 }
+int QMPlay2CoreClass::getCPUMaxAlign()
+{
+    return av_cpu_max_align();
+}
 
 #ifdef USE_OPENGL
 bool QMPlay2CoreClass::isGlOnWindowForced()
