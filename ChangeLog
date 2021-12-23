@@ -1,3 +1,10 @@
+Changes in QMPlay2 21.12.24:
+    - add audio, video, subtitles streams, programs and chapters into menu,
+    - add key shortcuts to change audio and subtitles streams,
+    - improve Vulkan initialization,
+    - fix some possible crashes,
+    - other minor fixes,
+
 Changes in QMPlay2 21.12.07:
     - fix possible crash on Windows when system audio settings was changed during playback,
     - add option to set negative amplify if replay gain is not stored,
