@@ -402,6 +402,14 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     fullScreenDockWidgetState = settings.getByteArray("MainWidget/FullScreenDockWidgetState");
     if (settings.getBool("MainWidget/AlwaysOnTop"))
         menuBar->window->alwaysOnTop->trigger();
+
+    if (testAttribute(Qt::WA_TranslucentBackground) || testAttribute(Qt::WA_NoSystemBackground))
+    {
+        // If we are about to create RGBA widget, remove translucent flags (e.g. kvantum-theme-matcha enforces it).
+        setAttribute(Qt::WA_TranslucentBackground, false);
+        setAttribute(Qt::WA_NoSystemBackground, false);
+    }
+
 #if defined Q_OS_MACOS || defined Q_OS_ANDROID
     show();
 #else
