@@ -21,7 +21,6 @@
 #include <DockWidget.hpp>
 #include <Functions.hpp>
 
-#include <QGuiApplication>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QMenu>
@@ -49,13 +48,11 @@ void VisWidget::setValue(QPair<qreal, double> &out, qreal in, qreal tDiffScaled)
 VisWidget::VisWidget()
     : stopped(true)
     , dw(new DockWidget)
-    , m_isWL(QGuiApplication::platformName().startsWith("wayland"))
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
+    setAttribute(Qt::WA_OpaquePaintEvent);
     setFocusPolicy(Qt::StrongFocus);
-    setAutoFillBackground(true);
     setMouseTracking(true);
-    setPalette(Qt::black);
 
     connect(&tim, SIGNAL(timeout()), this, SLOT(updateVisualization()));
     connect(dw, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
@@ -125,6 +122,7 @@ void VisWidget::paintEvent(QPaintEvent *)
         return;
 #endif
     QPainter p(this);
+    p.fillRect(rect(), Qt::black);
     paint(p);
 }
 void VisWidget::changeEvent(QEvent *event)
@@ -145,8 +143,7 @@ bool VisWidget::eventFilter(QObject *watched, QEvent *event)
     if (glW && watched == glW && event->type() == QEvent::Paint)
     {
         QPainter p(glW);
-        if (m_isWL)
-            p.fillRect(rect(), Qt::black);
+        p.fillRect(rect(), Qt::black);
         paint(p);
         m_pendingUpdate = false;
         return true;

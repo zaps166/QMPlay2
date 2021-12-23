@@ -63,7 +63,6 @@ private:
     QOpenGLWidget *glW = nullptr;
     bool m_pendingUpdate = false;
 #endif
-    const bool m_isWL;
     bool dockWidgetVisible = false;
 private slots:
     void wallpaperChanged(bool hasWallpaper, double alpha);
