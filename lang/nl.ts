@@ -3176,23 +3176,23 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation type="unfinished"></translation>
+        <translation>Audiostreams</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation type="unfinished"></translation>
+        <translation>Videostreams</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation type="unfinished"></translation>
+        <translation>Ondertitelstreams</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoofdstukken</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation type="unfinished"></translation>
+        <translation>Programma&apos;s</translation>
     </message>
 </context>
 <context>

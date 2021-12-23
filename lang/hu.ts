@@ -3177,23 +3177,23 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation type="unfinished"></translation>
+        <translation>Hang adatfolyamok</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation type="unfinished"></translation>
+        <translation>Videó adatfolyamok</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation type="unfinished"></translation>
+        <translation>Felirat adatfolyamok</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation type="unfinished"></translation>
+        <translation>Fejezet</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation type="unfinished"></translation>
+        <translation>Programok</translation>
     </message>
 </context>
 <context>

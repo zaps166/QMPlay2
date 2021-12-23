@@ -1160,7 +1160,7 @@
     </message>
     <message>
         <source>Some key shortcuts are duplicated!</source>
-        <translation type="unfinished"></translation>
+        <translation>部分键盘快捷方式重复！</translation>
     </message>
 </context>
 <context>
@@ -1307,11 +1307,11 @@
     </message>
     <message>
         <source>Next audio stream</source>
-        <translation type="unfinished"></translation>
+        <translation>下一个音频流</translation>
     </message>
     <message>
         <source>Next subtitles stream</source>
-        <translation type="unfinished"></translation>
+        <translation>下一个字幕流</translation>
     </message>
 </context>
 <context>
@@ -1556,7 +1556,7 @@
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
-        <translation>低分辨率解码（仅某些编解码器）</translation>
+        <translation>低分辨率解码（仅部分编解码器）</translation>
     </message>
     <message>
         <source>Hurry up</source>
@@ -3036,7 +3036,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation>这将提升性能。启用时某些视频驱动程序会崩溃。</translation>
+        <translation>这将提升性能。启用时部分视频驱动程序会崩溃。</translation>
     </message>
     <message>
         <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
@@ -3179,23 +3179,23 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation type="unfinished"></translation>
+        <translation>音频流</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation type="unfinished"></translation>
+        <translation>视频流</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation type="unfinished"></translation>
+        <translation>字幕流</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation type="unfinished"></translation>
+        <translation>章节</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation type="unfinished"></translation>
+        <translation>节目</translation>
     </message>
 </context>
 <context>

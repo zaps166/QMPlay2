@@ -3178,23 +3178,23 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio-Streams</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation type="unfinished"></translation>
+        <translation>Video-Streams</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation type="unfinished"></translation>
+        <translation>Untertitel-Streams</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapitels</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation type="unfinished"></translation>
+        <translation>Programme</translation>
     </message>
 </context>
 <context>

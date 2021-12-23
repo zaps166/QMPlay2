@@ -3181,23 +3181,23 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオ配信</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation type="unfinished"></translation>
+        <translation>ビデオ配信</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation type="unfinished"></translation>
+        <translation>字幕配信</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation type="unfinished"></translation>
+        <translation>チャプター</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation type="unfinished"></translation>
+        <translation>プログラム</translation>
     </message>
 </context>
 <context>
