@@ -21,6 +21,10 @@
 #include <QDebug>
 #include <QtMath>
 
+#ifndef PW_KEY_NODE_RATE // PW < 0.3.33
+#   define PW_KEY_NODE_RATE "node.rate"
+#endif
+
 class LoopLocker
 {
 public:
