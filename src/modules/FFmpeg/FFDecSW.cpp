@@ -420,7 +420,7 @@ bool FFDecSW::open(StreamInfo &streamInfo)
     else if (codec_ctx->codec_type == AVMEDIA_TYPE_SUBTITLE)
     {
         if (QMPlay2Core.isVulkanRenderer())
-            m_vkBufferPool = std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->createBufferPool();
+            m_vkBufferPool = static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->createBufferPool();
 #endif
     }
     if (!FFDec::openCodec(codec))
