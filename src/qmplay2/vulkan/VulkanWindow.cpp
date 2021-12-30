@@ -123,6 +123,18 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     setSurfaceType(VulkanSurface);
     setVulkanInstance(m_instance->qVulkanInstance());
 
+    auto maybeInsertFormatsLinearTilingSampledImage = [this](vk::Format fmt) {
+        if (m_physicalDevice->getFormatProperties(fmt).linearTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage)
+            m_formatsLinearTilingSampledImage.insert(fmt);
+    };
+    // All formats used in "Instance::isCompatibleDevice()" and "Instance::supportedPixelFormats()"
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8Unorm);
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8G8Unorm);
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR16Unorm);
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR16G16Unorm);
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8G8B8A8Unorm);
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eB8G8R8A8Unorm);
+
     switch (m_physicalDevice->properties().vendorID)
     {
 #if !defined(Q_OS_WIN)
@@ -452,7 +464,11 @@ void Window::render()
             fillVerticesBuffer();
 
         loadImage();
-        ensureMipmaps();
+        const bool mipmapsUsed = ensureMipmaps();
+        const bool imageOptimalCopied = ensureSupportedSampledImage();
+        if (!mipmapsUsed && !imageOptimalCopied)
+            m.imageOptimalTiling.reset();
+
         ensureBicubic();
 
         ensureClearPipeline();
@@ -1198,13 +1214,10 @@ void Window::fillVideoPipelineFragmentUniform()
     m.mustUpdateFragUniform = false;
 }
 
-void Window::ensureMipmaps()
+bool Window::ensureMipmaps()
 {
     if (!mustGenerateMipmaps() || !m.image)
-    {
-        m.imageOptimalTiling.reset();
-        return;
-    }
+        return false;
 
     if (m.imageOptimalTiling && (m.imageOptimalTiling->format() != m.image->format() || m.imageOptimalTiling->mipLevels() <= 1))
         m.imageOptimalTiling.reset();
@@ -1239,6 +1252,8 @@ void Window::ensureMipmaps()
     {
         m.imageOptimalTiling->maybeGenerateMipmaps(m.commandBuffer);
     }
+
+    return true;
 }
 bool Window::mustGenerateMipmaps()
 {
@@ -1246,6 +1261,51 @@ bool Window::mustGenerateMipmaps()
         return false;
 
     return (m_scaledSize.width() < m_imgSize.width() / 2.0 || m_scaledSize.height() < m_imgSize.height() / 2.0);
+}
+
+bool Window::ensureSupportedSampledImage()
+{
+    if (!m.image || !m.image->isLinear())
+        return false;
+
+    if (m.imageOptimalTiling && m.imageOptimalTiling->mipLevels() > 1)
+        return false;
+
+    const uint32_t numPlanes = m.image->numPlanes();
+    uint32_t numFormatsLinearTilingSampledImage = 0;
+    for (uint32_t i = 0; i < numPlanes; ++i)
+        numFormatsLinearTilingSampledImage += m_formatsLinearTilingSampledImage.count(m.image->format(i));
+
+    if (numFormatsLinearTilingSampledImage == numPlanes)
+        return false;
+
+    if (m.imageOptimalTiling && m.imageOptimalTiling->format() != m.image->format())
+        m.imageOptimalTiling.reset();
+
+    if (!m.imageOptimalTiling)
+    {
+        m.imageOptimalTiling = Image::createOptimal(
+            m.device,
+            vk::Extent2D(m_imgSize.width(), m_imgSize.height()),
+            m.image->format(),
+            false,
+            false
+        );
+
+        m.shouldUpdateImageOptimalTiling = true;
+    }
+    else
+    {
+        Q_ASSERT(m.imageOptimalTiling->size() == vk::Extent2D(m_imgSize.width(), m_imgSize.height()));
+    }
+
+    if (m.shouldUpdateImageOptimalTiling)
+    {
+        m.image->copyTo(m.imageOptimalTiling, m.commandBuffer);
+        m.shouldUpdateImageOptimalTiling = false;
+    }
+
+    return true;
 }
 
 void Window::ensureBicubic()

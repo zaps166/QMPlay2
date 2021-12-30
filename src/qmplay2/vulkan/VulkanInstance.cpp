@@ -243,8 +243,6 @@ AVPixelFormats Instance::supportedPixelFormats() const
 {
     auto checkImageFormat = [this](vk::Format format) {
         auto fmtProps = m_physicalDevice->getFormatProperties(format);
-        if (!(fmtProps.linearTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage))
-            return false;
         if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage)))
             return false;
         return true;
@@ -412,8 +410,6 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
         auto fmtProps = physicalDevice->getFormatProperties(format);
         if (img)
         {
-            if (!(fmtProps.linearTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage))
-                errors.push_back(QString::fromStdString("Missing linear tiling sampled image for format: " + vk::to_string(format)));
             if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage)))
                 errors.push_back(QString::fromStdString("Missing optimal tiling sampled or storage image for format: " + vk::to_string(format)));
         }

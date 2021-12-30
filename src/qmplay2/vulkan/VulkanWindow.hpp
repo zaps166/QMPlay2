@@ -136,8 +136,10 @@ private:
 
     void fillVideoPipelineFragmentUniform();
 
-    void ensureMipmaps();
+    bool ensureMipmaps();
     bool mustGenerateMipmaps();
+
+    bool ensureSupportedSampledImage();
 
     void ensureBicubic();
 
@@ -156,6 +158,8 @@ private:
 
     const shared_ptr<Instance> m_instance;
     const shared_ptr<PhysicalDevice> m_physicalDevice;
+
+    std::set<vk::Format> m_formatsLinearTilingSampledImage;
 
     QTimer m_initResourcesTimer;
 
