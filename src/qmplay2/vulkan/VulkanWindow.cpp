@@ -402,13 +402,13 @@ void Window::handleException(const vk::SystemError &e)
     }
 }
 
-void Window::resetImages(bool resetImageMipmap)
+void Window::resetImages(bool resetImageOptimalTiling)
 {
     m.image.reset();
-    if (resetImageMipmap)
-        m.imageMipmap.reset();
+    if (resetImageOptimalTiling)
+        m.imageOptimalTiling.reset();
     m.imageFromFrame = false;
-    m.shouldUpdateImageMipmap = false;
+    m.shouldUpdateImageOptimalTiling = false;
 }
 
 void Window::render()
@@ -895,8 +895,8 @@ void Window::ensureVideoPipeline()
         m.videoPipeline = GraphicsPipeline::create(createInfo);
     }
 
-    auto vkImage = m.imageMipmap
-        ? m.imageMipmap
+    auto vkImage = m.imageOptimalTiling
+        ? m.imageOptimalTiling
         : m.image
     ;
 
@@ -1098,7 +1098,7 @@ void Window::loadImage()
 
     if (m_frameChanged)
     {
-        m.shouldUpdateImageMipmap = true;
+        m.shouldUpdateImageOptimalTiling = true;
         m_format = newFormat;
 
         const bool framePropsChanged = obtainFrameProps();
@@ -1202,16 +1202,16 @@ void Window::ensureMipmaps()
 {
     if (!mustGenerateMipmaps() || !m.image)
     {
-        m.imageMipmap.reset();
+        m.imageOptimalTiling.reset();
         return;
     }
 
-    if (m.imageMipmap && m.imageMipmap->format() != m.image->format())
-        m.imageMipmap.reset();
+    if (m.imageOptimalTiling && (m.imageOptimalTiling->format() != m.image->format() || m.imageOptimalTiling->mipLevels() <= 1))
+        m.imageOptimalTiling.reset();
 
-    if (!m.imageMipmap)
+    if (!m.imageOptimalTiling)
     {
-        m.imageMipmap = Image::createOptimal(
+        m.imageOptimalTiling = Image::createOptimal(
             m.device,
             vk::Extent2D(m_imgSize.width(), m_imgSize.height()),
             m.image->format(),
@@ -1219,25 +1219,25 @@ void Window::ensureMipmaps()
             false
         );
 
-        m.shouldUpdateImageMipmap = true;
+        m.shouldUpdateImageOptimalTiling = true;
     }
     else
     {
-        Q_ASSERT(m.imageMipmap->size() == vk::Extent2D(m_imgSize.width(), m_imgSize.height()));
+        Q_ASSERT(m.imageOptimalTiling->size() == vk::Extent2D(m_imgSize.width(), m_imgSize.height()));
     }
 
-    const bool mustRegenerateMipmaps = m.imageMipmap->setMipLevelsLimitForSize(
+    const bool mustRegenerateMipmaps = m.imageOptimalTiling->setMipLevelsLimitForSize(
         vk::Extent2D(ceil(m_scaledSize.width()), ceil(m_scaledSize.height()))
     );
 
-    if (m.shouldUpdateImageMipmap)
+    if (m.shouldUpdateImageOptimalTiling)
     {
-        m.image->copyTo(m.imageMipmap, m.commandBuffer);
-        m.shouldUpdateImageMipmap = false;
+        m.image->copyTo(m.imageOptimalTiling, m.commandBuffer);
+        m.shouldUpdateImageOptimalTiling = false;
     }
     else if (mustRegenerateMipmaps)
     {
-        m.imageMipmap->maybeGenerateMipmaps(m.commandBuffer);
+        m.imageOptimalTiling->maybeGenerateMipmaps(m.commandBuffer);
     }
 }
 bool Window::mustGenerateMipmaps()

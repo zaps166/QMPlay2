@@ -107,7 +107,7 @@ private:
 
     void handleException(const vk::SystemError &e);
 
-    void resetImages(bool resetImageMipmap);
+    void resetImages(bool resetImageOptimalTiling);
 
     void render();
 
@@ -202,9 +202,9 @@ private:
 
         shared_ptr<Sampler> sampler;
         shared_ptr<Image> image;
-        shared_ptr<Image> imageMipmap;
+        shared_ptr<Image> imageOptimalTiling;
         bool imageFromFrame = false;
-        bool shouldUpdateImageMipmap = false;
+        bool shouldUpdateImageOptimalTiling = false;
 
         shared_ptr<GraphicsPipeline> clearPipeline;
         set<uint32_t> clearedImages;
