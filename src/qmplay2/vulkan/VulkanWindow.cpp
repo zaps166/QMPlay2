@@ -335,16 +335,19 @@ void Window::initResources() try
 
     m.queue = m.device->queue();
 
-    m.clearVertexShaderModule = ShaderModule::create(
-        m.device,
-        vk::ShaderStageFlagBits::eVertex,
-        Instance::readShader("clear.vert")
-    );
-    m.clearFragmentShaderModule = ShaderModule::create(
-        m.device,
-        vk::ShaderStageFlagBits::eFragment,
-        Instance::readShader("clear.frag")
-    );
+    if (!m_useRenderPassClear)
+    {
+        m.clearVertexShaderModule = ShaderModule::create(
+            m.device,
+            vk::ShaderStageFlagBits::eVertex,
+            Instance::readShader("clear.vert")
+        );
+        m.clearFragmentShaderModule = ShaderModule::create(
+            m.device,
+            vk::ShaderStageFlagBits::eFragment,
+            Instance::readShader("clear.frag")
+        );
+    }
 
     m.vertexShaderModule = ShaderModule::create(
         m.device,
