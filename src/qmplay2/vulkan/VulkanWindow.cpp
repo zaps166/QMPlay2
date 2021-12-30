@@ -123,16 +123,18 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     setSurfaceType(VulkanSurface);
     setVulkanInstance(m_instance->qVulkanInstance());
 
-#if defined(Q_OS_WIN)
     switch (m_physicalDevice->properties().vendorID)
     {
+#if !defined(Q_OS_WIN)
         case 0x8086: // Intel
+#endif
+        case 0x1002: // AMD
+        case 0x10de: // NVIDIA
+            break;
+        default:
             m_useRenderPassClear = true;
             break;
     }
-#elif defined(Q_OS_ANDROID)
-    m_useRenderPassClear = true;
-#endif
 
 #ifndef PASS_EVENTS_TO_PARENT
     setFlags(Qt::WindowTransparentForInput);
