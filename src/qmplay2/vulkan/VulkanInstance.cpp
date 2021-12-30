@@ -399,8 +399,7 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
     {
         const auto requiredHostMemoryFlags =
             vk::MemoryPropertyFlagBits::eHostVisible |
-            vk::MemoryPropertyFlagBits::eHostCoherent |
-            vk::MemoryPropertyFlagBits::eHostCached
+            vk::MemoryPropertyFlagBits::eHostCoherent
         ;
         physicalDevice->findMemoryType(requiredHostMemoryFlags);
     }

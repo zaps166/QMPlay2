@@ -25,8 +25,9 @@
 #include <Functions.hpp>
 
 #ifdef USE_VULKAN
-#   include "../qmvk/Device.hpp"
+#   include "../qmvk/MemoryPropertyFlags.hpp"
 #   include "../qmvk/PhysicalDevice.hpp"
+#   include "../qmvk/Device.hpp"
 #   include "../qmvk/Image.hpp"
 #   include "../qmvk/Buffer.hpp"
 #   include "../qmvk/BufferView.hpp"
@@ -410,11 +411,23 @@ bool FFDecSW::open(StreamInfo &streamInfo)
 #ifdef USE_VULKAN
         if ((codec->capabilities & AV_CODEC_CAP_DR1) && QMPlay2Core.isVulkanRenderer())
         {
-            codec_ctx->opaque = this;
-            codec_ctx->get_buffer2 = vulkanGetVideoBufferStatic;
+            try
+            {
+                static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->physicalDevice()->findMemoryType(
+                    vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent | vk::MemoryPropertyFlagBits::eHostCached
+                );
+
+                codec_ctx->opaque = this;
+                codec_ctx->get_buffer2 = vulkanGetVideoBufferStatic;
 #if LIBAVCODEC_VERSION_MAJOR < 60
-            codec_ctx->thread_safe_callbacks = 1;
+                codec_ctx->thread_safe_callbacks = 1;
 #endif
+            }
+            catch (const vk::SystemError &e)
+            {
+                Q_UNUSED(e)
+                qDebug() << "Vulkan :: Zero-copy decoding is not supported";
+            }
         }
     }
     else if (codec_ctx->codec_type == AVMEDIA_TYPE_SUBTITLE)
