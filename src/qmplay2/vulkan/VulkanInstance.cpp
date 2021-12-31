@@ -19,6 +19,7 @@
 #include "../../qmvk/PhysicalDevice.hpp"
 #include "../../qmvk/Device.hpp"
 #include "../../qmvk/MemoryPropertyFlags.hpp"
+#include "../../qmvk/Image.hpp"
 
 #include "VulkanInstance.hpp"
 #include "VulkanBufferPool.hpp"
@@ -155,6 +156,7 @@ Instance::~Instance()
 void Instance::prepareDestroy()
 {
     m_physicalDevice.reset();
+    fillSupportedFormats();
 }
 
 void Instance::init()
@@ -232,82 +234,18 @@ void Instance::obtainPhysicalDevice()
         if (it != supportedPhysicalDevices.end())
         {
             m_physicalDevice = *it;
+            fillSupportedFormats();
             return;
         }
     }
 
     m_physicalDevice = supportedPhysicalDevices[0];
+    fillSupportedFormats();
 }
 
 AVPixelFormats Instance::supportedPixelFormats() const
 {
-    auto checkImageFormat = [this](vk::Format format) {
-        auto fmtProps = m_physicalDevice->getFormatProperties(format);
-        if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage)))
-            return false;
-        return true;
-    };
-
-    AVPixelFormats pixelFormats {
-        AV_PIX_FMT_GRAY8,
-
-        AV_PIX_FMT_NV12,
-        AV_PIX_FMT_NV16,
-
-        AV_PIX_FMT_YUV420P,
-        AV_PIX_FMT_YUVJ420P,
-
-        AV_PIX_FMT_YUV422P,
-        AV_PIX_FMT_YUVJ422P,
-
-        AV_PIX_FMT_YUV444P,
-        AV_PIX_FMT_YUVJ444P,
-
-        AV_PIX_FMT_GBRP,
-    };
-
-    if (checkImageFormat(vk::Format::eR16Unorm) && checkImageFormat(vk::Format::eR16G16Unorm))
-    {
-        pixelFormats += {
-            AV_PIX_FMT_GRAY9,
-            AV_PIX_FMT_GRAY10,
-            AV_PIX_FMT_GRAY12,
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(56, 22, 100)
-            AV_PIX_FMT_GRAY14,
-#endif
-            AV_PIX_FMT_GRAY16,
-
-            AV_PIX_FMT_P010,
-            AV_PIX_FMT_P016,
-            AV_PIX_FMT_NV20,
-
-            AV_PIX_FMT_YUV420P9,
-            AV_PIX_FMT_YUV420P10,
-            AV_PIX_FMT_YUV420P12,
-            AV_PIX_FMT_YUV420P14,
-            AV_PIX_FMT_YUV420P16,
-
-            AV_PIX_FMT_YUV422P9,
-            AV_PIX_FMT_YUV422P10,
-            AV_PIX_FMT_YUV422P12,
-            AV_PIX_FMT_YUV422P14,
-            AV_PIX_FMT_YUV422P16,
-
-            AV_PIX_FMT_YUV444P9,
-            AV_PIX_FMT_YUV444P10,
-            AV_PIX_FMT_YUV444P12,
-            AV_PIX_FMT_YUV444P14,
-            AV_PIX_FMT_YUV444P16,
-        };
-    }
-
-    if (checkImageFormat(vk::Format::eR8G8B8A8Unorm))
-        pixelFormats += AV_PIX_FMT_RGBA;
-
-    if (checkImageFormat(vk::Format::eB8G8R8A8Unorm))
-        pixelFormats += AV_PIX_FMT_BGRA;
-
-    return pixelFormats;
+    return m_supportedPixelFormats;
 }
 
 shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &physicalDevice)
@@ -341,6 +279,15 @@ shared_ptr<BufferPool> Instance::createBufferPool()
 shared_ptr<ImagePool> Instance::createImagePool()
 {
     return make_shared<ImagePool>(static_pointer_cast<Instance>(shared_from_this()));
+}
+
+bool Instance::checkLinearTilingSampledImageSupported(const shared_ptr<Image> &image) const
+{
+    const uint32_t numPlanes = image->numPlanes();
+    uint32_t numFormatsLinearTilingSampledImage = 0;
+    for (uint32_t i = 0; i < numPlanes; ++i)
+        numFormatsLinearTilingSampledImage += m_formatsLinearTilingSampledImage.count(image->format(i));
+    return (numFormatsLinearTilingSampledImage == numPlanes);
 }
 
 bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevice) const try
@@ -502,6 +449,96 @@ void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalD
     Q_UNUSED(physicalDevices)
     Q_UNUSED(setAsFirst)
 #endif
+}
+
+void Instance::fillSupportedFormats()
+{
+    m_formatsLinearTilingSampledImage.clear();
+    m_supportedPixelFormats.clear();
+
+    if (!m_physicalDevice)
+        return;
+
+    // Supported formats for linear tiling sampled image
+
+    auto maybeInsertFormatsLinearTilingSampledImage = [&](vk::Format fmt) {
+        if (m_physicalDevice->getFormatProperties(fmt).linearTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage)
+            m_formatsLinearTilingSampledImage.insert(fmt);
+    };
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8Unorm);
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8G8Unorm);
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR16Unorm);
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR16G16Unorm);
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8G8B8A8Unorm);
+    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eB8G8R8A8Unorm);
+
+    // Supported image formats
+
+    auto checkImageFormat = [this](vk::Format format) {
+        auto fmtProps = m_physicalDevice->getFormatProperties(format);
+        if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage)))
+            return false;
+        return true;
+    };
+
+    m_supportedPixelFormats += {
+        AV_PIX_FMT_GRAY8,
+
+        AV_PIX_FMT_NV12,
+        AV_PIX_FMT_NV16,
+
+        AV_PIX_FMT_YUV420P,
+        AV_PIX_FMT_YUVJ420P,
+
+        AV_PIX_FMT_YUV422P,
+        AV_PIX_FMT_YUVJ422P,
+
+        AV_PIX_FMT_YUV444P,
+        AV_PIX_FMT_YUVJ444P,
+
+        AV_PIX_FMT_GBRP,
+    };
+
+    if (checkImageFormat(vk::Format::eR16Unorm) && checkImageFormat(vk::Format::eR16G16Unorm))
+    {
+        m_supportedPixelFormats += {
+            AV_PIX_FMT_GRAY9,
+            AV_PIX_FMT_GRAY10,
+            AV_PIX_FMT_GRAY12,
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(56, 22, 100)
+            AV_PIX_FMT_GRAY14,
+#endif
+            AV_PIX_FMT_GRAY16,
+
+            AV_PIX_FMT_P010,
+            AV_PIX_FMT_P016,
+            AV_PIX_FMT_NV20,
+
+            AV_PIX_FMT_YUV420P9,
+            AV_PIX_FMT_YUV420P10,
+            AV_PIX_FMT_YUV420P12,
+            AV_PIX_FMT_YUV420P14,
+            AV_PIX_FMT_YUV420P16,
+
+            AV_PIX_FMT_YUV422P9,
+            AV_PIX_FMT_YUV422P10,
+            AV_PIX_FMT_YUV422P12,
+            AV_PIX_FMT_YUV422P14,
+            AV_PIX_FMT_YUV422P16,
+
+            AV_PIX_FMT_YUV444P9,
+            AV_PIX_FMT_YUV444P10,
+            AV_PIX_FMT_YUV444P12,
+            AV_PIX_FMT_YUV444P14,
+            AV_PIX_FMT_YUV444P16,
+        };
+    }
+
+    if (checkImageFormat(vk::Format::eR8G8B8A8Unorm))
+        m_supportedPixelFormats += AV_PIX_FMT_RGBA;
+
+    if (checkImageFormat(vk::Format::eB8G8R8A8Unorm))
+        m_supportedPixelFormats += AV_PIX_FMT_BGRA;
 }
 
 vk::PhysicalDeviceFeatures Instance::requiredPhysicalDeviceFeatures()

@@ -81,9 +81,14 @@ public:
     shared_ptr<BufferPool> createBufferPool();
     shared_ptr<ImagePool> createImagePool();
 
+    bool checkLinearTilingSampledImageSupported(const shared_ptr<Image> &image) const;
+
 private:
     bool isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevice) const override final;
     void sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalDevices) const override final;
+
+private:
+    void fillSupportedFormats();
 
 private:
     static vk::PhysicalDeviceFeatures requiredPhysicalDeviceFeatures();
@@ -93,6 +98,8 @@ private:
     QVulkanInstance *const m_qVulkanInstance;
 
     shared_ptr<PhysicalDevice> m_physicalDevice;
+    set<vk::Format> m_formatsLinearTilingSampledImage;
+    AVPixelFormats m_supportedPixelFormats;
 
     weak_ptr<Device> m_deviceWeak;
     mutable mutex m_deviceMutex;

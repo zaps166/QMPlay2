@@ -123,18 +123,6 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     setSurfaceType(VulkanSurface);
     setVulkanInstance(m_instance->qVulkanInstance());
 
-    auto maybeInsertFormatsLinearTilingSampledImage = [this](vk::Format fmt) {
-        if (m_physicalDevice->getFormatProperties(fmt).linearTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage)
-            m_formatsLinearTilingSampledImage.insert(fmt);
-    };
-    // All formats used in "Instance::isCompatibleDevice()" and "Instance::supportedPixelFormats()"
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8Unorm);
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8G8Unorm);
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR16Unorm);
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR16G16Unorm);
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8G8B8A8Unorm);
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eB8G8R8A8Unorm);
-
     switch (m_physicalDevice->properties().vendorID)
     {
 #if !defined(Q_OS_WIN)
@@ -1271,12 +1259,7 @@ bool Window::ensureSupportedSampledImage()
     if (m.imageOptimalTiling && m.imageOptimalTiling->mipLevels() > 1)
         return false;
 
-    const uint32_t numPlanes = m.image->numPlanes();
-    uint32_t numFormatsLinearTilingSampledImage = 0;
-    for (uint32_t i = 0; i < numPlanes; ++i)
-        numFormatsLinearTilingSampledImage += m_formatsLinearTilingSampledImage.count(m.image->format(i));
-
-    if (numFormatsLinearTilingSampledImage == numPlanes)
+    if (m_instance->checkLinearTilingSampledImageSupported(m.image))
         return false;
 
     if (m.imageOptimalTiling && m.imageOptimalTiling->format() != m.image->format())
