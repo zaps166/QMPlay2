@@ -24,8 +24,12 @@
 #include <QQueue>
 
 #ifdef USE_VULKAN
+#include <functional>
+
 namespace QmVk {
+class Instance;
 class Device;
+class CommandBuffer;
 class Image;
 class ImagePool;
 class HWInterop;
@@ -34,6 +38,11 @@ class HWInterop;
 
 class QMPLAY2SHAREDLIB_EXPORT VideoFilter : public ModuleParams
 {
+#ifdef USE_VULKAN
+protected:
+    using CopyImageLinearToOptimalFn = std::function<void(const std::shared_ptr<QmVk::CommandBuffer> &)>;
+#endif
+
 public:
     enum DeintFlags
     {
@@ -70,7 +79,8 @@ protected:
 #ifdef USE_VULKAN
     std::shared_ptr<QmVk::Image> vulkanImageFromFrame(
         Frame &frame,
-        const std::shared_ptr<QmVk::Device> &device = nullptr
+        const std::shared_ptr<QmVk::Device> &device = nullptr,
+        CopyImageLinearToOptimalFn *copyFn = nullptr
     );
 #endif
 
@@ -86,6 +96,7 @@ protected:
     double m_lastTS = qQNaN();
 
 #ifdef USE_VULKAN
+    std::shared_ptr<QmVk::Instance> m_vkInstance;
     std::shared_ptr<QmVk::HWInterop> m_vkHwInterop;
     std::shared_ptr<QmVk::ImagePool> m_vkImagePool;
 #endif

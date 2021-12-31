@@ -86,9 +86,11 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
         Frame &currFrame = m_internalQueue[1];
         Frame &nextFrame = m_internalQueue[2];
 
-        auto prevImage = vulkanImageFromFrame(prevFrame, m.device);
-        auto currImage = vulkanImageFromFrame(currFrame, m.device);
-        auto nextImage = vulkanImageFromFrame(nextFrame, m.device);
+        CopyImageLinearToOptimalFn copyFns[3];
+
+        auto prevImage = vulkanImageFromFrame(prevFrame, m.device, &copyFns[0]);
+        auto currImage = vulkanImageFromFrame(currFrame, m.device, &copyFns[1]);
+        auto nextImage = vulkanImageFromFrame(nextFrame, m.device, &copyFns[2]);
         if (!prevImage || !currImage || !nextImage)
         {
             clearBuffer();
@@ -117,6 +119,11 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
             syncData = m_vkHwInterop->sync({prevFrame, currFrame, nextFrame}, &submitInfo);
 
         m.commandBuffer->resetAndBegin();
+        for (auto &&copyFn : copyFns)
+        {
+            if (copyFn)
+                copyFn(m.commandBuffer);
+        }
         for (uint32_t p = 0; p < 3; ++p)
         {
             auto yadifPushConstants = m.computes[p]->pushConstants<YadifPushConstants>();

@@ -26,12 +26,8 @@ namespace QmVk {
 
 using namespace std;
 
-class Instance;
-class Device;
 class Sampler;
 class ComputePipeline;
-class CommandBuffer;
-class Image;
 
 class QMPLAY2SHAREDLIB_EXPORT YadifDeint : public VideoFilter
 {

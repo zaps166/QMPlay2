@@ -34,7 +34,10 @@ VideoFilter::VideoFilter(bool fillDefaultSupportedPixelFormats)
 {
 #ifdef USE_VULKAN
     if (QMPlay2Core.isVulkanRenderer())
-        m_vkImagePool = std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->createImagePool();
+    {
+        m_vkInstance = std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance());
+        m_vkImagePool = m_vkInstance->createImagePool();
+    }
 #endif
 
     if (!fillDefaultSupportedPixelFormats)
@@ -153,7 +156,8 @@ Frame VideoFilter::getNewFrame(const Frame &other)
 #ifdef USE_VULKAN
 std::shared_ptr<QmVk::Image> VideoFilter::vulkanImageFromFrame(
     Frame &frame,
-    const std::shared_ptr<QmVk::Device> &device)
+    const std::shared_ptr<QmVk::Device> &device,
+    CopyImageLinearToOptimalFn *copyFn)
 {
     if (m_vkHwInterop && device)
     {
@@ -179,6 +183,23 @@ std::shared_ptr<QmVk::Image> VideoFilter::vulkanImageFromFrame(
     else if (device && image->device() != device)
     {
         return nullptr;
+    }
+
+    if (copyFn && image->isLinear() && !m_vkInstance->checkLinearTilingSampledImageSupported(image))
+    {
+        auto oldFrame = std::move(frame);
+        frame = m_vkImagePool->takeOptimalToFrame(oldFrame);
+        if (frame.isEmpty())
+        {
+            frame = std::move(oldFrame);
+            return nullptr;
+        }
+
+        auto oldImage = std::move(image);
+        image = frame.vulkanImage();
+        *copyFn = [=](const std::shared_ptr<QmVk::CommandBuffer> &commandBuffer) {
+            oldImage->copyTo(image, commandBuffer);
+        };
     }
 
     return image;
