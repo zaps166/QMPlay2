@@ -300,15 +300,6 @@ shared_ptr<ImagePool> Instance::createImagePool()
     return make_shared<ImagePool>(static_pointer_cast<Instance>(shared_from_this()));
 }
 
-bool Instance::checkLinearTilingSampledImageSupported(const shared_ptr<Image> &image) const
-{
-    const uint32_t numPlanes = image->numPlanes();
-    uint32_t numFormatsLinearTilingSampledImage = 0;
-    for (uint32_t i = 0; i < numPlanes; ++i)
-        numFormatsLinearTilingSampledImage += m_formatsLinearTilingSampledImage.count(image->format(i));
-    return (numFormatsLinearTilingSampledImage == numPlanes);
-}
-
 bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevice) const try
 {
     const auto &properties = physicalDevice->properties();
@@ -373,7 +364,7 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
     }
 
     auto checkFormat = [&](vk::Format format, bool img, bool buff) {
-        auto fmtProps = physicalDevice->getFormatProperties(format);
+        const auto &fmtProps = physicalDevice->getFormatPropertiesCached(format);
         if (img)
         {
             if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage)))
@@ -472,37 +463,15 @@ void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalD
 
 void Instance::fillSupportedFormats()
 {
-    m_formatsLinearTilingSampledImage.clear();
     m_supportedPixelFormats.clear();
 
     if (!m_physicalDevice)
         return;
 
-    // Supported formats for linear tiling sampled image
-
-    bool warningShown = false;
-    auto maybeInsertFormatsLinearTilingSampledImage = [&](vk::Format fmt) {
-        if (m_physicalDevice->getFormatProperties(fmt).linearTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage)
-        {
-            m_formatsLinearTilingSampledImage.insert(fmt);
-        }
-        else if (!warningShown)
-        {
-            qDebug() << "Vulkan :: Image conversion from linear to optimal tiling is needed";
-            warningShown = true;
-        }
-    };
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8Unorm);
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8G8Unorm);
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR16Unorm);
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR16G16Unorm);
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8G8B8A8Unorm);
-    maybeInsertFormatsLinearTilingSampledImage(vk::Format::eB8G8R8A8Unorm);
-
     // Supported image formats
 
     auto checkImageFormat = [this](vk::Format format) {
-        auto fmtProps = m_physicalDevice->getFormatProperties(format);
+        const auto &fmtProps = m_physicalDevice->getFormatPropertiesCached(format);
         if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage)))
             return false;
         return true;

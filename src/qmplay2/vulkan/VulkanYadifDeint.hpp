@@ -26,6 +26,7 @@ namespace QmVk {
 
 using namespace std;
 
+class Instance;
 class Sampler;
 class ComputePipeline;
 

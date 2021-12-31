@@ -27,7 +27,6 @@
 #include <functional>
 
 namespace QmVk {
-class Instance;
 class Device;
 class CommandBuffer;
 class Image;
@@ -96,7 +95,6 @@ protected:
     double m_lastTS = qQNaN();
 
 #ifdef USE_VULKAN
-    std::shared_ptr<QmVk::Instance> m_vkInstance;
     std::shared_ptr<QmVk::HWInterop> m_vkHwInterop;
     std::shared_ptr<QmVk::ImagePool> m_vkImagePool;
 #endif

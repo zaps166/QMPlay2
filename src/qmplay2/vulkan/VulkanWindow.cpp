@@ -1255,7 +1255,7 @@ bool Window::mustGenerateMipmaps()
 
 bool Window::ensureSupportedSampledImage(bool mustGenerateMipmaps)
 {
-    if (!m.image || !m.image->isLinear())
+    if (!m.image || m.image->isSampled())
         return false;
 
     if (m.imageOptimalTiling && m.imageOptimalTiling->mipLevels() > 1)
@@ -1265,9 +1265,6 @@ bool Window::ensureSupportedSampledImage(bool mustGenerateMipmaps)
         else
             return false;
     }
-
-    if (m_instance->checkLinearTilingSampledImageSupported(m.image))
-        return false;
 
     if (m.imageOptimalTiling && m.imageOptimalTiling->format() != m.image->format())
         m.imageOptimalTiling.reset();

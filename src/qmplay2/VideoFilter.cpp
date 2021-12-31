@@ -34,10 +34,7 @@ VideoFilter::VideoFilter(bool fillDefaultSupportedPixelFormats)
 {
 #ifdef USE_VULKAN
     if (QMPlay2Core.isVulkanRenderer())
-    {
-        m_vkInstance = std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance());
-        m_vkImagePool = m_vkInstance->createImagePool();
-    }
+        m_vkImagePool = std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->createImagePool();
 #endif
 
     if (!fillDefaultSupportedPixelFormats)
@@ -185,7 +182,7 @@ std::shared_ptr<QmVk::Image> VideoFilter::vulkanImageFromFrame(
         return nullptr;
     }
 
-    if (copyFn && image->isLinear() && !m_vkInstance->checkLinearTilingSampledImageSupported(image))
+    if (copyFn && image->isLinear() && !image->isSampled())
     {
         auto oldFrame = std::move(frame);
         frame = m_vkImagePool->takeOptimalToFrame(oldFrame);
