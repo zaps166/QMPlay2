@@ -480,9 +480,17 @@ void Instance::fillSupportedFormats()
 
     // Supported formats for linear tiling sampled image
 
+    bool warningShown = false;
     auto maybeInsertFormatsLinearTilingSampledImage = [&](vk::Format fmt) {
         if (m_physicalDevice->getFormatProperties(fmt).linearTilingFeatures & vk::FormatFeatureFlagBits::eSampledImage)
+        {
             m_formatsLinearTilingSampledImage.insert(fmt);
+        }
+        else if (!warningShown)
+        {
+            qDebug() << "Vulkan :: Image conversion from linear to optimal tiling is needed";
+            warningShown = true;
+        }
     };
     maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8Unorm);
     maybeInsertFormatsLinearTilingSampledImage(vk::Format::eR8G8Unorm);
