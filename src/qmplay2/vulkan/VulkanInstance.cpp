@@ -370,7 +370,7 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
         }
     }
 
-    const auto requiredExtenstions = this->requiredPhysicalDeviceExtenstions();
+    const auto requiredExtenstions = requiredPhysicalDeviceExtenstions();
     if (!physicalDevice->checkExtensions(requiredExtenstions))
     {
         QString names;
