@@ -136,10 +136,10 @@ private:
 
     void fillVideoPipelineFragmentUniform();
 
-    bool ensureMipmaps();
+    bool ensureMipmaps(bool mustGenerateMipmaps);
     bool mustGenerateMipmaps();
 
-    bool ensureSupportedSampledImage();
+    bool ensureSupportedSampledImage(bool mustGenerateMipmaps);
 
     void ensureBicubic();
 

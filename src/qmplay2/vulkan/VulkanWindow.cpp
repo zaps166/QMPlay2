@@ -452,8 +452,10 @@ void Window::render()
             fillVerticesBuffer();
 
         loadImage();
-        const bool mipmapsUsed = ensureMipmaps();
-        const bool imageOptimalCopied = ensureSupportedSampledImage();
+
+        const bool mustGenerateMipmaps = this->mustGenerateMipmaps();
+        const bool mipmapsUsed = ensureMipmaps(mustGenerateMipmaps);
+        const bool imageOptimalCopied = ensureSupportedSampledImage(mustGenerateMipmaps);
         if (!mipmapsUsed && !imageOptimalCopied)
             m.imageOptimalTiling.reset();
 
@@ -1202,9 +1204,9 @@ void Window::fillVideoPipelineFragmentUniform()
     m.mustUpdateFragUniform = false;
 }
 
-bool Window::ensureMipmaps()
+bool Window::ensureMipmaps(bool mustGenerateMipmaps)
 {
-    if (!mustGenerateMipmaps() || !m.image)
+    if (!mustGenerateMipmaps || !m.image)
         return false;
 
     if (m.imageOptimalTiling && (m.imageOptimalTiling->format() != m.image->format() || m.imageOptimalTiling->mipLevels() <= 1))
@@ -1251,13 +1253,18 @@ bool Window::mustGenerateMipmaps()
     return (m_scaledSize.width() < m_imgSize.width() / 2.0 || m_scaledSize.height() < m_imgSize.height() / 2.0);
 }
 
-bool Window::ensureSupportedSampledImage()
+bool Window::ensureSupportedSampledImage(bool mustGenerateMipmaps)
 {
     if (!m.image || !m.image->isLinear())
         return false;
 
     if (m.imageOptimalTiling && m.imageOptimalTiling->mipLevels() > 1)
-        return false;
+    {
+        if (!mustGenerateMipmaps)
+            m.imageOptimalTiling.reset();
+        else
+            return false;
+    }
 
     if (m_instance->checkLinearTilingSampledImageSupported(m.image))
         return false;
