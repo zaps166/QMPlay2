@@ -83,7 +83,7 @@ private:
     class SpeedProgressWidget : public QWidget
     {
     public:
-        ~SpeedProgressWidget() final = default;
+        ~SpeedProgressWidget() = default;
 
         QLabel *speedL;
         QProgressBar *progressB;
