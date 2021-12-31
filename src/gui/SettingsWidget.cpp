@@ -910,6 +910,8 @@ void SettingsWidget::createRendererSettings()
 
 #ifdef Q_OS_WIN
         auto noExclusiveFullScreenDevIDs = std::make_shared<QSet<QByteArray>>();
+#endif
+        auto noFiltersDevIDs = std::make_shared<QSet<QByteArray>>();
 
         connect(devices, qOverload<int>(&QComboBox::currentIndexChanged),
                 this, [=](int idx) {
@@ -917,9 +919,15 @@ void SettingsWidget::createRendererSettings()
                 return;
             if (idx == 0)
                 idx = 1;
+
+            const bool filtersEnabled = !noFiltersDevIDs->contains(devices->itemData(idx).toByteArray());
+            gpuDeint->setEnabled(filtersEnabled);
+            forceYadif->setEnabled(filtersEnabled);
+
+#ifdef Q_OS_WIN
             bypassCompositor->setEnabled(!noExclusiveFullScreenDevIDs->contains(devices->itemData(idx).toByteArray()));
-        });
 #endif
+        });
 
         connect(rendererStacked, &QStackedWidget::currentChanged,
                 this, [=](int idx) {
@@ -941,6 +949,8 @@ void SettingsWidget::createRendererSettings()
                         noExclusiveFullScreenDevIDs->insert(id);
                 }
 #endif
+                if (!QmVk::Instance::checkFiltersSupported(physicalDevice))
+                    noFiltersDevIDs->insert(id);
                 devices->addItem(static_cast<const char *>(properties.deviceName), id);
                 if (idIdx == 0 && !storedID.isEmpty() && storedID == id)
                     idIdx = devices->count();

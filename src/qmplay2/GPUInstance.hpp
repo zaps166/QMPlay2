@@ -38,6 +38,8 @@ public:
 
     virtual VideoWriter *createOrGetVideoOutput() = 0;
 
+    virtual bool checkFiltersSupported() const;
+
     std::shared_ptr<HWDecContext> getHWDecContext() const;
 
     template<typename T>

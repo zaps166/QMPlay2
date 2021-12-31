@@ -49,6 +49,8 @@ public: // Helpers
 
     static QByteArray getPhysicalDeviceID(const vk::PhysicalDeviceProperties &properties);
 
+    static bool checkFiltersSupported(const shared_ptr<PhysicalDevice> &physicalDevice);
+
 public:
     static shared_ptr<Instance> create();
 
@@ -66,6 +68,8 @@ public:
     QMPlay2CoreClass::Renderer renderer() const override;
 
     VideoWriter *createOrGetVideoOutput() override;
+
+    bool checkFiltersSupported() const override;
 
 public:
     inline QVulkanInstance *qVulkanInstance();

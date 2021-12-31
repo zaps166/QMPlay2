@@ -77,6 +77,11 @@ void GPUInstance::prepareDestroy()
 {
 }
 
+bool GPUInstance::checkFiltersSupported() const
+{
+    return false;
+}
+
 shared_ptr<HWDecContext> GPUInstance::getHWDecContext() const
 {
     if (m_videoWriter)

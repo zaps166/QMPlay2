@@ -597,7 +597,7 @@ bool CuvidDec::open(StreamInfo &streamInfo)
         }
     }
 
-    if (m_cuvidHwInterop && (!QMPlay2Core.isVulkanRenderer() || !QMPlay2Core.getSettings().getBool("Vulkan/ForceVulkanYadif")))
+    if (m_cuvidHwInterop && (!QMPlay2Core.isVulkanRenderer() || !QMPlay2Core.getSettings().getBool("Vulkan/ForceVulkanYadif") || !QMPlay2Core.gpuInstance()->checkFiltersSupported()))
         m_filter = make_shared<DeintHWPrepareFilter>();
 
     return true;

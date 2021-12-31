@@ -38,6 +38,7 @@
 #   include <opengl/OpenGLHWInterop.hpp>
 #endif
 #ifdef USE_VULKAN
+#   include <vulkan/VulkanInstance.hpp>
 #   include <vulkan/VulkanHWInterop.hpp>
 #   include <vulkan/VulkanYadifDeint.hpp>
 #endif
@@ -199,6 +200,9 @@ void VideoThr::initFilters()
 #ifdef USE_VULKAN
         auto enableVulkanDeint = [&] {
             if (!QMPlay2Core.isVulkanRenderer())
+                return false;
+
+            if (!static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->checkFiltersSupported())
                 return false;
 
             shared_ptr<VideoFilter> deintFilter = make_shared<QmVk::YadifDeint>(

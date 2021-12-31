@@ -137,6 +137,17 @@ QByteArray Instance::getPhysicalDeviceID(const vk::PhysicalDeviceProperties &pro
     return QString("%1:%2").arg(properties.vendorID).arg(properties.deviceID).toLatin1().toBase64();
 }
 
+bool Instance::checkFiltersSupported(const shared_ptr<PhysicalDevice> &physicalDevice)
+{
+    if (!physicalDevice)
+        return false;
+
+    if (!physicalDevice->getFeatures().shaderStorageImageWriteWithoutFormat)
+        return false;
+
+    return true;
+}
+
 shared_ptr<Instance> Instance::create()
 {
     auto instance = make_shared<Instance>(Priv());
@@ -221,6 +232,11 @@ VideoWriter *Instance::createOrGetVideoOutput()
     return m_videoWriter;
 }
 
+bool Instance::checkFiltersSupported() const
+{
+    return checkFiltersSupported(m_physicalDevice);
+}
+
 void Instance::obtainPhysicalDevice()
 {
     const auto supportedPhysicalDevices = enumeratePhysicalDevices(true);
@@ -263,10 +279,13 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
 #endif
 
+    auto requiredFeatures = requiredPhysicalDeviceFeatures();
+    requiredFeatures.shaderStorageImageWriteWithoutFormat = physicalDevice->getFeatures().shaderStorageImageWriteWithoutFormat;
+
     return AbstractInstance::createDevice(
         physicalDevice,
         s_queueFlags,
-        requiredPhysicalDeviceFeatures(),
+        requiredFeatures,
         physicalDeviceExtensions,
         2
     );
@@ -545,7 +564,6 @@ vk::PhysicalDeviceFeatures Instance::requiredPhysicalDeviceFeatures()
 {
     vk::PhysicalDeviceFeatures requiredFeatures;
     requiredFeatures.robustBufferAccess = true;
-    requiredFeatures.shaderStorageImageWriteWithoutFormat = true;
     return requiredFeatures;
 }
 vector<const char *> Instance::requiredPhysicalDeviceExtenstions()
