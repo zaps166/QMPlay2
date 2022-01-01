@@ -43,6 +43,10 @@
 #   include <vulkan/VulkanYadifDeint.hpp>
 #endif
 
+extern "C" {
+    #include <libavutil/mem.h>
+}
+
 using Functions::gettime;
 using namespace std;
 
@@ -802,9 +806,9 @@ void VideoThr::screenshot(Frame videoFrame)
                 videoFrame.clear();
         }
 #endif
-        auto imgData = new uint8_t[W * H * 4 + QMPlay2CoreClass::getCPUMaxAlign()];
+        auto imgData = reinterpret_cast<uint8_t *>(av_malloc(W * H * 4));
         img = QImage(imgData, W, H, QImage::Format_RGB32, [](void *ptr) {
-            delete[] reinterpret_cast<uint8_t *>(ptr);
+            av_free(ptr);
         }, imgData);
         if (!imgScaler.scale(videoFrame, imgData))
             img = QImage();

@@ -25,6 +25,10 @@
 #include <QCoreApplication>
 #include <QPainter>
 
+extern "C" {
+    #include <libavutil/mem.h>
+}
+
 Drawable::Drawable(QPainterWriter &writer) :
     writer(writer)
 {
@@ -49,9 +53,9 @@ void Drawable::draw(const Frame &newVideoFrame, bool canRepaint, bool entireScre
     if (imgScaler.create(videoFrame, m_scaleByQt ? -1 : imgW, m_scaleByQt ? -1 : imgH))
     {
         auto createImg = [this](int w, int h) {
-            auto imgData = new uint8_t[w * h * 4 + QMPlay2CoreClass::getCPUMaxAlign()];
+            auto imgData = reinterpret_cast<uint8_t *>(av_malloc(w * h * 4));
             img = QImage(imgData, w, h, QImage::Format_RGB32, [](void *ptr) {
-                delete[] reinterpret_cast<uint8_t *>(ptr);
+                av_free(ptr);
             }, imgData);
         };
         if (m_scaleByQt && (img.width() != videoFrame.width() || img.height() != videoFrame.height()))
