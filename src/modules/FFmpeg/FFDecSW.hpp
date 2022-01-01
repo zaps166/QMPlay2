@@ -26,6 +26,10 @@
 #   include <vulkan/VulkanBufferPool.hpp>
 #endif
 
+extern "C" {
+    #include <libavcodec/avcodec.h>
+}
+
 class Subtitle : public AVSubtitle
 {
 public:

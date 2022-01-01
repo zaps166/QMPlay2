@@ -22,6 +22,10 @@
 
 #include <cmath>
 
+extern "C" {
+    #include <libavutil/avutil.h>
+}
+
 Packet::Packet()
     : m_packet(av_packet_alloc())
 {

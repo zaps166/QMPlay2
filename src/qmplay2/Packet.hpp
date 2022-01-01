@@ -21,7 +21,8 @@
 #include <QMPlay2Lib.hpp>
 
 extern "C" {
-    #include <libavcodec/avcodec.h>
+    #include <libavcodec/packet.h>
+    #include <libavutil/rational.h>
 }
 
 class QMPLAY2SHAREDLIB_EXPORT Packet
