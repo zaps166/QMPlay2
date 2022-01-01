@@ -1,6 +1,6 @@
 ﻿/*
     QMPlay2 is a video and audio player.
-    Copyright (C) 2010-2021  Błażej Szczygieł
+    Copyright (C) 2010-2022  Błażej Szczygieł
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published

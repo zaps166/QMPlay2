@@ -149,7 +149,7 @@ elseif(APPLE)
     set(MACOSX_BUNDLE_ICON_FILE "QMPlay2.icns")
     set(MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME})
     set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${QMPLAY2_VERSION})
-    set(MACOSX_BUNDLE_COPYRIGHT "Copyright (C) 2010-2021  Błażej Szczygieł")
+    set(MACOSX_BUNDLE_COPYRIGHT "Copyright (C) 2010-2022  Błażej Szczygieł")
 
     set(ICNS_FILE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/macOS/QMPlay2.icns")
     set_source_files_properties(${ICNS_FILE_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
