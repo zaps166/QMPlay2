@@ -269,6 +269,8 @@ shared_ptr<Image> ImagePool::takeCommon(Config &config)
                 config.format,
                 config.paddingHeight,
                 config.deviceLocal,
+                false,
+                false,
                 config.exportMemoryTypes
             );
         }
