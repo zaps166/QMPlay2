@@ -68,9 +68,9 @@ void FFDec::clearFrames()
 }
 
 
-AVCodec *FFDec::init(StreamInfo &streamInfo)
+const AVCodec *FFDec::init(StreamInfo &streamInfo)
 {
-    AVCodec *codec = avcodec_find_decoder_by_name(streamInfo.codec_name);
+    const AVCodec *codec = avcodec_find_decoder_by_name(streamInfo.codec_name);
     if (codec)
     {
         codec_ctx = avcodec_alloc_context3(codec);
@@ -79,7 +79,7 @@ AVCodec *FFDec::init(StreamInfo &streamInfo)
     }
     return codec;
 }
-bool FFDec::openCodec(AVCodec *codec)
+bool FFDec::openCodec(const AVCodec *codec)
 {
     if (avcodec_open2(codec_ctx, codec, nullptr))
         return false;

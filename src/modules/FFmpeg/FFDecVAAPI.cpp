@@ -186,7 +186,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
         return false;
     }
 
-    AVCodec *codec = init(streamInfo);
+    const AVCodec *codec = init(streamInfo);
     if (!codec || !hasHWAccel("vaapi"))
         return false;
 

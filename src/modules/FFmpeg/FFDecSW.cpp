@@ -394,7 +394,7 @@ bool FFDecSW::decodeSubtitle(const QVector<Packet> &encodedPackets, double pos, 
 
 bool FFDecSW::open(StreamInfo &streamInfo)
 {
-    AVCodec *codec = FFDec::init(streamInfo);
+    const AVCodec *codec = FFDec::init(streamInfo);
     if (!codec)
         return false;
     if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO)
