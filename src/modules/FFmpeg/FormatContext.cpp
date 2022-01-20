@@ -168,10 +168,10 @@ private:
 class OpenFmtCtxThr : public OpenThr
 {
     AVFormatContext *m_formatCtx;
-    const AVInputFormat *m_inputFmt;
+    AVInputFormat *m_inputFmt;
 
 public:
-    inline OpenFmtCtxThr(AVFormatContext *formatCtx, const QByteArray &url, const AVInputFormat *inputFmt, AVDictionary *options, std::shared_ptr<AbortContext> &abortCtx) :
+    inline OpenFmtCtxThr(AVFormatContext *formatCtx, const QByteArray &url, AVInputFormat *inputFmt, AVDictionary *options, std::shared_ptr<AbortContext> &abortCtx) :
         OpenThr(url, options, abortCtx),
         m_formatCtx(formatCtx),
         m_inputFmt(inputFmt)
@@ -679,7 +679,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
             return false;
     }
 
-    const AVInputFormat *inputFmt = nullptr;
+    AVInputFormat *inputFmt = nullptr;
     if (scheme == "file")
         isLocal = true;
     else

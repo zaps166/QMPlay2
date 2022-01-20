@@ -144,7 +144,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo)
     if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
         return false;
 
-    const AVCodec *codec = init(streamInfo);
+    AVCodec *codec = init(streamInfo);
     if (!codec || !hasHWAccel("vdpau"))
         return false;
 
