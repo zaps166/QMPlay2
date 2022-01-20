@@ -70,7 +70,7 @@ void FFDec::clearFrames()
 
 AVCodec *FFDec::init(StreamInfo &streamInfo)
 {
-    AVCodec *codec = avcodec_find_decoder_by_name(streamInfo.codec_name);
+    auto codec = const_cast< AVCodec *>(avcodec_find_decoder_by_name(streamInfo.codec_name));
     if (codec)
     {
         codec_ctx = avcodec_alloc_context3(codec);

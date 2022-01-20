@@ -431,7 +431,7 @@ bool CuvidDec::open(StreamInfo &streamInfo)
     if (streamInfo.codec_type != AVMEDIA_TYPE_VIDEO)
         return false;
 
-    AVCodec *avCodec = avcodec_find_decoder_by_name(streamInfo.codec_name);
+    auto avCodec = const_cast<AVCodec *>(avcodec_find_decoder_by_name(streamInfo.codec_name));
     if (!avCodec)
         return false;
 

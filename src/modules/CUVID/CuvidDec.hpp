@@ -26,6 +26,10 @@
 #include <QCoreApplication>
 #include <QQueue>
 
+extern "C" {
+    #include <libavcodec/bsf.h>
+}
+
 class CuvidHWInterop;
 class VideoWriter;
 
