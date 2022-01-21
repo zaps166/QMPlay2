@@ -1095,7 +1095,8 @@ void Window::loadImage()
             m.image = Image::createLinear(
                 m.device,
                 vk::Extent2D(m_imgSize.width(), m_imgSize.height()),
-                newFormat
+                newFormat,
+                Image::MemoryPropertyPreset::PreferHostOnly
             );
         }
 

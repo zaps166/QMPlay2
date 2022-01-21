@@ -267,8 +267,10 @@ shared_ptr<Image> ImagePool::takeCommon(Config &config)
                 config.device,
                 config.size,
                 config.format,
+                config.deviceLocal
+                    ? Image::MemoryPropertyPreset::PreferNoHostAccess
+                    : Image::MemoryPropertyPreset::PreferCachedHostOnly,
                 config.paddingHeight,
-                config.deviceLocal,
                 false,
                 false,
                 config.exportMemoryTypes
