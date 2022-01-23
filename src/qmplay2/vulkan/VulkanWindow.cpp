@@ -127,8 +127,8 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     {
 #if !defined(Q_OS_WIN)
         case 0x8086: // Intel
-#endif
         case 0x1002: // AMD
+#endif
         case 0x10de: // NVIDIA
             break;
         default:
