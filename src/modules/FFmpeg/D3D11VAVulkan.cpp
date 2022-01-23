@@ -94,6 +94,7 @@ D3D11VAVulkan::D3D11VAVulkan(AVBufferRef *hwDeviceBufferRef, bool zeroCopyAllowe
             if (zeroCopyAllowed)
                 m_zeroCopy = true;
             break;
+        case 0x1002: // AMD
         case 0x10de: // NVIDIA
             // Mapping tiled images (especially small tiled images) doesn't work properly here,
             // so copy the image into a linear buffer and then map it as a linear image.
