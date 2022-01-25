@@ -462,7 +462,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
                 if (extension)
                     *extension = youTubeVideo[1];
             }
-            youTubeDl.reset();
+//             youTubeDl.reset();
         }
     }
     else if (prefix == "youtube-dl")
@@ -1287,6 +1287,11 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         result += ext;
     }
     result += title;
+
+    const auto description = o["description"];
+    if (description != QJsonValue::Undefined) {
+        youTubeDL->setDescription(o["description"].toString());
+    }
 
     return result;
 }

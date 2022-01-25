@@ -454,3 +454,13 @@ void YouTubeDL::startProcess(QStringList args)
 
     m_process.start(program, args);
 }
+
+void YouTubeDL::setDescription(const QString &desc)
+{
+    m_description = desc;
+}
+
+const QString YouTubeDL::description()
+{
+    return m_description;
+}

@@ -44,6 +44,8 @@ public:
 
     QStringList exec(const QString &url, const QStringList &args, QString *silentErr = nullptr, bool rawOutput = false);
 
+    void setDescription(const QString &desc);
+    const QString description();
 private:
     void abort() override;
 
@@ -65,4 +67,5 @@ private:
     IOController<NetworkReply> m_reply;
     QProcess m_process;
     bool m_aborted;
+    QString m_description;
 };

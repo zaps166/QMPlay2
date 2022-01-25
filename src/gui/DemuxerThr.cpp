@@ -28,6 +28,7 @@
 #include <Demuxer.hpp>
 #include <Decoder.hpp>
 #include <Reader.hpp>
+#include <YouTubeDL.hpp>
 
 #include <QCryptographicHash>
 #include <QCoreApplication>
@@ -792,6 +793,7 @@ void DemuxerThr::addSubtitleStream(bool currentPlaying, QString &subtitlesStream
         streamMenuText.push_back(" - " + title);
     addStreamsMenuString(streamsMenu, streamCountStr, streamLink, currentPlaying, streamMenuText);
 }
+
 void DemuxerThr::emitInfo()
 {
     QString info;
@@ -857,6 +859,19 @@ void DemuxerThr::emitInfo()
     if (demuxer->bitrate() > 0)
         info += "<b>" + tr("Bitrate") + ":</b> " + QString::number(demuxer->bitrate()) + "kbps<br/>";
     info += "<b>" + tr("Format") + ":</b> " + demuxer->name();
+    //description
+    auto youTubeDL = ioCtrl.toPtr<YouTubeDL>();
+    if (youTubeDL && *youTubeDL) {
+        auto desc = (*youTubeDL)->description().split("\n");
+        if (!desc.isEmpty()) {
+            auto line = desc.takeFirst();
+            info += "<br><b>" + tr("Description") + ":</b> " + line;
+            while (!desc.isEmpty()) {
+                line = desc.takeFirst();
+                info += "<br>&nbsp;&nbsp;" + line;
+            }
+        }
+    }
 
     if (!demuxer->image().isNull())
         info += "<br/><br/><a href='save_cover'>" + tr("Save cover picture") + "</a>";
