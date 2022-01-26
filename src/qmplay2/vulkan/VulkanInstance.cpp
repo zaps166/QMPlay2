@@ -367,7 +367,7 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
         const auto &fmtProps = physicalDevice->getFormatPropertiesCached(format);
         if (img)
         {
-            if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage)))
+            if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage | vk::FormatFeatureFlagBits::eSampledImageFilterLinear)))
                 errors.push_back(QString::fromStdString("Missing optimal tiling sampled or storage image for format: " + vk::to_string(format)));
         }
         if (buff)
@@ -472,7 +472,7 @@ void Instance::fillSupportedFormats()
 
     auto checkImageFormat = [this](vk::Format format) {
         const auto &fmtProps = m_physicalDevice->getFormatPropertiesCached(format);
-        if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage)))
+        if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage | vk::FormatFeatureFlagBits::eSampledImageFilterLinear)))
             return false;
         return true;
     };
