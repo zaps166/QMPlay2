@@ -431,11 +431,11 @@
     </message>
     <message>
         <source>Bottom field first</source>
-        <translation type="unfinished"></translation>
+        <translation>Najprv spodné pole</translation>
     </message>
     <message>
         <source>Top field first</source>
-        <translation type="unfinished"></translation>
+        <translation>Najprv vrchné pole</translation>
     </message>
 </context>
 <context>
@@ -1160,7 +1160,7 @@
     </message>
     <message>
         <source>Some key shortcuts are duplicated!</source>
-        <translation type="unfinished"></translation>
+        <translation>Niektoré klávesové skratky sa opakujú!</translation>
     </message>
 </context>
 <context>
@@ -1307,11 +1307,11 @@
     </message>
     <message>
         <source>Next audio stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Ďalší audio prúd</translation>
     </message>
     <message>
         <source>Next subtitles stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Ďalší titulkový prúd</translation>
     </message>
 </context>
 <context>
@@ -1816,7 +1816,7 @@
     </message>
     <message>
         <source>Preferred video codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Uprednostňovaný videokodek</translation>
     </message>
 </context>
 <context>
@@ -2319,7 +2319,7 @@
     </message>
     <message>
         <source>Amplify (no metadata)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zosilniť (žiadne metadáta)</translation>
     </message>
 </context>
 <context>
@@ -2824,7 +2824,7 @@ QMPlay2 nebude zväčšovať ikony!</translation>
     </message>
     <message>
         <source>Show related</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázať podobné</translation>
     </message>
 </context>
 <context>
