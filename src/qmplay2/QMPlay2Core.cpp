@@ -687,7 +687,7 @@ QMPlay2CoreClass::Renderer QMPlay2CoreClass::renderer() const
 bool QMPlay2CoreClass::isGlOnWindow() const
 {
 #ifdef USE_OPENGL
-    return (isGlOnWindowForced() || settings->getBool("OpenGL/OnWindow"));
+    return (renderer() == QMPlay2CoreClass::Renderer::OpenGL) && (isGlOnWindowForced() || settings->getBool("OpenGL/OnWindow"));
 #else
     return false;
 #endif
