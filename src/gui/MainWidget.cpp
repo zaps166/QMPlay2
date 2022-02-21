@@ -1045,10 +1045,10 @@ void MainWidget::toggleCompactView()
         videoDock->setLoseHeight(0);
         isCompactView = false;
 
+        videoDock->fullScreen(false);
+
         restoreState(dockWidgetState);
         dockWidgetState.clear();
-
-        videoDock->fullScreen(false);
 
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
         menuBar->setVisible(!hideMenuAct->isChecked());
@@ -1187,13 +1187,14 @@ void MainWidget::toggleFullScreen()
 #ifdef Q_OS_WIN
         QCoreApplication::processEvents();
 #endif
+
+        videoDock->fullScreen(false);
+
         restoreState(dockWidgetState);
         dockWidgetState.clear();
 
         if (!visible) //jeżeli okno było wcześniej ukryte, to ma je znowu ukryć
             toggleVisibility();
-
-        videoDock->fullScreen(false);
 
         infoDock->setFeatures(QDockWidget::AllDockWidgetFeatures);
         playlistDock->setFeatures(QDockWidget::AllDockWidgetFeatures);
