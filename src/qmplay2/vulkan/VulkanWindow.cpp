@@ -50,10 +50,6 @@
 
 #include <cmath>
 
-#if defined Q_OS_MACOS || defined Q_OS_WIN //QTBUG-50505
-    #define PASS_EVENTS_TO_PARENT
-#endif
-
 namespace QmVk {
 
 struct FrameProps
@@ -117,6 +113,7 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     , m_vkHwInterop(hwInterop)
     , m_instance(static_pointer_cast<Instance>(QMPlay2Core.gpuInstance()))
     , m_physicalDevice(m_instance->physicalDevice())
+    , m_passEventsToParent(QGuiApplication::platformName() != "xcb")
     , m_videoPipelineSpecializationData(sizeof(VideoPipelineSpecializationData) / sizeof(int))
     , m_frameProps(make_unique<FrameProps>())
 {
@@ -136,9 +133,8 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
             break;
     }
 
-#ifndef PASS_EVENTS_TO_PARENT
-    setFlags(Qt::WindowTransparentForInput);
-#endif
+    if (!m_passEventsToParent)
+        setFlags(Qt::WindowTransparentForInput);
 
     connect(qGuiApp, &QGuiApplication::applicationStateChanged,
             this, [this](Qt::ApplicationState state) {
@@ -147,7 +143,8 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     });
 
     m_widget = QWidget::createWindowContainer(this);
-    m_widget->setAttribute(Qt::WA_NativeWindow);
+    if (!QGuiApplication::platformName().contains("wayland"))
+        m_widget->setAttribute(Qt::WA_NativeWindow);
     m_widget->grabGesture(Qt::PinchGesture);
     m_widget->installEventFilter(this);
     m_widget->setMouseTracking(true);
@@ -1387,7 +1384,6 @@ bool Window::event(QEvent *e)
                     break;
             }
             break;
-#ifdef PASS_EVENTS_TO_PARENT
         case QEvent::MouseButtonPress:
         case QEvent::MouseButtonRelease:
         case QEvent::MouseButtonDblClick:
@@ -1407,10 +1403,11 @@ bool Window::event(QEvent *e)
         case QEvent::TouchEnd:
         case QEvent::InputMethodQuery:
         case QEvent::TouchCancel:
-            return QCoreApplication::sendEvent(parent(), e);
+            if (m_passEventsToParent)
+                return QCoreApplication::sendEvent(parent(), e);
         case QEvent::Wheel:
-            return QCoreApplication::sendEvent(const_cast<QWidget *>(QMPlay2Core.getVideoDock()), e);
-#endif
+            if (m_passEventsToParent)
+                return QCoreApplication::sendEvent(const_cast<QWidget *>(QMPlay2Core.getVideoDock()), e);
         default:
             break;
     }
