@@ -118,5 +118,5 @@ QList<QByteArray> Playlist::readLines()
         data.clear();
     data.append(reader->read(reader->size() - reader->pos()));
 
-    return data.replace('\r', QByteArray()).split('\n');
+    return data.replace('\r', '\n').split('\n');
 }
