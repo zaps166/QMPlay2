@@ -502,6 +502,12 @@ bool VAAPI::checkCodec(const char *codecName) const
         ;
     }
 #endif
+#if VA_VERSION_HEX >= 0x270000 // 1.7.0
+    else if (qstrcmp(codecName, "av1") == 0)
+    {
+        return vaProfiles.contains(VAProfileAV1Profile0) || vaProfiles.contains(VAProfileAV1Profile1);
+    }
+#endif
     else if (qstrcmp(codecName, "mpeg2video") == 0)
     {
         return vaProfiles.contains(VAProfileMPEG2Main)

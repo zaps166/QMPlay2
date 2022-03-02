@@ -68,6 +68,8 @@ Decoder *Decoder::create(
         Decoder *decoder = (Decoder *)module->createInstance(moduleInfo.name);
         if (!decoder)
             continue;
+
+        const auto origCodecName = streamInfo.codec_name;
         if (decoder->open(streamInfo))
         {
             if (modNameOutput)
@@ -75,6 +77,7 @@ Decoder *Decoder::create(
             return decoder;
         }
         delete decoder;
+        streamInfo.codec_name = origCodecName;
     }
     return nullptr;
 }

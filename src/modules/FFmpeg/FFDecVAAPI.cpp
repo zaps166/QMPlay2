@@ -186,6 +186,9 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
         return false;
     }
 
+    if (streamInfo.codec_name == "libdav1d")
+        streamInfo.codec_name = "av1";
+
     AVCodec *codec = init(streamInfo);
     if (!codec || !hasHWAccel("vaapi"))
         return false;
