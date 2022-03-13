@@ -453,7 +453,7 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
         {
             auto &youTubeDl = ioCtrl->toRef<YouTubeDL>();
             const QStringList youTubeVideo = getYouTubeVideo(param, url, youTubeDl);
-            if (youTubeVideo.count() == 3)
+            if (youTubeVideo.count() == 4)
             {
                 if (stream_url)
                     *stream_url = youTubeVideo[0];
@@ -461,6 +461,8 @@ void YouTube::convertAddress(const QString &prefix, const QString &url, const QS
                     *name = youTubeVideo[2];
                 if (extension)
                     *extension = youTubeVideo[1];
+                if (!youTubeVideo[3].isEmpty())
+                    QMPlay2Core.addDescriptionForUrl(youTubeVideo[0], youTubeVideo[3]);
             }
             youTubeDl.reset();
         }
@@ -1287,6 +1289,8 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         result += ext;
     }
     result += title;
+
+    result += o["description"].toString();
 
     return result;
 }

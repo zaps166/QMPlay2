@@ -696,7 +696,7 @@ void DemuxerThr::updateCoverAndPlaying(bool doCompare)
     const QString prevTitle  = title;
     const QString prevArtist = artist;
     const QString prevAlbum  = album;
-    QString lyrics;
+    QString lyrics = QMPlay2Core.getDescriptionForUrl(url);
     title.clear();
     artist.clear();
     album.clear();
@@ -715,7 +715,8 @@ void DemuxerThr::updateCoverAndPlaying(bool doCompare)
                 album = tag.second;
                 break;
             case QMPLAY2_TAG_LYRICS:
-                lyrics = tag.second;
+                if (lyrics.isEmpty())
+                    lyrics = tag.second;
                 break;
             default:
                 break;

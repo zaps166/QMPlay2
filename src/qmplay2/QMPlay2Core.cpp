@@ -655,6 +655,16 @@ QString QMPlay2CoreClass::getNameForUrl(const QString &url)
     return getDataFromHash(url, namesForUrl);
 }
 
+void QMPlay2CoreClass::addDescriptionForUrl(const QString &url, const QString &description, const bool removeAfterUse)
+{
+    if (!url.isEmpty())
+        setDataToHash(url, description.toUtf8(), removeAfterUse, descriptionsForUrl);
+}
+QString QMPlay2CoreClass::getDescriptionForUrl(const QString &url)
+{
+    return getDataFromHash(url, descriptionsForUrl);
+}
+
 void QMPlay2CoreClass::loadPlaylistGroup(const QString &name, const QMPlay2CoreClass::GroupEntries &entries, bool enqueue)
 {
     if (!entries.isEmpty())

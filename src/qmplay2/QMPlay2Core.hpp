@@ -204,6 +204,9 @@ public:
     void addNameForUrl(const QString &url, const QString &name, const bool removeAfterUse = true);
     QString getNameForUrl(const QString &url);
 
+    void addDescriptionForUrl(const QString &url, const QString &description, const bool removeAfterUse = true);
+    QString getDescriptionForUrl(const QString &url);
+
     void loadPlaylistGroup(const QString &name, const GroupEntries &entries, bool enqueue = false);
 
     QString rendererName() const;
@@ -256,7 +259,7 @@ private:
     {
         mutable QMutex mutex;
         QHash<QString, QPair<QByteArray, bool>> data;
-    } cookies, resources, rawHeaders, namesForUrl;
+    } cookies, resources, rawHeaders, namesForUrl, descriptionsForUrl;
 
     std::shared_ptr<GPUInstance> m_gpuInstance;
 
