@@ -113,7 +113,8 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     , m_vkHwInterop(hwInterop)
     , m_instance(static_pointer_cast<Instance>(QMPlay2Core.gpuInstance()))
     , m_physicalDevice(m_instance->physicalDevice())
-    , m_passEventsToParent(QGuiApplication::platformName() != "xcb")
+    , m_platformName(QGuiApplication::platformName())
+    , m_passEventsToParent(m_platformName != "xcb" && m_platformName != "android")
     , m_videoPipelineSpecializationData(sizeof(VideoPipelineSpecializationData) / sizeof(int))
     , m_frameProps(make_unique<FrameProps>())
 {
@@ -143,7 +144,7 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     });
 
     m_widget = QWidget::createWindowContainer(this);
-    if (!QGuiApplication::platformName().contains("wayland"))
+    if (!m_platformName.contains("wayland") && !m_platformName.contains("android"))
         m_widget->setAttribute(Qt::WA_NativeWindow);
     m_widget->grabGesture(Qt::PinchGesture);
     m_widget->installEventFilter(this);

@@ -159,6 +159,8 @@ private:
     const shared_ptr<Instance> m_instance;
     const shared_ptr<PhysicalDevice> m_physicalDevice;
 
+    const QString m_platformName;
+
     QTimer m_initResourcesTimer;
 
     bool m_passEventsToParent = false;
