@@ -471,7 +471,7 @@ void Window::render()
         }
 
         if (m.videoPipeline)
-            m.videoPipeline->prepareImages(m.commandBuffer);
+            m.videoPipeline->prepareObjects(m.commandBuffer);
 
         bool osdChanged = false;
 
