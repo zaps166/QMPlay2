@@ -447,6 +447,13 @@ void YouTubeDL::startProcess(QStringList args)
                 args.prepend(program);
                 program = pythonCmd;
             }
+#ifdef Q_OS_MACOS
+            else if (QFileInfo("/usr/local/bin/" + pythonCmd).isExecutable())
+            {
+                args.prepend(program);
+                program = "/usr/local/bin/" + pythonCmd;
+            }
+#endif
         }
         ytDlFile.close();
     }
