@@ -72,11 +72,11 @@ sudo dnf install qmplay2
 You can change the default audio and video quality of YouTube contents. Click on the "Settings" icon on the left of the search bar, change the order of audio and/or video quality priorities and apply changes.
 If the chosen quality can't be found on YouTube content, QMPlay2 will try using the next entry on the quality list.
 
-YouTube videos don't work without external "youtube-dl" software, so QMPlay2 will download it automatically. You can remove downloaded "youtube-dl" from settings.
+YouTube videos don't work without external "yt-dlp" software, so QMPlay2 will download it automatically. You can remove downloaded "yt-dlp" from settings.
 
 #### Windows
 
-- Make sure that antivirus or firewall doesn't block "youtube-dl" and doesn't block executing external applications!
+- Make sure that antivirus or firewall doesn't block "yt-dlp" and doesn't block executing external applications!
 
 ## Spherical view
 
