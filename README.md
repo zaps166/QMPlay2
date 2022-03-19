@@ -77,6 +77,7 @@ YouTube videos don't work without external "yt-dlp" software, so QMPlay2 will do
 #### Windows
 
 - Make sure that antivirus or firewall doesn't block "yt-dlp" and doesn't block executing external applications!
+- Vulkan on AMD Radeon GPUs might not switch to full screen exclusive.
 
 ## Spherical view
 
