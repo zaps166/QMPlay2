@@ -840,10 +840,10 @@ QByteArray Functions::decryptAes256Cbc(const QByteArray &password, const QByteAr
 
     QLibrary libssl;
 #if defined(Q_OS_WIN64)
-    libssl.setFileName("libcrypto-1_1-x64");
+    libssl.setFileName("libcrypto-3-x64");
     libssl.load();
 #elif defined(Q_OS_WIN32)
-    libssl.setFileName("libcrypto-1_1");
+    libssl.setFileName("libcrypto-3");
     libssl.load();
 #else
     libssl.setFileName("ssl");
