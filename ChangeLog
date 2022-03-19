@@ -1,3 +1,15 @@
+Changes in QMPlay2 22.03.19:
+    - fix possible crashes in software video output and screenshots,
+    - fix yt-dlp on macOS where python3 can be in "/usr/local/bin",
+    - Vulkan can be now used on more devices (including R-Pi),
+    - fix some Vulkan issues on AMD Radeon on Windows,
+    - fix building with PipeWire older then 0.3.33,
+    - fix reading playlists with "\r" line ending,
+    - show YouTube description in Lyrics panel,
+    - fix compilation with FFmpeg 5.0,
+    - VA-API AV1 video decoder,
+    - other minor fixes,
+
 Changes in QMPlay2 21.12.24:
     - add audio, video, subtitles streams, programs and chapters into menu,
     - add key shortcuts to change audio and subtitles streams,
