@@ -468,66 +468,98 @@ bool VAAPI::checkCodec(const char *codecName) const
     // Optional check - FFmpeg opens VA-API when first frame is given to the codec,
     // so check here if codec is supported to not open VideoWriter unnecessarily.
 
+    enum class VAProfileQMPlay2
+    {
+        MPEG2Simple                = 0,
+        MPEG2Main                  = 1,
+        MPEG4Simple                = 2,
+        MPEG4AdvancedSimple        = 3,
+        MPEG4Main                  = 4,
+        H264Main                   = 6,
+        H264High                   = 7,
+        VC1Simple                  = 8,
+        VC1Main                    = 9,
+        VC1Advanced                = 10,
+        H263Baseline               = 11,
+        JPEGBaseline               = 12,
+        H264ConstrainedBaseline    = 13,
+        VP8Version0_3              = 14,
+        H264MultiviewHigh          = 15,
+        H264StereoHigh             = 16,
+        HEVCMain                   = 17,
+        HEVCMain10                 = 18,
+        VP9Profile0                = 19,
+        VP9Profile1                = 20,
+        VP9Profile2                = 21,
+        VP9Profile3                = 22,
+        HEVCMain12                 = 23,
+        HEVCMain422_10             = 24,
+        HEVCMain422_12             = 25,
+        HEVCMain444                = 26,
+        HEVCMain444_10             = 27,
+        HEVCMain444_12             = 28,
+        HEVCSccMain                = 29,
+        HEVCSccMain10              = 30,
+        HEVCSccMain444             = 31,
+        AV1Profile0                = 32,
+        AV1Profile1                = 33,
+        HEVCSccMain444_10          = 34,
+    };
+    static_assert(sizeof(VAProfile) == sizeof(VAProfileQMPlay2), "VAProfile size missmatch");
+
     int numProfiles = vaMaxNumProfiles(VADisp);
-    QVector<VAProfile> vaProfiles(numProfiles);
-    if (vaQueryConfigProfiles(VADisp, vaProfiles.data(), &numProfiles) != VA_STATUS_SUCCESS)
+    QVector<VAProfileQMPlay2> vaProfiles(numProfiles);
+    if (vaQueryConfigProfiles(VADisp, reinterpret_cast<VAProfile *>(vaProfiles.data()), &numProfiles) != VA_STATUS_SUCCESS)
         return false;
     vaProfiles.resize(numProfiles);
 
     if (qstrcmp(codecName, "h264") == 0)
     {
-        return vaProfiles.contains(VAProfileH264High)
-                || vaProfiles.contains(VAProfileH264Main)
-                || vaProfiles.contains(VAProfileH264ConstrainedBaseline);
+        return vaProfiles.contains(VAProfileQMPlay2::H264Main)
+                || vaProfiles.contains(VAProfileQMPlay2::H264High)
+                || vaProfiles.contains(VAProfileQMPlay2::H264ConstrainedBaseline);
     }
-#if VA_VERSION_HEX >= 0x230000 // 1.3.0
     else if (qstrcmp(codecName, "vp8") == 0)
     {
-        return vaProfiles.contains(VAProfileVP8Version0_3);
+        return vaProfiles.contains(VAProfileQMPlay2::VP8Version0_3);
     }
-#endif
-#if VA_VERSION_HEX >= 0x250000 // 1.5.0
     else if (qstrcmp(codecName, "hevc") == 0)
     {
-        return vaProfiles.contains(VAProfileHEVCMain);
+        return vaProfiles.contains(VAProfileQMPlay2::HEVCMain)
+                || vaProfiles.contains(VAProfileQMPlay2::HEVCMain10);
     }
-#endif
-#if VA_VERSION_HEX >= 0x260000 // 1.6.0
     else if (qstrcmp(codecName, "vp9") == 0)
     {
-        return vaProfiles.contains(VAProfileVP9Profile0)
-#   if VA_VERSION_HEX >= 0x270000
-                || vaProfiles.contains(VAProfileVP9Profile2)
-#   endif
-        ;
+        return vaProfiles.contains(VAProfileQMPlay2::VP9Profile0)
+                || vaProfiles.contains(VAProfileQMPlay2::VP9Profile1)
+                || vaProfiles.contains(VAProfileQMPlay2::VP9Profile2)
+                || vaProfiles.contains(VAProfileQMPlay2::VP9Profile3);
     }
-#endif
-#if VA_VERSION_HEX >= 0x270000 // 1.7.0
     else if (qstrcmp(codecName, "av1") == 0)
     {
-        return vaProfiles.contains(VAProfileAV1Profile0) || vaProfiles.contains(VAProfileAV1Profile1);
+        return vaProfiles.contains(VAProfileQMPlay2::AV1Profile0)
+                || vaProfiles.contains(VAProfileQMPlay2::AV1Profile1);
     }
-#endif
     else if (qstrcmp(codecName, "mpeg2video") == 0)
     {
-        return vaProfiles.contains(VAProfileMPEG2Main)
-                || vaProfiles.contains(VAProfileMPEG2Simple);
+        return vaProfiles.contains(VAProfileQMPlay2::MPEG2Simple)
+                || vaProfiles.contains(VAProfileQMPlay2::MPEG2Main);
     }
     else if (qstrcmp(codecName, "mpeg4") == 0)
     {
-        return vaProfiles.contains(VAProfileMPEG4Main)
-                || vaProfiles.contains(VAProfileMPEG4Simple)
-                || vaProfiles.contains(VAProfileMPEG4AdvancedSimple);
+        return vaProfiles.contains(VAProfileQMPlay2::MPEG4Simple)
+                || vaProfiles.contains(VAProfileQMPlay2::MPEG4AdvancedSimple)
+                || vaProfiles.contains(VAProfileQMPlay2::MPEG4Main);
     }
     else if (qstrcmp(codecName, "vc1") == 0 || qstrcmp(codecName, "wmv3") == 0)
     {
-        return vaProfiles.contains(VAProfileVC1Advanced)
-                || vaProfiles.contains(VAProfileVC1Main)
-                || vaProfiles.contains(VAProfileVC1Simple);
+        return vaProfiles.contains(VAProfileQMPlay2::VC1Main)
+                || vaProfiles.contains(VAProfileQMPlay2::VC1Simple)
+                || vaProfiles.contains(VAProfileQMPlay2::VC1Advanced);
     }
     else if (qstrcmp(codecName, "h263") == 0)
     {
-        return vaProfiles.contains(VAProfileH263Baseline);
+        return vaProfiles.contains(VAProfileQMPlay2::H263Baseline);
     }
 
     return false;
