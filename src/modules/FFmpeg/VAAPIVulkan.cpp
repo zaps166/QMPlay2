@@ -110,21 +110,21 @@ void VAAPIVulkan::map(Frame &frame)
             bool isLinear = true;
 
             MemoryObject::FdDescriptors fdDescriptors(vaSurfaceDescr.num_objects);
+            vector<uint64_t> drmFormatModifiers(vaSurfaceDescr.num_objects);
             for (uint32_t i = 0; i < vaSurfaceDescr.num_objects; ++i)
             {
-                if (i == 0)
-                {
-                    // 0x0000000000000000 - linear, 0x00ffffffffffffff - invalid
-                    const auto drmFmtMod = vaSurfaceDescr.objects[i].drm_format_modifier;
-                    if (drmFmtMod != 0ull && drmFmtMod != 0xffffffffffffffull)
-                        isLinear = false;
-                }
-
                 fdDescriptors[i].first = vaSurfaceDescr.objects[i].fd;
                 fdDescriptors[i].second = (vaSurfaceDescr.objects[i].size > 0)
                     ? vaSurfaceDescr.objects[i].size
                     : ::lseek(vaSurfaceDescr.objects[i].fd, 0, SEEK_END)
                 ;
+
+                drmFormatModifiers[i] = vaSurfaceDescr.objects[i].drm_format_modifier;
+                if (drmFormatModifiers[i] == 0x00ffffffffffffffull) // Use invalid format as linear format
+                    drmFormatModifiers[i] = 0;
+
+                if (drmFormatModifiers[i] != 0)
+                    isLinear = false;
             }
 
             vector<vk::DeviceSize> offsets(vaSurfaceDescr.num_layers);
@@ -135,12 +135,31 @@ void VAAPIVulkan::map(Frame &frame)
             {
                 constexpr auto externalMemoryHandleType = vk::ExternalMemoryHandleTypeFlagBits::eDmaBufEXT;
 
+                vk::ImageDrmFormatModifierExplicitCreateInfoEXT imageDrmFormatModifierExplicitCreateInfo;
+                vk::SubresourceLayout drmFormatModifierPlaneLayout;
+
+                auto imageCreateInfoCallback = [&](uint32_t plane, vk::ImageCreateInfo &imageCreateInfo) {
+                    if (plane >= vaSurfaceDescr.num_layers)
+                        throw vk::LogicError("Pitches count and planes count missmatch");
+
+                    imageDrmFormatModifierExplicitCreateInfo.drmFormatModifier = drmFormatModifiers[min<size_t>(plane, drmFormatModifiers.size() - 1)];
+                    imageDrmFormatModifierExplicitCreateInfo.drmFormatModifierPlaneCount = 1;
+                    imageDrmFormatModifierExplicitCreateInfo.pPlaneLayouts = &drmFormatModifierPlaneLayout;
+                    imageDrmFormatModifierExplicitCreateInfo.pNext = imageCreateInfo.pNext;
+
+                    drmFormatModifierPlaneLayout.rowPitch = vaSurfaceDescr.layers[plane].pitch[0];
+
+                    imageCreateInfo.tiling = vk::ImageTiling::eDrmFormatModifierEXT;
+                    imageCreateInfo.pNext = &imageDrmFormatModifierExplicitCreateInfo;
+                };
+
                 vkImage = Image::createExternalImport(
                     device,
                     vk::Extent2D(frame.width(), frame.height()),
                     format,
                     isLinear,
-                    externalMemoryHandleType
+                    externalMemoryHandleType,
+                    imageCreateInfoCallback
                 );
 
                 auto fdCustomData = make_unique<FDCustomData>();
