@@ -277,6 +277,7 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
 #else
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
+    physicalDeviceExtensions.push_back(VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME);
 #endif
 
     auto requiredFeatures = requiredPhysicalDeviceFeatures();
