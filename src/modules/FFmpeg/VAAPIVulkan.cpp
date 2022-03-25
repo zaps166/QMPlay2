@@ -107,10 +107,7 @@ void VAAPIVulkan::map(Frame &frame)
 
         if (exported)
         {
-            bool isLinear = true;
-
             MemoryObject::FdDescriptors fdDescriptors(vaSurfaceDescr.num_objects);
-            vector<uint64_t> drmFormatModifiers(vaSurfaceDescr.num_objects);
             for (uint32_t i = 0; i < vaSurfaceDescr.num_objects; ++i)
             {
                 fdDescriptors[i].first = vaSurfaceDescr.objects[i].fd;
@@ -118,13 +115,6 @@ void VAAPIVulkan::map(Frame &frame)
                     ? vaSurfaceDescr.objects[i].size
                     : ::lseek(vaSurfaceDescr.objects[i].fd, 0, SEEK_END)
                 ;
-
-                drmFormatModifiers[i] = vaSurfaceDescr.objects[i].drm_format_modifier;
-                if (drmFormatModifiers[i] == 0x00ffffffffffffffull) // Use invalid format as linear format
-                    drmFormatModifiers[i] = 0;
-
-                if (drmFormatModifiers[i] != 0)
-                    isLinear = false;
             }
 
             vector<vk::DeviceSize> offsets(vaSurfaceDescr.num_layers);
@@ -142,7 +132,11 @@ void VAAPIVulkan::map(Frame &frame)
                     if (plane >= vaSurfaceDescr.num_layers)
                         throw vk::LogicError("Pitches count and planes count missmatch");
 
-                    imageDrmFormatModifierExplicitCreateInfo.drmFormatModifier = drmFormatModifiers[min<size_t>(plane, drmFormatModifiers.size() - 1)];
+                    auto drmFormatModifier = vaSurfaceDescr.objects[min(plane, vaSurfaceDescr.num_objects - 1)].drm_format_modifier;
+                    if (drmFormatModifier == 0x00ffffffffffffffull) // Use invalid format as linear format
+                        drmFormatModifier = 0;
+
+                    imageDrmFormatModifierExplicitCreateInfo.drmFormatModifier = drmFormatModifier;
                     imageDrmFormatModifierExplicitCreateInfo.drmFormatModifierPlaneCount = 1;
                     imageDrmFormatModifierExplicitCreateInfo.pPlaneLayouts = &drmFormatModifierPlaneLayout;
                     imageDrmFormatModifierExplicitCreateInfo.pNext = imageCreateInfo.pNext;
@@ -157,7 +151,7 @@ void VAAPIVulkan::map(Frame &frame)
                     device,
                     vk::Extent2D(frame.width(), frame.height()),
                     format,
-                    isLinear,
+                    false,
                     externalMemoryHandleType,
                     imageCreateInfoCallback
                 );
