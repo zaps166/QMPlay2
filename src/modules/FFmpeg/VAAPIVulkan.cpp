@@ -154,7 +154,7 @@ void VAAPIVulkan::map(Frame &frame)
                     externalMemoryHandleType
                 );
             }
-            catch (const vk::SystemError &e)
+            catch (const vk::Error &e)
             {
                 QMPlay2Core.logError(QString("VA-API :: %1").arg(e.what()));
                 vkImage.reset();
