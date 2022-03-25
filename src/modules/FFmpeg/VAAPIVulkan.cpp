@@ -123,10 +123,7 @@ void VAAPIVulkan::map(Frame &frame)
             for (uint32_t i = 0; i < vaSurfaceDescr.num_objects; ++i)
             {
                 fdDescriptors[i].first = vaSurfaceDescr.objects[i].fd;
-                fdDescriptors[i].second = (vaSurfaceDescr.objects[i].size > 0)
-                    ? vaSurfaceDescr.objects[i].size
-                    : ::lseek(vaSurfaceDescr.objects[i].fd, 0, SEEK_END)
-                ;
+                fdDescriptors[i].second = ::lseek(vaSurfaceDescr.objects[i].fd, 0, SEEK_END);
             }
 
             vector<vk::DeviceSize> offsets(vaSurfaceDescr.num_layers);
