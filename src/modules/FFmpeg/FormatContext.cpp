@@ -894,9 +894,23 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 
             if (void *sideData = av_stream_get_side_data(stream, AV_PKT_DATA_DISPLAYMATRIX, nullptr))
             {
-                streamInfo->rotation = av_display_rotation_get(reinterpret_cast<const int32_t *>(sideData));
-                if (!qIsNaN(streamInfo->rotation) && !qIsNull(streamInfo->rotation))
-                    streamInfo->rotation += 180.0;
+                const auto rotation = av_display_rotation_get(reinterpret_cast<const int32_t *>(sideData));
+                if (!qIsNaN(rotation))
+                {
+                    switch(qRound(rotation))
+                    {
+                        case -180:
+                        case 180:
+                            streamInfo->rotation = 180.0;
+                            break;
+                        case -90:
+                            streamInfo->rotation = 90.0;
+                            break;
+                        case 90:
+                            streamInfo->rotation = 270.0;
+                            break;
+                    }
+                }
             }
 
             if (void *sideData = av_stream_get_side_data(stream, AV_PKT_DATA_SPHERICAL, nullptr))
