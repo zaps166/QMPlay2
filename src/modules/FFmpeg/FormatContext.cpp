@@ -32,6 +32,7 @@ extern "C"
     #include <libavformat/avformat.h>
     #include <libavutil/replaygain.h>
     #include <libavutil/spherical.h>
+    #include <libavutil/display.h>
     #include <libavutil/pixdesc.h>
 }
 
@@ -891,10 +892,12 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
             if (!stillImage)
                 streamInfo->fps = stream->r_frame_rate;
 
-            bool ok = false;
-            const double rotation = getTag(stream->metadata, "rotate", false).toDouble(&ok);
-            if (ok)
-                streamInfo->rotation = rotation;
+            if (void *sideData = av_stream_get_side_data(stream, AV_PKT_DATA_DISPLAYMATRIX, nullptr))
+            {
+                streamInfo->rotation = av_display_rotation_get(reinterpret_cast<const int32_t *>(sideData));
+                if (!qIsNaN(streamInfo->rotation) && !qIsNull(streamInfo->rotation))
+                    streamInfo->rotation += 180.0;
+            }
 
             if (void *sideData = av_stream_get_side_data(stream, AV_PKT_DATA_SPHERICAL, nullptr))
             {
