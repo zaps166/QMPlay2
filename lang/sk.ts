@@ -73,20 +73,20 @@
 <context>
     <name>Add</name>
     <message>
-        <source>&amp;Address</source>
-        <translation>&amp;Adresu</translation>
+        <source>Address(&amp;A)</source>
+        <translation>Adresu(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Files</source>
-        <translation>&amp;Súbory</translation>
+        <source>Files(&amp;F)</source>
+        <translation>Súbory(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Directory</source>
-        <translation>Ad&amp;resár</translation>
+        <source>Directory(&amp;D)</source>
+        <translation>Adresár(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Add</source>
-        <translation>&amp;Pridať</translation>
+        <source>Add(&amp;A)</source>
+        <translation>Pridať(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -264,20 +264,20 @@
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>&amp;Aspect ratio</source>
-        <translation>&amp;Pomer strán</translation>
+        <source>Aspect ratio(&amp;A)</source>
+        <translation>Pomer strán(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Disabled</source>
-        <translation>&amp;Vypnuté</translation>
+        <source>Disabled(&amp;D)</source>
+        <translation>Vypnuté(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Auto</source>
-        <translation>&amp;Automaticky</translation>
+        <source>Auto(&amp;A)</source>
+        <translation>Automaticky(&amp;A)</translation>
     </message>
     <message>
-        <source>D&amp;epends on size</source>
-        <translation>&amp;Závisí na veľkosti</translation>
+        <source>Depends on size(&amp;E)</source>
+        <translation>Závisí na veľkosti(&amp;E)</translation>
     </message>
 </context>
 <context>
@@ -337,24 +337,24 @@
 <context>
     <name>AudioChannels</name>
     <message>
-        <source>&amp;Autodetect</source>
-        <translation>Zistiť &amp;automaticky</translation>
+        <source>Autodetect(&amp;A)</source>
+        <translation>Zistiť Automaticky(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Mono</source>
-        <translation>&amp;Mono</translation>
+        <source>Mono(&amp;M)</source>
+        <translation>Mono(&amp;M)</translation>
     </message>
     <message>
-        <source>&amp;Stereo</source>
-        <translation>&amp;Stereo</translation>
+        <source>Stereo(&amp;S)</source>
+        <translation>Stereo(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Other</source>
-        <translation>&amp;Iné</translation>
+        <source>Other(&amp;O)</source>
+        <translation>Iné(&amp;O)</translation>
     </message>
     <message>
-        <source>&amp;Channels</source>
-        <translation>&amp;Kanály</translation>
+        <source>Channels(&amp;C)</source>
+        <translation>Kanály(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -663,8 +663,8 @@
         <translation>Zadajte adresu</translation>
     </message>
     <message>
-        <source>&amp;Add</source>
-        <translation>&amp;Pridať</translation>
+        <source>Add(&amp;A)</source>
+        <translation>Pridať(&amp;A)</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
@@ -1034,20 +1034,20 @@
 <context>
     <name>Help</name>
     <message>
-        <source>&amp;Help</source>
-        <translation>Pomo&amp;cník</translation>
+        <source>Help(&amp;H)</source>
+        <translation>Pomocník(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;About QMPlay2</source>
-        <translation>&amp;O programe QMPlay2</translation>
+        <source>About QMPlay2(&amp;A)</source>
+        <translation>O programe QMPlay2(&amp;A)</translation>
     </message>
     <message>
-        <source>About &amp;Qt</source>
-        <translation>O &amp;Qt</translation>
+        <source>About Qt(&amp;Q)</source>
+        <translation>O Qt(&amp;Q)</translation>
     </message>
     <message>
-        <source>&amp;Updates</source>
-        <translation>&amp;Aktualizácie</translation>
+        <source>Updates(&amp;U)</source>
+        <translation>Aktualizácie(&amp;U)</translation>
     </message>
     <message>
         <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
@@ -1222,8 +1222,8 @@
         <translation>Hlavná lišta nástrojov</translation>
     </message>
     <message>
-        <source>&amp;Play</source>
-        <translation>&amp;Prehrať</translation>
+        <source>Play(&amp;P)</source>
+        <translation>Prehrať(&amp;P)</translation>
     </message>
     <message>
         <source>Choose files</source>
@@ -1238,12 +1238,12 @@
         <translation>Uvedená pozícia</translation>
     </message>
     <message>
-        <source>&amp;Hide</source>
-        <translation>&amp;Skryť</translation>
+        <source>Hide(&amp;H)</source>
+        <translation>Skryť(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;Show</source>
-        <translation>&amp;Zobraziť</translation>
+        <source>Show(&amp;S)</source>
+        <translation>Zobraziť(&amp;S)</translation>
     </message>
     <message>
         <source>Stopped</source>
@@ -1282,8 +1282,8 @@
         <translation>Aktualizácia sa momentálne preberá.</translation>
     </message>
     <message>
-        <source>&amp;Lock widgets</source>
-        <translation>&amp;Zamknúť widgety</translation>
+        <source>Lock widgets(&amp;L)</source>
+        <translation>Zamknúť widgety(&amp;L)</translation>
     </message>
     <message>
         <source>Save group</source>
@@ -1294,16 +1294,16 @@
         <translation>Chyba počas ukladania playlistu</translation>
     </message>
     <message>
-        <source>&amp;Hide menu bar</source>
-        <translation>&amp;Skryť ponukovú lištu</translation>
+        <source>Hide menu bar(&amp;H)</source>
+        <translation>Skryť ponukovú lištu(&amp;H)</translation>
     </message>
     <message>
         <source>New window</source>
         <translation>Nové okno</translation>
     </message>
     <message>
-        <source>&amp;Pause</source>
-        <translation>&amp;Pauza</translation>
+        <source>Pause(&amp;P)</source>
+        <translation>Pauza(&amp;P)</translation>
     </message>
     <message>
         <source>Next audio stream</source>
@@ -1930,40 +1930,40 @@
 <context>
     <name>Options</name>
     <message>
-        <source>Op&amp;tions</source>
-        <translation>&amp;Možnosti</translation>
+        <source>Options(&amp;T)</source>
+        <translation>Možnosti(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Settings</source>
-        <translation>&amp;Nastavenia</translation>
+        <source>Settings(&amp;S)</source>
+        <translation>Nastavenia(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Show tray icon</source>
-        <translation>&amp;Zobraziť ikonu v systémovej lište</translation>
+        <source>Show tray icon(&amp;S)</source>
+        <translation>Zobraziť ikonu v systémovej lište(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Modules settings</source>
-        <translation>Nastavenia &amp;modulov</translation>
+        <source>Modules settings(&amp;M)</source>
+        <translation>Nastavenia modulov(&amp;M)</translation>
     </message>
     <message>
         <source>Create new profile</source>
         <translation>Vytvoriť nový profil</translation>
     </message>
     <message>
-        <source>&amp;Profiles</source>
-        <translation>Profil&amp;y</translation>
+        <source>Profiles(&amp;P)</source>
+        <translation>Profily(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;New Profile</source>
-        <translation>&amp;Nový profil</translation>
+        <source>New Profile(&amp;N)</source>
+        <translation>Nový profil(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Copy Profile</source>
-        <translation>&amp;Kopírovať profil</translation>
+        <source>Copy Profile(&amp;C)</source>
+        <translation>Kopírovať profil(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Default</source>
-        <translation>&amp;Predvolený</translation>
+        <source>Default(&amp;D)</source>
+        <translation>Predvolený(&amp;D)</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -1974,12 +1974,12 @@
         <translation>Zadajte názov nového profilu:</translation>
     </message>
     <message>
-        <source>&amp;Playback settings</source>
-        <translation>Nastavenia &amp;prehrávania</translation>
+        <source>Play back settings(&amp;P)</source>
+        <translation>Nastavenia prehrávania(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Renderer settings</source>
-        <translation>Nastavenia &amp;vykresľovania</translation>
+        <source>Renderer settings(&amp;R)</source>
+        <translation>Nastavenia vykresľovania(&amp;R)</translation>
     </message>
 </context>
 <context>
@@ -2107,60 +2107,60 @@
 <context>
     <name>Playback</name>
     <message>
-        <source>&amp;Playback</source>
-        <translation>&amp;Prehrávanie</translation>
+        <source>Playback(&amp;P)</source>
+        <translation>Prehrávanie(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Enable audio</source>
-        <translation>&amp;Zapnúť zvuk</translation>
+        <source>Enable audio(&amp;E)</source>
+        <translation>Zapnúť zvuk(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Enable video</source>
-        <translation>Zapnúť &amp;video</translation>
+        <source>Enable video(&amp;E)</source>
+        <translation>Zapnúť video(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Delay video</source>
-        <translation>&amp;Oneskorenie videa</translation>
+        <source>Delay video(&amp;D)</source>
+        <translation>Oneskorenie videa(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Speed up video</source>
-        <translation>Z&amp;rýchlenie videa</translation>
+        <source>Speed up video(&amp;S)</source>
+        <translation>Zrýchlenie videa(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Enable subtitles</source>
-        <translation>Zapnúť &amp;titulky</translation>
+        <source>Enable subtitles(&amp;E)</source>
+        <translation>Zapnúť titulky(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Delay subtitiles</source>
-        <translation>One&amp;skorenie titulkov</translation>
+        <source>Delay subtitiles(&amp;D)</source>
+        <translation>Oneskorenie titulkov(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Speed up subtitles</source>
-        <translation>Z&amp;rýchlenie titulkov</translation>
+        <source>Speed up subtitles(&amp;S)</source>
+        <translation>Zrýchlenie titulkov(&amp;S)</translation>
     </message>
     <message>
-        <source>Scale up subt&amp;itles</source>
-        <translation>Z&amp;väčšiť titulky</translation>
+        <source>Scale up subtitles(&amp;I)</source>
+        <translation>Zväčšiť titulky(&amp;I)</translation>
     </message>
     <message>
-        <source>Scale down sub&amp;titles</source>
-        <translation>Z&amp;menšiť titulky</translation>
+        <source>Scale down subtitles(&amp;T)</source>
+        <translation>Zmenšiť titulky(&amp;T)</translation>
     </message>
     <message>
-        <source>Add &amp;subtities from file</source>
-        <translation>Pri&amp;dať titulky zo súboru</translation>
+        <source>Add subtities from file(&amp;S)</source>
+        <translation>Pridať titulky zo súboru(&amp;S)</translation>
     </message>
     <message>
-        <source>Set &amp;subtitles delay</source>
-        <translation>Nas&amp;taviť oneskorenie titulkov</translation>
+        <source>Set subtitles delay(&amp;S)</source>
+        <translation>Nastaviť oneskorenie titulkov(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Screen shot</source>
-        <translation>&amp;Snímka obrazovky</translation>
+        <source>Screen shot(&amp;S)</source>
+        <translation>Snímka obrazovky(&amp;S)</translation>
     </message>
     <message>
-        <source>Set &amp;video delay</source>
-        <translation>&amp;Nastaviť oneskorenie videa</translation>
+        <source>Set video delay(&amp;V)</source>
+        <translation>Nastaviť oneskorenie videa(&amp;V)</translation>
     </message>
 </context>
 <context>
@@ -2325,195 +2325,195 @@
 <context>
     <name>Player</name>
     <message>
-        <source>&amp;Player</source>
-        <translation>P&amp;rehrávač</translation>
+        <source>Player(&amp;P)</source>
+        <translation>Prehrávač(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Stop</source>
-        <translation>&amp;Zastaviť</translation>
+        <source>Stop(&amp;S)</source>
+        <translation>Zastaviť(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Next</source>
-        <translation>Ď&amp;alší</translation>
+        <source>Next(&amp;N)</source>
+        <translation>Ďalší(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Previous</source>
-        <translation>Predchádzajú&amp;ci</translation>
+        <source>Previous(&amp;P)</source>
+        <translation>Predchádzajúci(&amp;P)</translation>
     </message>
     <message>
-        <source>Seek &amp;forward</source>
-        <translation>P&amp;retočiť dopredu</translation>
+        <source>Seek forward(&amp;F)</source>
+        <translation>Pretočiť dopredu(&amp;F)</translation>
     </message>
     <message>
-        <source>Seek &amp;backward</source>
-        <translation>Pr&amp;etočiť dozadu</translation>
+        <source>Seek backward(&amp;B)</source>
+        <translation>Pretočiť dozadu(&amp;B)</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
-        <translation>V&amp;eľký skok vzad</translation>
+        <source>Long seek forward(&amp;S)</source>
+        <translation>Veľký skok vzad(&amp;S)</translation>
     </message>
     <message>
-        <source>Long s&amp;eek backward</source>
-        <translation>Veľký s&amp;kok vzad</translation>
+        <source>Long seek backward(&amp;E)</source>
+        <translation>Veľký skok vzad(&amp;E)</translation>
     </message>
     <message>
-        <source>Fa&amp;ster</source>
-        <translation>&amp;Rýchlejšie</translation>
+        <source>Faster(&amp;S)</source>
+        <translation>Rýchlejšie(&amp;S)</translation>
     </message>
     <message>
-        <source>Slowe&amp;r</source>
-        <translation>&amp;Pomalšie</translation>
+        <source>Slower(&amp;R)</source>
+        <translation>Pomalšie(&amp;R)</translation>
     </message>
     <message>
-        <source>Zoom i&amp;n</source>
-        <translation>&amp;Priblížiť</translation>
+        <source>Zoom in(&amp;N)</source>
+        <translation>Priblížiť(&amp;N)</translation>
     </message>
     <message>
-        <source>Zoom ou&amp;t</source>
-        <translation>Zm&amp;enšiť</translation>
+        <source>Zoom out(&amp;T)</source>
+        <translation>Zmenšiť(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Mute</source>
-        <translation>S&amp;tíšiť</translation>
+        <source>Mute(&amp;M)</source>
+        <translation>Stíšiť(&amp;M)</translation>
     </message>
     <message>
-        <source>Toggle &amp;aspect ratio</source>
-        <translation>Prepnúť &amp;pomer strán</translation>
+        <source>Toggle Aspect ratio(&amp;A)</source>
+        <translation>Prepnúť pomer strán(&amp;A)</translation>
     </message>
     <message>
-        <source>Reset image &amp;settings</source>
-        <translation>Obnoviť nastavenia &amp;obrázka</translation>
+        <source>Reset image Settings(&amp;S)</source>
+        <translation>Obnoviť nastavenia obrázka(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Set speed</source>
-        <translation>Nastav&amp;iť rýchlosť</translation>
+        <source>Set speed(&amp;S)</source>
+        <translation>Nastaviť rýchlosť(&amp;S)</translation>
     </message>
     <message>
-        <source>Next &amp;frame</source>
-        <translation>Ď&amp;alšia snímka</translation>
+        <source>Next frame(&amp;F)</source>
+        <translation>Ďalšia snímka(&amp;F)</translation>
     </message>
     <message>
-        <source>Volume &amp;up</source>
-        <translation>&amp;Hlasnejšie</translation>
+        <source>Volume up(&amp;U)</source>
+        <translation>Hlasnejšie(&amp;U)</translation>
     </message>
     <message>
-        <source>Volume &amp;down</source>
-        <translation>&amp;Tichšie</translation>
+        <source>Volume down(&amp;D)</source>
+        <translation>Tichšie(&amp;D)</translation>
     </message>
     <message>
-        <source>Suspend after playbac&amp;k is finished</source>
-        <translation>U&amp;spať po skončení prehrávania</translation>
+        <source>Suspend after playback is finished(&amp;K)</source>
+        <translation>Uspať po skončení prehrávania(&amp;K)</translation>
     </message>
     <message>
-        <source>A&amp;-B Repeat</source>
-        <translation>Opakovanie A&amp;-B</translation>
+        <source>A-B Repeat(&amp;-)</source>
+        <translation>Opakovanie A-B(&amp;-)</translation>
     </message>
     <message>
-        <source>Detach from receiving &amp;commands</source>
-        <translation>Odpojiť od &amp;prijímania príkazov</translation>
+        <source>Detach from receiving commands(&amp;C)</source>
+        <translation>Odpojiť od prijímania príkazov(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Skip</source>
-        <translation>&amp;Preskočiť</translation>
+        <source>Skip(&amp;S)</source>
+        <translation>Preskočiť(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Stop after playing</source>
-        <translation>&amp;Zastaviť po prehratí</translation>
+        <source>Stop after playing(&amp;S)</source>
+        <translation>Zastaviť po prehratí(&amp;S)</translation>
     </message>
     <message>
-        <source>Previous &amp;frame</source>
-        <translation>P&amp;redchádzajúca snímka</translation>
+        <source>Previous frame(&amp;F)</source>
+        <translation>Predchádzajúca snímka(&amp;F)</translation>
     </message>
 </context>
 <context>
     <name>Playlist</name>
     <message>
-        <source>&amp;Playlist</source>
-        <translation>P&amp;laylist</translation>
+        <source>Playlist(&amp;P)</source>
+        <translation>Playlist(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Stop loading</source>
-        <translation>&amp;Zastaviť načítavanie</translation>
+        <source>Stop loading(&amp;S)</source>
+        <translation>Zastaviť načítavanie(&amp;S)</translation>
     </message>
     <message>
-        <source>Load &amp;list</source>
-        <translation>Načítať &amp;zoznam</translation>
+        <source>Load list(&amp;L)</source>
+        <translation>Načítať zoznam(&amp;L)</translation>
     </message>
     <message>
-        <source>Save &amp;list</source>
-        <translation>&amp;Uložiť zoznam</translation>
+        <source>Save list(&amp;L)</source>
+        <translation>Uložiť zoznam(&amp;L)</translation>
     </message>
     <message>
-        <source>&amp;Remove selected entries</source>
-        <translation>&amp;Odstrániť označené položky</translation>
+        <source>Remove selected entries(&amp;R)</source>
+        <translation>Odstrániť označené položky(&amp;R)</translation>
     </message>
     <message>
-        <source>Remove entries &amp;without groups</source>
-        <translation>Odstrán&amp;iť položky mimo skupiny</translation>
+        <source>Remove entries without groups(&amp;W)</source>
+        <translation>Odstrániť položky mimo skupiny(&amp;W)</translation>
     </message>
     <message>
-        <source>&amp;Clear list</source>
-        <translation>V&amp;yčistiť zoznam</translation>
+        <source>Clear list(&amp;C)</source>
+        <translation>Vyčistiť zoznam(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Copy</source>
-        <translation>K&amp;opírovať</translation>
+        <source>Copy(&amp;C)</source>
+        <translation>Kopírovať(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Paste</source>
-        <translation>&amp;Prilepiť</translation>
+        <source>Paste(&amp;P)</source>
+        <translation>Prilepiť(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
-        <translation>&amp;Vytvoriť &amp;skupinu</translation>
+        <source>Create group(&amp;C)</source>
+        <translation>Vytvoriť skupinu(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Rename</source>
-        <translation>&amp;Premenovať</translation>
+        <source>Rename(&amp;R)</source>
+        <translation>Premenovať(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;Find entries</source>
-        <translation>&amp;Hľadať položky</translation>
+        <source>Find entries(&amp;F)</source>
+        <translation>Hľadať položky(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Collapse all</source>
-        <translation>&amp;Zbaliť všetko</translation>
+        <source>Collapse all(&amp;C)</source>
+        <translation>Zbaliť všetko(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Expand all</source>
-        <translation>&amp;Rozbaliť všetko</translation>
+        <source>Expand all(&amp;E)</source>
+        <translation>Rozbaliť všetko(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Go to the playback</source>
-        <translation>&amp;Prejsť na prehrávané</translation>
+        <source>Go to the playback(&amp;G)</source>
+        <translation>Prejsť na prehrávané(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Enqueue</source>
-        <translation>&amp;Pridať do poradia</translation>
+        <source>Enqueue(&amp;E)</source>
+        <translation>Pridať do poradia(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Properties</source>
-        <translation>&amp;Vlastnosti</translation>
+        <source>Properties(&amp;P)</source>
+        <translation>Vlastnosti(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Extensions</source>
-        <translation>&amp;Rozšírenia</translation>
+        <source>Extensions(&amp;E)</source>
+        <translation>Rozšírenia(&amp;E)</translation>
     </message>
     <message>
-        <source>Save &amp;group</source>
-        <translation>Uložiť &amp;skupinu</translation>
+        <source>Save group(&amp;G)</source>
+        <translation>Uložiť skupinu(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Synchronize groups</source>
-        <translation>&amp;Synchronizovať skupiny</translation>
+        <source>Synchronize groups(&amp;S)</source>
+        <translation>Synchronizovať skupiny(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Quick group synchronization</source>
-        <translation>&amp;Rýchla synchronizácia skupiny</translation>
+        <source>Quick group synchronization(&amp;Q)</source>
+        <translation>Rýchla synchronizácia skupiny(&amp;Q)</translation>
     </message>
     <message>
-        <source>&amp;Always sync</source>
-        <translation>&amp;Vždy synchronizovať</translation>
+        <source>Always sync(&amp;A)</source>
+        <translation>Vždy synchronizovať(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -2546,12 +2546,12 @@
 <context>
     <name>PlaylistWidget</name>
     <message>
-        <source>Un&amp;lock</source>
-        <translation>O&amp;domknúť</translation>
+        <source>Unlock(&amp;L)</source>
+        <translation>Odomknúť(&amp;L)</translation>
     </message>
     <message>
-        <source>&amp;Lock</source>
-        <translation>&amp;Zamknúť</translation>
+        <source>Lock(&amp;L)</source>
+        <translation>Zamknúť(&amp;L)</translation>
     </message>
 </context>
 <context>
@@ -2744,44 +2744,44 @@ QMPlay2 nebude zväčšovať ikony!</translation>
 <context>
     <name>Repeat</name>
     <message>
-        <source>&amp;Repeat</source>
-        <translation>&amp;Opakovať</translation>
+        <source>Repeat(&amp;R)</source>
+        <translation>Opakovať(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;No repeating</source>
-        <translation>&amp;Bez opakovania</translation>
+        <source>No repeating(&amp;N)</source>
+        <translation>Bez opakovania(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Entry repeating</source>
-        <translation>O&amp;pakovať položku</translation>
+        <source>Entry repeating(&amp;E)</source>
+        <translation>Opakovať položku(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Group repeating</source>
-        <translation>Opako&amp;vať skupinu</translation>
+        <source>Group repeating(&amp;G)</source>
+        <translation>Opakovať skupinu(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Playlist repeating</source>
-        <translation>Opa&amp;kovať playlist</translation>
+        <source>Playlist repeating(&amp;P)</source>
+        <translation>Opakovať playlist(&amp;P)</translation>
     </message>
     <message>
-        <source>R&amp;andom</source>
-        <translation>&amp;Náhodne</translation>
+        <source>Random(&amp;A)</source>
+        <translation>Náhodne(&amp;A)</translation>
     </message>
     <message>
-        <source>Random in &amp;group</source>
-        <translation>Ná&amp;hodne v skupine</translation>
+        <source>Random in group(&amp;G)</source>
+        <translation>Náhodne v skupine(&amp;G)</translation>
     </message>
     <message>
-        <source>Random and &amp;repeat</source>
-        <translation>Ná&amp;hodne a opakovať</translation>
+        <source>Random and Repeat(&amp;R)</source>
+        <translation>Náhodne a opakovať(&amp;R)</translation>
     </message>
     <message>
-        <source>Random in group and repea&amp;t</source>
-        <translation>Náhodne &amp;v skupine a opakovať</translation>
+        <source>Random in group and repeat(&amp;T)</source>
+        <translation>Náhodne v skupine a opakovať(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Stop playback after every file</source>
-        <translation>&amp;Zastaviť prehrávanie po každom súbore</translation>
+        <source>Stop playback after every file(&amp;S)</source>
+        <translation>Zastaviť prehrávanie po každom súbore(&amp;S)</translation>
     </message>
 </context>
 <context>
@@ -3120,24 +3120,24 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Sort</name>
     <message>
-        <source>&amp;From the shortest to the longest</source>
-        <translation>&amp;Od najkratšej po najdlhšiu</translation>
+        <source>From the shortest to the longest(&amp;F)</source>
+        <translation>Od najkratšej po najdlhšiu(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;From the longest to the shortest</source>
-        <translation>O&amp;d najdlhšej po najkratšiu</translation>
+        <source>From the longest to the shortest(&amp;F)</source>
+        <translation>Od najdlhšej po najkratšiu(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Sort</source>
-        <translation>&amp;Triediť</translation>
+        <source>Sort(&amp;S)</source>
+        <translation>Triediť(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;A-Z</source>
-        <translation>&amp;A-Z</translation>
+        <source>A-Z(&amp;A)</source>
+        <translation>A-Z(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Z-A</source>
-        <translation>&amp;Z-A</translation>
+        <source>Z-A(&amp;Z)</source>
+        <translation>Z-A(&amp;Z)</translation>
     </message>
 </context>
 <context>
@@ -3178,24 +3178,24 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Streams</name>
     <message>
-        <source>&amp;Audio streams</source>
-        <translation>Audio prúdy</translation>
+        <source>Audio streams(&amp;A)</source>
+        <translation>Audio prúdy(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Video streams</source>
-        <translation>Video prúdy</translation>
+        <source>Video streams(&amp;V)</source>
+        <translation>Video prúdy(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;Subtitles streams</source>
-        <translation>Titulkové prúdy</translation>
+        <source>Subtitles streams(&amp;S)</source>
+        <translation>Titulkové prúdy(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Chapters</source>
-        <translation>Kapitoly</translation>
+        <source>Chapters(&amp;C)</source>
+        <translation>Kapitoly(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Programs</source>
-        <translation>Programy</translation>
+        <source>Programs(&amp;P)</source>
+        <translation>Programy(&amp;P)</translation>
     </message>
 </context>
 <context>
@@ -3437,32 +3437,32 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>VideoFilters</name>
     <message>
-        <source>Video &amp;filters</source>
-        <translation>Filtre &amp;videa</translation>
+        <source>Video filters(&amp;F)</source>
+        <translation>Filtre videa(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Horizontal flip</source>
-        <translation>Prevrátiť &amp;vodorovne</translation>
+        <source>Horizontal flip(&amp;H)</source>
+        <translation>Prevrátiť vodorovne(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;Vertical flip</source>
-        <translation>Prevrátiť &amp;zvisle</translation>
+        <source>Vertical flip(&amp;V)</source>
+        <translation>Prevrátiť zvisle(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;More filters</source>
-        <translation>Ďalšie &amp;filtre</translation>
+        <source>More filters(&amp;M)</source>
+        <translation>Ďalšie filtre(&amp;M)</translation>
     </message>
     <message>
-        <source>&amp;Rotate 90°</source>
-        <translation>Otočiť o &amp;90°</translation>
+        <source>Rotate 90°(&amp;R)</source>
+        <translation>Otočiť o 90°(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;Spherical view</source>
-        <translation>&amp;Sférický pohľad</translation>
+        <source>Spherical view(&amp;S)</source>
+        <translation>Sférický pohľad(&amp;S)</translation>
     </message>
     <message>
-        <source>Video &amp;adjustment</source>
-        <translation>Ú&amp;prava videa</translation>
+        <source>Video adjustment(&amp;A)</source>
+        <translation>Úprava videa(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -3497,31 +3497,31 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Widgets</name>
     <message>
-        <source>&amp;Widgets</source>
-        <translation>&amp;Widgety</translation>
+        <source>Widgets(&amp;W)</source>
+        <translation>Widgety(&amp;W)</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <source>&amp;Window</source>
-        <translation>&amp;Okno</translation>
+        <source>Window(&amp;W)</source>
+        <translation>Okno(&amp;W)</translation>
     </message>
     <message>
-        <source>&amp;Full screen</source>
-        <translation>&amp;Celá obrazovka</translation>
+        <source>Full screen(&amp;F)</source>
+        <translation>Celá obrazovka(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Compact view</source>
-        <translation>&amp;Kompaktný režim</translation>
+        <source>Compact view(&amp;C)</source>
+        <translation>Kompaktný režim(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Close</source>
-        <translation>&amp;Zavrieť</translation>
+        <source>Close(&amp;C)</source>
+        <translation>Zavrieť(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Always on top</source>
-        <translation>&amp;Vždy navrchu</translation>
+        <source>Always on top(&amp;A)</source>
+        <translation>Vždy navrchu(&amp;A)<translation>
     </message>
 </context>
 <context>
