@@ -39,6 +39,8 @@ private:
     const std::shared_ptr<QmVk::Instance> m_vkInstance;
     const std::shared_ptr<VAAPI> m_vaapi;
 
+    bool m_hasDrmFormatModifier = false;
+
     std::mutex m_mutex;
 
     std::unordered_set<uintptr_t> m_availableSurfaces;

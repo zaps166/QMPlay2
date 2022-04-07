@@ -16,6 +16,11 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
+// libdrm/drm_fourcc.h
+
+#define DRM_FORMAT_MOD_INVALID 0x00ffffffffffffffull
+#define DRM_FORMAT_MOD_LINEAR 0ull
+
 // linux/dma-buf.h
 
 struct dma_buf_sync {
@@ -52,12 +57,15 @@ VAAPIVulkan::VAAPIVulkan(const shared_ptr<VAAPI> &vaapi)
 
     if (!physicalDevice->checkExtensions({
         VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
-        VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME,
     })) {
         QMPlay2Core.logError("VA-API :: Can't interoperate with Vulkan");
         m_error = true;
         return;
     }
+
+    m_hasDrmFormatModifier = physicalDevice->checkExtensions({
+        VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME,
+    });
 }
 VAAPIVulkan::~VAAPIVulkan()
 {}
@@ -119,11 +127,18 @@ void VAAPIVulkan::map(Frame &frame)
 
         if (exported)
         {
+            bool isLinear = false;
+
             MemoryObject::FdDescriptors fdDescriptors(vaSurfaceDescr.num_objects);
             for (uint32_t i = 0; i < vaSurfaceDescr.num_objects; ++i)
             {
                 fdDescriptors[i].first = vaSurfaceDescr.objects[i].fd;
                 fdDescriptors[i].second = ::lseek(vaSurfaceDescr.objects[i].fd, 0, SEEK_END);
+                if (!m_hasDrmFormatModifier && i == 0)
+                {
+                    const auto drmFormatModifier = vaSurfaceDescr.objects[i].drm_format_modifier;
+                    isLinear = (drmFormatModifier == DRM_FORMAT_MOD_LINEAR || drmFormatModifier == DRM_FORMAT_MOD_INVALID);
+                }
             }
 
             vector<vk::DeviceSize> offsets(vaSurfaceDescr.num_layers);
@@ -138,12 +153,15 @@ void VAAPIVulkan::map(Frame &frame)
                 vk::SubresourceLayout drmFormatModifierPlaneLayout;
 
                 auto imageCreateInfoCallback = [&](uint32_t plane, vk::ImageCreateInfo &imageCreateInfo) {
+                    if (!m_hasDrmFormatModifier)
+                        return;
+
                     if (plane >= vaSurfaceDescr.num_layers)
                         throw vk::LogicError("Pitches count and planes count missmatch");
 
                     auto drmFormatModifier = vaSurfaceDescr.objects[min(plane, vaSurfaceDescr.num_objects - 1)].drm_format_modifier;
-                    if (drmFormatModifier == 0x00ffffffffffffffull) // Use invalid format as linear format
-                        drmFormatModifier = 0;
+                    if (drmFormatModifier == DRM_FORMAT_MOD_INVALID)
+                        drmFormatModifier = DRM_FORMAT_MOD_LINEAR;
 
                     imageDrmFormatModifierExplicitCreateInfo.drmFormatModifier = drmFormatModifier;
                     imageDrmFormatModifierExplicitCreateInfo.drmFormatModifierPlaneCount = 1;
@@ -160,7 +178,7 @@ void VAAPIVulkan::map(Frame &frame)
                     device,
                     vk::Extent2D(frame.width(), frame.height()),
                     format,
-                    false,
+                    isLinear,
                     externalMemoryHandleType,
                     imageCreateInfoCallback
                 );
