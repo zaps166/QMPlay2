@@ -780,6 +780,11 @@ int main(int argc, char *argv[])
             settings.remove("audioWriters");
             settings.remove("videoWriters");
         }
+        if (settings.getBool("ForceChannels") && settings.getInt("ForceChannels") == 0)
+        {
+            // convert the old ForceChannels==true to ForceChannels=Qt::Checked
+            settings.set("ForceChannels", Qt::Checked);
+        }
         if (settings.contains("Volume"))
         {
             const int vol = settings.getInt("Volume");

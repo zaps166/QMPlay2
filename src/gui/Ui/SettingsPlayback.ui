@@ -365,6 +365,9 @@
            <property name="text">
             <string>Force channels conversion</string>
            </property>
+           <property name="tristate">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="8" column="1">
