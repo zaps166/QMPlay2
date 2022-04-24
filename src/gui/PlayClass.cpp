@@ -605,8 +605,15 @@ bool PlayClass::setAudioParams(quint8 realChannels, quint32 realSampleRate)
     quint8 chn = 0;
     if (QMPlay2Core.getSettings().getBool("ForceSamplerate"))
         srate = QMPlay2Core.getSettings().getUInt("Samplerate");
-    if (QMPlay2Core.getSettings().getBool("ForceChannels"))
+    if (const auto forceChn = QMPlay2Core.getSettings().getInt("ForceChannels"))
+    {
         chn = QMPlay2Core.getSettings().getUInt("Channels");
+        if (forceChn == Qt::PartiallyChecked && chn < realChannels)
+        {
+            // only promote the effective channel count
+            chn = 0;
+        }
+    }
     return aThr->setParams(realChannels, realSampleRate, chn, srate, QMPlay2Core.getSettings().getBool("ResamplerFirst"));
 }
 

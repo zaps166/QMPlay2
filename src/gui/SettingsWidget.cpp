@@ -204,7 +204,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("VolumeR", 100);
     QMPSettings.init("ForceSamplerate", false);
     QMPSettings.init("Samplerate", 48000);
-    QMPSettings.init("ForceChannels", false);
+    QMPSettings.init("ForceChannels", Qt::Unchecked);
     QMPSettings.init("Channels", 2);
     QMPSettings.init("ResamplerFirst", true);
     QMPSettings.init("ReplayGain/Enabled", false);
@@ -245,7 +245,7 @@ void SettingsWidget::InitSettings()
 }
 void SettingsWidget::SetAudioChannelsMenu()
 {
-    const bool forceChn = QMPlay2Core.getSettings().getBool("ForceChannels");
+    const bool forceChn = QMPlay2Core.getSettings().getInt("ForceChannels");
     const int chn = QMPlay2Core.getSettings().getInt("Channels");
     bool audioChannelsChecked = false;
     for (QAction *act : QMPlay2GUI.menuBar->playback->audioChannels->actions())
@@ -262,7 +262,7 @@ void SettingsWidget::SetAudioChannels(int chn)
     const bool forceChannels = chn >= 1 && chn <= 8;
     if (forceChannels)
         QMPlay2Core.getSettings().set("Channels", chn);
-    QMPlay2Core.getSettings().set("ForceChannels", forceChannels);
+    QMPlay2Core.getSettings().set("ForceChannels", forceChannels ? Qt::Checked : Qt::Unchecked);
 }
 
 SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *videoEq) :
@@ -504,10 +504,13 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         connect(playbackSettingsPage->forceSamplerate, SIGNAL(toggled(bool)), playbackSettingsPage->samplerateB, SLOT(setEnabled(bool)));
         playbackSettingsPage->samplerateB->setEnabled(playbackSettingsPage->forceSamplerate->isChecked());
 
-        playbackSettingsPage->forceChannels->setChecked(QMPSettings.getBool("ForceChannels"));
+        playbackSettingsPage->forceChannels->setCheckState(Qt::CheckState(QMPSettings.getInt("ForceChannels")));
+        playbackSettingsPage->forceChannels->setToolTip(tr("Force audio content to use the specified number of channels.\n"
+            "Partially checked does this only if the content has less channels than the specified amount\n"
+            "\t(e.g. promote mono to stereo but do not degrade quadrophonic to stereo)"));
         playbackSettingsPage->channelsB->setValue(QMPSettings.getInt("Channels"));
         connect(playbackSettingsPage->forceChannels, SIGNAL(toggled(bool)), playbackSettingsPage->channelsB, SLOT(setEnabled(bool)));
-        playbackSettingsPage->channelsB->setEnabled(playbackSettingsPage->forceChannels->isChecked());
+        playbackSettingsPage->channelsB->setEnabled(playbackSettingsPage->forceChannels->checkState());
 
         playbackSettingsPage->resamplerFirst->setChecked(QMPSettings.getBool("ResamplerFirst"));
 
@@ -720,7 +723,7 @@ SettingsWidget::~SettingsWidget()
 
 void SettingsWidget::setAudioChannels()
 {
-    playbackSettingsPage->forceChannels->setChecked(QMPlay2Core.getSettings().getBool("ForceChannels"));
+    playbackSettingsPage->forceChannels->setCheckState(Qt::CheckState(QMPlay2Core.getSettings().getInt("ForceChannels")));
     playbackSettingsPage->channelsB->setValue(QMPlay2Core.getSettings().getInt("Channels"));
 }
 
@@ -1214,7 +1217,7 @@ void SettingsWidget::apply()
             QMPSettings.set("ForceSamplerate", playbackSettingsPage->forceSamplerate->isChecked());
             QMPSettings.set("Samplerate", playbackSettingsPage->samplerateB->value());
             QMPSettings.set("MaxVol", playbackSettingsPage->maxVolB->value());
-            QMPSettings.set("ForceChannels", playbackSettingsPage->forceChannels->isChecked());
+            QMPSettings.set("ForceChannels", playbackSettingsPage->forceChannels->checkState());
             QMPSettings.set("Channels", playbackSettingsPage->channelsB->value());
             QMPSettings.set("ResamplerFirst", playbackSettingsPage->resamplerFirst->isChecked());
             QMPSettings.set("ReplayGain/Enabled", playbackSettingsPage->replayGain->isChecked());
