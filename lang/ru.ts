@@ -73,20 +73,20 @@
 <context>
     <name>Add</name>
     <message>
-        <source>Address(&amp;A)</source>
-        <translation>Адрес(&amp;A)</translation>
+        <source>&amp;Address</source>
+        <translation>&amp;Адрес</translation>
     </message>
     <message>
-        <source>Files(&amp;F)</source>
-        <translation>Файлы(&amp;F)</translation>
+        <source>&amp;Files</source>
+        <translation>&amp;Файлы</translation>
     </message>
     <message>
-        <source>Directory(&amp;D)</source>
-        <translation>Каталог(&amp;D)</translation>
+        <source>&amp;Directory</source>
+        <translation>&amp;Каталог</translation>
     </message>
     <message>
-        <source>Add(&amp;A)</source>
-        <translation>Добавить(&amp;A)</translation>
+        <source>&amp;Add</source>
+        <translation>&amp;Добавить</translation>
     </message>
 </context>
 <context>
@@ -264,20 +264,20 @@
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>Disabled(&amp;D)</source>
-        <translation>Отключено(&amp;D)</translation>
+        <source>&amp;Disabled</source>
+        <translation>&amp;Отключено</translation>
     </message>
     <message>
-        <source>Aspect ratio(&amp;A)</source>
-        <translation>Соотношение сторон(&amp;A)</translation>
+        <source>&amp;Aspect ratio</source>
+        <translation>&amp;Соотношение сторон</translation>
     </message>
     <message>
-        <source>Auto(&amp;A)</source>
-        <translation>Авто(&amp;A)</translation>
+        <source>&amp;Auto</source>
+        <translation>&amp;Авто</translation>
     </message>
     <message>
-        <source>Depends on size(&amp;E)</source>
-        <translation>В зависимости от размера(&amp;E)</translation>
+        <source>D&amp;epends on size</source>
+        <translation>&amp;В зависимости от размера</translation>
     </message>
 </context>
 <context>
@@ -337,24 +337,24 @@
 <context>
     <name>AudioChannels</name>
     <message>
-        <source>Autodetect(&amp;A)</source>
-        <translation>Автоматически(&amp;A)</translation>
+        <source>&amp;Autodetect</source>
+        <translation>&amp;Автоматически</translation>
     </message>
     <message>
-        <source>Mono(&amp;M)</source>
-        <translation>Моно(&amp;M)</translation>
+        <source>&amp;Mono</source>
+        <translation>&amp;Моно</translation>
     </message>
     <message>
-        <source>Stereo(&amp;S)</source>
-        <translation>Стерео(&amp;S)</translation>
+        <source>&amp;Stereo</source>
+        <translation>&amp;Стерео</translation>
     </message>
     <message>
-        <source>Other(&amp;O)</source>
-        <translation>Другое(&amp;O)</translation>
+        <source>&amp;Other</source>
+        <translation>&amp;Другое</translation>
     </message>
     <message>
-        <source>Channels(&amp;C)</source>
-        <translation>Каналы(&amp;C)</translation>
+        <source>&amp;Channels</source>
+        <translation>&amp;Каналы</translation>
     </message>
 </context>
 <context>
@@ -663,8 +663,8 @@
         <translation>Введите адрес</translation>
     </message>
     <message>
-        <source>Add(&amp;A)</source>
-        <translation>Добавить(&amp;A)</translation>
+        <source>&amp;Add</source>
+        <translation type="unfinished">&amp;Добавить</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
@@ -687,7 +687,7 @@
     </message>
     <message>
         <source>Remove</source>
-        <translation>Удалить</translation>
+        <translation type="unfinished">Удалить</translation>
     </message>
     <message>
         <source>Preset name</source>
@@ -1031,20 +1031,20 @@
 <context>
     <name>Help</name>
     <message>
-        <source>Help(&amp;H)</source>
-        <translation>Справка(&amp;H)</translation>
+        <source>&amp;Help</source>
+        <translation>&amp;Справка</translation>
     </message>
     <message>
-        <source>About QMPlay2(&amp;A)</source>
-        <translation>О программе QMPlay2(&amp;A)</translation>
+        <source>&amp;About QMPlay2</source>
+        <translation>&amp;О программе QMPlay2</translation>
     </message>
     <message>
-        <source>About Qt(&amp;Q)</source>
-        <translation>О Qt(&amp;Q)</translation>
+        <source>About &amp;Qt</source>
+        <translation>О &amp;Qt</translation>
     </message>
     <message>
-        <source>Updates(&amp;U)</source>
-        <translation>Обновить(&amp;U)</translation>
+        <source>&amp;Updates</source>
+        <translation>&amp;Обновить</translation>
     </message>
     <message>
         <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
@@ -1179,18 +1179,18 @@
     <name>LineEdit</name>
     <message>
         <source>Clear</source>
-        <translation>Очистить</translation>
+        <translation type="unfinished">Очистить</translation>
     </message>
 </context>
 <context>
     <name>Lyrics</name>
     <message>
         <source>Lyrics</source>
-        <translation>Текст песни</translation>
+        <translation type="unfinished">Текст песни</translation>
     </message>
     <message>
         <source>Translation</source>
-        <translation>Перевод</translation>
+        <translation type="unfinished">Перевод</translation>
     </message>
     <message>
         <source>Lyrics not found</source>
@@ -1219,8 +1219,8 @@
         <translation>Главная панель инструментов</translation>
     </message>
     <message>
-        <source>Play(&amp;P)</source>
-        <translation>Воспроизведение(&amp;P)</translation>
+        <source>&amp;Play</source>
+        <translation>&amp;Воспроизведение</translation>
     </message>
     <message>
         <source>Choose files</source>
@@ -1235,12 +1235,12 @@
         <translation>Указанная позиция</translation>
     </message>
     <message>
-        <source>Hide(&amp;H)</source>
-        <translation>Скрыть(&amp;H)</translation>
+        <source>&amp;Hide</source>
+        <translation>&amp;Скрыть</translation>
     </message>
     <message>
-        <source>Show(&amp;S)</source>
-        <translation>Показать(&amp;S)</translation>
+        <source>&amp;Show</source>
+        <translation>&amp;Показать</translation>
     </message>
     <message>
         <source>Stopped</source>
@@ -1279,8 +1279,8 @@
         <translation>Сейчас загружается обновление.</translation>
     </message>
     <message>
-        <source>Lock widgets(&amp;L)</source>
-        <translation>Заблокировать виджеты(&amp;L)</translation>
+        <source>&amp;Lock widgets</source>
+        <translation>&amp;Заблокировать виджеты</translation>
     </message>
     <message>
         <source>Save group</source>
@@ -1291,16 +1291,16 @@
         <translation>Ошибка при сохранении списка воспроизведения</translation>
     </message>
     <message>
-        <source>Hide menu bar(&amp;H)</source>
-        <translation>Скрыть меню(&amp;H)</translation>
+        <source>&amp;Hide menu bar</source>
+        <translation>&amp;Скрыть меню</translation>
     </message>
     <message>
         <source>New window</source>
         <translation>Новое окно</translation>
     </message>
     <message>
-        <source>Pause(&amp;P)</source>
-        <translation>Пауза(&amp;P)</translation>
+        <source>&amp;Pause</source>
+        <translation>&amp;Пауза</translation>
     </message>
     <message>
         <source>Next audio stream</source>
@@ -1927,40 +1927,40 @@
 <context>
     <name>Options</name>
     <message>
-        <source>Options(&amp;T)</source>
-        <translation>Опции(&amp;T)</translation>
+        <source>Op&amp;tions</source>
+        <translation>Оп&amp;ции</translation>
     </message>
     <message>
-        <source>Settings(&amp;S)</source>
-        <translation>Настройки(&amp;S)</translation>
+        <source>&amp;Settings</source>
+        <translation>&amp;Настройки</translation>
     </message>
     <message>
-        <source>Show tray icon(&amp;S)</source>
-        <translation>Показывать значок в системном лотке(&amp;S)</translation>
+        <source>&amp;Show tray icon</source>
+        <translation>&amp;Показывать значок в системном лотке</translation>
     </message>
     <message>
-        <source>Modules settings(&amp;M)</source>
-        <translation>Настройка модулей(&amp;M)</translation>
+        <source>&amp;Modules settings</source>
+        <translation>&amp;Настройка модулей</translation>
     </message>
     <message>
         <source>Create new profile</source>
         <translation>Создать новый профиль</translation>
     </message>
     <message>
-        <source>Profiles(&amp;P)</source>
-        <translation>Профили(&amp;P)</translation>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Профили</translation>
     </message>
     <message>
-        <source>New Profile(&amp;N)</source>
-        <translation>Новый профиль(&amp;N)</translation>
+        <source>&amp;New Profile</source>
+        <translation>&amp;Новый профиль</translation>
     </message>
     <message>
-        <source>Copy Profile(&amp;C)</source>
-        <translation>Скопировать профиль(&amp;C)</translation>
+        <source>&amp;Copy Profile</source>
+        <translation>&amp;Скопировать профиль</translation>
     </message>
     <message>
-        <source>Default(&amp;D)</source>
-        <translation>По умолчанию(&amp;D)</translation>
+        <source>&amp;Default</source>
+        <translation>По &amp;умолчанию</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -1971,11 +1971,11 @@
         <translation>Введите имя нового профиля:</translation>
     </message>
     <message>
-        <source>Play back settings(&amp;P)</source>
-        <translation>Настройка воспроизведения(&amp;P)</translation>
+        <source>&amp;Playback settings</source>
+        <translation>&amp;Настройка воспроизведения</translation>
     </message>
     <message>
-        <source>Renderer settings(&amp;R)</source>
+        <source>&amp;Renderer settings</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2104,60 +2104,60 @@
 <context>
     <name>Playback</name>
     <message>
-        <source>Playback(&amp;P)</source>
-        <translation>Воспроизведение(&amp;P)</translation>
+        <source>&amp;Playback</source>
+        <translation>&amp;Воспроизведение</translation>
     </message>
     <message>
-        <source>Enable audio(&amp;E)</source>
-        <translation>Аудио включено(&amp;E)</translation>
+        <source>&amp;Enable audio</source>
+        <translation>&amp;Аудио включено</translation>
     </message>
     <message>
-        <source>Enable video(&amp;E)</source>
-        <translation>Видео включено(&amp;E)</translation>
+        <source>&amp;Enable video</source>
+        <translation>&amp;Видео включено</translation>
     </message>
     <message>
-        <source>Set video delay(&amp;V)</source>
-        <translation>Установить задержку видео(&amp;V)</translation>
+        <source>Set &amp;video delay</source>
+        <translation>Установить з&amp;адержку видео</translation>
     </message>
     <message>
-        <source>Delay video(&amp;D)</source>
-        <translation>Задержка видео(&amp;D)</translation>
+        <source>&amp;Delay video</source>
+        <translation>&amp;Задержка видео</translation>
     </message>
     <message>
-        <source>Speed up video(&amp;S)</source>
-        <translation>Ускорение видео(&amp;S)</translation>
+        <source>&amp;Speed up video</source>
+        <translation>&amp;Ускорение видео</translation>
     </message>
     <message>
-        <source>Enable subtitles(&amp;E)</source>
-        <translation>Субтитры включены(&amp;E)</translation>
+        <source>&amp;Enable subtitles</source>
+        <translation>&amp;Субтитры включены</translation>
     </message>
     <message>
-        <source>Add subtities from file(&amp;S)</source>
-        <translation>Добавить субтитры из файла(&amp;S)</translation>
+        <source>Add &amp;subtities from file</source>
+        <translation>Добавить &amp;субтитры из файла</translation>
     </message>
     <message>
-        <source>Set subtitles delay(&amp;S)</source>
-        <translation>Установить задержку субтитров(&amp;S)</translation>
+        <source>Set &amp;subtitles delay</source>
+        <translation>Установить за&amp;держку субтитров</translation>
     </message>
     <message>
-        <source>Delay subtitiles(&amp;D)</source>
-        <translation>Задержка субтитров(&amp;D)</translation>
+        <source>&amp;Delay subtitiles</source>
+        <translation>&amp;Задержка субтитров</translation>
     </message>
     <message>
-        <source>Speed up subtitles(&amp;S)</source>
-        <translation>Ускорение субтитров(&amp;S)</translation>
+        <source>&amp;Speed up subtitles</source>
+        <translation>&amp;Ускорение субтитров</translation>
     </message>
     <message>
-        <source>Scale up subtitles(&amp;I)</source>
-        <translation>Увеличить субтитры(&amp;I)</translation>
+        <source>Scale up subt&amp;itles</source>
+        <translation>Увеличить субти&amp;тры</translation>
     </message>
     <message>
-        <source>Scale down subtitles(&amp;T)</source>
-        <translation>Уменьшить субтитры(&amp;T)</translation>
+        <source>Scale down sub&amp;titles</source>
+        <translation>Умень&amp;шить субтитры</translation>
     </message>
     <message>
-        <source>Screen shot(&amp;S)</source>
-        <translation>Cнимок экрана(&amp;S)</translation>
+        <source>&amp;Screen shot</source>
+        <translation>&amp;Cнимок экрана</translation>
     </message>
 </context>
 <context>
@@ -2322,194 +2322,194 @@
 <context>
     <name>Player</name>
     <message>
-        <source>Player(&amp;P)</source>
-        <translation>Проигрыватель(&amp;P)</translation>
+        <source>&amp;Player</source>
+        <translation>&amp;Проигрыватель</translation>
     </message>
     <message>
-        <source>Stop(&amp;S)</source>
-        <translation>Остановить(&amp;S)</translation>
+        <source>&amp;Stop</source>
+        <translation>&amp;Остановить</translation>
     </message>
     <message>
-        <source>Next(&amp;N)</source>
-        <translation>Следующий(&amp;N)</translation>
+        <source>&amp;Next</source>
+        <translation>&amp;Следующий</translation>
     </message>
     <message>
-        <source>Previous(&amp;P)</source>
-        <translation>Предыдущий(&amp;P)</translation>
+        <source>&amp;Previous</source>
+        <translation>&amp;Предыдущий</translation>
     </message>
     <message>
-        <source>Seek forward(&amp;F)</source>
-        <translation>Перемотка вперед(&amp;F)</translation>
+        <source>Seek &amp;forward</source>
+        <translation>Перемотка &amp;вперед</translation>
     </message>
     <message>
-        <source>Seek backward(&amp;B)</source>
-        <translation>Перемотка назад(&amp;B)</translation>
+        <source>Seek &amp;backward</source>
+        <translation>Перемотка на&amp;зад</translation>
     </message>
     <message>
-        <source>Long seek forward(&amp;S)</source>
-        <translation>Длинная перемотка вперед(&amp;S)</translation>
+        <source>Long &amp;seek &amp;forward</source>
+        <translation>Длинная перемотка впе&amp;ред</translation>
     </message>
     <message>
-        <source>Long seek backward(&amp;E)</source>
-        <translation>Длинная перемотка назад(&amp;E)</translation>
+        <source>Long s&amp;eek backward</source>
+        <translation>Длинная перемотка на&amp;зад</translation>
     </message>
     <message>
-        <source>Faster(&amp;S)</source>
-        <translation>Быстрее(&amp;S)</translation>
+        <source>Fa&amp;ster</source>
+        <translation>Бы&amp;стрее</translation>
     </message>
     <message>
-        <source>Slower(&amp;R)</source>
-        <translation>Медленнее(&amp;R)</translation>
+        <source>Slowe&amp;r</source>
+        <translation>Медле&amp;ннее</translation>
     </message>
     <message>
-        <source>Zoom in(&amp;N)</source>
-        <translation>Увеличить(&amp;N)</translation>
+        <source>Zoom i&amp;n</source>
+        <translation>Увеличи&amp;ть</translation>
     </message>
     <message>
-        <source>Zoom out(&amp;T)</source>
-        <translation>Уменьшить(&amp;T)</translation>
+        <source>Zoom ou&amp;t</source>
+        <translation>Уменьши&amp;ть</translation>
     </message>
     <message>
-        <source>Mute(&amp;M)</source>
-        <translation>Выключить звук(&amp;M)</translation>
+        <source>&amp;Mute</source>
+        <translation>&amp;Выключить звук</translation>
     </message>
     <message>
-        <source>Toggle Aspect ratio(&amp;A)</source>
-        <translation>Переключить соотношение сторон(&amp;A)</translation>
+        <source>Toggle &amp;aspect ratio</source>
+        <translation>Переключить &amp;соотношение сторон</translation>
     </message>
     <message>
-        <source>Reset image Settings(&amp;S)</source>
-        <translation>Сброс параметров изображения(&amp;S)</translation>
+        <source>Reset image &amp;settings</source>
+        <translation>Сброс параметров &amp;изображения</translation>
     </message>
     <message>
-        <source>Set speed(&amp;S)</source>
-        <translation>Установить скорость(&amp;S)</translation>
+        <source>&amp;Set speed</source>
+        <translation>&amp;Установить скорость</translation>
     </message>
     <message>
-        <source>Next frame(&amp;F)</source>
-        <translation>Следующий кадр(&amp;F)</translation>
+        <source>Next &amp;frame</source>
+        <translation>Следующий &amp;кадр</translation>
     </message>
     <message>
-        <source>Volume up(&amp;U)</source>
-        <translation>Увеличить громкость(&amp;U)</translation>
+        <source>Volume &amp;up</source>
+        <translation>&amp;Увеличить громкость</translation>
     </message>
     <message>
-        <source>Volume down(&amp;D)</source>
-        <translation>Уменьшить громкость(&amp;D)</translation>
+        <source>Volume &amp;down</source>
+        <translation>&amp;Уменьшить громкость</translation>
     </message>
     <message>
-        <source>Suspend after playback is finished(&amp;K)</source>
-        <translation>Перейти в ждущий режим после завершения воспроизведения(&amp;K)</translation>
+        <source>Suspend after playbac&amp;k is finished</source>
+        <translation>Перейти в ждущий режим после заверше&amp;ния воспроизведения</translation>
     </message>
     <message>
-        <source>A-B Repeat(&amp;-)</source>
-        <translation>Повторять A-Б(&amp;-)</translation>
+        <source>A&amp;-B Repeat</source>
+        <translation>&amp;Повторять A-Б</translation>
     </message>
     <message>
-        <source>Detach from receiving commands(&amp;C)</source>
-        <translation>Отсоединить от получения команд(&amp;C)</translation>
+        <source>Detach from receiving &amp;commands</source>
+        <translation>Отсоединить от получения &amp;команд</translation>
     </message>
     <message>
-        <source>Skip(&amp;S)</source>
-        <translation>Пропустить(&amp;S)</translation>
+        <source>&amp;Skip</source>
+        <translation>&amp;Пропустить</translation>
     </message>
     <message>
-        <source>Stop after playing(&amp;S)</source>
+        <source>&amp;Stop after playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Previous frame(&amp;F)</source>
-        <translation>Предыдущий кадр(&amp;F)</translation>
+        <source>Previous &amp;frame</source>
+        <translation>Предыдущий &amp;кадр</translation>
     </message>
 </context>
 <context>
     <name>Playlist</name>
     <message>
-        <source>Playlist(&amp;P)</source>
-        <translation>Список воспроизведения(&amp;P)</translation>
+        <source>&amp;Playlist</source>
+        <translation>&amp;Список воспроизведения</translation>
     </message>
     <message>
-        <source>Stop loading(&amp;S)</source>
-        <translation>Остановить загрузку(&amp;S)</translation>
+        <source>&amp;Stop loading</source>
+        <translation>&amp;Остановить загрузку</translation>
     </message>
     <message>
-        <source>Load list(&amp;L)</source>
-        <translation>Загрузить список(&amp;L)</translation>
+        <source>Load &amp;list</source>
+        <translation>Загрузить с&amp;писок</translation>
     </message>
     <message>
-        <source>Save list(&amp;L)</source>
-        <translation>Сохранить список(&amp;L)</translation>
+        <source>Save &amp;list</source>
+        <translation>Сохранить &amp;список</translation>
     </message>
     <message>
-        <source>Remove selected entries(&amp;R)</source>
-        <translation>Удалить выбранные записи(&amp;R)</translation>
+        <source>&amp;Remove selected entries</source>
+        <translation>&amp;Удалить выбранные записи</translation>
     </message>
     <message>
-        <source>Remove entries without groups(&amp;W)</source>
-        <translation>Удалить записи без группы(&amp;W)</translation>
+        <source>Remove entries &amp;without groups</source>
+        <translation>Удалить записи &amp;без группы</translation>
     </message>
     <message>
-        <source>Clear list(&amp;C)</source>
-        <translation>Очистить список(&amp;C)</translation>
+        <source>&amp;Clear list</source>
+        <translation>&amp;Очистить список</translation>
     </message>
     <message>
-        <source>Copy(&amp;C)</source>
-        <translation>Копировать(&amp;C)</translation>
+        <source>&amp;Copy</source>
+        <translation>&amp;Копировать</translation>
     </message>
     <message>
-        <source>Paste(&amp;P)</source>
-        <translation>Вставить(&amp;P)</translation>
+        <source>&amp;Paste</source>
+        <translation>&amp;Вставить</translation>
     </message>
     <message>
-        <source>Create group(&amp;C)</source>
-        <translation>Создать группу(&amp;C)</translation>
+        <source>&amp;Create &amp;group</source>
+        <translation>Соз&amp;дать группу</translation>
     </message>
     <message>
-        <source>Rename(&amp;R)</source>
-        <translation>Переименовать(&amp;R)</translation>
+        <source>&amp;Rename</source>
+        <translation>&amp;Переименовать</translation>
     </message>
     <message>
-        <source>Find entries(&amp;F)</source>
-        <translation>Поиск записей(&amp;F)</translation>
+        <source>&amp;Find entries</source>
+        <translation>&amp;Поиск записей</translation>
     </message>
     <message>
-        <source>Collapse all(&amp;C)</source>
-        <translation>Свернуть все(&amp;C)</translation>
+        <source>&amp;Collapse all</source>
+        <translation>&amp;Свернуть все</translation>
     </message>
     <message>
-        <source>Expand all(&amp;E)</source>
-        <translation>Развернуть все(&amp;E)</translation>
+        <source>&amp;Expand all</source>
+        <translation>&amp;Развернуть все</translation>
     </message>
     <message>
-        <source>Go to the playback(&amp;G)</source>
-        <translation>Перейти к(&amp;G)</translation>
+        <source>&amp;Go to the playback</source>
+        <translation>&amp;Перейти к</translation>
     </message>
     <message>
-        <source>Enqueue(&amp;E)</source>
-        <translation>Очередь(&amp;E)</translation>
+        <source>&amp;Enqueue</source>
+        <translation>&amp;Очередь</translation>
     </message>
     <message>
-        <source>Properties(&amp;P)</source>
-        <translation>Параметры(&amp;P)</translation>
+        <source>&amp;Properties</source>
+        <translation>&amp;Параметры</translation>
     </message>
     <message>
-        <source>Extensions(&amp;E)</source>
-        <translation>Расширения(&amp;E)</translation>
+        <source>&amp;Extensions</source>
+        <translation>&amp;Расширения</translation>
     </message>
     <message>
-        <source>Save group(&amp;G)</source>
-        <translation>Сохранить группу(&amp;G)</translation>
+        <source>Save &amp;group</source>
+        <translation>Сохранить &amp;группу</translation>
     </message>
     <message>
-        <source>Synchronize groups(&amp;S)</source>
-        <translation>Синхронизировать группу(&amp;S)</translation>
+        <source>&amp;Synchronize groups</source>
+        <translation>&amp;Синхронизировать группу</translation>
     </message>
     <message>
-        <source>Quick group synchronization(&amp;Q)</source>
-        <translation>Быстрая синхронизация группы(&amp;Q)</translation>
+        <source>&amp;Quick group synchronization</source>
+        <translation>&amp;Быстрая синхронизация группы</translation>
     </message>
     <message>
-        <source>Always sync(&amp;A)</source>
+        <source>&amp;Always sync</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2543,12 +2543,12 @@
 <context>
     <name>PlaylistWidget</name>
     <message>
-        <source>Unlock(&amp;L)</source>
-        <translation>Разблокировать(&amp;L)</translation>
+        <source>Un&amp;lock</source>
+        <translation>Ра&amp;зблокировать</translation>
     </message>
     <message>
-        <source>Lock(&amp;L)</source>
-        <translation>Заблокировать(&amp;L)</translation>
+        <source>&amp;Lock</source>
+        <translation>&amp;Заблокировать</translation>
     </message>
 </context>
 <context>
@@ -2741,44 +2741,44 @@ QMPlay2 не будет отображать значки!</translation>
 <context>
     <name>Repeat</name>
     <message>
-        <source>Repeat(&amp;R)</source>
-        <translation>Повторять(&amp;R)</translation>
+        <source>&amp;Repeat</source>
+        <translation>&amp;Повторять</translation>
     </message>
     <message>
-        <source>No repeating(&amp;N)</source>
-        <translation>Без повторения(&amp;N)</translation>
+        <source>&amp;No repeating</source>
+        <translation>&amp;Без повторения</translation>
     </message>
     <message>
-        <source>Entry repeating(&amp;E)</source>
-        <translation>Повторение записи(&amp;E)</translation>
+        <source>&amp;Entry repeating</source>
+        <translation>Повторение &amp;записи</translation>
     </message>
     <message>
-        <source>Group repeating(&amp;G)</source>
-        <translation>Повторение группы(&amp;G)</translation>
+        <source>&amp;Group repeating</source>
+        <translation>Повторение &amp;группы</translation>
     </message>
     <message>
-        <source>Playlist repeating(&amp;P)</source>
-        <translation>Повторение списка воспроизведения(&amp;P)</translation>
+        <source>&amp;Playlist repeating</source>
+        <translation>Повторение &amp;списка воспроизведения</translation>
     </message>
     <message>
-        <source>Random(&amp;A)</source>
-        <translation>Случайно(&amp;A)</translation>
+        <source>R&amp;andom</source>
+        <translation>С&amp;лучайно</translation>
     </message>
     <message>
-        <source>Random in group(&amp;G)</source>
-        <translation>Случайно в группе(&amp;G)</translation>
+        <source>Random in &amp;group</source>
+        <translation>Случайно в г&amp;руппе</translation>
     </message>
     <message>
-        <source>Random and Repeat(&amp;R)</source>
-        <translation>Случайно и повторять(&amp;R)</translation>
+        <source>Random and &amp;repeat</source>
+        <translation>Случайно и &amp;повторять</translation>
     </message>
     <message>
-        <source>Random in group and repeat(&amp;T)</source>
-        <translation>Случайно в группе и повторять(&amp;T)</translation>
+        <source>Random in group and repea&amp;t</source>
+        <translation>Случайно в группе и повторя&amp;ть</translation>
     </message>
     <message>
-        <source>Stop playback after every file(&amp;S)</source>
-        <translation>Останавливать воспроизведение после каждого файла(&amp;S)</translation>
+        <source>&amp;Stop playback after every file</source>
+        <translation>&amp;Останавливать воспроизведение после каждого файла</translation>
     </message>
 </context>
 <context>
@@ -3115,24 +3115,24 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Sort</name>
     <message>
-        <source>From the shortest to the longest(&amp;F)</source>
-        <translation>От коротких к длинным(&amp;F)</translation>
+        <source>&amp;From the shortest to the longest</source>
+        <translation>&amp;От коротких к длинным</translation>
     </message>
     <message>
-        <source>From the longest to the shortest(&amp;F)</source>
-        <translation>От длинных к коротким(&amp;F)</translation>
+        <source>&amp;From the longest to the shortest</source>
+        <translation>О&amp;т длинных к коротким</translation>
     </message>
     <message>
-        <source>Sort(&amp;S)</source>
-        <translation>Сортировка(&amp;S)</translation>
+        <source>&amp;Sort</source>
+        <translation>Сор&amp;тировка</translation>
     </message>
     <message>
-        <source>A-Z(&amp;A)</source>
-        <translation>А-Я(&amp;A)</translation>
+        <source>&amp;A-Z</source>
+        <translation>&amp;А-Я</translation>
     </message>
     <message>
-        <source>Z-A(&amp;Z)</source>
-        <translation>;Я-А(&amp;Z)</translation>
+        <source>&amp;Z-A</source>
+        <translation>&amp;Я-А</translation>
     </message>
 </context>
 <context>
@@ -3173,24 +3173,24 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Streams</name>
     <message>
-        <source>Audio streams(&amp;A)</source>
-        <translation>Аудиопотоки(&amp;A)</translation>
+        <source>&amp;Audio streams</source>
+        <translation>Аудиопотоки</translation>
     </message>
     <message>
-        <source>Video streams(&amp;V)</source>
-        <translation>Видеопотоки(&amp;V)</translation>
+        <source>&amp;Video streams</source>
+        <translation>Видеопотоки</translation>
     </message>
     <message>
-        <source>Subtitles streams(&amp;S)</source>
-        <translation>Субтитры потоков(&amp;S)</translation>
+        <source>&amp;Subtitles streams</source>
+        <translation>Субтитры потоков</translation>
     </message>
     <message>
-        <source>Chapters(&amp;C)</source>
-        <translation>Главы(&amp;C)</translation>
+        <source>&amp;Chapters</source>
+        <translation>Главы</translation>
     </message>
     <message>
-        <source>Programs(&amp;P)</source>
-        <translation>Программы(&amp;P)</translation>
+        <source>&amp;Programs</source>
+        <translation>Программы</translation>
     </message>
 </context>
 <context>
@@ -3432,32 +3432,32 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>VideoFilters</name>
     <message>
-        <source>Video filters(&amp;F)</source>
-        <translation>Видеофильтры(&amp;F)</translation>
+        <source>Video &amp;filters</source>
+        <translation>Видеофильт&amp;ры</translation>
     </message>
     <message>
-        <source>Horizontal flip(&amp;H)</source>
-        <translation>Отразить горизонтально(&amp;H)</translation>
+        <source>&amp;Horizontal flip</source>
+        <translation>Отразить &amp;горизонтально</translation>
     </message>
     <message>
-        <source>Vertical flip(&amp;V)</source>
-        <translation>Отразить вертикально(&amp;V)</translation>
+        <source>&amp;Vertical flip</source>
+        <translation>Отразить &amp;вертикально</translation>
     </message>
     <message>
-        <source>More filters(&amp;M)</source>
-        <translation>Дополнительные фильтры(&amp;M)</translation>
+        <source>&amp;More filters</source>
+        <translation>&amp;Дополнительные фильтры</translation>
     </message>
     <message>
-        <source>Rotate 90°(&amp;R)</source>
-        <translation>Повернуть 90°(&amp;R)</translation>
+        <source>&amp;Rotate 90°</source>
+        <translation>&amp;Повернуть 90°</translation>
     </message>
     <message>
-        <source>Spherical view(&amp;S)</source>
-        <translation>Сферический вид(&amp;S)</translation>
+        <source>&amp;Spherical view</source>
+        <translation>&amp;Сферический вид</translation>
     </message>
     <message>
-        <source>Video adjustment(&amp;A)</source>
-        <translation>Регулировка видео(&amp;A)</translation>
+        <source>Video &amp;adjustment</source>
+        <translation>Р&amp;егулировка видео</translation>
     </message>
 </context>
 <context>
@@ -3492,30 +3492,30 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Widgets</name>
     <message>
-        <source>Widgets(&amp;W)</source>
-        <translation>Виджеты(&amp;W)</translation>
+        <source>&amp;Widgets</source>
+        <translation>&amp;Виджеты</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <source>Window(&amp;W)</source>
-        <translation>Окно(&amp;W)</translation>
+        <source>&amp;Window</source>
+        <translation>&amp;Окно</translation>
     </message>
     <message>
-        <source>Full screen(&amp;F)</source>
-        <translation>Во весь экран(&amp;F)</translation>
+        <source>&amp;Full screen</source>
+        <translation>&amp;Во весь экран</translation>
     </message>
     <message>
-        <source>Compact view(&amp;C)</source>
-        <translation>Компактный вид(&amp;C)</translation>
+        <source>&amp;Compact view</source>
+        <translation>&amp;Компактный вид</translation>
     </message>
     <message>
-        <source>Close(&amp;C)</source>
-        <translation>Закрыть(&amp;C)</translation>
+        <source>&amp;Close</source>
+        <translation>&amp;Закрыть</translation>
     </message>
     <message>
-        <source>Always on top(&amp;A)</source>
+        <source>&amp;Always on top</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3559,7 +3559,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Rating</source>
-        <translation>Рейтинг</translation>
+        <translation type="unfinished">Рейтинг</translation>
     </message>
     <message>
         <source>Sort search results by ...</source>

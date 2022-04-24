@@ -73,20 +73,20 @@
 <context>
     <name>Add</name>
     <message>
-        <source>Directory(&amp;D)</source>
-        <translation>ディレクトリ(&amp;D)</translation>
+        <source>&amp;Directory</source>
+        <translation>ディレクトリ</translation>
     </message>
     <message>
-        <source>Address(&amp;A)</source>
-        <translation>アドレス(&amp;A)</translation>
+        <source>&amp;Address</source>
+        <translation>アドレス</translation>
     </message>
     <message>
-        <source>Add(&amp;A)</source>
-        <translation>追加(&amp;A)</translation>
+        <source>&amp;Add</source>
+        <translation>追加</translation>
     </message>
     <message>
-        <source>Files(&amp;F)</source>
-        <translation>ファイル(&amp;F)</translation>
+        <source>&amp;Files</source>
+        <translation>ファイル</translation>
     </message>
 </context>
 <context>
@@ -264,20 +264,20 @@
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>Aspect ratio(&amp;A)</source>
-        <translation>アスペクト比(&amp;A)</translation>
+        <source>&amp;Aspect ratio</source>
+        <translation>アスペクト比</translation>
     </message>
     <message>
-        <source>Disabled(&amp;D)</source>
-        <translation>無効化(&amp;D)</translation>
+        <source>&amp;Disabled</source>
+        <translation>無効化</translation>
     </message>
     <message>
-        <source>Auto(&amp;A)</source>
-        <translation>自動(&amp;A)</translation>
+        <source>&amp;Auto</source>
+        <translation>自動</translation>
     </message>
     <message>
-        <source>Depends on size(&amp;E)</source>
-        <translation>サイズに依存します(&amp;E)</translation>
+        <source>D&amp;epends on size</source>
+        <translation>サイズに依存します</translation>
     </message>
 </context>
 <context>
@@ -337,24 +337,24 @@
 <context>
     <name>AudioChannels</name>
     <message>
-        <source>Other(&amp;O)</source>
-        <translation>その他(&amp;D)</translation>
+        <source>&amp;Other</source>
+        <translation>その他</translation>
     </message>
     <message>
-        <source>Mono(&amp;M)</source>
-        <translation>モノラル(&amp;M)</translation>
+        <source>&amp;Mono</source>
+        <translation>モノラル</translation>
     </message>
     <message>
-        <source>Channels(&amp;C)</source>
-        <translation>チャンネル(&amp;C)</translation>
+        <source>&amp;Channels</source>
+        <translation>チャンネル</translation>
     </message>
     <message>
-        <source>Autodetect(&amp;A)</source>
-        <translation>自動検出(&amp;A)</translation>
+        <source>&amp;Autodetect</source>
+        <translation>自動検出</translation>
     </message>
     <message>
-        <source>Stereo(&amp;S)</source>
-        <translation>ステレオ(&amp;S)</translation>
+        <source>&amp;Stereo</source>
+        <translation>ステレオ</translation>
     </message>
 </context>
 <context>
@@ -663,8 +663,8 @@
         <translation>アドレスを入力</translation>
     </message>
     <message>
-        <source>Add(&amp;A)</source>
-        <translation>追加(&amp;A)</translation>
+        <source>&amp;Add</source>
+        <translation>追加</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
@@ -1035,20 +1035,20 @@
 <context>
     <name>Help</name>
     <message>
-        <source>About Qt(&amp;Q)</source>
-        <translation>Qtについて(&amp;Q)</translation>
+        <source>About &amp;Qt</source>
+        <translation>Qtについて</translation>
     </message>
     <message>
-        <source>Help(&amp;H)</source>
-        <translation>ヘルプ(&amp;H)</translation>
+        <source>&amp;Help</source>
+        <translation>ヘルプ</translation>
     </message>
     <message>
-        <source>About QMPlay2(&amp;A)</source>
-        <translation>QMPlay2について(&amp;A)</translation>
+        <source>&amp;About QMPlay2</source>
+        <translation>QMPlay2について</translation>
     </message>
     <message>
-        <source>Updates(&amp;U)</source>
-        <translation>アップデート(&amp;U)</translation>
+        <source>&amp;Updates</source>
+        <translation>アップデート</translation>
     </message>
     <message>
         <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
@@ -1231,16 +1231,16 @@
         <translation>ファイルを選ぶ</translation>
     </message>
     <message>
-        <source>Hide(&amp;H)</source>
-        <translation>隠す(&amp;H)</translation>
+        <source>&amp;Hide</source>
+        <translation>隠す</translation>
     </message>
     <message>
         <source>Choose playlist</source>
         <translation>プレイリストを選択</translation>
     </message>
     <message>
-        <source>Hide menu bar(&amp;H)</source>
-        <translation>メニューバーを隠す(&amp;H)</translation>
+        <source>&amp;Hide menu bar</source>
+        <translation>メニューバーを隠す</translation>
     </message>
     <message>
         <source>Subtitles</source>
@@ -1279,20 +1279,20 @@
         <translation>メインツールバー</translation>
     </message>
     <message>
-        <source>Show(&amp;S)</source>
-        <translation>表示(&amp;S)</translation>
+        <source>&amp;Show</source>
+        <translation>表示</translation>
     </message>
     <message>
-        <source>Play(&amp;P)</source>
-        <translation>再生(&amp;P)</translation>
+        <source>&amp;Play</source>
+        <translation>再生</translation>
     </message>
     <message>
         <source>QMPlay2 is doing something in the background.</source>
         <translation>QMPlay2はバックグラウンドで動作しています。</translation>
     </message>
     <message>
-        <source>Lock widgets(&amp;L)</source>
-        <translation>ウィジェットをロック(&amp;L)</translation>
+        <source>&amp;Lock widgets</source>
+        <translation>ウィジェットをロック</translation>
     </message>
     <message>
         <source>The update is being downloaded now.</source>
@@ -1303,16 +1303,16 @@
         <translation>新しいウィンドウ</translation>
     </message>
     <message>
-        <source>Pause(&amp;P)</source>
-        <translation>一時停止(&amp;P)</translation>
+        <source>&amp;Pause</source>
+        <translation>一時停止</translation>
     </message>
     <message>
         <source>Next audio stream</source>
-        <translation>次のオーディオ配信</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Next subtitles stream</source>
-        <translation>次の字幕配信</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1561,6 +1561,7 @@
     </message>
     <message>
         <source>Add entry to the directories context menu</source>
+        <translatorcomment>ディレクトリのコンテキストメニューにエントリを追加する</translatorcomment>
         <translation>ディレクトリのコンテキストメニューにエントリを追加する</translation>
     </message>
     <message>
@@ -1931,40 +1932,40 @@
 <context>
     <name>Options</name>
     <message>
-        <source>Show tray icon(&amp;S)</source>
-        <translation>トレイアイコンを表示(&amp;S)</translation>
+        <source>&amp;Show tray icon</source>
+        <translation>トレイアイコンを表示</translation>
     </message>
     <message>
-        <source>Options(&amp;T)</source>
-        <translation>設定(&amp;T)</translation>
+        <source>Op&amp;tions</source>
+        <translation>設定</translation>
     </message>
     <message>
-        <source>Settings(&amp;S)</source>
-        <translation>設定(&amp;S)</translation>
+        <source>&amp;Settings</source>
+        <translation>設定</translation>
     </message>
     <message>
-        <source>Modules settings(&amp;M)</source>
-        <translation>モジュールの設定(&amp;M)</translation>
+        <source>&amp;Modules settings</source>
+        <translation>モジュールの設定</translation>
     </message>
     <message>
         <source>Create new profile</source>
         <translation>新しいプロファイルを作成</translation>
     </message>
     <message>
-        <source>Profiles(&amp;P)</source>
-        <translation>プロファイル(&amp;P)</translation>
+        <source>&amp;Profiles</source>
+        <translation>プロファイル</translation>
     </message>
     <message>
-        <source>New Profile(&amp;N)</source>
-        <translation>プロファイル(&amp;N)</translation>
+        <source>&amp;New Profile</source>
+        <translation>プロファイル</translation>
     </message>
     <message>
-        <source>Copy Profile(&amp;C)</source>
-        <translation>プロファイルをコピー(&amp;C)</translation>
+        <source>&amp;Copy Profile</source>
+        <translation>プロファイルをコピー</translation>
     </message>
     <message>
-        <source>Default(&amp;D)</source>
-        <translation>デフォルト(&amp;D)</translation>
+        <source>&amp;Default</source>
+        <translation>デフォルト</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -1975,12 +1976,12 @@
         <translation>新しいプロファイル名を入力してください：</translation>
     </message>
     <message>
-        <source>Play back settings(&amp;P)</source>
-        <translation>再生設定(&amp;P)</translation>
+        <source>&amp;Playback settings</source>
+        <translation>再生設定</translation>
     </message>
     <message>
-        <source>Renderer settings(&amp;R)</source>
-        <translation>レンダラー設定(&amp;R)</translation>
+        <source>&amp;Renderer settings</source>
+        <translation>レンダラー設定</translation>
     </message>
 </context>
 <context>
@@ -2108,60 +2109,60 @@
 <context>
     <name>Playback</name>
     <message>
-        <source>Enable audio(&amp;E)</source>
-        <translation>オーディオを有効化(&amp;E)</translation>
+        <source>&amp;Enable audio</source>
+        <translation>オーディオを有効化</translation>
     </message>
     <message>
-        <source>Delay video(&amp;D)</source>
-        <translation>ビデオを遅くする(&amp;D)</translation>
+        <source>&amp;Delay video</source>
+        <translation>ビデオを遅くする</translation>
     </message>
     <message>
-        <source>Scale down subtitles(&amp;T)</source>
-        <translation>字幕の倍率を下げる(&amp;T)</translation>
+        <source>Scale down sub&amp;titles</source>
+        <translation>字幕の倍率を下げる</translation>
     </message>
     <message>
-        <source>Enable video(&amp;E)</source>
-        <translation>ビデオを有効化(&amp;E)</translation>
+        <source>&amp;Enable video</source>
+        <translation>ビデオを有効化</translation>
     </message>
     <message>
-        <source>Enable subtitles(&amp;E)</source>
-        <translation>字幕を有効化(&amp;E)</translation>
+        <source>&amp;Enable subtitles</source>
+        <translation>字幕を有効化</translation>
     </message>
     <message>
-        <source>Scale up subtitles(&amp;I)</source>
-        <translation>字幕の倍率を上げる(&amp;I)</translation>
+        <source>Scale up subt&amp;itles</source>
+        <translation>字幕の倍率を上げる</translation>
     </message>
     <message>
-        <source>Delay subtitiles(&amp;D)</source>
-        <translation>字幕を遅くする(&amp;D)</translation>
+        <source>&amp;Delay subtitiles</source>
+        <translation>字幕を遅くする</translation>
     </message>
     <message>
-        <source>Screen shot(&amp;S)</source>
-        <translation>スクリーンショットを撮る(&amp;S)</translation>
+        <source>&amp;Screen shot</source>
+        <translation>スクリーンショットを撮る</translation>
     </message>
     <message>
-        <source>Set subtitles delay(&amp;S)</source>
-        <translation>字幕の遅延時間の設定(&amp;S)</translation>
+        <source>Set &amp;subtitles delay</source>
+        <translation>字幕の遅延時間の設定</translation>
     </message>
     <message>
-        <source>Speed up video(&amp;S)</source>
-        <translation>ビデオを速くする(&amp;S)</translation>
+        <source>&amp;Speed up video</source>
+        <translation>ビデオを速くする</translation>
     </message>
     <message>
-        <source>Playback(&amp;P)</source>
-        <translation>再生(&amp;P)</translation>
+        <source>&amp;Playback</source>
+        <translation>再生</translation>
     </message>
     <message>
-        <source>Set video delay(&amp;V)</source>
-        <translation>ビデオの遅延時間を設定(&amp;V)</translation>
+        <source>Set &amp;video delay</source>
+        <translation>ビデオの遅延時間を設定</translation>
     </message>
     <message>
-        <source>Add subtities from file(&amp;S)</source>
-        <translation>ファイルから字幕を追加(&amp;S)</translation>
+        <source>Add &amp;subtities from file</source>
+        <translation>ファイルから字幕を追加</translation>
     </message>
     <message>
-        <source>Speed up subtitles(&amp;S)</source>
-        <translation>字幕の速度を速くする(&amp;S)</translation>
+        <source>&amp;Speed up subtitles</source>
+        <translation>字幕の速度を速くする</translation>
     </message>
 </context>
 <context>
@@ -2326,195 +2327,195 @@
 <context>
     <name>Player</name>
     <message>
-        <source>Mute(&amp;M)</source>
-        <translation>ミュート(&amp;M)</translation>
+        <source>&amp;Mute</source>
+        <translation>ミュート</translation>
     </message>
     <message>
-        <source>Zoom in(&amp;N)</source>
-        <translation>拡大(&amp;N)</translation>
+        <source>Zoom i&amp;n</source>
+        <translation>拡大</translation>
     </message>
     <message>
-        <source>Reset image Settings(&amp;S)</source>
-        <translation>画像の設定をリセットする(&amp;S)</translation>
+        <source>Reset image &amp;settings</source>
+        <translation>画像の設定をリセットする</translation>
     </message>
     <message>
-        <source>Set speed(&amp;S)</source>
-        <translation>スピードを設定(&amp;S)</translation>
+        <source>&amp;Set speed</source>
+        <translation>スピードを設定</translation>
     </message>
     <message>
-        <source>Slower(&amp;R)</source>
-        <translation>遅く(&amp;R)</translation>
+        <source>Slowe&amp;r</source>
+        <translation>遅く</translation>
     </message>
     <message>
-        <source>Seek backward(&amp;B)</source>
-        <translation>後ろにシーク(&amp;B)</translation>
+        <source>Seek &amp;backward</source>
+        <translation>後ろにシーク</translation>
     </message>
     <message>
-        <source>Next frame(&amp;F)</source>
-        <translation>次のフレーム(&amp;F)</translation>
+        <source>Next &amp;frame</source>
+        <translation>次のフレーム</translation>
     </message>
     <message>
-        <source>Long seek backward(&amp;E)</source>
-        <translation>後ろにたくさんシーク(&amp;E)</translation>
+        <source>Long s&amp;eek backward</source>
+        <translation>後ろにたくさんシーク</translation>
     </message>
     <message>
-        <source>Previous(&amp;P)</source>
-        <translation>前へ(&amp;P)</translation>
+        <source>&amp;Previous</source>
+        <translation>前へ</translation>
     </message>
     <message>
-        <source>Seek forward(&amp;F)</source>
-        <translation>前にシーク(&amp;F)</translation>
+        <source>Seek &amp;forward</source>
+        <translation>前にシーク</translation>
     </message>
     <message>
-        <source>Zoom out(&amp;T)</source>
-        <translation>縮小(&amp;T)</translation>
+        <source>Zoom ou&amp;t</source>
+        <translation>縮小</translation>
     </message>
     <message>
-        <source>Toggle Aspect ratio(&amp;A)</source>
-        <translation>アスペクト比を変更(&amp;A)</translation>
+        <source>Toggle &amp;aspect ratio</source>
+        <translation>アスペクト比を変更</translation>
     </message>
     <message>
-        <source>Volume down(&amp;D)</source>
-        <translation>ボリュームダウン(&amp;D)</translation>
+        <source>Volume &amp;down</source>
+        <translation>ボリュームダウン</translation>
     </message>
     <message>
-        <source>Next(&amp;N)</source>
-        <translation>次へ(&amp;N)</translation>
+        <source>&amp;Next</source>
+        <translation>次へ</translation>
     </message>
     <message>
-        <source>Stop(&amp;S)</source>
-        <translation>停止(&amp;S)</translation>
+        <source>&amp;Stop</source>
+        <translation>停止</translation>
     </message>
     <message>
-        <source>Faster(&amp;S)</source>
-        <translation>速(&amp;S)く</translation>
+        <source>Fa&amp;ster</source>
+        <translation>速く</translation>
     </message>
     <message>
-        <source>Volume up(&amp;U)</source>
-        <translation>ボリュームアップ(&amp;U)</translation>
+        <source>Volume &amp;up</source>
+        <translation>ボリュームアップ</translation>
     </message>
     <message>
-        <source>Player(&amp;P)</source>
-        <translation>プレイヤー(&amp;P)</translation>
+        <source>&amp;Player</source>
+        <translation>プレイヤー</translation>
     </message>
     <message>
-        <source>Long seek forward(&amp;S)</source>
-        <translation>前にたくさんシーク(&amp;P)</translation>
+        <source>Long &amp;seek &amp;forward</source>
+        <translation>前にたくさんシーク</translation>
     </message>
     <message>
-        <source>Suspend after playback is finished(&amp;K)</source>
-        <translation>再生が終了次第一時停止(&amp;K)</translation>
+        <source>Suspend after playbac&amp;k is finished</source>
+        <translation>再生が終了次第一時停止</translation>
     </message>
     <message>
-        <source>A-B Repeat(&amp;-)</source>
-        <translation>A-Bリピート(&amp;-)</translation>
+        <source>A&amp;-B Repeat</source>
+        <translation>A-Bリピート</translation>
     </message>
     <message>
-        <source>Detach from receiving commands(&amp;C)</source>
-        <translation>コマンドの受信から切り離します(&amp;C)</translation>
+        <source>Detach from receiving &amp;commands</source>
+        <translation>コマンドの受信から切り離します</translation>
     </message>
     <message>
-        <source>Skip(&amp;S)</source>
-        <translation>スキップ(&amp;S)</translation>
+        <source>&amp;Skip</source>
+        <translation>スキップ</translation>
     </message>
     <message>
-        <source>Stop after playing(&amp;S)</source>
+        <source>&amp;Stop after playing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Previous frame(&amp;F)</source>
-        <translation>前のフレーム(&amp;F)</translation>
+        <source>Previous &amp;frame</source>
+        <translation>前のフレーム</translation>
     </message>
 </context>
 <context>
     <name>Playlist</name>
     <message>
-        <source>Find entries(&amp;F)</source>
-        <translation>エントリーを探す(&amp;F)</translation>
+        <source>&amp;Find entries</source>
+        <translation>エントリーを探す</translation>
     </message>
     <message>
-        <source>Go to the playback(&amp;G)</source>
-        <translation>再生に移動する(&amp;G)</translation>
+        <source>&amp;Go to the playback</source>
+        <translation>再生に移動する</translation>
     </message>
     <message>
-        <source>Save group(&amp;G)</source>
-        <translation>グループを保存(&amp;G)</translation>
+        <source>Save &amp;group</source>
+        <translation>グループを保存</translation>
     </message>
     <message>
-        <source>Clear list(&amp;C)</source>
-        <translation>リストをクリア(&amp;C)</translation>
+        <source>&amp;Clear list</source>
+        <translation>リストをクリア</translation>
     </message>
     <message>
-        <source>Collapse all(&amp;C)</source>
-        <translation>すべて折りたたむ(&amp;C)</translation>
+        <source>&amp;Collapse all</source>
+        <translation>すべて折りたたむ</translation>
     </message>
     <message>
-        <source>Paste(&amp;P)</source>
-        <translation>ペースト(&amp;P)</translation>
+        <source>&amp;Paste</source>
+        <translation>ペースト</translation>
     </message>
     <message>
-        <source>Stop loading(&amp;S)</source>
-        <translation>読み込みを停止する(&amp;S)</translation>
+        <source>&amp;Stop loading</source>
+        <translation>読み込みを停止する</translation>
     </message>
     <message>
-        <source>Enqueue(&amp;E)</source>
-        <translation>格納(&amp;E)</translation>
+        <source>&amp;Enqueue</source>
+        <translation>格納</translation>
     </message>
     <message>
-        <source>Extensions(&amp;E)</source>
-        <translation>拡張(&amp;E)</translation>
+        <source>&amp;Extensions</source>
+        <translation>拡張</translation>
     </message>
     <message>
-        <source>Expand all(&amp;E)</source>
-        <translation>すべて展開(&amp;E)</translation>
+        <source>&amp;Expand all</source>
+        <translation>すべて展開</translation>
     </message>
     <message>
-        <source>Save list(&amp;L)</source>
-        <translation>リストを保存(&amp;L)</translation>
+        <source>Save &amp;list</source>
+        <translation>リストを保存</translation>
     </message>
     <message>
-        <source>Playlist(&amp;P)</source>
-        <translation>プレイリスト(&amp;P)</translation>
+        <source>&amp;Playlist</source>
+        <translation>プレイリスト</translation>
     </message>
     <message>
-        <source>Create group(&amp;C)</source>
-        <translation>グループを作成(&amp;C)</translation>
+        <source>&amp;Create &amp;group</source>
+        <translation>グループを作成</translation>
     </message>
     <message>
-        <source>Rename(&amp;R)</source>
-        <translation>名前の変更(&amp;R)</translation>
+        <source>&amp;Rename</source>
+        <translation>名前の変更</translation>
     </message>
     <message>
-        <source>Remove entries without groups(&amp;W)</source>
-        <translation>グループのないエントリを削除する(&amp;W)</translation>
+        <source>Remove entries &amp;without groups</source>
+        <translation>グループのないエントリを削除する</translation>
     </message>
     <message>
-        <source>Properties(&amp;P)</source>
-        <translation>プロパティ(&amp;P)</translation>
+        <source>&amp;Properties</source>
+        <translation>プロパティ</translation>
     </message>
     <message>
-        <source>Copy(&amp;C)</source>
-        <translation>コピー(&amp;C)</translation>
+        <source>&amp;Copy</source>
+        <translation>コピー</translation>
     </message>
     <message>
-        <source>Remove selected entries(&amp;R)</source>
-        <translation>選択したエントリーを削除する(&amp;R)</translation>
+        <source>&amp;Remove selected entries</source>
+        <translation>選択したエントリーを削除する</translation>
     </message>
     <message>
-        <source>Load list(&amp;L)</source>
-        <translation>ロードリスト(&amp;L)</translation>
+        <source>Load &amp;list</source>
+        <translation>ロードリスト</translation>
     </message>
     <message>
-        <source>Synchronize groups(&amp;S)</source>
-        <translation>グループを同期する(&amp;S)</translation>
+        <source>&amp;Synchronize groups</source>
+        <translation>グループを同期する</translation>
     </message>
     <message>
-        <source>Quick group synchronization(&amp;Q)</source>
-        <translation>クイックグループ同期(&amp;Q)</translation>
+        <source>&amp;Quick group synchronization</source>
+        <translation>クイックグループ同期</translation>
     </message>
     <message>
-        <source>Always sync(&amp;A)</source>
-        <translation>常に同期(&amp;A)</translation>
+        <source>&amp;Always sync</source>
+        <translation>常に同期</translation>
     </message>
 </context>
 <context>
@@ -2547,12 +2548,12 @@
 <context>
     <name>PlaylistWidget</name>
     <message>
-        <source>Unlock(&amp;L)</source>
-        <translation>ロック解除(&amp;L)</translation>
+        <source>Un&amp;lock</source>
+        <translation>ロック解除</translation>
     </message>
     <message>
-        <source>Lock(&amp;L)</source>
-        <translation>ロック(&amp;L)</translation>
+        <source>&amp;Lock</source>
+        <translation>ロック</translation>
     </message>
 </context>
 <context>
@@ -2745,44 +2746,44 @@ QMPlay2はアイコンを拡大しません！</translation>
 <context>
     <name>Repeat</name>
     <message>
-        <source>Random in group(&amp;G)</source>
-        <translation>グループ内でランダム再生(&amp;G)</translation>
+        <source>Random in &amp;group</source>
+        <translation>グループ内でランダム再生</translation>
     </message>
     <message>
-        <source>Repeat(&amp;R)</source>
-        <translation>リピート(&amp;R)</translation>
+        <source>&amp;Repeat</source>
+        <translation>リピート</translation>
     </message>
     <message>
-        <source>Random(&amp;A)</source>
-        <translation>ランダム(&amp;A)</translation>
+        <source>R&amp;andom</source>
+        <translation>ランダム</translation>
     </message>
     <message>
-        <source>No repeating(&amp;N)</source>
-        <translation>リピートなし(&amp;N)</translation>
+        <source>&amp;No repeating</source>
+        <translation>リピートなし</translation>
     </message>
     <message>
-        <source>Entry repeating(&amp;E)</source>
-        <translation>一つをリピート(&amp;E)</translation>
+        <source>&amp;Entry repeating</source>
+        <translation>一つをリピート</translation>
     </message>
     <message>
-        <source>Group repeating(&amp;G)</source>
-        <translation>グループでリピート(&amp;G)</translation>
+        <source>&amp;Group repeating</source>
+        <translation>グループでリピート</translation>
     </message>
     <message>
-        <source>Playlist repeating(&amp;P)</source>
-        <translation>プレイリストでリピート(&amp;P)</translation>
+        <source>&amp;Playlist repeating</source>
+        <translation>プレイリストでリピート</translation>
     </message>
     <message>
-        <source>Random and Repeat(&amp;R)</source>
-        <translation>ランダムにリピート(&amp;R)</translation>
+        <source>Random and &amp;repeat</source>
+        <translation>ランダムにリピート</translation>
     </message>
     <message>
-        <source>Random in group and repeat(&amp;T)</source>
-        <translation>ランダムにグループでリピート(&amp;T)</translation>
+        <source>Random in group and repea&amp;t</source>
+        <translation>ランダムにグループでリピート</translation>
     </message>
     <message>
-        <source>Stop playback after every file(&amp;S)</source>
-        <translation>すべてのファイルの再生が終了次第停止(&amp;S)</translation>
+        <source>&amp;Stop playback after every file</source>
+        <translation>すべてのファイルの再生が終了次第停止</translation>
     </message>
 </context>
 <context>
@@ -3088,6 +3089,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Very slow if used with sharpness</source>
+        <translatorcomment>意味不明なので修正お願い</translatorcomment>
         <translation>もし動作が遅いなら画像シャープ化と使うといい</translation>
     </message>
     <message>
@@ -3120,24 +3122,24 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Sort</name>
     <message>
-        <source>From the longest to the shortest(&amp;F)</source>
-        <translation>長→短(&amp;F)</translation>
+        <source>&amp;From the longest to the shortest</source>
+        <translation>長→短</translation>
     </message>
     <message>
-        <source>Sort(&amp;S)</source>
-        <translation>並び替え(&amp;S)</translation>
+        <source>&amp;Sort</source>
+        <translation>並び替え</translation>
     </message>
     <message>
-        <source>From the shortest to the longest(&amp;F)</source>
-        <translation>短→長(&amp;F)</translation>
+        <source>&amp;From the shortest to the longest</source>
+        <translation>短→長</translation>
     </message>
     <message>
-        <source>A-Z(&amp;A)</source>
-        <translation>A-Z(&amp;A)</translation>
+        <source>&amp;A-Z</source>
+        <translation>&amp;A-Z</translation>
     </message>
     <message>
-        <source>Z-A(&amp;Z)</source>
-        <translation>Z-A(&amp;Z)</translation>
+        <source>&amp;Z-A</source>
+        <translation>&amp;Z-A</translation>
     </message>
 </context>
 <context>
@@ -3178,24 +3180,24 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Streams</name>
     <message>
-        <source>Audio streams(&amp;A)</source>
-        <translation>オーディオ配信(&amp;A)</translation>
+        <source>&amp;Audio streams</source>
+        <translation>オーディオ配信</translation>
     </message>
     <message>
-        <source>Video streams(&amp;V)</source>
-        <translation>ビデオ配信(&amp;V)</translation>
+        <source>&amp;Video streams</source>
+        <translation>ビデオ配信</translation>
     </message>
     <message>
-        <source>Subtitles streams(&amp;S)</source>
-        <translation>字幕配信(&amp;S)</translation>
+        <source>&amp;Subtitles streams</source>
+        <translation>字幕配信</translation>
     </message>
     <message>
-        <source>Chapters(&amp;C)</source>
-        <translation>チャプター(&amp;C)</translation>
+        <source>&amp;Chapters</source>
+        <translation>チャプター</translation>
     </message>
     <message>
-        <source>Programs(&amp;P)</source>
-        <translation>プログラム(&amp;P)</translation>
+        <source>&amp;Programs</source>
+        <translation>プログラム</translation>
     </message>
 </context>
 <context>
@@ -3437,32 +3439,32 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>VideoFilters</name>
     <message>
-        <source>Horizontal flip(&amp;H)</source>
-        <translation>水平フリップ(&amp;H)</translation>
+        <source>&amp;Horizontal flip</source>
+        <translation>水平フリップ</translation>
     </message>
     <message>
-        <source>More filters(&amp;M)</source>
-        <translation>他のフィルター(&amp;M)</translation>
+        <source>&amp;More filters</source>
+        <translation>他のフィルター</translation>
     </message>
     <message>
-        <source>Vertical flip(&amp;V)</source>
-        <translation>垂直フリップ(&amp;V)</translation>
+        <source>&amp;Vertical flip</source>
+        <translation>垂直フリップ</translation>
     </message>
     <message>
-        <source>Video filters(&amp;F)</source>
-        <translation>ビデオフィルター(&amp;F)</translation>
+        <source>Video &amp;filters</source>
+        <translation>ビデオフィルター</translation>
     </message>
     <message>
-        <source>Rotate 90°(&amp;R)</source>
-        <translation>90°回転(&amp;R)</translation>
+        <source>&amp;Rotate 90°</source>
+        <translation>90°回転</translation>
     </message>
     <message>
-        <source>Spherical view(&amp;S)</source>
-        <translation>球面ビュー(&amp;S)</translation>
+        <source>&amp;Spherical view</source>
+        <translation>球面ビュー</translation>
     </message>
     <message>
-        <source>Video adjustment(&amp;A)</source>
-        <translation>ビデオ調整(&amp;A)</translation>
+        <source>Video &amp;adjustment</source>
+        <translation>ビデオ調整</translation>
     </message>
 </context>
 <context>
@@ -3497,31 +3499,31 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Widgets</name>
     <message>
-        <source>Widgets(&amp;W)</source>
-        <translation>ウィジェット(&amp;W)</translation>
+        <source>&amp;Widgets</source>
+        <translation>ウィジェット</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <source>Full screen(&amp;F)</source>
-        <translation>全画面(&amp;F)</translation>
+        <source>&amp;Full screen</source>
+        <translation>全画面</translation>
     </message>
     <message>
-        <source>Window(&amp;W)</source>
-        <translation>ウィンドウ(&amp;W)</translation>
+        <source>&amp;Window</source>
+        <translation>ウィンドウ</translation>
     </message>
     <message>
-        <source>Close(&amp;C)</source>
-        <translation>閉じる(&amp;C)</translation>
+        <source>&amp;Close</source>
+        <translation>閉じる</translation>
     </message>
     <message>
-        <source>Compact view(&amp;C)</source>
-        <translation>コンパクトビュー(&amp;C)</translation>
+        <source>&amp;Compact view</source>
+        <translation>コンパクトビュー</translation>
     </message>
     <message>
-        <source>Always on top(&amp;A)</source>
-        <translation>常に最上面(&amp;A)</translation>
+        <source>&amp;Always on top</source>
+        <translation>常に最上面</translation>
     </message>
 </context>
 <context>

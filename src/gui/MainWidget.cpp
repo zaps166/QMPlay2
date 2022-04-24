@@ -348,7 +348,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
     const bool menuHidden = settings.getBool("MainWidget/MenuHidden", false);
     menuBar->setVisible(!menuHidden);
-    hideMenuAct = new QAction(tr("Hide menu bar(&H)"), menuBar);
+    hideMenuAct = new QAction(tr("&Hide menu bar"), menuBar);
     hideMenuAct->setCheckable(true);
     hideMenuAct->setAutoRepeat(false);
     hideMenuAct->setChecked(menuHidden);
@@ -361,7 +361,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
 
     const bool widgetsLocked = settings.getBool("MainWidget/WidgetsLocked");
     lockWidgets(widgetsLocked);
-    lockWidgetsAct = new QAction(tr("Lock widgets(&L)"), menuBar);
+    lockWidgetsAct = new QAction(tr("&Lock widgets"), menuBar);
     lockWidgetsAct->setCheckable(true);
     lockWidgetsAct->setAutoRepeat(false);
     lockWidgetsAct->setChecked(widgetsLocked);
@@ -655,12 +655,12 @@ void MainWidget::playStateChanged(bool b)
     if (b)
     {
         menuBar->player->togglePlay->setIcon(QMPlay2Core.getIconFromTheme("media-playback-pause"));
-        menuBar->player->togglePlay->setText(tr("Pause(&P)"));
+        menuBar->player->togglePlay->setText(tr("&Pause"));
     }
     else
     {
         menuBar->player->togglePlay->setIcon(QMPlay2Core.getIconFromTheme("media-playback-start"));
-        menuBar->player->togglePlay->setText(tr("Play(&P)"));
+        menuBar->player->togglePlay->setText(tr("&Play"));
     }
 #ifdef Q_OS_WIN
     if (m_taskBarProgress)
@@ -1956,7 +1956,7 @@ void MainWidget::showEvent(QShowEvent *)
 #endif
         wasShow = true;
     }
-    menuBar->window->toggleVisibility->setText(tr("Hide(&H)"));
+    menuBar->window->toggleVisibility->setText(tr("&Hide"));
 }
 void MainWidget::hideEvent(QHideEvent *)
 {
@@ -1967,7 +1967,7 @@ void MainWidget::hideEvent(QHideEvent *)
         QMPlay2Core.getSettings().set("MainWidget/isMaximized", isMaximized());
     }
 #endif
-    menuBar->window->toggleVisibility->setText(tr("Show(&S)"));
+    menuBar->window->toggleVisibility->setText(tr("&Show"));
 }
 
 bool MainWidget::eventFilter(QObject *obj, QEvent *event)

@@ -847,7 +847,7 @@ void Downloader::init()
     connect(downloadLW, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this, SLOT(itemDoubleClicked(QTreeWidgetItem *)));
 
     m_convertsMenu = new QMenu(this);
-    connect(m_convertsMenu->addAction(tr("Add(&A)")), &QAction::triggered, this, &Downloader::addConvertPreset);
+    connect(m_convertsMenu->addAction(tr("&Add")), &QAction::triggered, this, &Downloader::addConvertPreset);
     m_convertsMenu->addSeparator();
 
     setDownloadsDirB = new QToolButton;

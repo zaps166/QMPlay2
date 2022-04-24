@@ -73,20 +73,20 @@
 <context>
     <name>Add</name>
     <message>
-        <source>Add(&amp;A)</source>
-        <translation>Adicionar(&amp;A)</translation>
+        <source>&amp;Add</source>
+        <translation>&amp;Adicionar</translation>
     </message>
     <message>
-        <source>Files(&amp;F)</source>
-        <translation>Arquivos(&amp;F)</translation>
+        <source>&amp;Files</source>
+        <translation>&amp;Arquivos</translation>
     </message>
     <message>
-        <source>Directory(&amp;D)</source>
-        <translation>Diretório(&amp;D)</translation>
+        <source>&amp;Directory</source>
+        <translation>&amp;Diretório</translation>
     </message>
     <message>
-        <source>Address(&amp;A)</source>
-        <translation>Endereço(&amp;A)</translation>
+        <source>&amp;Address</source>
+        <translation>&amp;Endereço</translation>
     </message>
 </context>
 <context>
@@ -264,20 +264,21 @@
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>Aspect ratio(&amp;A)</source>
-        <translation>Proporção da tela(&amp;A)</translation>
+        <source>&amp;Aspect ratio</source>
+        <translation>&amp;Proporção da tela</translation>
     </message>
     <message>
-        <source>Auto(&amp;A)</source>
-        <translation>Automático(&amp;A)</translation>
+        <source>&amp;Auto</source>
+        <translation>&amp;Automático</translation>
     </message>
     <message>
-        <source>Depends on size(&amp;E)</source>
+        <source>D&amp;epends on size</source>
+        <translatorcomment>Não entendi a diferença entre essa string e a opção &quot;Auto&quot;. Traduzir para &quot;Depende(r) do tamanho&quot; irá passar a mesma impressão do modo automático; afinal, ele também depende do tamanho disponível.</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Disabled(&amp;D)</source>
-        <translation>Desabilitado(&amp;D)</translation>
+        <source>&amp;Disabled</source>
+        <translation>&amp;Desabilitado</translation>
     </message>
 </context>
 <context>
@@ -337,24 +338,24 @@
 <context>
     <name>AudioChannels</name>
     <message>
-        <source>Channels(&amp;C)</source>
-        <translation>Canais(&amp;C)</translation>
+        <source>&amp;Channels</source>
+        <translation>&amp;Canais</translation>
     </message>
     <message>
-        <source>Autodetect(&amp;A)</source>
-        <translation>Auto detectar(&amp;A)</translation>
+        <source>&amp;Autodetect</source>
+        <translation>&amp;Auto detectar</translation>
     </message>
     <message>
-        <source>Mono(&amp;M)</source>
-        <translation>Mono(&amp;M)</translation>
+        <source>&amp;Mono</source>
+        <translation>&amp;Mono</translation>
     </message>
     <message>
-        <source>Stereo(&amp;S)</source>
-        <translation>Estéreo(&amp;S)</translation>
+        <source>&amp;Stereo</source>
+        <translation>&amp;Estéreo</translation>
     </message>
     <message>
-        <source>Other(&amp;O)</source>
-        <translation>Outro(&amp;O)</translation>
+        <source>&amp;Other</source>
+        <translation>&amp;Outro</translation>
     </message>
 </context>
 <context>
@@ -442,10 +443,12 @@
     <name>DemuxerThr</name>
     <message>
         <source>Seeking</source>
-        <translation>Buscando</translation>
+        <translatorcomment>Buscando? Acho que não fica bom</translatorcomment>
+        <translation>Avanço/Recuo</translation>
     </message>
     <message>
         <source>Playback</source>
+        <translatorcomment>É o status da reprodução (exibido na parte inferior do programa), não um botão para reproduzir, por isso a diferença na tradução com outras strings.</translatorcomment>
         <translation>Reproduzindo</translation>
     </message>
     <message>
@@ -635,8 +638,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add(&amp;A)</source>
-        <translation>Adicionar(&amp;A)</translation>
+        <source>&amp;Add</source>
+        <translation>&amp;Adicionar</translation>
     </message>
     <message>
         <source>Download directory</source>
@@ -988,6 +991,7 @@
     </message>
     <message>
         <source>Proxy server needs login</source>
+        <translatorcomment>Não é necessário ficar fazendo repetições do mesmo nome.</translatorcomment>
         <translation>O servidor exige autênticação</translation>
     </message>
     <message>
@@ -1102,20 +1106,20 @@
         <translation>Exibir essa ajuda.</translation>
     </message>
     <message>
-        <source>Help(&amp;H)</source>
-        <translation>Ajuda(&amp;H)</translation>
+        <source>&amp;Help</source>
+        <translation>&amp;Ajuda</translation>
     </message>
     <message>
-        <source>About QMPlay2(&amp;A)</source>
-        <translation>Sobre o QMPlay2(&amp;A)</translation>
+        <source>&amp;About QMPlay2</source>
+        <translation>&amp;Sobre o QMPlay2</translation>
     </message>
     <message>
-        <source>Updates(&amp;U)</source>
-        <translation>Atualizações(&amp;U)</translation>
+        <source>&amp;Updates</source>
+        <translation>&amp;Atualizações</translation>
     </message>
     <message>
-        <source>About Qt(&amp;Q)</source>
-        <translation>Sobre o Qt(&amp;Q)</translation>
+        <source>About &amp;Qt</source>
+        <translation>Sobre o &amp;Qt</translation>
     </message>
 </context>
 <context>
@@ -1197,7 +1201,7 @@
     </message>
     <message>
         <source>Lyrics not found</source>
-        <translation>Letras não encontrada</translation>
+        <translation type="unfinished">Letras não encontrada</translation>
     </message>
 </context>
 <context>
@@ -1219,6 +1223,7 @@
     <name>MainWidget</name>
     <message>
         <source>Stopped</source>
+        <translatorcomment>Parou?</translatorcomment>
         <translation>Parado</translation>
     </message>
     <message>
@@ -1226,20 +1231,20 @@
         <translation>Barra de ferramentas principal</translation>
     </message>
     <message>
-        <source>Hide menu bar(&amp;H)</source>
-        <translation>Ocultar barra de menus(&amp;H)</translation>
+        <source>&amp;Hide menu bar</source>
+        <translation>&amp;Ocultar barra de menus</translation>
     </message>
     <message>
-        <source>Lock widgets(&amp;L)</source>
-        <translation>Bloquear widgets(&amp;L)</translation>
+        <source>&amp;Lock widgets</source>
+        <translation>&amp;Bloquear widgets</translation>
     </message>
     <message>
-        <source>Pause(&amp;P)</source>
-        <translation>Pausar(&amp;P)</translation>
+        <source>&amp;Pause</source>
+        <translation>&amp;Pausar</translation>
     </message>
     <message>
-        <source>Play(&amp;P)</source>
-        <translation>Reproduzir(&amp;P)</translation>
+        <source>&amp;Play</source>
+        <translation>&amp;Reproduzir</translation>
     </message>
     <message>
         <source>New window</source>
@@ -1298,12 +1303,12 @@
         <translation>A atualização está sendo baixada agora.</translation>
     </message>
     <message>
-        <source>Hide(&amp;H)</source>
-        <translation>Ocultar(&amp;H)</translation>
+        <source>&amp;Hide</source>
+        <translation>&amp;Ocultar</translation>
     </message>
     <message>
-        <source>Show(&amp;S)</source>
-        <translation>Exibir(&amp;S)</translation>
+        <source>&amp;Show</source>
+        <translation>&amp;Exibir</translation>
     </message>
     <message>
         <source>Next audio stream</source>
@@ -1938,44 +1943,44 @@
         <translation>Insira o nome do novo perfil:</translation>
     </message>
     <message>
-        <source>Options(&amp;T)</source>
-        <translation>Opções(&amp;T)</translation>
+        <source>Op&amp;tions</source>
+        <translation>&amp;Opções</translation>
     </message>
     <message>
-        <source>Settings(&amp;S)</source>
-        <translation>Configurações(&amp;S)</translation>
+        <source>&amp;Settings</source>
+        <translation>&amp;Configurações</translation>
     </message>
     <message>
-        <source>Renderer settings(&amp;R)</source>
-        <translation>Configurações de renderização(&amp;R)</translation>
+        <source>&amp;Renderer settings</source>
+        <translation>&amp;Configurações de renderização</translation>
     </message>
     <message>
-        <source>Play back settings(&amp;P)</source>
-        <translation>Configurações de reprodução(&amp;P)</translation>
+        <source>&amp;Playback settings</source>
+        <translation>&amp;Configurações de reprodução</translation>
     </message>
     <message>
-        <source>Modules settings(&amp;M)</source>
-        <translation>Configurações dos módulos(&amp;M)</translation>
+        <source>&amp;Modules settings</source>
+        <translation>&amp;Configurações dos módulos</translation>
     </message>
     <message>
-        <source>Profiles(&amp;P)</source>
-        <translation>Perfis(&amp;P)</translation>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Perfis</translation>
     </message>
     <message>
-        <source>New Profile(&amp;N)</source>
-        <translation>Novo perfil(&amp;N)</translation>
+        <source>&amp;New Profile</source>
+        <translation>&amp;Novo perfil</translation>
     </message>
     <message>
-        <source>Copy Profile(&amp;C)</source>
-        <translation>Copiar perfil(&amp;C)</translation>
+        <source>&amp;Copy Profile</source>
+        <translation>&amp;Copiar perfil</translation>
     </message>
     <message>
-        <source>Default(&amp;D)</source>
-        <translation>Padrão(&amp;D)</translation>
+        <source>&amp;Default</source>
+        <translation>&amp;Padrão</translation>
     </message>
     <message>
-        <source>Show tray icon(&amp;S)</source>
-        <translation>Exibir ícone de notificação(&amp;S)</translation>
+        <source>&amp;Show tray icon</source>
+        <translation>&amp;Exibir ícone de notificação</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -2107,60 +2112,60 @@
 <context>
     <name>Playback</name>
     <message>
-        <source>Playback(&amp;P)</source>
-        <translation>Reprodução(&amp;P)</translation>
+        <source>&amp;Playback</source>
+        <translation>&amp;Reprodução</translation>
     </message>
     <message>
-        <source>Enable audio(&amp;E)</source>
-        <translation>Ativar áudio(&amp;E)</translation>
+        <source>&amp;Enable audio</source>
+        <translation>&amp;Ativar áudio</translation>
     </message>
     <message>
-        <source>Enable video(&amp;E)</source>
-        <translation>Ativar vídeo(&amp;E)</translation>
+        <source>&amp;Enable video</source>
+        <translation>&amp;Ativar vídeo</translation>
     </message>
     <message>
-        <source>Set video delay(&amp;V)</source>
-        <translation>Definir atraso no vídeo(&amp;V)</translation>
+        <source>Set &amp;video delay</source>
+        <translation>&amp;Definir atraso no vídeo</translation>
     </message>
     <message>
-        <source>Delay video(&amp;D)</source>
-        <translation>Atrasar vídeo(&amp;D)</translation>
+        <source>&amp;Delay video</source>
+        <translation>&amp;Atrasar vídeo</translation>
     </message>
     <message>
-        <source>Speed up video(&amp;S)</source>
-        <translation>Acelerar vídeo(&amp;S)</translation>
+        <source>&amp;Speed up video</source>
+        <translation>&amp;Acelerar vídeo</translation>
     </message>
     <message>
-        <source>Enable subtitles(&amp;E)</source>
-        <translation>Ativar legendas(&amp;E)</translation>
+        <source>&amp;Enable subtitles</source>
+        <translation>&amp;Ativar legendas</translation>
     </message>
     <message>
-        <source>Add subtities from file(&amp;S)</source>
-        <translation>Adicionar arquivo de legendas(&amp;S)</translation>
+        <source>Add &amp;subtities from file</source>
+        <translation>&amp;Adicionar arquivo de legendas</translation>
     </message>
     <message>
-        <source>Set subtitles delay(&amp;S)</source>
-        <translation>Definir atraso das legendas(&amp;S)</translation>
+        <source>Set &amp;subtitles delay</source>
+        <translation>&amp;Definir atraso das legendas</translation>
     </message>
     <message>
-        <source>Delay subtitiles(&amp;D)</source>
-        <translation>Atrasar legendas(&amp;D)</translation>
+        <source>&amp;Delay subtitiles</source>
+        <translation>&amp;Atrasar legendas</translation>
     </message>
     <message>
-        <source>Speed up subtitles(&amp;S)</source>
-        <translation>Acelerar legendas(&amp;S)</translation>
+        <source>&amp;Speed up subtitles</source>
+        <translation>&amp;Acelerar legendas</translation>
     </message>
     <message>
-        <source>Scale up subtitles(&amp;I)</source>
-        <translation>Aumentar legendas(&amp;I)</translation>
+        <source>Scale up subt&amp;itles</source>
+        <translation>&amp;Aumentar legendas</translation>
     </message>
     <message>
-        <source>Scale down subtitles(&amp;T)</source>
-        <translation>Diminuir legendas(&amp;T)</translation>
+        <source>Scale down sub&amp;titles</source>
+        <translation>&amp;Diminuir legendas</translation>
     </message>
     <message>
-        <source>Screen shot(&amp;S)</source>
-        <translation>Capturar tela(&amp;S)</translation>
+        <source>&amp;Screen shot</source>
+        <translation>&amp;Capturar tela</translation>
     </message>
 </context>
 <context>
@@ -2199,7 +2204,8 @@
     </message>
     <message>
         <source>Fade sound</source>
-        <translation>Efeito fade ao trocar de faixas</translation>
+        <translatorcomment>pois é...</translatorcomment>
+        <translation>Efeito &quot;fade&quot; ao trocar de faixas</translation>
     </message>
     <message>
         <source>Keep speed</source>
@@ -2287,10 +2293,12 @@
     </message>
     <message>
         <source>Mouse wheel scrolls music/movie</source>
+        <translatorcomment>Não repeti &quot;mouse wheel&quot; porque essa string fica dentro de uma box informando isso.</translatorcomment>
         <translation>Controla o progresso do vídeo</translation>
     </message>
     <message>
         <source>Mouse wheel changes the volume</source>
+        <translatorcomment>Não repeti &quot;mouse wheel&quot; porque essa string fica dentro de uma box informando isso.</translatorcomment>
         <translation>Altera o volume</translation>
     </message>
     <message>
@@ -2325,195 +2333,199 @@
 <context>
     <name>Player</name>
     <message>
-        <source>Skip(&amp;S)</source>
-        <translation>Pular(&amp;S)</translation>
+        <source>&amp;Skip</source>
+        <translation>&amp;Pular</translation>
     </message>
     <message>
-        <source>Stop after playing(&amp;S)</source>
-        <translation>Parar após reproduzir(&amp;S)</translation>
+        <source>&amp;Stop after playing</source>
+        <translation>&amp;Parar após reproduzir</translation>
     </message>
     <message>
-        <source>Player(&amp;P)</source>
-        <translation>Reprodutor(&amp;P)</translation>
+        <source>&amp;Player</source>
+        <translatorcomment>&apos;Reprodutor&apos; não ficou bom na interface</translatorcomment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Stop(&amp;S)</source>
-        <translation>Parar(&amp;S)</translation>
+        <source>&amp;Stop</source>
+        <translation>&amp;Parar</translation>
     </message>
     <message>
-        <source>Next(&amp;N)</source>
-        <translation>Próximo(&amp;N)</translation>
+        <source>&amp;Next</source>
+        <translation>&amp;Próximo</translation>
     </message>
     <message>
-        <source>Previous(&amp;P)</source>
-        <translation>Anterior(&amp;P)</translation>
+        <source>&amp;Previous</source>
+        <translation>&amp;Anterior</translation>
     </message>
     <message>
-        <source>Previous frame(&amp;F)</source>
-        <translation>Frame anterior(&amp;F)</translation>
+        <source>Previous &amp;frame</source>
+        <translation>&amp;Frame anterior</translation>
     </message>
     <message>
-        <source>Next frame(&amp;F)</source>
-        <translation>Próximo frame(&amp;F)</translation>
+        <source>Next &amp;frame</source>
+        <translation>&amp;Próximo frame</translation>
     </message>
     <message>
-        <source>A-B Repeat(&amp;-)</source>
-        <translation>Repetição A-B(&amp;-)</translation>
+        <source>A&amp;-B Repeat</source>
+        <translation>&amp;Repetição A-B</translation>
     </message>
     <message>
-        <source>Seek forward(&amp;F)</source>
-        <translation>Avanço curto(&amp;F)</translation>
+        <source>Seek &amp;forward</source>
+        <translation>&amp;Avanço curto</translation>
     </message>
     <message>
-        <source>Seek backward(&amp;B)</source>
-        <translation>Recuo curto(&amp;B)</translation>
+        <source>Seek &amp;backward</source>
+        <translation>&amp;Recuo curto</translation>
     </message>
     <message>
-        <source>Long seek forward(&amp;S)</source>
-        <translation>Avanço longo(&amp;S)</translation>
+        <source>Long &amp;seek &amp;forward</source>
+        <translation>&amp;Avanço longo</translation>
     </message>
     <message>
-        <source>Long seek backward(&amp;E)</source>
-        <translation>Recuo longo(&amp;E)</translation>
+        <source>Long s&amp;eek backward</source>
+        <translation>&amp;Recuo longo</translation>
     </message>
     <message>
-        <source>Faster(&amp;S)</source>
-        <translation>Acelerar(&amp;S)</translation>
+        <source>Fa&amp;ster</source>
+        <translatorcomment>Fica no menu Reprodutor, e refere-se a velocidade de reprodução do vídeo. Somente &apos;rápido&apos; e &apos;devagar&apos; não constrói um contexto suficiente para informar sua função. Utilizar &apos;Acelerar&apos; e &apos;Atrasar&apos; também mehora a consistência com a tradução da mesma função das legendas.</translatorcomment>
+        <translation>&amp;Acelerar</translation>
     </message>
     <message>
-        <source>Slower(&amp;R)</source>
-        <translation>Atrasar(&amp;R)</translation>
+        <source>Slowe&amp;r</source>
+        <translatorcomment>Fica no menu Reprodutor, e refere-se a velocidade de reprodução do vídeo. Somente &apos;rápido&apos; e &apos;devagar&apos; não constrói um contexto suficiente para informar sua função. Utilizar &apos;Acelerar&apos; e &apos;Atrasar&apos; também mehora a consistência com a tradução da mesma função das legendas.</translatorcomment>
+        <translation>&amp;Atrasar</translation>
     </message>
     <message>
-        <source>Set speed(&amp;S)</source>
-        <translation>Definir velocidade(&amp;S)</translation>
+        <source>&amp;Set speed</source>
+        <translation>&amp;Definir velocidade</translation>
     </message>
     <message>
-        <source>Zoom in(&amp;N)</source>
-        <translation>Aumentar zoom(&amp;N)</translation>
+        <source>Zoom i&amp;n</source>
+        <translation>&amp;Aumentar zoom</translation>
     </message>
     <message>
-        <source>Zoom out(&amp;T)</source>
-        <translation>Diminuir zoom(&amp;T)</translation>
+        <source>Zoom ou&amp;t</source>
+        <translation>&amp;Diminuir zoom</translation>
     </message>
     <message>
-        <source>Toggle Aspect ratio(&amp;A)</source>
-        <translation>Alternar proporção da tela(&amp;A)</translation>
+        <source>Toggle &amp;aspect ratio</source>
+        <translation>&amp;Alternar proporção da tela</translation>
     </message>
     <message>
-        <source>Reset image Settings(&amp;S)</source>
-        <translation>Restaurar configurações de imagem(&amp;S)</translation>
+        <source>Reset image &amp;settings</source>
+        <translation>&amp;Restaurar configurações de imagem</translation>
     </message>
     <message>
-        <source>Volume up(&amp;U)</source>
-        <translation>Aumentar volume(&amp;U)</translation>
+        <source>Volume &amp;up</source>
+        <translation>&amp;Aumentar volume</translation>
     </message>
     <message>
-        <source>Volume down(&amp;D)</source>
-        <translation>Diminuir volume(&amp;D)</translation>
+        <source>Volume &amp;down</source>
+        <translation>&amp;Diminuir volume</translation>
     </message>
     <message>
-        <source>Mute(&amp;M)</source>
-        <translation>Mutar(&amp;M)</translation>
+        <source>&amp;Mute</source>
+        <translation>&amp;Mutar</translation>
     </message>
     <message>
-        <source>Detach from receiving commands(&amp;C)</source>
-        <translation>Desativar recepção de comandos(&amp;C)</translation>
+        <source>Detach from receiving &amp;commands</source>
+        <translatorcomment>Não tenho certeza absoluta se essa tradução realmente é que a função desse item</translatorcomment>
+        <translation>Desativar recepção de &amp;comandos</translation>
     </message>
     <message>
-        <source>Suspend after playback is finished(&amp;K)</source>
-        <translation>Suspender após finalizar a reprodução(&amp;K)</translation>
+        <source>Suspend after playbac&amp;k is finished</source>
+        <translation>&amp;Suspender após finalizar a reprodução</translation>
     </message>
 </context>
 <context>
     <name>Playlist</name>
     <message>
-        <source>Playlist(&amp;P)</source>
+        <source>&amp;Playlist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Stop loading(&amp;S)</source>
-        <translation>Parar carregamento(&amp;S)</translation>
+        <source>&amp;Stop loading</source>
+        <translation>&amp;Parar carregamento</translation>
     </message>
     <message>
-        <source>Synchronize groups(&amp;S)</source>
-        <translation>Sincronizar grupos(&amp;S)</translation>
+        <source>&amp;Synchronize groups</source>
+        <translation>&amp;Sincronizar grupos</translation>
     </message>
     <message>
-        <source>Quick group synchronization(&amp;Q)</source>
-        <translation>Sincronização rápida de grupos(&amp;Q)</translation>
+        <source>&amp;Quick group synchronization</source>
+        <translation>&amp;Sincronização rápida de grupos</translation>
     </message>
     <message>
-        <source>Load list(&amp;L)</source>
-        <translation>Carregar lista(&amp;L)</translation>
+        <source>Load &amp;list</source>
+        <translation>&amp;Carregar lista</translation>
     </message>
     <message>
-        <source>Save list(&amp;L)</source>
-        <translation>Salvar lista(&amp;L)</translation>
+        <source>Save &amp;list</source>
+        <translation>&amp;Salvar lista</translation>
     </message>
     <message>
-        <source>Save group(&amp;G)</source>
-        <translation>Salvar grupo(&amp;G)</translation>
+        <source>Save &amp;group</source>
+        <translation>&amp;Salvar grupo</translation>
     </message>
     <message>
-        <source>Always sync(&amp;A)</source>
-        <translation>Sempre sincronizar(&amp;A)</translation>
+        <source>&amp;Always sync</source>
+        <translation>&amp;Sempre sincronizar</translation>
     </message>
     <message>
-        <source>Remove selected entries(&amp;R)</source>
-        <translation>Remover itens selecionados(&amp;R)</translation>
+        <source>&amp;Remove selected entries</source>
+        <translation>&amp;Remover itens selecionados</translation>
     </message>
     <message>
-        <source>Remove entries without groups(&amp;W)</source>
-        <translation>Remover itens sem grupos(&amp;W)</translation>
+        <source>Remove entries &amp;without groups</source>
+        <translation>&amp;Remover itens sem grupos</translation>
     </message>
     <message>
-        <source>Clear list(&amp;C)</source>
-        <translation>Limpar lista(&amp;C)</translation>
+        <source>&amp;Clear list</source>
+        <translation>&amp;Limpar lista</translation>
     </message>
     <message>
-        <source>Copy(&amp;C)</source>
-        <translation>Copiar(&amp;C)</translation>
+        <source>&amp;Copy</source>
+        <translation>&amp;Copiar</translation>
     </message>
     <message>
-        <source>Paste(&amp;P)</source>
-        <translation>Colar(&amp;P)</translation>
+        <source>&amp;Paste</source>
+        <translation>&amp;Colar</translation>
     </message>
     <message>
-        <source>Extensions(&amp;E)</source>
-        <translation>Extensões(&amp;E)</translation>
+        <source>&amp;Extensions</source>
+        <translation>&amp;Extensões</translation>
     </message>
     <message>
-        <source>Create group(&amp;C)</source>
-        <translation>Criar grupo(&amp;C)</translation>
+        <source>&amp;Create &amp;group</source>
+        <translation>&amp;Criar grupo</translation>
     </message>
     <message>
-        <source>Rename(&amp;R)</source>
-        <translation>Renomear(&amp;R)</translation>
+        <source>&amp;Rename</source>
+        <translation>&amp;Renomear</translation>
     </message>
     <message>
-        <source>Find entries(&amp;F)</source>
-        <translation>Procurar itens(&amp;F)</translation>
+        <source>&amp;Find entries</source>
+        <translation>&amp;Procurar itens</translation>
     </message>
     <message>
-        <source>Collapse all(&amp;C)</source>
-        <translation>Recolher todos(&amp;C)</translation>
+        <source>&amp;Collapse all</source>
+        <translation>&amp;Recolher todos</translation>
     </message>
     <message>
-        <source>Expand all(&amp;E)</source>
-        <translation>Expandir todos(&amp;E)</translation>
+        <source>&amp;Expand all</source>
+        <translation>&amp;Expandir todos</translation>
     </message>
     <message>
-        <source>Go to the playback(&amp;G)</source>
-        <translation>Ir para a reprodução(&amp;G)</translation>
+        <source>&amp;Go to the playback</source>
+        <translation>&amp;Ir para a reprodução</translation>
     </message>
     <message>
-        <source>Enqueue(&amp;E)</source>
-        <translation>Enfileirar(&amp;E)</translation>
+        <source>&amp;Enqueue</source>
+        <translation>&amp;Enfileirar</translation>
     </message>
     <message>
-        <source>Properties(&amp;P)</source>
-        <translation>Propriedades(&amp;P)</translation>
+        <source>&amp;Properties</source>
+        <translation>&amp;Propriedades</translation>
     </message>
 </context>
 <context>
@@ -2546,12 +2558,12 @@
 <context>
     <name>PlaylistWidget</name>
     <message>
-        <source>Unlock(&amp;L)</source>
-        <translation>Desbloquear(&amp;L)</translation>
+        <source>Un&amp;lock</source>
+        <translation>&amp;Desbloquear</translation>
     </message>
     <message>
-        <source>Lock(&amp;L)</source>
-        <translation>Bloquear(&amp;L)</translation>
+        <source>&amp;Lock</source>
+        <translation>&amp;Bloquear</translation>
     </message>
 </context>
 <context>
@@ -2743,44 +2755,44 @@ QMPlay2 will not scale up icons!</source>
 <context>
     <name>Repeat</name>
     <message>
-        <source>Repeat(&amp;R)</source>
-        <translation>Repetir(&amp;R)</translation>
+        <source>&amp;Repeat</source>
+        <translation>&amp;Repetir</translation>
     </message>
     <message>
-        <source>No repeating(&amp;N)</source>
-        <translation>Sem repetição(&amp;N)</translation>
+        <source>&amp;No repeating</source>
+        <translation>&amp;Sem repetição</translation>
     </message>
     <message>
-        <source>Entry repeating(&amp;E)</source>
-        <translation>Repetição do item(&amp;E)</translation>
+        <source>&amp;Entry repeating</source>
+        <translation>&amp;Repetição do item</translation>
     </message>
     <message>
-        <source>Group repeating(&amp;G)</source>
-        <translation>Repetição do grupo(&amp;G)</translation>
+        <source>&amp;Group repeating</source>
+        <translation>&amp;Repetição do grupo</translation>
     </message>
     <message>
-        <source>Playlist repeating(&amp;P)</source>
-        <translation>Repetição da playlist(&amp;P)</translation>
+        <source>&amp;Playlist repeating</source>
+        <translation>&amp;Repetição da playlist</translation>
     </message>
     <message>
-        <source>Random(&amp;A)</source>
-        <translation>Aleatório(&amp;A)</translation>
+        <source>R&amp;andom</source>
+        <translation>&amp;Aleatório</translation>
     </message>
     <message>
-        <source>Random in group(&amp;G)</source>
-        <translation>Aleatório no grupo(&amp;G)</translation>
+        <source>Random in &amp;group</source>
+        <translation>&amp;Aleatório no grupo</translation>
     </message>
     <message>
-        <source>Random and Repeat(&amp;R)</source>
-        <translation>Aleatório e repetir(&amp;R)</translation>
+        <source>Random and &amp;repeat</source>
+        <translation>&amp;Aleatório e repetir</translation>
     </message>
     <message>
-        <source>Random in group and repeat(&amp;T)</source>
-        <translation>Aleatório no grupo e repetir(&amp;T)</translation>
+        <source>Random in group and repea&amp;t</source>
+        <translation>&amp;Aleatório no grupo e repetir</translation>
     </message>
     <message>
-        <source>Stop playback after every file(&amp;S)</source>
-        <translation>Parar reprodução após cada arquivo(&amp;S)</translation>
+        <source>&amp;Stop playback after every file</source>
+        <translation>&amp;Parar reprodução após cada arquivo</translation>
     </message>
 </context>
 <context>
@@ -2962,7 +2974,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>To set up a new renderer, the program will start again!</source>
-        <translation>Para configurar um novo renderizador, o programa irá iniciar novamente!</translation>
+        <translation type="unfinished">Para configurar um novo renderizador, o programa irá iniciar novamente!</translation>
     </message>
     <message>
         <source>Vertical synchronization (V-Sync)</source>
@@ -3056,7 +3068,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>To set up a new language, the program will start again!</source>
-        <translation>Para configurar um novo idioma, o programa irá iniciar novamente!</translation>
+        <translation type="unfinished">Para configurar um novo idioma, o programa irá iniciar novamente!</translation>
     </message>
     <message>
         <source>Changing icons</source>
@@ -3116,24 +3128,24 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Sort</name>
     <message>
-        <source>Sort(&amp;S)</source>
-        <translation>Ordenar(&amp;S)</translation>
+        <source>&amp;Sort</source>
+        <translation>&amp;Ordenar</translation>
     </message>
     <message>
-        <source>From the shortest to the longest(&amp;F)</source>
-        <translation>Do mais curto ao mais longo(&amp;F)</translation>
+        <source>&amp;From the shortest to the longest</source>
+        <translation>&amp;Do mais curto ao mais longo</translation>
     </message>
     <message>
-        <source>From the longest to the shortest(&amp;F)</source>
-        <translation>Do mais longo ao mais curto(&amp;F)</translation>
+        <source>&amp;From the longest to the shortest</source>
+        <translation>&amp;Do mais longo ao mais curto</translation>
     </message>
     <message>
-        <source>A-Z(&amp;A)</source>
-        <translation type="unfinished"></translation>
+        <source>&amp;A-Z</source>
+        <translation></translation>
     </message>
     <message>
-        <source>Z-A(&amp;Z)</source>
-        <translation type="unfinished"></translation>
+        <source>&amp;Z-A</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -3174,24 +3186,24 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Streams</name>
     <message>
-        <source>Audio streams(&amp;A)</source>
-        <translation>Stream de áudio(&amp;A)</translation>
+        <source>&amp;Audio streams</source>
+        <translation>Stream de áudio</translation>
     </message>
     <message>
-        <source>Video streams(&amp;V)</source>
-        <translation>Stream de vídeo(&amp;V)</translation>
+        <source>&amp;Video streams</source>
+        <translation>Stream de vídeo</translation>
     </message>
     <message>
-        <source>Subtitles streams(&amp;S)</source>
-        <translation>Stream de legendas(&amp;S)</translation>
+        <source>&amp;Subtitles streams</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Chapters(&amp;C)</source>
-        <translation>Capítulos(&amp;C)</translation>
+        <source>&amp;Chapters</source>
+        <translation>Capítulos</translation>
     </message>
     <message>
-        <source>Programs(&amp;P)</source>
-        <translation>Programas(&amp;P)</translation>
+        <source>&amp;Programs</source>
+        <translation>Programas</translation>
     </message>
 </context>
 <context>
@@ -3261,7 +3273,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Hz</source>
-        <translation>Hz</translation>
+        <translation type="unfinished">Hz</translation>
     </message>
 </context>
 <context>
@@ -3433,32 +3445,32 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>VideoFilters</name>
     <message>
-        <source>Video filters(&amp;F)</source>
-        <translation>Filtros de vídeo(&amp;F)</translation>
+        <source>Video &amp;filters</source>
+        <translation>&amp;Filtros de vídeo</translation>
     </message>
     <message>
-        <source>Video adjustment(&amp;A)</source>
-        <translation>Ajuste de vídeo(&amp;A)</translation>
+        <source>Video &amp;adjustment</source>
+        <translation>&amp;Ajuste de vídeo</translation>
     </message>
     <message>
-        <source>Spherical view(&amp;S)</source>
-        <translation>Vista esférica(&amp;S)</translation>
+        <source>&amp;Spherical view</source>
+        <translation>&amp;Vista esférica</translation>
     </message>
     <message>
-        <source>Horizontal flip(&amp;H)</source>
-        <translation>Virar horizontalmente(&amp;H)</translation>
+        <source>&amp;Horizontal flip</source>
+        <translation>&amp;Virar horizontalmente</translation>
     </message>
     <message>
-        <source>Vertical flip(&amp;V)</source>
-        <translation>Virar verticalmente(&amp;V)</translation>
+        <source>&amp;Vertical flip</source>
+        <translation>&amp;Virar verticalmente</translation>
     </message>
     <message>
-        <source>Rotate 90°(&amp;R)</source>
-        <translation>Rotacionar 90°(&amp;R)</translation>
+        <source>&amp;Rotate 90°</source>
+        <translation>&amp;Rotacionar 90°</translation>
     </message>
     <message>
-        <source>More filters(&amp;M)</source>
-        <translation>Mais filtros(&amp;M)</translation>
+        <source>&amp;More filters</source>
+        <translation>&amp;Mais filtros</translation>
     </message>
 </context>
 <context>
@@ -3493,31 +3505,31 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Widgets</name>
     <message>
-        <source>Widgets(&amp;W)</source>
-        <translation>Widgets(&amp;W)</translation>
+        <source>&amp;Widgets</source>
+        <translation>&amp;Widgets</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <source>Window(&amp;W)</source>
-        <translation>Janela(&amp;W)</translation>
+        <source>&amp;Window</source>
+        <translation>&amp;Janela</translation>
     </message>
     <message>
-        <source>Full screen(&amp;F)</source>
-        <translation>Tela cheia(&amp;F)</translation>
+        <source>&amp;Full screen</source>
+        <translation>&amp;Tela cheia</translation>
     </message>
     <message>
-        <source>Compact view(&amp;C)</source>
-        <translation>Visualização compacta(&amp;C)</translation>
+        <source>&amp;Compact view</source>
+        <translation>&amp;Visualização compacta</translation>
     </message>
     <message>
-        <source>Always on top(&amp;A)</source>
-        <translation>Sempre no topo(&amp;A)</translation>
+        <source>&amp;Always on top</source>
+        <translation>&amp;Sempre no topo</translation>
     </message>
     <message>
-        <source>Close(&amp;C)</source>
-        <translation>Fechar(&amp;C)</translation>
+        <source>&amp;Close</source>
+        <translation>&amp;Fechar</translation>
     </message>
 </context>
 <context>
