@@ -504,7 +504,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         connect(playbackSettingsPage->forceSamplerate, SIGNAL(toggled(bool)), playbackSettingsPage->samplerateB, SLOT(setEnabled(bool)));
         playbackSettingsPage->samplerateB->setEnabled(playbackSettingsPage->forceSamplerate->isChecked());
 
-        playbackSettingsPage->forceChannels->setCheckState(Qt::CheckState(QMPSettings.getInt("ForceChannels")));
+        playbackSettingsPage->forceChannels->setCheckState(QMPSettings.getWithBounds("ForceChannels", Qt::Unchecked, Qt::Checked));
         playbackSettingsPage->forceChannels->setToolTip(tr("Force audio content to use the specified number of channels.\n"
             "Partially checked does this only if the content has less channels than the specified amount\n"
             "\t(e.g. promote mono to stereo but do not degrade quadrophonic to stereo)"));
@@ -723,7 +723,7 @@ SettingsWidget::~SettingsWidget()
 
 void SettingsWidget::setAudioChannels()
 {
-    playbackSettingsPage->forceChannels->setCheckState(Qt::CheckState(QMPlay2Core.getSettings().getInt("ForceChannels")));
+    playbackSettingsPage->forceChannels->setCheckState(QMPlay2Core.getSettings().getWithBounds("ForceChannels", Qt::Unchecked, Qt::Checked));
     playbackSettingsPage->channelsB->setValue(QMPlay2Core.getSettings().getInt("Channels"));
 }
 
