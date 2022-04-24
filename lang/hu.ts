@@ -73,20 +73,20 @@
 <context>
     <name>Add</name>
     <message>
-        <source>&amp;Add</source>
-        <translation>&amp;Hozzáadás</translation>
+        <source>Add(&amp;A)</source>
+        <translation>Hozzáadás(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Files</source>
-        <translation>&amp;Fájlok</translation>
+        <source>Files(&amp;F)</source>
+        <translation>Fájlok(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Directory</source>
-        <translation>&amp;Könyvtár</translation>
+        <source>Directory(&amp;D)</source>
+        <translation>Könyvtár(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Address</source>
-        <translation>&amp;Cím</translation>
+        <source>Address(&amp;A)</source>
+        <translation>Cím(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -264,20 +264,20 @@
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>&amp;Aspect ratio</source>
-        <translation>&amp;Oldalarány</translation>
+        <source>Aspect ratio(&amp;A)</source>
+        <translation>Oldalarány(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Auto</source>
-        <translation>&amp;Automatikus</translation>
+        <source>Auto(&amp;A)</source>
+        <translation>Automatikus(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Disabled</source>
-        <translation>&amp;Kikapcsolva</translation>
+        <source>Disabled(&amp;D)</source>
+        <translation>Kikapcsolva(&amp;D)</translation>
     </message>
     <message>
-        <source>D&amp;epends on size</source>
-        <translation>&amp;Video méretétől függ</translation>
+        <source>Depends on size(&amp;E)</source>
+        <translation>Video méretétől függ(&amp;E)</translation>
     </message>
 </context>
 <context>
@@ -337,24 +337,24 @@
 <context>
     <name>AudioChannels</name>
     <message>
-        <source>&amp;Channels</source>
-        <translation>&amp;Csatornák</translation>
+        <source>Channels(&amp;C)</source>
+        <translation>Csatornák(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Autodetect</source>
-        <translation>&amp;Automatikus felismerés</translation>
+        <source>Autodetect(&amp;A)</source>
+        <translation>Automatikus felismerés(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Mono</source>
-        <translation>&amp;Mono</translation>
+        <source>Mono(&amp;M)</source>
+        <translation>Mono(&amp;M)</translation>
     </message>
     <message>
-        <source>&amp;Stereo</source>
-        <translation>&amp;Sztereo</translation>
+        <source>Stereo(&amp;S)</source>
+        <translation>Sztereo(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Other</source>
-        <translation>&amp;Egyéb</translation>
+        <source>Other(&amp;O)</source>
+        <translation>Egyéb(&amp;O)</translation>
     </message>
 </context>
 <context>
@@ -663,8 +663,8 @@
         <translation>Add met a címet</translation>
     </message>
     <message>
-        <source>&amp;Add</source>
-        <translation>&amp;Hozzáadás</translation>
+        <source>Add(&amp;A)</source>
+        <translation>Hozzáadás(&amp;A)</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
@@ -1098,20 +1098,20 @@
         <translation>Ennek a súgóüzenetnek megjelenítése.</translation>
     </message>
     <message>
-        <source>&amp;Help</source>
-        <translation>&amp;Súgó</translation>
+        <source>Help(&amp;H)</source>
+        <translation>Súgó(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;About QMPlay2</source>
-        <translation>&amp;A QMPlay2-ről</translation>
+        <source>About QMPlay2(&amp;A)</source>
+        <translation>A QMPlay2-ről(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Updates</source>
-        <translation>&amp;Frissítések</translation>
+        <source>Updates(&amp;U)</source>
+        <translation>Frissítések(&amp;U)</translation>
     </message>
     <message>
-        <source>About &amp;Qt</source>
-        <translation>A &amp;Qt-ról</translation>
+        <source>About Qt(&amp;Q)</source>
+        <translation>A Qt-ról(&amp;Q)</translation>
     </message>
     <message>
         <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
@@ -1189,15 +1189,15 @@
     <name>Lyrics</name>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished">Szöveg</translation>
+        <translation>Szöveg</translation>
     </message>
     <message>
         <source>Translation</source>
-        <translation type="unfinished">Lengyel fordítás</translation>
+        <translation>Lengyel fordítás</translation>
     </message>
     <message>
         <source>Lyrics not found</source>
-        <translation type="unfinished">A szöveg nem található</translation>
+        <translation>A szöveg nem található</translation>
     </message>
 </context>
 <context>
@@ -1226,20 +1226,20 @@
         <translation>Fő eszköztár</translation>
     </message>
     <message>
-        <source>&amp;Hide menu bar</source>
-        <translation>&amp;Menüsor elrejtése</translation>
+        <source>Hide menu bar(&amp;H)</source>
+        <translation>Menüsor elrejtése(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;Lock widgets</source>
-        <translation>&amp;Felületi elemek zárolása</translation>
+        <source>Lock widgets(&amp;L)</source>
+        <translation>Felületi elemek zárolása(&amp;L)</translation>
     </message>
     <message>
-        <source>&amp;Pause</source>
-        <translation>&amp;Szünet</translation>
+        <source>Pause(&amp;P)</source>
+        <translation>Szünet(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Play</source>
-        <translation>&amp;Lejátszás</translation>
+        <source>Play(&amp;P)</source>
+        <translation>Lejátszás(&amp;P)</translation>
     </message>
     <message>
         <source>New window</source>
@@ -1298,12 +1298,12 @@
         <translation>A frissítés letöltése folyamatban van.</translation>
     </message>
     <message>
-        <source>&amp;Hide</source>
-        <translation>&amp;Elrejtés</translation>
+        <source>Hide(&amp;H)</source>
+        <translation>Elrejtés(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;Show</source>
-        <translation>&amp;Mutatás</translation>
+        <source>Show(&amp;S)</source>
+        <translation>Mutatás(&amp;S)</translation>
     </message>
     <message>
         <source>Next audio stream</source>
@@ -1938,47 +1938,47 @@
         <translation>Írd be az új profil nevét:</translation>
     </message>
     <message>
-        <source>Op&amp;tions</source>
-        <translation>&amp;Opciók</translation>
+        <source>Options(&amp;T)</source>
+        <translation>Opciók(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Settings</source>
-        <translation>&amp;Beállítások</translation>
+        <source>Settings(&amp;S)</source>
+        <translation>Beállítások(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Playback settings</source>
-        <translation>&amp;Lejátszási beállítások</translation>
+        <source>Play back settings(&amp;P)</source>
+        <translation>Lejátszási beállítások(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Modules settings</source>
-        <translation>&amp;Modul beállítások</translation>
+        <source>Modules settings(&amp;M)</source>
+        <translation>Modul beállítások(&amp;M)</translation>
     </message>
     <message>
-        <source>&amp;Profiles</source>
-        <translation>&amp;Profilok</translation>
+        <source>Profiles(&amp;P)</source>
+        <translation>Profilok(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;New Profile</source>
-        <translation>&amp;Új Profil</translation>
+        <source>New Profile(&amp;N)</source>
+        <translation>Új Profil(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Copy Profile</source>
-        <translation>Profil &amp;másolása</translation>
+        <source>Copy Profile(&amp;C)</source>
+        <translation>Profil másolása(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Default</source>
-        <translation>&amp;Alapértelmezett</translation>
+        <source>Default(&amp;D)</source>
+        <translation>Alapértelmezett(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Show tray icon</source>
-        <translation>&amp;Tálcaikon mutatása</translation>
+        <source>Show tray icon(&amp;S)</source>
+        <translation>Tálcaikon mutatása(&amp;S)</translation>
     </message>
     <message>
         <source>Remove</source>
         <translation>Eltávolítás</translation>
     </message>
     <message>
-        <source>&amp;Renderer settings</source>
+        <source>Renderer settings(&amp;R)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2107,60 +2107,60 @@
 <context>
     <name>Playback</name>
     <message>
-        <source>&amp;Playback</source>
-        <translation>&amp;Lejátszás</translation>
+        <source>Playback(&amp;P)</source>
+        <translation>Lejátszás(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Enable audio</source>
-        <translation>&amp;Hang engedélyezése</translation>
+        <source>Enable audio(&amp;E)</source>
+        <translation>Hang engedélyezése(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Enable video</source>
-        <translation>&amp;Video engedélyezése</translation>
+        <source>Enable video(&amp;E)</source>
+        <translation>Video engedélyezése(&amp;E)</translation>
     </message>
     <message>
-        <source>Set &amp;video delay</source>
-        <translation>&amp;Videó késleltetésének beállítása</translation>
+        <source>Set video delay(&amp;V)</source>
+        <translation>Videó késleltetésének beállítása(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;Delay video</source>
-        <translation>&amp;Videó késleltetésének beállítása</translation>
+        <source>Delay video(&amp;D)</source>
+        <translation>Videó késleltetésének beállítása(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Speed up video</source>
-        <translation>Videó &amp;gyorsítása</translation>
+        <source>Speed up video(&amp;S)</source>
+        <translation>Videó gyorsítása(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Enable subtitles</source>
-        <translation>&amp;Feliratok engedélyezése</translation>
+        <source>Enable subtitles(&amp;E)</source>
+        <translation>Feliratok engedélyezése(&amp;E)</translation>
     </message>
     <message>
-        <source>Add &amp;subtities from file</source>
-        <translation>Felirat &amp;hozzáadása fájlból</translation>
+        <source>Add subtities from file(&amp;S)</source>
+        <translation>Felirat hozzáadása fájlból(&amp;S)</translation>
     </message>
     <message>
-        <source>Set &amp;subtitles delay</source>
-        <translation>Felirat &amp;késleltetésének beállítása</translation>
+        <source>Set subtitles delay(&amp;S)</source>
+        <translation>Felirat késleltetésének beállítása(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Delay subtitiles</source>
-        <translation>&amp;Felirat késleltetése</translation>
+        <source>Delay subtitiles(&amp;D)</source>
+        <translation>Felirat késleltetése(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Speed up subtitles</source>
-        <translation>&amp;Felirat gyorsítása</translation>
+        <source>Speed up subtitles(&amp;S)</source>
+        <translation>Felirat gyorsítása(&amp;S)</translation>
     </message>
     <message>
-        <source>Scale up subt&amp;itles</source>
-        <translation>Felirat &amp;nagyítása</translation>
+        <source>Scale up subtitles(&amp;I)</source>
+        <translation>Felirat nagyítása(&amp;I)</translation>
     </message>
     <message>
-        <source>Scale down sub&amp;titles</source>
-        <translation>Felirat &amp;kicsinyítése</translation>
+        <source>Scale down subtitles(&amp;T)</source>
+        <translation>Felirat kicsinyítése(&amp;PT)</translation>
     </message>
     <message>
-        <source>&amp;Screen shot</source>
-        <translation>&amp;Képernyőkép</translation>
+        <source>Screen shot(&amp;S)</source>
+        <translation>Képernyőkép(&amp;S)</translation>
     </message>
 </context>
 <context>
@@ -2325,195 +2325,195 @@
 <context>
     <name>Player</name>
     <message>
-        <source>&amp;Skip</source>
-        <translation>&amp;Kihagyás</translation>
+        <source>Skip(&amp;S)</source>
+        <translation>Kihagyás(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Stop after playing</source>
+        <source>Stop after playing(&amp;S)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Player</source>
-        <translation>&amp;Lejátszó</translation>
+        <source>Player(&amp;P)</source>
+        <translation>Lejátszó(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Stop</source>
-        <translation>&amp;Megállítás</translation>
+        <source>Stop(&amp;S)</source>
+        <translation>Megállítás(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Next</source>
-        <translation>&amp;Következő</translation>
+        <source>Next(&amp;N)</source>
+        <translation>Következő(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Previous</source>
-        <translation>&amp;Előző</translation>
+        <source>Previous(&amp;P)</source>
+        <translation>Előző(&amp;P)</translation>
     </message>
     <message>
-        <source>Previous &amp;frame</source>
-        <translation>E&amp;lőző képkocka</translation>
+        <source>Previous frame(&amp;F)</source>
+        <translation>Előző képkocka(&amp;F)</translation>
     </message>
     <message>
-        <source>Next &amp;frame</source>
-        <translation>Követke&amp;ző képkocka</translation>
+        <source>Next frame(&amp;F)</source>
+        <translation>Következő képkocka(&amp;F)</translation>
     </message>
     <message>
-        <source>A&amp;-B Repeat</source>
-        <translation>A&amp;-B ismétlés</translation>
+        <source>A-B Repeat(&amp;-)</source>
+        <translation>A-B ismétlés(&amp;-)</translation>
     </message>
     <message>
-        <source>Seek &amp;forward</source>
-        <translation>&amp;Előre tekerés</translation>
+        <source>Seek forward(&amp;F)</source>
+        <translation>Előre tekerés(&amp;F)</translation>
     </message>
     <message>
-        <source>Seek &amp;backward</source>
-        <translation>&amp;Vissza tekerés</translation>
+        <source>Seek backward(&amp;B)</source>
+        <translation>Vissza tekerés(&amp;B)</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
-        <translation>&amp;Hosszú előre léptetés</translation>
+        <source>Long seek forward(&amp;S)</source>
+        <translation>Hosszú előre léptetés(&amp;S)</translation>
     </message>
     <message>
-        <source>Long s&amp;eek backward</source>
-        <translation>H&amp;osszú hátra léptetés</translation>
+        <source>Long seek backward(&amp;E)</source>
+        <translation>Hosszú hátra léptetés(&amp;E)</translation>
     </message>
     <message>
-        <source>Fa&amp;ster</source>
-        <translation>&amp;Gyorsabban</translation>
+        <source>Faster(&amp;S)</source>
+        <translation>Gyorsabban(&amp;S)</translation>
     </message>
     <message>
-        <source>Slowe&amp;r</source>
-        <translation>&amp;Lassabban</translation>
+        <source>Slower(&amp;R)</source>
+        <translation>Lassabban(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Set speed</source>
-        <translation>&amp;Sebesség beállítása</translation>
+        <source>Set speed(&amp;S)</source>
+        <translation>Sebesség beállítása(&amp;S)</translation>
     </message>
     <message>
-        <source>Zoom i&amp;n</source>
-        <translation>&amp;Nagyítás</translation>
+        <source>Zoom in(&amp;N)</source>
+        <translation>Nagyítás(&amp;N)</translation>
     </message>
     <message>
-        <source>Zoom ou&amp;t</source>
-        <translation>&amp;Kicsinyítés</translation>
+        <source>Zoom out(&amp;T)</source>
+        <translation>Kicsinyítés(&amp;T)</translation>
     </message>
     <message>
-        <source>Toggle &amp;aspect ratio</source>
-        <translation>&amp;Oldalarány beállítása</translation>
+        <source>Toggle Aspect ratio(&amp;A)</source>
+        <translation>Oldalarány beállítása(&amp;A)</translation>
     </message>
     <message>
-        <source>Reset image &amp;settings</source>
-        <translation>Kép beállítások &amp;visszaállítása</translation>
+        <source>Reset image Settings(&amp;S)</source>
+        <translation>Kép beállítások visszaállítása(&amp;S)</translation>
     </message>
     <message>
-        <source>Volume &amp;up</source>
-        <translation>Hangerő &amp;növelése</translation>
+        <source>Volume up(&amp;U)</source>
+        <translation>Hangerő növelése(&amp;U)</translation>
     </message>
     <message>
-        <source>Volume &amp;down</source>
-        <translation>Hangerő &amp;csökkentése</translation>
+        <source>Volume down(&amp;D)</source>
+        <translation>Hangerő csökkentése(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Mute</source>
-        <translation>&amp;Némítás</translation>
+        <source>Mute(&amp;M)</source>
+        <translation>Némítás(&amp;M)</translation>
     </message>
     <message>
-        <source>Detach from receiving &amp;commands</source>
+        <source>Detach from receiving commands(&amp;C)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Suspend after playbac&amp;k is finished</source>
-        <translation>&amp;Felfüggesztés a lejátszás befejezése után</translation>
+        <source>Suspend after playback is finished(&amp;K)</source>
+        <translation>Felfüggesztés a lejátszás befejezése után(&amp;K)</translation>
     </message>
 </context>
 <context>
     <name>Playlist</name>
     <message>
-        <source>&amp;Playlist</source>
-        <translation>&amp;Lejátszási lista</translation>
+        <source>Playlist(&amp;P)</source>
+        <translation>Lejátszási lista(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Stop loading</source>
-        <translation>&amp;Betöltés megállítása</translation>
+        <source>Stop loading(&amp;S)</source>
+        <translation>Betöltés megállítása(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Synchronize groups</source>
-        <translation>&amp;Csoport szinkronizálása</translation>
+        <source>Synchronize groups(&amp;S)</source>
+        <translation>Csoport szinkronizálása(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Quick group synchronization</source>
-        <translation>&amp;Gyors csoportszinkronizáció</translation>
+        <source>Quick group synchronization(&amp;Q)</source>
+        <translation>Gyors csoportszinkronizáció(&amp;Q)</translation>
     </message>
     <message>
-        <source>Load &amp;list</source>
-        <translation>&amp;Lista betöltése</translation>
+        <source>Load list(&amp;L)</source>
+        <translation>Lista betöltése(&amp;L)</translation>
     </message>
     <message>
-        <source>Save &amp;list</source>
-        <translation>Lista &amp;mentése</translation>
+        <source>Save list(&amp;L)</source>
+        <translation>Lista mentése(&amp;L)</translation>
     </message>
     <message>
-        <source>Save &amp;group</source>
-        <translation>&amp;Csoport mentése</translation>
+        <source>Save group(&amp;G)</source>
+        <translation>Csoport mentése(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Remove selected entries</source>
-        <translation>Kiválasztott elemek &amp;eltávolítása</translation>
+        <source>Remove selected entries(&amp;R)</source>
+        <translation>Kiválasztott elemek eltávolítása(&amp;R)</translation>
     </message>
     <message>
-        <source>Remove entries &amp;without groups</source>
-        <translation>&amp;Csoportosítatlan elemek eltávolítása</translation>
+        <source>Remove entries without groups(&amp;W)</source>
+        <translation>Csoportosítatlan elemek eltávolítása(&amp;W)</translation>
     </message>
     <message>
-        <source>&amp;Clear list</source>
-        <translation>Lista &amp;törlése</translation>
+        <source>Clear list(&amp;C)</source>
+        <translation>Lista törlése(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Copy</source>
-        <translation>&amp;Másolás</translation>
+        <source>Copy(&amp;C)</source>
+        <translation>Másolás(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Paste</source>
-        <translation>&amp;Beillesztés</translation>
+        <source>Paste(&amp;P)</source>
+        <translation>Beillesztés(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Extensions</source>
-        <translation>Kie&amp;gészítők</translation>
+        <source>Extensions(&amp;E)</source>
+        <translation>Kiegészítők(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
-        <translation>&amp;Csoport &amp;létrehozása</translation>
+        <source>Create group(&amp;C)</source>
+        <translation>Csoport létrehozása(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Rename</source>
-        <translation>&amp;Átnevezés</translation>
+        <source>Rename(&amp;R)</source>
+        <translation>Átnevezés(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;Find entries</source>
-        <translation>Elemek kere&amp;sése</translation>
+        <source>Find entries(&amp;F)</source>
+        <translation>Elemek keresése(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Collapse all</source>
-        <translation>&amp;Összes összecsukása</translation>
+        <source>Collapse all(&amp;C)</source>
+        <translation>Összes összecsukása(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Expand all</source>
-        <translation>Összes &amp;kinyitása</translation>
+        <source>Expand all(&amp;E)</source>
+        <translation>Összes kinyitása(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Go to the playback</source>
-        <translation>&amp;Ugrás a lejátszáshoz</translation>
+        <source>Go to the playback(&amp;G)</source>
+        <translation>Ugrás a lejátszáshoz(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Enqueue</source>
-        <translation>&amp;Sorba állítás</translation>
+        <source>Enqueue(&amp;E)</source>
+        <translation>Sorba állítás(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Properties</source>
-        <translation>&amp;Tulajdonságok</translation>
+        <source>Properties(&amp;P)</source>
+        <translation>Tulajdonságok(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Always sync</source>
-        <translation>&amp;Mindig szinkronizál</translation>
+        <source>Always sync(&amp;A)</source>
+        <translation>Mindig szinkronizál(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -2546,12 +2546,12 @@
 <context>
     <name>PlaylistWidget</name>
     <message>
-        <source>Un&amp;lock</source>
-        <translation>&amp;Feloldás</translation>
+        <source>Unlock(&amp;L)</source>
+        <translation>Feloldás(&amp;L)</translation>
     </message>
     <message>
-        <source>&amp;Lock</source>
-        <translation>&amp;Zárolás</translation>
+        <source>Lock(&amp;L)</source>
+        <translation>Zárolás(&amp;L)</translation>
     </message>
 </context>
 <context>
@@ -2744,44 +2744,44 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
 <context>
     <name>Repeat</name>
     <message>
-        <source>&amp;Repeat</source>
-        <translation>&amp;Ismétlés</translation>
+        <source>Repeat(&amp;R)</source>
+        <translation>Ismétlés(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;No repeating</source>
-        <translation>&amp;Nincs ismétlés</translation>
+        <source>No repeating(&amp;N)</source>
+        <translation>Nincs ismétlés(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Entry repeating</source>
-        <translation>&amp;Fájl ismétlése</translation>
+        <source>Entry repeating(&amp;E)</source>
+        <translation>Fájl ismétlése(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Group repeating</source>
-        <translation>&amp;Csoport ismétlése</translation>
+        <source>Group repeating(&amp;G)</source>
+        <translation>Csoport ismétlése(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Playlist repeating</source>
-        <translation>&amp;Lejátszási lista ismétlése</translation>
+        <source>Playlist repeating(&amp;P)</source>
+        <translation>Lejátszási lista ismétlése(&amp;P)</translation>
     </message>
     <message>
-        <source>R&amp;andom</source>
-        <translation>&amp;Véletlenszerű</translation>
+        <source>Random(&amp;A)</source>
+        <translation>Véletlenszerű(&amp;A)</translation>
     </message>
     <message>
-        <source>Random in &amp;group</source>
-        <translation>Véletlenszerűen a &amp;csoportból</translation>
+        <source>Random in group(&amp;G)</source>
+        <translation>Véletlenszerűen a csoportból(&amp;G)</translation>
     </message>
     <message>
-        <source>Random and &amp;repeat</source>
-        <translation>V&amp;életlenszerű és ismétlés</translation>
+        <source>Random and Repeat(&amp;R)</source>
+        <translation>Véletlenszerű és ismétlés(&amp;R)</translation>
     </message>
     <message>
-        <source>Random in group and repea&amp;t</source>
-        <translation>Véletlenszerűen a csoportb&amp;ól, és ismétlés</translation>
+        <source>Random in group and repeat(&amp;T)</source>
+        <translation>Véletlenszerűen a csoportból, és ismétlés(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Stop playback after every file</source>
-        <translation>Lejátszás &amp;megállítása minden fájl után</translation>
+        <source>Stop playback after every file(&amp;S)</source>
+        <translation>Lejátszás megállítása minden fájl után(&amp;S)</translation>
     </message>
 </context>
 <context>
@@ -3118,24 +3118,24 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
 <context>
     <name>Sort</name>
     <message>
-        <source>&amp;Sort</source>
-        <translation>&amp;Rendezés</translation>
+        <source>Sort(&amp;S)</source>
+        <translation>Rendezés(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;From the shortest to the longest</source>
-        <translation>Leg&amp;rövidebbtől a leghosszabbig</translation>
+        <source>From the shortest to the longest(&amp;F)</source>
+        <translation>Legrövidebbtől a leghosszabbig(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;From the longest to the shortest</source>
-        <translation>Leg&amp;hosszabbtól a legrövidebbig</translation>
+        <source>From the longest to the shortest(&amp;F)</source>
+        <translation>Leghosszabbtól a legrövidebbig(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;A-Z</source>
-        <translation>&amp;A-Z</translation>
+        <source>A-Z(&amp;A)</source>
+        <translation>A-Z(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Z-A</source>
-        <translation>&amp;Z-A</translation>
+        <source>Z-A(&amp;Z)</source>
+        <translation>Z-A(&amp;Z)</translation>
     </message>
 </context>
 <context>
@@ -3170,30 +3170,30 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     </message>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished">Szöveg</translation>
+        <translation>Szöveg</translation>
     </message>
 </context>
 <context>
     <name>Streams</name>
     <message>
-        <source>&amp;Audio streams</source>
-        <translation>Hang adatfolyamok</translation>
+        <source>Audio streams(&amp;A)</source>
+        <translation>Hang adatfolyamok(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Video streams</source>
-        <translation>Videó adatfolyamok</translation>
+        <source>Video streams(&amp;V)</source>
+        <translation>Videó adatfolyamok(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;Subtitles streams</source>
-        <translation>Felirat adatfolyamok</translation>
+        <source>Subtitles streams(&amp;S)</source>
+        <translation>Felirat adatfolyamok(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Chapters</source>
-        <translation>Fejezet</translation>
+        <source>Chapters(&amp;C)</source>
+        <translation>Fejezet(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Programs</source>
-        <translation>Programok</translation>
+        <source>Programs(&amp;P)</source>
+        <translation>Programok(&amp;P)</translation>
     </message>
 </context>
 <context>
@@ -3336,11 +3336,11 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation type="unfinished">Nem támogatott élességi szűrő</translation>
+        <translation>Nem támogatott élességi szűrő</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation type="unfinished">Nem támogatott váltottsorosság-megszüntetési algoritmus</translation>
+        <translation>Nem támogatott váltottsorosság-megszüntetési algoritmus</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
@@ -3435,32 +3435,32 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
 <context>
     <name>VideoFilters</name>
     <message>
-        <source>Video &amp;filters</source>
-        <translation>Video &amp;szűrők</translation>
+        <source>Video filters(&amp;F)</source>
+        <translation>Video szűrők(&amp;F)</translation>
     </message>
     <message>
-        <source>Video &amp;adjustment</source>
-        <translation>Videó &amp;igazítás</translation>
+        <source>Video adjustment(&amp;A)</source>
+        <translation>Videó igazítás(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Spherical view</source>
-        <translation>&amp;Gömb nézet</translation>
+        <source>Spherical view(&amp;S)</source>
+        <translation>Gömb nézet(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Horizontal flip</source>
-        <translation>&amp;Vízszintes tükrözés</translation>
+        <source>Horizontal flip(&amp;H)</source>
+        <translation>Vízszintes tükrözés(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;Vertical flip</source>
-        <translation>&amp;Függőleges tükrözés</translation>
+        <source>Vertical flip(&amp;V)</source>
+        <translation>Függőleges tükrözés(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;Rotate 90°</source>
-        <translation>&amp;90°-os forgatás</translation>
+        <source>Rotate 90°(&amp;R)</source>
+        <translation>90°-os forgatás(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;More filters</source>
-        <translation>&amp;Több szűrő</translation>
+        <source>More filters(&amp;M)</source>
+        <translation>Több szűrő(&amp;M)</translation>
     </message>
 </context>
 <context>
@@ -3495,30 +3495,30 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
 <context>
     <name>Widgets</name>
     <message>
-        <source>&amp;Widgets</source>
-        <translation>&amp;Elemek</translation>
+        <source>Widgets(&amp;W)</source>
+        <translation>Elemek(&amp;W)</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <source>&amp;Window</source>
-        <translation>&amp;Ablak</translation>
+        <source>Window(&amp;W)</source>
+        <translation>Ablak(&amp;W)</translation>
     </message>
     <message>
-        <source>&amp;Full screen</source>
-        <translation>&amp;Teljes képernyő</translation>
+        <source>Full screen(&amp;F)</source>
+        <translation>Teljes képernyő(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Compact view</source>
-        <translation>&amp;Kompakt nézet</translation>
+        <source>Compact view(&amp;C)</source>
+        <translation>Kompakt nézet(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Close</source>
-        <translation>&amp;Bezárás</translation>
+        <source>Close(&amp;C)</source>
+        <translation>Bezárás(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Always on top</source>
+        <source>Always on top(&amp;A)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -1249,7 +1249,7 @@ void PlaylistWidget::modifyMenu()
     const bool syncVisible = (isItemGroup && !entryUrl.isEmpty());
 
     playlistMenu()->saveGroup->setVisible(isItemGroup);
-    playlistMenu()->lock->setText(isLocked ? tr("Un&lock") : tr("&Lock"));
+    playlistMenu()->lock->setText(isLocked ? tr("Unlock(&L)") : tr("Lock(&L)"));
     playlistMenu()->lock->setVisible(currItem);
     playlistMenu()->alwaysSync->setChecked(isItemGroup && isAlwaysSynced(currItem));
     playlistMenu()->alwaysSync->setVisible(isItemGroup);

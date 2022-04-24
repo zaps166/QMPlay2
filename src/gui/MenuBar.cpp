@@ -109,19 +109,19 @@ MenuBar::~MenuBar()
 }
 
 MenuBar::Window::Window(MenuBar *parent) :
-    QMenu(Window::tr("&Window"), parent)
+    QMenu(Window::tr("Window(&W)"), parent)
 {
     newAction(QString(), this, toggleVisibility, false, QIcon(), false);
-    newAction(Window::tr("&Full screen"), this, toggleFullScreen, false, QMPlay2Core.getIconFromTheme("view-fullscreen"), false);
-    newAction(Window::tr("&Compact view"), this, toggleCompactView, false, QIcon(), true);
+    newAction(Window::tr("Full screen(&F)"), this, toggleFullScreen, false, QMPlay2Core.getIconFromTheme("view-fullscreen"), false);
+    newAction(Window::tr("Compact view(&C)"), this, toggleCompactView, false, QIcon(), true);
     addSeparator();
-    newAction(Window::tr("&Always on top"), this, alwaysOnTop, false, QIcon(), true);
+    newAction(Window::tr("Always on top(&A)"), this, alwaysOnTop, false, QIcon(), true);
     addSeparator();
-    newAction(Window::tr("&Close"), this, close, false, QMPlay2Core.getIconFromTheme("application-exit"), false, QAction::QuitRole);
+    newAction(Window::tr("Close(&C)"), this, close, false, QMPlay2Core.getIconFromTheme("application-exit"), false, QAction::QuitRole);
 }
 
 MenuBar::Widgets::Widgets(MenuBar *parent) :
-    QMenu(Widgets::tr("&Widgets"), parent)
+    QMenu(Widgets::tr("Widgets(&W)"), parent)
 {}
 void MenuBar::Widgets::menuShow()
 {
@@ -140,167 +140,167 @@ void MenuBar::Widgets::menuShow()
 }
 
 MenuBar::Playlist::Playlist(MenuBar *parent) :
-    QMenu(Playlist::tr("&Playlist"), parent)
+    QMenu(Playlist::tr("Playlist(&P)"), parent)
 {
     add = new Add(this);
     addMenu(add);
 
     addSeparator();
-    newAction(Playlist::tr("&Stop loading"), this, stopLoading, false, QMPlay2Core.getIconFromTheme("process-stop"), false);
+    newAction(Playlist::tr("Stop loading(&S)"), this, stopLoading, false, QMPlay2Core.getIconFromTheme("process-stop"), false);
     addSeparator();
-    newAction(Playlist::tr("&Synchronize groups"), this, sync, false, QMPlay2Core.getIconFromTheme("view-refresh"), false);
-    newAction(Playlist::tr("&Quick group synchronization"), this, quickSync, false, QMPlay2Core.getIconFromTheme("view-refresh"), false);
+    newAction(Playlist::tr("Synchronize groups(&S)"), this, sync, false, QMPlay2Core.getIconFromTheme("view-refresh"), false);
+    newAction(Playlist::tr("Quick group synchronization(&Q)"), this, quickSync, false, QMPlay2Core.getIconFromTheme("view-refresh"), false);
     addSeparator();
-    newAction(Playlist::tr("Load &list"), this, loadPlist, false, QIcon(), false);
-    newAction(Playlist::tr("Save &list"), this, savePlist, false, QIcon(), false);
-    newAction(Playlist::tr("Save &group"), this, saveGroup, false, QIcon(), false);
+    newAction(Playlist::tr("Load list(&L)"), this, loadPlist, false, QIcon(), false);
+    newAction(Playlist::tr("Save list(&L)"), this, savePlist, false, QIcon(), false);
+    newAction(Playlist::tr("Save group(&G)"), this, saveGroup, false, QIcon(), false);
     addSeparator();
     newAction(QString(), this, lock, false, QIcon(), false);
-    newAction(Playlist::tr("&Always sync"), this, alwaysSync, false, QIcon(), true);
+    newAction(Playlist::tr("Always sync(&A)"), this, alwaysSync, false, QIcon(), true);
     addSeparator();
-    newAction(Playlist::tr("&Remove selected entries"), this, delEntries, true, QMPlay2Core.getIconFromTheme("list-remove"), false);
-    newAction(Playlist::tr("Remove entries &without groups"), this, delNonGroupEntries, false, QMPlay2Core.getIconFromTheme("list-remove"), false);
-    newAction(Playlist::tr("&Clear list"), this, clear, false, QMPlay2Core.getIconFromTheme("archive-remove"), false);
+    newAction(Playlist::tr("Remove selected entries(&R)"), this, delEntries, true, QMPlay2Core.getIconFromTheme("list-remove"), false);
+    newAction(Playlist::tr("Remove entries without groups(&W)"), this, delNonGroupEntries, false, QMPlay2Core.getIconFromTheme("list-remove"), false);
+    newAction(Playlist::tr("Clear list(&C)"), this, clear, false, QMPlay2Core.getIconFromTheme("archive-remove"), false);
     addSeparator();
-    newAction(Playlist::tr("&Copy"), this, copy, false, QMPlay2Core.getIconFromTheme("edit-copy"), false);
-    newAction(Playlist::tr("&Paste"), this, paste, false, QMPlay2Core.getIconFromTheme("edit-paste"), false);
+    newAction(Playlist::tr("Copy(&C)"), this, copy, false, QMPlay2Core.getIconFromTheme("edit-copy"), false);
+    newAction(Playlist::tr("Paste(&P)"), this, paste, false, QMPlay2Core.getIconFromTheme("edit-paste"), false);
     addSeparator();
 
-    extensions = new QMenu(Playlist::tr("&Extensions"), this);
+    extensions = new QMenu(Playlist::tr("Extensions(&E)"), this);
     extensions->setEnabled(false);
     addMenu(extensions);
 
     addSeparator();
-    newAction(Playlist::tr("&Create &group"), this, newGroup, false, QMPlay2Core.getIconFromTheme("folder-new"), false);
-    newAction(Playlist::tr("&Rename"), this, renameGroup, false, QIcon(), false);
+    newAction(Playlist::tr("Create group(&C)"), this, newGroup, false, QMPlay2Core.getIconFromTheme("folder-new"), false);
+    newAction(Playlist::tr("Rename(&R)"), this, renameGroup, false, QIcon(), false);
     addSeparator();
-    newAction(Playlist::tr("&Find entries"), this, find, false, QMPlay2Core.getIconFromTheme("edit-find"), false);
+    newAction(Playlist::tr("Find entries(&F)"), this, find, false, QMPlay2Core.getIconFromTheme("edit-find"), false);
     addSeparator();
 
     sort = new Sort(this);
     addMenu(sort);
 
     addSeparator();
-    newAction(Playlist::tr("&Collapse all"), this, collapseAll, false, QIcon(), false);
-    newAction(Playlist::tr("&Expand all"), this, expandAll, false, QIcon(), false);
+    newAction(Playlist::tr("Collapse all(&C)"), this, collapseAll, false, QIcon(), false);
+    newAction(Playlist::tr("Expand all(&E)"), this, expandAll, false, QIcon(), false);
     addSeparator();
-    newAction(Playlist::tr("&Go to the playback"), this, goToPlayback, false, QIcon(), false);
+    newAction(Playlist::tr("Go to the playback(&G)"), this, goToPlayback, false, QIcon(), false);
     addSeparator();
-    newAction(Playlist::tr("&Enqueue"), this, queue, false, QIcon(), false);
-    newAction(Player::tr("&Skip"), this, skip, false, QIcon(), false);
-    newAction(Player::tr("&Stop after playing"), this, stopAfter, false, QIcon(), false);
+    newAction(Playlist::tr("Enqueue(&E)"), this, queue, false, QIcon(), false);
+    newAction(Player::tr("Skip(&S)"), this, skip, false, QIcon(), false);
+    newAction(Player::tr("Stop after playing(&S)"), this, stopAfter, false, QIcon(), false);
     addSeparator();
-    newAction(Playlist::tr("&Properties"), this, entryProperties, false, QMPlay2Core.getIconFromTheme("document-properties"), false);
+    newAction(Playlist::tr("Properties(&P)"), this, entryProperties, false, QMPlay2Core.getIconFromTheme("document-properties"), false);
 }
 MenuBar::Playlist::Add::Add(QMenu *parent) :
-    QMenu(Add::tr("&Add"), parent)
+    QMenu(Add::tr("Add(&A)"), parent)
 {
     setIcon(QMPlay2Core.getIconFromTheme("list-add"));
-    newAction(Add::tr("&Files"), this, file, false, *QMPlay2GUI.mediaIcon, false);
-    newAction(Add::tr("&Directory"), this, dir, false, QMPlay2Core.getIconFromTheme("folder"), false);
-    newAction(Add::tr("&Address"), this, address, false, QMPlay2Core.getIconFromTheme("application-x-mswinurl"), false);
+    newAction(Add::tr("Files(&F)"), this, file, false, *QMPlay2GUI.mediaIcon, false);
+    newAction(Add::tr("Directory(&D)"), this, dir, false, QMPlay2Core.getIconFromTheme("folder"), false);
+    newAction(Add::tr("Address(&A)"), this, address, false, QMPlay2Core.getIconFromTheme("application-x-mswinurl"), false);
     addSeparator();
 }
 MenuBar::Playlist::Sort::Sort(QMenu *parent) :
-    QMenu(Sort::tr("&Sort"), parent)
+    QMenu(Sort::tr("Sort(&S)"), parent)
 {
-    newAction(Sort::tr("&From the shortest to the longest"), this, timeSort1, false, QIcon(), false);
-    newAction(Sort::tr("&From the longest to the shortest"), this, timeSort2, false, QIcon(), false);
+    newAction(Sort::tr("From the shortest to the longest(&F)"), this, timeSort1, false, QIcon(), false);
+    newAction(Sort::tr("From the longest to the shortest(&F)"), this, timeSort2, false, QIcon(), false);
     addSeparator();
-    newAction(Sort::tr("&A-Z"), this, titleSort1, false, QIcon(), false);
-    newAction(Sort::tr("&Z-A"), this, titleSort2, false, QIcon(), false);
+    newAction(Sort::tr("A-Z(&A)"), this, titleSort1, false, QIcon(), false);
+    newAction(Sort::tr("Z-A(&Z)"), this, titleSort2, false, QIcon(), false);
 }
 
 MenuBar::Player::Player(MenuBar *parent) :
-    QMenu(Player::tr("&Player"), parent)
+    QMenu(Player::tr("Player(&P)"), parent)
 {
     newAction(QString(), this,  togglePlay, false, QMPlay2Core.getIconFromTheme("media-playback-start"), false);
-    newAction(Player::tr("&Stop"), this, stop, false, QMPlay2Core.getIconFromTheme("media-playback-stop"), false);
-    newAction(Player::tr("&Next"), this, next, true, QMPlay2Core.getIconFromTheme("media-skip-forward"), false);
-    newAction(Player::tr("&Previous"), this, prev, true, QMPlay2Core.getIconFromTheme("media-skip-backward"), false);
-    newAction(Player::tr("Previous &frame"), this, prevFrame, true, QIcon(), false);
-    newAction(Player::tr("Next &frame"), this, nextFrame, true, QIcon(), false);
+    newAction(Player::tr("Stop(&S)"), this, stop, false, QMPlay2Core.getIconFromTheme("media-playback-stop"), false);
+    newAction(Player::tr("Next(&N)"), this, next, true, QMPlay2Core.getIconFromTheme("media-skip-forward"), false);
+    newAction(Player::tr("Previous(&P)"), this, prev, true, QMPlay2Core.getIconFromTheme("media-skip-backward"), false);
+    newAction(Player::tr("Previous frame(&F)"), this, prevFrame, true, QIcon(), false);
+    newAction(Player::tr("Next frame(&F)"), this, nextFrame, true, QIcon(), false);
     addSeparator();
 
     repeat = new Repeat(this);
     addMenu(repeat);
 
-    newAction(Player::tr("A&-B Repeat"), this, abRepeat, true, QIcon(), false);
+    newAction(Player::tr("A-B Repeat(&-)"), this, abRepeat, true, QIcon(), false);
 
     addSeparator();
-    newAction(Player::tr("Seek &forward"), this, seekF, true, QIcon(), false);
-    newAction(Player::tr("Seek &backward"), this, seekB, true, QIcon(), false);
-    newAction(Player::tr("Long &seek &forward"), this, lSeekF, true, QIcon(), false);
-    newAction(Player::tr("Long s&eek backward"), this, lSeekB, true, QIcon(), false);
+    newAction(Player::tr("Seek forward(&F)"), this, seekF, true, QIcon(), false);
+    newAction(Player::tr("Seek backward(&B)"), this, seekB, true, QIcon(), false);
+    newAction(Player::tr("Long seek &forward(&S)"), this, lSeekF, true, QIcon(), false);
+    newAction(Player::tr("Long seek backward(&E)"), this, lSeekB, true, QIcon(), false);
     addSeparator();
-    newAction(Player::tr("Fa&ster"), this, speedUp, true, QIcon(), false);
-    newAction(Player::tr("Slowe&r"), this, slowDown, true, QIcon(), false);
-    newAction(Player::tr("&Set speed"), this, setSpeed, false, QIcon(), false);
+    newAction(Player::tr("Faster(&S)"), this, speedUp, true, QIcon(), false);
+    newAction(Player::tr("Slower(&R)"), this, slowDown, true, QIcon(), false);
+    newAction(Player::tr("Set speed(&S)"), this, setSpeed, false, QIcon(), false);
     addSeparator();
-    newAction(Player::tr("Zoom i&n"), this, zoomIn, true, QIcon(), false);
-    newAction(Player::tr("Zoom ou&t"), this, zoomOut, true, QIcon(), false);
-    newAction(Player::tr("Toggle &aspect ratio"), this, switchARatio, true, QIcon(), false);
+    newAction(Player::tr("Zoom in(&N)"), this, zoomIn, true, QIcon(), false);
+    newAction(Player::tr("Zoom out(&T)"), this, zoomOut, true, QIcon(), false);
+    newAction(Player::tr("Toggle aspect ratio(&A)"), this, switchARatio, true, QIcon(), false);
 
     aRatio = new AspectRatio(this);
     addMenu(aRatio);
 
-    newAction(Player::tr("Reset image &settings"), this, reset, false, QIcon(), false);
+    newAction(Player::tr("Reset image settings(&S)"), this, reset, false, QIcon(), false);
 
     addSeparator();
-    newAction(Player::tr("Volume &up"), this, volUp, true, QIcon(), false);
-    newAction(Player::tr("Volume &down"), this, volDown, true, QIcon(), false);
-    newAction(Player::tr("&Mute"), this, toggleMute, false, QMPlay2Core.getIconFromTheme("audio-volume-high"), true);
+    newAction(Player::tr("Volume up(&U)"), this, volUp, true, QIcon(), false);
+    newAction(Player::tr("Volume down(&D)"), this, volDown, true, QIcon(), false);
+    newAction(Player::tr("Mute(&M)"), this, toggleMute, false, QMPlay2Core.getIconFromTheme("audio-volume-high"), true);
 
     if (!QMPlay2GUI.pipe)
         detach = nullptr;
     else
     {
         addSeparator();
-        newAction(Player::tr("Detach from receiving &commands"), this, detach, false, QIcon(), false);
+        newAction(Player::tr("Detach from receiving commands(&C)"), this, detach, false, QIcon(), false);
     }
 
     if (QMPlay2Core.canSuspend())
     {
         addSeparator();
-        newAction(Player::tr("Suspend after playbac&k is finished"), this, suspend, false, QIcon(), true);
+        newAction(Player::tr("Suspend after playback is finished(&K)"), this, suspend, false, QIcon(), true);
     }
 }
 MenuBar::Player::Repeat::Repeat(QMenu *parent) :
-    QMenu(Repeat::tr("&Repeat"), parent)
+    QMenu(Repeat::tr("Repeat(&R)"), parent)
 {
     choice = new QActionGroup(this);
-    choice->addAction(newAction(Repeat::tr("&No repeating"), this, repeatActions[RepeatNormal], false, QIcon(), true));
+    choice->addAction(newAction(Repeat::tr("No repeating(&N)"), this, repeatActions[RepeatNormal], false, QIcon(), true));
     addSeparator();
-    choice->addAction(newAction(Repeat::tr("&Entry repeating"), this, repeatActions[RepeatEntry], false, QIcon(), true));
-    choice->addAction(newAction(Repeat::tr("&Group repeating"), this, repeatActions[RepeatGroup], false, QIcon(), true));
-    choice->addAction(newAction(Repeat::tr("&Playlist repeating"), this, repeatActions[RepeatList], false, QIcon(), true));
+    choice->addAction(newAction(Repeat::tr("Entry repeating(&E)"), this, repeatActions[RepeatEntry], false, QIcon(), true));
+    choice->addAction(newAction(Repeat::tr("Group repeating(&G)"), this, repeatActions[RepeatGroup], false, QIcon(), true));
+    choice->addAction(newAction(Repeat::tr("Playlist repeating(&P)"), this, repeatActions[RepeatList], false, QIcon(), true));
     addSeparator();
-    choice->addAction(newAction(Repeat::tr("R&andom"), this, repeatActions[RandomMode], false, QIcon(), true));
-    choice->addAction(newAction(Repeat::tr("Random in &group"), this, repeatActions[RandomGroupMode], false, QIcon(), true));
+    choice->addAction(newAction(Repeat::tr("Random(&A)"), this, repeatActions[RandomMode], false, QIcon(), true));
+    choice->addAction(newAction(Repeat::tr("Random in group(&G)"), this, repeatActions[RandomGroupMode], false, QIcon(), true));
     addSeparator();
-    choice->addAction(newAction(Repeat::tr("Random and &repeat"), this, repeatActions[RepeatRandom], false, QIcon(), true));
-    choice->addAction(newAction(Repeat::tr("Random in group and repea&t"), this, repeatActions[RepeatRandomGroup], false, QIcon(), true));
+    choice->addAction(newAction(Repeat::tr("Random and repeat(&R)"), this, repeatActions[RepeatRandom], false, QIcon(), true));
+    choice->addAction(newAction(Repeat::tr("Random in group and repeat(&T)"), this, repeatActions[RepeatRandomGroup], false, QIcon(), true));
     addSeparator();
-    choice->addAction(newAction(Repeat::tr("&Stop playback after every file"), this, repeatActions[RepeatStopAfter], false, QIcon(), true));
+    choice->addAction(newAction(Repeat::tr("Stop playback after every file(&S)"), this, repeatActions[RepeatStopAfter], false, QIcon(), true));
 
     for (int i = 0; i < RepeatModeCount; ++i)
         repeatActions[i]->setProperty("enumValue", i);
 }
 MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
-    QMenu(AspectRatio::tr("&Aspect ratio"), parent)
+    QMenu(AspectRatio::tr("Aspect ratio(&A)"), parent)
 {
     choice = new QActionGroup(this);
-    choice->addAction(newAction(AspectRatio::tr("&Auto"), this, _auto, false, QIcon(), true));
+    choice->addAction(newAction(AspectRatio::tr("Auto(&A)"), this, _auto, false, QIcon(), true));
     addSeparator();
-    choice->addAction(newAction("&1:1", this, _1x1, false, QIcon(), true));
-    choice->addAction(newAction("&4:3", this, _4x3, false, QIcon(), true));
-    choice->addAction(newAction("&5:4", this, _5x4, false, QIcon(), true));
-    choice->addAction(newAction("&16:9", this, _16x9, false, QIcon(), true));
-    choice->addAction(newAction("&3:2", this, _3x2, false, QIcon(), true));
-    choice->addAction(newAction("&21:9", this, _21x9, false, QIcon(), true));
+    choice->addAction(newAction("1:1(&1)", this, _1x1, false, QIcon(), true));
+    choice->addAction(newAction("4:3(&4)", this, _4x3, false, QIcon(), true));
+    choice->addAction(newAction("5:4(&5)", this, _5x4, false, QIcon(), true));
+    choice->addAction(newAction("16:9(&1)", this, _16x9, false, QIcon(), true));
+    choice->addAction(newAction("3:2(&3)", this, _3x2, false, QIcon(), true));
+    choice->addAction(newAction("21:9(&2)", this, _21x9, false, QIcon(), true));
     addSeparator();
-    choice->addAction(newAction(AspectRatio::tr("D&epends on size"), this, sizeDep, false, QIcon(), true));
-    choice->addAction(newAction(AspectRatio::tr("&Disabled"), this, off, false, QIcon(), true));
+    choice->addAction(newAction(AspectRatio::tr("Depends on size(&E)"), this, sizeDep, false, QIcon(), true));
+    choice->addAction(newAction(AspectRatio::tr("Disabled(&D)"), this, off, false, QIcon(), true));
 
     _auto->setObjectName("auto");
     _1x1->setObjectName("1");
@@ -338,62 +338,62 @@ void MenuBar::Player::playActionEnable(bool e)
 }
 
 MenuBar::Playback::Playback(MenuBar *parent) :
-    QMenu(Playback::tr("&Playback"), parent)
+    QMenu(Playback::tr("Playback(&P)"), parent)
 {
-    newAction(Playback::tr("&Enable audio"), this, toggleAudio, false, QIcon(), true)->setObjectName("toggleAudio");
+    newAction(Playback::tr("Enable audio(&E)"), this, toggleAudio, false, QIcon(), true)->setObjectName("toggleAudio");
     toggleAudio->setChecked(true);
 
     audioChannels = new AudioChannels(this);
     addMenu(audioChannels);
 
-    audioStreams = new Streams(Streams::tr("&Audio streams"), this);
+    audioStreams = new Streams(Streams::tr("Audio streams(&A)"), this);
     audioStreams->menuAction()->setVisible(false);
     addMenu(audioStreams);
 
     addSeparator();
 
-    newAction(Playback::tr("&Enable video"), this, toggleVideo, false, QIcon(), true)->setObjectName("toggleVideo");
+    newAction(Playback::tr("Enable video(&E)"), this, toggleVideo, false, QIcon(), true)->setObjectName("toggleVideo");
     toggleVideo->setChecked(true);
 
     videoFilters = new VideoFilters(this);
     addMenu(videoFilters);
 
-    newAction(Playback::tr("Set &video delay"), this, videoSync, false, QIcon(), false);
-    newAction(Playback::tr("&Delay video") + " (100ms)", this, slowDownVideo, true, QIcon(), false);
-    newAction(Playback::tr("&Speed up video") + " (100ms)", this, speedUpVideo, true, QIcon(), false);
+    newAction(Playback::tr("Set video delay(&V)"), this, videoSync, false, QIcon(), false);
+    newAction(Playback::tr("Delay video(&D)") + " (100ms)", this, slowDownVideo, true, QIcon(), false);
+    newAction(Playback::tr("Speed up video(&S)") + " (100ms)", this, speedUpVideo, true, QIcon(), false);
 
-    videoStreams = new Streams(Streams::tr("&Video streams"), this);
+    videoStreams = new Streams(Streams::tr("Video streams(&V)"), this);
     videoStreams->menuAction()->setVisible(false);
     addMenu(videoStreams);
 
     addSeparator();
 
-    newAction(Playback::tr("&Enable subtitles"), this, toggleSubtitles, false, QIcon(), true)->setObjectName("toggleSubtitles");
+    newAction(Playback::tr("Enable subtitles(&E)"), this, toggleSubtitles, false, QIcon(), true)->setObjectName("toggleSubtitles");
     toggleSubtitles->setChecked(true);
-    newAction(Playback::tr("Add &subtities from file"), this, subsFromFile, false, QIcon(), false);
-    newAction(Playback::tr("Set &subtitles delay"), this, subtitlesSync, true, QIcon(), false);
-    newAction(Playback::tr("&Delay subtitiles") + " (100ms)", this, slowDownSubtitles, true, QIcon(), false);
-    newAction(Playback::tr("&Speed up subtitles") + " (100ms)", this, speedUpSubtitles, true, QIcon(), false);
-    newAction(Playback::tr("Scale up subt&itles"), this, biggerSubtitles, true, QIcon(), false);
-    newAction(Playback::tr("Scale down sub&titles"), this, smallerSubtitles, true, QIcon(), false);
+    newAction(Playback::tr("Add subtities from file(&S)"), this, subsFromFile, false, QIcon(), false);
+    newAction(Playback::tr("Set subtitles delay(&S)"), this, subtitlesSync, true, QIcon(), false);
+    newAction(Playback::tr("Delay subtitiles(&D)") + " (100ms)", this, slowDownSubtitles, true, QIcon(), false);
+    newAction(Playback::tr("Speed up subtitles(&S)") + " (100ms)", this, speedUpSubtitles, true, QIcon(), false);
+    newAction(Playback::tr("Scale up subtitles(&I)"), this, biggerSubtitles, true, QIcon(), false);
+    newAction(Playback::tr("Scale down subtitles(&T)"), this, smallerSubtitles, true, QIcon(), false);
 
-    subtitlesStreams = new Streams(Streams::tr("&Subtitles streams"), this);
+    subtitlesStreams = new Streams(Streams::tr("Subtitles streams(&S)"), this);
     subtitlesStreams->menuAction()->setVisible(false);
     addMenu(subtitlesStreams);
 
     addSeparator();
 
-    chapters = new Streams(Streams::tr("&Chapters"), this, false);
+    chapters = new Streams(Streams::tr("Chapters(&C)"), this, false);
     chapters->menuAction()->setVisible(false);
     addMenu(chapters);
 
-    programs = new Streams(Streams::tr("&Programs"), this);
+    programs = new Streams(Streams::tr("Programs(&P)"), this);
     programs->menuAction()->setVisible(false);
     addMenu(programs);
 
     addSeparator();
 
-    newAction(Playback::tr("&Screen shot"), this, screenShot, true, QIcon(), false);
+    newAction(Playback::tr("Screen shot(&S)"), this, screenShot, true, QIcon(), false);
 }
 MenuBar::Playback::~Playback()
 {
@@ -413,10 +413,10 @@ MenuBar::Playback::~Playback()
 }
 
 MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
-    QMenu(VideoFilters::tr("Video &filters"), parent)
+    QMenu(VideoFilters::tr("Video filters(&F)"), parent)
 {
     /** Korektor wideo */
-    videoAdjustmentMenu = new QMenu(VideoFilters::tr("Video &adjustment"), this);
+    videoAdjustmentMenu = new QMenu(VideoFilters::tr("Video adjustment(&A)"), this);
     addMenu(videoAdjustmentMenu);
     QWidgetAction *widgetAction = new QWidgetAction(this);
     widgetAction->setDefaultWidget(QMPlay2GUI.videoAdjustment);
@@ -438,27 +438,27 @@ MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
 #endif
     /**/
     addSeparator();
-    newAction(VideoFilters::tr("&Spherical view"), this, spherical, true, QIcon(), true);
+    newAction(VideoFilters::tr("Spherical view(&S)"), this, spherical, true, QIcon(), true);
     addSeparator();
-    newAction(VideoFilters::tr("&Horizontal flip"), this, hFlip, true, QIcon(), true);
-    newAction(VideoFilters::tr("&Vertical flip"), this, vFlip, true, QIcon(), true);
-    newAction(VideoFilters::tr("&Rotate 90°"), this, rotate90, true, QIcon(), true);
+    newAction(VideoFilters::tr("Horizontal flip(&H)"), this, hFlip, true, QIcon(), true);
+    newAction(VideoFilters::tr("Vertical flip(&AV)"), this, vFlip, true, QIcon(), true);
+    newAction(VideoFilters::tr("Rotate 90°(&R)"), this, rotate90, true, QIcon(), true);
     addSeparator();
-    newAction(VideoFilters::tr("&More filters"), this, more, false, QIcon(), false);
+    newAction(VideoFilters::tr("More filters(&M)"), this, more, false, QIcon(), false);
 }
 MenuBar::Playback::AudioChannels::AudioChannels(QMenu *parent) :
-    QMenu(AudioChannels::tr("&Channels") , parent)
+    QMenu(AudioChannels::tr("Channels(&C)") , parent)
 {
     choice = new QActionGroup(this);
-    choice->addAction(newAction(AudioChannels::tr("&Autodetect"), this, _auto, false, QIcon(), true));
+    choice->addAction(newAction(AudioChannels::tr("Autodetect(&A)"), this, _auto, false, QIcon(), true));
     addSeparator();
-    choice->addAction(newAction(AudioChannels::tr("&Mono"), this, _1, false, QIcon(), true));
-    choice->addAction(newAction(AudioChannels::tr("&Stereo"), this, _2, false, QIcon(), true));
-    choice->addAction(newAction("&4.0", this, _4, false, QIcon(), true));
-    choice->addAction(newAction("&5.1", this, _6, false, QIcon(), true));
-    choice->addAction(newAction("&7.1", this, _8, false, QIcon(), true));
+    choice->addAction(newAction(AudioChannels::tr("Mono(&M)"), this, _1, false, QIcon(), true));
+    choice->addAction(newAction(AudioChannels::tr("Stereo(&S)"), this, _2, false, QIcon(), true));
+    choice->addAction(newAction("4.0(&4)", this, _4, false, QIcon(), true));
+    choice->addAction(newAction("5.1(&5)", this, _6, false, QIcon(), true));
+    choice->addAction(newAction("7.1(&7)", this, _8, false, QIcon(), true));
     addSeparator();
-    choice->addAction(newAction(AudioChannels::tr("&Other"), this, other, false, QIcon(), true));
+    choice->addAction(newAction(AudioChannels::tr("Other(&O)"), this, other, false, QIcon(), true));
 
     _auto->setObjectName("auto");
     _1->setObjectName("1");
@@ -475,28 +475,28 @@ MenuBar::Playback::Streams::Streams(const QString &title, QMenu *parent, bool cr
 }
 
 MenuBar::Options::Options(MenuBar *parent) :
-    QMenu(Options::tr("Op&tions"), parent)
+    QMenu(Options::tr("Options(&T)"), parent)
 {
     const QIcon configureIcon = QMPlay2Core.getIconFromTheme("configure");
-    newAction(Options::tr("&Settings"), this, settings, false, configureIcon, false, QAction::PreferencesRole);
-    newAction(Options::tr("&Renderer settings"), this, rendererSettings, true, configureIcon, false);
-    newAction(Options::tr("&Playback settings"), this, playbackSettings, true, configureIcon, false);
-    newAction(Options::tr("&Modules settings"), this, modulesSettings, false, configureIcon, false);
+    newAction(Options::tr("Settings(&S)"), this, settings, false, configureIcon, false, QAction::PreferencesRole);
+    newAction(Options::tr("Renderer settings(&R)"), this, rendererSettings, true, configureIcon, false);
+    newAction(Options::tr("Playback settings(&P)"), this, playbackSettings, true, configureIcon, false);
+    newAction(Options::tr("Modules settings(&M)"), this, modulesSettings, false, configureIcon, false);
     addSeparator();
 
     {
-        QMenu *profiles = new QMenu(Options::tr("&Profiles"), this);
+        QMenu *profiles = new QMenu(Options::tr("Profiles(&P)"), this);
         profiles->setContextMenuPolicy(Qt::CustomContextMenu);
         connect(profiles, SIGNAL(customContextMenuRequested(QPoint)), parent, SLOT(removeProfileMenuRequest(QPoint)));
         profiles->setIcon(configureIcon);
 
-        profiles->addAction(QMPlay2Core.getIconFromTheme("list-add"), Options::tr("&New Profile"), parent, SLOT(addProfile()));
-        profiles->addAction(QMPlay2Core.getIconFromTheme("edit-copy"), Options::tr("&Copy Profile"), parent, SLOT(copyProfile()));
+        profiles->addAction(QMPlay2Core.getIconFromTheme("list-add"), Options::tr("New Profile(&N)"), parent, SLOT(addProfile()));
+        profiles->addAction(QMPlay2Core.getIconFromTheme("edit-copy"), Options::tr("Copy Profile(&C)"), parent, SLOT(copyProfile()));
         profiles->addSeparator();
 
         profilesGroup = new QActionGroup(parent);
 
-        QAction *act = profiles->addAction(Options::tr("&Default"), parent, SLOT(changeProfile()));
+        QAction *act = profiles->addAction(Options::tr("Default(&D)"), parent, SLOT(changeProfile()));
         act->setProperty("path", "/");
         act->setCheckable(true);
         profilesGroup->addAction(act);
@@ -523,21 +523,21 @@ MenuBar::Options::Options(MenuBar *parent) :
     }
 
     addSeparator();
-    newAction(Options::tr("&Show tray icon"), this, trayVisible, false, QIcon(), true);
+    newAction(Options::tr("Show tray icon(&S)"), this, trayVisible, false, QIcon(), true);
 
     removeProfileMenu = new QMenu(this);
     removeProfileMenu->addAction(tr("Remove"), parent, SLOT(removeProfile()));
 }
 
 MenuBar::Help::Help(MenuBar *parent) :
-    QMenu(Help::tr("&Help"), parent)
+    QMenu(Help::tr("Help(&H)"), parent)
 {
-    newAction(Help::tr("&About QMPlay2"), this, about, false, QIcon(), false, QAction::AboutRole);
+    newAction(Help::tr("About QMPlay2(&A)"), this, about, false, QIcon(), false, QAction::AboutRole);
 #ifdef UPDATER
-    newAction(Help::tr("&Updates"), this, updates, false, QIcon(), false);
+    newAction(Help::tr("Updates(&U)"), this, updates, false, QIcon(), false);
 #endif
     addSeparator();
-    newAction(Help::tr("About &Qt"), this, aboutQt, false, QIcon(), false, QAction::AboutQtRole);
+    newAction(Help::tr("About Qt(&Q)"), this, aboutQt, false, QIcon(), false, QAction::AboutQtRole);
 }
 
 void MenuBar::setKeyShortcuts()

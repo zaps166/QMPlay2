@@ -73,20 +73,20 @@
 <context>
     <name>Add</name>
     <message>
-        <source>&amp;Address</source>
-        <translation>&amp;Adresse</translation>
+        <source>Address(&amp;A)</source>
+        <translation>Adresse(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Files</source>
-        <translation>&amp;Dateien</translation>
+        <source>Files(&amp;F)</source>
+        <translation>Dateien(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Directory</source>
-        <translation>&amp;Verzeichnis</translation>
+        <source>Directory(&amp;D)</source>
+        <translation>Verzeichnis(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Add</source>
-        <translation>&amp;Hinzufügen</translation>
+        <source>Add(&amp;A)</source>
+        <translation>Hinzufügen(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -264,20 +264,20 @@
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>&amp;Aspect ratio</source>
-        <translation>&amp;Seitenverhältnis</translation>
+        <source>Aspect ratio(&amp;A)</source>
+        <translation>Seitenverhältnis(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Disabled</source>
-        <translation>&amp;Deaktiviert</translation>
+        <source>Disabled(&amp;D)</source>
+        <translation>Deaktiviert(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Auto</source>
-        <translation>&amp;Auto</translation>
+        <source>Auto(&amp;A)</source>
+        <translation>Auto(&amp;A)</translation>
     </message>
     <message>
-        <source>D&amp;epends on size</source>
-        <translation>&amp;Abhängig von der Größe</translation>
+        <source>Depends on size(&amp;E)</source>
+        <translation>Abhängig von der Größe(&amp;E)</translation>
     </message>
 </context>
 <context>
@@ -337,24 +337,24 @@
 <context>
     <name>AudioChannels</name>
     <message>
-        <source>&amp;Autodetect</source>
-        <translation>&amp;Automatisch erkennen</translation>
+        <source>Autodetect(&amp;A)</source>
+        <translation>Automatisch erkennen(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Mono</source>
-        <translation>&amp;Mono</translation>
+        <source>Mono(&amp;M)</source>
+        <translation>Mono(&amp;M)</translation>
     </message>
     <message>
-        <source>&amp;Stereo</source>
-        <translation>&amp;Stereo</translation>
+        <source>Stereo(&amp;S)</source>
+        <translation>Stereo(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Other</source>
-        <translation>&amp;Weitere</translation>
+        <source>Other(&amp;O)</source>
+        <translation>Weitere(&amp;O)</translation>
     </message>
     <message>
-        <source>&amp;Channels</source>
-        <translation>&amp;Kanäle</translation>
+        <source>Channels(&amp;C)</source>
+        <translation>Kanäle(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -663,8 +663,8 @@
         <translation>Adresse eingeben</translation>
     </message>
     <message>
-        <source>&amp;Add</source>
-        <translation>&amp;Hinzufügen</translation>
+        <source>Add(&amp;A)</source>
+        <translation>Hinzufügen(&amp;A)</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
@@ -1033,20 +1033,20 @@
 <context>
     <name>Help</name>
     <message>
-        <source>&amp;Help</source>
-        <translation>&amp;Hilfe</translation>
+        <source>Help(&amp;H)</source>
+        <translation>Hilfe(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;About QMPlay2</source>
-        <translation>&amp;Über QMPlay2</translation>
+        <source>About QMPlay2(&amp;A)</source>
+        <translation>Über QMPlay2(&amp;A)</translation>
     </message>
     <message>
-        <source>About &amp;Qt</source>
-        <translation>Über &amp;Qt</translation>
+        <source>About Qt(&amp;Q)</source>
+        <translation>Über Qt(&amp;Q)</translation>
     </message>
     <message>
-        <source>&amp;Updates</source>
-        <translation>&amp;Aktualisierungen</translation>
+        <source>Updates(&amp;U)</source>
+        <translation>Aktualisierungen(&amp;U)</translation>
     </message>
     <message>
         <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
@@ -1221,8 +1221,8 @@
         <translation>Hauptsymbolleiste</translation>
     </message>
     <message>
-        <source>&amp;Play</source>
-        <translation>&amp;Wiedergabe</translation>
+        <source>Play(&amp;P)</source>
+        <translation>Wiedergabe(&amp;P)</translation>
     </message>
     <message>
         <source>Choose files</source>
@@ -1237,12 +1237,12 @@
         <translation>Aktuelle Position</translation>
     </message>
     <message>
-        <source>&amp;Hide</source>
-        <translation>&amp;Verstecken</translation>
+        <source>Hide(&amp;H)</source>
+        <translation>Verstecken(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;Show</source>
-        <translation>&amp;Anzeigen</translation>
+        <source>Show(&amp;S)</source>
+        <translation>Anzeigen(&amp;S)</translation>
     </message>
     <message>
         <source>Stopped</source>
@@ -1281,8 +1281,8 @@
         <translation>Eine Aktualisierung wird gerade heruntergeladen.</translation>
     </message>
     <message>
-        <source>&amp;Lock widgets</source>
-        <translation>&amp;Widgets sperren</translation>
+        <source>Lock widgets(&amp;L)</source>
+        <translation>Widgets sperren(&amp;L)</translation>
     </message>
     <message>
         <source>Save group</source>
@@ -1293,16 +1293,16 @@
         <translation>Fehler beim Speichern der Wiedergabeliste</translation>
     </message>
     <message>
-        <source>&amp;Hide menu bar</source>
-        <translation>&amp;Verstecke Menübar</translation>
+        <source>Hide menu bar(&amp;H)</source>
+        <translation>Verstecke Menübar(&amp;H)</translation>
     </message>
     <message>
         <source>New window</source>
         <translation>Neues Fenster</translation>
     </message>
     <message>
-        <source>&amp;Pause</source>
-        <translation>&amp;Pause</translation>
+        <source>Pause(&amp;P)</source>
+        <translation>Pause(&amp;P)</translation>
     </message>
     <message>
         <source>Next audio stream</source>
@@ -1929,40 +1929,40 @@
 <context>
     <name>Options</name>
     <message>
-        <source>Op&amp;tions</source>
-        <translation>Op&amp;tionen</translation>
+        <source>Options(&amp;T)</source>
+        <translation>Optionen(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Settings</source>
-        <translation>&amp;Einstellungen</translation>
+        <source>Settings(&amp;S)</source>
+        <translation>Einstellungen(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Show tray icon</source>
-        <translation>&amp;Symbol in Kontrollleiste anzeigen</translation>
+        <source>Show tray icon(&amp;S)</source>
+        <translation>Symbol in Kontrollleiste anzeigen(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Modules settings</source>
-        <translation>&amp;Modul Einstellungen</translation>
+        <source>Modules settings(&amp;M)</source>
+        <translation>Modul Einstellungen(&amp;M)</translation>
     </message>
     <message>
         <source>Create new profile</source>
         <translation>Neues Profil erstellen</translation>
     </message>
     <message>
-        <source>&amp;Profiles</source>
-        <translation>&amp;Profile</translation>
+        <source>Profiles(&amp;P)</source>
+        <translation>Profile(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;New Profile</source>
-        <translation>&amp;Neues Profil</translation>
+        <source>New Profile(&amp;N)</source>
+        <translation>Neues Profil(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Copy Profile</source>
-        <translation>Profil &amp;kopieren</translation>
+        <source>Copy Profile(&amp;C)</source>
+        <translation>Profil kopieren(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Default</source>
-        <translation>&amp;Standard</translation>
+        <source>Default(&amp;D)</source>
+        <translation>Standard(&amp;D)</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -1973,12 +1973,12 @@
         <translation>Neuen Profilnamen eingeben:</translation>
     </message>
     <message>
-        <source>&amp;Playback settings</source>
-        <translation>&amp;Wiedergabeeinstellungen</translation>
+        <source>Play back settings(&amp;P)</source>
+        <translation>Wiedergabeeinstellungen(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Renderer settings</source>
-        <translation>&amp;Renderer Einstellungen</translation>
+        <source>Renderer settings(&amp;R)</source>
+        <translation>Renderer Einstellungen(&amp;R)</translation>
     </message>
 </context>
 <context>
@@ -2106,60 +2106,60 @@
 <context>
     <name>Playback</name>
     <message>
-        <source>&amp;Playback</source>
-        <translation>&amp;Wiedergabe</translation>
+        <source>Playback(&amp;P)</source>
+        <translation>Wiedergabe(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Enable audio</source>
-        <translation>&amp;Audio aktivieren</translation>
+        <source>Enable audio(&amp;E)</source>
+        <translation>Audio aktivieren(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Enable video</source>
-        <translation>&amp;Video aktivieren</translation>
+        <source>Enable video(&amp;E)</source>
+        <translation>Video aktivieren(&amp;E)</translation>
     </message>
     <message>
-        <source>Set &amp;video delay</source>
-        <translation>&amp;Video Verzögerung angeben</translation>
+        <source>Set video delay(&amp;V)</source>
+        <translation>Video Verzögerung angeben(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;Delay video</source>
-        <translation>&amp;Video verzögern</translation>
+        <source>Delay video(&amp;D)</source>
+        <translation>Video verzögern(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Speed up video</source>
-        <translation>Video Abspielgeschwindigkeit erhöhen</translation>
+        <source>Speed up video(&amp;S)</source>
+        <translation>Video Abspielgeschwindigkeit erhöhen(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Enable subtitles</source>
-        <translation>&amp;Untertitel aktivieren</translation>
+        <source>Enable subtitles(&amp;E)</source>
+        <translation>Untertitel aktivieren(&amp;E)</translation>
     </message>
     <message>
-        <source>Add &amp;subtities from file</source>
-        <translation>Untertitel Datei hinzufügen</translation>
+        <source>Add subtities from file(&amp;S)</source>
+        <translation>Untertitel Datei hinzufügen(&amp;S)</translation>
     </message>
     <message>
-        <source>Set &amp;subtitles delay</source>
-        <translation>Untertitel Verzögerung angeben</translation>
+        <source>Set subtitles delay(&amp;S)</source>
+        <translation>Untertitel Verzögerung angeben(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Delay subtitiles</source>
-        <translation>Untertitel verzögern</translation>
+        <source>Delay subtitiles(&amp;D)</source>
+        <translation>Untertitel verzögern(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Speed up subtitles</source>
-        <translation>Untertitel Anzeigegeschwindigkeit erhöhen</translation>
+        <source>Speed up subtitles(&amp;S)</source>
+        <translation>Untertitel Anzeigegeschwindigkeit erhöhen(&amp;S)</translation>
     </message>
     <message>
-        <source>Scale up subt&amp;itles</source>
-        <translation>Untertitel vergrößern</translation>
+        <source>Scale up subtitles(&amp;I)</source>
+        <translation>Untertitel vergrößern(&amp;I)</translation>
     </message>
     <message>
-        <source>Scale down sub&amp;titles</source>
-        <translation>Untertitel verkleinern</translation>
+        <source>Scale down subtitles(&amp;T)</source>
+        <translation>Untertitel verkleinern(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Screen shot</source>
-        <translation>&amp;Bildschirmfoto</translation>
+        <source>Screen shot(&amp;S)</source>
+        <translation>Bildschirmfoto(&amp;S)</translation>
     </message>
 </context>
 <context>
@@ -2324,195 +2324,195 @@
 <context>
     <name>Player</name>
     <message>
-        <source>&amp;Player</source>
-        <translation>&amp;Abspielgerät</translation>
+        <source>Player(&amp;P)</source>
+        <translation>Abspielgerät(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Stop</source>
-        <translation>&amp;Stop</translation>
+        <source>Stop(&amp;S)</source>
+        <translation>Stop(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Next</source>
-        <translation>&amp;Nächste</translation>
+        <source>Next(&amp;N)</source>
+        <translation>Nächste(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Previous</source>
-        <translation>&amp;Vorherige</translation>
+        <source>Previous(&amp;P)</source>
+        <translation>Vorherige(&amp;P)</translation>
     </message>
     <message>
-        <source>Seek &amp;forward</source>
-        <translation>&amp;Vorwärts Suchen</translation>
+        <source>Seek forward(&amp;F)</source>
+        <translation>Vorwärts Suchen(&amp;F)</translation>
     </message>
     <message>
-        <source>Seek &amp;backward</source>
-        <translation>&amp;Rückwärts Suchen</translation>
+        <source>Seek backward(&amp;B)</source>
+        <translation>Rückwärts Suchen(&amp;B)</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
-        <translation>Langes Suchen Vorwärts</translation>
+        <source>Long seek forward(&amp;S)</source>
+        <translation>Langes Suchen Vorwärts(&amp;S)</translation>
     </message>
     <message>
-        <source>Long s&amp;eek backward</source>
-        <translation>Langes Suchen Rückwärts</translation>
+        <source>Long seek backward(&amp;E)</source>
+        <translation>Langes Suchen Rückwärts(&amp;E)</translation>
     </message>
     <message>
-        <source>Fa&amp;ster</source>
-        <translation>&amp;Schneller</translation>
+        <source>Faster(&amp;S)</source>
+        <translation>Schneller(&amp;S)</translation>
     </message>
     <message>
-        <source>Slowe&amp;r</source>
-        <translation>Langsame&amp;r</translation>
+        <source>Slower(&amp;R)</source>
+        <translation>Langsamer(&amp;R)</translation>
     </message>
     <message>
-        <source>Zoom i&amp;n</source>
-        <translation>Rei&amp;nzoomen</translation>
+        <source>Zoom in(&amp;N)</source>
+        <translation>Reinzoomen(&amp;N)</translation>
     </message>
     <message>
-        <source>Zoom ou&amp;t</source>
-        <translation>Rauszoomen</translation>
+        <source>Zoom out(&amp;T)</source>
+        <translation>Rauszoomen(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Mute</source>
-        <translation>Stu&amp;mm</translation>
+        <source>Mute(&amp;M)</source>
+        <translation>Stumm(&amp;M)</translation>
     </message>
     <message>
-        <source>Toggle &amp;aspect ratio</source>
-        <translation>&amp;Seitenverhältnis umschalten</translation>
+        <source>Toggle Aspect ratio(&amp;A)</source>
+        <translation>Seitenverhältnis umschalten(&amp;A)</translation>
     </message>
     <message>
-        <source>Reset image &amp;settings</source>
-        <translation>Bilder &amp;Einstellungen zurücksetzen</translation>
+        <source>Reset image Settings(&amp;S)</source>
+        <translation>Bilder Einstellungen zurücksetzen(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Set speed</source>
-        <translation>&amp;Geschwindigkeit angeben</translation>
+        <source>Set speed(&amp;S)</source>
+        <translation>Geschwindigkeit angeben(&amp;S)</translation>
     </message>
     <message>
-        <source>Next &amp;frame</source>
-        <translation>Nächstes &amp;Bild</translation>
+        <source>Next frame(&amp;F)</source>
+        <translation>Nächstes Bild(&amp;F)</translation>
     </message>
     <message>
-        <source>Volume &amp;up</source>
-        <translation>Lautstärke &amp;anheben</translation>
+        <source>Volume up(&amp;U)</source>
+        <translation>Lautstärke anheben(&amp;U)</translation>
     </message>
     <message>
-        <source>Volume &amp;down</source>
-        <translation>Lautstärke absenken</translation>
+        <source>Volume down(&amp;D)</source>
+        <translation>Lautstärke absenken(&amp;D)</translation>
     </message>
     <message>
-        <source>Suspend after playbac&amp;k is finished</source>
-        <translation>Nach Wiedergabe anhalten</translation>
+        <source>Suspend after playback is finished(&amp;K)</source>
+        <translation>Nach Wiedergabe anhalten(&amp;K)</translation>
     </message>
     <message>
-        <source>A&amp;-B Repeat</source>
-        <translation>A&amp;-B wiederholen</translation>
+        <source>A-B Repeat(&amp;-)</source>
+        <translation>A-B wiederholen(&amp;-)</translation>
     </message>
     <message>
-        <source>Detach from receiving &amp;commands</source>
-        <translation>Trenne eingehende &amp;Befehle</translation>
+        <source>Detach from receiving commands(&amp;C)</source>
+        <translation>Trenne eingehende Befehle(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Skip</source>
-        <translation>Überspringen</translation>
+        <source>Skip(&amp;S)</source>
+        <translation>Überspringen(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Stop after playing</source>
+        <source>Stop after playing(&amp;S)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Previous &amp;frame</source>
-        <translation>Vorheriges &amp;Bild</translation>
+        <source>Previous frame(&amp;F)</source>
+        <translation>Vorheriges Bild(&amp;F)</translation>
     </message>
 </context>
 <context>
     <name>Playlist</name>
     <message>
-        <source>&amp;Playlist</source>
-        <translation>&amp;Wiedergabeliste</translation>
+        <source>Playlist(&amp;P)</source>
+        <translation>Wiedergabeliste(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Stop loading</source>
-        <translation>&amp;Laden stoppen</translation>
+        <source>Stop loading(&amp;S)</source>
+        <translation>Laden stoppen(&amp;S)</translation>
     </message>
     <message>
-        <source>Load &amp;list</source>
-        <translation>&amp;Liste laden</translation>
+        <source>Load list(&amp;L)</source>
+        <translation>Liste laden(&amp;L)</translation>
     </message>
     <message>
-        <source>Save &amp;list</source>
-        <translation>Liste speichern</translation>
+        <source>Save list(&amp;L)</source>
+        <translation>Liste speichern(&amp;L)</translation>
     </message>
     <message>
-        <source>&amp;Remove selected entries</source>
-        <translation>&amp;Angewählte Einträge löschen</translation>
+        <source>Remove selected entries(&amp;R)</source>
+        <translation>Angewählte Einträge löschen(&amp;R)</translation>
     </message>
     <message>
-        <source>Remove entries &amp;without groups</source>
-        <translation>Einträge löschen, &amp;ohne Gruppe</translation>
+        <source>Remove entries without groups(&amp;W)</source>
+        <translation>Einträge löschen, ohne Gruppe(&amp;W)</translation>
     </message>
     <message>
-        <source>&amp;Clear list</source>
-        <translation>Liste &amp;bereinigen</translation>
+        <source>Clear list(&amp;C)</source>
+        <translation>Liste bereinigen(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Copy</source>
-        <translation>&amp;Kopieren</translation>
+        <source>Copy(&amp;C)</source>
+        <translation>Kopieren(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Paste</source>
-        <translation>&amp;Einfügen</translation>
+        <source>Paste(&amp;P)</source>
+        <translation>Einfügen(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
-        <translation>&amp;Erstelle &amp;Gruppe</translation>
+        <source>Create group(&amp;C)</source>
+        <translation>Erstelle Gruppe(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Rename</source>
-        <translation>&amp;Umbenennen</translation>
+        <source>Rename(&amp;R)</source>
+        <translation>Umbenennen(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;Find entries</source>
-        <translation>&amp;Einträge finden</translation>
+        <source>Find entries(&amp;F)</source>
+        <translation>Einträge finden(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Collapse all</source>
-        <translation>&amp;Alles schließen</translation>
+        <source>Collapse all(&amp;C)</source>
+        <translation>Alles schließen(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Expand all</source>
-        <translation>A&amp;lles erweitern</translation>
+        <source>Expand all(&amp;E)</source>
+        <translation>Alles erweitern(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Go to the playback</source>
-        <translation>&amp;Zur Wiedergabe</translation>
+        <source>Go to the playback(&amp;G)</source>
+        <translation>Zur Wiedergabe(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Enqueue</source>
-        <translation>Wartesc&amp;hlange</translation>
+        <source>Enqueue(&amp;E)</source>
+        <translation>Warteschlange(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Properties</source>
-        <translation>&amp;Eigenschaften</translation>
+        <source>Properties(&amp;P)</source>
+        <translation>Eigenschaften(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Extensions</source>
-        <translation>Erweiterungen</translation>
+        <source>Extensions(&amp;E)</source>
+        <translation>Erweiterungen(&amp;E)</translation>
     </message>
     <message>
-        <source>Save &amp;group</source>
-        <translation>Gruppe speichern</translation>
+        <source>Save group(&amp;G)</source>
+        <translation>Gruppe speichern(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Synchronize groups</source>
-        <translation>&amp;Synchronisiere Gruppe</translation>
+        <source>Synchronize groups(&amp;S)</source>
+        <translation>Synchronisiere Gruppe(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Quick group synchronization</source>
-        <translation>&amp;Schnelle Gruppensynchronisation</translation>
+        <source>Quick group synchronization(&amp;Q)</source>
+        <translation>Schnelle Gruppensynchronisation(&amp;Q)</translation>
     </message>
     <message>
-        <source>&amp;Always sync</source>
-        <translation>&amp;Immer synchronisieren</translation>
+        <source>Always syn(&amp;A)c</source>
+        <translation>Immer synchronisieren(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -2545,12 +2545,12 @@
 <context>
     <name>PlaylistWidget</name>
     <message>
-        <source>Un&amp;lock</source>
-        <translation>Freischalten</translation>
+        <source>Unlock(&amp;L)</source>
+        <translation>Freischalten(&amp;L)</translation>
     </message>
     <message>
-        <source>&amp;Lock</source>
-        <translation>Sperren</translation>
+        <source>Lock(&amp;L)</source>
+        <translation>Sperren(&amp;L)</translation>
     </message>
 </context>
 <context>
@@ -2743,44 +2743,44 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
 <context>
     <name>Repeat</name>
     <message>
-        <source>&amp;Repeat</source>
-        <translation>&amp;Wiederholen</translation>
+        <source>Repeat(&amp;R)</source>
+        <translation>Wiederholen(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;No repeating</source>
-        <translation>&amp;Ohne Looping</translation>
+        <source>No repeating(&amp;N)</source>
+        <translation>Ohne Looping(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Entry repeating</source>
-        <translation>&amp;Einträge wiederholen</translation>
+        <source>Entry repeating(&amp;E)</source>
+        <translation>Einträge wiederholen(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Group repeating</source>
-        <translation>&amp;Gruppe wiederholen</translation>
+        <source>Group repeating(&amp;G)</source>
+        <translation>Gruppe wiederholen(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Playlist repeating</source>
-        <translation>&amp;Wiedergabeliste wiederholen</translation>
+        <source>Playlist repeating(&amp;P)</source>
+        <translation>Wiedergabeliste wiederholen(&amp;P)</translation>
     </message>
     <message>
-        <source>R&amp;andom</source>
-        <translation>&amp;Zufällige Wiedergabe</translation>
+        <source>Random(&amp;A)</source>
+        <translation>Zufällige Wiedergabe(&amp;A)</translation>
     </message>
     <message>
-        <source>Random in &amp;group</source>
-        <translation>Zufällige Wiedergabe der &amp;Gruppe</translation>
+        <source>Random in group(&amp;G)</source>
+        <translation>Zufällige Wiedergabe der Gruppe(&amp;G)</translation>
     </message>
     <message>
-        <source>Random and &amp;repeat</source>
-        <translation>Zufällige Wiedergabe und &amp;wiederholen</translation>
+        <source>Random and Repeat(&amp;R)</source>
+        <translation>Zufällige Wiedergabe und wiederholen(&amp;R)</translation>
     </message>
     <message>
-        <source>Random in group and repea&amp;t</source>
-        <translation>Zufällig in der Gruppe und wiederholen</translation>
+        <source>Random in group and repeat(&amp;T)</source>
+        <translation>Zufällig in der Gruppe und wiederholen(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Stop playback after every file</source>
-        <translation>&amp;Wiedergabe nach jeder Datei stoppen</translation>
+        <source>Stop playback after every file(&amp;S)</source>
+        <translation>Wiedergabe nach jeder Datei stoppen(&amp;S)</translation>
     </message>
 </context>
 <context>
@@ -3119,24 +3119,24 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
 <context>
     <name>Sort</name>
     <message>
-        <source>&amp;From the shortest to the longest</source>
-        <translation>&amp;Vom Kürzesten zum Längsten</translation>
+        <source>From the shortest to the longest(&amp;F)</source>
+        <translation>Vom Kürzesten zum Längsten(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;From the longest to the shortest</source>
-        <translation>&amp;Vom Längsten zum Kürzesten</translation>
+        <source>From the longest to the shortest(&amp;F)</source>
+        <translation>Vom Längsten zum Kürzesten(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Sort</source>
-        <translation>&amp;Sortieren</translation>
+        <source>Sort(&amp;S)</source>
+        <translation>Sortieren(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;A-Z</source>
-        <translation>&amp;A-Z</translation>
+        <source>A-Z(&amp;A)</source>
+        <translation>A-Z(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Z-A</source>
-        <translation>&amp;Z-A</translation>
+        <source>Z-A(&amp;Z)</source>
+        <translation>Z-A(&amp;Z)</translation>
     </message>
 </context>
 <context>
@@ -3177,24 +3177,24 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
 <context>
     <name>Streams</name>
     <message>
-        <source>&amp;Audio streams</source>
-        <translation>Audio-Streams</translation>
+        <source>Audio streams(&amp;A)</source>
+        <translation>Audio-Streams(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Video streams</source>
-        <translation>Video-Streams</translation>
+        <source>Video streams(&amp;V)</source>
+        <translation>Video-Streams(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;Subtitles streams</source>
-        <translation>Untertitel-Streams</translation>
+        <source>Subtitles streams(&amp;S)</source>
+        <translation>Untertitel-Streams(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Chapters</source>
-        <translation>Kapitels</translation>
+        <source>Chapters(&amp;C)</source>
+        <translation>Kapitels(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Programs</source>
-        <translation>Programme</translation>
+        <source>Programs(&amp;P)</source>
+        <translation>Programme(&amp;P)</translation>
     </message>
 </context>
 <context>
@@ -3436,32 +3436,32 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
 <context>
     <name>VideoFilters</name>
     <message>
-        <source>Video &amp;filters</source>
-        <translation>Video &amp;Filter</translation>
+        <source>Video filters(&amp;F)</source>
+        <translation>Video Filter(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Horizontal flip</source>
-        <translation>&amp;Horizontal spiegeln</translation>
+        <source>Horizontal flip(&amp;H)</source>
+        <translation>Horizontal spiegeln(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;Vertical flip</source>
-        <translation>&amp;Vertikal spiegeln</translation>
+        <source>Vertical flip(&amp;V)</source>
+        <translation>Vertikal spiegeln(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;More filters</source>
-        <translation>&amp;Weitere Filter</translation>
+        <source>More filters(&amp;M)</source>
+        <translation>Weitere Filter(&amp;M)</translation>
     </message>
     <message>
-        <source>&amp;Rotate 90°</source>
-        <translation>90° drehen</translation>
+        <source>Rotate 90°(&amp;R)</source>
+        <translation>90° drehen(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;Spherical view</source>
-        <translation>Sphärische Ansicht</translation>
+        <source>Spherical view(&amp;S)</source>
+        <translation>Sphärische Ansicht(&amp;S)</translation>
     </message>
     <message>
-        <source>Video &amp;adjustment</source>
-        <translation>Video &amp;Anpassung</translation>
+        <source>Video adjustment(&amp;A)</source>
+        <translation>Video Anpassung(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -3496,31 +3496,31 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
 <context>
     <name>Widgets</name>
     <message>
-        <source>&amp;Widgets</source>
-        <translation>&amp;Widgets</translation>
+        <source>Widgets(&amp;W)</source>
+        <translation>Widgets(&amp;W)</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <source>&amp;Window</source>
-        <translation>&amp;Fenster</translation>
+        <source>Window(&amp;W)</source>
+        <translation>Fenster(&amp;W)</translation>
     </message>
     <message>
-        <source>&amp;Full screen</source>
-        <translation>&amp;Vollbild</translation>
+        <source>Full screen(&amp;F)</source>
+        <translation>Vollbild(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Compact view</source>
-        <translation>&amp;Kompakte Anzeige</translation>
+        <source>Compact view(&amp;C)</source>
+        <translation>Kompakte Anzeige(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Close</source>
-        <translation>&amp;Schließen</translation>
+        <source>Close(&amp;C)</source>
+        <translation>Schließen(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Always on top</source>
-        <translation>&amp;Immer oben</translation>
+        <source>Always on top(&amp;A)</source>
+        <translation>Immer oben(&amp;A)</translation>
     </message>
 </context>
 <context>

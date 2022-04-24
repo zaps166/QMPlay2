@@ -5,7 +5,7 @@
     <name>ALSAWriter</name>
     <message>
         <source>Cannot open</source>
-        <translation type="unfinished">Het openen is mislukt</translation>
+        <translation>Het openen is mislukt</translation>
     </message>
     <message>
         <source>back to</source>
@@ -73,20 +73,20 @@
 <context>
     <name>Add</name>
     <message>
-        <source>&amp;Add</source>
-        <translation>&amp;Toevoegen</translation>
+        <source>Add(&amp;A)</source>
+        <translation>Toevoegen(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Files</source>
-        <translation>&amp;Bestanden</translation>
+        <source>Files(&amp;F)</source>
+        <translation>Bestanden(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Directory</source>
-        <translation>&amp;Map</translation>
+        <source>Directory(&amp;D)</source>
+        <translation>Map(&amp;D)/<translation>
     </message>
     <message>
-        <source>&amp;Address</source>
-        <translation>&amp;Adres</translation>
+        <source>Address(&amp;A)</source>
+        <translation>Adres(&amp;A)/</translation>
     </message>
 </context>
 <context>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Afspelen</translation>
+        <translation>Afspelen</translation>
     </message>
 </context>
 <context>
@@ -264,20 +264,20 @@
 <context>
     <name>AspectRatio</name>
     <message>
-        <source>&amp;Aspect ratio</source>
-        <translation>&amp;Beeldverhouding</translation>
+        <source>Aspect ratio(&amp;A)</source>
+        <translation>Beeldverhouding(&amp;A)/</translation>
     </message>
     <message>
-        <source>&amp;Auto</source>
-        <translation>&amp;Automatisch</translation>
+        <source>Auto(&amp;A)</source>
+        <translation>Automatisch(&amp;A)</translation>
     </message>
     <message>
-        <source>D&amp;epends on size</source>
-        <translation>Afhank&amp;elijk van afmetingen</translation>
+        <source>Depends on size(&amp;E)</source>
+        <translation>Afhankelijk van afmetingen(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Disabled</source>
-        <translation>Uitgeschakel&amp;d</translation>
+        <source>Disabled(&amp;D)</source>
+        <translation>Uitgeschakeld(&amp;D)</translation>
     </message>
 </context>
 <context>
@@ -315,7 +315,7 @@
     </message>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Volgnummer</translation>
+        <translation>Volgnummer</translation>
     </message>
     <message>
         <source>Error reading track</source>
@@ -337,24 +337,24 @@
 <context>
     <name>AudioChannels</name>
     <message>
-        <source>&amp;Channels</source>
-        <translation>Aantal &amp;kanalen</translation>
+        <source>Channels(&amp;C)</source>
+        <translation>Aantal kanalen(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Autodetect</source>
-        <translation>&amp;Automatisch detecteren</translation>
+        <source>Autodetect(&amp;A)</source>
+        <translation>Automatisch detecteren(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Mono</source>
-        <translation>&amp;Mono</translation>
+        <source>Mono(&amp;M)</source>
+        <translation>Mono(&amp;M)</translation>
     </message>
     <message>
-        <source>&amp;Stereo</source>
-        <translation>&amp;Stereo</translation>
+        <source>Stereo(&amp;S)</source>
+        <translation>Stereo(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Other</source>
-        <translation>&amp;Anders</translation>
+        <source>Other(&amp;O)</source>
+        <translation>Anders(&amp;O)</translation>
     </message>
 </context>
 <context>
@@ -392,7 +392,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation type="unfinished">Interliniëringsmethode</translation>
+        <translation>Interliniëringsmethode</translation>
     </message>
 </context>
 <context>
@@ -605,7 +605,7 @@
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Afspelen</translation>
+        <translation>Afspelen</translation>
     </message>
     <message>
         <source>Download again</source>
@@ -617,7 +617,7 @@
     </message>
     <message>
         <source>File size</source>
-        <translation type="unfinished">Bestandsgrootte</translation>
+        <translation>Bestandsgrootte</translation>
     </message>
     <message>
         <source>Converting...</source>
@@ -635,8 +635,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Add</source>
-        <translation type="unfinished">&amp;Toevoegen</translation>
+        <source>Add(&amp;A)</source>
+        <translation>Toevoegen(&amp;A)</translation>
     </message>
     <message>
         <source>Download directory</source>
@@ -679,7 +679,7 @@
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Verwijderen</translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <source>Preset name</source>
@@ -788,7 +788,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Instellingen</translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <source>ON</source>
@@ -815,7 +815,7 @@
     <name>FFDemux</name>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Volgnummer</translation>
+        <translation>Volgnummer</translation>
     </message>
 </context>
 <context>
@@ -833,11 +833,11 @@
     <name>FFmpeg</name>
     <message>
         <source>None</source>
-        <translation type="unfinished">Geen</translation>
+        <translation>Geen</translation>
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation type="unfinished">Interliniëringsmethode</translation>
+        <translation>Interliniëringsmethode</translation>
     </message>
 </context>
 <context>
@@ -855,7 +855,7 @@
     <name>FormatContext</name>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Volgnummer</translation>
+        <translation>Volgnummer</translation>
     </message>
 </context>
 <context>
@@ -870,7 +870,7 @@
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished">Opmerking</translation>
+        <translation>Opmerking</translation>
     </message>
     <message>
         <source>Voices</source>
@@ -878,7 +878,7 @@
     </message>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Volgnummer</translation>
+        <translation>Volgnummer</translation>
     </message>
 </context>
 <context>
@@ -1099,20 +1099,20 @@
         <translation>Toon deze hulp.</translation>
     </message>
     <message>
-        <source>&amp;Help</source>
-        <translation>&amp;Hulp</translation>
+        <source>Help(&amp;H)</source>
+        <translation>Hulp(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;About QMPlay2</source>
-        <translation>Over QMPl&amp;ay2</translation>
+        <source>About QMPlay2(&amp;A)</source>
+        <translation>Over QMPlay2(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Updates</source>
-        <translation>&amp;Updates</translation>
+        <source>Updates(&amp;U)</source>
+        <translation>Updates(&amp;U)</translation>
     </message>
     <message>
-        <source>About &amp;Qt</source>
-        <translation>Over &amp;Qt</translation>
+        <source>About Qt(&amp;Q)</source>
+        <translation>Over Qt(&amp;Q)</translation>
     </message>
 </context>
 <context>
@@ -1223,20 +1223,20 @@
         <translation>Hoofdwerkbalk</translation>
     </message>
     <message>
-        <source>&amp;Hide menu bar</source>
-        <translation>Menubalk verber&amp;gen</translation>
+        <source>Hide menu bar(&amp;H)</source>
+        <translation>Menubalk verbergen(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;Lock widgets</source>
-        <translation>Widgets vergrende&amp;len</translation>
+        <source>Lock widgets(&amp;L)</source>
+        <translation>Widgets vergrendelen(&amp;L)</translation>
     </message>
     <message>
-        <source>&amp;Pause</source>
-        <translation>&amp;Pauzeren</translation>
+        <source>Pause(&amp;P)</source>
+        <translation>Pauzeren(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Play</source>
-        <translation>Afs&amp;pelen</translation>
+        <source>Play(&amp;P)</source>
+        <translation>Afspelen(&amp;P)</translation>
     </message>
     <message>
         <source>New window</source>
@@ -1295,12 +1295,12 @@
         <translation>De update wordt gedownload.</translation>
     </message>
     <message>
-        <source>&amp;Hide</source>
-        <translation>&amp;Verbergen</translation>
+        <source>Hide(&amp;H)</source>
+        <translation>Verbergen(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;Show</source>
-        <translation>&amp;Tonen</translation>
+        <source>Show(&amp;S)</source>
+        <translation>Tonen(&amp;S)</translation>
     </message>
     <message>
         <source>Next audio stream</source>
@@ -1342,7 +1342,7 @@
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Afspelen</translation>
+        <translation>Afspelen</translation>
     </message>
     <message>
         <source>Open the page in the browser</source>
@@ -1685,7 +1685,7 @@
     </message>
     <message>
         <source>Format</source>
-        <translation type="unfinished">Formaat</translation>
+        <translation>Formaat</translation>
     </message>
     <message>
         <source>Channel count</source>
@@ -1753,7 +1753,7 @@
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Standaard</translation>
+        <translation>Standaard</translation>
     </message>
     <message>
         <source>Exclusive mode</source>
@@ -1835,7 +1835,7 @@
     <name>NotifyService</name>
     <message>
         <source>Stopped</source>
-        <translation type="unfinished">Gestopt</translation>
+        <translation>Gestopt</translation>
     </message>
     <message>
         <source>Playing</source>
@@ -1843,7 +1843,7 @@
     </message>
     <message>
         <source>Paused</source>
-        <translation type="unfinished">Gepauzeerd</translation>
+        <translation>Gepauzeerd</translation>
     </message>
     <message>
         <source>Volume changed</source>
@@ -1927,56 +1927,56 @@
 <context>
     <name>Options</name>
     <message>
-        <source>Op&amp;tions</source>
-        <translation>Op&amp;ties</translation>
+        <source>Options(&amp;T)</source>
+        <translation>Opties(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Settings</source>
-        <translation>In&amp;stellingen</translation>
+        <source>Settings(&amp;S)</source>
+        <translation>Instellingen(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Renderer settings</source>
-        <translation>Wee&amp;rgave-instellingen</translation>
+        <source>Renderer settings(&amp;R)</source>
+        <translation>Weergave-instellingen(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;Playback settings</source>
-        <translation>Afs&amp;peelinstellingen</translation>
+        <source>Play back settings(&amp;P)</source>
+        <translation>Afspeelinstellingen(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Modules settings</source>
-        <translation>&amp;Module-instellingen</translation>
+        <source>Modules settings(&amp;M)</source>
+        <translation>Module-instellingen(&amp;M)</translation>
     </message>
     <message>
-        <source>&amp;Profiles</source>
-        <translation>&amp;Profielen</translation>
+        <source>Profiles(&amp;P)</source>
+        <translation>Profielen(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;New Profile</source>
-        <translation>&amp;Nieuw profiel</translation>
+        <source>New Profile(&amp;N)</source>
+        <translation>Nieuw profiel(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Copy Profile</source>
-        <translation>Profiel &amp;kopiëren</translation>
+        <source>Copy Profile(&amp;C)</source>
+        <translation>Profiel kopiëren(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Default</source>
-        <translation>Stan&amp;daard</translation>
+        <source>Default(&amp;D)</source>
+        <translation>Standaard(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Show tray icon</source>
-        <translation>&amp;Systeemvakpictogram tonen</translation>
+        <source>Show tray icon(&amp;S)</source>
+        <translation>Systeemvakpictogram tonen(&amp;S)</translation>
     </message>
     <message>
         <source>Create new profile</source>
-        <translation type="unfinished">Nieuw profiel aanmaken</translation>
+        <translation>Nieuw profiel aanmaken</translation>
     </message>
     <message>
         <source>Enter new profile name:</source>
-        <translation type="unfinished">Geef het nieuwe profiel een naam:</translation>
+        <translation>Geef het nieuwe profiel een naam:</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Verwijderen</translation>
+        <translation>Verwijderen</translation>
     </message>
 </context>
 <context>
@@ -2104,60 +2104,60 @@
 <context>
     <name>Playback</name>
     <message>
-        <source>&amp;Playback</source>
-        <translation>Afs&amp;pelen</translation>
+        <source>Playback(&amp;P)</source>
+        <translation>Afspelen(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Enable audio</source>
-        <translation>G&amp;eluid afspelen</translation>
+        <source>Enable audio(&amp;E)</source>
+        <translation>Geluid afspelen(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Enable video</source>
-        <translation>B&amp;eelden tonen</translation>
+        <source>Enable video(&amp;E)</source>
+        <translation>Beelden tonen(&amp;E)</translation>
     </message>
     <message>
-        <source>Set &amp;video delay</source>
-        <translation>&amp;Videovertraging instellen</translation>
+        <source>Set video delay(&amp;V)</source>
+        <translation>Videovertraging instellen(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;Delay video</source>
-        <translation>Vi&amp;deo vertragen</translation>
+        <source>Delay video(&amp;D)</source>
+        <translation>Video vertragen(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Speed up video</source>
-        <translation>Video ver&amp;snellen</translation>
+        <source>Speed up video(&amp;S)</source>
+        <translation>Video versnellen(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Enable subtitles</source>
-        <translation>Ond&amp;ertiteling tonen</translation>
+        <source>Enable subtitles(&amp;E)</source>
+        <translation>Ondertiteling tonen(&amp;E)</translation>
     </message>
     <message>
-        <source>Add &amp;subtities from file</source>
-        <translation>Ondertiteling toevoegen uit be&amp;stand</translation>
+        <source>Add subtities from file(&amp;S)</source>
+        <translation>Ondertiteling toevoegen uit bestand(&amp;S)</translation>
     </message>
     <message>
-        <source>Set &amp;subtitles delay</source>
-        <translation>Ondertitelvertraging in&amp;stellen</translation>
+        <source>Set subtitles delay(&amp;S)</source>
+        <translation>Ondertitelvertraging instellen(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Delay subtitiles</source>
-        <translation>On&amp;dertiteling vertragen</translation>
+        <source>Delay subtitiles(&amp;D)</source>
+        <translation>Ondertiteling vertragen(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Speed up subtitles</source>
-        <translation>Ondertiteling ver&amp;snellen</translation>
+        <source>Speed up subtitles(&amp;S)</source>
+        <translation>Ondertiteling versnellen(&amp;S)</translation>
     </message>
     <message>
-        <source>Scale up subt&amp;itles</source>
-        <translation>Ondert&amp;iteling vergroten</translation>
+        <source>Scale up subtitles(&amp;I)</source>
+        <translation>Ondertiteling vergroten(&amp;I)</translation>
     </message>
     <message>
-        <source>Scale down sub&amp;titles</source>
-        <translation>Onder&amp;titeling verkleinen</translation>
+        <source>Scale down subtitles(&amp;T)</source>
+        <translation>Ondertiteling verkleinen(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Screen shot</source>
-        <translation>&amp;Schermfoto maken</translation>
+        <source>Screen shot(&amp;S)</source>
+        <translation>Schermfoto maken(&amp;S)</translation>
     </message>
 </context>
 <context>
@@ -2322,195 +2322,195 @@
 <context>
     <name>Player</name>
     <message>
-        <source>&amp;Skip</source>
-        <translation>Over&amp;slaan</translation>
+        <source>Skip(&amp;S)</source>
+        <translation>Overslaan(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Stop after playing</source>
-        <translation>&amp;Stoppen na afspelen</translation>
+        <source>Stop after playing(&amp;S)</source>
+        <translation>Stoppen na afspelen(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Player</source>
-        <translation>S&amp;peler</translation>
+        <source>Player(&amp;P)</source>
+        <translation>Speler(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Stop</source>
-        <translation>&amp;Stoppen</translation>
+        <source>Stop(&amp;S)</source>
+        <translation>Stoppen(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Next</source>
-        <translation>Volge&amp;nde</translation>
+        <source>Next(&amp;N)</source>
+        <translation>Volgende(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Previous</source>
-        <translation>&amp;Vorige</translation>
+        <source>Previous(&amp;P)</source>
+        <translation>Vorige(&amp;P)</translation>
     </message>
     <message>
-        <source>Previous &amp;frame</source>
-        <translation>Vorig &amp;frame</translation>
+        <source>Previous frame(&amp;F)</source>
+        <translation>Vorig frame(&amp;F)</translation>
     </message>
     <message>
-        <source>Next &amp;frame</source>
-        <translation>Volgend &amp;frame</translation>
+        <source>Next frame(&amp;F)</source>
+        <translation>Volgend frame(&amp;F)</translation>
     </message>
     <message>
-        <source>A&amp;-B Repeat</source>
-        <translation>A&amp;-B herhalen</translation>
+        <source>A-B Repeat(&amp;-)</source>
+        <translation>A-B herhalen(&amp;-)</translation>
     </message>
     <message>
-        <source>Seek &amp;forward</source>
-        <translation>&amp;Vooruitspoelen</translation>
+        <source>Seek forward(&amp;F)</source>
+        <translation>Vooruitspoelen(&amp;F)</translation>
     </message>
     <message>
-        <source>Seek &amp;backward</source>
-        <translation>&amp;Terugspoelen</translation>
+        <source>Seek backward(&amp;B)</source>
+        <translation>Terugspoelen(&amp;B)</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
-        <translation>Lang door&amp;spoe&amp;len</translation>
+        <source>Long seek forward(&amp;S)</source>
+        <translation>Lang doorspoelen(&amp;S)</translation>
     </message>
     <message>
-        <source>Long s&amp;eek backward</source>
-        <translation>Lang t&amp;erugspoelen</translation>
+        <source>Long seek backward(&amp;E)</source>
+        <translation>Lang terugspoelen(&amp;E)</translation>
     </message>
     <message>
-        <source>Fa&amp;ster</source>
-        <translation>&amp;Sneller</translation>
+        <source>Faster(&amp;S)</source>
+        <translation>Sneller(&amp;S)</translation>
     </message>
     <message>
-        <source>Slowe&amp;r</source>
-        <translation>Langzame&amp;r</translation>
+        <source>Slower(&amp;R)</source>
+        <translation>Langzamer(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;Set speed</source>
-        <translation>&amp;Snelheid instellen</translation>
+        <source>Set speed(&amp;S)</source>
+        <translation>Snelheid instellen(&amp;S)</translation>
     </message>
     <message>
-        <source>Zoom i&amp;n</source>
-        <translation>I&amp;nzoomen</translation>
+        <source>Zoom in(&amp;N)</source>
+        <translation>Inzoomen(&amp;N)</translation>
     </message>
     <message>
-        <source>Zoom ou&amp;t</source>
-        <translation>Ui&amp;tzoomen</translation>
+        <source>Zoom out(&amp;T)</source>
+        <translation>Uitzoomen(&amp;T)</translation>
     </message>
     <message>
-        <source>Toggle &amp;aspect ratio</source>
-        <translation>&amp;Andere beeldverhouding gebruiken</translation>
+        <source>Toggle Aspect ratio(&amp;A)</source>
+        <translation>Andere beeldverhouding gebruiken(&amp;A)</translation>
     </message>
     <message>
-        <source>Reset image &amp;settings</source>
-        <translation>Standaardwaarden her&amp;stellen</translation>
+        <source>Reset image Settings(&amp;S)</source>
+        <translation>Standaardwaarden herstellen(&amp;S)</translation>
     </message>
     <message>
-        <source>Volume &amp;up</source>
-        <translation>Vol&amp;ume omhoog</translation>
+        <source>Volume up(&amp;U)</source>
+        <translation>Volume omhoog(&amp;U)</translation>
     </message>
     <message>
-        <source>Volume &amp;down</source>
-        <translation>Vol&amp;ume omlaag</translation>
+        <source>Volume down(&amp;D)</source>
+        <translation>Volume omlaag(&amp;D)</translation>
     </message>
     <message>
-        <source>&amp;Mute</source>
-        <translation>De&amp;mpen</translation>
+        <source>Mute(&amp;M)</source>
+        <translation>Dempen(&amp;M)</translation>
     </message>
     <message>
-        <source>Detach from receiving &amp;commands</source>
-        <translation>Loskoppelen van ontvangen en opdra&amp;chten</translation>
+        <source>Detach from receiving commands(&amp;C)</source>
+        <translation>Loskoppelen van ontvangen en opdrachten(&amp;C)</translation>
     </message>
     <message>
-        <source>Suspend after playbac&amp;k is finished</source>
-        <translation>In pau&amp;zestand zetten nadat afspelen is voltooid</translation>
+        <source>Suspend after playback is finished(&amp;K)</source>
+        <translation>In pauzestand zetten nadat afspelen is voltooid(&amp;K)</translation>
     </message>
 </context>
 <context>
     <name>Playlist</name>
     <message>
-        <source>&amp;Playlist</source>
-        <translation>Afs&amp;peellijst</translation>
+        <source>Playlist(&amp;P)</source>
+        <translation>Afspeellijst(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Stop loading</source>
-        <translation>&amp;Stoppen met laden</translation>
+        <source>Stop loading(&amp;S)</source>
+        <translation>Stoppen met laden(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Synchronize groups</source>
-        <translation>Groepen &amp;synchroniseren</translation>
+        <source>Synchronize groups(&amp;S)</source>
+        <translation>Groepen synchroniseren(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Quick group synchronization</source>
-        <translation>&amp;Groepen snel synchroniseren</translation>
+        <source>Quick group synchronization(&amp;Q)</source>
+        <translation>Groepen snel synchroniseren(&amp;Q)</translation>
     </message>
     <message>
-        <source>Load &amp;list</source>
-        <translation>&amp;Lijst laden</translation>
+        <source>Load list(&amp;L)</source>
+        <translation>Lijst laden(&amp;L)</translation>
     </message>
     <message>
-        <source>Save &amp;list</source>
-        <translation>&amp;Lijst opslaan</translation>
+        <source>Save list(&amp;L)</source>
+        <translation>Lijst opslaan(&amp;L)</translation>
     </message>
     <message>
-        <source>Save &amp;group</source>
-        <translation>&amp;Groep opslaan</translation>
+        <source>Save group(&amp;G)</source>
+        <translation>Groep opslaan(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Always sync</source>
-        <translation>&amp;Altijd synchroniseren</translation>
+        <source>Always sync(&amp;A)</source>
+        <translation>Altijd synchroniseren(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Remove selected entries</source>
-        <translation>Selectie w&amp;issen</translation>
+        <source>Remove selected entries(&amp;R)</source>
+        <translation>Selectie wissen(&amp;R)</translation>
     </message>
     <message>
-        <source>Remove entries &amp;without groups</source>
-        <translation>Ongegroepeerde items &amp;wissen</translation>
+        <source>Remove entries without groups(&amp;W)</source>
+        <translation>Ongegroepeerde items wissen(&amp;W)</translation>
     </message>
     <message>
-        <source>&amp;Clear list</source>
-        <translation>Lijst wi&amp;ssen</translation>
+        <source>Clear list(&amp;C)</source>
+        <translation>Lijst wissen(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Copy</source>
-        <translation>&amp;Kopiëren</translation>
+        <source>Copy(&amp;C)</source>
+        <translation>Kopiëren(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Paste</source>
-        <translation>&amp;Plakken</translation>
+        <source>Paste(&amp;P)</source>
+        <translation>Plakken(&amp;P)</translation>
     </message>
     <message>
-        <source>&amp;Extensions</source>
-        <translation>Bestands&amp;extensies</translation>
+        <source>Extensions(&amp;E)</source>
+        <translation>Bestandsextensies(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
-        <translation>&amp;Groep samenstellen</translation>
+        <source>Create group(&amp;C)</source>
+        <translation>Groep samenstellen(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Rename</source>
-        <translation>Naam &amp;wijzigen</translation>
+        <source>Rename(&amp;R)</source>
+        <translation>Naam wijzigen(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;Find entries</source>
-        <translation>Items &amp;zoeken</translation>
+        <source>Find entries(&amp;F)</source>
+        <translation>Items zoeken(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Collapse all</source>
-        <translation>Alles in&amp;klappen</translation>
+        <source>Collapse all(&amp;C)</source>
+        <translation>Alles inklappen(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Expand all</source>
-        <translation>All&amp;es uitklappen</translation>
+        <source>Expand all(&amp;E)</source>
+        <translation>Alles uitklappen(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Go to the playback</source>
-        <translation>&amp;Ga naar huidige nummer</translation>
+        <source>Go to the playback(&amp;G)</source>
+        <translation>Ga naar huidige nummer(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Enqueue</source>
-        <translation>To&amp;evoegen aan wachtrij</translation>
+        <source>Enqueue(&amp;E)</source>
+        <translation>Toevoegen aan wachtrij(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Properties</source>
-        <translation>Eigenscha&amp;ppen</translation>
+        <source>Properties(&amp;P)</source>
+        <translation>Eigenschappen(&amp;P)</translation>
     </message>
 </context>
 <context>
@@ -2543,12 +2543,12 @@
 <context>
     <name>PlaylistWidget</name>
     <message>
-        <source>Un&amp;lock</source>
-        <translation>Ontgrende&amp;len</translation>
+        <source>Unlock(&amp;L)</source>
+        <translation>Ontgrendelen(&amp;L)</translation>
     </message>
     <message>
-        <source>&amp;Lock</source>
-        <translation>Vergrende&amp;len</translation>
+        <source>Lock(&amp;L)</source>
+        <translation>Vergrendelen(&amp;L)</translation>
     </message>
 </context>
 <context>
@@ -2660,7 +2660,7 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <source>Tag</source>
@@ -2680,7 +2680,7 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Afspelen</translation>
+        <translation>Afspelen</translation>
     </message>
     <message>
         <source>Enqueue</source>
@@ -2696,7 +2696,7 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Address</source>
-        <translation type="unfinished">Adres</translation>
+        <translation>Adres</translation>
     </message>
     <message>
         <source>Editing selected radio station</source>
@@ -2719,7 +2719,7 @@ Pictogrammen worden niet vergroot.</translation>
     <name>RadioBrowserModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <source>Stream info</source>
@@ -2741,44 +2741,44 @@ Pictogrammen worden niet vergroot.</translation>
 <context>
     <name>Repeat</name>
     <message>
-        <source>&amp;Repeat</source>
-        <translation>He&amp;rhalen</translation>
+        <source>Repeat(&amp;R)</source>
+        <translation>Herhalen(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;No repeating</source>
-        <translation>&amp;Niet herhalen</translation>
+        <source>No repeating(&amp;N)</source>
+        <translation>Niet herhalen(&amp;N)</translation>
     </message>
     <message>
-        <source>&amp;Entry repeating</source>
-        <translation>It&amp;em herhalen</translation>
+        <source>Entry repeating(&amp;E)</source>
+        <translation>Item herhalen(&amp;E)</translation>
     </message>
     <message>
-        <source>&amp;Group repeating</source>
-        <translation>&amp;Groep herhalen</translation>
+        <source>Group repeating(&amp;G)</source>
+        <translation>Groep herhalen(&amp;G)</translation>
     </message>
     <message>
-        <source>&amp;Playlist repeating</source>
-        <translation>Afs&amp;peellijst herhalen</translation>
+        <source>Playlist repeating(&amp;P)</source>
+        <translation>Afspeellijst herhalen(&amp;P)</translation>
     </message>
     <message>
-        <source>R&amp;andom</source>
-        <translation>Willekeu&amp;rig</translation>
+        <source>Random(&amp;A)</source>
+        <translation>Willekeurig(&amp;A)</translation>
     </message>
     <message>
-        <source>Random in &amp;group</source>
-        <translation>Willekeurig in &amp;groep</translation>
+        <source>Random in group(&amp;G)</source>
+        <translation>Willekeurig in groep(&amp;G)</translation>
     </message>
     <message>
-        <source>Random and &amp;repeat</source>
-        <translation>Willekeurig en he&amp;rhalen</translation>
+        <source>Random and Repeat(&amp;R)</source>
+        <translation>Willekeurig en herhalen(&amp;R)</translation>
     </message>
     <message>
-        <source>Random in group and repea&amp;t</source>
-        <translation>Willekeurig in groep en herha&amp;len</translation>
+        <source>Random in group and repeat(&amp;T)</source>
+        <translation>Willekeurig in groep en herhalen(&amp;T)</translation>
     </message>
     <message>
-        <source>&amp;Stop playback after every file</source>
-        <translation>&amp;Stoppen met afspelen na elk bestand</translation>
+        <source>Stop playback after every file(&amp;S)</source>
+        <translation>Stoppen met afspelen na elk bestand(&amp;S)</translation>
     </message>
 </context>
 <context>
@@ -2805,7 +2805,7 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Afspelen</translation>
+        <translation>Afspelen</translation>
     </message>
     <message>
         <source>Enqueue</source>
@@ -2828,7 +2828,7 @@ Pictogrammen worden niet vergroot.</translation>
     <name>SIDPlay</name>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Volgnummer</translation>
+        <translation>Volgnummer</translation>
     </message>
 </context>
 <context>
@@ -3117,24 +3117,24 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
 <context>
     <name>Sort</name>
     <message>
-        <source>&amp;Sort</source>
-        <translation>&amp;Sorteren</translation>
+        <source>Sort(&amp;S)</source>
+        <translation>Sorteren(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;From the shortest to the longest</source>
-        <translation>&amp;Van kort naar lang</translation>
+        <source>From the shortest to the longest(&amp;F)</source>
+        <translation>Van kort naar lang(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;From the longest to the shortest</source>
-        <translation>&amp;Van lang naar kort</translation>
+        <source>From the longest to the shortest(&amp;F)</source>
+        <translation>Van lang naar kort(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;A-Z</source>
-        <translation>&amp;A-Z</translation>
+        <source>A-Z(&amp;A)</source>
+        <translation>A-Z(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Z-A</source>
-        <translation>&amp;Z-A</translation>
+        <source>Z-A(&amp;Z)</source>
+        <translation>Z-A(&amp;Z)</translation>
     </message>
 </context>
 <context>
@@ -3149,15 +3149,15 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished">Artiest</translation>
+        <translation>Artiest</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation type="unfinished">Album</translation>
+        <translation>Album</translation>
     </message>
     <message>
         <source>Genre</source>
-        <translation type="unfinished">Genre</translation>
+        <translation>Genre</translation>
     </message>
     <message>
         <source>Date</source>
@@ -3165,7 +3165,7 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished">Opmerking</translation>
+        <translation>Opmerking</translation>
     </message>
     <message>
         <source>Lyrics</source>
@@ -3175,24 +3175,24 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
 <context>
     <name>Streams</name>
     <message>
-        <source>&amp;Audio streams</source>
-        <translation>Audiostreams</translation>
+        <source>Audio streams(&amp;A)</source>
+        <translation>Audiostreams(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Video streams</source>
-        <translation>Videostreams</translation>
+        <source>Video streams(&amp;V)</source>
+        <translation>Videostreams(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;Subtitles streams</source>
-        <translation>Ondertitelstreams</translation>
+        <source>Subtitles streams(&amp;S)</source>
+        <translation>Ondertitelstreams(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Chapters</source>
-        <translation>Hoofdstukken</translation>
+        <source>Chapters(&amp;C)</source>
+        <translation>Hoofdstukken(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Programs</source>
-        <translation>Programma&apos;s</translation>
+        <source>Programs(&amp;P)</source>
+        <translation>Programmas(&amp;P)</translation>
     </message>
 </context>
 <context>
@@ -3262,7 +3262,7 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     </message>
     <message>
         <source>Hz</source>
-        <translation type="unfinished">Hz</translation>
+        <translation>Hz</translation>
     </message>
 </context>
 <context>
@@ -3434,32 +3434,32 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
 <context>
     <name>VideoFilters</name>
     <message>
-        <source>Video &amp;filters</source>
-        <translation>Video&amp;filters</translation>
+        <source>Video filters(&amp;F)</source>
+        <translation>Videofilters(&amp;F)</translation>
     </message>
     <message>
-        <source>Video &amp;adjustment</source>
-        <translation>Video-&amp;aanpassingen</translation>
+        <source>Video adjustment(&amp;A)</source>
+        <translation>Video-aanpassingen(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Spherical view</source>
-        <translation>&amp;Bolweergave</translation>
+        <source>Spherical view(&amp;S)</source>
+        <translation>Bolweergave(&amp;S)</translation>
     </message>
     <message>
-        <source>&amp;Horizontal flip</source>
-        <translation>&amp;Horizontaal spiegelen</translation>
+        <source>Horizontal flip(&amp;H)</source>
+        <translation>Horizontaal spiegelen(&amp;H)</translation>
     </message>
     <message>
-        <source>&amp;Vertical flip</source>
-        <translation>&amp;Verticaal spiegelen</translation>
+        <source>Vertical flip(&amp;V)</source>
+        <translation>Verticaal spiegelen(&amp;V)</translation>
     </message>
     <message>
-        <source>&amp;Rotate 90°</source>
-        <translation>90° d&amp;raaien</translation>
+        <source>Rotate 90°(&amp;R)</source>
+        <translation>90° draaien(&amp;R)</translation>
     </message>
     <message>
-        <source>&amp;More filters</source>
-        <translation>&amp;Meer filters</translation>
+        <source>More filters(&amp;M)</source>
+        <translation>Meer filters(&amp;M)</translation>
     </message>
 </context>
 <context>
@@ -3481,7 +3481,7 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     <name>VisWidget</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Instellingen</translation>
+        <translation>Instellingen</translation>
     </message>
 </context>
 <context>
@@ -3494,31 +3494,31 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
 <context>
     <name>Widgets</name>
     <message>
-        <source>&amp;Widgets</source>
-        <translation>&amp;Widgets</translation>
+        <source>Widgets(&amp;W)</source>
+        <translation>Widgets(&amp;W)</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <source>&amp;Window</source>
-        <translation>&amp;Venster</translation>
+        <source>Window(&amp;W)</source>
+        <translation>Venster(&amp;W)</translation>
     </message>
     <message>
-        <source>&amp;Full screen</source>
-        <translation>&amp;Beeldvullende modus</translation>
+        <source>Full screen(&amp;F)</source>
+        <translation>Beeldvullende modus(&amp;F)</translation>
     </message>
     <message>
-        <source>&amp;Compact view</source>
-        <translation>&amp;Compacte weergave</translation>
+        <source>Compact view(&amp;C)</source>
+        <translation>Compacte weergave(&amp;C)</translation>
     </message>
     <message>
-        <source>&amp;Always on top</source>
-        <translation>&amp;Altijd bovenop</translation>
+        <source>Always on top(&amp;A)</source>
+        <translation>Altijd bovenop(&amp;A)</translation>
     </message>
     <message>
-        <source>&amp;Close</source>
-        <translation>&amp;Sluiten</translation>
+        <source>Close(&amp;C)</source>
+        <translation>Sluiten(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -3529,7 +3529,7 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Instellingen</translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <source>Preferred quality</source>
@@ -3565,7 +3565,7 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     </message>
     <message>
         <source>Playlist</source>
-        <translation type="unfinished">Afspeellijst</translation>
+        <translation>Afspeellijst</translation>
     </message>
     <message>
         <source>yes</source>
