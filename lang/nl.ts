@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="nl_NL">
+<TS version="2.1" language="nl_NL" sourcelanguage="en">
 <context>
     <name>ALSAWriter</name>
     <message>
         <source>Cannot open</source>
-        <translation type="unfinished">Het openen is mislukt</translation>
+        <translation>Het openen is mislukt</translation>
     </message>
     <message>
         <source>back to</source>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Afspelen</translation>
+        <translation>Afspelen</translation>
     </message>
 </context>
 <context>
@@ -315,7 +315,7 @@
     </message>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Volgnummer</translation>
+        <translation>Volgnummer</translation>
     </message>
     <message>
         <source>Error reading track</source>
@@ -338,7 +338,7 @@
     <name>AudioChannels</name>
     <message>
         <source>&amp;Channels</source>
-        <translation>Aantal &amp;kanalen</translation>
+        <translation>&amp;Aantal kanalen</translation>
     </message>
     <message>
         <source>&amp;Autodetect</source>
@@ -392,7 +392,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation type="unfinished">Interliniëringsmethode</translation>
+        <translation>Interliniëringsmethode</translation>
     </message>
 </context>
 <context>
@@ -605,7 +605,7 @@
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Afspelen</translation>
+        <translation>Afspelen</translation>
     </message>
     <message>
         <source>Download again</source>
@@ -617,7 +617,7 @@
     </message>
     <message>
         <source>File size</source>
-        <translation type="unfinished">Bestandsgrootte</translation>
+        <translation>Bestandsgrootte</translation>
     </message>
     <message>
         <source>Converting...</source>
@@ -636,7 +636,7 @@
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished">&amp;Toevoegen</translation>
+        <translation>&amp;Toevoegen</translation>
     </message>
     <message>
         <source>Download directory</source>
@@ -679,7 +679,7 @@
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Verwijderen</translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <source>Preset name</source>
@@ -788,7 +788,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Instellingen</translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <source>ON</source>
@@ -815,7 +815,7 @@
     <name>FFDemux</name>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Volgnummer</translation>
+        <translation>Volgnummer</translation>
     </message>
 </context>
 <context>
@@ -833,11 +833,11 @@
     <name>FFmpeg</name>
     <message>
         <source>None</source>
-        <translation type="unfinished">Geen</translation>
+        <translation>Geen</translation>
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation type="unfinished">Interliniëringsmethode</translation>
+        <translation>Interliniëringsmethode</translation>
     </message>
 </context>
 <context>
@@ -855,7 +855,7 @@
     <name>FormatContext</name>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Volgnummer</translation>
+        <translation>Volgnummer</translation>
     </message>
 </context>
 <context>
@@ -870,7 +870,7 @@
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished">Opmerking</translation>
+        <translation>Opmerking</translation>
     </message>
     <message>
         <source>Voices</source>
@@ -878,7 +878,7 @@
     </message>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Volgnummer</translation>
+        <translation>Volgnummer</translation>
     </message>
 </context>
 <context>
@@ -1224,7 +1224,7 @@
     </message>
     <message>
         <source>&amp;Hide menu bar</source>
-        <translation>Menubalk verber&amp;gen</translation>
+        <translation>&amp;Menubalk verbergen</translation>
     </message>
     <message>
         <source>&amp;Lock widgets</source>
@@ -1342,7 +1342,7 @@
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Afspelen</translation>
+        <translation>Afspelen</translation>
     </message>
     <message>
         <source>Open the page in the browser</source>
@@ -1685,7 +1685,7 @@
     </message>
     <message>
         <source>Format</source>
-        <translation type="unfinished">Formaat</translation>
+        <translation>Formaat</translation>
     </message>
     <message>
         <source>Channel count</source>
@@ -1753,7 +1753,7 @@
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Standaard</translation>
+        <translation>Standaard</translation>
     </message>
     <message>
         <source>Exclusive mode</source>
@@ -1835,7 +1835,7 @@
     <name>NotifyService</name>
     <message>
         <source>Stopped</source>
-        <translation type="unfinished">Gestopt</translation>
+        <translation>Gestopt</translation>
     </message>
     <message>
         <source>Playing</source>
@@ -1843,7 +1843,7 @@
     </message>
     <message>
         <source>Paused</source>
-        <translation type="unfinished">Gepauzeerd</translation>
+        <translation>Gepauzeerd</translation>
     </message>
     <message>
         <source>Volume changed</source>
@@ -1956,7 +1956,7 @@
     </message>
     <message>
         <source>&amp;Copy Profile</source>
-        <translation>Profiel &amp;kopiëren</translation>
+        <translation>&amp;Profiel kopiëren</translation>
     </message>
     <message>
         <source>&amp;Default</source>
@@ -1968,15 +1968,15 @@
     </message>
     <message>
         <source>Create new profile</source>
-        <translation type="unfinished">Nieuw profiel aanmaken</translation>
+        <translation>Nieuw profiel aanmaken</translation>
     </message>
     <message>
         <source>Enter new profile name:</source>
-        <translation type="unfinished">Geef het nieuwe profiel een naam:</translation>
+        <translation>Geef het nieuwe profiel een naam:</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Verwijderen</translation>
+        <translation>Verwijderen</translation>
     </message>
 </context>
 <context>
@@ -2366,8 +2366,8 @@
         <translation>&amp;Terugspoelen</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
-        <translation>Lang door&amp;spoe&amp;len</translation>
+        <source>Long &amp;seek forward</source>
+        <translation>Lang door&amp;spoelen</translation>
     </message>
     <message>
         <source>Long s&amp;eek backward</source>
@@ -2399,7 +2399,7 @@
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>Standaardwaarden her&amp;stellen</translation>
+        <translation>&amp;Standaardwaarden herstellen</translation>
     </message>
     <message>
         <source>Volume &amp;up</source>
@@ -2407,7 +2407,7 @@
     </message>
     <message>
         <source>Volume &amp;down</source>
-        <translation>Vol&amp;ume omlaag</translation>
+        <translation>&amp;Volume omlaag</translation>
     </message>
     <message>
         <source>&amp;Mute</source>
@@ -2419,7 +2419,7 @@
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>In pau&amp;zestand zetten nadat afspelen is voltooid</translation>
+        <translation>&amp;In pauzestand zetten nadat afspelen is voltooid</translation>
     </message>
 </context>
 <context>
@@ -2458,7 +2458,7 @@
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
-        <translation>Selectie w&amp;issen</translation>
+        <translation>&amp;Selectie wissen</translation>
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
@@ -2466,7 +2466,7 @@
     </message>
     <message>
         <source>&amp;Clear list</source>
-        <translation>Lijst wi&amp;ssen</translation>
+        <translation>&amp;Lijst wissen</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
@@ -2478,23 +2478,23 @@
     </message>
     <message>
         <source>&amp;Extensions</source>
-        <translation>Bestands&amp;extensies</translation>
+        <translation>B&amp;estandsextensies</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
+        <source>&amp;Create group</source>
         <translation>&amp;Groep samenstellen</translation>
     </message>
     <message>
         <source>&amp;Rename</source>
-        <translation>Naam &amp;wijzigen</translation>
+        <translation>&amp;Naam wijzigen</translation>
     </message>
     <message>
         <source>&amp;Find entries</source>
-        <translation>Items &amp;zoeken</translation>
+        <translation>&amp;Items zoeken</translation>
     </message>
     <message>
         <source>&amp;Collapse all</source>
-        <translation>Alles in&amp;klappen</translation>
+        <translation>&amp;Alles inklappen</translation>
     </message>
     <message>
         <source>&amp;Expand all</source>
@@ -2660,7 +2660,7 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <source>Tag</source>
@@ -2680,7 +2680,7 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Afspelen</translation>
+        <translation>Afspelen</translation>
     </message>
     <message>
         <source>Enqueue</source>
@@ -2696,7 +2696,7 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Address</source>
-        <translation type="unfinished">Adres</translation>
+        <translation>Adres</translation>
     </message>
     <message>
         <source>Editing selected radio station</source>
@@ -2719,7 +2719,7 @@ Pictogrammen worden niet vergroot.</translation>
     <name>RadioBrowserModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Naam</translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <source>Stream info</source>
@@ -2762,19 +2762,19 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
-        <translation>Willekeu&amp;rig</translation>
+        <translation>&amp;Willekeurig</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation>Willekeurig in &amp;groep</translation>
+        <translation>Willekeuri&amp;g in groep</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
-        <translation>Willekeurig en he&amp;rhalen</translation>
+        <translation>Willekeu&amp;rig en herhalen</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation>Willekeurig in groep en herha&amp;len</translation>
+        <translation>&amp;Willekeurig in groep en herhalen</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
@@ -2805,7 +2805,7 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Afspelen</translation>
+        <translation>Afspelen</translation>
     </message>
     <message>
         <source>Enqueue</source>
@@ -2828,7 +2828,7 @@ Pictogrammen worden niet vergroot.</translation>
     <name>SIDPlay</name>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Volgnummer</translation>
+        <translation>Volgnummer</translation>
     </message>
 </context>
 <context>
@@ -3149,15 +3149,15 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation type="unfinished">Artiest</translation>
+        <translation>Artiest</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation type="unfinished">Album</translation>
+        <translation>Album</translation>
     </message>
     <message>
         <source>Genre</source>
-        <translation type="unfinished">Genre</translation>
+        <translation>Genre</translation>
     </message>
     <message>
         <source>Date</source>
@@ -3165,7 +3165,7 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished">Opmerking</translation>
+        <translation>Opmerking</translation>
     </message>
     <message>
         <source>Lyrics</source>
@@ -3176,23 +3176,23 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation>Audiostreams</translation>
+        <translation>&amp;Audiostreams</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation>Videostreams</translation>
+        <translation>&amp;Videostreams</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation>Ondertitelstreams</translation>
+        <translation>Ondertitel&amp;streams</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation>Hoofdstukken</translation>
+        <translation>&amp;Hoofdstukken</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation>Programma&apos;s</translation>
+        <translation>&amp;Programma&apos;s</translation>
     </message>
 </context>
 <context>
@@ -3262,7 +3262,7 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     </message>
     <message>
         <source>Hz</source>
-        <translation type="unfinished">Hz</translation>
+        <translation>Hz</translation>
     </message>
 </context>
 <context>
@@ -3481,7 +3481,7 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     <name>VisWidget</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Instellingen</translation>
+        <translation>Instellingen</translation>
     </message>
 </context>
 <context>
@@ -3529,7 +3529,7 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Instellingen</translation>
+        <translation>Instellingen</translation>
     </message>
     <message>
         <source>Preferred quality</source>
@@ -3565,7 +3565,7 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     </message>
     <message>
         <source>Playlist</source>
-        <translation type="unfinished">Afspeellijst</translation>
+        <translation>Afspeellijst</translation>
     </message>
     <message>
         <source>yes</source>

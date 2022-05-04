@@ -664,7 +664,7 @@
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished">&amp;Добавить</translation>
+        <translation>&amp;Добавить</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
@@ -2346,7 +2346,7 @@
         <translation>Перемотка на&amp;зад</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
+        <source>Long &amp;seek forward</source>
         <translation>Длинная перемотка впе&amp;ред</translation>
     </message>
     <message>
@@ -2461,7 +2461,7 @@
         <translation>&amp;Вставить</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
+        <source>&amp;Create group</source>
         <translation>Соз&amp;дать группу</translation>
     </message>
     <message>
@@ -3174,23 +3174,23 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation>Аудиопотоки</translation>
+        <translation>&amp;Аудиопотоки</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation>Видеопотоки</translation>
+        <translation>&amp;Видеопотоки</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation>Субтитры потоков</translation>
+        <translation>&amp;Субтитры потоков</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation>Главы</translation>
+        <translation>&amp;Главы</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation>Программы</translation>
+        <translation>&amp;Программы</translation>
     </message>
 </context>
 <context>
@@ -3559,7 +3559,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Rating</source>
-        <translation type="unfinished">Рейтинг</translation>
+        <translation>Рейтинг</translation>
     </message>
     <message>
         <source>Sort search results by ...</source>

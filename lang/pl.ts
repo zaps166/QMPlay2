@@ -86,7 +86,7 @@
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation>&amp;Dodaj</translation>
+        <translation>Dod&amp;aj</translation>
     </message>
 </context>
 <context>
@@ -265,7 +265,7 @@
     <name>AspectRatio</name>
     <message>
         <source>&amp;Aspect ratio</source>
-        <translation>W&amp;spółczynnik proporcji</translation>
+        <translation>&amp;Współczynnik proporcji</translation>
     </message>
     <message>
         <source>&amp;Disabled</source>
@@ -277,7 +277,7 @@
     </message>
     <message>
         <source>D&amp;epends on size</source>
-        <translation>&amp;Zależne od rozmiaru</translation>
+        <translation>Zal&amp;eżne od rozmiaru</translation>
     </message>
 </context>
 <context>
@@ -664,7 +664,7 @@
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation>&amp;Dodaj</translation>
+        <translation>Dod&amp;aj</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
@@ -1035,11 +1035,11 @@
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
-        <translation>Po&amp;moc</translation>
+        <translation>&amp;Pomoc</translation>
     </message>
     <message>
         <source>&amp;About QMPlay2</source>
-        <translation>&amp;O QMPlay2</translation>
+        <translation>O QMPl&amp;ay2</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
@@ -1283,7 +1283,7 @@
     </message>
     <message>
         <source>&amp;Lock widgets</source>
-        <translation>&amp;Zablokuj widgety</translation>
+        <translation>Zab&amp;lokuj widgety</translation>
     </message>
     <message>
         <source>Save group</source>
@@ -1931,11 +1931,11 @@
     <name>Options</name>
     <message>
         <source>Op&amp;tions</source>
-        <translation>Op&amp;cje</translation>
+        <translation>&amp;Opcje</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation>&amp;Ustawienia</translation>
+        <translation>U&amp;stawienia</translation>
     </message>
     <message>
         <source>&amp;Show tray icon</source>
@@ -1975,7 +1975,7 @@
     </message>
     <message>
         <source>&amp;Playback settings</source>
-        <translation>Ustawienia &amp;odtwarzania</translation>
+        <translation>&amp;Ustawienia odtwarzania</translation>
     </message>
     <message>
         <source>&amp;Renderer settings</source>
@@ -2108,7 +2108,7 @@
     <name>Playback</name>
     <message>
         <source>&amp;Playback</source>
-        <translation>Od&amp;twarzanie</translation>
+        <translation>&amp;Odtwarzanie</translation>
     </message>
     <message>
         <source>&amp;Enable audio</source>
@@ -2116,7 +2116,7 @@
     </message>
     <message>
         <source>&amp;Enable video</source>
-        <translation>O&amp;braz włączony</translation>
+        <translation>&amp;Obraz włączony</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
@@ -2124,11 +2124,11 @@
     </message>
     <message>
         <source>&amp;Speed up video</source>
-        <translation>&amp;Przyspiesz obraz</translation>
+        <translation>Przy&amp;spiesz obraz</translation>
     </message>
     <message>
         <source>&amp;Enable subtitles</source>
-        <translation>&amp;Napisy włączone</translation>
+        <translation>Napisy włączon&amp;e</translation>
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
@@ -2136,23 +2136,23 @@
     </message>
     <message>
         <source>&amp;Speed up subtitles</source>
-        <translation>&amp;Przyspiesz napisy</translation>
+        <translation>Przy&amp;spiesz napisy</translation>
     </message>
     <message>
         <source>Scale up subt&amp;itles</source>
-        <translation>Po&amp;większ napisy</translation>
+        <translation>Pow&amp;iększ napisy</translation>
     </message>
     <message>
         <source>Scale down sub&amp;titles</source>
-        <translation>Po&amp;mniejsz napisy</translation>
+        <translation>&amp;Pomniejsz napisy</translation>
     </message>
     <message>
         <source>Add &amp;subtities from file</source>
-        <translation>Dodaj n&amp;apisy z pliku</translation>
+        <translation>Dodaj napi&amp;sy z pliku</translation>
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
-        <translation>Ustaw opóźn&amp;ienie napisów</translation>
+        <translation>U&amp;staw opóźnienie napisów</translation>
     </message>
     <message>
         <source>&amp;Screen shot</source>
@@ -2160,7 +2160,7 @@
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>Ustaw opóźn&amp;ienie obrazu</translation>
+        <translation>&amp;Ustaw opóźnienie obrazu</translation>
     </message>
 </context>
 <context>
@@ -2326,7 +2326,7 @@
     <name>Player</name>
     <message>
         <source>&amp;Player</source>
-        <translation>O&amp;dtwarzacz</translation>
+        <translation>&amp;Odtwarzacz</translation>
     </message>
     <message>
         <source>&amp;Stop</source>
@@ -2342,35 +2342,35 @@
     </message>
     <message>
         <source>Seek &amp;forward</source>
-        <translation>Przewiń do p&amp;rzodu</translation>
+        <translation>&amp;Przewiń do przodu</translation>
     </message>
     <message>
         <source>Seek &amp;backward</source>
-        <translation>Przewiń do &amp;tyłu</translation>
+        <translation>&amp;Przewiń do tyłu</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
-        <translation>Przewiń dużo do pr&amp;zodu</translation>
+        <source>Long &amp;seek forward</source>
+        <translation>&amp;Przewiń dużo do przodu</translation>
     </message>
     <message>
         <source>Long s&amp;eek backward</source>
-        <translation>Przewiń dużo do t&amp;yłu</translation>
+        <translation>Prz&amp;ewiń dużo do tyłu</translation>
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translation>Szy&amp;bciej</translation>
+        <translation>&amp;Szybciej</translation>
     </message>
     <message>
         <source>Slowe&amp;r</source>
-        <translation>Wo&amp;lniej</translation>
+        <translation>&amp;Wolniej</translation>
     </message>
     <message>
         <source>Zoom i&amp;n</source>
-        <translation>Pow&amp;iększ obraz</translation>
+        <translation>&amp;Powiększ obraz</translation>
     </message>
     <message>
         <source>Zoom ou&amp;t</source>
-        <translation>Po&amp;mniejsz obraz</translation>
+        <translation>&amp;Pomniejsz obraz</translation>
     </message>
     <message>
         <source>&amp;Mute</source>
@@ -2378,19 +2378,19 @@
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
-        <translation>Przełącz &amp;współczynnik proporcji</translation>
+        <translation>&amp;Przełącz współczynnik proporcji</translation>
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>Resetuj ustawienia obr&amp;azu</translation>
+        <translation>Re&amp;setuj ustawienia obrazu</translation>
     </message>
     <message>
         <source>&amp;Set speed</source>
-        <translation>&amp;Ustaw szybkość</translation>
+        <translation>U&amp;staw szybkość</translation>
     </message>
     <message>
         <source>Next &amp;frame</source>
-        <translation>Następna &amp;klatka</translation>
+        <translation>&amp;Następna klatka</translation>
     </message>
     <message>
         <source>Volume &amp;up</source>
@@ -2402,7 +2402,7 @@
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>Uśp&amp;ij po zakończeniu odtwarzania</translation>
+        <translation>Uśpij po za&amp;kończeniu odtwarzania</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
@@ -2410,7 +2410,7 @@
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
-        <translation>Odłącz o&amp;d otrzymywania poleceń</translation>
+        <translation>Odłącz od otrzymywania pole&amp;ceń</translation>
     </message>
     <message>
         <source>&amp;Skip</source>
@@ -2418,11 +2418,11 @@
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation>Z&amp;atrzymaj po odtworzeniu</translation>
+        <translation>&amp;Zatrzymaj po odtworzeniu</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
-        <translation>Poprzednia &amp;klatka</translation>
+        <translation>&amp;Poprzednia klatka</translation>
     </message>
 </context>
 <context>
@@ -2437,11 +2437,11 @@
     </message>
     <message>
         <source>Load &amp;list</source>
-        <translation>Załaduj playl&amp;istę</translation>
+        <translation>Załaduj p&amp;laylistę</translation>
     </message>
     <message>
         <source>Save &amp;list</source>
-        <translation>Zapisz play&amp;listę</translation>
+        <translation>Zapisz p&amp;laylistę</translation>
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
@@ -2449,31 +2449,31 @@
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
-        <translation>U&amp;suń wpisy bez grupy</translation>
+        <translation>Usuń &amp;wpisy bez grupy</translation>
     </message>
     <message>
         <source>&amp;Clear list</source>
-        <translation>&amp;Wyczyść listę</translation>
+        <translation>Wy&amp;czyść listę</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>K&amp;opiuj</translation>
+        <translation>&amp;Kopiuj</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>Wkl&amp;ej</translation>
+        <translation>&amp;Wklej</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
-        <translation>U&amp;twórz grupę</translation>
+        <source>&amp;Create group</source>
+        <translation>&amp;Utwórz grupę</translation>
     </message>
     <message>
         <source>&amp;Rename</source>
-        <translation>Z&amp;mień nazwę</translation>
+        <translation>&amp;Zmień nazwę</translation>
     </message>
     <message>
         <source>&amp;Find entries</source>
-        <translation>Z&amp;najdź wpisy</translation>
+        <translation>&amp;Znajdź wpisy</translation>
     </message>
     <message>
         <source>&amp;Collapse all</source>
@@ -2481,7 +2481,7 @@
     </message>
     <message>
         <source>&amp;Expand all</source>
-        <translation>&amp;Rozwiń wszystkie</translation>
+        <translation>Rozwiń wszystki&amp;e</translation>
     </message>
     <message>
         <source>&amp;Go to the playback</source>
@@ -2489,7 +2489,7 @@
     </message>
     <message>
         <source>&amp;Enqueue</source>
-        <translation>&amp;Kolejkuj</translation>
+        <translation>Kol&amp;ejkuj</translation>
     </message>
     <message>
         <source>&amp;Properties</source>
@@ -2497,7 +2497,7 @@
     </message>
     <message>
         <source>&amp;Extensions</source>
-        <translation>&amp;Rozszerzenia</translation>
+        <translation>Rozsz&amp;erzenia</translation>
     </message>
     <message>
         <source>Save &amp;group</source>
@@ -2513,7 +2513,7 @@
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation>&amp;Zawsze synchronizuj</translation>
+        <translation>Z&amp;awsze synchronizuj</translation>
     </message>
 </context>
 <context>
@@ -2547,11 +2547,11 @@
     <name>PlaylistWidget</name>
     <message>
         <source>Un&amp;lock</source>
-        <translation>Od&amp;blokuj</translation>
+        <translation>Odb&amp;lokuj</translation>
     </message>
     <message>
         <source>&amp;Lock</source>
-        <translation>Za&amp;blokuj</translation>
+        <translation>Zab&amp;lokuj</translation>
     </message>
 </context>
 <context>
@@ -2745,15 +2745,15 @@ QMPlay2 nie będzie skalować ikon!</translation>
     <name>Repeat</name>
     <message>
         <source>&amp;Repeat</source>
-        <translation>Zapętlenie &amp;odtwarzania</translation>
+        <translation>Zapętlenie odtwa&amp;rzania</translation>
     </message>
     <message>
         <source>&amp;No repeating</source>
-        <translation>&amp;Bez zapętlenia</translation>
+        <translation>Bez zapętle&amp;nia</translation>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
-        <translation>Zapętlenie &amp;utworu</translation>
+        <translation>Zapętl&amp;enie utworu</translation>
     </message>
     <message>
         <source>&amp;Group repeating</source>
@@ -2761,15 +2761,15 @@ QMPlay2 nie będzie skalować ikon!</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>Zapętlenie &amp;listy</translation>
+        <translation>Za&amp;pętlenie listy</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
-        <translation>Losowe &amp;odtwarzanie</translation>
+        <translation>Losowe odtw&amp;arzanie</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation>Losowe odtwarzanie g&amp;rupy</translation>
+        <translation>Losowe odtwarzanie &amp;grupy</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
@@ -2777,7 +2777,7 @@ QMPlay2 nie będzie skalować ikon!</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation>Z&amp;apętlone losowe odtwarzanie grupy</translation>
+        <translation>Zapę&amp;tlone losowe odtwarzanie grupy</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
@@ -3125,11 +3125,11 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     </message>
     <message>
         <source>&amp;From the longest to the shortest</source>
-        <translation>O&amp;d najdłuższej do najkrótszej</translation>
+        <translation>&amp;Od najdłuższej do najkrótszej</translation>
     </message>
     <message>
         <source>&amp;Sort</source>
-        <translation>S&amp;ortuj</translation>
+        <translation>&amp;Sortuj</translation>
     </message>
     <message>
         <source>&amp;A-Z</source>
@@ -3438,15 +3438,15 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <name>VideoFilters</name>
     <message>
         <source>Video &amp;filters</source>
-        <translation>Filtry wid&amp;eo</translation>
+        <translation>&amp;Filtry wideo</translation>
     </message>
     <message>
         <source>&amp;Horizontal flip</source>
-        <translation>Odbicie &amp;lustrzane</translation>
+        <translation>&amp;Odbicie lustrzane</translation>
     </message>
     <message>
         <source>&amp;Vertical flip</source>
-        <translation>Odbicie &amp;pionowe</translation>
+        <translation>&amp;Odbicie pionowe</translation>
     </message>
     <message>
         <source>&amp;More filters</source>
@@ -3454,7 +3454,7 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     </message>
     <message>
         <source>&amp;Rotate 90°</source>
-        <translation>&amp;Obróć o 90°</translation>
+        <translation>Ob&amp;róć o 90°</translation>
     </message>
     <message>
         <source>&amp;Spherical view</source>
@@ -3462,7 +3462,7 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     </message>
     <message>
         <source>Video &amp;adjustment</source>
-        <translation>Regulacja &amp;wideo</translation>
+        <translation>Regulacj&amp;a wideo</translation>
     </message>
 </context>
 <context>
