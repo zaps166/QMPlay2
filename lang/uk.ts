@@ -2349,7 +2349,7 @@
         <translation>Перемотування на&amp;зад</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
+        <source>Long &amp;seek forward</source>
         <translation>Довге перемотування впе&amp;ред</translation>
     </message>
     <message>
@@ -2464,7 +2464,7 @@
         <translation>&amp;Вставити</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
+        <source>&amp;Create group</source>
         <translation>Створ&amp;ити групу</translation>
     </message>
     <message>
@@ -3179,23 +3179,23 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation>Аудіопотоки</translation>
+        <translation>&amp;Аудіопотоки</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation>Відеопотоки</translation>
+        <translation>&amp;Відеопотоки</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation>Потоки субтитрів</translation>
+        <translation>&amp;Потоки субтитрів</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation>Розділи</translation>
+        <translation>&amp;Розділи</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation>Програми</translation>
+        <translation>&amp;Програми</translation>
     </message>
 </context>
 <context>

@@ -78,7 +78,7 @@
     </message>
     <message>
         <source>&amp;Address</source>
-        <translation>Direc&amp;ción</translation>
+        <translation>&amp;Dirección</translation>
     </message>
     <message>
         <source>&amp;Add</source>
@@ -265,7 +265,7 @@
     <name>AspectRatio</name>
     <message>
         <source>&amp;Aspect ratio</source>
-        <translation>Relaci&amp;ón de aspecto</translation>
+        <translation>Relación de &amp;aspecto</translation>
     </message>
     <message>
         <source>&amp;Disabled</source>
@@ -354,7 +354,7 @@
     </message>
     <message>
         <source>&amp;Stereo</source>
-        <translation>&amp;Estéreo</translation>
+        <translation>E&amp;stéreo</translation>
     </message>
 </context>
 <context>
@@ -702,7 +702,7 @@
     </message>
     <message>
         <source>Incorrect/empty name or command line!</source>
-        <translation type="unfinished">El nombre o la línea de comandos son incojrrectos o están vacíos.</translation>
+        <translation>El nombre o la línea de comandos son incojrrectos o están vacíos.</translation>
     </message>
     <message>
         <source>Command must contain &lt;input/&gt; tag!</source>
@@ -1043,7 +1043,7 @@
     </message>
     <message>
         <source>&amp;About QMPlay2</source>
-        <translation>Acerca de Q&amp;MPlay2</translation>
+        <translation>&amp;Acerca de QMPlay2</translation>
     </message>
     <message>
         <source>&amp;Updates</source>
@@ -1189,15 +1189,15 @@
     <name>Lyrics</name>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished">Letras</translation>
+        <translation>Letras</translation>
     </message>
     <message>
         <source>Translation</source>
-        <translation type="unfinished">Traducción</translation>
+        <translation>Traducción</translation>
     </message>
     <message>
         <source>Lyrics not found</source>
-        <translation type="unfinished">Letras no encontradas</translation>
+        <translation>Letras no encontradas</translation>
     </message>
 </context>
 <context>
@@ -1279,11 +1279,11 @@
     </message>
     <message>
         <source>&amp;Show</source>
-        <translation>&amp;Mostrar</translation>
+        <translation>Mo&amp;strar</translation>
     </message>
     <message>
         <source>&amp;Play</source>
-        <translation>&amp;Reproducir</translation>
+        <translation>Re&amp;producir</translation>
     </message>
     <message>
         <source>QMPlay2 is doing something in the background.</source>
@@ -1291,7 +1291,7 @@
     </message>
     <message>
         <source>&amp;Lock widgets</source>
-        <translation>&amp;Bloquear los componentes</translation>
+        <translation>B&amp;loquear los componentes</translation>
     </message>
     <message>
         <source>The update is being downloaded now.</source>
@@ -1916,7 +1916,7 @@
     <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation type="unfinished">Error de enlace / compilación de sombreadores</translation>
+        <translation>Error de enlace / compilación de sombreadores</translation>
     </message>
     <message>
         <source>Can&apos;t init %1</source>
@@ -1931,7 +1931,7 @@
     <name>Options</name>
     <message>
         <source>&amp;Show tray icon</source>
-        <translation>&amp;Mostrar icono en la bandeja</translation>
+        <translation>Mo&amp;strar icono en la bandeja</translation>
     </message>
     <message>
         <source>Op&amp;tions</source>
@@ -1975,7 +1975,7 @@
     </message>
     <message>
         <source>&amp;Playback settings</source>
-        <translation>Ajustes de &amp;reproducción</translation>
+        <translation>Ajustes de re&amp;producción</translation>
     </message>
     <message>
         <source>&amp;Renderer settings</source>
@@ -2108,7 +2108,7 @@
     <name>Playback</name>
     <message>
         <source>&amp;Enable audio</source>
-        <translation>Audio &amp;habilitado</translation>
+        <translation>&amp;Audio habilitado</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
@@ -2116,11 +2116,11 @@
     </message>
     <message>
         <source>Scale down sub&amp;titles</source>
-        <translation>R&amp;educir los subtítulos</translation>
+        <translation>Reducir los sub&amp;títulos</translation>
     </message>
     <message>
         <source>&amp;Enable video</source>
-        <translation>&amp;Vídeo habilitado</translation>
+        <translation>Víd&amp;eo habilitado</translation>
     </message>
     <message>
         <source>&amp;Enable subtitles</source>
@@ -2128,19 +2128,19 @@
     </message>
     <message>
         <source>Scale up subt&amp;itles</source>
-        <translation>A&amp;mpliar los subtítulos</translation>
+        <translation>Ampl&amp;iar los subtítulos</translation>
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
-        <translation>Retrasar los subtítulos</translation>
+        <translation>&amp;Retrasar los subtítulos</translation>
     </message>
     <message>
         <source>&amp;Screen shot</source>
-        <translation>Captura de &amp;pantalla</translation>
+        <translation>&amp;Captura de pantalla</translation>
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
-        <translation>&amp;Establecer retardo de los subtítulos</translation>
+        <translation>E&amp;stablecer retardo de los subtítulos</translation>
     </message>
     <message>
         <source>&amp;Speed up video</source>
@@ -2152,15 +2152,15 @@
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>Establecer re&amp;tardo del vídeo</translation>
+        <translation>Establecer retardo del &amp;vídeo</translation>
     </message>
     <message>
         <source>Add &amp;subtities from file</source>
-        <translation>Añadir subtít&amp;ulos desde archivo</translation>
+        <translation>Añadir &amp;subtítulos desde archivo</translation>
     </message>
     <message>
         <source>&amp;Speed up subtitles</source>
-        <translation>Adelantar los su&amp;btítulos</translation>
+        <translation>Adelantar lo&amp;s subtítulos</translation>
     </message>
 </context>
 <context>
@@ -2330,23 +2330,23 @@
     </message>
     <message>
         <source>Zoom i&amp;n</source>
-        <translation>Ampliar</translation>
+        <translation>&amp;Ampliar</translation>
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>Restablecer los a&amp;justes de imagen</translation>
+        <translation>Re&amp;stablecer los ajustes de imagen</translation>
     </message>
     <message>
         <source>&amp;Set speed</source>
-        <translation>Ajustar la &amp;velocidad</translation>
+        <translation>Aju&amp;star la velocidad</translation>
     </message>
     <message>
         <source>Slowe&amp;r</source>
-        <translation>Más &amp;lento</translation>
+        <translation>&amp;Más lento</translation>
     </message>
     <message>
         <source>Seek &amp;backward</source>
-        <translation>Salto hacia a&amp;trás</translation>
+        <translation>&amp;Salto hacia atrás</translation>
     </message>
     <message>
         <source>Next &amp;frame</source>
@@ -2354,7 +2354,7 @@
     </message>
     <message>
         <source>Long s&amp;eek backward</source>
-        <translation>Salto largo hacia atrás</translation>
+        <translation>&amp;Salto largo hacia atrás</translation>
     </message>
     <message>
         <source>&amp;Previous</source>
@@ -2362,23 +2362,23 @@
     </message>
     <message>
         <source>Seek &amp;forward</source>
-        <translation>Salto hacia delante</translation>
+        <translation>&amp;Salto hacia delante</translation>
     </message>
     <message>
         <source>Zoom ou&amp;t</source>
-        <translation>Reducir</translation>
+        <translation>&amp;Reducir</translation>
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
-        <translation>Alter&amp;nar la relación de aspecto</translation>
+        <translation>&amp;Alternar la relación de aspecto</translation>
     </message>
     <message>
         <source>Volume &amp;down</source>
-        <translation>Bajar el vol&amp;umen</translation>
+        <translation>&amp;Bajar el volumen</translation>
     </message>
     <message>
         <source>&amp;Next</source>
-        <translation>Si&amp;guiente</translation>
+        <translation>&amp;Siguiente</translation>
     </message>
     <message>
         <source>&amp;Stop</source>
@@ -2386,31 +2386,31 @@
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translation>Más r&amp;ápido</translation>
+        <translation>Má&amp;s rápido</translation>
     </message>
     <message>
         <source>Volume &amp;up</source>
-        <translation>Subir el volum&amp;en</translation>
+        <translation>Subir el vol&amp;umen</translation>
     </message>
     <message>
         <source>&amp;Player</source>
-        <translation>&amp;Reproductor</translation>
+        <translation>Re&amp;productor</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
-        <translation>Salto largo hacia delante</translation>
+        <source>Long &amp;seek forward</source>
+        <translation>&amp;Salto largo hacia delante</translation>
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>Suspender al finalizar la reproducción</translation>
+        <translation>&amp;Suspender al finalizar la reproducción</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
-        <translation>Repetir &amp;A-B</translation>
+        <translation>Repetir A&amp;-B</translation>
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
-        <translation>Desconectar de la recepción de &amp;comandos</translation>
+        <translation>Des&amp;conectar de la recepción de comandos</translation>
     </message>
     <message>
         <source>&amp;Skip</source>
@@ -2429,7 +2429,7 @@
     <name>Playlist</name>
     <message>
         <source>&amp;Find entries</source>
-        <translation>B&amp;uscar entradas</translation>
+        <translation>&amp;Buscar entradas</translation>
     </message>
     <message>
         <source>&amp;Go to the playback</source>
@@ -2445,7 +2445,7 @@
     </message>
     <message>
         <source>&amp;Collapse all</source>
-        <translation>Contraer &amp;todo</translation>
+        <translation>&amp;Contraer todo</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
@@ -2465,19 +2465,19 @@
     </message>
     <message>
         <source>&amp;Expand all</source>
-        <translation>E&amp;xpandir todo</translation>
+        <translation>&amp;Expandir todo</translation>
     </message>
     <message>
         <source>Save &amp;list</source>
-        <translation>&amp;Guardar la lista</translation>
+        <translation>Guardar &amp;la lista</translation>
     </message>
     <message>
         <source>&amp;Playlist</source>
         <translation>&amp;Lista</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
-        <translation>C&amp;rear grupo</translation>
+        <source>&amp;Create group</source>
+        <translation>&amp;Crear grupo</translation>
     </message>
     <message>
         <source>&amp;Rename</source>
@@ -2485,7 +2485,7 @@
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
-        <translation>Eliminar las entradas sin gr&amp;upo</translation>
+        <translation>&amp;Eliminar las entradas sin grupo</translation>
     </message>
     <message>
         <source>&amp;Properties</source>
@@ -2497,11 +2497,11 @@
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
-        <translation>Eliminar las entradas &amp;seleccionadas</translation>
+        <translation>Elimina&amp;r las entradas seleccionadas</translation>
     </message>
     <message>
         <source>Load &amp;list</source>
-        <translation>&amp;Cargar lista</translation>
+        <translation>Cargar &amp;lista</translation>
     </message>
     <message>
         <source>&amp;Synchronize groups</source>
@@ -2509,11 +2509,11 @@
     </message>
     <message>
         <source>&amp;Quick group synchronization</source>
-        <translation>Sincronización rápida del grupo</translation>
+        <translation>&amp;Sincronización rápida del grupo</translation>
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation>Sincroniz_ar siempre</translation>
+        <translation>Sincroniz_&amp;ar siempre</translation>
     </message>
 </context>
 <context>
@@ -2749,7 +2749,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>&amp;Repeat</source>
-        <translation>Repeti&amp;ción (bucle)</translation>
+        <translation>&amp;Bucle</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
@@ -2765,11 +2765,11 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>&amp;Group repeating</source>
-        <translation>Bucle de g&amp;rupo</translation>
+        <translation>Bucle de &amp;grupo</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>Bucle de &amp;lista de reproducción</translation>
+        <translation>Bucle de lista de re&amp;producción</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
@@ -3119,7 +3119,7 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     <name>Sort</name>
     <message>
         <source>&amp;From the longest to the shortest</source>
-        <translation>De mayor a menor duración</translation>
+        <translation>&amp;De mayor a menor duración</translation>
     </message>
     <message>
         <source>&amp;Sort</source>
@@ -3127,7 +3127,7 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
     <message>
         <source>&amp;From the shortest to the longest</source>
-        <translation>De menor a mayor duración</translation>
+        <translation>&amp;De menor a mayor duración</translation>
     </message>
     <message>
         <source>&amp;A-Z</source>
@@ -3170,30 +3170,30 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished">Letras</translation>
+        <translation>Letras</translation>
     </message>
 </context>
 <context>
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation>Secuencias de audio</translation>
+        <translation>Secuenci&amp;as de audio</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation>Secuencias de vídeo</translation>
+        <translation>Secuencias de &amp;vídeo</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation>Secuencia de subtítulos</translation>
+        <translation>&amp;Secuencia de subtítulos</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation>Capítulos</translation>
+        <translation>&amp;Capítulos</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation>Programas</translation>
+        <translation>&amp;Programas</translation>
     </message>
 </context>
 <context>
@@ -3336,11 +3336,11 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation type="unfinished">Filtro de nitidez de imagen no soportado</translation>
+        <translation>Filtro de nitidez de imagen no soportado</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation type="unfinished">Algoritmo de desentrelazado no soportado</translation>
+        <translation>Algoritmo de desentrelazado no soportado</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
@@ -3515,11 +3515,11 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
     </message>
     <message>
         <source>&amp;Compact view</source>
-        <translation>&amp;Vista compacta</translation>
+        <translation>Vista &amp;compacta</translation>
     </message>
     <message>
         <source>&amp;Always on top</source>
-        <translation>&amp;Siempre encima</translation>
+        <translation>Siempre encim&amp;a</translation>
     </message>
 </context>
 <context>

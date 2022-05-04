@@ -82,11 +82,11 @@
     </message>
     <message>
         <source>&amp;Directory</source>
-        <translation>Ad&amp;resár</translation>
+        <translation>A&amp;dresár</translation>
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation>&amp;Pridať</translation>
+        <translation>Prid&amp;ať</translation>
     </message>
 </context>
 <context>
@@ -277,7 +277,7 @@
     </message>
     <message>
         <source>D&amp;epends on size</source>
-        <translation>&amp;Závisí na veľkosti</translation>
+        <translation>Závisí na v&amp;eľkosti</translation>
     </message>
 </context>
 <context>
@@ -664,7 +664,7 @@
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation>&amp;Pridať</translation>
+        <translation>Prid&amp;ať</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
@@ -1035,11 +1035,11 @@
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
-        <translation>Pomo&amp;cník</translation>
+        <translation>&amp;Pomocník</translation>
     </message>
     <message>
         <source>&amp;About QMPlay2</source>
-        <translation>&amp;O programe QMPlay2</translation>
+        <translation>O programe QMPl&amp;ay2</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
@@ -1935,11 +1935,11 @@
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation>&amp;Nastavenia</translation>
+        <translation>Na&amp;stavenia</translation>
     </message>
     <message>
         <source>&amp;Show tray icon</source>
-        <translation>&amp;Zobraziť ikonu v systémovej lište</translation>
+        <translation>Zobraziť ikonu v &amp;systémovej lište</translation>
     </message>
     <message>
         <source>&amp;Modules settings</source>
@@ -1951,7 +1951,7 @@
     </message>
     <message>
         <source>&amp;Profiles</source>
-        <translation>Profil&amp;y</translation>
+        <translation>&amp;Profily</translation>
     </message>
     <message>
         <source>&amp;New Profile</source>
@@ -1963,7 +1963,7 @@
     </message>
     <message>
         <source>&amp;Default</source>
-        <translation>&amp;Predvolený</translation>
+        <translation>Pre&amp;dvolený</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -1979,7 +1979,7 @@
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation>Nastavenia &amp;vykresľovania</translation>
+        <translation>Nastavenia vyk&amp;resľovania</translation>
     </message>
 </context>
 <context>
@@ -2116,43 +2116,43 @@
     </message>
     <message>
         <source>&amp;Enable video</source>
-        <translation>Zapnúť &amp;video</translation>
+        <translation>Zapnúť vid&amp;eo</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
-        <translation>&amp;Oneskorenie videa</translation>
+        <translation>Oneskorenie vi&amp;dea</translation>
     </message>
     <message>
         <source>&amp;Speed up video</source>
-        <translation>Z&amp;rýchlenie videa</translation>
+        <translation>&amp;Zrýchlenie videa</translation>
     </message>
     <message>
         <source>&amp;Enable subtitles</source>
-        <translation>Zapnúť &amp;titulky</translation>
+        <translation>&amp;Zapnúť titulky</translation>
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
-        <translation>One&amp;skorenie titulkov</translation>
+        <translation>&amp;Oneskorenie titulkov</translation>
     </message>
     <message>
         <source>&amp;Speed up subtitles</source>
-        <translation>Z&amp;rýchlenie titulkov</translation>
+        <translation>&amp;Zrýchlenie titulkov</translation>
     </message>
     <message>
         <source>Scale up subt&amp;itles</source>
-        <translation>Z&amp;väčšiť titulky</translation>
+        <translation>Zväčš&amp;iť titulky</translation>
     </message>
     <message>
         <source>Scale down sub&amp;titles</source>
-        <translation>Z&amp;menšiť titulky</translation>
+        <translation>Zmenšiť &amp;titulky</translation>
     </message>
     <message>
         <source>Add &amp;subtities from file</source>
-        <translation>Pri&amp;dať titulky zo súboru</translation>
+        <translation>Pridať titulky zo &amp;súboru</translation>
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
-        <translation>Nas&amp;taviť oneskorenie titulkov</translation>
+        <translation>Na&amp;staviť oneskorenie titulkov</translation>
     </message>
     <message>
         <source>&amp;Screen shot</source>
@@ -2160,7 +2160,7 @@
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>&amp;Nastaviť oneskorenie videa</translation>
+        <translation>Nasta&amp;viť oneskorenie videa</translation>
     </message>
 </context>
 <context>
@@ -2326,11 +2326,11 @@
     <name>Player</name>
     <message>
         <source>&amp;Player</source>
-        <translation>P&amp;rehrávač</translation>
+        <translation>&amp;Prehrávač</translation>
     </message>
     <message>
         <source>&amp;Stop</source>
-        <translation>&amp;Zastaviť</translation>
+        <translation>Za&amp;staviť</translation>
     </message>
     <message>
         <source>&amp;Next</source>
@@ -2338,23 +2338,23 @@
     </message>
     <message>
         <source>&amp;Previous</source>
-        <translation>Predchádzajú&amp;ci</translation>
+        <translation>&amp;Predchádzajúci</translation>
     </message>
     <message>
         <source>Seek &amp;forward</source>
-        <translation>P&amp;retočiť dopredu</translation>
+        <translation>&amp;Pretočiť dopredu</translation>
     </message>
     <message>
         <source>Seek &amp;backward</source>
-        <translation>Pr&amp;etočiť dozadu</translation>
+        <translation>&amp;Pretočiť dozadu</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
-        <translation>V&amp;eľký skok vzad</translation>
+        <source>Long &amp;seek forward</source>
+        <translation>Veľký &amp;skok vzad</translation>
     </message>
     <message>
         <source>Long s&amp;eek backward</source>
-        <translation>Veľký s&amp;kok vzad</translation>
+        <translation>V&amp;eľký skok vzad</translation>
     </message>
     <message>
         <source>Fa&amp;ster</source>
@@ -2370,23 +2370,23 @@
     </message>
     <message>
         <source>Zoom ou&amp;t</source>
-        <translation>Zm&amp;enšiť</translation>
+        <translation>&amp;Zmenšiť</translation>
     </message>
     <message>
         <source>&amp;Mute</source>
-        <translation>S&amp;tíšiť</translation>
+        <translation>&amp;Stíšiť</translation>
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
-        <translation>Prepnúť &amp;pomer strán</translation>
+        <translation>&amp;Prepnúť pomer strán</translation>
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>Obnoviť nastavenia &amp;obrázka</translation>
+        <translation>Obnoviť na&amp;stavenia obrázka</translation>
     </message>
     <message>
         <source>&amp;Set speed</source>
-        <translation>Nastav&amp;iť rýchlosť</translation>
+        <translation>Na&amp;staviť rýchlosť</translation>
     </message>
     <message>
         <source>Next &amp;frame</source>
@@ -2402,7 +2402,7 @@
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>U&amp;spať po skončení prehrávania</translation>
+        <translation>&amp;Uspať po skončení prehrávania</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
@@ -2410,38 +2410,38 @@
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
-        <translation>Odpojiť od &amp;prijímania príkazov</translation>
+        <translation>&amp;Odpojiť od prijímania príkazov</translation>
     </message>
     <message>
         <source>&amp;Skip</source>
-        <translation>&amp;Preskočiť</translation>
+        <translation>Pre&amp;skočiť</translation>
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation>&amp;Zastaviť po prehratí</translation>
+        <translation>Za&amp;staviť po prehratí</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
-        <translation>P&amp;redchádzajúca snímka</translation>
+        <translation>&amp;Predchádzajúca snímka</translation>
     </message>
 </context>
 <context>
     <name>Playlist</name>
     <message>
         <source>&amp;Playlist</source>
-        <translation>P&amp;laylist</translation>
+        <translation>&amp;Playlist</translation>
     </message>
     <message>
         <source>&amp;Stop loading</source>
-        <translation>&amp;Zastaviť načítavanie</translation>
+        <translation>Za&amp;staviť načítavanie</translation>
     </message>
     <message>
         <source>Load &amp;list</source>
-        <translation>Načítať &amp;zoznam</translation>
+        <translation>&amp;Načítať zoznam</translation>
     </message>
     <message>
         <source>Save &amp;list</source>
-        <translation>&amp;Uložiť zoznam</translation>
+        <translation>U&amp;ložiť zoznam</translation>
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
@@ -2449,27 +2449,27 @@
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
-        <translation>Odstrán&amp;iť položky mimo skupiny</translation>
+        <translation>&amp;Odstrániť položky mimo skupiny</translation>
     </message>
     <message>
         <source>&amp;Clear list</source>
-        <translation>V&amp;yčistiť zoznam</translation>
+        <translation>&amp;Vyčistiť zoznam</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>K&amp;opírovať</translation>
+        <translation>&amp;Kopírovať</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
         <translation>&amp;Prilepiť</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
-        <translation>&amp;Vytvoriť &amp;skupinu</translation>
+        <source>&amp;Create group</source>
+        <translation>&amp;Vytvoriť skupinu</translation>
     </message>
     <message>
         <source>&amp;Rename</source>
-        <translation>&amp;Premenovať</translation>
+        <translation>P&amp;remenovať</translation>
     </message>
     <message>
         <source>&amp;Find entries</source>
@@ -2481,7 +2481,7 @@
     </message>
     <message>
         <source>&amp;Expand all</source>
-        <translation>&amp;Rozbaliť všetko</translation>
+        <translation>Rozbaliť vš&amp;etko</translation>
     </message>
     <message>
         <source>&amp;Go to the playback</source>
@@ -2497,11 +2497,11 @@
     </message>
     <message>
         <source>&amp;Extensions</source>
-        <translation>&amp;Rozšírenia</translation>
+        <translation>Rozšír&amp;enia</translation>
     </message>
     <message>
         <source>Save &amp;group</source>
-        <translation>Uložiť &amp;skupinu</translation>
+        <translation>&amp;Uložiť skupinu</translation>
     </message>
     <message>
         <source>&amp;Synchronize groups</source>
@@ -2513,7 +2513,7 @@
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation>&amp;Vždy synchronizovať</translation>
+        <translation>Vždy synchronizov&amp;ať</translation>
     </message>
 </context>
 <context>
@@ -2547,7 +2547,7 @@
     <name>PlaylistWidget</name>
     <message>
         <source>Un&amp;lock</source>
-        <translation>O&amp;domknúť</translation>
+        <translation>&amp;Odomknúť</translation>
     </message>
     <message>
         <source>&amp;Lock</source>
@@ -2749,19 +2749,19 @@ QMPlay2 nebude zväčšovať ikony!</translation>
     </message>
     <message>
         <source>&amp;No repeating</source>
-        <translation>&amp;Bez opakovania</translation>
+        <translation>Bez opakova&amp;nia</translation>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
-        <translation>O&amp;pakovať položku</translation>
+        <translation>&amp;Opakovať položku</translation>
     </message>
     <message>
         <source>&amp;Group repeating</source>
-        <translation>Opako&amp;vať skupinu</translation>
+        <translation>&amp;Opakovať skupinu</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>Opa&amp;kovať playlist</translation>
+        <translation>O&amp;pakovať playlist</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
@@ -2769,19 +2769,19 @@ QMPlay2 nebude zväčšovať ikony!</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation>Ná&amp;hodne v skupine</translation>
+        <translation>&amp;Náhodne v skupine</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
-        <translation>Ná&amp;hodne a opakovať</translation>
+        <translation>&amp;Náhodne a opakovať</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation>Náhodne &amp;v skupine a opakovať</translation>
+        <translation>&amp;Náhodne v skupine a opakovať</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
-        <translation>&amp;Zastaviť prehrávanie po každom súbore</translation>
+        <translation>Za&amp;staviť prehrávanie po každom súbore</translation>
     </message>
 </context>
 <context>
@@ -3125,7 +3125,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;From the longest to the shortest</source>
-        <translation>O&amp;d najdlhšej po najkratšiu</translation>
+        <translation>&amp;Od najdlhšej po najkratšiu</translation>
     </message>
     <message>
         <source>&amp;Sort</source>
@@ -3179,23 +3179,23 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation>Audio prúdy</translation>
+        <translation>&amp;Audio prúdy</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation>Video prúdy</translation>
+        <translation>&amp;Video prúdy</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation>Titulkové prúdy</translation>
+        <translation>&amp;Titulkové prúdy</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation>Kapitoly</translation>
+        <translation>&amp;Kapitoly</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation>Programy</translation>
+        <translation>&amp;Programy</translation>
     </message>
 </context>
 <context>
@@ -3438,23 +3438,23 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>VideoFilters</name>
     <message>
         <source>Video &amp;filters</source>
-        <translation>Filtre &amp;videa</translation>
+        <translation>&amp;Filtre videa</translation>
     </message>
     <message>
         <source>&amp;Horizontal flip</source>
-        <translation>Prevrátiť &amp;vodorovne</translation>
+        <translation>&amp;Prevrátiť vodorovne</translation>
     </message>
     <message>
         <source>&amp;Vertical flip</source>
-        <translation>Prevrátiť &amp;zvisle</translation>
+        <translation>Pre&amp;vrátiť zvisle</translation>
     </message>
     <message>
         <source>&amp;More filters</source>
-        <translation>Ďalšie &amp;filtre</translation>
+        <translation>Ď&amp;alšie filtre</translation>
     </message>
     <message>
         <source>&amp;Rotate 90°</source>
-        <translation>Otočiť o &amp;90°</translation>
+        <translation>&amp;Otočiť o 90°</translation>
     </message>
     <message>
         <source>&amp;Spherical view</source>
@@ -3462,7 +3462,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Video &amp;adjustment</source>
-        <translation>Ú&amp;prava videa</translation>
+        <translation>Úpr&amp;ava videa</translation>
     </message>
 </context>
 <context>
@@ -3521,7 +3521,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;Always on top</source>
-        <translation>&amp;Vždy navrchu</translation>
+        <translation>Vždy n&amp;avrchu</translation>
     </message>
 </context>
 <context>

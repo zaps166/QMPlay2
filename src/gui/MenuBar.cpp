@@ -171,7 +171,7 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
     addMenu(extensions);
 
     addSeparator();
-    newAction(Playlist::tr("&Create &group"), this, newGroup, false, QMPlay2Core.getIconFromTheme("folder-new"), false);
+    newAction(Playlist::tr("&Create group"), this, newGroup, false, QMPlay2Core.getIconFromTheme("folder-new"), false);
     newAction(Playlist::tr("&Rename"), this, renameGroup, false, QIcon(), false);
     addSeparator();
     newAction(Playlist::tr("&Find entries"), this, find, false, QMPlay2Core.getIconFromTheme("edit-find"), false);
@@ -230,7 +230,7 @@ MenuBar::Player::Player(MenuBar *parent) :
     addSeparator();
     newAction(Player::tr("Seek &forward"), this, seekF, true, QIcon(), false);
     newAction(Player::tr("Seek &backward"), this, seekB, true, QIcon(), false);
-    newAction(Player::tr("Long &seek &forward"), this, lSeekF, true, QIcon(), false);
+    newAction(Player::tr("Long &seek forward"), this, lSeekF, true, QIcon(), false);
     newAction(Player::tr("Long s&eek backward"), this, lSeekB, true, QIcon(), false);
     addSeparator();
     newAction(Player::tr("Fa&ster"), this, speedUp, true, QIcon(), false);

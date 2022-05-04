@@ -265,7 +265,7 @@
     <name>AspectRatio</name>
     <message>
         <source>&amp;Aspect ratio</source>
-        <translation>&amp;Radio d&apos;aspect</translation>
+        <translation>R&amp;adio d&apos;aspect</translation>
     </message>
     <message>
         <source>&amp;Disabled</source>
@@ -338,7 +338,7 @@
     <name>AudioChannels</name>
     <message>
         <source>&amp;Autodetect</source>
-        <translation>&amp;Détection automatique</translation>
+        <translation>Détection &amp;automatique</translation>
     </message>
     <message>
         <source>&amp;Mono</source>
@@ -392,7 +392,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation type="unfinished">Méthode de désentrelacement</translation>
+        <translation>Méthode de désentrelacement</translation>
     </message>
 </context>
 <context>
@@ -632,39 +632,39 @@
     <name>Downloader</name>
     <message>
         <source>Downloader</source>
-        <translation type="unfinished">Téléchargeur</translation>
+        <translation>Téléchargeur</translation>
     </message>
     <message>
         <source>Download directory</source>
-        <translation type="unfinished">Dossier de téléchargement</translation>
+        <translation>Dossier de téléchargement</translation>
     </message>
     <message>
         <source>Choose directory for downloaded files</source>
-        <translation type="unfinished">Choisir le dossier pour les fichiers téléchargés</translation>
+        <translation>Choisir le dossier pour les fichiers téléchargés</translation>
     </message>
     <message>
         <source>Clear completed downloads</source>
-        <translation type="unfinished">Nettoyer les téléchargements terminés</translation>
+        <translation>Nettoyer les téléchargements terminés</translation>
     </message>
     <message>
         <source>Enter the address for download</source>
-        <translation type="unfinished">Entrer l&apos;adresse du téléchargement</translation>
+        <translation>Entrer l&apos;adresse du téléchargement</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished">Télécharger</translation>
+        <translation>Télécharger</translation>
     </message>
     <message>
         <source>Cannot change downloading files directory</source>
-        <translation type="unfinished">Impossible de changer le dossier de téléchargement du fichier</translation>
+        <translation>Impossible de changer le dossier de téléchargement du fichier</translation>
     </message>
     <message>
         <source>Enter address</source>
-        <translation type="unfinished">Entrer une adresse</translation>
+        <translation>Entrer une adresse</translation>
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished">&amp;Ajouter</translation>
+        <translation>&amp;Ajouter</translation>
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
@@ -687,7 +687,7 @@
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Supprimer</translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <source>Preset name</source>
@@ -792,7 +792,7 @@
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Réglages</translation>
+        <translation>Réglages</translation>
     </message>
     <message>
         <source>New preset</source>
@@ -1280,7 +1280,7 @@
     </message>
     <message>
         <source>&amp;Lock widgets</source>
-        <translation>&amp;Verrouiller les widgets</translation>
+        <translation>Verroui&amp;ller les widgets</translation>
     </message>
     <message>
         <source>Save group</source>
@@ -1300,7 +1300,7 @@
     </message>
     <message>
         <source>&amp;Pause</source>
-        <translation>&amp;En pause</translation>
+        <translation>En &amp;pause</translation>
     </message>
     <message>
         <source>Next audio stream</source>
@@ -1315,11 +1315,11 @@
     <name>MediaBrowser</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Chercher</translation>
+        <translation>Chercher</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Erreur de connexion</translation>
+        <translation>Erreur de connexion</translation>
     </message>
     <message>
         <source>Website doesn&apos;t exist</source>
@@ -1338,7 +1338,7 @@
     <name>MediaBrowserResults</name>
     <message>
         <source>Enqueue</source>
-        <translation type="unfinished">Mettre dans la file d&apos;attente</translation>
+        <translation>Mettre dans la file d&apos;attente</translation>
     </message>
     <message>
         <source>Play</source>
@@ -1346,11 +1346,11 @@
     </message>
     <message>
         <source>Open the page in the browser</source>
-        <translation type="unfinished">Ouvrir la page dans le navigateur</translation>
+        <translation>Ouvrir la page dans le navigateur</translation>
     </message>
     <message>
         <source>Copy page address</source>
-        <translation type="unfinished">Copier l&apos;adresse de la page</translation>
+        <translation>Copier l&apos;adresse de la page</translation>
     </message>
 </context>
 <context>
@@ -1745,7 +1745,7 @@
     </message>
     <message>
         <source>Equalizer</source>
-        <translation type="unfinished">Egaliseur</translation>
+        <translation>Egaliseur</translation>
     </message>
     <message>
         <source>Default settings</source>
@@ -1843,7 +1843,7 @@
     </message>
     <message>
         <source>Stopped</source>
-        <translation type="unfinished">Arrêté</translation>
+        <translation>Arrêté</translation>
     </message>
     <message>
         <source>Playing</source>
@@ -1851,7 +1851,7 @@
     </message>
     <message>
         <source>Paused</source>
-        <translation type="unfinished">Pause</translation>
+        <translation>Pause</translation>
     </message>
 </context>
 <context>
@@ -1932,15 +1932,15 @@
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation>&amp;Réglages</translation>
+        <translation>Réglage&amp;s</translation>
     </message>
     <message>
         <source>&amp;Show tray icon</source>
-        <translation>&amp;Montrer l&apos;icône dans la barre des tâches</translation>
+        <translation>Montrer l&apos;icône dan&amp;s la barre des tâches</translation>
     </message>
     <message>
         <source>&amp;Modules settings</source>
-        <translation>&amp;Réglages des modules</translation>
+        <translation>Réglages des &amp;modules</translation>
     </message>
     <message>
         <source>Create new profile</source>
@@ -1964,7 +1964,7 @@
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Supprimer</translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <source>Enter new profile name:</source>
@@ -1972,7 +1972,7 @@
     </message>
     <message>
         <source>&amp;Playback settings</source>
-        <translation type="unfinished">&amp;Paramètres de lecture</translation>
+        <translation>&amp;Paramètres de lecture</translation>
     </message>
     <message>
         <source>&amp;Renderer settings</source>
@@ -2117,7 +2117,7 @@
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>Régler &amp;écart entre les video</translation>
+        <translation>Régler écart entre les &amp;video</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
@@ -2129,7 +2129,7 @@
     </message>
     <message>
         <source>&amp;Enable subtitles</source>
-        <translation>&amp;Sous-titres activés</translation>
+        <translation>Sous-titr&amp;es activés</translation>
     </message>
     <message>
         <source>Add &amp;subtities from file</source>
@@ -2137,7 +2137,7 @@
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
-        <translation>Régler les &amp;écarts entre les sous-titres</translation>
+        <translation>Régler le&amp;s écarts entre les sous-titres</translation>
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
@@ -2145,15 +2145,15 @@
     </message>
     <message>
         <source>&amp;Speed up subtitles</source>
-        <translation>&amp;Accélérer les sous-titres</translation>
+        <translation>Accélérer le&amp;s sous-titres</translation>
     </message>
     <message>
         <source>Scale up subt&amp;itles</source>
-        <translation>Augmenter proportions des des sous-&amp;titres</translation>
+        <translation>Augmenter proport&amp;ions des des sous-titres</translation>
     </message>
     <message>
         <source>Scale down sub&amp;titles</source>
-        <translation>Réduire proportions des sous-&amp;titres</translation>
+        <translation>Réduire propor&amp;tions des sous-titres</translation>
     </message>
     <message>
         <source>&amp;Screen shot</source>
@@ -2339,27 +2339,27 @@
     </message>
     <message>
         <source>Seek &amp;forward</source>
-        <translation>Chercher en a&amp;vant</translation>
+        <translation>&amp;Chercher en avant</translation>
     </message>
     <message>
         <source>Seek &amp;backward</source>
-        <translation>Chercher en &amp;arrière</translation>
+        <translation>&amp;Chercher en arrière</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
-        <translation>Chercher longtemps en a&amp;vant</translation>
+        <source>Long &amp;seek forward</source>
+        <translation>Chercher longtemp&amp;s en avant</translation>
     </message>
     <message>
         <source>Long s&amp;eek backward</source>
-        <translation>Chercher longtemps en a&amp;rrière</translation>
+        <translation>Ch&amp;ercher longtemps en arrière</translation>
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translation>Plus &amp;rapide</translation>
+        <translation>Plu&amp;s rapide</translation>
     </message>
     <message>
         <source>Slowe&amp;r</source>
-        <translation>Plus &amp;lent</translation>
+        <translation>&amp;Plus lent</translation>
     </message>
     <message>
         <source>Zoom i&amp;n</source>
@@ -2375,23 +2375,23 @@
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
-        <translation>Basculer le &amp;ratio d&apos;aspect</translation>
+        <translation>B&amp;asculer le ratio d&apos;aspect</translation>
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>Reset image &amp;Paramètres</translation>
+        <translation>Re&amp;set image Paramètres</translation>
     </message>
     <message>
         <source>&amp;Set speed</source>
-        <translation>&amp;Régler la vitesse</translation>
+        <translation>Régler la vite&amp;sse</translation>
     </message>
     <message>
         <source>Next &amp;frame</source>
-        <translation>Image &amp;suivante</translation>
+        <translation>&amp;Image suivante</translation>
     </message>
     <message>
         <source>Volume &amp;up</source>
-        <translation>&amp;Monter le volume</translation>
+        <translation>Monter le vol&amp;ume</translation>
     </message>
     <message>
         <source>Volume &amp;down</source>
@@ -2434,23 +2434,23 @@
     </message>
     <message>
         <source>Load &amp;list</source>
-        <translation>Charger la &amp;liste</translation>
+        <translation>Charger &amp;la liste</translation>
     </message>
     <message>
         <source>Save &amp;list</source>
-        <translation>Enregistrer le &amp;liste</translation>
+        <translation>Enregistrer &amp;le liste</translation>
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
-        <translation>&amp;Effacer les entrées sélectionnées</translation>
+        <translation>Efface&amp;r les entrées sélectionnées</translation>
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
-        <translation>Supprimer les entrées &amp;sans groupe</translation>
+        <translation>&amp;Supprimer les entrées sans groupe</translation>
     </message>
     <message>
         <source>&amp;Clear list</source>
-        <translation>&amp;Effacer la liste</translation>
+        <translation>Effa&amp;cer la liste</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
@@ -2461,8 +2461,8 @@
         <translation>&amp;Coller</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
-        <translation>&amp;Créer &amp;goupe</translation>
+        <source>&amp;Create group</source>
+        <translation>&amp;Créer goupe</translation>
     </message>
     <message>
         <source>&amp;Rename</source>
@@ -2486,7 +2486,7 @@
     </message>
     <message>
         <source>&amp;Enqueue</source>
-        <translation>&amp;Mettre en liste d&apos;attente</translation>
+        <translation>M&amp;ettre en liste d&apos;attente</translation>
     </message>
     <message>
         <source>&amp;Properties</source>
@@ -2663,7 +2663,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Enqueue</source>
-        <translation type="unfinished">Mettre dans la file d&apos;attente</translation>
+        <translation>Mettre dans la file d&apos;attente</translation>
     </message>
     <message>
         <source>Add to my radio stations</source>
@@ -2718,7 +2718,7 @@ QMPlay2 will not scale up icons!</source>
     <name>RadioBrowserModel</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Stream info</source>
@@ -2741,11 +2741,11 @@ QMPlay2 will not scale up icons!</source>
     <name>Repeat</name>
     <message>
         <source>&amp;Repeat</source>
-        <translation>Ré&amp;péter</translation>
+        <translation>&amp;Répéter</translation>
     </message>
     <message>
         <source>&amp;No repeating</source>
-        <translation>&amp;Pas de répétition</translation>
+        <translation>Pas de répétitio&amp;n</translation>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
@@ -2761,7 +2761,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>R&amp;andom</source>
-        <translation>A&amp;léatoire</translation>
+        <translation>&amp;Aléatoire</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
@@ -2946,7 +2946,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Par défaut</translation>
+        <translation>Par défaut</translation>
     </message>
     <message>
         <source>Automatically check for updates</source>
@@ -3172,19 +3172,19 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation>Flux audio</translation>
+        <translation>Flux &amp;audio</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation>Flux vidéo</translation>
+        <translation>Flux &amp;vidéo</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation>Flux de sous-titres</translation>
+        <translation>Flux de &amp;sous-titres</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation>Chapitres</translation>
+        <translation>&amp;Chapitres</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
@@ -3331,11 +3331,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation type="unfinished">Filtre de résolution d&apos;image non supporté</translation>
+        <translation>Filtre de résolution d&apos;image non supporté</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation type="unfinished">Algorithme de désentrelacement non supporté</translation>
+        <translation>Algorithme de désentrelacement non supporté</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
@@ -3353,19 +3353,19 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>VideoAdjustmentW</name>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">Réinitialiser</translation>
+        <translation>Réinitialiser</translation>
     </message>
     <message>
         <source>Brightness</source>
-        <translation type="unfinished">Brillance</translation>
+        <translation>Brillance</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation type="unfinished">Contraste</translation>
+        <translation>Contraste</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation type="unfinished">Saturation</translation>
+        <translation>Saturation</translation>
     </message>
     <message>
         <source>Hue</source>
@@ -3373,7 +3373,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation type="unfinished">Résolution</translation>
+        <translation>Résolution</translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
@@ -3431,15 +3431,15 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>VideoFilters</name>
     <message>
         <source>Video &amp;filters</source>
-        <translation>Filtres &amp;video</translation>
+        <translation>&amp;Filtres video</translation>
     </message>
     <message>
         <source>&amp;Horizontal flip</source>
-        <translation>&amp;Retournement horizontal</translation>
+        <translation>Retournement &amp;horizontal</translation>
     </message>
     <message>
         <source>&amp;Vertical flip</source>
-        <translation>&amp;Retournement vertical</translation>
+        <translation>Retournement &amp;vertical</translation>
     </message>
     <message>
         <source>&amp;More filters</source>
@@ -3506,7 +3506,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;Compact view</source>
-        <translation>&amp;Vue compacte</translation>
+        <translation>Vue &amp;compacte</translation>
     </message>
     <message>
         <source>&amp;Close</source>
@@ -3521,23 +3521,23 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>YouTube</name>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Chercher</translation>
+        <translation>Chercher</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Réglages</translation>
+        <translation>Réglages</translation>
     </message>
     <message>
         <source>Search on YouTube</source>
-        <translation type="unfinished">Chercher sur YouTube</translation>
+        <translation>Chercher sur YouTube</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Erreur de connexion</translation>
+        <translation>Erreur de connexion</translation>
     </message>
     <message>
         <source>Playlist</source>
-        <translation type="unfinished">Liste de lecture</translation>
+        <translation>Liste de lecture</translation>
     </message>
     <message>
         <source>yes</source>

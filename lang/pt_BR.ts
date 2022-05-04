@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt_BR">
+<TS version="2.1" language="pt_BR" sourcelanguage="en">
 <context>
     <name>ALSAWriter</name>
     <message>
@@ -273,7 +273,6 @@
     </message>
     <message>
         <source>D&amp;epends on size</source>
-        <translatorcomment>Não entendi a diferença entre essa string e a opção &quot;Auto&quot;. Traduzir para &quot;Depende(r) do tamanho&quot; irá passar a mesma impressão do modo automático; afinal, ele também depende do tamanho disponível.</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -351,7 +350,7 @@
     </message>
     <message>
         <source>&amp;Stereo</source>
-        <translation>&amp;Estéreo</translation>
+        <translation>E&amp;stéreo</translation>
     </message>
     <message>
         <source>&amp;Other</source>
@@ -443,12 +442,10 @@
     <name>DemuxerThr</name>
     <message>
         <source>Seeking</source>
-        <translatorcomment>Buscando? Acho que não fica bom</translatorcomment>
-        <translation>Avanço/Recuo</translation>
+        <translation>Buscando</translation>
     </message>
     <message>
         <source>Playback</source>
-        <translatorcomment>É o status da reprodução (exibido na parte inferior do programa), não um botão para reproduzir, por isso a diferença na tradução com outras strings.</translatorcomment>
         <translation>Reproduzindo</translation>
     </message>
     <message>
@@ -991,7 +988,6 @@
     </message>
     <message>
         <source>Proxy server needs login</source>
-        <translatorcomment>Não é necessário ficar fazendo repetições do mesmo nome.</translatorcomment>
         <translation>O servidor exige autênticação</translation>
     </message>
     <message>
@@ -1111,11 +1107,11 @@
     </message>
     <message>
         <source>&amp;About QMPlay2</source>
-        <translation>&amp;Sobre o QMPlay2</translation>
+        <translation>Sobre o QMPl&amp;ay2</translation>
     </message>
     <message>
         <source>&amp;Updates</source>
-        <translation>&amp;Atualizações</translation>
+        <translation>At&amp;ualizações</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
@@ -1201,7 +1197,7 @@
     </message>
     <message>
         <source>Lyrics not found</source>
-        <translation type="unfinished">Letras não encontrada</translation>
+        <translation>Letras não encontrada</translation>
     </message>
 </context>
 <context>
@@ -1223,7 +1219,6 @@
     <name>MainWidget</name>
     <message>
         <source>Stopped</source>
-        <translatorcomment>Parou?</translatorcomment>
         <translation>Parado</translation>
     </message>
     <message>
@@ -1236,7 +1231,7 @@
     </message>
     <message>
         <source>&amp;Lock widgets</source>
-        <translation>&amp;Bloquear widgets</translation>
+        <translation>B&amp;loquear widgets</translation>
     </message>
     <message>
         <source>&amp;Pause</source>
@@ -1244,7 +1239,7 @@
     </message>
     <message>
         <source>&amp;Play</source>
-        <translation>&amp;Reproduzir</translation>
+        <translation>Re&amp;produzir</translation>
     </message>
     <message>
         <source>New window</source>
@@ -1569,7 +1564,7 @@
     </message>
     <message>
         <source>Last password</source>
-        <translation type="unfinished">Última senha</translation>
+        <translation>Última senha</translation>
     </message>
     <message>
         <source>Demuxer</source>
@@ -1948,19 +1943,19 @@
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation>&amp;Configurações</translation>
+        <translation>Configuraçõe&amp;s</translation>
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation>&amp;Configurações de renderização</translation>
+        <translation>Configu&amp;rações de renderização</translation>
     </message>
     <message>
         <source>&amp;Playback settings</source>
-        <translation>&amp;Configurações de reprodução</translation>
+        <translation>Configurações de re&amp;produção</translation>
     </message>
     <message>
         <source>&amp;Modules settings</source>
-        <translation>&amp;Configurações dos módulos</translation>
+        <translation>Configurações dos &amp;módulos</translation>
     </message>
     <message>
         <source>&amp;Profiles</source>
@@ -2113,7 +2108,7 @@
     <name>Playback</name>
     <message>
         <source>&amp;Playback</source>
-        <translation>&amp;Reprodução</translation>
+        <translation>Re&amp;produção</translation>
     </message>
     <message>
         <source>&amp;Enable audio</source>
@@ -2125,7 +2120,7 @@
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>&amp;Definir atraso no vídeo</translation>
+        <translation>Definir atraso no &amp;vídeo</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
@@ -2137,23 +2132,23 @@
     </message>
     <message>
         <source>&amp;Enable subtitles</source>
-        <translation>&amp;Ativar legendas</translation>
+        <translation>Ativar l&amp;egendas</translation>
     </message>
     <message>
         <source>Add &amp;subtities from file</source>
-        <translation>&amp;Adicionar arquivo de legendas</translation>
+        <translation>Adicionar arquivo de legenda&amp;s</translation>
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
-        <translation>&amp;Definir atraso das legendas</translation>
+        <translation>Definir atra&amp;so das legendas</translation>
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
-        <translation>&amp;Atrasar legendas</translation>
+        <translation>Atrasar legen&amp;das</translation>
     </message>
     <message>
         <source>&amp;Speed up subtitles</source>
-        <translation>&amp;Acelerar legendas</translation>
+        <translation>Acelerar legenda&amp;s</translation>
     </message>
     <message>
         <source>Scale up subt&amp;itles</source>
@@ -2204,7 +2199,6 @@
     </message>
     <message>
         <source>Fade sound</source>
-        <translatorcomment>pois é...</translatorcomment>
         <translation>Efeito &quot;fade&quot; ao trocar de faixas</translation>
     </message>
     <message>
@@ -2293,12 +2287,10 @@
     </message>
     <message>
         <source>Mouse wheel scrolls music/movie</source>
-        <translatorcomment>Não repeti &quot;mouse wheel&quot; porque essa string fica dentro de uma box informando isso.</translatorcomment>
         <translation>Controla o progresso do vídeo</translation>
     </message>
     <message>
         <source>Mouse wheel changes the volume</source>
-        <translatorcomment>Não repeti &quot;mouse wheel&quot; porque essa string fica dentro de uma box informando isso.</translatorcomment>
         <translation>Altera o volume</translation>
     </message>
     <message>
@@ -2338,12 +2330,11 @@
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation>&amp;Parar após reproduzir</translation>
+        <translation>Parar apó&amp;s reproduzir</translation>
     </message>
     <message>
         <source>&amp;Player</source>
-        <translatorcomment>&apos;Reprodutor&apos; não ficou bom na interface</translatorcomment>
-        <translation type="unfinished"></translation>
+        <translation>Re&amp;produtor</translation>
     </message>
     <message>
         <source>&amp;Stop</source>
@@ -2363,11 +2354,11 @@
     </message>
     <message>
         <source>Next &amp;frame</source>
-        <translation>&amp;Próximo frame</translation>
+        <translation>Próximo &amp;frame</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
-        <translation>&amp;Repetição A-B</translation>
+        <translation>Repetição A&amp;-B</translation>
     </message>
     <message>
         <source>Seek &amp;forward</source>
@@ -2378,7 +2369,7 @@
         <translation>&amp;Recuo curto</translation>
     </message>
     <message>
-        <source>Long &amp;seek &amp;forward</source>
+        <source>Long &amp;seek forward</source>
         <translation>&amp;Avanço longo</translation>
     </message>
     <message>
@@ -2387,13 +2378,11 @@
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translatorcomment>Fica no menu Reprodutor, e refere-se a velocidade de reprodução do vídeo. Somente &apos;rápido&apos; e &apos;devagar&apos; não constrói um contexto suficiente para informar sua função. Utilizar &apos;Acelerar&apos; e &apos;Atrasar&apos; também mehora a consistência com a tradução da mesma função das legendas.</translatorcomment>
         <translation>&amp;Acelerar</translation>
     </message>
     <message>
         <source>Slowe&amp;r</source>
-        <translatorcomment>Fica no menu Reprodutor, e refere-se a velocidade de reprodução do vídeo. Somente &apos;rápido&apos; e &apos;devagar&apos; não constrói um contexto suficiente para informar sua função. Utilizar &apos;Acelerar&apos; e &apos;Atrasar&apos; também mehora a consistência com a tradução da mesma função das legendas.</translatorcomment>
-        <translation>&amp;Atrasar</translation>
+        <translation>At&amp;rasar</translation>
     </message>
     <message>
         <source>&amp;Set speed</source>
@@ -2413,11 +2402,11 @@
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>&amp;Restaurar configurações de imagem</translation>
+        <translation>R&amp;estaurar configurações de imagem</translation>
     </message>
     <message>
         <source>Volume &amp;up</source>
-        <translation>&amp;Aumentar volume</translation>
+        <translation>A&amp;umentar volume</translation>
     </message>
     <message>
         <source>Volume &amp;down</source>
@@ -2429,8 +2418,7 @@
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
-        <translatorcomment>Não tenho certeza absoluta se essa tradução realmente é que a função desse item</translatorcomment>
-        <translation>Desativar recepção de &amp;comandos</translation>
+        <translation>Desativar re&amp;cepção de comandos</translation>
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
@@ -2457,19 +2445,19 @@
     </message>
     <message>
         <source>Load &amp;list</source>
-        <translation>&amp;Carregar lista</translation>
+        <translation>Carregar &amp;lista</translation>
     </message>
     <message>
         <source>Save &amp;list</source>
-        <translation>&amp;Salvar lista</translation>
+        <translation>Salvar &amp;lista</translation>
     </message>
     <message>
         <source>Save &amp;group</source>
-        <translation>&amp;Salvar grupo</translation>
+        <translation>Salvar &amp;grupo</translation>
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation>&amp;Sempre sincronizar</translation>
+        <translation>Sempre sincroniz&amp;ar</translation>
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
@@ -2496,7 +2484,7 @@
         <translation>&amp;Extensões</translation>
     </message>
     <message>
-        <source>&amp;Create &amp;group</source>
+        <source>&amp;Create group</source>
         <translation>&amp;Criar grupo</translation>
     </message>
     <message>
@@ -2509,7 +2497,7 @@
     </message>
     <message>
         <source>&amp;Collapse all</source>
-        <translation>&amp;Recolher todos</translation>
+        <translation>Re&amp;colher todos</translation>
     </message>
     <message>
         <source>&amp;Expand all</source>
@@ -2559,11 +2547,11 @@
     <name>PlaylistWidget</name>
     <message>
         <source>Un&amp;lock</source>
-        <translation>&amp;Desbloquear</translation>
+        <translation>Desb&amp;loquear</translation>
     </message>
     <message>
         <source>&amp;Lock</source>
-        <translation>&amp;Bloquear</translation>
+        <translation>B&amp;loquear</translation>
     </message>
 </context>
 <context>
@@ -2764,15 +2752,15 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
-        <translation>&amp;Repetição do item</translation>
+        <translation>R&amp;epetição do item</translation>
     </message>
     <message>
         <source>&amp;Group repeating</source>
-        <translation>&amp;Repetição do grupo</translation>
+        <translation>Repetição do &amp;grupo</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>&amp;Repetição da playlist</translation>
+        <translation>Re&amp;petição da playlist</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
@@ -2780,19 +2768,19 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation>&amp;Aleatório no grupo</translation>
+        <translation>Aleatório no &amp;grupo</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
-        <translation>&amp;Aleatório e repetir</translation>
+        <translation>Aleatório e repeti&amp;r</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation>&amp;Aleatório no grupo e repetir</translation>
+        <translation>Alea&amp;tório no grupo e repetir</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
-        <translation>&amp;Parar reprodução após cada arquivo</translation>
+        <translation>Parar reprodução apó&amp;s cada arquivo</translation>
     </message>
 </context>
 <context>
@@ -2974,7 +2962,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>To set up a new renderer, the program will start again!</source>
-        <translation type="unfinished">Para configurar um novo renderizador, o programa irá iniciar novamente!</translation>
+        <translation>Para configurar um novo renderizador, o programa irá iniciar novamente!</translation>
     </message>
     <message>
         <source>Vertical synchronization (V-Sync)</source>
@@ -3068,7 +3056,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>To set up a new language, the program will start again!</source>
-        <translation type="unfinished">Para configurar um novo idioma, o programa irá iniciar novamente!</translation>
+        <translation>Para configurar um novo idioma, o programa irá iniciar novamente!</translation>
     </message>
     <message>
         <source>Changing icons</source>
@@ -3141,11 +3129,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;A-Z</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Z-A</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3187,23 +3175,23 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation>Stream de áudio</translation>
+        <translation>&amp;Stream de áudio</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation>Stream de vídeo</translation>
+        <translation>Stream de &amp;vídeo</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Stream de legendas</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation>Capítulos</translation>
+        <translation>&amp;Capítulos</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation>Programas</translation>
+        <translation>&amp;Programas</translation>
     </message>
 </context>
 <context>
@@ -3273,7 +3261,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Hz</source>
-        <translation type="unfinished">Hz</translation>
+        <translation>Hz</translation>
     </message>
 </context>
 <context>
@@ -3454,11 +3442,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;Spherical view</source>
-        <translation>&amp;Vista esférica</translation>
+        <translation>Vi&amp;sta esférica</translation>
     </message>
     <message>
         <source>&amp;Horizontal flip</source>
-        <translation>&amp;Virar horizontalmente</translation>
+        <translation>Virar &amp;horizontalmente</translation>
     </message>
     <message>
         <source>&amp;Vertical flip</source>
@@ -3521,7 +3509,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;Compact view</source>
-        <translation>&amp;Visualização compacta</translation>
+        <translation>Visualização &amp;compacta</translation>
     </message>
     <message>
         <source>&amp;Always on top</source>
@@ -3529,7 +3517,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>&amp;Fechar</translation>
+        <translation>Fe&amp;char</translation>
     </message>
 </context>
 <context>
