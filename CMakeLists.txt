@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 project(QMPlay2)
 
 if(WIN32)
@@ -404,7 +404,6 @@ endif()
 
 if(USE_VULKAN)
     set(Vulkan_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/src/qmplay2/vulkan/headers/include")
-    set(QMVK_LIBRARY_TYPE STATIC)
     set(QMVK_USE_PCH ${USE_PCH})
     set(QMVK_WAIT_TIMEOUT_MS 2500)
     add_subdirectory(src/qmvk)

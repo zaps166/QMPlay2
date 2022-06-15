@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 
 if(WIN32)
     set(MODULES_INSTALL_PATH "modules")
