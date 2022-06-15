@@ -52,7 +52,7 @@ pkg_check_modules(LIBAVUTIL REQUIRED libavutil>=56.14.100)
 pkg_check_modules(LIBSWRESAMPLE REQUIRED libswresample>=3.1.100)
 
 # Add FFmpeg link directories here, because it must be global.
-# "target_link_directories" is supported since CMake 3.13, but QMPlay2 supports CMake 3.9.
+# "target_link_directories" is supported since CMake 3.13, but QMPlay2 supports CMake 3.12.
 link_directories(
     ${LIBAVFORMAT_LIBRARY_DIRS}
     ${LIBAVCODEC_LIBRARY_DIRS}
