@@ -1,3 +1,11 @@
+Changes in QMPlay2 22.06.16:
+    - make possible to increase but not decrease the effective number of audio channels (RJVB),
+    - fix VA-API on Vulkan on modern Intel GPUs (use VK_EXT_image_drm_format_modifier),
+    - fix timeout error on exclusive full screen on AMD Radeon on Vulkan on Windows,
+    - reorganize menu shortcuts (zo-shin),
+    - fix video rotation with FFmpeg 5.0,
+    - require CMake 3.12,
+
 Changes in QMPlay2 22.03.19:
     - fix possible crashes in software video output and screenshots,
     - fix yt-dlp on macOS where python3 can be in "/usr/local/bin",
