@@ -3497,7 +3497,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Widgets</name>
     <message>
-        <source>Widgets(&amp;W)</source>
+        <source>&amp;Widgets</source>
         <translation>小工具(&amp;W)</translation>
     </message>
 </context>

@@ -2388,7 +2388,7 @@
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translation>速(&amp;S)く</translation>
+        <translation>速く(&amp;S)</translation>
     </message>
     <message>
         <source>Volume &amp;up</source>
@@ -3499,7 +3499,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 <context>
     <name>Widgets</name>
     <message>
-        <source>Widgets(&amp;W)</source>
+        <source>&amp;Widgets</source>
         <translation>ウィジェット(&amp;W)</translation>
     </message>
 </context>
