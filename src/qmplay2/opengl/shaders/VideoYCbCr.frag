@@ -14,6 +14,7 @@
 
 varying vec2 vTexCoord;
 uniform mat3 uYUVtRGB;
+uniform vec2 uRangeMultiplier;
 uniform float uBL;
 uniform vec4 uVideoEq;
 uniform float uSharpness;
@@ -82,5 +83,5 @@ void main()
     }
 #endif
 
-    gl_FragColor = vec4(clamp(uYUVtRGB * ((YCbCr - vec3(0.5, 0.0, 0.0)) * contrastSaturation + vec3(0.5, 0.0, 0.0)), 0.0, 1.0) + brightness, 1.0);
+    gl_FragColor = vec4(clamp(uYUVtRGB * ((YCbCr * uRangeMultiplier.xyy - vec3(0.5, 0.0, 0.0)) * contrastSaturation + vec3(0.5, 0.0, 0.0)), 0.0, 1.0) + brightness, 1.0);
 }

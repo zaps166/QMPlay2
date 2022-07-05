@@ -149,12 +149,7 @@ namespace Functions
 
     QMPLAY2SHAREDLIB_EXPORT QByteArray textWithFallbackEncoding(const QByteArray &data);
 
-    struct LumaCoefficients
-    {
-        float cR, cG, cB;
-    };
-    QMPLAY2SHAREDLIB_EXPORT LumaCoefficients getLumaCoeff(AVColorSpace colorSpace);
-    QMPLAY2SHAREDLIB_EXPORT QMatrix4x4 getYUVtoRGBmatrix(const LumaCoefficients &lumaCoeff, bool limited);
+    QMPLAY2SHAREDLIB_EXPORT QMatrix4x4 getYUVtoRGBmatrix(AVColorSpace colorSpace);
 
     QMPLAY2SHAREDLIB_EXPORT bool isX11EGL();
 

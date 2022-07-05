@@ -19,7 +19,8 @@ layout(binding = 0) uniform FragUniform
 {
     mat3 conversionMatrix;
     vec2 levels;
-    float multiplier;
+    vec2 rangeMultiplier;
+    float bitsMultiplier;
 
     float brightness;
     float contrast;
@@ -153,7 +154,7 @@ void main()
         }
     }
 
-    value = (value * multiplier) - levels.xyy;
+    value = ((value * bitsMultiplier) - levels.xyy) * rangeMultiplier.xyy;
 
     if (!isGray && hasLuma && useHueSaturation)
     {

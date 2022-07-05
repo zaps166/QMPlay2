@@ -531,8 +531,12 @@ void OpenGLCommon::paintGL()
         }
         else
         {
-            const auto mat = Functions::getYUVtoRGBmatrix(Functions::getLumaCoeff(m_colorSpace), m_limited).toGenericMatrix<3, 3>();
+            const auto mat = Functions::getYUVtoRGBmatrix(m_colorSpace).toGenericMatrix<3, 3>();
             shaderProgramVideo->setUniformValue("uYUVtRGB", mat);
+            shaderProgramVideo->setUniformValue("uRangeMultiplier", m_limited
+                ? QVector2D(255.0f / (235.0f - 16.0f), 255.0f / (240.0f - 16.0f))
+                : QVector2D(1.0f, 1.0f)
+            );
             shaderProgramVideo->setUniformValue("uBL", m_limited ? 16.0f / 255.0f : 0.0f);
 
             const float saturation = (videoAdjustment.saturation + 100) / 100.0f;

@@ -90,7 +90,8 @@ struct alignas(16) FragUniform
 {
     QGenericMatrix<3, 4, float> conversionMatrix;
     QVector2D levels;
-    float multiplier;
+    QVector2D rangeMultiplier;
+    float bitsMultiplier;
 
     float brightness;
     float contrast;
@@ -1175,8 +1176,7 @@ void Window::fillVideoPipelineFragmentUniform()
     else
     {
         fragData->conversionMatrix = Functions::getYUVtoRGBmatrix(
-            Functions::getLumaCoeff(m_frameProps->colorSpace),
-            m_frameProps->limited
+            m_frameProps->colorSpace
         ).toGenericMatrix<3, 4>();
 
         fragData->levels.setY(128.0 / 255.0f);
@@ -1187,10 +1187,19 @@ void Window::fillVideoPipelineFragmentUniform()
         : 0.0f
     );
 
-    fragData->multiplier = (m_frameProps->plannar || m_frameProps->gray)
+    fragData->bitsMultiplier = (m_frameProps->plannar || m_frameProps->gray)
         ? 1 << m_frameProps->paddingBits
         : 1.0f
     ;
+
+    fragData->rangeMultiplier.setX(m_frameProps->limited
+        ? 255.0f / (235.0f - 16.0f)
+        : 1.0f
+    );
+    fragData->rangeMultiplier.setY(m_frameProps->limited
+        ? 255.0f / (240.0f - 16.0f)
+        : 1.0f
+    );
 
     fragData->brightness = m_brightness;
     fragData->contrast = m_contrast;

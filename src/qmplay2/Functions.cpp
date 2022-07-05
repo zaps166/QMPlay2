@@ -938,26 +938,31 @@ QByteArray Functions::textWithFallbackEncoding(const QByteArray &data)
     return data;
 }
 
-Functions::LumaCoefficients Functions::getLumaCoeff(AVColorSpace colorSpace)
+QMatrix4x4 Functions::getYUVtoRGBmatrix(AVColorSpace colorSpace)
 {
-    switch (colorSpace)
+    struct LumaCoefficients
     {
-        case AVCOL_SPC_BT709:
-            return {0.2126f, 0.7152f, 0.0722f};
-        case AVCOL_SPC_SMPTE170M:
-            return {0.299f, 0.587f, 0.114f};
-        case AVCOL_SPC_SMPTE240M:
-            return {0.212f, 0.701f, 0.087f};
-        case AVCOL_SPC_BT2020_CL:
-        case AVCOL_SPC_BT2020_NCL:
-            return {0.2627f, 0.6780f, 0.0593f};
-        default:
-            break;
-    }
-    return {0.299f, 0.587f, 0.114f}; // AVCOL_SPC_BT470BG
-}
-QMatrix4x4 Functions::getYUVtoRGBmatrix(const LumaCoefficients &lumaCoeff, bool limited)
-{
+        float cR, cG, cB;
+    };
+
+    const auto lumaCoeff = [&]()->LumaCoefficients {
+        switch (colorSpace)
+        {
+            case AVCOL_SPC_BT709:
+                return {0.2126f, 0.7152f, 0.0722f};
+            case AVCOL_SPC_SMPTE170M:
+                return {0.299f, 0.587f, 0.114f};
+            case AVCOL_SPC_SMPTE240M:
+                return {0.212f, 0.701f, 0.087f};
+            case AVCOL_SPC_BT2020_CL:
+            case AVCOL_SPC_BT2020_NCL:
+                return {0.2627f, 0.6780f, 0.0593f};
+            default:
+                break;
+        }
+        return {0.299f, 0.587f, 0.114f}; // AVCOL_SPC_BT470BG
+    }();
+
     const float bscale = 0.5f / (lumaCoeff.cB - 1.0f);
     const float rscale = 0.5f / (lumaCoeff.cR - 1.0f);
 
@@ -979,9 +984,6 @@ QMatrix4x4 Functions::getYUVtoRGBmatrix(const LumaCoefficients &lumaCoeff, bool 
         0.0f,
         1.0f
     ).inverted();
-
-    if (limited)
-        mat *= 255.0f / (235.0f - 16.0f);
 
     return mat;
 }
