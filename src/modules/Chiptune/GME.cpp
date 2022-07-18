@@ -195,10 +195,12 @@ bool GME::open(const QString &_url, bool tracksOnly)
             m_title = getTitle(info, track);
             m_length = getLength(info);
 
-            if (*info->game)
-                m_tags += {QString::number(QMPLAY2_TAG_TITLE), QString(info->game)};
+            if (*info->song)
+                m_tags += {QString::number(QMPLAY2_TAG_TITLE), QString(info->song)};
             if (*info->author)
                 m_tags += {QString::number(QMPLAY2_TAG_ARTIST), QString(info->author)};
+            if (*info->game)
+                m_tags += {QString::number(QMPLAY2_TAG_ALBUM), QString(info->game)};
             if (*info->system)
                 m_tags += {tr("System"), QString(info->system)};
             if (*info->copyright)
@@ -241,7 +243,7 @@ bool GME::open(const QString &_url, bool tracksOnly)
 
 QString GME::getTitle(gme_info_t *info, int track) const
 {
-    const QString title  = info->game;
+    const QString title  = info->song;
     const QString author = info->author;
     QString ret;
     if (!author.isEmpty() && !title.isEmpty())
