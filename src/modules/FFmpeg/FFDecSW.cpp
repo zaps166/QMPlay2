@@ -62,7 +62,7 @@ inline AVSubtitle *Subtitle::av()
 
 double Subtitle::duration() const
 {
-    return (end_display_time != static_cast<uint32_t>(-1))
+    return (end_display_time != static_cast<uint32_t>(-1) && end_display_time != start_display_time)
         ? (end_display_time - start_display_time) / 1000.0
         : -1.0
     ;
