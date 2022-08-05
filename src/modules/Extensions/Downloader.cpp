@@ -252,6 +252,8 @@ void DownloadItemW::finish(bool f)
     if (!finished)
     {
         bool canStop = true;
+        if (speedProgressW)
+            speedProgressW->hide();
         delete speedProgressW;
         speedProgressW = nullptr;
         if (f)
