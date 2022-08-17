@@ -45,7 +45,7 @@
     #include <powrprof.h>
 #elif defined Q_OS_MACOS
     #include <QOperatingSystemVersion>
-#elif !defined Q_OS_ANDROID
+#elif !defined Q_OS_ANDROID && !defined Q_OS_HAIKU
     #include <QDBusConnection>
     #include <QDBusInterface>
 #endif
@@ -243,7 +243,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
     }
     else
     {
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN) || defined(Q_OS_HAIKU)
         settingsDir = QFileInfo(QSettings(QSettings::IniFormat, QSettings::UserScope, QString()).fileName()).absolutePath() + "/QMPlay2/";
 #elif defined(Q_OS_MACOS)
         settingsDir = Functions::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).value(0));
@@ -491,6 +491,11 @@ QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
 #elif defined Q_OS_WIN
     if (type == "videoWriters")
         defaultModules << "OpenGL 2" << "DirectDraw";
+#elif defined Q_OS_HAIKU
+	if ( type == "videoWriters" )
+		defaultModules << "QPainter";
+	else if ( type == "audioWriters" )
+		defaultModules << "MediaKit";
 #endif
     if (type == "decoders")
         defaultModules << "FFmpeg Decoder";
