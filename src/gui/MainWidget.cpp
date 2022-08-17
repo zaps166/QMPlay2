@@ -150,7 +150,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
         setIconSize({22, 22});
 
     SettingsWidget::InitSettings();
-#ifndef Q_OS_ANDROID
+#if !defined Q_OS_ANDROID && !defined Q_OS_HAIKU
     settings.init("MainWidget/WidgetsLocked", false);
 #else
     settings.init("MainWidget/WidgetsLocked", true);

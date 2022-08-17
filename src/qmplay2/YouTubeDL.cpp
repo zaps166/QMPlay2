@@ -37,9 +37,13 @@ static QMutex g_mutex(QMutex::Recursive);
 
 QString YouTubeDL::getFilePath()
 {
+#ifdef Q_OS_HAIKU
+    return "/bin/yt-dlp"
+#else
     return QMPlay2Core.getSettingsDir() + "yt-dlp"
 #ifdef Q_OS_WIN
     "_x86.exe"
+#endif
 #endif
     ;
 }
@@ -258,6 +262,9 @@ void YouTubeDL::abort()
 
 bool YouTubeDL::prepare()
 {
+#ifdef Q_OS_HAIKU
+	return true;
+#endif
 #ifdef Q_OS_ANDROID
     return false;
 #endif
@@ -304,6 +311,9 @@ bool YouTubeDL::prepare()
 
 bool YouTubeDL::download()
 {
+#if defined(Q_OS_HAIKU)
+	return true;
+#endif
     // Mutex must be locked here
 
     const QString downloadUrl = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp"
@@ -357,6 +367,9 @@ bool YouTubeDL::download()
 }
 bool YouTubeDL::update()
 {
+#if defined(Q_OS_HAIKU)
+	return true;
+#endif
     // Mutex must be locked here
 
     qDebug() << "\"youtube-dl\" updates will be checked";
@@ -408,7 +421,7 @@ bool YouTubeDL::update()
 
 void YouTubeDL::ensureExecutable()
 {
-#ifndef Q_OS_WIN
+#if !defined(Q_OS_WIN) && !defined(Q_OS_HAIKU)
     if (!QFileInfo(m_ytDlPath).isExecutable())
     {
         QFile file(m_ytDlPath);

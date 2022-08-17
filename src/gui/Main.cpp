@@ -606,6 +606,10 @@ int main(int argc, char *argv[])
 
     qputenv("QT_QPA_UPDATE_IDLE_TIME", "0");
 
+#ifdef Q_OS_HAIKU
+	setenv("HOME", "/boot/home", 1);
+#endif
+
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #ifndef USE_OPENGL
     QGuiApplication::setAttribute(Qt::AA_ForceRasterWidgets);
@@ -707,7 +711,7 @@ int main(int argc, char *argv[])
     }
     if (!cmakeBuildFound)
     {
-#if !defined Q_OS_WIN && !defined Q_OS_MACOS && !defined Q_OS_ANDROID
+#if !defined Q_OS_WIN && !defined Q_OS_MACOS && !defined Q_OS_ANDROID && !defined Q_OS_HAIKU
         sharePath = QCoreApplication::applicationDirPath() + "/../share/qmplay2";
         libPath = QMPlay2CoreClass::getLibDir();
         if (libPath.isEmpty() || !QDir(libPath).exists("qmplay2"))
@@ -918,5 +922,9 @@ int main(int argc, char *argv[])
     if (canDeleteApp)
 #endif
         delete qApp;
+
+#ifdef Q_OS_HAIKU
+	kill(::getpid(), SIGKILL);
+#endif
     return 0;
 }
