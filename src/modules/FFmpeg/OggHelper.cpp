@@ -21,6 +21,7 @@
 extern "C"
 {
     #include <libavformat/avio.h>
+    #include <libavutil/mem.h>
 }
 
 static int readPacket(void *opaque, uint8_t *buf, int bufSize)
