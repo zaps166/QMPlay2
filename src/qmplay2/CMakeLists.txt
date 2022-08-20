@@ -279,6 +279,14 @@ if(USE_LIBASS)
     link_directories(${LIBASS_LIBRARY_DIRS})
 endif()
 
+if(USE_RUBBERBAND)
+    add_definitions(-DQMPLAY2_RUBBERBAND)
+    pkg_check_modules(RUBBERBAND REQUIRED rubberband>=3.0.0)
+    include_directories(${RUBBERBAND_INCLUDE_DIRS})
+    link_directories(${RUBBERBAND_LIBRARY_DIRS})
+    list(APPEND LIBQMPLAY2_LIBS ${RUBBERBAND_LIBRARIES})
+endif()
+
 add_library(${PROJECT_NAME} SHARED
     ${QMPLAY2_HDR}
     ${QMPLAY2_SRC}

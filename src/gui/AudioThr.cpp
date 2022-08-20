@@ -76,7 +76,8 @@ bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate, b
     m_resamplerFirst = resamplerFirst;
 
     doSilence = -1.0;
-    lastSpeed = playC.speed;
+    m_lastKeepAudioPitch = playC.keepAudioPitch;
+    m_lastSpeed = playC.speed;
 
     realChannels    = realChn;
     realSample_rate = realSRate;
@@ -276,7 +277,7 @@ void AudioThr::run()
                 decoded = std::move(converted);
             }
 
-            delay = writer->getParam("delay").toDouble();
+            delay = writer->getParam("delay").toDouble() + sndResampler.getDelay();
             for (AudioFilter *filter : qAsConst(filters))
             {
                 if (flushAudio)
@@ -354,10 +355,12 @@ void AudioThr::run()
                 if (playC.skipAudioFrame <= 0.0 || oneFrame)
                 {
                     const double speed = playC.speed;
-                    if (speed != lastSpeed)
+                    const bool keepAudioPitch = playC.keepAudioPitch;
+                    if (speed != m_lastSpeed || keepAudioPitch != m_lastKeepAudioPitch)
                     {
+                        m_lastSpeed = speed;
+                        m_lastKeepAudioPitch = keepAudioPitch;
                         resampler_create();
-                        lastSpeed = speed;
                     }
 
                     if (!isMuted && (!qFuzzyCompare(vol[0], 1.0f) || !qFuzzyCompare(vol[1], 1.0f)))
@@ -426,10 +429,10 @@ void AudioThr::run()
 
 bool AudioThr::resampler_create()
 {
-    const double speed = playC.speed > 0.0 ? playC.speed : 1.0;
-    if (realSample_rate != sample_rate || realChannels != channels || speed != 1.0)
+    const double speed = m_lastSpeed > 0.0 ? m_lastSpeed : 1.0;
+    if (realSample_rate != sample_rate || realChannels != channels || !qFuzzyCompare(speed, 1.0))
     {
-        const bool OK = sndResampler.create(realSample_rate, realChannels, sample_rate / speed, channels);
+        const bool OK = sndResampler.create(realSample_rate, realChannels, sample_rate, channels, speed, m_lastKeepAudioPitch);
         if (!OK)
             QMPlay2Core.logError(tr("Error during initialization") + ": " + sndResampler.name());
         return OK;

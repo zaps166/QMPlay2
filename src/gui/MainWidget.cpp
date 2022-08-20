@@ -818,6 +818,8 @@ void MainWidget::toggleVisibility()
 }
 void MainWidget::createMenuBar()
 {
+    const Settings &QMPSettings = QMPlay2Core.getSettings();
+
     menuBar = QMPlay2GUI.menuBar;
 
     for (Module *module : QMPlay2Core.getPluginsInstance())
@@ -885,7 +887,6 @@ void MainWidget::createMenuBar()
     connect(menuBar->player->zoomOut, SIGNAL(triggered()), &playC, SLOT(zoomOut()));
     connect(menuBar->player->switchARatio, SIGNAL(triggered()), this, SLOT(switchARatio()));
     {
-        const Settings &QMPSettings = QMPlay2Core.getSettings();
         const QString initialAspectRatio = QMPSettings.getBool("StoreARatioAndZoom") ? QMPSettings.getString("AspectRatio") : QString();
         QAction *autoARatioAct = nullptr;
         bool aRatioTriggered = false;
@@ -921,6 +922,11 @@ void MainWidget::createMenuBar()
         connect(menuBar->player->suspend, SIGNAL(triggered(bool)), &playC, SLOT(suspendWhenFinished(bool)));
 
     connect(menuBar->playback->toggleAudio, SIGNAL(triggered(bool)), &playC, SLOT(toggleAVS(bool)));
+    if (menuBar->playback->keepAudioPitch)
+    {
+        menuBar->playback->keepAudioPitch->setChecked(QMPSettings.getBool("KeepAudioPitch"));
+        connect(menuBar->playback->keepAudioPitch, &QAction::triggered, &playC, &PlayClass::setKeepAudioPitch);
+    }
     connect(menuBar->playback->toggleVideo, SIGNAL(triggered(bool)), &playC, SLOT(toggleAVS(bool)));
     connect(menuBar->playback->toggleSubtitles, SIGNAL(triggered(bool)), &playC, SLOT(toggleAVS(bool)));
     connect(menuBar->playback->videoSync, SIGNAL(triggered()), &playC, SLOT(setVideoSync()));

@@ -56,6 +56,8 @@ PlayClass::PlayClass() :
 
     quitApp = muted = reload = videoDecErrorLoad = false;
 
+    keepAudioPitch = QMPlay2Core.getSettings().getBool("KeepAudioPitch");
+
     if (QMPlay2Core.getSettings().getBool("StoreARatioAndZoom"))
     {
         zoom = qBound(0.05, QMPlay2Core.getSettings().getDouble("Zoom", 1.0), 100.0);
@@ -415,6 +417,16 @@ void PlayClass::messageAndOSD(const QString &txt, bool onStatusBar, double durat
     }
     if (onStatusBar)
         emit QMPlay2Core.statusBarMessage(txt, duration * 1000);
+}
+
+void PlayClass::setKeepAudioPitch(bool keep)
+{
+    keepAudioPitch = keep;
+    if (keepAudioPitch)
+        messageAndOSD(tr("Keep audio pitch across playback speed"));
+    else
+        messageAndOSD(tr("Don't keep audio pitch across playback speed"));
+    QMPlay2Core.getSettings().set("KeepAudioPitch", keepAudioPitch);
 }
 
 inline bool PlayClass::hasVideoStream()

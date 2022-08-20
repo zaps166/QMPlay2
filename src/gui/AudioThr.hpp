@@ -58,7 +58,8 @@ private:
     uchar realChannels, channels;
     uint  realSample_rate, sample_rate;
     bool m_resamplerFirst;
-    double lastSpeed;
+    bool m_lastKeepAudioPitch = false;
+    double m_lastSpeed;
 
     int tmp_br;
     double tmp_time, silence_step;

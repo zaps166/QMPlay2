@@ -133,6 +133,12 @@ endif()
 option(USE_LIBASS "Build with libass support" ON)
 add_feature_info(libass USE_LIBASS "Build with libass support")
 
+if(NOT DEFINED USE_RUBBERBAND)
+    pkg_check_modules(RUBBERBAND rubberband>=3.0.0)
+endif()
+option(USE_RUBBERBAND "Build with RubberBand support" ${RUBBERBAND_FOUND})
+add_feature_info(RubberBand USE_RUBBERBAND "Build with RubberBand support")
+
 option(USE_INPUTS "Build with Inputs module" ON)
 add_feature_info(Inputs USE_INPUTS "Build with Inputs module")
 

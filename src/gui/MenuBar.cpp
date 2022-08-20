@@ -20,6 +20,7 @@
 
 #include <VideoAdjustmentW.hpp>
 #include <ShortcutHandler.hpp>
+#include <SndResampler.hpp>
 #include <DockWidget.hpp>
 #include <Functions.hpp>
 #include <Settings.hpp>
@@ -343,6 +344,11 @@ MenuBar::Playback::Playback(MenuBar *parent) :
     newAction(Playback::tr("&Enable audio"), this, toggleAudio, false, QIcon(), true)->setObjectName("toggleAudio");
     toggleAudio->setChecked(true);
 
+    if (SndResampler::canKeepPitch())
+        newAction(Playback::tr("&Keep audio pitch"), this, keepAudioPitch, false, QIcon(), true);
+    else
+        keepAudioPitch = nullptr;
+
     audioChannels = new AudioChannels(this);
     addMenu(audioChannels);
 
@@ -628,6 +634,8 @@ void MenuBar::setKeyShortcuts()
 
 
     shortcuts->appendAction(playback->toggleAudio, "KeyBindings/Playback-toggleAudio", "D");
+    if (playback->keepAudioPitch)
+        shortcuts->appendAction(playback->keepAudioPitch, "KeyBindings/Playback-keepAudioPitch", "P");
     shortcuts->appendAction(playback->toggleVideo, "KeyBindings/Playback-toggleVideo", "O");
     shortcuts->appendAction(playback->videoSync, "KeyBindings/Playback-videoSync", "Shift+O");
     shortcuts->appendAction(playback->slowDownVideo, "KeyBindings/Playback-slowDownVideo", "-");

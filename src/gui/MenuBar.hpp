@@ -140,7 +140,7 @@ public:
 
         AudioChannels *audioChannels;
         VideoFilters *videoFilters;
-        QAction *toggleAudio, *toggleVideo, *videoSync, *slowDownVideo, *speedUpVideo, *toggleSubtitles, *subsFromFile, *subtitlesSync, *slowDownSubtitles, *speedUpSubtitles, *biggerSubtitles, *smallerSubtitles, *screenShot;
+        QAction *toggleAudio, *keepAudioPitch, *toggleVideo, *videoSync, *slowDownVideo, *speedUpVideo, *toggleSubtitles, *subsFromFile, *subtitlesSync, *slowDownSubtitles, *speedUpSubtitles, *biggerSubtitles, *smallerSubtitles, *screenShot;
         Streams *audioStreams, *videoStreams, *subtitlesStreams, *chapters, *programs;
     };
 
