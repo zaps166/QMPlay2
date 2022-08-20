@@ -1258,7 +1258,7 @@ bool Window::mustGenerateMipmaps()
     if (!m_hqScaleDown || m_sphericalView)
         return false;
 
-    return (m_scaledSize.width() < m_imgSize.width() / 2.0 || m_scaledSize.height() < m_imgSize.height() / 2.0);
+    return (m_scaledSize.width() / m_imgSize.width() < 0.75 || m_scaledSize.height() / m_imgSize.height() < 0.75);
 }
 
 bool Window::ensureSupportedSampledImage(bool mustGenerateMipmaps)
