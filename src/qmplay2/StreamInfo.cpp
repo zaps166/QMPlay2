@@ -60,32 +60,36 @@ QString StreamInfo::getTagName(const QString &tag)
 
 StreamInfo::StreamInfo()
 {
-    memset(static_cast<AVCodecParameters *>(this), 0, sizeof(AVCodecParameters));
-    format = -1;
+    params = avcodec_parameters_alloc();
+    params->format = -1;
     resetSAR();
 }
 StreamInfo::StreamInfo(AVCodecParameters *codecpar)
     : StreamInfo()
 {
-    avcodec_parameters_copy(static_cast<AVCodecParameters *>(this), codecpar);
+    avcodec_parameters_copy(params, codecpar);
 
-    if (const AVCodec *codec = avcodec_find_decoder(codec_id))
+    if (const AVCodec *codec = avcodec_find_decoder(params->codec_id))
         codec_name = codec->name;
 
-    if (sample_aspect_ratio.num == 0)
+    if (params->sample_aspect_ratio.num == 0)
         resetSAR();
 }
 StreamInfo::StreamInfo(quint32 sampleRateArg, quint8 channelsArg)
     : StreamInfo()
 {
-    codec_type = AVMEDIA_TYPE_AUDIO;
-    sample_rate = sampleRateArg;
-    channels = channelsArg;
+    params->codec_type = AVMEDIA_TYPE_AUDIO;
+    params->sample_rate = sampleRateArg;
+    params->channels = channelsArg;
+}
+StreamInfo::~StreamInfo()
+{
+    avcodec_parameters_free(&params);
 }
 
 QByteArray StreamInfo::getFormatName() const
 {
-    switch (codec_type)
+    switch (params->codec_type)
     {
         case AVMEDIA_TYPE_AUDIO:
             return av_get_sample_fmt_name(sampleFormat());
@@ -98,10 +102,10 @@ QByteArray StreamInfo::getFormatName() const
 }
 void StreamInfo::setFormat(int newFormat)
 {
-    format = newFormat;
+    params->format = newFormat;
 }
 
 inline void StreamInfo::resetSAR()
 {
-    sample_aspect_ratio.num = sample_aspect_ratio.den = 1;
+    params->sample_aspect_ratio.num = params->sample_aspect_ratio.den = 1;
 }

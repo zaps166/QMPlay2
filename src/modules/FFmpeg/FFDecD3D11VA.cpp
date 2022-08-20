@@ -176,7 +176,7 @@ int FFDecD3D11VA::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPix
 
 bool FFDecD3D11VA::open(StreamInfo &streamInfo)
 {
-    if (streamInfo.codec_type != AVMEDIA_TYPE_VIDEO)
+    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO)
         return false;
 
     const auto pixFmt = streamInfo.pixelFormat();

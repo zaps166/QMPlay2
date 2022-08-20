@@ -124,7 +124,7 @@ void FFDecDXVA2::downloadVideoFrame(Frame &decoded)
 
 bool FFDecDXVA2::open(StreamInfo &streamInfo)
 {
-    if (streamInfo.codec_type != AVMEDIA_TYPE_VIDEO)
+    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO)
         return false;
 
     m_pixFmt = Frame::convert3PlaneTo2Plane(streamInfo.pixelFormat());

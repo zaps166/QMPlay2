@@ -812,7 +812,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
     isOneStreamOgg = (name() == "ogg" && streamsInfo.count() == 1); //Workaround for OGG network streams
 
-    if (isStreamed && streamsInfo.count() == 1 && streamsInfo.at(0)->codec_type == AVMEDIA_TYPE_SUBTITLE && formatCtx->pb && avio_size(formatCtx->pb) > 0)
+    if (isStreamed && streamsInfo.count() == 1 && streamsInfo.at(0)->params->codec_type == AVMEDIA_TYPE_SUBTITLE && formatCtx->pb && avio_size(formatCtx->pb) > 0)
         isStreamed = false; //Allow subtitles streams to be non-streamed if size is known
 
     formatCtx->event_flags = 0;
@@ -846,7 +846,7 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
     StreamInfo *streamInfo = new StreamInfo(stream->codecpar);
 
     streamInfo->must_decode = true;
-    if (const AVCodecDescriptor *codecDescr = avcodec_descriptor_get(streamInfo->codec_id))
+    if (const AVCodecDescriptor *codecDescr = avcodec_descriptor_get(streamInfo->params->codec_id))
     {
         if (codecDescr->props & AV_CODEC_PROP_TEXT_SUB)
             streamInfo->must_decode = false;
@@ -854,7 +854,7 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
         if (streamInfo->codec_name.isEmpty())
             streamInfo->codec_name = codecDescr->name;
     }
-    else if (streamInfo->codec_type == AVMEDIA_TYPE_SUBTITLE)
+    else if (streamInfo->params->codec_type == AVMEDIA_TYPE_SUBTITLE)
     {
         streamInfo->must_decode = false;
     }
@@ -862,7 +862,7 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
     streamInfo->is_default = stream->disposition & AV_DISPOSITION_DEFAULT;
     streamInfo->time_base = stream->time_base;
 
-    if (streamInfo->codec_type != AVMEDIA_TYPE_ATTACHMENT)
+    if (streamInfo->params->codec_type != AVMEDIA_TYPE_ATTACHMENT)
     {
         QString value;
         if (streamsInfo.count() > 1)
@@ -882,12 +882,12 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
             streamInfo->other_info += {QString::number(QMPLAY2_TAG_LANGUAGE), value};
     }
 
-    switch (streamInfo->codec_type)
+    switch (streamInfo->params->codec_type)
     {
         case AVMEDIA_TYPE_VIDEO:
         {
             if (stream->sample_aspect_ratio.num)
-                streamInfo->sample_aspect_ratio = stream->sample_aspect_ratio;
+                streamInfo->params->sample_aspect_ratio = stream->sample_aspect_ratio;
 
             if (!stillImage)
                 streamInfo->fps = stream->r_frame_rate;
@@ -923,7 +923,7 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
         case AVMEDIA_TYPE_ATTACHMENT:
         {
             streamInfo->title = getTag(stream->metadata, "filename", false);
-            switch (streamInfo->codec_id)
+            switch (streamInfo->params->codec_id)
             {
                 case AV_CODEC_ID_TTF:
                     streamInfo->codec_name = "TTF";

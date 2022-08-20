@@ -169,7 +169,7 @@ void FFDecVAAPI::downloadVideoFrame(Frame &decoded)
 
 bool FFDecVAAPI::open(StreamInfo &streamInfo)
 {
-    if (streamInfo.codec_type != AVMEDIA_TYPE_VIDEO)
+    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO)
         return false;
 
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();

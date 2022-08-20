@@ -441,8 +441,8 @@ bool FFDecSW::open(StreamInfo &streamInfo)
     m_timeBase = streamInfo.time_base;
     if (codec_ctx->codec_type == AVMEDIA_TYPE_VIDEO && codec_ctx->lowres)
     {
-        streamInfo.width = codec_ctx->width;
-        streamInfo.height = codec_ctx->height;
+        streamInfo.params->width = codec_ctx->width;
+        streamInfo.params->height = codec_ctx->height;
     }
     return true;
 }

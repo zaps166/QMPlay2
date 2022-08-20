@@ -368,7 +368,7 @@ void DemuxerThr::run()
             filter << "*." + ext;
         for (StreamInfo *streamInfo : demuxer->streamsInfo())
         {
-            if (streamInfo->codec_type == AVMEDIA_TYPE_VIDEO) //napisów szukam tylko wtedy, jeżeli jest strumień wideo
+            if (streamInfo->params->codec_type == AVMEDIA_TYPE_VIDEO) //napisów szukam tylko wtedy, jeżeli jest strumień wideo
             {
                 const QString directory = Functions::filePath(url.mid(7));
                 const QString fName = Functions::fileName(url, false).replace('_', ' ');
@@ -931,7 +931,7 @@ void DemuxerThr::emitInfo()
     int videoStreamCount = 0, audioStreamCount = 0, subtitlesStreamCount = 0, i = 0;
     for (StreamInfo *streamInfo : streamsInfo)
     {
-        switch (streamInfo->codec_type)
+        switch (streamInfo->params->codec_type)
         {
             case AVMEDIA_TYPE_VIDEO:
             {
@@ -956,13 +956,13 @@ void DemuxerThr::emitInfo()
                     videoStreams += "<li><b>" + tr("title") + ":</b> " + streamInfo->title + "</li>";
                 if (!streamInfo->codec_name.isEmpty())
                     videoStreams += "<li><b>" + tr("codec") + ":</b> " + streamInfo->codec_name + "</li>";
-                videoStreams += "<li><b>" + tr("size") + ":</b> " + QString::number(streamInfo->width) + "x" + QString::number(streamInfo->height) + "</li>";
+                videoStreams += "<li><b>" + tr("size") + ":</b> " + QString::number(streamInfo->params->width) + "x" + QString::number(streamInfo->params->height) + "</li>";
                 videoStreams += "<li><b>" + tr("aspect ratio") + ":</b> " + QString::number(streamInfo->getAspectRatio()) + "</li>";
                 const double FPS = streamInfo->getFPS();
                 if (FPS)
                     videoStreams += "<li><b>" + tr("FPS") + ":</b> " + QString::number(FPS) + "</li>";
-                if (streamInfo->bit_rate)
-                    videoStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->bit_rate / 1000) + "kbps</li>";
+                if (streamInfo->params->bit_rate)
+                    videoStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->params->bit_rate / 1000) + "kbps</li>";
                 const auto formatName = streamInfo->getFormatName();
                 if (!formatName.isEmpty())
                     videoStreams += "<li><b>" + tr("format") + ":</b> " + formatName + "</li>";
@@ -1000,19 +1000,19 @@ void DemuxerThr::emitInfo()
                     audioStreams += "<li><b>" + tr("artist") + ":</b> " + streamInfo->artist + "</li>";
                 if (!streamInfo->codec_name.isEmpty())
                     audioStreams += "<li><b>" + tr("codec") + ":</b> " + streamInfo->codec_name + "</li>";
-                audioStreams += "<li><b>" + tr("sample rate") + ":</b> " + QString::number(streamInfo->sample_rate) + "Hz</li>";
+                audioStreams += "<li><b>" + tr("sample rate") + ":</b> " + QString::number(streamInfo->params->sample_rate) + "Hz</li>";
 
                 QString channels;
-                if (streamInfo->channels == 1)
+                if (streamInfo->params->channels == 1)
                     channels = tr("mono");
-                else if (streamInfo->channels == 2)
+                else if (streamInfo->params->channels == 2)
                     channels = tr("stereo");
                 else
-                    channels = QString::number(streamInfo->channels);
+                    channels = QString::number(streamInfo->params->channels);
                 audioStreams += "<li><b>" + tr("channels") + ":</b> " + channels + "</li>";
 
-                if (streamInfo->bit_rate)
-                    audioStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->bit_rate / 1000) + "kbps</li>";
+                if (streamInfo->params->bit_rate)
+                    audioStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->params->bit_rate / 1000) + "kbps</li>";
                 const auto formatName = streamInfo->getFormatName();
                 if (!formatName.isEmpty())
                     audioStreams += "<li><b>" + tr("format") + ":</b> " + formatName + "</li>";
@@ -1032,7 +1032,7 @@ void DemuxerThr::emitInfo()
             case AVMEDIA_TYPE_ATTACHMENT:
             {
                 attachmentStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'>";
-                attachmentStreams += "<li><b>" + streamInfo->title + "</b> - " + Functions::sizeString(streamInfo->extradata_size) + "</li>";
+                attachmentStreams += "<li><b>" + streamInfo->title + "</b> - " + Functions::sizeString(streamInfo->params->extradata_size) + "</li>";
                 attachmentStreams += "</ul>";
             } break;
             default:

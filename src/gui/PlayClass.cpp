@@ -449,12 +449,12 @@ double PlayClass::getARatio()
     if (aRatioName == "auto")
         return demuxThr->demuxer->streamsInfo().at(videoStream)->getAspectRatio();
     if (aRatioName == "sizeDep")
-        return (double)demuxThr->demuxer->streamsInfo().at(videoStream)->width / (double)demuxThr->demuxer->streamsInfo().at(videoStream)->height;
+        return (double)demuxThr->demuxer->streamsInfo().at(videoStream)->params->width / (double)demuxThr->demuxer->streamsInfo().at(videoStream)->params->height;
     return aRatioName.toDouble();
 }
 inline AVRational PlayClass::getSAR()
 {
-    return demuxThr->demuxer->streamsInfo().at(videoStream)->sample_aspect_ratio;
+    return demuxThr->demuxer->streamsInfo().at(videoStream)->params->sample_aspect_ratio;
 }
 
 void PlayClass::flushAssEvents()
@@ -633,7 +633,7 @@ void PlayClass::loadAssFonts(const QList<StreamInfo *> &streams)
 {
     for (auto &&stream : streams)
     {
-        if (stream->codec_type == AVMEDIA_TYPE_ATTACHMENT && (stream->codec_name == "TTF" || stream->codec_name == "OTF") && stream->extradata_size > 0)
+        if (stream->params->codec_type == AVMEDIA_TYPE_ATTACHMENT && (stream->codec_name == "TTF" || stream->codec_name == "OTF") && stream->params->extradata_size > 0)
             ass->addFont(stream->title, stream->getExtraData());
     }
 }
@@ -1074,8 +1074,8 @@ void PlayClass::frameSizeUpdated(int w, int h) //jeżeli rozmiar obrazu zmieni s
     if (hasVideoStream())
     {
         StreamInfo *streamInfo = demuxThr->demuxer->streamsInfo().at(videoStream);
-        streamInfo->width = w;
-        streamInfo->height = h;
+        streamInfo->params->width = w;
+        streamInfo->params->height = h;
         const double aspect_ratio = getARatio();
         if (ass)
             ass->setARatio(aspect_ratio);
@@ -1094,7 +1094,7 @@ void PlayClass::aRatioUpdated(const AVRational &sar) //jeżeli współczynnik pr
 {
     if (hasVideoStream())
     {
-        demuxThr->demuxer->streamsInfo().at(videoStream)->sample_aspect_ratio = sar;
+        demuxThr->demuxer->streamsInfo().at(videoStream)->params->sample_aspect_ratio = sar;
         const double aspect_ratio = getARatio();
         if (ass)
             ass->setARatio(aspect_ratio);
@@ -1120,8 +1120,8 @@ void PlayClass::audioParamsUpdated(quint8 channels, quint32 sampleRate)
     if (hasAudioStream())
     {
         StreamInfo *streamInfo = demuxThr->demuxer->streamsInfo().at(audioStream);
-        streamInfo->sample_rate = sampleRate;
-        streamInfo->channels = channels;
+        streamInfo->params->sample_rate = sampleRate;
+        streamInfo->params->channels = channels;
         demuxThr->emitInfo();
     }
     if (aThr)
@@ -1251,7 +1251,7 @@ static Decoder *loadStream(
 
     Decoder *dec = nullptr;
     const bool subtitles = (type == AVMEDIA_TYPE_SUBTITLE);
-    if (chosenStream >= 0 && chosenStream < streams.count() && streams[chosenStream]->codec_type == type)
+    if (chosenStream >= 0 && chosenStream < streams.count() && streams[chosenStream]->params->codec_type == type)
     {
         if (streams[chosenStream]->must_decode || !subtitles)
             dec = Decoder::create(*streams[chosenStream], decoders, modNameOutput);
@@ -1263,7 +1263,7 @@ static Decoder *loadStream(
         int defaultStream = -1, chosenLangStream = -1;
         for (int i = 0; i < streams.count(); ++i)
         {
-            if (streams[i]->codec_type == type)
+            if (streams[i]->params->codec_type == type)
             {
                 if (defaultStream < 0 && streams[i]->is_default)
                     defaultStream = i;
@@ -1286,7 +1286,7 @@ static Decoder *loadStream(
         for (int i = 0; i < streams.count(); ++i)
         {
             StreamInfo &streamInfo = *streams[i];
-            if (streamInfo.codec_type == type && (defaultStream == -1 || i == defaultStream))
+            if (streamInfo.params->codec_type == type && (defaultStream == -1 || i == defaultStream))
             {
                 if (streamInfo.must_decode || !subtitles)
                     dec = Decoder::create(streamInfo, decoders, modNameOutput);
@@ -1357,7 +1357,7 @@ void PlayClass::load(Demuxer *demuxer)
 
                 vThr->setDec(dec);
 
-                vThr->setFrameSize(streams[videoStream]->width, streams[videoStream]->height);
+                vThr->setFrameSize(streams[videoStream]->params->width, streams[videoStream]->params->height);
                 vThr->setARatio(aspect_ratio, getSAR());
                 vThr->setVideoAdjustment();
                 vThr->setZoom();
@@ -1439,7 +1439,7 @@ void PlayClass::load(Demuxer *demuxer)
             {
                 aThr->setDec(dec);
 
-                if (!setAudioParams(streams[audioStream]->channels, streams[audioStream]->sample_rate))
+                if (!setAudioParams(streams[audioStream]->params->channels, streams[audioStream]->params->sample_rate))
                     dec = nullptr;
 
                 else if (reload)

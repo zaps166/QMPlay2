@@ -64,32 +64,32 @@ MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsIn
 
         stream->time_base = streamInfo->time_base;
 
-        stream->codecpar->codec_type = streamInfo->codec_type;
+        stream->codecpar->codec_type = streamInfo->params->codec_type;
         stream->codecpar->codec_id = codec->id;
 
-        if (streamInfo->extradata_size > 0)
+        if (streamInfo->params->extradata_size > 0)
         {
             stream->codecpar->extradata = (uint8_t *)av_mallocz(streamInfo->getExtraDataCapacity());
-            stream->codecpar->extradata_size = streamInfo->extradata_size;
-            memcpy(stream->codecpar->extradata, streamInfo->extradata, stream->codecpar->extradata_size);
+            stream->codecpar->extradata_size = streamInfo->params->extradata_size;
+            memcpy(stream->codecpar->extradata, streamInfo->params->extradata, stream->codecpar->extradata_size);
         }
 
-        switch (streamInfo->codec_type)
+        switch (streamInfo->params->codec_type)
         {
             case AVMEDIA_TYPE_VIDEO:
-                stream->codecpar->width = streamInfo->width;
-                stream->codecpar->height = streamInfo->height;
-                stream->codecpar->format = streamInfo->format;
-                stream->codecpar->sample_aspect_ratio = streamInfo->sample_aspect_ratio;
+                stream->codecpar->width = streamInfo->params->width;
+                stream->codecpar->height = streamInfo->params->height;
+                stream->codecpar->format = streamInfo->params->format;
+                stream->codecpar->sample_aspect_ratio = streamInfo->params->sample_aspect_ratio;
                 stream->avg_frame_rate = streamInfo->fps;
                 if (streamInfo->is_default)
                     stream->disposition |= AV_DISPOSITION_DEFAULT;
                 break;
             case AVMEDIA_TYPE_AUDIO:
-                stream->codecpar->channels = streamInfo->channels;
-                stream->codecpar->sample_rate = streamInfo->sample_rate;
-                stream->codecpar->block_align = streamInfo->block_align;
-                stream->codecpar->format = streamInfo->format;
+                stream->codecpar->channels = streamInfo->params->channels;
+                stream->codecpar->sample_rate = streamInfo->params->sample_rate;
+                stream->codecpar->block_align = streamInfo->params->block_align;
+                stream->codecpar->format = streamInfo->params->format;
                 break;
             default:
                 break;

@@ -428,7 +428,7 @@ bool CuvidDec::hasCriticalError() const
 
 bool CuvidDec::open(StreamInfo &streamInfo)
 {
-    if (streamInfo.codec_type != AVMEDIA_TYPE_VIDEO)
+    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO)
         return false;
 
     auto avCodec = const_cast<AVCodec *>(avcodec_find_decoder_by_name(streamInfo.codec_name));
@@ -514,9 +514,9 @@ bool CuvidDec::open(StreamInfo &streamInfo)
         av_bsf_alloc(bsf, &m_bsfCtx);
 
         m_bsfCtx->par_in->codec_id = avCodec->id;
-        m_bsfCtx->par_in->extradata_size = streamInfo.extradata_size;
+        m_bsfCtx->par_in->extradata_size = streamInfo.params->extradata_size;
         m_bsfCtx->par_in->extradata = (uint8_t *)av_mallocz(streamInfo.getExtraDataCapacity());
-        memcpy(m_bsfCtx->par_in->extradata, streamInfo.extradata, m_bsfCtx->par_in->extradata_size);
+        memcpy(m_bsfCtx->par_in->extradata, streamInfo.params->extradata, m_bsfCtx->par_in->extradata_size);
 
         if (av_bsf_init(m_bsfCtx) < 0)
             return false;
@@ -526,8 +526,8 @@ bool CuvidDec::open(StreamInfo &streamInfo)
         m_pkt = av_packet_alloc();
     }
 
-    m_width = streamInfo.width;
-    m_height = streamInfo.height;
+    m_width = streamInfo.params->width;
+    m_height = streamInfo.params->height;
     m_codedHeight = m_height;
 
 #if defined(USE_OPENGL) || defined(USE_VULKAN)
@@ -568,8 +568,8 @@ bool CuvidDec::open(StreamInfo &streamInfo)
     if (err)
         return false;
 
-    m_limited = (streamInfo.color_range != AVCOL_RANGE_JPEG);
-    m_colorSpace = streamInfo.color_space;
+    m_limited = (streamInfo.params->color_range != AVCOL_RANGE_JPEG);
+    m_colorSpace = streamInfo.params->color_space;
 
     if (!m_cuvidHwInterop)
     {

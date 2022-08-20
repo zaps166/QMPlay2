@@ -46,9 +46,10 @@ enum QMPlay2Tags
     QMPLAY2_TAG_LYRICS,
 };
 
-class QMPLAY2SHAREDLIB_EXPORT StreamInfo : public AVCodecParameters
+class QMPLAY2SHAREDLIB_EXPORT StreamInfo
 {
     Q_DECLARE_TR_FUNCTIONS(StreamInfo)
+    Q_DISABLE_COPY_MOVE(StreamInfo)
 
 public:
     static QMPlay2Tags getTag(const QString &tag);
@@ -57,15 +58,16 @@ public:
     StreamInfo();
     StreamInfo(AVCodecParameters *codecpar);
     StreamInfo(quint32 sampleRateArg, quint8 channelsArg);
+    ~StreamInfo();
 
     inline double getSampleAspectRatio() const
     {
-        return av_q2d(sample_aspect_ratio);
+        return av_q2d(params->sample_aspect_ratio);
     }
 
     inline double getAspectRatio() const
     {
-        return getSampleAspectRatio() * width / height;
+        return getSampleAspectRatio() * params->width / params->height;
     }
 
     inline double getFPS() const
@@ -75,20 +77,20 @@ public:
 
     inline int getExtraDataCapacity() const
     {
-        return extradata_size + AV_INPUT_BUFFER_PADDING_SIZE;
+        return params->extradata_size + AV_INPUT_BUFFER_PADDING_SIZE;
     }
     inline const QByteArray getExtraData() const
     {
-        return QByteArray::fromRawData((const char *)extradata, extradata_size);
+        return QByteArray::fromRawData((const char *)params->extradata, params->extradata_size);
     }
 
     inline AVPixelFormat pixelFormat() const
     {
-        return static_cast<AVPixelFormat>(format);
+        return static_cast<AVPixelFormat>(params->format);
     }
     inline AVSampleFormat sampleFormat() const
     {
-        return static_cast<AVSampleFormat>(format);
+        return static_cast<AVSampleFormat>(params->format);
     }
 
     QByteArray getFormatName() const;
@@ -104,6 +106,8 @@ public:
     AVRational fps = {0, 1};
     double rotation = qQNaN();
     bool spherical = false;
+
+    AVCodecParameters *params = nullptr;
 
 private:
     inline void resetSAR();
