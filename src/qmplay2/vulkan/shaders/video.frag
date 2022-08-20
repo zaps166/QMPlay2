@@ -61,44 +61,56 @@ vec3 getBilinear(in vec2 pos)
     return vec3(0.0, 0.0, 0.0);
 }
 
-// Bicubic filter is not written by me
-vec4 cubic(in float v)
+// Bicubic filter is not written by me (https://www.shadertoy.com/view/MtVGWz)
+vec3 getBicubic(in vec2 uv) // CatmullRom
 {
-    vec4 n = vec4(1.0, 2.0, 3.0, 4.0) - v;
-    vec4 s = n * n * n;
-    float x = s.x;
-    float y = s.y - 4.0 * s.x;
-    float z = s.z - 4.0 * s.y + 6.0 * s.x;
-    float w = 6.0 - x - y - z;
-    return vec4(x, y, z, w) * (1.0 / 6.0);
-}
-vec3 getBicubic(in vec2 inPos)
-{
-    vec2 size = textureSize(inputImages[0], 0);
-    vec2 invSize = 1.0 / size;
+    vec2 texSize = textureSize(inputImages[0], 0);
 
-    vec2 pos = (inPos * size) - 0.5;
+    // We're going to sample a a 4x4 grid of texels surrounding the target UV coordinate. We'll do this by rounding
+    // down the sample location to get the exact center of our "starting" texel. The starting texel will be at
+    // location [1, 1] in the grid, where [0, 0] is the top left corner.
+    vec2 samplePos = uv * texSize;
+    vec2 texPos1 = floor(samplePos - 0.5) + 0.5;
 
-    vec2 fxy = fract(pos);
-    pos -= fxy;
+    // Compute the fractional offset from our starting texel to our original sample location, which we'll
+    // feed into the Catmull-Rom spline function to get our filter weights.
+    vec2 f = samplePos - texPos1;
 
-    vec4 xcubic = cubic(fxy.x);
-    vec4 ycubic = cubic(fxy.y);
+    // Compute the Catmull-Rom weights using the fractional offset that we calculated earlier.
+    // These equations are pre-expanded based on our knowledge of where the texels will be located,
+    // which lets us avoid having to evaluate a piece-wise function.
+    vec2 w0 = f * (-0.5 + f * (1.0 - 0.5 * f));
+    vec2 w1 = 1.0 + f * f * (-2.5 + 1.5 * f);
+    vec2 w2 = f * (0.5 + f * (2.0 - 1.5 * f));
+    vec2 w3 = f * f * (-0.5 + 0.5 * f);
 
-    vec4 c = pos.xxyy + vec2(-0.5, +1.5).xyxy;
+    // Work out weighting factors and sampling offsets that will let us use bilinear filtering to
+    // simultaneously evaluate the middle 2 samples from the 4x4 grid.
+    vec2 w12 = w1 + w2;
+    vec2 offset12 = w2 / w12;
 
-    vec4 s = vec4(xcubic.xz + xcubic.yw, ycubic.xz + ycubic.yw);
-    vec4 o = (c + vec4 (xcubic.yw, ycubic.yw) / s) * invSize.xxyy;
+    // Compute the final UV coordinates we'll use for sampling the texture
+    vec2 texPos0 = texPos1 - vec2(1.0);
+    vec2 texPos3 = texPos1 + vec2(2.0);
+    vec2 texPos12 = texPos1 + offset12;
 
-    vec3 sample0 = getBilinear(o.xz);
-    vec3 sample1 = getBilinear(o.yz);
-    vec3 sample2 = getBilinear(o.xw);
-    vec3 sample3 = getBilinear(o.yw);
+    texPos0 /= texSize;
+    texPos3 /= texSize;
+    texPos12 /= texSize;
 
-    float sx = s.x / (s.x + s.y);
-    float sy = s.z / (s.z + s.w);
+    return
+        getBilinear(vec2(texPos0.x,  texPos0.y)) * w0.x  * w0.y +
+        getBilinear(vec2(texPos12.x, texPos0.y)) * w12.x * w0.y +
+        getBilinear(vec2(texPos3.x,  texPos0.y)) * w3.x  * w0.y +
 
-    return mix(mix(sample3, sample2, sx), mix(sample1, sample0, sx), sy);
+        getBilinear(vec2(texPos0.x,  texPos12.y)) * w0.x  * w12.y +
+        getBilinear(vec2(texPos12.x, texPos12.y)) * w12.x * w12.y +
+        getBilinear(vec2(texPos3.x,  texPos12.y)) * w3.x  * w12.y +
+
+        getBilinear(vec2(texPos0.x,  texPos3.y)) * w0.x  * w3.y +
+        getBilinear(vec2(texPos12.x, texPos3.y)) * w12.x * w3.y +
+        getBilinear(vec2(texPos3.x,  texPos3.y)) * w3.x  * w3.y
+    ;
 }
 
 // HSV <-> RGB converter is not written by me
