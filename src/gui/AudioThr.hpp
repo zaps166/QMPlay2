@@ -49,7 +49,7 @@ public:
 private:
     void run() override;
 
-    bool resampler_create();
+    bool createResampler(bool cleanBuffers);
 
     inline uchar currentChannels() const;
     inline uint currentSampleRate() const;

@@ -103,7 +103,7 @@ bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate, b
             }
         }
 
-        if (!resampler_create())
+        if (!createResampler(true))
         {
             if (paramsCorrected)
                 return false;
@@ -185,13 +185,25 @@ void AudioThr::run()
             playC.aPackets.lock();
             const bool hasAPackets = playC.aPackets.canFetch();
             bool hasBufferedSamples = false;
+            bool hasBufferedSamplesInResampler = false;
             if (playC.endOfStream && !hasAPackets)
+            {
                 for (AudioFilter *filter : qAsConst(filters))
+                {
                     if (filter->bufferedSamples())
                     {
                         hasBufferedSamples = true;
                         break;
                     }
+                }
+
+                hasBufferedSamplesInResampler = sndResampler.hasBufferedSamples();
+
+                if (!hasBufferedSamples)
+                {
+                    hasBufferedSamples = hasBufferedSamplesInResampler;
+                }
+            }
 
             if ((playC.paused && !oneFrame) || (!hasAPackets && !hasBufferedSamples) || playC.waitForData || (playC.audioSeekPos <= 0.0 && playC.videoSeekPos > 0.0))
             {
@@ -273,7 +285,7 @@ void AudioThr::run()
             if (m_resamplerFirst && sndResampler.isOpen())
             {
                 QByteArray converted;
-                sndResampler.convert(decoded, converted);
+                sndResampler.convert(decoded, converted, hasBufferedSamples);
                 decoded = std::move(converted);
             }
 
@@ -289,7 +301,7 @@ void AudioThr::run()
                 playC.flushAudio = false;
             int decodedSize = decoded.size();
             int decodedPos = 0;
-            while (decodedSize > 0 && (!playC.paused || oneFrame) && !br && !br2)
+            while ((decodedSize > 0 || hasBufferedSamplesInResampler) && (!playC.paused || oneFrame) && !br && !br2)
             {
                 const double max_len = 0.02; //TODO: zrobić opcje?
                 const int chunk = qMin(decodedSize, (int)(ceil(currentSampleRate() * max_len) * currentChannels() * sizeof(float)));
@@ -360,7 +372,7 @@ void AudioThr::run()
                     {
                         m_lastSpeed = speed;
                         m_lastKeepAudioPitch = keepAudioPitch;
-                        resampler_create();
+                        createResampler(false);
                     }
 
                     if (!isMuted && (!qFuzzyCompare(vol[0], 1.0f) || !qFuzzyCompare(vol[1], 1.0f)))
@@ -376,7 +388,7 @@ void AudioThr::run()
 
                     QByteArray dataToWrite;
                     if (!m_resamplerFirst && sndResampler.isOpen())
-                        sndResampler.convert(decodedChunk, dataToWrite);
+                        sndResampler.convert(decodedChunk, dataToWrite, hasBufferedSamples);
                     else
                         dataToWrite = decodedChunk;
 
@@ -419,6 +431,8 @@ void AudioThr::run()
                 {
                     playC.skipAudioFrame -= playC.audio_last_delay;
                 }
+
+                hasBufferedSamplesInResampler = false;
             }
 
             mutex.unlock();
@@ -427,11 +441,14 @@ void AudioThr::run()
     writer->modParam("drain", allowAudioDrain);
 }
 
-bool AudioThr::resampler_create()
+bool AudioThr::createResampler(bool cleanBuffers)
 {
     const double speed = m_lastSpeed > 0.0 ? m_lastSpeed : 1.0;
     if (realSample_rate != sample_rate || realChannels != channels || !qFuzzyCompare(speed, 1.0))
     {
+        if (cleanBuffers)
+            sndResampler.cleanBuffers();
+
         const bool OK = sndResampler.create(realSample_rate, realChannels, sample_rate, channels, speed, m_lastKeepAudioPitch);
         if (!OK)
             QMPlay2Core.logError(tr("Error during initialization") + ": " + sndResampler.name());

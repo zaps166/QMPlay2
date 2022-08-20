@@ -48,10 +48,12 @@ public:
     }
 
     bool create(int srcSamplerate, int srcChannels, int dstSamplerate, int dstChannels, double speed, bool keepPitch);
-    void convert(const QByteArray &src, QByteArray &dst);
+    void convert(const QByteArray &src, QByteArray &dst, bool flush);
+    void cleanBuffers();
     void destroy();
 
     double getDelay() const;
+    bool hasBufferedSamples() const;
 
 private:
     SwrContext *m_sndConvertCtx = nullptr;
