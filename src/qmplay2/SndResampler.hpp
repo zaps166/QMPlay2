@@ -58,6 +58,7 @@ public:
 private:
     SwrContext *m_sndConvertCtx = nullptr;
     std::unique_ptr<RubberBand::RubberBandStretcher> m_rubberBandStretcher;
+    bool m_keepPitch = false;
     int m_srcSamplerate = 0;
     int m_srcChannels = 0;
     int m_dstSamplerate = 0;

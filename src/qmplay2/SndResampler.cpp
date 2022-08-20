@@ -68,15 +68,17 @@ const char *SndResampler::name() const
 
 bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate, int dstChannels, double speed, bool keepPitch)
 {
+    m_keepPitch = keepPitch;
+
 #ifdef QMPLAY2_RUBBERBAND
-    if (keepPitch && qFuzzyCompare(speed, 1.0))
+    if (m_keepPitch && qFuzzyCompare(speed, 1.0))
 #endif
     {
-        keepPitch = false;
+        m_keepPitch = false;
     }
 
 #ifdef QMPLAY2_RUBBERBAND
-    if (!keepPitch || m_dstSamplerate != dstSamplerate || m_dstChannels != dstChannels)
+    if (!m_keepPitch || m_dstSamplerate != dstSamplerate || m_dstChannels != dstChannels)
         m_rubberBandStretcher.reset();
 #endif
 
@@ -86,7 +88,7 @@ bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate,
     m_dstChannels = dstChannels;
     m_speed = speed;
 
-    if (!keepPitch)
+    if (!m_keepPitch)
     {
         m_dstSamplerate /= speed;
     }
@@ -99,7 +101,7 @@ bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate,
     m_sndConvertCtx = swr_alloc_set_opts(
         m_sndConvertCtx,
         dstChnLayout,
-        keepPitch ? AV_SAMPLE_FMT_FLTP : AV_SAMPLE_FMT_FLT,
+        m_keepPitch ? AV_SAMPLE_FMT_FLTP : AV_SAMPLE_FMT_FLT,
         m_dstSamplerate,
         srcChnLayout,
         AV_SAMPLE_FMT_FLT,
@@ -132,9 +134,21 @@ bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate,
         return false;
     }
 
-#ifdef QMPLAY2_RUBBERBAND
-    if (keepPitch)
+    return true;
+}
+void SndResampler::convert(const QByteArray &src, QByteArray &dst, bool flush)
+{
+    const int inSize = src.size() / m_srcChannels / sizeof(float);
+    const int possibleSwrSize = ceil(inSize * (double)m_dstSamplerate / (double)m_srcSamplerate);
+
+#ifndef QMPLAY2_RUBBERBAND
+    Q_UNUSED(flush)
+#else
+    if (m_keepPitch)
     {
+        vector<QByteArray> tmpQ(m_dstChannels);
+        quint8 *tmp[m_dstChannels];
+
         if (!m_rubberBandStretcher)
         {
             RubberBandStretcher::Options options = RubberBandStretcher::OptionProcessRealTime | RubberBandStretcher::OptionChannelsTogether;
@@ -151,24 +165,10 @@ bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate,
                 options
             );
         }
-        m_rubberBandStretcher->setTimeRatio(1.0 / m_speed);
-    }
-#endif
 
-    return true;
-}
-void SndResampler::convert(const QByteArray &src, QByteArray &dst, bool flush)
-{
-    const int inSize = src.size() / m_srcChannels / sizeof(float);
-    const int possibleSwrSize = ceil(inSize * (double)m_dstSamplerate / (double)m_srcSamplerate);
-
-#ifndef QMPLAY2_RUBBERBAND
-    Q_UNUSED(flush)
-#else
-    if (m_rubberBandStretcher)
-    {
-        vector<QByteArray> tmpQ(m_dstChannels);
-        quint8 *tmp[m_dstChannels];
+        const double newTimeRatio = 1.0 / m_speed;
+        if (!qFuzzyCompare(m_rubberBandStretcher->getTimeRatio(), newTimeRatio))
+            m_rubberBandStretcher->setTimeRatio(newTimeRatio);
 
         if (!flush)
         {
@@ -222,6 +222,9 @@ void SndResampler::convert(const QByteArray &src, QByteArray &dst, bool flush)
                 dstF[i * m_dstChannels + c] = reinterpret_cast<const float *>(tmp[c])[i];
             }
         }
+
+        if (flush)
+            m_rubberBandStretcher.reset();
     }
     else
 #endif
