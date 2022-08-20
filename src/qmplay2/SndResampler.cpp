@@ -137,10 +137,18 @@ bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate,
     {
         if (!m_rubberBandStretcher)
         {
+            RubberBandStretcher::Options options = RubberBandStretcher::OptionProcessRealTime | RubberBandStretcher::OptionChannelsTogether;
+            if (m_dstSamplerate >= 40000)
+            {
+                // Workaround for RubberBand 3.0.0 bug:
+                // - low sample rates - bad audio quality
+                // - very low sample rates - crash
+                options |= RubberBandStretcher::OptionEngineFiner;
+            }
             m_rubberBandStretcher = make_unique<RubberBandStretcher>(
                 m_dstSamplerate,
                 m_dstChannels,
-                RubberBandStretcher::OptionProcessRealTime | RubberBandStretcher::OptionChannelsTogether | RubberBandStretcher::OptionEngineFiner
+                options
             );
         }
         m_rubberBandStretcher->setTimeRatio(1.0 / m_speed);
