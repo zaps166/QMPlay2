@@ -25,7 +25,7 @@
 #ifndef QMPlay2GitHEAD
     #define QMPlay2GitHEAD
 #endif
-#define QMPlay2Version "22.06.16" QMPlay2GitHEAD
+#define QMPlay2Version "22.08.21" QMPlay2GitHEAD
 
 QByteArray Version::get()
 {

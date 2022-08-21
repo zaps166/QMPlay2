@@ -1,3 +1,15 @@
+Changes in QMPlay2 22.08.21:
+    - use RubberBand to keep audio pitch across playback speed,
+    - revert OpenSSL to 1.1.1 to fix https issues on Win 7,
+    - use the song name as the title for GME (cspiegel),
+    - fix displaying bitmap subtitles without duration,
+    - fix color space on limited YUV range,
+    - change HQ image downscale threshold,
+    - update Dutch translation (Vistaus),
+    - improve HQ image upscaling,
+    - fix crash with Vulkan 1.0,
+    - other minor fixes,
+
 Changes in QMPlay2 22.06.16:
     - make possible to increase but not decrease the effective number of audio channels (RJVB),
     - fix VA-API on Vulkan on modern Intel GPUs (use VK_EXT_image_drm_format_modifier),
