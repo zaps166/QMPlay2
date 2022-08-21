@@ -2103,6 +2103,14 @@
         <source>Playback has been incorrectly terminated!</source>
         <translation>Het afspelen is onjuist afgebroken!</translation>
     </message>
+    <message>
+        <source>Keep audio pitch across playback speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Don&apos;t keep audio pitch across playback speed</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>
@@ -2161,6 +2169,10 @@
     <message>
         <source>&amp;Screen shot</source>
         <translation>&amp;Schermfoto maken</translation>
+    </message>
+    <message>
+        <source>&amp;Keep audio pitch</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3097,6 +3109,12 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     <message>
         <source>Do you really want to clear all settings?</source>
         <translation>Weet u zeker alle instellingen wilt wissen?</translation>
+    </message>
+    <message>
+        <source>Force audio content to use the specified number of channels.
+Partially checked does this only if the content has less channels than the specified amount
+	(e.g. promote mono to stereo but do not degrade quadrophonic to stereo)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

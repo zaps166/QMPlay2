@@ -2100,6 +2100,14 @@
         <source>Audio off</source>
         <translation>Son coupé</translation>
     </message>
+    <message>
+        <source>Keep audio pitch across playback speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Don&apos;t keep audio pitch across playback speed</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>
@@ -2158,6 +2166,10 @@
     <message>
         <source>&amp;Screen shot</source>
         <translation>&amp;Capture d&apos;écran</translation>
+    </message>
+    <message>
+        <source>&amp;Keep audio pitch</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3089,6 +3101,12 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force audio content to use the specified number of channels.
+Partially checked does this only if the content has less channels than the specified amount
+	(e.g. promote mono to stereo but do not degrade quadrophonic to stereo)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

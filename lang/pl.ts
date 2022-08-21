@@ -2103,6 +2103,14 @@
         <source>Audio off</source>
         <translation>Dźwięk wyłączony</translation>
     </message>
+    <message>
+        <source>Keep audio pitch across playback speed</source>
+        <translation>Zachowaj wysokość dźwięku przy różnych prędkościach odtwarzania</translation>
+    </message>
+    <message>
+        <source>Don&apos;t keep audio pitch across playback speed</source>
+        <translation>Nie zachowuj wysokości dźwięku przy różnych prędkościach odtwarzania</translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>
@@ -2161,6 +2169,10 @@
     <message>
         <source>Set &amp;video delay</source>
         <translation>&amp;Ustaw opóźnienie obrazu</translation>
+    </message>
+    <message>
+        <source>&amp;Keep audio pitch</source>
+        <translation>Z&amp;achowaj wysokość dźwięku</translation>
     </message>
 </context>
 <context>
@@ -3097,6 +3109,14 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
         <translation>Wymuś Yadif poprzez Vulkan dla wszystkich dekoderów sprzętowych</translation>
+    </message>
+    <message>
+        <source>Force audio content to use the specified number of channels.
+Partially checked does this only if the content has less channels than the specified amount
+	(e.g. promote mono to stereo but do not degrade quadrophonic to stereo)</source>
+        <translation>Wymuś wybraną liczbę kanałów dźwięku.
+Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
+	(np. skonwertuje mono do stereo, ale dźwięk kwadrofoniczny nie zostanie skonwertowany do stereo)</translation>
     </message>
 </context>
 <context>
