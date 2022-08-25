@@ -2109,7 +2109,7 @@
     </message>
     <message>
         <source>Don&apos;t keep audio pitch across playback speed</source>
-        <translation type>Не зберігати висоту звуку на різних швидкостях відтворення></translation>
+        <translation>Не зберігати висоту звуку на різних швидкостях відтворення></translation>
     </message>
 </context>
 <context>
