@@ -49,7 +49,7 @@ enum QMPlay2Tags
 class QMPLAY2SHAREDLIB_EXPORT StreamInfo
 {
     Q_DECLARE_TR_FUNCTIONS(StreamInfo)
-    Q_DISABLE_COPY_MOVE(StreamInfo)
+    Q_DISABLE_COPY(StreamInfo)
 
 public:
     static QMPlay2Tags getTag(const QString &tag);
