@@ -639,6 +639,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
         "ass",
         "tty", //txt files
         "srt",
+        "vplayer",
     };
 
     const QByteArray scheme = Functions::getUrlScheme(_url).toUtf8();
