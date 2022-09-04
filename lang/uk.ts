@@ -431,11 +431,11 @@
     </message>
     <message>
         <source>Bottom field first</source>
-        <translation type="unfinished"></translation>
+        <translation>Спочатку нижнє поле></translation>
     </message>
     <message>
         <source>Top field first</source>
-        <translation type="unfinished"></translation>
+        <translation>Спочатку верхнє поле></translation>
     </message>
 </context>
 <context>
@@ -1160,7 +1160,7 @@
     </message>
     <message>
         <source>Some key shortcuts are duplicated!</source>
-        <translation type="unfinished"></translation>
+        <translation>Деякі сполучення клавіш дублюються!></translation>
     </message>
 </context>
 <context>
@@ -1307,11 +1307,11 @@
     </message>
     <message>
         <source>Next audio stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Наступний аудіопотік></translation>
     </message>
     <message>
         <source>Next subtitles stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Наступний потік субтитрів></translation>
     </message>
 </context>
 <context>
@@ -2105,11 +2105,11 @@
     </message>
     <message>
         <source>Keep audio pitch across playback speed</source>
-        <translation type="unfinished"></translation>
+        <translation type>Зберігати висоту звуку на різних швидкостях відтворення></translation>
     </message>
     <message>
         <source>Don&apos;t keep audio pitch across playback speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Не зберігати висоту звуку на різних швидкостях відтворення></translation>
     </message>
 </context>
 <context>
@@ -2172,7 +2172,7 @@
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Зберігати висоту звуку></translation>
     </message>
 </context>
 <context>
@@ -3114,7 +3114,9 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>Force audio content to use the specified number of channels.
 Partially checked does this only if the content has less channels than the specified amount
 	(e.g. promote mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation type="unfinished"></translation>
+        <translation>Примусово використовувати вказану кількість аудіоканалів.
+Частково вибране не зменшить кількість каналів
+	(напр., перетворить моно на стерео, але квадрафонічний звук не буде перетворено на стерео)</translation>
     </message>
 </context>
 <context>
