@@ -326,7 +326,9 @@ void LibASS::initASS(const QByteArray &ass_data)
     ass_sub_track = ass_new_track(ass);
     if (!ass_data.isEmpty())
     {
-        ass_process_data(ass_sub_track, (char *)ass_data.constData(), ass_data.size());
+        ass_process_codec_private(ass_sub_track, (char *)ass_data.constData(), ass_data.size());
+        for (int i = 0; i < ass_sub_track->n_events; ++i)
+            ass_sub_track->events[i].ReadOrder = i;
         hasASSData = true;
         setASSStyle();
     }
