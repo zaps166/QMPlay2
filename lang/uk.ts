@@ -1160,7 +1160,7 @@
     </message>
     <message>
         <source>Some key shortcuts are duplicated!</source>
-        <translation>Деякі сполучення клавіш дублюються!></translation>
+        <translation>Деякі сполучення клавіш дублюються!</translation>
     </message>
 </context>
 <context>
@@ -2105,7 +2105,7 @@
     </message>
     <message>
         <source>Keep audio pitch across playback speed</source>
-        <translation type>Зберігати висоту звуку на різних швидкостях відтворення></translation>
+        <translation>Зберігати висоту звуку на різних швидкостях відтворення></translation>
     </message>
     <message>
         <source>Don&apos;t keep audio pitch across playback speed</source>
