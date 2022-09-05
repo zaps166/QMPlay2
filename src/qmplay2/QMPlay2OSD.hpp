@@ -50,6 +50,9 @@ public:
         // Common
         QRect rect;
 
+        // AV subtitles
+        QSizeF ratio;
+
         // CPU only
         QByteArray rgba;
 

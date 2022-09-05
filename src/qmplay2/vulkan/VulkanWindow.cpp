@@ -678,8 +678,8 @@ void Window::renderOSD()
         if (img->paletteBufferView)
         {
             multiplier = QVector2D(
-                m_scaledSize.width()  / m_imgSize.width(),
-                m_scaledSize.height() / m_imgSize.height()
+                img->ratio.width()  * m_scaledSize.width()  / m_imgSize.width(),
+                img->ratio.height() * m_scaledSize.height() / m_imgSize.height()
             );
             osdPipeline = m.osdAvPipeline;
             osdDescriptorPool = m.osdAvDescriptorPool;

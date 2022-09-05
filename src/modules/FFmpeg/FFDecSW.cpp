@@ -595,16 +595,22 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
             osd->setDuration(subtitle.duration());
             osd->setPTS(subtitle.time);
 
-            auto getRect = [](AVSubtitleRect *avRect, const QSize &frameSize) {
-                const QSize size(
-                    qBound(0, avRect->w, frameSize.width()),
-                    qBound(0, avRect->h, frameSize.height())
-                );
+            auto getRect = [this](AVSubtitleRect *avRect) {
                 const QPoint point(
-                    qBound(0, avRect->x, frameSize.width()  - size.width()),
-                    qBound(0, avRect->y, frameSize.height() - size.height())
+                    qBound(0, avRect->x, codec_ctx->width),
+                    qBound(0, avRect->y, codec_ctx->height)
+                );
+                const QSize size(
+                    qBound(0, avRect->w, codec_ctx->width  - point.x()),
+                    qBound(0, avRect->h, codec_ctx->height - point.y())
                 );
                 return QRect(point, size);
+            };
+            auto getRatio = [this](const QSize &frameSize) {
+                return QSizeF(
+                    static_cast<qreal>(frameSize.width())  / static_cast<qreal>(codec_ctx->width),
+                    static_cast<qreal>(frameSize.height()) / static_cast<qreal>(codec_ctx->height)
+                );
             };
 
 #ifdef USE_VULKAN
@@ -645,7 +651,8 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
 
                     auto &osdImg = osd->add();
 
-                    osdImg.rect = getRect(avRect, subtitle.frameSize);
+                    osdImg.rect = getRect(avRect);
+                    osdImg.ratio = getRatio(subtitle.frameSize);
 
                     memcpy(data + buffOffset, avRect->data[0], rectSize);
                     osdImg.dataBufferView = BufferView::create(buffer, vk::Format::eR8Uint, buffOffset, rectSize);
@@ -674,7 +681,8 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
                     const auto avRect = subtitle.rects[i];
 
                     auto &osdImg = osd->add();
-                    osdImg.rect = getRect(avRect, subtitle.frameSize);
+                    osdImg.rect = getRect(avRect);
+                    osdImg.ratio = getRatio(subtitle.frameSize);
                     osdImg.rgba = QByteArray(osdImg.rect.width() * osdImg.rect.height() * sizeof(uint32_t), Qt::Uninitialized);
 
                     const auto source   = (uint8_t  *)avRect->data[0];
