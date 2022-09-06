@@ -423,9 +423,9 @@ void PlayClass::setKeepAudioPitch(bool keep)
 {
     keepAudioPitch = keep;
     if (keepAudioPitch)
-        messageAndOSD(tr("Keep audio pitch across playback speed"));
+        messageAndOSD(tr("Keep audio pitch during playback speed change"));
     else
-        messageAndOSD(tr("Don't keep audio pitch across playback speed"));
+        messageAndOSD(tr("Don't keep audio pitch during playback speed change"));
     QMPlay2Core.getSettings().set("KeepAudioPitch", keepAudioPitch);
 }
 
@@ -779,7 +779,7 @@ void PlayClass::slowDown()
 void PlayClass::setSpeed()
 {
     bool ok;
-    double s = QInputDialog::getDouble(nullptr, tr("Play speed"), tr("Set playback speed (sec.)"), speed, 0.05, 100.0, 2, &ok);
+    double s = QInputDialog::getDouble(nullptr, tr("Play speed"), tr("Set playback speed"), speed, 0.05, 100.0, 2, &ok);
     if (ok)
     {
         speed = s;

@@ -1703,6 +1703,14 @@
         <translation>Verschuiving</translation>
     </message>
     <message>
+        <source>Little endian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Big endian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Rayman2 music (*.apm)</source>
         <translation>Rayman2-muziek (*.apm)</translation>
     </message>
@@ -2044,8 +2052,8 @@
         <translation>A-B herhalen</translation>
     </message>
     <message>
-        <source>Set playback speed (sec.)</source>
-        <translation>Afspeelsnelheid (in sec.)</translation>
+        <source>Set playback speed</source>
+        <translation>Afspeelsnelheid</translation>
     </message>
     <message>
         <source>Aspect ratio</source>
@@ -2104,11 +2112,11 @@
         <translation>Het afspelen is onjuist afgebroken!</translation>
     </message>
     <message>
-        <source>Keep audio pitch across playback speed</source>
+        <source>Keep audio pitch during playback speed change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Don&apos;t keep audio pitch across playback speed</source>
+        <source>Don&apos;t keep audio pitch during playback speed change</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3112,8 +3120,8 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     </message>
     <message>
         <source>Force audio content to use the specified number of channels.
-Partially checked does this only if the content has less channels than the specified amount
-	(e.g. promote mono to stereo but do not degrade quadrophonic to stereo)</source>
+Partially checked only if the content has less channels than the specified value
+	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

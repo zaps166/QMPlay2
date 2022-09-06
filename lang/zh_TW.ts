@@ -1511,6 +1511,14 @@
         <translation>補償值</translation>
     </message>
     <message>
+        <source>Little endian</source>
+        <translation>小端位元組序</translation>
+    </message>
+    <message>
+        <source>Big endian</source>
+        <translation>大端位元組序</translation>
+    </message>
+    <message>
         <source>Associate files with QMPlay2</source>
         <translation>用 QMPlay2 關聯檔案</translation>
     </message>
@@ -2052,8 +2060,8 @@
         <translation>設定視訊延遲（秒）</translation>
     </message>
     <message>
-        <source>Set playback speed (sec.)</source>
-        <translation>設定播放速度（秒）</translation>
+        <source>Set playback speed</source>
+        <translation>設定播放速度</translation>
     </message>
     <message>
         <source>A-B Repeat</source>
@@ -2104,12 +2112,12 @@
         <translation>音訊關閉</translation>
     </message>
     <message>
-        <source>Keep audio pitch across playback speed</source>
-        <translation type="unfinished"></translation>
+        <source>Keep audio pitch during playback speed change</source>
+        <translation>播放速度改變时保持音訊音調</translation>
     </message>
     <message>
-        <source>Don&apos;t keep audio pitch across playback speed</source>
-        <translation type="unfinished"></translation>
+        <source>Don&apos;t keep audio pitch during playback speed change</source>
+        <translation>播放速度改變时不保持音訊音調</translation>
     </message>
 </context>
 <context>
@@ -2172,7 +2180,7 @@
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>保持音訊音調(&amp;K)</translation>
     </message>
 </context>
 <context>
@@ -2327,7 +2335,7 @@
     </message>
     <message>
         <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>部份打勾表示按下按鈕與暫停之間有延遲</translation>
+        <translation>部份勾選表示按下按鈕與暫停之間有延遲</translation>
     </message>
     <message>
         <source>Amplify (no metadata)</source>
@@ -2980,7 +2988,7 @@ QMPlay2 將不會放大圖示！</translation>
         <source>Slower, but more accurate seeking.
 Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>比較慢，但跳轉更精確。
-部份打勾不影響進度條。</translation>
+部份勾選不影響進度條。</translation>
     </message>
     <message>
         <source>Hardware accelerated video filters</source>
@@ -3112,9 +3120,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Force audio content to use the specified number of channels.
-Partially checked does this only if the content has less channels than the specified amount
-	(e.g. promote mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation type="unfinished"></translation>
+Partially checked only if the content has less channels than the specified value
+	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
+        <translation>強制音訊內容使用指定的聲道數。
+僅在內容聲道數少於指定值時為部份勾選
+	（例如將單聲道升為立體聲但不將四聲道降為立體聲）</translation>
     </message>
 </context>
 <context>
