@@ -278,8 +278,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     offsetB->setValue(sets().getInt("PCM/offset"));
 
     endianB = new QComboBox;
-    endianB->addItem("Little endian");
-    endianB->addItem("Big endian");
+    endianB->addItem(tr("Little endian"));
+    endianB->addItem(tr("Big endian"));
     endianB->setCurrentIndex(sets().getBool("PCM/BE"));
 
     QGridLayout *pcmLayout = new QGridLayout(pcmB);

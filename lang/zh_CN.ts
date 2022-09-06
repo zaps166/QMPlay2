@@ -1511,6 +1511,14 @@
         <translation>位移值</translation>
     </message>
     <message>
+        <source>Little endian</source>
+        <translation>小端字节序</translation>
+    </message>
+    <message>
+        <source>Big endian</source>
+        <translation>大端字节序</translation>
+    </message>    
+    <message>
         <source>Associate files with QMPlay2</source>
         <translation>用 QMPlay2 关联文件</translation>
     </message>
@@ -2052,8 +2060,8 @@
         <translation>设置视频延时（秒）</translation>
     </message>
     <message>
-        <source>Set playback speed (sec.)</source>
-        <translation>设置回放速度（秒）</translation>
+        <source>Set playback speed</source>
+        <translation>设置回放速度</translation>
     </message>
     <message>
         <source>A-B Repeat</source>
@@ -2104,12 +2112,12 @@
         <translation>关闭声音</translation>
     </message>
     <message>
-        <source>Keep audio pitch across playback speed</source>
-        <translation type="unfinished"></translation>
+        <source>Keep audio pitch during playback speed change</source>
+        <translation>回放速度改变时保持音频音调</translation>
     </message>
     <message>
-        <source>Don&apos;t keep audio pitch across playback speed</source>
-        <translation type="unfinished"></translation>
+        <source>Don&apos;t keep audio pitch during playback speed change</source>
+        <translation>回放速度改变时不保持音频音调</translation>
     </message>
 </context>
 <context>
@@ -2172,7 +2180,7 @@
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>保持音频音调(&amp;K)</translation>
     </message>
 </context>
 <context>
@@ -3112,9 +3120,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Force audio content to use the specified number of channels.
-Partially checked does this only if the content has less channels than the specified amount
-	(e.g. promote mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation type="unfinished"></translation>
+Partially checked only if the content has less channels than the specified value
+	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
+        <translation>强制音频内容使用指定的声道数。
+仅在内容声道数少于指定值时为半选中
+	（例如将单声道升为立体声但不将四声道降为立体声）</translation>
     </message>
 </context>
 <context>

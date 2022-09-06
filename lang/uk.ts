@@ -1511,6 +1511,14 @@
         <translation>Зсув</translation>
     </message>
     <message>
+        <source>Little endian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Big endian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Associate files with QMPlay2</source>
         <translation>Асоціація файлів QMPlay2</translation>
     </message>
@@ -2052,8 +2060,8 @@
         <translation>Встановити затримку відео (сек.)</translation>
     </message>
     <message>
-        <source>Set playback speed (sec.)</source>
-        <translation>Встановити швидкість відтворення (сек.)</translation>
+        <source>Set playback speed</source>
+        <translation>Встановити швидкість відтворення</translation>
     </message>
     <message>
         <source>A-B Repeat</source>
@@ -2104,11 +2112,11 @@
         <translation>Аудіо вимкнене</translation>
     </message>
     <message>
-        <source>Keep audio pitch across playback speed</source>
+        <source>Keep audio pitch during playback speed change</source>
         <translation>Зберігати висоту звуку на різних швидкостях відтворення></translation>
     </message>
     <message>
-        <source>Don&apos;t keep audio pitch across playback speed</source>
+        <source>Don&apos;t keep audio pitch during playback speed change</source>
         <translation>Не зберігати висоту звуку на різних швидкостях відтворення></translation>
     </message>
 </context>
@@ -3112,8 +3120,8 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Force audio content to use the specified number of channels.
-Partially checked does this only if the content has less channels than the specified amount
-	(e.g. promote mono to stereo but do not degrade quadrophonic to stereo)</source>
+Partially checked does this only if the content has less channels than the specified value
+	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
         <translation>Примусово використовувати вказану кількість аудіоканалів.
 Частково вибране не зменшить кількість каналів
 	(напр., перетворить моно на стерео, але квадрафонічний звук не буде перетворено на стерео)</translation>
