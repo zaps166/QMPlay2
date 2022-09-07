@@ -13,7 +13,7 @@
     </message>
     <message>
         <source>Cannot open</source>
-        <translation>Не удается открыть</translation>
+        <translation>Не удаётся открыть</translation>
     </message>
     <message>
         <source>back to</source>
@@ -24,7 +24,7 @@
     <name>AVThread</name>
     <message>
         <source>A/V thread has been incorrectly terminated!</source>
-        <translation>А/В поток был завершен некорректно!</translation>
+        <translation>А/В поток был завершён некорректно!</translation>
     </message>
 </context>
 <context>
@@ -39,7 +39,7 @@
     </message>
     <message>
         <source>Clear log</source>
-        <translation>Очистить  журнал</translation>
+        <translation>Очистить журнал</translation>
     </message>
     <message>
         <source>Close</source>
@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Autodetect address</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматически определять адрес</translation>
     </message>
 </context>
 <context>
@@ -377,7 +377,7 @@
     </message>
     <message>
         <source>requires a change in one of the forced parameters, sound disabled ...</source>
-        <translation>Требуется изменение одного из принудительных параметров, звук отключен...</translation>
+        <translation>Требуется изменение одного из принудительных параметров, звук отключён...</translation>
     </message>
     <message>
         <source>sets the parameters to</source>
@@ -392,7 +392,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation>Метод деинтерлейсинга</translation>
+        <translation>Метод устранения чересстрочности</translation>
     </message>
 </context>
 <context>
@@ -411,7 +411,7 @@
     </message>
     <message>
         <source>Automatically detect parity</source>
-        <translation>Автоматическое определение четности</translation>
+        <translation>Автоматическое определение чётности</translation>
     </message>
     <message>
         <source>Parity (if not detected automatically)</source>
@@ -419,7 +419,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation>Метод деинтерлейсинга</translation>
+        <translation>Метод устранения чересстрочности</translation>
     </message>
     <message>
         <source>software decoding</source>
@@ -427,15 +427,15 @@
     </message>
     <message>
         <source>Vulkan Yadif spatial check</source>
-        <translation type="unfinished"></translation>
+        <translation>Пространственная проверка Yadif с Vulkan</translation>
     </message>
     <message>
         <source>Bottom field first</source>
-        <translation type="unfinished"></translation>
+        <translation>Сначала нижнее поле</translation>
     </message>
     <message>
         <source>Top field first</source>
-        <translation type="unfinished"></translation>
+        <translation>Сначала верхнее поле</translation>
     </message>
 </context>
 <context>
@@ -478,23 +478,23 @@
     </message>
     <message>
         <source>codec</source>
-        <translation>Кодек</translation>
+        <translation>кодек</translation>
     </message>
     <message>
         <source>aspect ratio</source>
-        <translation>Соотношение сторон</translation>
+        <translation>соотношение сторон</translation>
     </message>
     <message>
         <source>FPS</source>
-        <translation>FPS</translation>
+        <translation>Частота кадров</translation>
     </message>
     <message>
         <source>sample rate</source>
-        <translation>Частота дискретизации</translation>
+        <translation>частота дискретизации</translation>
     </message>
     <message>
         <source>format</source>
-        <translation>Формат</translation>
+        <translation>формат</translation>
     </message>
     <message>
         <source>Title</source>
@@ -502,11 +502,11 @@
     </message>
     <message>
         <source>artist</source>
-        <translation>Исполнитель</translation>
+        <translation>исполнитель</translation>
     </message>
     <message>
         <source>loaded from file</source>
-        <translation>Загруженные из файла</translation>
+        <translation>загруженные из файла</translation>
     </message>
     <message>
         <source>File path</source>
@@ -538,31 +538,31 @@
     </message>
     <message>
         <source>Attached files</source>
-        <translation>Прикрепленные файлы</translation>
+        <translation>Прикреплённые файлы</translation>
     </message>
     <message>
         <source>bitrate</source>
-        <translation>Битрейт</translation>
+        <translation>битрейт</translation>
     </message>
     <message>
         <source>channels</source>
-        <translation>Каналы</translation>
+        <translation>каналы</translation>
     </message>
     <message>
         <source>mono</source>
-        <translation>Моно</translation>
+        <translation>моно</translation>
     </message>
     <message>
         <source>stereo</source>
-        <translation>Стерео</translation>
+        <translation>стерео</translation>
     </message>
     <message>
         <source>size</source>
-        <translation>Размер</translation>
+        <translation>размер</translation>
     </message>
     <message>
         <source>Cannot open</source>
-        <translation>Не удается открыть</translation>
+        <translation>Не удаётся открыть</translation>
     </message>
     <message>
         <source>Save cover picture</source>
@@ -613,19 +613,19 @@
     </message>
     <message>
         <source>Conversion aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>Конвертация прервана</translation>
     </message>
     <message>
         <source>Conversion error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка конвертации</translation>
     </message>
     <message>
         <source>Converting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Конвертация…</translation>
     </message>
     <message>
         <source>Stop conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Остановить конвертацию</translation>
     </message>
 </context>
 <context>
@@ -644,7 +644,7 @@
     </message>
     <message>
         <source>Clear completed downloads</source>
-        <translation>Очистить завершенные загрузки</translation>
+        <translation>Очистить завершённые загрузки</translation>
     </message>
     <message>
         <source>Enter the address for download</source>
@@ -668,50 +668,53 @@
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить, изменить или удалить предустановки конвертации</translation>
     </message>
     <message>
         <source>Download and convert to &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачать и конвертировать в «%1»</translation>
     </message>
     <message>
         <source>Converter preset</source>
-        <translation type="unfinished"></translation>
+        <translation>Предустановка конвертера</translation>
     </message>
     <message>
         <source>Command line to execute after download.
 
 &lt;input/&gt; - specifies downloaded file.
 &lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
-        <translation type="unfinished"></translation>
+        <translation>Командная строка для выполнения после загрузки.
+
+&lt;input/&gt; - указывает загруженный файл.
+&lt;output&gt;%f.mp3&lt;/output&gt; - конвертированный файл будет выходным с расширением «mp3».</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Удалить</translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <source>Preset name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя предустановки</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation type="unfinished"></translation>
+        <translation>Командная строка</translation>
     </message>
     <message>
         <source>Incorrect/empty name or command line!</source>
-        <translation type="unfinished"></translation>
+        <translation>Неверное/пустое имя или командная строка!</translation>
     </message>
     <message>
         <source>Command must contain &lt;input/&gt; tag!</source>
-        <translation type="unfinished"></translation>
+        <translation>Командная строка должна содержать тег &lt;input/&gt;!</translation>
     </message>
     <message>
         <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
-        <translation type="unfinished"></translation>
+        <translation>Командная строка должна содержать действительный тег &lt;output&gt;файл&lt;/output/&gt;!</translation>
     </message>
     <message>
         <source>Preset name already exists!</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя предустановки уже существует!</translation>
     </message>
 </context>
 <context>
@@ -765,7 +768,7 @@
     </message>
     <message>
         <source>Open URL or directory containing chosen file</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть адрес или каталог, содержащие выбранный файл</translation>
     </message>
 </context>
 <context>
@@ -776,7 +779,7 @@
     </message>
     <message>
         <source>ON</source>
-        <translation>Включен</translation>
+        <translation>Включён</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -815,7 +818,7 @@
     <name>FFDemux</name>
     <message>
         <source>Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Дорожка</translation>
     </message>
 </context>
 <context>
@@ -826,7 +829,7 @@
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>Указанная частота: %1 Гц</translation>
     </message>
 </context>
 <context>
@@ -837,7 +840,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation>Метод деинтерлейсинга</translation>
+        <translation>Метод устранения чересстрочности</translation>
     </message>
 </context>
 <context>
@@ -1017,15 +1020,15 @@
     </message>
     <message>
         <source>Automatically restore main window when new video file is loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматически восстанавливать главное окно при запуске нового видеофайла</translation>
     </message>
     <message>
         <source>Don&apos;t load playlist files within other files</source>
-        <translation type="unfinished"></translation>
+        <translation>Не загружать файлы плейлиста в другие файлы</translation>
     </message>
     <message>
         <source>Enlarge small covers</source>
-        <translation type="unfinished"></translation>
+        <translation>Увеличивать небольшие обложки</translation>
     </message>
 </context>
 <context>
@@ -1088,7 +1091,7 @@
     </message>
     <message>
         <source>Add specified &lt;url&gt; to playlist.</source>
-        <translation>Добавляет указанный &lt;адрес&gt; в список воспроизведения</translation>
+        <translation>Добавить указанный &lt;адрес&gt; в плейлист.</translation>
     </message>
     <message>
         <source>Start the application with given &lt;profile name&gt;.</source>
@@ -1112,7 +1115,7 @@
     </message>
     <message>
         <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть новый экземпляр QMPlay2 и воспроизвести указанный &lt;url&gt;.</translation>
     </message>
 </context>
 <context>
@@ -1135,7 +1138,7 @@
     </message>
     <message>
         <source>interlaced</source>
-        <translation>Черезстрочный</translation>
+        <translation>Чересстрочный</translation>
     </message>
     <message>
         <source>visible</source>
@@ -1157,7 +1160,7 @@
     </message>
     <message>
         <source>Some key shortcuts are duplicated!</source>
-        <translation type="unfinished"></translation>
+        <translation>Некоторые сочетания клавиш повторяются!</translation>
     </message>
 </context>
 <context>
@@ -1179,29 +1182,29 @@
     <name>LineEdit</name>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Очистить</translation>
+        <translation>Очистить</translation>
     </message>
 </context>
 <context>
     <name>Lyrics</name>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished">Текст песни</translation>
+        <translation>Текст песни</translation>
     </message>
     <message>
         <source>Translation</source>
-        <translation type="unfinished">Перевод</translation>
+        <translation>Перевод</translation>
     </message>
     <message>
         <source>Lyrics not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Текст песни не найден</translation>
     </message>
 </context>
 <context>
     <name>MPDemux</name>
     <message>
         <source>Samples</source>
-        <translation>Сэмпл</translation>
+        <translation>Сэмплы</translation>
     </message>
     <message>
         <source>Patterns</source>
@@ -1304,11 +1307,11 @@
     </message>
     <message>
         <source>Next audio stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Следующий поток аудио</translation>
     </message>
     <message>
         <source>Next subtitles stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Следующий поток субтитров</translation>
     </message>
 </context>
 <context>
@@ -1331,7 +1334,7 @@
     </message>
     <message>
         <source>Search on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Поиск в %1</translation>
     </message>
 </context>
 <context>
@@ -1377,7 +1380,7 @@
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
-        <translation>Максимальное отображение субтитров без определенной продолжительности</translation>
+        <translation>Максимальное отображение субтитров без определённой продолжительности</translation>
     </message>
     <message>
         <source>Enabled</source>
@@ -1389,7 +1392,7 @@
     </message>
     <message>
         <source>XVideo outputs</source>
-        <translation>Выводы xvideo</translation>
+        <translation>Выводы XVideo</translation>
     </message>
     <message>
         <source>Default</source>
@@ -1437,7 +1440,7 @@
     </message>
     <message>
         <source>Maximum latency</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальная задержка</translation>
     </message>
     <message>
         <source>Refresh time</source>
@@ -1509,11 +1512,11 @@
     </message>
     <message>
         <source>Little endian</source>
-        <translation type="unfinished"></translation>
+        <translation>Обратный порядок байтов</translation>
     </message>
     <message>
         <source>Big endian</source>
-        <translation type="unfinished"></translation>
+        <translation>Прямой порядок байтов</translation>
     </message>
     <message>
         <source>Associate files with QMPlay2</source>
@@ -1533,7 +1536,7 @@
     </message>
     <message>
         <source>Enqueue in QMPlay2</source>
-        <translation>Поставить в очередь в QMPlay2</translation>
+        <translation>Поставить в очередь QMPlay2</translation>
     </message>
     <message>
         <source>Play in QMPlay2</source>
@@ -1557,7 +1560,7 @@
     </message>
     <message>
         <source>Force frame skipping</source>
-        <translation>Допускать жесткое выпадение кадров</translation>
+        <translation>Допускать жёсткое выпадение кадров</translation>
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
@@ -1573,7 +1576,7 @@
     </message>
     <message>
         <source>Demuxer</source>
-        <translation>Demuxer</translation>
+        <translation>Демультиплексор</translation>
     </message>
     <message>
         <source>Decoder</source>
@@ -1597,7 +1600,7 @@
     </message>
     <message>
         <source>Scrobble</source>
-        <translation>Scrobble</translation>
+        <translation>Скробблить</translation>
     </message>
     <message>
         <source>User name</source>
@@ -1685,7 +1688,7 @@
     </message>
     <message>
         <source>Decoder enabled</source>
-        <translation>Декодер включен</translation>
+        <translation>Декодер включён</translation>
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
@@ -1781,47 +1784,47 @@
     </message>
     <message>
         <source>Bit-perfect audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудио без передискретизации</translation>
     </message>
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
-        <translation type="unfinished"></translation>
+        <translation>Это настраивает выбранное устройство вывода на частоту дискретизации воспроизводимого материала</translation>
     </message>
     <message>
         <source>Swap stereo channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Поменять местами каналы стерео</translation>
     </message>
     <message>
         <source>Show user name in search results</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать имя пользователя в результатах поиска</translation>
     </message>
     <message>
         <source>Linear scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Линейный масштаб</translation>
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Предпочитаемое качество</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
-        <translation type="unfinished"></translation>
+        <translation>Копировать декодированное видео в память процессора (медленно)</translation>
     </message>
     <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Декодирование без копирования на оборудовании Intel (экспериментально)</translation>
     </message>
     <message>
         <source>Better performance, but can cause garbage or might not work at all.</source>
-        <translation type="unfinished"></translation>
+        <translation>Более высокая производительность, но может привести к искажениям или вообще не работать.</translation>
     </message>
     <message>
         <source>Exclusive mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Эксклюзивный режим</translation>
     </message>
     <message>
         <source>Preferred video codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Предпочитаемый кодек видео</translation>
     </message>
 </context>
 <context>
@@ -1921,15 +1924,15 @@
     <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка компиляции/компоновки шейдера</translation>
     </message>
     <message>
         <source>Can&apos;t init %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удаётся инициализировать %1</translation>
     </message>
     <message>
         <source>texture map error</source>
-        <translation type="unfinished"></translation>
+        <translation>ошибка карты текстур</translation>
     </message>
 </context>
 <context>
@@ -1984,7 +1987,7 @@
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настрой&amp;ки отрисовщика</translation>
     </message>
 </context>
 <context>
@@ -2038,7 +2041,7 @@
     </message>
     <message>
         <source>Subtitles off</source>
-        <translation>Субтитры выключены</translation>
+        <translation>Субтитры отключены</translation>
     </message>
     <message>
         <source>Horizontal flip</source>
@@ -2102,19 +2105,19 @@
     </message>
     <message>
         <source>Video off</source>
-        <translation>Выключить видео</translation>
+        <translation>Отключить видео</translation>
     </message>
     <message>
         <source>Audio off</source>
-        <translation>Выключить звук</translation>
+        <translation>Отключить звук</translation>
     </message>
     <message>
         <source>Keep audio pitch during playback speed change</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранять высоту звука при изменении скорости воспроизведения</translation>
     </message>
     <message>
         <source>Don&apos;t keep audio pitch during playback speed change</source>
-        <translation type="unfinished"></translation>
+        <translation>Не сохранять высоту звука при изменении скорости воспроизведения</translation>
     </message>
 </context>
 <context>
@@ -2177,7 +2180,7 @@
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>С&amp;охранять высоту звука</translation>
     </message>
 </context>
 <context>
@@ -2208,7 +2211,7 @@
     </message>
     <message>
         <source>Mouse wheel action on video dock</source>
-        <translation>Действие колеса мыши на видеопанели</translation>
+        <translation>Действие колеса мыши на панели видео</translation>
     </message>
     <message>
         <source>Mouse wheel scrolls music/movie</source>
@@ -2300,7 +2303,7 @@
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation>Левая кнопка мыши на видео панели переключает воспроизведен</translation>
+        <translation>Левая кнопка мыши на панели видео переключает воспроизведение</translation>
     </message>
     <message>
         <source>Accurate seeking</source>
@@ -2308,35 +2311,35 @@
     </message>
     <message>
         <source>Store aspect ratio and zoom in config file</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранять соотношение сторон и масштаб в файле настроек</translation>
     </message>
     <message>
         <source>Unpause when seeking</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключать паузу при перемотке</translation>
     </message>
     <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать передискретизатор звука и преобразование каналов раньше фильтров и визуализации</translation>
     </message>
     <message>
         <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Средняя кнопка мыши на панели видео переключает полноэкранный режим</translation>
     </message>
     <message>
         <source>Disable subtitles at program startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключать субтитры при запуске программы</translation>
     </message>
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
-        <translation type="unfinished"></translation>
+        <translation>Запоминать состояние активных аудио/видео/субтитров</translation>
     </message>
     <message>
         <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation type="unfinished"></translation>
+        <translation>Частичный флажок означает, что будет задержка между щелчком мыши и паузой</translation>
     </message>
     <message>
         <source>Amplify (no metadata)</source>
-        <translation type="unfinished"></translation>
+        <translation>Усиление (без метаданных)</translation>
     </message>
 </context>
 <context>
@@ -2359,7 +2362,7 @@
     </message>
     <message>
         <source>Seek &amp;forward</source>
-        <translation>Перемотка &amp;вперед</translation>
+        <translation>Перемотка &amp;вперёд</translation>
     </message>
     <message>
         <source>Seek &amp;backward</source>
@@ -2367,7 +2370,7 @@
     </message>
     <message>
         <source>Long &amp;seek forward</source>
-        <translation>Длинная перемотка впе&amp;ред</translation>
+        <translation>Длинная перемотка впе&amp;рёд</translation>
     </message>
     <message>
         <source>Long s&amp;eek backward</source>
@@ -2391,7 +2394,7 @@
     </message>
     <message>
         <source>&amp;Mute</source>
-        <translation>&amp;Выключить звук</translation>
+        <translation>&amp;Отключить звук</translation>
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
@@ -2419,7 +2422,7 @@
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>Перейти в ждущий режим после заверше&amp;ния воспроизведения</translation>
+        <translation>Перейти в ждущий режим по заверше&amp;нии воспроизведения</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
@@ -2435,7 +2438,7 @@
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Останавливать после воспроизведения</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2506,7 +2509,7 @@
     </message>
     <message>
         <source>&amp;Enqueue</source>
-        <translation>&amp;Очередь</translation>
+        <translation>В &amp;очередь</translation>
     </message>
     <message>
         <source>&amp;Properties</source>
@@ -2530,7 +2533,7 @@
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Всегда синхронизировать</translation>
     </message>
 </context>
 <context>
@@ -2631,11 +2634,11 @@
     <name>QObject</name>
     <message>
         <source>QMPlay2 has been updated to version</source>
-        <translation>QMPlay2 был обновлен ​​до версии</translation>
+        <translation>QMPlay2 был обновлён ​​до версии</translation>
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation>QMPlay2 не был обновлен. Хотите запустить обновление (рекомендуется)?</translation>
+        <translation>QMPlay2 не был обновлён. Хотите запустить обновление (рекомендуется)?</translation>
     </message>
     <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
@@ -2684,7 +2687,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Enqueue</source>
-        <translation>Очередь</translation>
+        <translation>В очередь</translation>
     </message>
     <message>
         <source>Add to my radio stations</source>
@@ -2704,23 +2707,23 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Load radio station list from file</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузить список радиостанций из файла</translation>
     </message>
     <message>
         <source>Save radio station list to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить список радиостанций в файл</translation>
     </message>
     <message>
         <source>Load radio station list</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузить список радиостанций</translation>
     </message>
     <message>
         <source>Save radio station list</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить список радиостанций</translation>
     </message>
     <message>
         <source>Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Тег</translation>
     </message>
     <message>
         <source>Country</source>
@@ -2732,7 +2735,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished"></translation>
+        <translation>Штат/область</translation>
     </message>
 </context>
 <context>
@@ -2755,7 +2758,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation>Рейтинг</translation>
+        <translation>Оценка</translation>
     </message>
 </context>
 <context>
@@ -2817,7 +2820,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Enqueue</source>
-        <translation>Очередь</translation>
+        <translation>В очередь</translation>
     </message>
     <message>
         <source>Play</source>
@@ -2833,11 +2836,11 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Audio and video</source>
-        <translation type="unfinished"></translation>
+        <translation>Аудио и видео</translation>
     </message>
     <message>
         <source>Audio only</source>
-        <translation type="unfinished"></translation>
+        <translation>Только аудио</translation>
     </message>
     <message>
         <source>Show related</source>
@@ -2989,15 +2992,15 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Hardware accelerated video filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Аппаратно ускоренные видеофильтры</translation>
     </message>
     <message>
         <source>Changing OpenGL mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Смена режима OpenGL</translation>
     </message>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтобы настроить новый режим OpenGL, программа запустится снова!</translation>
     </message>
     <message>
         <source>To apply the icons change, the program will start again!</source>
@@ -3005,119 +3008,123 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Устаревший приоритет видеовывода</translation>
     </message>
     <message>
         <source>Legacy</source>
-        <translation type="unfinished"></translation>
+        <translation>Устаревший</translation>
     </message>
     <message>
         <source>OpenGL</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenGL</translation>
     </message>
     <message>
         <source>active</source>
-        <translation type="unfinished"></translation>
+        <translation>активно</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>неактивно</translation>
     </message>
     <message>
         <source>Changing renderer</source>
-        <translation type="unfinished"></translation>
+        <translation>Смена отрисовщика</translation>
     </message>
     <message>
         <source>To set up a new renderer, the program will start again!</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтобы настроить новый отрисовщик, программа запустится снова!</translation>
     </message>
     <message>
         <source>Vertical synchronization (V-Sync)</source>
-        <translation type="unfinished"></translation>
+        <translation>Вертикальная синхронизация (V-Sync)</translation>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Обходить оконный композитор в полноэкранном режиме</translation>
     </message>
     <message>
         <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать модули видеовывода QMPlay2. Это также будет задействовано, если другие отрисовщики недоступны.</translation>
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать OpenGL для всего окна</translation>
     </message>
     <message>
         <source>This can improve performance if X11 compositor supports it</source>
-        <translation type="unfinished"></translation>
+        <translation>Это может повысить производительность, если композитор X11 поддерживает его</translation>
     </message>
     <message>
         <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Это может повысить производительность. Некоторые видеодрайверы могут сбоить при включении.</translation>
     </message>
     <message>
         <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать QOpenGLWidget (отрисовка в текстуру), также включить OpenGL для визуализаций. Используйте с осторожностью, это может снизить производительность проигрывания видео.</translation>
     </message>
     <message>
         <source>Renderer:</source>
-        <translation type="unfinished"></translation>
+        <translation>Отрисовщик:</translation>
     </message>
     <message>
         <source>Renderer settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки отрисовщика</translation>
     </message>
     <message>
         <source>Vulkan</source>
-        <translation type="unfinished"></translation>
+        <translation>Vulkan</translation>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать деинтерлейсинг ГП для видео, декодированного процессором</translation>
     </message>
     <message>
         <source>High quality image scaling down</source>
-        <translation type="unfinished"></translation>
+        <translation>Высококачественное уменьшение масштаба изображения</translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation type="unfinished"></translation>
+        <translation>Высококачественное увеличение масштаба изображения</translation>
     </message>
     <message>
         <source>First available device</source>
-        <translation type="unfinished"></translation>
+        <translation>Первое доступное устройство</translation>
     </message>
     <message>
         <source>No supported devices found</source>
-        <translation type="unfinished"></translation>
+        <translation>Поддерживаемые устройства не найдены</translation>
     </message>
     <message>
         <source>Partially checked (default):
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Частично включено (по умолчанию):
+  - MAILBOX (без тиринга) — предпочтительный режим представления
+  - FIFO (V-Sync) не должен использоваться в оконном режиме</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Разрешить эксклюзивный полноэкранный режим. Это может повысить производительность.</translation>
     </message>
     <message>
         <source>Very slow if used with sharpness</source>
-        <translation type="unfinished"></translation>
+        <translation>Очень медленно, если использовать с резкостью</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Устройство:</translation>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
-        <translation type="unfinished"></translation>
+        <translation>Принудительное устранение чересстрочности Vulkan Yadif для всех аппаратных декодеров</translation>
     </message>
     <message>
         <source>Force audio content to use the specified number of channels.
 Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation type="unfinished"></translation>
+        <translation>Принудительно использовать указанное количество каналов для аудиоматериалов.
+Частично включено, только если содержимое содержит каналы меньше указанного значения
+	(например, увеличить моно до стерео, но не ухудшать квадрофоническое звучание до стерео)</translation>
     </message>
 </context>
 <context>
@@ -3193,7 +3200,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Lyrics</source>
-        <translation type="unfinished">Текст песни</translation>
+        <translation>Текст песни</translation>
     </message>
 </context>
 <context>
@@ -3348,26 +3355,26 @@ Partially checked only if the content has less channels than the specified value
     <name>VAAPI</name>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation>Алгоритм деинтерлейсинга не поддерживается</translation>
+        <translation>Алгоритм устранения чересстрочности не поддерживается</translation>
     </message>
     <message>
         <source>Cannot open video filters</source>
-        <translation>Не удается открыть видеофильтры</translation>
+        <translation>Не удаётся открыть видеофильтры</translation>
     </message>
 </context>
 <context>
     <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation type="unfinished">Неподдерживаемый фильтр резкости</translation>
+        <translation>Неподдерживаемый фильтр резкости изображения</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation type="unfinished">Алгоритм деинтерлейсинга не поддерживается</translation>
+        <translation>Неподдерживаемый алгоритм устранения чересстрочности</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Неподдерживаемый фильтр подавления шума</translation>
     </message>
 </context>
 <context>
@@ -3381,71 +3388,71 @@ Partially checked only if the content has less channels than the specified value
     <name>VideoAdjustmentW</name>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">Сброс</translation>
+        <translation>Сброс</translation>
     </message>
     <message>
         <source>Brightness</source>
-        <translation type="unfinished">Яркость</translation>
+        <translation>Яркость</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation type="unfinished">Контрастность</translation>
+        <translation>Контраст</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation type="unfinished">Насыщенность</translation>
+        <translation>Насыщенность</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation type="unfinished">Тон</translation>
+        <translation>Оттенок</translation>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation type="unfinished">Резкость</translation>
+        <translation>Резкость</translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
-        <translation type="unfinished"></translation>
+        <translation>Сбросить регулировки видео</translation>
     </message>
     <message>
         <source>Brightness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Уменьшить яркость</translation>
     </message>
     <message>
         <source>Brightness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Увеличить яркость</translation>
     </message>
     <message>
         <source>Contrast down</source>
-        <translation type="unfinished"></translation>
+        <translation>Уменьшить контраст</translation>
     </message>
     <message>
         <source>Saturation down</source>
-        <translation type="unfinished"></translation>
+        <translation>Уменьшить насыщенность</translation>
     </message>
     <message>
         <source>Saturation up</source>
-        <translation type="unfinished"></translation>
+        <translation>Увеличить насыщенность</translation>
     </message>
     <message>
         <source>Hue down</source>
-        <translation type="unfinished"></translation>
+        <translation>Уменьшить оттенок</translation>
     </message>
     <message>
         <source>Hue up</source>
-        <translation type="unfinished"></translation>
+        <translation>Увеличить оттенок</translation>
     </message>
     <message>
         <source>Sharpness down</source>
-        <translation type="unfinished"></translation>
+        <translation>Уменьшить резкость</translation>
     </message>
     <message>
         <source>Sharpness up</source>
-        <translation type="unfinished"></translation>
+        <translation>Увеличить резкость</translation>
     </message>
     <message>
         <source>Contrast up</source>
-        <translation type="unfinished"></translation>
+        <translation>Увеличить контраст</translation>
     </message>
 </context>
 <context>
@@ -3490,7 +3497,7 @@ Partially checked only if the content has less channels than the specified value
     <name>VideoThr</name>
     <message>
         <source>Cannot initialize the deinterlacing filter</source>
-        <translation>Не удалось инициализировать фильтр деинтерлейсинга</translation>
+        <translation>Не удалось инициализировать фильтр устранения чересстрочности</translation>
     </message>
     <message>
         <source>Cannot create screenshot</source>
@@ -3542,7 +3549,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&amp;Always on top</source>
-        <translation type="unfinished"></translation>
+        <translation>Всегда &amp;поверх всех окон</translation>
     </message>
 </context>
 <context>
@@ -3557,7 +3564,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Search on YouTube</source>
-        <translation>Поиск на youtube</translation>
+        <translation>Поиск в YouTube</translation>
     </message>
     <message>
         <source>Connection error</source>
@@ -3569,35 +3576,35 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>yes</source>
-        <translation>Доступно</translation>
+        <translation>да</translation>
     </message>
     <message>
         <source>Relevance</source>
-        <translation type="unfinished"></translation>
+        <translation>Актуальность</translation>
     </message>
     <message>
         <source>Upload date</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата отправки</translation>
     </message>
     <message>
         <source>View count</source>
-        <translation type="unfinished"></translation>
+        <translation>Счётчик просмотров</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation>Рейтинг</translation>
+        <translation>Оценка</translation>
     </message>
     <message>
         <source>Sort search results by ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Сортировать результаты поиска по…</translation>
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Предпочитаемое качество</translation>
     </message>
     <message>
         <source>Publish time</source>
-        <translation type="unfinished"></translation>
+        <translation>Дата публикации</translation>
     </message>
 </context>
 <context>
@@ -3628,7 +3635,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has failed!</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузка «youtube-dl» не удалась!</translation>
     </message>
 </context>
 </TS>
