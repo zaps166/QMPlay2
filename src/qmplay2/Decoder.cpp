@@ -39,9 +39,17 @@ Decoder *Decoder::create(
     const QStringList &modNames,
     QString *modNameOutput)
 {
+    auto maybeRestoreCodecName = [&] {
+        if (!streamInfo.codec_name_backup.isEmpty())
+        {
+            streamInfo.codec_name = streamInfo.codec_name_backup;
+            streamInfo.codec_name_backup.clear();
+        }
+    };
     if (!streamInfo.must_decode)
     {
         Decoder *decoder = new QMPlay2DummyDecoder;
+        maybeRestoreCodecName();
         decoder->open(streamInfo);
         return decoder;
     }
@@ -68,8 +76,7 @@ Decoder *Decoder::create(
         Decoder *decoder = (Decoder *)module->createInstance(moduleInfo.name);
         if (!decoder)
             continue;
-
-        const auto origCodecName = streamInfo.codec_name;
+        maybeRestoreCodecName();
         if (decoder->open(streamInfo))
         {
             if (modNameOutput)
@@ -77,7 +84,7 @@ Decoder *Decoder::create(
             return decoder;
         }
         delete decoder;
-        streamInfo.codec_name = origCodecName;
+        maybeRestoreCodecName();
     }
     return nullptr;
 }

@@ -97,6 +97,7 @@ public:
     void setFormat(int newFormat);
 
     QByteArray codec_name, title, artist;
+    QByteArray codec_name_backup;
     QVector<QMPlay2Tag> other_info;
     bool is_default = true;
     bool must_decode = false;
