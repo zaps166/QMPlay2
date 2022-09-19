@@ -7,6 +7,9 @@ if(WIN32)
 elseif(APPLE)
     set(MODULES_INSTALL_PATH "${CMAKE_INSTALL_LIBDIR}/modules")
     set(QMPLAY2_MODULE SHARED) # otherwise CMake uses ".so" extension
+elseif(HAIKU)
+    set(MODULES_INSTALL_PATH "modules")
+    set(QMPLAY2_MODULE MODULE)
 else()
     set(MODULES_INSTALL_PATH "${CMAKE_INSTALL_LIBDIR}/qmplay2/modules")
     set(QMPLAY2_MODULE MODULE)
@@ -85,4 +88,8 @@ endif()
 
 if(ANDROID)
     add_subdirectory(OpenSLES)
+endif()
+
+if(HAIKU)
+    add_subdirectory(MediaKit)
 endif()
