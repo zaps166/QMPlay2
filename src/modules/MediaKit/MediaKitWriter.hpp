@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Writer.hpp>
 #include <SndPlayer.hpp>
 
@@ -5,26 +7,26 @@
 
 class MediaKitWriter : public Writer
 {
-	Q_DECLARE_TR_FUNCTIONS( MediaKitWriter )
+    Q_DECLARE_TR_FUNCTIONS( MediaKitWriter )
 public:
-	MediaKitWriter( Module & );
+    MediaKitWriter( Module & );
 private:
-	bool set();
+    bool set();
 
-	bool readyWrite() const;
+    bool readyWrite() const;
 
-	bool processParams( bool *paramsCorrected );
-	qint64 write( const QByteArray & );
+    bool processParams( bool *paramsCorrected );
+    qint64 write( const QByteArray & );
 
-	qint64 size() const;
-	QString name() const;
+    qint64 size() const;
+    QString name() const;
 
-	bool open();
+    bool open();
 
-	/**/
+    /**/
 
-	SndPlayer player;
-	bool err;
+    SndPlayer player;
+    bool err;
 };
 
 #define MediaKitWriterName "MediaKit Writer"

@@ -607,7 +607,7 @@ int main(int argc, char *argv[])
     qputenv("QT_QPA_UPDATE_IDLE_TIME", "0");
 
 #ifdef Q_OS_HAIKU
-	setenv("HOME", "/boot/home", 1);
+    setenv("HOME", "/boot/home", 1);
 #endif
 
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -924,7 +924,8 @@ int main(int argc, char *argv[])
         delete qApp;
 
 #ifdef Q_OS_HAIKU
-	kill(::getpid(), SIGKILL);
+    kill(::getpid(), SIGKILL); // FIXME
 #endif
+
     return 0;
 }

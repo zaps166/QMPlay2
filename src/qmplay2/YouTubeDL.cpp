@@ -31,6 +31,8 @@
 #include <QMutex>
 #include <QFile>
 
+// FIXME: Why Haiku can't use upstream yt-dlp?
+
 constexpr const char *g_name = "YouTubeDL";
 static bool g_mustUpdate = true;
 static QMutex g_mutex(QMutex::Recursive);
@@ -263,7 +265,7 @@ void YouTubeDL::abort()
 bool YouTubeDL::prepare()
 {
 #ifdef Q_OS_HAIKU
-	return true;
+    return true;
 #endif
 #ifdef Q_OS_ANDROID
     return false;
@@ -312,7 +314,7 @@ bool YouTubeDL::prepare()
 bool YouTubeDL::download()
 {
 #if defined(Q_OS_HAIKU)
-	return true;
+    return true;
 #endif
     // Mutex must be locked here
 
@@ -368,7 +370,7 @@ bool YouTubeDL::download()
 bool YouTubeDL::update()
 {
 #if defined(Q_OS_HAIKU)
-	return true;
+    return true;
 #endif
     // Mutex must be locked here
 

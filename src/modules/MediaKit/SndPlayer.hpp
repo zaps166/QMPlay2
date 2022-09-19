@@ -1,5 +1,4 @@
-#ifndef PULSE_HPP
-#define PULSE_HPP
+#pragma once
 
 #include <QByteArray>
 
@@ -14,36 +13,34 @@
 class SndPlayer
 {
 public:
-	SndPlayer();
-	inline ~SndPlayer()
-	{
-		stop();
-	}
+    SndPlayer();
+    inline ~SndPlayer()
+    {
+        stop();
+    }
 
-	inline bool isOK() const
-	{
-		return _isOK;
-	}
-	inline bool isOpen() const
-	{
-		return player;
-	}
+    inline bool isOK() const
+    {
+        return _isOK;
+    }
+    inline bool isOpen() const
+    {
+        return player;
+    }
 
-	bool start();
-	void stop();
+    bool start();
+    void stop();
 
-	double getLatency();
+    double getLatency();
 
-	bool write( const QByteArray & );
+    bool write( const QByteArray & );
 
-	double delay;
-	uchar channels;
-	float sample_rate;
-		
+    double delay;
+    uchar channels;
+    float sample_rate;
+
 private:
-	bool _isOK;
-	BSoundPlayer *player;
-	RingBuffer *ring;
+    bool _isOK;
+    BSoundPlayer *player;
+    RingBuffer *ring;
 };
-
-#endif

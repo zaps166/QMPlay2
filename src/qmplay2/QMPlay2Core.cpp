@@ -492,10 +492,10 @@ QStringList QMPlay2CoreClass::getModules(const QString &type, int typeLen) const
     if (type == "videoWriters")
         defaultModules << "OpenGL 2" << "DirectDraw";
 #elif defined Q_OS_HAIKU
-	if ( type == "videoWriters" )
-		defaultModules << "QPainter";
-	else if ( type == "audioWriters" )
-		defaultModules << "MediaKit";
+    if ( type == "videoWriters" )
+        defaultModules << "QPainter";
+    else if ( type == "audioWriters" )
+        defaultModules << "MediaKit";
 #endif
     if (type == "decoders")
         defaultModules << "FFmpeg Decoder";
