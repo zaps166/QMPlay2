@@ -313,8 +313,10 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
 
     QStringList errors;
 
+#ifndef Q_OS_HAIKU
     if (properties.deviceType == vk::PhysicalDeviceType::eCpu)
         errors.push_back("Not a GPU");
+#endif
 
     if (limits.maxPushConstantsSize < 128)
         errors.push_back("Push constants size is too small");
