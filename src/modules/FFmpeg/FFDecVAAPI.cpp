@@ -173,7 +173,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
         return false;
 
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
-    if (pix_fmt == AV_PIX_FMT_YUV420P10 && QMPlay2Core.isVulkanRenderer())
+    if (pix_fmt == AV_PIX_FMT_YUV420P10 && streamInfo.params->codec_id != AV_CODEC_ID_H264 && QMPlay2Core.isVulkanRenderer())
     {
 #ifdef USE_VULKAN
         auto vkInstance = static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance());
