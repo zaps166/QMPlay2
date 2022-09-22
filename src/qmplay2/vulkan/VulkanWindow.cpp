@@ -130,6 +130,8 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
 #endif
         case 0x10de: // NVIDIA
             break;
+        case 0x10005: // LVP
+            break;
         default:
             m_useRenderPassClear = true;
             break;
