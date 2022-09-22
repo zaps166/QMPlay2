@@ -739,6 +739,12 @@ void VideoThr::run()
         }
 
         mutex.unlock();
+
+        if (br2)
+        {
+            // Take time for another thread to lock the mutex
+            Functions::s_wait(0.001);
+        }
     }
 }
 
