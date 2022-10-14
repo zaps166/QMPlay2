@@ -20,6 +20,7 @@
 
 #include <Frame.hpp>
 #include <Writer.hpp>
+#include <QMPlay2OSD.hpp>
 
 class HWDecContext;
 class QMPlay2OSD;
@@ -34,8 +35,7 @@ public:
 
     qint64 write(const QByteArray &) override final;
 
-    virtual void writeVideo(const Frame &videoFrame) = 0;
-    virtual void writeOSD(const QList<const QMPlay2OSD *> &osd) = 0;
+    virtual void writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList) = 0;
 
     virtual bool setHWDecContext(const std::shared_ptr<HWDecContext> &hwDecContext);
     virtual std::shared_ptr<HWDecContext> hwDecContext() const;

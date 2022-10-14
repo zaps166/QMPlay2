@@ -29,6 +29,8 @@
 #include <QStringList>
 #include <QWaitCondition>
 
+#include <memory>
+
 class StreamInfo;
 class QMPlay2OSD;
 class DemuxerThr;
@@ -160,7 +162,7 @@ private:
     LibASS *ass;
 
     QMutex osdMutex, subsMutex;
-    QMPlay2OSD *osd;
+    std::shared_ptr<QMPlay2OSD> osd;
     int videoWinW, videoWinH;
     QStringList fileSubsList;
     QString fileSubs;

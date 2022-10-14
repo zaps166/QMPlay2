@@ -18,7 +18,6 @@
 
 #include <DirectDraw.hpp>
 
-#include <QMPlay2OSD.hpp>
 #include <Frame.hpp>
 #include <Functions.hpp>
 
@@ -247,7 +246,6 @@ void Drawable::draw(const Frame &videoFrame)
         const int dataSize = (ddsd.lPitch * ddsd.dwHeight * 3) >> 1;
         BYTE *surface = (BYTE *)ddsd.lpSurface;
 
-        osd_mutex.lock();
         BYTE *dest = ((flip && !isOverlay) || !osd_list.isEmpty()) ? new BYTE[dataSize] : surface;
 
         videoFrame.copyYV12(dest, ddsd.lPitch, ddsd.lPitch >> 1);
@@ -268,7 +266,6 @@ void Drawable::draw(const Frame &videoFrame)
             }
             Functions::paintOSDtoYV12(dest, osdImg, W, H, ddsd.lPitch, ddsd.lPitch >> 1, osd_list, osd_ids);
         }
-        osd_mutex.unlock();
 
         if (surface != dest)
         {
@@ -516,17 +513,12 @@ bool DirectDrawWriter::processParams(bool *)
     return readyWrite();
 }
 
-void DirectDrawWriter::writeVideo(const Frame &videoFrame)
+void DirectDrawWriter::writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList)
 {
+    drawable->osd_list = std::move(osdList);
     drawable->paused = false;
     if (drawable->canDraw())
         drawable->draw(videoFrame);
-}
-void DirectDrawWriter::writeOSD(const QList<const QMPlay2OSD *> &osds)
-{
-    drawable->osd_mutex.lock();
-    drawable->osd_list = osds;
-    drawable->osd_mutex.unlock();
 }
 
 void DirectDrawWriter::pause()

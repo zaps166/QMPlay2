@@ -26,7 +26,6 @@
 #include <GPUInstance.hpp>
 #include <HWDecContext.hpp>
 #include <VideoWriter.hpp>
-#include <QMPlay2OSD.hpp>
 #include <Frame.hpp>
 #include <Settings.hpp>
 #include <Decoder.hpp>
@@ -88,9 +87,8 @@ VideoThr::~VideoThr()
 #ifdef Q_OS_WIN
     setHighTimerResolution<false>();
 #endif
-    delete playC.osd;
-    playC.osd = nullptr;
-    delete subtitles;
+    playC.osd.reset();
+    subtitles.reset();
     delete sDec;
 }
 
@@ -323,7 +321,7 @@ inline VideoWriter *VideoThr::videoWriter() const
 
 void VideoThr::run()
 {
-    bool skip = false, paused = false, oneFrame = false, useLastDelay = false, lastOSDListEmpty = true, maybeFlush = false, lastAVDesync = false, interlaced = false, err = false;
+    bool skip = false, paused = false, oneFrame = false, useLastDelay = false, maybeFlush = false, lastAVDesync = false, interlaced = false, err = false;
     double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0, framesDisplayedTime = 0.0;
     QMutex emptyBufferMutex;
     Frame videoFrame;
@@ -368,7 +366,9 @@ void VideoThr::run()
 
         if (doScreenshot && !videoFrame.isEmpty())
         {
-            QMetaObject::invokeMethod(this, "screenshot", Q_ARG(Frame, videoFrame));
+            QTimer::singleShot(0, this, [=] {
+                screenshot(videoFrame);
+            });
             doScreenshot = false;
         }
 
@@ -382,7 +382,9 @@ void VideoThr::run()
         {
             if (playC.paused && !paused)
             {
-                QMetaObject::invokeMethod(this, "pause");
+                QTimer::singleShot(0, this, [this] {
+                    pause();
+                });
                 paused = true;
                 frame_timer = -1.0;
                 emit playC.updateBitrateAndFPS(-1, -1, -1.0, 0.0, interlaced); //Set real FPS to 0 on pause
@@ -432,74 +434,10 @@ void VideoThr::run()
             break;
         }
 
-        /* Subtitles */
-        const double subsPts = playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync;
-        QList<const QMPlay2OSD *> osdList, osdListToDelete;
-        playC.subsMutex.lock();
-        const bool canDeleteSubs = (deleteSubs && static_cast<bool>(subtitles));
-        if (sDec) //Image subs (pgssub, dvdsub, ...)
-        {
-            if (!sDec->decodeSubtitle(sPackets, subsPts, subtitles, QSize(W, H), playC.flushVideo))
-            {
-                osdListToDelete += subtitles;
-                subtitles = nullptr;
-            }
-        }
-        else
-        {
-            for (auto &&sPacket : qAsConst(sPackets))
-            {
-                const QByteArray sPacketData = QByteArray::fromRawData((const char *)sPacket.data(), sPacket.size());
-                if (playC.ass->isASS())
-                    playC.ass->addASSEvent(sPacketData);
-                else
-                    playC.ass->addASSEvent(Functions::convertToASS(sPacketData), sPacket.ts(), sPacket.duration());
-            }
-            if (!playC.ass->getASS(subtitles, subsPts))
-            {
-                osdListToDelete += subtitles;
-                subtitles = nullptr;
-            }
-        }
-        if (subtitles)
-        {
-            const bool hasDuration = subtitles->duration() >= 0.0;
-            if (canDeleteSubs || (subtitles->isStarted() && subsPts < subtitles->pts()) || (hasDuration && subsPts > subtitles->pts() + subtitles->duration()))
-            {
-                osdListToDelete += subtitles;
-                subtitles = nullptr;
-            }
-            else if (subsPts >= subtitles->pts())
-            {
-                subtitles->start();
-                osdList += subtitles;
-            }
-        }
-        playC.subsMutex.unlock();
-        playC.osdMutex.lock();
-        if (playC.osd)
-        {
-            if (deleteOSD || playC.osd->leftDuration() < 0)
-            {
-                osdListToDelete += playC.osd;
-                playC.osd = nullptr;
-            }
-            else
-                osdList += playC.osd;
-        }
-        playC.osdMutex.unlock();
-        if ((!lastOSDListEmpty || !osdList.isEmpty()) && writer->readyWrite())
-        {
-            videoWriter()->writeOSD(osdList);
-            lastOSDListEmpty = osdList.isEmpty();
-        }
-        while (!osdListToDelete.isEmpty())
-            delete osdListToDelete.takeFirst();
-        deleteSubs = deleteOSD = false;
-        /**/
+        const bool flushVideo = playC.flushVideo;
 
         filtersMutex.lock();
-        if (playC.flushVideo)
+        if (flushVideo)
         {
             filters.clearBuffers();
             frame_timer = -1.0;
@@ -509,11 +447,11 @@ void VideoThr::run()
         {
             Frame decoded;
             AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE;
-            const int bytes_consumed = dec->decodeVideo(packet, decoded, newPixelFormat, playC.flushVideo, skip ? ~0 : (fast >> 1));
+            const int bytes_consumed = dec->decodeVideo(packet, decoded, newPixelFormat, flushVideo, skip ? ~0 : (fast >> 1));
             ts = decoded.isTsValid() ? decoded.ts() : qQNaN();
             if (newPixelFormat != AV_PIX_FMT_NONE)
                 emit playC.pixelFormatUpdate(newPixelFormat);
-            if (playC.flushVideo)
+            if (flushVideo)
             {
                 useLastDelay = true; //if seeking
                 playC.flushVideo = false;
@@ -566,7 +504,69 @@ void VideoThr::run()
             ts = videoFrame.ts();
         filtersMutex.unlock();
 
-        if ((maybeFlush = !qIsNaN(ts)))
+        const bool tsIsNotNan = !qIsNaN(ts);
+
+        /* Subtitles */
+        QMPlay2OSDList osdList;
+        playC.subsMutex.lock();
+        const double subsPts = tsIsNotNan
+            ? ts - playC.subtitlesSync
+            : qQNaN()
+        ;
+        const bool canDeleteSubs = (deleteSubs && subtitles);
+        if (sDec) //Image subs (pgssub, dvdsub, ...)
+        {
+            if (!sDec->decodeSubtitle(sPackets, subsPts, subtitles, QSize(W, H), flushVideo))
+            {
+                subtitles.reset();
+            }
+        }
+        else
+        {
+            for (auto &&sPacket : qAsConst(sPackets))
+            {
+                const QByteArray sPacketData = QByteArray::fromRawData((const char *)sPacket.data(), sPacket.size());
+                if (playC.ass->isASS())
+                    playC.ass->addASSEvent(sPacketData);
+                else
+                    playC.ass->addASSEvent(Functions::convertToASS(sPacketData), sPacket.ts(), sPacket.duration());
+            }
+            if (tsIsNotNan && !playC.ass->getASS(subtitles, subsPts))
+            {
+                subtitles.reset();
+            }
+        }
+        if (subtitles && tsIsNotNan)
+        {
+            const bool hasDuration = subtitles->duration() >= 0.0;
+            if (canDeleteSubs || (subtitles->isStarted() && subsPts < subtitles->pts()) || (hasDuration && subsPts > subtitles->pts() + subtitles->duration()))
+            {
+                subtitles.reset();
+            }
+            else if (subsPts >= subtitles->pts())
+            {
+                subtitles->start();
+                osdList += subtitles;
+            }
+        }
+        playC.subsMutex.unlock();
+        playC.osdMutex.lock();
+        if (playC.osd)
+        {
+            if (deleteOSD || playC.osd->leftDuration() < 0)
+            {
+                playC.osd.reset();
+            }
+            else
+            {
+                osdList += playC.osd;
+            }
+        }
+        playC.osdMutex.unlock();
+        deleteSubs = deleteOSD = false;
+        /**/
+
+        if ((maybeFlush = tsIsNotNan))
         {
             const AVRational currSAR = videoFrame.sampleAspectRatio();
             if (currSAR.num != 0 && currSAR.den != 0 && lastSAR.num != 0 && lastSAR.den != 0 && av_cmp_q(lastSAR, currSAR) != 0) //Aspect ratio has been changed
@@ -727,7 +727,9 @@ void VideoThr::run()
                 if (!skip && canWrite)
                 {
                     oneFrame = canWrite = false;
-                    QMetaObject::invokeMethod(this, "write", Q_ARG(Frame, videoFrame), Q_ARG(quint32, seq));
+                    QTimer::singleShot(0, this, [=, osdList = move(osdList)]() mutable {
+                        write(videoFrame, move(osdList), seq);
+                    });
                     if (canSkipFrames)
                         ++framesDisplayed;
                 }
@@ -771,7 +773,7 @@ inline void VideoThr::setHighTimerResolution()
 }
 #endif
 
-void VideoThr::write(Frame videoFrame, quint32 lastSeq)
+void VideoThr::write(const Frame &videoFrame, QMPlay2OSDList &&osdList, quint32 lastSeq)
 {
     canWrite = true;
 
@@ -787,7 +789,7 @@ void VideoThr::write(Frame videoFrame, quint32 lastSeq)
     setHighTimerResolution<true>();
 #endif
 
-    videoWriter()->writeVideo(videoFrame);
+    videoWriter()->writeVideo(videoFrame, move(osdList));
 }
 void VideoThr::screenshot(Frame videoFrame)
 {

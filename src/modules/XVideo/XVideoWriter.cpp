@@ -177,15 +177,10 @@ bool XVideoWriter::processParams(bool *)
     return readyWrite();
 }
 
-void XVideoWriter::writeVideo(const Frame &videoFrame)
+void XVideoWriter::writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList)
 {
-    xv->draw(videoFrame, drawable->srcRect, drawable->dstRect, drawable->W, drawable->H, osd_list, osd_mutex);
-}
-void XVideoWriter::writeOSD(const QList<const QMPlay2OSD *> &osds)
-{
-    osd_mutex.lock();
-    osd_list = osds;
-    osd_mutex.unlock();
+    osd_list = std::move(osdList);
+    xv->draw(videoFrame, drawable->srcRect, drawable->dstRect, drawable->W, drawable->H, osd_list);
 }
 
 QString XVideoWriter::name() const

@@ -357,7 +357,7 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
 
     return bytesConsumed < 0 ? -1 : bytesConsumed;
 }
-bool FFDecSW::decodeSubtitle(const QVector<Packet> &encodedPackets, double pos, QMPlay2OSD *&osd, const QSize &size, bool flush)
+bool FFDecSW::decodeSubtitle(const QVector<Packet> &encodedPackets, double pos, shared_ptr<QMPlay2OSD> &osd, const QSize &size, bool flush)
 {
     if (codec_ctx->codec_type != AVMEDIA_TYPE_SUBTITLE)
         return false;
@@ -389,7 +389,10 @@ bool FFDecSW::decodeSubtitle(const QVector<Packet> &encodedPackets, double pos, 
         }
     }
 
-    return getFromBitmapSubsBuffer(osd, pos);
+    return qIsNaN(pos)
+        ? true
+        : getFromBitmapSubsBuffer(osd, pos)
+    ;
 }
 
 bool FFDecSW::open(StreamInfo &streamInfo)
@@ -571,7 +574,7 @@ void FFDecSW::setPixelFormat()
     }
 }
 
-bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
+bool FFDecSW::getFromBitmapSubsBuffer(shared_ptr<QMPlay2OSD> &osd, double pos)
 {
     bool ret = true;
     for (auto i = m_subtitles.size(); i > 0; --i)
@@ -582,16 +585,7 @@ bool FFDecSW::getFromBitmapSubsBuffer(QMPlay2OSD *&osd, double pos)
 
         if (subtitle.num_rects > 0)
         {
-            unique_lock<mutex> locker;
-            if (osd)
-            {
-                locker = osd->lock();
-                osd->clear();
-            }
-            else
-            {
-                osd = new QMPlay2OSD;
-            }
+            auto locker = QMPlay2OSD::ensure(osd, true);
             osd->setDuration(subtitle.duration());
             osd->setPTS(subtitle.time);
 

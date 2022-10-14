@@ -98,7 +98,6 @@ void Drawable::paintEvent(QPaintEvent *)
     p.translate(X, Y);
     p.drawImage(QRect(0, 0, W, H), img);
 
-    osd_mutex.lock();
     if (!osd_list.isEmpty())
     {
         const qreal dpr = devicePixelRatioF();
@@ -107,7 +106,6 @@ void Drawable::paintEvent(QPaintEvent *)
         p.setClipRect(0, 0, imgW, imgH);
         Functions::paintOSD(true, osd_list, W * dpr / writer.outW, H * dpr / writer.outH, p);
     }
-    osd_mutex.unlock();
 }
 bool Drawable::event(QEvent *e)
 {
@@ -214,15 +212,10 @@ AVPixelFormats QPainterWriter::supportedPixelFormats() const
     };
 }
 
-void QPainterWriter::writeVideo(const Frame &videoFrame)
+void QPainterWriter::writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList)
 {
+    drawable->osd_list = std::move(osdList);
     drawable->draw(videoFrame, true, false);
-}
-void QPainterWriter::writeOSD(const QList<const QMPlay2OSD *> &osds)
-{
-    drawable->osd_mutex.lock();
-    drawable->osd_list = osds;
-    drawable->osd_mutex.unlock();
 }
 
 QString QPainterWriter::name() const

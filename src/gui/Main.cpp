@@ -21,7 +21,6 @@
 #include <EventFilterWorkarounds.hpp>
 #include <PanGestureEventFilter.hpp>
 #include <ScreenSaver.hpp>
-#include <Frame.hpp>
 #include <MainWidget.hpp>
 #include <PlayClass.hpp>
 #include <Functions.hpp>
@@ -734,7 +733,6 @@ int main(int argc, char *argv[])
     }
 
     qRegisterMetaType<AVRational>("AVRational");
-    qRegisterMetaType<Frame>("Frame");
 
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);

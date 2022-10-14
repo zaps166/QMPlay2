@@ -18,7 +18,6 @@
 
 #include <xv.hpp>
 
-#include <QMPlay2OSD.hpp>
 #include <Frame.hpp>
 #include <Functions.hpp>
 
@@ -216,7 +215,7 @@ void XVIDEO::close()
     clrVars();
 }
 
-void XVIDEO::draw(const Frame &videoFrame, const QRect &srcRect, const QRect &dstRect, int W, int H, const QList<const QMPlay2OSD *> &osd_list, QMutex &osd_mutex)
+void XVIDEO::draw(const Frame &videoFrame, const QRect &srcRect, const QRect &dstRect, int W, int H, const QMPlay2OSDList &osd_list)
 {
     videoFrame.copyYV12(image->data, image->pitches[0], image->pitches[1]);
 
@@ -225,10 +224,8 @@ void XVIDEO::draw(const Frame &videoFrame, const QRect &srcRect, const QRect &ds
     if (_flip & Qt::Vertical)
         Functions::vFlip((quint8 *)image->data, image->pitches[0], image->height);
 
-    osd_mutex.lock();
     if (!osd_list.isEmpty())
         Functions::paintOSDtoYV12((quint8 *)image->data, osdImg, W, H, image->pitches[0], image->pitches[1], osd_list, osd_ids);
-    osd_mutex.unlock();
 
     putImage(srcRect, dstRect);
     hasImage = true;

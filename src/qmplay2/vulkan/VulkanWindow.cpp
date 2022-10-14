@@ -38,7 +38,6 @@
 #include "VulkanInstance.hpp"
 #include "VulkanHWInterop.hpp"
 
-#include <QMPlay2OSD.hpp>
 #include <Functions.hpp>
 #include <Sphere.hpp>
 
@@ -267,18 +266,14 @@ AVPixelFormats Window::supportedPixelFormats() const
     return m_instance->supportedPixelFormats();
 }
 
-void Window::setFrame(const Frame &frame)
+void Window::setFrame(const Frame &frame, QMPlay2OSDList &&osdList)
 {
+    m_osd = move(osdList);
     if (m.imageFromFrame)
         resetImages(false);
     m_frame = frame;
     m_frameChanged = true;
     maybeRequestUpdate();
-}
-void Window::setOSD(const QList<const QMPlay2OSD *> &osd)
-{
-    lock_guard<mutex> locker(m_osdMutex);
-    m_osd = osd;
 }
 
 inline VideoPipelineSpecializationData *Window::getVideoPipelineSpecializationData()
@@ -541,7 +536,6 @@ vector<unique_lock<mutex>> Window::prepareOSD(bool &changed)
 {
     const auto osdIDs = move(m_osdIDs);
 
-    unique_lock<mutex> locker(m_osdMutex);
     if (m_osd.empty())
     {
         if (!osdIDs.empty())
@@ -550,8 +544,7 @@ vector<unique_lock<mutex>> Window::prepareOSD(bool &changed)
     }
 
     vector<unique_lock<mutex>> lockers;
-    lockers.reserve(1 + m_osd.size());
-    lockers.push_back(move(locker));
+    lockers.reserve(m_osd.size());
 
     for (auto &&osd : qAsConst(m_osd))
     {

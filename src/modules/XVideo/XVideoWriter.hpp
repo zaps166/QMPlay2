@@ -59,8 +59,7 @@ private:
     bool readyWrite() const override;
 
     bool processParams(bool *paramsCorrected) override;
-    void writeVideo(const Frame &videoFrame) override;
-    void writeOSD(const QList<const QMPlay2OSD *> &) override;
+    void writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList) override;
 
     QString name() const override;
 
@@ -77,8 +76,7 @@ private:
     Drawable *drawable;
     XVIDEO *xv;
 
-    QList<const QMPlay2OSD *> osd_list;
-    QMutex osd_mutex;
+    QMPlay2OSDList osd_list;
 };
 
 #define XVideoWriterName "XVideo"

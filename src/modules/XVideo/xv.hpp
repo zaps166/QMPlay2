@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <QMPlay2OSD.hpp>
+
 #include <QString>
 #include <QVector>
 #include <QMutex>
@@ -48,7 +50,7 @@ public:
     void invalidateShm();
     void close();
 
-    void draw(const Frame &, const QRect &, const QRect &, int, int, const QList<const QMPlay2OSD *> &, QMutex &);
+    void draw(const Frame &, const QRect &, const QRect &, int, int, const QMPlay2OSDList &osd_list);
     void redraw(const QRect &, const QRect &, int, int, int, int, int, int);
 
     void setVideoEqualizer(int, int, int, int);

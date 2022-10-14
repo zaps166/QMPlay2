@@ -59,7 +59,7 @@ public:
 
     void initOSD();
     void setOSDStyle();
-    bool getOSD(QMPlay2OSD *&, const QByteArray &, double);
+    bool getOSD(std::shared_ptr<QMPlay2OSD> &osd, const QByteArray &, double);
     void closeOSD();
 
     void initASS(const QByteArray &header = QByteArray());
@@ -68,7 +68,7 @@ public:
     void addASSEvent(const QByteArray &);
     void addASSEvent(const QByteArray &, double, double);
     void flushASSEvents();
-    bool getASS(QMPlay2OSD *&, double);
+    bool getASS(std::shared_ptr<QMPlay2OSD> &osd, double);
     void closeASS();
 
 private:

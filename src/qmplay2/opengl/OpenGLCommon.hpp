@@ -23,12 +23,12 @@
 #include <Frame.hpp>
 #include <VideoAdjustment.hpp>
 #include <VideoOutputCommon.hpp>
+#include <QMPlay2OSD.hpp>
 
 #include <QOpenGLShaderProgram>
 
 #include <QCoreApplication>
 #include <QImage>
-#include <QMutex>
 #include <QTimer>
 
 #if !defined OPENGL_ES2 && !defined Q_OS_MACOS
@@ -36,7 +36,6 @@
 #endif
 
 class OpenGLHWInterop;
-class QMPlay2OSD;
 
 class OpenGLCommon : public VideoOutputCommon
 {
@@ -133,8 +132,7 @@ public:
     bool isPaused, isOK, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness;
     int outW, outH, verticesIdx;
 
-    QList<const QMPlay2OSD *> osdList;
-    QMutex osdMutex;
+    QMPlay2OSDList osdList;
 
     QVector<quint64> osd_ids;
     QImage osdImg;

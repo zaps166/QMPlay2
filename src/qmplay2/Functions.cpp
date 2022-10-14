@@ -51,6 +51,8 @@ extern "C"
 #include <cmath>
 #include <vector>
 
+using namespace std;
+
 static inline void swapArray(quint8 *a, quint8 *b, int size)
 {
     quint8 t[size];
@@ -367,10 +369,10 @@ void Functions::drawPixmap(QPainter &p, const QPixmap &pixmap, const QWidget *w,
     }
 }
 
-bool Functions::mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const ChecksumList &osd_ids, const qreal *scaleW, const qreal *scaleH, QRect *bounds)
+bool Functions::mustRepaintOSD(const QList<shared_ptr<const QMPlay2OSD>> &osd_list, const ChecksumList &osd_ids, const qreal *scaleW, const qreal *scaleH, QRect *bounds)
 {
     bool mustRepaint = (osd_list.count() != osd_ids.count());
-    for (const QMPlay2OSD *osd : osd_list)
+    for (auto &&osd : osd_list)
     {
         auto locker = osd->lock();
         if (!mustRepaint)
@@ -396,11 +398,11 @@ bool Functions::mustRepaintOSD(const QList<const QMPlay2OSD *> &osd_list, const 
     }
     return mustRepaint;
 }
-void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_ids)
+void Functions::paintOSD(bool rgbSwapped, const QList<shared_ptr<const QMPlay2OSD>> &osd_list, const qreal scaleW, const qreal scaleH, QPainter &painter, ChecksumList *osd_ids)
 {
     if (osd_ids)
         osd_ids->clear();
-    for (const QMPlay2OSD *osd : osd_list)
+    for (auto &&osd : osd_list)
     {
         auto locker = osd->lock();
         if (osd_ids)
@@ -437,7 +439,7 @@ void Functions::paintOSD(bool rgbSwapped, const QList<const QMPlay2OSD *> &osd_l
             painter.restore();
     }
 }
-void Functions::paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList<const QMPlay2OSD *> &osd_list, ChecksumList &osd_ids)
+void Functions::paintOSDtoYV12(quint8 *imageData, QImage &osdImg, int W, int H, int linesizeLuma, int linesizeChroma, const QList<shared_ptr<const QMPlay2OSD>> &osd_list, ChecksumList &osd_ids)
 {
     QRect bounds;
     const int osdW = osdImg.width();

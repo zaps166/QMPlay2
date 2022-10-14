@@ -38,9 +38,8 @@ public:
     void resizeEvent(QResizeEvent *) override;
 
     Frame videoFrame;
-    QList<const QMPlay2OSD *> osd_list;
+    QMPlay2OSDList osd_list;
     int Brightness, Contrast;
-    QMutex osd_mutex;
 private:
     void paintEvent(QPaintEvent *) override;
     bool event(QEvent *) override;
@@ -70,8 +69,7 @@ private:
 
     AVPixelFormats supportedPixelFormats() const override;
 
-    void writeVideo(const Frame &videoFrame) override;
-    void writeOSD(const QList<const QMPlay2OSD *> &) override;
+    void writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList) override;
 
     QString name() const override;
 

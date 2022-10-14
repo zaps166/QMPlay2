@@ -573,7 +573,6 @@ void OpenGLCommon::paintGL()
     glActiveTexture(GL_TEXTURE3);
 
     /* OSD */
-    osdMutex.lock();
     if (!osdList.isEmpty())
     {
         glBindTexture(GL_TEXTURE_2D, textures[0]);
@@ -648,7 +647,6 @@ void OpenGLCommon::paintGL()
         shaderProgramOSD->disableAttributeArray(texCoordOSDLoc);
         shaderProgramOSD->disableAttributeArray(positionOSDLoc);
     }
-    osdMutex.unlock();
 
     glBindTexture(GL_TEXTURE_2D, 0);
 }

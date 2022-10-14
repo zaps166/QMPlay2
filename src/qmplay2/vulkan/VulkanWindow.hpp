@@ -19,6 +19,7 @@
 #pragma once
 
 #include <VideoOutputCommon.hpp>
+#include <QMPlay2OSD.hpp>
 #include <Frame.hpp>
 
 #include <QMatrix4x4>
@@ -29,9 +30,6 @@
 
 #include <mutex>
 #include <set>
-
-class QMPlay2OSD;
-class Frame;
 
 namespace QmVk {
 
@@ -89,8 +87,7 @@ public:
 
     inline bool isDeepColor() const;
 
-    void setFrame(const Frame &frame);
-    void setOSD(const QList<const QMPlay2OSD *> &osd);
+    void setFrame(const Frame &frame, QMPlay2OSDList &&osdList);
 
 private:
     inline VideoPipelineSpecializationData *getVideoPipelineSpecializationData();
@@ -247,8 +244,7 @@ private:
     bool m_frameChanged = false;
     unique_ptr<FrameProps> m_frameProps;
 
-    mutex m_osdMutex;
-    QList<const QMPlay2OSD *> m_osd;
+    QMPlay2OSDList m_osd;
 };
 
 /* Inline implementation */

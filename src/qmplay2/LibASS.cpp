@@ -272,7 +272,7 @@ void LibASS::setOSDStyle()
     osd_style->ScaleX = osd_style->ScaleY = 1;
     readStyle("OSD", osd_style);
 }
-bool LibASS::getOSD(QMPlay2OSD *&osd, const QByteArray &txt, double duration)
+bool LibASS::getOSD(shared_ptr<QMPlay2OSD> &osd, const QByteArray &txt, double duration)
 {
     if (!osd_track || !osd_style || !osd_event || !osd_renderer || !W || !H)
         return false;
@@ -288,21 +288,11 @@ bool LibASS::getOSD(QMPlay2OSD *&osd, const QByteArray &txt, double duration)
     osd_event->Text = nullptr;
     if (!img)
         return false;
-    unique_lock<mutex> locker;
-    if (!osd)
-    {
-        osd = new QMPlay2OSD;
-    }
-    else
-    {
-        locker = osd->lock();
-        if (ch)
-            osd->clear();
-    }
+    auto locker = QMPlay2OSD::ensure(osd, ch);
     osd->setText(txt);
     osd->setDuration(duration);
     if (ch || !locker.owns_lock())
-        addImgs(img, osd);
+        addImgs(img, osd.get());
     osd->start();
     return true;
 }
@@ -480,7 +470,7 @@ void LibASS::flushASSEvents()
         return;
     ass_flush_events(ass_sub_track);
 }
-bool LibASS::getASS(QMPlay2OSD *&osd, double pos)
+bool LibASS::getASS(shared_ptr<QMPlay2OSD> &osd, double pos)
 {
     if (!ass_sub_track || !ass_sub_renderer || !W || !H)
         return false;
@@ -537,21 +527,10 @@ bool LibASS::getASS(QMPlay2OSD *&osd, double pos)
     if (!img)
         return false;
 
-    unique_lock<mutex> locker;
-
-    if (!osd)
-    {
-        osd = new QMPlay2OSD;
-    }
-    else
-    {
-        locker = osd->lock();
-        if (ch)
-            osd->clear();
-    }
+    auto locker = QMPlay2OSD::ensure(osd, ch);
     osd->setPTS(pos);
     if (ch || !locker.owns_lock())
-        addImgs(img, osd);
+        addImgs(img, osd.get());
     return true;
 }
 void LibASS::closeASS()
@@ -649,7 +628,7 @@ void LibASS::addASSEvent(const QByteArray &, double, double)
 {}
 void LibASS::flushASSEvents()
 {}
-bool LibASS::getASS(QMPlay2OSD *&, double)
+bool LibASS::getASS(shared_ptr<QMPlay2OSD> &, double)
 {
     return false;
 }

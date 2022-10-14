@@ -71,6 +71,9 @@ public:
     using IterateCallback = std::function<void(const Image &)>;
 
 public:
+    static std::unique_lock<std::mutex> ensure(std::shared_ptr<QMPlay2OSD> &osd, bool forceClear);
+
+public:
     QMPlay2OSD();
     ~QMPlay2OSD();
 
@@ -167,3 +170,5 @@ private:
     std::function<void()> m_returnVkBufferFn;
 #endif
 };
+
+using QMPlay2OSDList = QList<std::shared_ptr<const QMPlay2OSD>>;

@@ -19,6 +19,7 @@
 #pragma once
 
 #include <VideoWriter.hpp>
+#include <QMPlay2OSD.hpp>
 
 #include <QWidget>
 #include <QTimer>
@@ -26,7 +27,6 @@
 #include <ddraw.h>
 
 class DirectDrawWriter;
-class QMPlay2OSD;
 
 class Drawable final : public QWidget
 {
@@ -50,8 +50,7 @@ public:
 
     void resizeEvent(QResizeEvent *) override;
 
-    QList<const QMPlay2OSD *> osd_list;
-    QMutex osd_mutex;
+    QMPlay2OSDList osd_list;
     bool isOK, isOverlay, paused;
 private:
     void getRects(RECT &, RECT &);
@@ -103,8 +102,7 @@ private:
     bool readyWrite() const override;
 
     bool processParams(bool *paramsCorrected) override;
-    void writeVideo(const Frame &videoFrame) override;
-    void writeOSD(const QList<const QMPlay2OSD *> &) override;
+    void writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList) override;
 
     void pause() override;
 

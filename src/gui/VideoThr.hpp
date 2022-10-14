@@ -20,18 +20,19 @@
 
 #include <AVThread.hpp>
 #include <VideoFilters.hpp>
+#include <QMPlay2OSD.hpp>
 
 extern "C" {
     #include <libavutil/rational.h>
 }
 
-class QMPlay2OSD;
 class VideoWriter;
 class HWDecContext;
 
 class VideoThr final : public AVThread
 {
     Q_OBJECT
+
 public:
     VideoThr(PlayClass &playC, const QStringList &pluginsName = {});
     ~VideoThr();
@@ -88,21 +89,22 @@ private:
     inline void setHighTimerResolution();
 #endif
 
+    void write(const Frame &videoFrame, QMPlay2OSDList &&osdList, quint32 lastSeq);
+    void screenshot(Frame videoFrame);
+    void pause();
+
+private:
     bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrameOrError, decoderError;
     AVRational lastSAR;
     int W, H;
     quint32 seq;
 
     Decoder *sDec;
-    QMPlay2OSD *subtitles;
+    std::shared_ptr<QMPlay2OSD> subtitles;
     VideoFilters filters;
     QMutex filtersMutex;
 
 #ifdef Q_OS_WIN
     bool m_timerPrecision = false;
 #endif
-private slots:
-    void write(Frame videoFrame, quint32 lastSeq);
-    void screenshot(Frame videoFrame);
-    void pause();
 };

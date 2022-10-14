@@ -177,8 +177,9 @@ AVPixelFormats OpenGLWriter::supportedPixelFormats() const
     };
 }
 
-void OpenGLWriter::writeVideo(const Frame &videoFrame)
+void OpenGLWriter::writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList)
 {
+    m_drawable->osdList = move(osdList);
     m_drawable->isPaused = false;
     m_drawable->videoFrame = videoFrame;
     if (m_drawable->m_limited != m_drawable->videoFrame.isLimited() || m_drawable->m_colorSpace != m_drawable->videoFrame.colorSpace())
@@ -188,11 +189,6 @@ void OpenGLWriter::writeVideo(const Frame &videoFrame)
         m_drawable->doReset = true;
     }
     m_drawable->updateGL(m_drawable->isSphericalView());
-}
-void OpenGLWriter::writeOSD(const QList<const QMPlay2OSD *> &osds)
-{
-    QMutexLocker mL(&m_drawable->osdMutex);
-    m_drawable->osdList = osds;
 }
 
 void OpenGLWriter::pause()
