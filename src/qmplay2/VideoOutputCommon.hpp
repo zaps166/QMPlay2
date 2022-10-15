@@ -44,6 +44,8 @@ public:
     virtual bool setSphericalView(bool sphericalView);
 
 protected:
+    QSize getRealWidgetSize() const;
+
     void updateSizes(bool transpose);
     void updateMatrix();
 
@@ -70,8 +72,8 @@ protected:
     double m_aRatio = 0.0;
     double m_zoom = 0.0;
 
-    QSizeF m_scaledSize;
-    QRectF m_subsRect;
+    QSize m_scaledSize;
+    QRect m_subsRect;
 
     QMatrix4x4 m_matrix;
 

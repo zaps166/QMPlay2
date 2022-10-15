@@ -690,16 +690,12 @@ void Window::renderOSD()
 
         QMatrix4x4 mat;
         mat.translate(
-            -1.0f - m_osdOffset.x(),
-            -1.0f - m_osdOffset.y()
-        );
-        mat.translate(
-            m_subsRect.x() * 2.0f / winSize.width(),
-            m_subsRect.y() * 2.0f / winSize.height()
-        );
-        mat.translate(
-            img->rect.x() * 2.0f * multiplier.x() / (winSize.width()  - 1.0f),
-            img->rect.y() * 2.0f * multiplier.y() / (winSize.height() - 1.0f)
+            (-1.0f - m_osdOffset.x())
+                + (m_subsRect.x() * 2.0f / winSize.width())
+                + (img->rect.x()  * 2.0f * multiplier.x() / winSize.width()),
+            (-1.0f - m_osdOffset.y())
+                + (m_subsRect.y() * 2.0f / winSize.height())
+                + (img->rect.y()  * 2.0f * multiplier.y() / winSize.height())
         );
         mat.scale(
             img->rect.width()  * 2.0f * multiplier.x() / winSize.width(),
@@ -1233,7 +1229,7 @@ bool Window::ensureMipmaps(bool mustGenerateMipmaps)
     }
 
     const bool mustRegenerateMipmaps = m.imageOptimalTiling->setMipLevelsLimitForSize(
-        vk::Extent2D(ceil(m_scaledSize.width()), ceil(m_scaledSize.height()))
+        vk::Extent2D(m_scaledSize.width(), m_scaledSize.height())
     );
 
     if (m.shouldUpdateImageOptimalTiling)
@@ -1253,7 +1249,9 @@ bool Window::mustGenerateMipmaps()
     if (!m_hqScaleDown || m_sphericalView)
         return false;
 
-    return (m_scaledSize.width() / m_imgSize.width() < 0.75 || m_scaledSize.height() / m_imgSize.height() < 0.75);
+    const auto scaledSizeF = QSizeF(m_scaledSize);
+    const auto imgSizeF = QSizeF(m_imgSize);
+    return (scaledSizeF.width() / imgSizeF.width() < 0.75 || scaledSizeF.height() / imgSizeF.height() < 0.75);
 }
 
 bool Window::ensureSupportedSampledImage(bool mustGenerateMipmaps)

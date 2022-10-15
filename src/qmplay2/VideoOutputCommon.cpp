@@ -76,18 +76,31 @@ bool VideoOutputCommon::setSphericalView(bool sphericalView)
     return true;
 }
 
+QSize VideoOutputCommon::getRealWidgetSize() const
+{
+    const auto widgetSizeF = m_widget->devicePixelRatioF() * QSizeF(m_widget->size());
+    return QSize(
+        widgetSizeF.width(),
+        widgetSizeF.height()
+    );
+}
+
 void VideoOutputCommon::updateSizes(bool transpose)
 {
-    const auto size = m_widget->devicePixelRatioF() * m_widget->size();
+    const auto size = getRealWidgetSize();
 
-    m_scaledSize = m_zoom * (transpose
+    const auto scaledSize = m_zoom * (transpose
         ? QSizeF(1.0, m_aRatio).scaled(size, Qt::KeepAspectRatio)
         : QSizeF(m_aRatio, 1.0).scaled(size, Qt::KeepAspectRatio)
+    );
+    m_scaledSize = QSize( // round down to int
+        scaledSize.width(),
+        scaledSize.height()
     );
 
     const auto subsScaledSize = m_zoom * QSizeF(m_aRatio, 1.0).scaled(size, Qt::KeepAspectRatio);
     const auto subsScaledPos = (size - subsScaledSize) / 2.0;
-    m_subsRect.setRect(
+    m_subsRect.setRect( // round down to int
         subsScaledPos.width(),
         subsScaledPos.height(),
         subsScaledSize.width(),
@@ -96,18 +109,21 @@ void VideoOutputCommon::updateSizes(bool transpose)
 }
 void VideoOutputCommon::updateMatrix()
 {
-    const auto widgetSize = m_widget->devicePixelRatioF() * m_widget->size();
+    const auto widgetSize = getRealWidgetSize();
     m_matrix.setToIdentity();
     if (!m_sphericalView)
     {
-        m_matrix.scale(m_scaledSize.width() / widgetSize.width(), m_scaledSize.height() / widgetSize.height());
+        m_matrix.scale(
+            m_scaledSize.width()  / static_cast<float>(widgetSize.width()),
+            m_scaledSize.height() / static_cast<float>(widgetSize.height())
+        );
         if (!m_videoOffset.isNull())
             m_matrix.translate(-m_videoOffset.x(), m_videoOffset.y() * m_yMultiplier);
     }
     else
     {
         m_matrix.scale(1.0f, m_yMultiplier, 1.0f);
-        m_matrix.perspective(68.0, static_cast<float>(widgetSize.width()) / static_cast<float>(widgetSize.height()), 0.001f, 2.0f);
+        m_matrix.perspective(68.0f, static_cast<float>(widgetSize.width()) / static_cast<float>(widgetSize.height()), 0.001f, 2.0f);
         m_matrix.translate(0.0f, 0.0f, qBound<float>(-1.0f, (m_zoom > 1.0f) ? log10(m_zoom) : m_zoom - 1.0f, 0.99f));
         m_matrix.rotate(m_rot.x(), 1.0f, 0.0f, 0.0f);
         m_matrix.rotate(m_rot.y(), 0.0f, 0.0f, 1.0f);

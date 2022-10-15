@@ -578,7 +578,7 @@ void OpenGLCommon::paintGL()
         glBindTexture(GL_TEXTURE_2D, textures[0]);
 
         QRect bounds;
-        const qreal scaleW = m_subsRect.width() / outW, scaleH = m_subsRect.height() / outH;
+        const qreal scaleW = qreal(m_subsRect.width()) / outW, scaleH = qreal(m_subsRect.height()) / outH;
         bool mustRepaint = Functions::mustRepaintOSD(osdList, osd_ids, &scaleW, &scaleH, &bounds);
         bool hasNewSize = false;
         if (!mustRepaint)
@@ -621,7 +621,7 @@ void OpenGLCommon::paintGL()
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
         }
 
-        const auto realWinSize = m_widget->devicePixelRatioF() * m_widget->size();
+        const auto realWinSize = getRealWidgetSize();
         const float left   = (bounds.left() + m_subsRect.x()) * 2.0f / realWinSize.width() - m_osdOffset.x();
         const float right  = (bounds.right() + m_subsRect.x() + 1.0f) * 2.0f / realWinSize.width() - m_osdOffset.x();
         const float top    = (bounds.top() + m_subsRect.y()) * 2.0f / realWinSize.height() - m_osdOffset.y();
