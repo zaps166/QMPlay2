@@ -117,6 +117,9 @@ MenuBar::Window::Window(MenuBar *parent) :
     newAction(Window::tr("&Compact view"), this, toggleCompactView, false, QIcon(), true);
     addSeparator();
     newAction(Window::tr("&Always on top"), this, alwaysOnTop, false, QIcon(), true);
+#ifndef Q_OS_ANDROID
+    newAction(Window::tr("&Hide on close"), this, hideOnClose, false, QIcon(), true);
+#endif
     addSeparator();
     newAction(Window::tr("&Close"), this, close, false, QMPlay2Core.getIconFromTheme("application-exit"), false, QAction::QuitRole);
 }

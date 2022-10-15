@@ -834,6 +834,13 @@ void MainWidget::createMenuBar()
     connect(menuBar->window->toggleFullScreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
     connect(menuBar->window->toggleCompactView, SIGNAL(triggered()), this, SLOT(toggleCompactView()));
     connect(menuBar->window->alwaysOnTop, &QAction::triggered, this, &MainWidget::toggleAlwaysOnTop);
+#ifndef Q_OS_ANDROID
+    menuBar->window->hideOnClose->setChecked(QMPSettings.getBool("MainWidget/HideOnClose"));
+    connect(menuBar->window->hideOnClose, &QAction::triggered,
+            this, [](bool checked) {
+        QMPlay2Core.getSettings().set("MainWidget/HideOnClose", checked);
+    });
+#endif
     connect(menuBar->window->close, SIGNAL(triggered()), this, SLOT(close()));
 
     connect(menuBar->playlist->add->address, SIGNAL(triggered()), this, SLOT(openUrl()));
@@ -1864,6 +1871,17 @@ void MainWidget::leaveEvent(QEvent *e)
 }
 void MainWidget::closeEvent(QCloseEvent *e)
 {
+    Settings &settings = QMPlay2Core.getSettings();
+
+#ifndef Q_OS_ANDROID
+    if (!sender() && settings.getBool("MainWidget/HideOnClose"))
+    {
+        e->ignore();
+        toggleVisibility();
+        return;
+    }
+#endif
+
     const QString quitMsg = tr("Are you sure you want to quit?");
     if
     (
@@ -1882,8 +1900,6 @@ void MainWidget::closeEvent(QCloseEvent *e)
 
     if (QMPlay2GUI.pipe)
         disconnect(QMPlay2GUI.pipe, SIGNAL(newConnection(IPCSocket *)), this, SLOT(newConnection(IPCSocket *)));
-
-    Settings &settings = QMPlay2Core.getSettings();
 
     if (wasShow)
     {

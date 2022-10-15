@@ -35,7 +35,7 @@ public:
         Q_DECLARE_TR_FUNCTIONS(Window)
     public:
         Window(MenuBar *parent);
-        QAction *toggleVisibility, *toggleFullScreen, *toggleCompactView, *alwaysOnTop, *close;
+        QAction *toggleVisibility, *toggleFullScreen, *toggleCompactView, *alwaysOnTop, *hideOnClose, *close;
     };
 
     class Widgets : public QMenu
