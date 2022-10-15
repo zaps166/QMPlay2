@@ -204,13 +204,22 @@ void Radio::replyFinished(NetworkReply *reply)
 
 void Radio::on_addMyRadioStationButton_clicked()
 {
-    bool ok = false;
-    const QString name = QInputDialog::getText(this, m_newStationTxt, tr("Name"), QLineEdit::Normal, QString(), &ok);
-    if (ok && !name.isEmpty())
+    QString name;
+    QString address("http://");
+    for (;;)
     {
-        const QString address = QInputDialog::getText(this, m_newStationTxt, tr("Address"), QLineEdit::Normal, "http://", &ok).simplified();
-        if (ok && !address.isEmpty())
-            addMyRadioStation(name, address, QPixmap());
+        bool ok = false;
+        name = QInputDialog::getText(this, m_newStationTxt, tr("Name"), QLineEdit::Normal, name, &ok);
+        if (ok && !name.isEmpty())
+        {
+            address = QInputDialog::getText(this, m_newStationTxt, tr("Address"), QLineEdit::Normal, address, &ok).simplified();
+            if (ok && !address.isEmpty())
+            {
+                if (!addMyRadioStation(name, address, QPixmap()))
+                    continue;
+            }
+        }
+        break;
     }
 }
 void Radio::on_editMyRadioStationButton_clicked()
@@ -218,13 +227,22 @@ void Radio::on_editMyRadioStationButton_clicked()
     if (QListWidgetItem *item = ui->myRadioListWidget->currentItem())
     {
         const QString newStationTxt = tr("Editing selected radio station");
-        bool ok = false;
-        const QString name = QInputDialog::getText(this, newStationTxt, tr("Name"), QLineEdit::Normal, item->text(), &ok);
-        if (ok && !name.isEmpty())
+        QString name = item->text();
+        QString address = item->data(Qt::UserRole).toString();
+        for (;;)
         {
-            const QString address = QInputDialog::getText(this, newStationTxt, tr("Address"), QLineEdit::Normal, item->data(Qt::UserRole).toString(), &ok).simplified();
-            if (ok && !address.isEmpty())
-                addMyRadioStation(name, address, QPixmap(), item);
+            bool ok = false;
+            name = QInputDialog::getText(this, newStationTxt, tr("Name"), QLineEdit::Normal, name, &ok);
+            if (ok && !name.isEmpty())
+            {
+                address = QInputDialog::getText(this, newStationTxt, tr("Address"), QLineEdit::Normal, address, &ok).simplified();
+                if (ok && !address.isEmpty())
+                {
+                    if (!addMyRadioStation(name, address, QPixmap(), item))
+                        continue;
+                }
+            }
+            break;
         }
     }
 }
@@ -352,15 +370,16 @@ void Radio::radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &p
     emit QMPlay2Core.processParam(param, url);
 }
 
-void Radio::addMyRadioStation(const QString &name, const QString &address, const QPixmap &icon, QListWidgetItem *item)
+bool Radio::addMyRadioStation(const QString &name, const QString &address, const QPixmap &icon, QListWidgetItem *item)
 {
+    const auto items = ui->myRadioListWidget->findItems(name, Qt::MatchExactly | Qt::MatchCaseSensitive);
+    if (!items.empty() && (!item || !items.contains(item)))
+    {
+        QMessageBox::information(this, m_newStationTxt, tr("Radio station with given name already exists!"));
+        return false;
+    }
     if (!item)
     {
-        if (!ui->myRadioListWidget->findItems(name, Qt::MatchExactly | Qt::MatchCaseSensitive).isEmpty())
-        {
-            QMessageBox::information(this, m_newStationTxt, tr("Radio station with given name already exists!"));
-            return;
-        }
         item = new QListWidgetItem(ui->myRadioListWidget);
         item->setIcon(icon.isNull() ? m_radioIcon : icon);
         item->setData(Qt::UserRole + 1, !icon.isNull());
@@ -370,6 +389,7 @@ void Radio::addMyRadioStation(const QString &name, const QString &address, const
     item->setData(Qt::UserRole, address);
     if (m_once)
         m_storeMyRadios = true;
+    return true;
 }
 
 void Radio::setSearchInfo(const QStringList &list)

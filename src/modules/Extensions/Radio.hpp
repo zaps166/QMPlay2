@@ -76,7 +76,7 @@ private slots:
 private:
     void radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param);
 
-    void addMyRadioStation(const QString &name, const QString &address, const QPixmap &icon, QListWidgetItem *item = nullptr);
+    bool addMyRadioStation(const QString &name, const QString &address, const QPixmap &icon, QListWidgetItem *item = nullptr);
 
     void setSearchInfo(const QStringList &list);
 
