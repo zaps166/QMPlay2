@@ -319,6 +319,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
             if (QMPlay2Core.getLanguage() == langs[i])
                 generalSettingsPage->langBox->setCurrentIndex(i + 1);
         }
+        generalSettingsPage->langBox->model()->sort(0);
 
         generalSettingsPage->styleBox->addItems(QStyleFactory::keys());
         idx = generalSettingsPage->styleBox->findText(QApplication::style()->objectName(), Qt::MatchFixedString);
