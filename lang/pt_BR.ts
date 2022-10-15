@@ -1362,6 +1362,17 @@
     </message>
 </context>
 <context>
+    <name>MediaKitWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation type="unfinished">Não foi possível abrir o canal de saída do áudio</translation>
+    </message>
+    <message>
+        <source>Playback error</source>
+        <translation type="unfinished">Erro de reprodução</translation>
+    </message>
+</context>
+<context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>Enabled</source>
@@ -1829,6 +1840,10 @@
     </message>
     <message>
         <source>Preferred video codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delay</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3556,6 +3571,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>&amp;Close</source>
         <translation>Fe&amp;char</translation>
+    </message>
+    <message>
+        <source>&amp;Hide on close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

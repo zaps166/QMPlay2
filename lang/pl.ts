@@ -1357,6 +1357,17 @@
     </message>
 </context>
 <context>
+    <name>MediaKitWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation>Nie można otworzyć strumienia wyjścia dźwięku</translation>
+    </message>
+    <message>
+        <source>Playback error</source>
+        <translation>Błąd podczas odtwarzania</translation>
+    </message>
+</context>
+<context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>enabled</source>
@@ -1825,6 +1836,10 @@
     <message>
         <source>Preferred video codec</source>
         <translation>Preferowany kodek wideo</translation>
+    </message>
+    <message>
+        <source>Delay</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3550,6 +3565,10 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     <message>
         <source>&amp;Always on top</source>
         <translation>Z&amp;awsze na wierzchu</translation>
+    </message>
+    <message>
+        <source>&amp;Hide on close</source>
+        <translation>&amp;Ukryj przy zamykaniu</translation>
     </message>
 </context>
 <context>

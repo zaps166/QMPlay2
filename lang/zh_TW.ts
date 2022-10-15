@@ -1357,6 +1357,17 @@
     </message>
 </context>
 <context>
+    <name>MediaKitWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation type="unfinished">無法開啟音訊輸出串流</translation>
+    </message>
+    <message>
+        <source>Playback error</source>
+        <translation type="unfinished">播放錯誤</translation>
+    </message>
+</context>
+<context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>enabled</source>
@@ -1825,6 +1836,10 @@
     <message>
         <source>Preferred video codec</source>
         <translation>偏好的視訊編解碼器</translation>
+    </message>
+    <message>
+        <source>Delay</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3550,6 +3565,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>&amp;Always on top</source>
         <translation>永遠置頂(&amp;A)</translation>
+    </message>
+    <message>
+        <source>&amp;Hide on close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

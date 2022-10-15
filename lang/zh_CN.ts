@@ -1357,6 +1357,17 @@
     </message>
 </context>
 <context>
+    <name>MediaKitWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation type="unfinished">无法打开音频输出流</translation>
+    </message>
+    <message>
+        <source>Playback error</source>
+        <translation type="unfinished">回放错误</translation>
+    </message>
+</context>
+<context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>enabled</source>
@@ -1517,7 +1528,7 @@
     <message>
         <source>Big endian</source>
         <translation>大端字节序</translation>
-    </message>    
+    </message>
     <message>
         <source>Associate files with QMPlay2</source>
         <translation>用 QMPlay2 关联文件</translation>
@@ -1825,6 +1836,10 @@
     <message>
         <source>Preferred video codec</source>
         <translation>首选视频编解码器</translation>
+    </message>
+    <message>
+        <source>Delay</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3550,6 +3565,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>&amp;Always on top</source>
         <translation>始终在最前端(&amp;A)</translation>
+    </message>
+    <message>
+        <source>&amp;Hide on close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

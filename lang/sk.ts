@@ -1357,6 +1357,17 @@
     </message>
 </context>
 <context>
+    <name>MediaKitWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Playback error</source>
+        <translation type="unfinished">Chyba prehrávania</translation>
+    </message>
+</context>
+<context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>enabled</source>
@@ -1825,6 +1836,10 @@
     <message>
         <source>Preferred video codec</source>
         <translation>Uprednostňovaný videokodek</translation>
+    </message>
+    <message>
+        <source>Delay</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3548,6 +3563,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>&amp;Always on top</source>
         <translation>Vždy n&amp;avrchu</translation>
+    </message>
+    <message>
+        <source>&amp;Hide on close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

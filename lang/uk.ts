@@ -431,11 +431,11 @@
     </message>
     <message>
         <source>Bottom field first</source>
-        <translation>Спочатку нижнє поле></translation>
+        <translation>Спочатку нижнє поле</translation>
     </message>
     <message>
         <source>Top field first</source>
-        <translation>Спочатку верхнє поле></translation>
+        <translation>Спочатку верхнє поле</translation>
     </message>
 </context>
 <context>
@@ -1307,11 +1307,11 @@
     </message>
     <message>
         <source>Next audio stream</source>
-        <translation>Наступний аудіопотік></translation>
+        <translation>Наступний аудіопотік</translation>
     </message>
     <message>
         <source>Next subtitles stream</source>
-        <translation>Наступний потік субтитрів></translation>
+        <translation>Наступний потік субтитрів</translation>
     </message>
 </context>
 <context>
@@ -1354,6 +1354,17 @@
     <message>
         <source>Copy page address</source>
         <translation>Копіювати адресу сторінки</translation>
+    </message>
+</context>
+<context>
+    <name>MediaKitWriter</name>
+    <message>
+        <source>Cannot open audio output stream</source>
+        <translation type="unfinished">Неможливо відкрити вихідний потік звуку</translation>
+    </message>
+    <message>
+        <source>Playback error</source>
+        <translation type="unfinished">Помилка відтворення</translation>
     </message>
 </context>
 <context>
@@ -1826,6 +1837,10 @@
         <source>Preferred video codec</source>
         <translation>Бажаний відеокодек</translation>
     </message>
+    <message>
+        <source>Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -2113,11 +2128,11 @@
     </message>
     <message>
         <source>Keep audio pitch during playback speed change</source>
-        <translation>Зберігати висоту звуку на різних швидкостях відтворення></translation>
+        <translation>Зберігати висоту звуку на різних швидкостях відтворення</translation>
     </message>
     <message>
         <source>Don&apos;t keep audio pitch during playback speed change</source>
-        <translation>Не зберігати висоту звуку на різних швидкостях відтворення></translation>
+        <translation>Не зберігати висоту звуку на різних швидкостях відтворення</translation>
     </message>
 </context>
 <context>
@@ -2180,7 +2195,7 @@
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation>&amp;Зберігати висоту звуку></translation>
+        <translation>&amp;Зберігати висоту звуку</translation>
     </message>
 </context>
 <context>
@@ -3120,7 +3135,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Force audio content to use the specified number of channels.
-Partially checked does this only if the content has less channels than the specified value
+Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
         <translation>Примусово використовувати вказану кількість аудіоканалів.
 Частково вибране не зменшить кількість каналів
@@ -3550,6 +3565,10 @@ Partially checked does this only if the content has less channels than the speci
     <message>
         <source>&amp;Always on top</source>
         <translation>&amp;Завжди зверху</translation>
+    </message>
+    <message>
+        <source>&amp;Hide on close</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
