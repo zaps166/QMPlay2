@@ -315,7 +315,11 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
 
 #ifndef Q_OS_HAIKU
     if (properties.deviceType == vk::PhysicalDeviceType::eCpu)
-        errors.push_back("Not a GPU");
+    {
+        static bool allowCpu = (qEnvironmentVariableIntValue("QMPLAY2_ALLOW_VULKAN_CPU", nullptr) != 0);
+        if (!allowCpu)
+            errors.push_back("Not a GPU");
+    }
 #endif
 
     if (limits.maxPushConstantsSize < 128)
