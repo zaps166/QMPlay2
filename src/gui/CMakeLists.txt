@@ -162,6 +162,9 @@ elseif(APPLE)
 
     # screen saver
     list(APPEND GUI_SRC macOS/ScreenSaver.cpp)
+elseif(ANDROID)
+    # screen saver
+    list(APPEND GUI_SRC Android/ScreenSaver.cpp)
 else()
     # screen saver
     list(APPEND GUI_SRC Unix/ScreenSaver.cpp)
