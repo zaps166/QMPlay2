@@ -21,6 +21,7 @@
 #include <NetworkAccess.hpp>
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
+#include <Settings.hpp>
 
 #include <QRegularExpression>
 #include <QStandardPaths>
@@ -372,6 +373,10 @@ bool YouTubeDL::update()
 #if defined(Q_OS_HAIKU)
     return true;
 #endif
+
+    if (QMPlay2Core.getSettings().getBool("SkipYtDplUpdate"))
+        return true;
+
     // Mutex must be locked here
 
     qDebug() << "\"youtube-dl\" updates will be checked";
