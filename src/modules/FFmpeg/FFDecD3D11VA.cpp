@@ -180,7 +180,7 @@ bool FFDecD3D11VA::open(StreamInfo &streamInfo)
         return false;
 
     const auto pixFmt = streamInfo.pixelFormat();
-    if (pixFmt == AV_PIX_FMT_YUV420P10)
+    if (pixFmt == AV_PIX_FMT_YUV420P10 && streamInfo.params->codec_id != AV_CODEC_ID_H264)
     {
         auto vkInstance = static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance());
         if (!vkInstance->supportedPixelFormats().contains(pixFmt))

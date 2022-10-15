@@ -128,7 +128,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo)
         return false;
 
     m_pixFmt = Frame::convert3PlaneTo2Plane(streamInfo.pixelFormat());
-    if (m_pixFmt != AV_PIX_FMT_NV12 && m_pixFmt != AV_PIX_FMT_P016)
+    if (m_pixFmt != AV_PIX_FMT_NV12 && (m_pixFmt != AV_PIX_FMT_P016 || streamInfo.params->codec_id == AV_CODEC_ID_H264))
         return false;
 
     AVCodec *codec = init(streamInfo);
