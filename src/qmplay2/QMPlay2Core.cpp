@@ -583,14 +583,12 @@ QStringList QMPlay2CoreClass::getLanguages() const
 }
 void QMPlay2CoreClass::setLanguage()
 {
-    QString systemLang = QLocale::system().name();
-    const int idx = systemLang.indexOf('_');
-    if (idx > -1)
-        systemLang.remove(idx, systemLang.size() - idx);
-    lang = settings->getString("Language", systemLang);
+    lang = settings->getString("Language");
     if (lang.isEmpty())
-        lang = systemLang;
-    if (!translator->load(lang, langDir))
+        lang = QLocale::system().name();
+    if (translator->load(lang, langDir))
+        lang = QFileInfo(translator->filePath()).baseName();
+    else
         lang = "en";
     qtTranslator->load("qtbase_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 }
