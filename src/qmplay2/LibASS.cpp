@@ -607,7 +607,7 @@ void LibASS::initOSD()
 {}
 void LibASS::setOSDStyle()
 {}
-bool LibASS::getOSD(QMPlay2OSD *&, const QByteArray &, double)
+bool LibASS::getOSD(std::shared_ptr<QMPlay2OSD> &, const QByteArray &, double)
 {
     return false;
 }
@@ -628,7 +628,7 @@ void LibASS::addASSEvent(const QByteArray &, double, double)
 {}
 void LibASS::flushASSEvents()
 {}
-bool LibASS::getASS(shared_ptr<QMPlay2OSD> &, double)
+bool LibASS::getASS(std::shared_ptr<QMPlay2OSD> &, double)
 {
     return false;
 }
