@@ -1360,11 +1360,11 @@
     <name>MediaKitWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation type="unfinished">Nem sikerült a hangkimeneti adatfolyam megnyitása</translation>
+        <translation>Nem sikerült a hangkimeneti adatfolyam megnyitása</translation>
     </message>
     <message>
         <source>Playback error</source>
-        <translation type="unfinished">Lejátszási hiba</translation>
+        <translation>Lejátszási hiba</translation>
     </message>
 </context>
 <context>

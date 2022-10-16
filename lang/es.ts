@@ -1360,11 +1360,11 @@
     <name>MediaKitWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el flujo de salida de audio</translation>
     </message>
     <message>
         <source>Playback error</source>
-        <translation type="unfinished">Error de reproducción</translation>
+        <translation>Error de reproducción</translation>
     </message>
 </context>
 <context>

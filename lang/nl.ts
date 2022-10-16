@@ -1360,11 +1360,11 @@
     <name>MediaKitWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation type="unfinished">De audio-uitvoerstream kan niet worden geopend</translation>
+        <translation>De audio-uitvoerstream kan niet worden geopend</translation>
     </message>
     <message>
         <source>Playback error</source>
-        <translation type="unfinished">Afspeelfout</translation>
+        <translation>Afspeelfout</translation>
     </message>
 </context>
 <context>

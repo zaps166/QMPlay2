@@ -1360,11 +1360,11 @@
     <name>MediaKitWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation type="unfinished">無法開啟音訊輸出串流</translation>
+        <translation>無法開啟音訊輸出串流</translation>
     </message>
     <message>
         <source>Playback error</source>
-        <translation type="unfinished">播放錯誤</translation>
+        <translation>播放錯誤</translation>
     </message>
 </context>
 <context>
@@ -1839,7 +1839,7 @@
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>延遲</translation>
     </message>
 </context>
 <context>
@@ -3568,7 +3568,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&amp;Hide on close</source>
-        <translation type="unfinished"></translation>
+        <translation>關閉時隱藏(&amp;H)</translation>
     </message>
 </context>
 <context>
