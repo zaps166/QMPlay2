@@ -165,7 +165,13 @@ QString QMPlay2GUIClass::getCurrentPth(QString pth, bool leaveFilename)
     if (!leaveFilename)
         pth = Functions::filePath(pth);
     if (!QFileInfo::exists(pth))
+    {
         pth = settings->getString("currPth");
+#ifdef Q_OS_ANDROID
+        if (pth.isEmpty())
+            pth = "/sdcard";
+#endif
+    }
     return pth;
 }
 void QMPlay2GUIClass::setCurrentPth(const QString &pth)
@@ -607,6 +613,10 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_HAIKU
     setenv("HOME", "/boot/home", 1);
+#endif
+
+#ifdef Q_OS_ANDROID
+    QGuiApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
 #endif
 
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
