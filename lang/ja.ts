@@ -1361,11 +1361,11 @@
     <name>MediaKitWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation type="unfinished"></translation>
+        <translation>開けません</translation>
     </message>
     <message>
         <source>Playback error</source>
-        <translation type="unfinished">再生エラー</translation>
+        <translation>再生エラー</translation>
     </message>
 </context>
 <context>

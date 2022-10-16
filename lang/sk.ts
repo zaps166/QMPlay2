@@ -1360,11 +1360,11 @@
     <name>MediaKitWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedá sa otvoriť výstupný audio stream</translation>
     </message>
     <message>
         <source>Playback error</source>
-        <translation type="unfinished">Chyba prehrávania</translation>
+        <translation>Chyba prehrávania</translation>
     </message>
 </context>
 <context>
