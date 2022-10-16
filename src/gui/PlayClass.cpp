@@ -343,7 +343,6 @@ void PlayClass::loadSubsFile(const QString &fileName, const QList<StreamInfo *> 
             if (!QMPlay2Core.getSettings().getBool("KeepSubtitlesDelay"))
                 subtitlesSync = 0.0;
             ass->closeASS();
-            ass->clearFonts();
 
             bool loaded = false;
             const QString fileExt = Functions::fileExt(fileName).toLower();
@@ -1479,7 +1478,6 @@ void PlayClass::load(Demuxer *demuxer)
             subsMutex.lock();
             vThr->destroySubtitlesDecoder();
             ass->closeASS();
-            ass->clearFonts();
             subsMutex.unlock();
 
             if (subtitlesEnabled && fileSubsList.count() && chosenSubtitlesStream < 0)

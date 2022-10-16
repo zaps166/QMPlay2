@@ -55,7 +55,6 @@ public:
     void setFontScale(double);
 
     void addFont(const QByteArray &name, const QByteArray &data);
-    void clearFonts();
 
     void initOSD();
     void setOSDStyle();
@@ -78,7 +77,8 @@ private:
 private:
     Settings &settings;
 
-    ass_library *ass;
+    ass_library *m_subsAss;
+    ass_library *m_osdAss;
     int W, H, winW, winH;
     double zoom, aspect_ratio, fontScale;
 

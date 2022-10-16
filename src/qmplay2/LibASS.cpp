@@ -87,7 +87,9 @@ bool LibASS::isDummy()
 LibASS::LibASS(Settings &settings) :
     settings(settings)
 {
-    ass = ass_library_init();
+    m_subsAss = ass_library_init();
+    m_osdAss = ass_library_init();
+
     winW = winH = W = H = 0;
     zoom = 0.0;
     aspect_ratio = -1.0;
@@ -107,8 +109,8 @@ LibASS::~LibASS()
 {
     closeASS();
     closeOSD();
-    clearFonts();
-    ass_library_done(ass);
+    ass_library_done(m_osdAss);
+    ass_library_done(m_subsAss);
 }
 
 void LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
@@ -236,12 +238,7 @@ void LibASS::setFontScale(double fs)
 
 void LibASS::addFont(const QByteArray &name, const QByteArray &data)
 {
-    ass_add_font(ass, (char *)name.constData(), (char *)data.constData(), data.size());
-}
-void LibASS::clearFonts()
-{
-    ass_clear_fonts(ass);
-    ass_set_fonts_dir(ass, nullptr);
+    ass_add_font(m_subsAss, (char *)name.constData(), (char *)data.constData(), data.size());
 }
 
 void LibASS::initOSD()
@@ -249,7 +246,7 @@ void LibASS::initOSD()
     if (osd_track && osd_style && osd_event && osd_renderer)
         return;
 
-    osd_track = ass_new_track(ass);
+    osd_track = ass_new_track(m_osdAss);
 
     int styleID = ass_alloc_style(osd_track);
     osd_style = &osd_track->styles[styleID];
@@ -262,7 +259,7 @@ void LibASS::initOSD()
     osd_event->Style = styleID;
     osd_event->ReadOrder = eventID;
 
-    osd_renderer = ass_renderer_init(ass);
+    osd_renderer = ass_renderer_init(m_osdAss);
     ass_set_fonts(osd_renderer, nullptr, nullptr, 1, nullptr, 1);
 }
 void LibASS::setOSDStyle()
@@ -313,7 +310,7 @@ void LibASS::initASS(const QByteArray &ass_data)
     if (ass_sub_track && ass_sub_renderer)
         return;
 
-    ass_sub_track = ass_new_track(ass);
+    ass_sub_track = ass_new_track(m_subsAss);
     if (!ass_data.isEmpty())
     {
         ass_process_codec_private(ass_sub_track, (char *)ass_data.constData(), ass_data.size());
@@ -331,7 +328,7 @@ void LibASS::initASS(const QByteArray &ass_data)
         setASSStyle();
     }
 
-    ass_sub_renderer = ass_renderer_init(ass);
+    ass_sub_renderer = ass_renderer_init(m_subsAss);
     ass_set_fonts(ass_sub_renderer, nullptr, nullptr, true, nullptr, true);
 }
 bool LibASS::isASS() const
@@ -548,6 +545,7 @@ void LibASS::closeASS()
         ass_free_track(ass_sub_track);
     ass_sub_track = nullptr;
     ass_sub_renderer = nullptr;
+    ass_clear_fonts(m_subsAss);
 }
 
 void LibASS::readStyle(const QString &prefix, ASS_Style *style)
@@ -599,8 +597,6 @@ void LibASS::setFontScale(double)
 {}
 
 void LibASS::addFont(const QByteArray &, const QByteArray &)
-{}
-void LibASS::clearFonts()
 {}
 
 void LibASS::initOSD()
