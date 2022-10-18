@@ -74,6 +74,8 @@ private slots:
     void radioBrowserOpenHomePage();
 
 private:
+    QString getFileFilters(bool all) const;
+
     void radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param);
 
     bool addMyRadioStation(const QString &name, const QString &address, const QPixmap &icon, QListWidgetItem *item = nullptr);

@@ -22,6 +22,7 @@
 #include <Radio/RadioBrowserModel.hpp>
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
+#include <Playlist.hpp>
 
 #include <QDesktopServices>
 #include <QJsonDocument>
@@ -36,8 +37,6 @@
 #include <QTimer>
 #include <QMenu>
 #include <QUrl>
-
-constexpr const char *g_fileDialogFilter = "QMPlay2 radio station list (*.qmplay2radio)";
 
 Radio::Radio(Module &module) :
     m_newStationTxt(tr("Adding a new radio station")),
@@ -253,7 +252,7 @@ void Radio::on_removeMyRadioStationButton_clicked()
 }
 void Radio::on_loadMyRadioStationButton_clicked()
 {
-    const QString filePath = QFileDialog::getOpenFileName(this, tr("Load radio station list"), QString(), g_fileDialogFilter);
+    const QString filePath = QFileDialog::getOpenFileName(this, tr("Load radio station list"), QString(), getFileFilters(false));
     if (!filePath.isEmpty())
     {
         loadMyRadios(QSettings(filePath, QSettings::IniFormat).value("Radia").toStringList());
@@ -262,12 +261,34 @@ void Radio::on_loadMyRadioStationButton_clicked()
 }
 void Radio::on_saveMyRadioStationButton_clicked()
 {
-    QString filePath = QFileDialog::getSaveFileName(this, tr("Save radio station list"), QString(), g_fileDialogFilter);
-    if (!filePath.isEmpty())
+    if (ui->myRadioListWidget->count() == 0)
+        return;
+
+    QString filter;
+    QString filePath = QFileDialog::getSaveFileName(this, tr("Save radio station list"), QString(), getFileFilters(true), &filter);
+    if (filePath.isEmpty())
+        return;
+
+    int idx = filter.indexOf("(*.");
+    if (idx < 0)
+        return;
+
+    const auto suffix = filter.midRef(idx + 2).chopped(1);
+    if (!filePath.endsWith(suffix, Qt::CaseInsensitive))
+        filePath += suffix;
+
+    if (suffix == ".qmplay2radio")
     {
-        if (!filePath.endsWith(".qmplay2radio", Qt::CaseInsensitive))
-            filePath += ".qmplay2radio";
         QSettings(filePath, QSettings::IniFormat).setValue("Radia", getMyRadios());
+    }
+    else
+    {
+        Playlist::Entries plist;
+        for (auto item : ui->myRadioListWidget->findItems(QString(), Qt::MatchContains))
+        {
+            plist.push_back({item->text(), item->data(Qt::UserRole).toString()});
+        }
+        Playlist::write(plist, Functions::Url(filePath));
     }
 }
 
@@ -360,6 +381,17 @@ void Radio::radioBrowserOpenHomePage()
     const QModelIndex index = ui->radioView->currentIndex();
     if (index.isValid())
         QDesktopServices::openUrl(m_radioBrowserModel->getHomePageUrl(index));
+}
+
+QString Radio::getFileFilters(bool all) const
+{
+    QString filter = "QMPlay2 radio station list (*.qmplay2radio)";
+    if (all)
+    {
+        for (const QString &e : Playlist::extensions())
+            filter += ";;" + e.toUpper() + " (*." + e + ")";
+    }
+    return filter;
 }
 
 void Radio::radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param)
