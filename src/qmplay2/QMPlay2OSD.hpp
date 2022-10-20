@@ -171,4 +171,4 @@ private:
 #endif
 };
 
-using QMPlay2OSDList = QList<std::shared_ptr<const QMPlay2OSD>>;
+using QMPlay2OSDList = QVector<std::shared_ptr<const QMPlay2OSD>>;
