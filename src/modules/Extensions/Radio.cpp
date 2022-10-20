@@ -402,8 +402,9 @@ void Radio::radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &p
     emit QMPlay2Core.processParam(param, url);
 }
 
-bool Radio::addMyRadioStation(const QString &name, const QString &address, const QPixmap &icon, QListWidgetItem *item)
+bool Radio::addMyRadioStation(QString name, const QString &address, const QPixmap &icon, QListWidgetItem *item)
 {
+    name = name.simplified();
     const auto items = ui->myRadioListWidget->findItems(name, Qt::MatchExactly | Qt::MatchCaseSensitive);
     if (!items.empty() && (!item || !items.contains(item)))
     {

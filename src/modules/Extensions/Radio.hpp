@@ -78,7 +78,7 @@ private:
 
     void radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param);
 
-    bool addMyRadioStation(const QString &name, const QString &address, const QPixmap &icon, QListWidgetItem *item = nullptr);
+    bool addMyRadioStation(QString name, const QString &address, const QPixmap &icon, QListWidgetItem *item = nullptr);
 
     void setSearchInfo(const QStringList &list);
 
