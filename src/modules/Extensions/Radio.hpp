@@ -33,7 +33,6 @@ class QListWidgetItem;
 class NetworkAccess;
 class NetworkReply;
 class QTimer;
-class QMenu;
 
 class Radio final : public QWidget, public QMPlay2Extensions
 {
@@ -44,6 +43,9 @@ public:
     ~Radio();
 
     DockWidget *getDockWidget() override;
+
+    QMenu *getTrayMenu() override;
+    void ensureTrayMenu() override;
 
 private slots:
     void visibilityChanged(const bool v);
@@ -87,6 +89,10 @@ private:
     QStringList getMyRadios() const;
     void loadMyRadios(const QStringList &radios);
 
+    void trayActionTriggered(bool checked);
+
+    void play(const QString &url, const QString &name);
+
 private:
     bool eventFilter(QObject *watched, QEvent *event) override;
 
@@ -96,9 +102,11 @@ private:
 
     Ui::Radio *ui;
 
-    bool m_once = false;
+    bool m_loaded = false;
     bool m_storeMyRadios = false;
+    bool m_recreateTrayMenu = true;
     DockWidget *m_dw;
+    QMenu *m_menu = nullptr;
 
     QMap<int, QPair<QStringList, QPointer<NetworkReply>>> m_searchInfo;
     RadioBrowserModel *m_radioBrowserModel;

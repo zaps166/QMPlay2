@@ -101,10 +101,17 @@ Radio::Radio(Module &module) :
 }
 Radio::~Radio()
 {
-    if (m_once)
+    if (m_loaded)
     {
         if (m_storeMyRadios)
-            Settings("Radio").set("Radia", getMyRadios());
+        {
+            Settings sets("Radio");
+            const auto radios = getMyRadios();
+            if (radios.isEmpty())
+                sets.remove("Radia");
+            else
+                sets.set("Radia", radios);
+        }
 
         sets().set("Radio/RadioBrowserSplitter", ui->radioBrowserSplitter->saveState().toBase64());
 
@@ -127,12 +134,54 @@ DockWidget *Radio::getDockWidget()
     return m_dw;
 }
 
-void Radio::visibilityChanged(const bool v)
+QMenu *Radio::getTrayMenu()
 {
-    if (v && !m_once)
+    bool hasEntries = false;
+
+    if (m_loaded)
+        hasEntries = (ui->myRadioListWidget->count() > 0);
+    else
+        hasEntries = Settings("Radio").contains("Radia");
+
+    if (!hasEntries)
+    {
+        delete m_menu;
+        m_menu = nullptr;
+    }
+    else if (!m_menu)
+    {
+        m_menu = new QMenu(m_dw->windowTitle(), this);
+    }
+
+    return m_menu;
+}
+void Radio::ensureTrayMenu()
+{
+    if (!m_recreateTrayMenu || !m_menu)
+        return;
+
+    if (!m_loaded)
     {
         restoreSettings();
-        m_once = true;
+    }
+
+    m_menu->clear();
+    for (auto item : ui->myRadioListWidget->findItems(QString(), Qt::MatchContains))
+    {
+        auto act = m_menu->addAction(item->text());
+        act->setData(item->data(Qt::UserRole));
+        connect(act, &QAction::triggered,
+                this, &Radio::trayActionTriggered);
+    }
+
+    m_recreateTrayMenu = false;
+}
+
+void Radio::visibilityChanged(const bool v)
+{
+    if (v && !m_loaded)
+    {
+        restoreSettings();
     }
 }
 
@@ -249,6 +298,7 @@ void Radio::on_removeMyRadioStationButton_clicked()
 {
     delete ui->myRadioListWidget->currentItem();
     m_storeMyRadios = true;
+    m_recreateTrayMenu = true;
 }
 void Radio::on_loadMyRadioStationButton_clicked()
 {
@@ -257,6 +307,7 @@ void Radio::on_loadMyRadioStationButton_clicked()
     {
         loadMyRadios(QSettings(filePath, QSettings::IniFormat).value("Radia").toStringList());
         m_storeMyRadios = true;
+        m_recreateTrayMenu = true;
     }
 }
 void Radio::on_saveMyRadioStationButton_clicked()
@@ -296,8 +347,7 @@ void Radio::on_myRadioListWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     if (item)
     {
-        QMPlay2Core.addNameForUrl(item->data(Qt::UserRole).toString(), item->text());
-        emit QMPlay2Core.processParam("open", item->data(Qt::UserRole).toString());
+        play(item->data(Qt::UserRole).toString(), item->text());
     }
 }
 
@@ -420,8 +470,11 @@ bool Radio::addMyRadioStation(QString name, const QString &address, const QPixma
     }
     item->setText(name);
     item->setData(Qt::UserRole, address);
-    if (m_once)
+    if (m_loaded)
+    {
         m_storeMyRadios = true;
+        m_recreateTrayMenu = true;
+    }
     return true;
 }
 
@@ -456,6 +509,8 @@ void Radio::restoreSettings()
         ui->searchByComboBox->setCurrentIndex(searchByIdx);
         on_searchByComboBox_activated(searchByIdx);
     }
+
+    m_loaded = true;
 }
 
 QStringList Radio::getMyRadios() const
@@ -496,6 +551,19 @@ void Radio::loadMyRadios(const QStringList &radios)
             continue;
         addMyRadioStation(radioDescr[0], radioDescr[1], pixmap);
     }
+}
+
+void Radio::trayActionTriggered(bool checked)
+{
+    Q_UNUSED(checked)
+    auto act = qobject_cast<QAction *>(sender());
+    play(act->data().toString(), act->text());
+}
+
+void Radio::play(const QString &url, const QString &name)
+{
+    QMPlay2Core.addNameForUrl(url, name);
+    emit QMPlay2Core.processParam("open", url);
 }
 
 bool Radio::eventFilter(QObject *watched, QEvent *event)
