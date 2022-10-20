@@ -77,6 +77,13 @@ QVector<QAction *> QMPlay2Extensions::getActions(const QString &name, double len
     Q_UNUSED(param)
     return {};
 }
+QMenu *QMPlay2Extensions::getTrayMenu()
+{
+    return nullptr;
+}
+void QMPlay2Extensions::ensureTrayMenu()
+{
+}
 
 bool QMPlay2Extensions::isVisualization() const
 {

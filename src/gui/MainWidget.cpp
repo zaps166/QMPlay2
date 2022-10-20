@@ -976,18 +976,38 @@ void MainWidget::createMenuBar()
 
     setMenuBar(menuBar);
 
-    QMenu *secondMenu = new QMenu(this);
 #ifndef Q_OS_MACOS
-    copyMenu(secondMenu, menuBar->window);
-    secondMenu->addMenu(menuBar->widgets);
-    copyMenu(secondMenu, menuBar->playlist, menuBar->playlist->extensions);
-    copyMenu(secondMenu, menuBar->player);
-    copyMenu(secondMenu, menuBar->playback, menuBar->playback->videoFilters->videoAdjustmentMenu);
-    copyMenu(secondMenu, menuBar->options);
-    copyMenu(secondMenu, menuBar->help);
     if (tray)
+    {
+        auto secondMenu = new QMenu(this);
+        copyMenu(secondMenu, menuBar->window);
+        secondMenu->addMenu(menuBar->widgets);
+        copyMenu(secondMenu, menuBar->playlist, menuBar->playlist->extensions);
+        copyMenu(secondMenu, menuBar->player);
+        copyMenu(secondMenu, menuBar->playback, menuBar->playback->videoFilters->videoAdjustmentMenu);
+        copyMenu(secondMenu, menuBar->options);
+        for (auto ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+        {
+            if (auto menu = ext->getTrayMenu())
+                secondMenu->addMenu(menu);
+        }
         tray->setContextMenu(secondMenu);
+
+        connect(secondMenu, &QMenu::aboutToShow,
+                this, [=] {
+            for (auto ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+            {
+                if (auto menu = ext->getTrayMenu())
+                {
+                    ext->ensureTrayMenu();
+                    if (!secondMenu->actions().contains(menu->menuAction()))
+                        secondMenu->addMenu(menu);
+                }
+            }
+        });
+    }
 #else //On OS X add only the most important menu actions to dock menu
+    auto secondMenu = new QMenu(this);
     secondMenu->addAction(menuBar->player->togglePlay);
     secondMenu->addAction(menuBar->player->stop);
     secondMenu->addAction(menuBar->player->next);

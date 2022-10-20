@@ -25,6 +25,8 @@
 #include <QString>
 #include <QImage>
 
+class QMenu;
+
 class QMPLAY2SHAREDLIB_EXPORT QMPlay2Extensions : public ModuleCommon
 {
 public:
@@ -65,6 +67,9 @@ public:
     virtual void convertAddress(const QString &, const QString &, const QString &, QString *, QString *, QIcon *, QString *extension, IOController<> *ioCtrl);
 
     virtual QVector<QAction *> getActions(const QString &name, double length, const QString &url, const QString &prefix = QString(), const QString &param = QString());
+
+    virtual QMenu *getTrayMenu();
+    virtual void ensureTrayMenu();
 
     virtual bool isVisualization() const;
     virtual void connectDoubleClick(const QObject *, const char *);
