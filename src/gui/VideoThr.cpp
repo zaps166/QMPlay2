@@ -306,8 +306,8 @@ void VideoThr::updateSubs()
     if (playC.ass)
     {
         playC.subsMutex.lock();
-        if (subtitles)
-            playC.ass->getASS(subtitles, playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync);
+        if (m_subtitles)
+            playC.ass->getASS(m_subtitles, playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync);
         playC.subsMutex.unlock();
     }
 }
@@ -511,12 +511,12 @@ void VideoThr::run()
             ? ts - playC.subtitlesSync
             : qQNaN()
         ;
-        const bool canDeleteSubs = (deleteSubs && subtitles);
+        const bool canDeleteSubs = (deleteSubs && m_subtitles);
         if (sDec) //Image subs (pgssub, dvdsub, ...)
         {
-            if (!sDec->decodeSubtitle(sPackets, subsPts, subtitles, QSize(W, H), flushVideo))
+            if (!sDec->decodeSubtitle(sPackets, subsPts, m_subtitles, QSize(W, H), flushVideo))
             {
-                subtitles.reset();
+                m_subtitles.reset();
             }
         }
         else
@@ -529,22 +529,22 @@ void VideoThr::run()
                 else
                     playC.ass->addASSEvent(Functions::convertToASS(sPacketData), sPacket.ts(), sPacket.duration());
             }
-            if (tsIsNotNan && !playC.ass->getASS(subtitles, subsPts))
+            if (tsIsNotNan && !playC.ass->getASS(m_subtitles, subsPts))
             {
-                subtitles.reset();
+                m_subtitles.reset();
             }
         }
-        if (subtitles && tsIsNotNan)
+        if (m_subtitles && tsIsNotNan)
         {
-            const bool hasDuration = subtitles->duration() >= 0.0;
-            if (canDeleteSubs || (subtitles->isStarted() && subsPts < subtitles->pts()) || (hasDuration && subsPts > subtitles->pts() + subtitles->duration()))
+            const bool hasDuration = m_subtitles->duration() >= 0.0;
+            if (canDeleteSubs || (m_subtitles->isStarted() && subsPts < m_subtitles->pts()) || (hasDuration && subsPts > m_subtitles->pts() + m_subtitles->duration()))
             {
-                subtitles.reset();
+                m_subtitles.reset();
             }
-            else if (subsPts >= subtitles->pts())
+            else if (subsPts >= m_subtitles->pts())
             {
-                subtitles->start();
-                osdList += subtitles;
+                m_subtitles->start();
+                osdList += m_subtitles;
             }
         }
         playC.subsMutex.unlock();
