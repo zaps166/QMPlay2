@@ -152,7 +152,7 @@ void SndResampler::convert(const QByteArray &src, QByteArray &dst, bool flush)
         if (!m_rubberBandStretcher)
         {
             RubberBandStretcher::Options options = RubberBandStretcher::OptionProcessRealTime | RubberBandStretcher::OptionChannelsTogether;
-            if (m_dstSamplerate >= 40000)
+            if (QStringLiteral(RUBBERBAND_VERSION) != QStringLiteral("3.0.0") || m_dstSamplerate >= 40000)
             {
                 // Workaround for RubberBand 3.0.0 bug:
                 // - low sample rates - bad audio quality
