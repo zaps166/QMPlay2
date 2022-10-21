@@ -77,7 +77,6 @@ private:
 private:
     Settings &settings;
 
-    ass_library *m_subsAss;
     ass_library *m_osdAss;
     int W, H, winW, winH;
     double zoom, aspect_ratio, fontScale;
@@ -89,6 +88,7 @@ private:
     ass_renderer *osd_renderer;
 
     //ASS subtitles
+    ass_library *m_subsAss;
     ass_track *ass_sub_track;
     ass_renderer *ass_sub_renderer;
     QList<ass_style *> ass_sub_styles_copy;
