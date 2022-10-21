@@ -65,8 +65,7 @@ VideoThr::VideoThr(PlayClass &playC, const QStringList &pluginsName) :
     doScreenshot(false),
     deleteOSD(false), deleteFrame(false), gotFrameOrError(false), decoderError(false),
     W(0), H(0), seq(0),
-    sDec(nullptr),
-    subtitles(nullptr)
+    sDec(nullptr)
 {
     if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
     {
@@ -88,7 +87,6 @@ VideoThr::~VideoThr()
     setHighTimerResolution<false>();
 #endif
     playC.osd.reset();
-    subtitles.reset();
     delete sDec;
 }
 
