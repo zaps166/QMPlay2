@@ -44,8 +44,8 @@ public:
         updateMutex.unlock();
     }
 
-    bool lock();
-    void unlock();
+    virtual bool lock();
+    virtual void unlock();
 
     inline bool isWaiting() const
     {

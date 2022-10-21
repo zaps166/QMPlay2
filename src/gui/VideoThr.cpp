@@ -110,8 +110,15 @@ bool VideoThr::videoWriterSet()
     return writer->set();
 }
 
+bool VideoThr::lock()
+{
+    m_subsDisplayLocker = {};
+    return AVThread::lock();
+}
+
 void VideoThr::stop(bool terminate)
 {
+    m_subsDisplayLocker = {};
     if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
         QMPlay2Core.gpuInstance()->clearVideoOutput();
     playC.videoSeekPos = -1;
@@ -733,10 +740,11 @@ void VideoThr::run()
                 if (!skip && canWrite)
                 {
                     oneFrame = canWrite = false;
-                    m_subsDisplayMutex.lock();
+                    if (!osdList.isEmpty())
+                        m_subsDisplayLocker = unique_lock<std::mutex>(m_subsDisplayMutex);
                     QTimer::singleShot(0, this, [=, osdList = move(osdList)]() mutable {
                         write(videoFrame, move(osdList), seq);
-                        m_subsDisplayMutex.unlock();
+                        m_subsDisplayLocker = {};
                     });
                     if (canSkipFrames)
                         ++framesDisplayed;
@@ -799,8 +807,8 @@ void VideoThr::write(const Frame &videoFrame, QMPlay2OSDList &&osdList, quint32 
 
     videoWriter()->writeVideo(videoFrame, move(osdList));
 
-    // "playC.subsMutex" must be locked here
-    swap(m_subtitles, m_subtitlesBusy);
+    if (m_subsDisplayLocker.owns_lock())
+        swap(m_subtitles, m_subtitlesBusy);
 }
 void VideoThr::screenshot(Frame videoFrame)
 {

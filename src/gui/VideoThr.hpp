@@ -43,6 +43,8 @@ public:
 
     bool videoWriterSet();
 
+    bool lock() override;
+
     void stop(bool terminate = false) override;
 
     bool hasDecoderError() const override;
@@ -101,7 +103,8 @@ private:
 
     Decoder *sDec;
     std::shared_ptr<QMPlay2OSD> m_subtitles, m_subtitlesBusy;
-    QMutex m_subsDisplayMutex;
+    std::mutex m_subsDisplayMutex;
+    std::unique_lock<std::mutex> m_subsDisplayLocker;
     VideoFilters filters;
     QMutex filtersMutex;
 
