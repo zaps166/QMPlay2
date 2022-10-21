@@ -585,7 +585,9 @@ bool FFDecSW::getFromBitmapSubsBuffer(shared_ptr<QMPlay2OSD> &osd, double pos)
 
         if (subtitle.num_rects > 0)
         {
-            auto locker = QMPlay2OSD::ensure(osd, true);
+            auto locker = QMPlay2OSD::ensure(osd);
+            if (locker.owns_lock())
+                osd->clear();
             osd->setDuration(subtitle.duration());
             osd->setPTS(subtitle.time);
 
@@ -706,7 +708,11 @@ bool FFDecSW::getFromBitmapSubsBuffer(shared_ptr<QMPlay2OSD> &osd, double pos)
             ret = false;
         }
 
-        m_subtitles.erase(m_subtitles.begin(), m_subtitles.begin() + i);
+        if (i > 1) // Keep one for second subtitles buffer
+        {
+            m_subtitles.erase(m_subtitles.begin(), m_subtitles.begin() + i - 1);
+        }
+
         break;
     }
     return ret;

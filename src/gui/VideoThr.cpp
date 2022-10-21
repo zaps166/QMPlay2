@@ -306,8 +306,10 @@ void VideoThr::updateSubs()
     if (playC.ass)
     {
         playC.subsMutex.lock();
+        if (m_subtitlesBusy)
+            playC.ass->getASS(m_subtitlesBusy);
         if (m_subtitles)
-            playC.ass->getASS(m_subtitles, playC.frame_last_pts + playC.frame_last_delay  - playC.subtitlesSync);
+            playC.ass->getASS(m_subtitles);
         playC.subsMutex.unlock();
     }
 }
@@ -506,17 +508,22 @@ void VideoThr::run()
 
         /* Subtitles */
         QMPlay2OSDList osdList;
+        m_subsDisplayMutex.lock(); // Must be locked before "playC.subsMutex"!
         playC.subsMutex.lock();
         const double subsPts = tsIsNotNan
             ? ts - playC.subtitlesSync
             : qQNaN()
         ;
         const bool canDeleteSubs = (deleteSubs && m_subtitles);
+        auto resetSubs = [this] {
+            m_subtitles.reset();
+            m_subtitlesBusy.reset();
+        };
         if (sDec) //Image subs (pgssub, dvdsub, ...)
         {
             if (!sDec->decodeSubtitle(sPackets, subsPts, m_subtitles, QSize(W, H), flushVideo))
             {
-                m_subtitles.reset();
+                resetSubs();
             }
         }
         else
@@ -531,7 +538,7 @@ void VideoThr::run()
             }
             if (tsIsNotNan && !playC.ass->getASS(m_subtitles, subsPts))
             {
-                m_subtitles.reset();
+                resetSubs();
             }
         }
         if (m_subtitles && tsIsNotNan)
@@ -539,7 +546,7 @@ void VideoThr::run()
             const bool hasDuration = m_subtitles->duration() >= 0.0;
             if (canDeleteSubs || (m_subtitles->isStarted() && subsPts < m_subtitles->pts()) || (hasDuration && subsPts > m_subtitles->pts() + m_subtitles->duration()))
             {
-                m_subtitles.reset();
+                resetSubs();
             }
             else if (subsPts >= m_subtitles->pts())
             {
@@ -548,6 +555,7 @@ void VideoThr::run()
             }
         }
         playC.subsMutex.unlock();
+        m_subsDisplayMutex.unlock();
         playC.osdMutex.lock();
         if (playC.osd)
         {
@@ -725,8 +733,10 @@ void VideoThr::run()
                 if (!skip && canWrite)
                 {
                     oneFrame = canWrite = false;
+                    m_subsDisplayMutex.lock();
                     QTimer::singleShot(0, this, [=, osdList = move(osdList)]() mutable {
                         write(videoFrame, move(osdList), seq);
+                        m_subsDisplayMutex.unlock();
                     });
                     if (canSkipFrames)
                         ++framesDisplayed;
@@ -788,6 +798,9 @@ void VideoThr::write(const Frame &videoFrame, QMPlay2OSDList &&osdList, quint32 
 #endif
 
     videoWriter()->writeVideo(videoFrame, move(osdList));
+
+    // "playC.subsMutex" must be locked here
+    swap(m_subtitles, m_subtitlesBusy);
 }
 void VideoThr::screenshot(Frame videoFrame)
 {

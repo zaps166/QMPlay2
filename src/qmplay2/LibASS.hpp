@@ -23,6 +23,8 @@
 #include <QByteArray>
 #include <QList>
 
+#include <set>
+
 class Settings;
 class QMPlay2OSD;
 struct ass_style;
@@ -47,7 +49,7 @@ public:
     LibASS(Settings &);
     ~LibASS();
 
-    void addImgs(ass_image *img, QMPlay2OSD *osd);
+    bool addImgs(ass_image *img, QMPlay2OSD *osd);
 
     void setWindowSize(int, int);
     void setARatio(double);
@@ -67,7 +69,7 @@ public:
     void addASSEvent(const QByteArray &);
     void addASSEvent(const QByteArray &, double, double);
     void flushASSEvents();
-    bool getASS(std::shared_ptr<QMPlay2OSD> &osd, double);
+    bool getASS(std::shared_ptr<QMPlay2OSD> &osd, double pos = qQNaN());
     void closeASS();
 
 private:
@@ -93,6 +95,8 @@ private:
     ass_renderer *ass_sub_renderer;
     QList<ass_style *> ass_sub_styles_copy;
     bool hasASSData, overridePlayRes;
+    double m_lastPos = qQNaN();
+    std::set<int> m_assIDs;
 
 #ifdef USE_VULKAN
     std::shared_ptr<QmVk::BufferPool> m_vkBufferPool;

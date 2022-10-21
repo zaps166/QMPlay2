@@ -71,7 +71,7 @@ public:
     using IterateCallback = std::function<void(const Image &)>;
 
 public:
-    static std::unique_lock<std::mutex> ensure(std::shared_ptr<QMPlay2OSD> &osd, bool forceClear);
+    static std::unique_lock<std::mutex> ensure(std::shared_ptr<QMPlay2OSD> &osd);
 
 public:
     QMPlay2OSD();

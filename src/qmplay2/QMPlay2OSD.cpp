@@ -28,7 +28,7 @@ using namespace std;
 
 static atomic<uint64_t> g_id;
 
-unique_lock<mutex> QMPlay2OSD::ensure(shared_ptr<QMPlay2OSD> &osd, bool forceClear)
+unique_lock<mutex> QMPlay2OSD::ensure(shared_ptr<QMPlay2OSD> &osd)
 {
     unique_lock<mutex> locker;
     if (!osd)
@@ -38,8 +38,6 @@ unique_lock<mutex> QMPlay2OSD::ensure(shared_ptr<QMPlay2OSD> &osd, bool forceCle
     else
     {
         locker = osd->lock();
-        if (forceClear)
-            osd->clear();
     }
     return locker;
 }

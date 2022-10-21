@@ -113,7 +113,7 @@ LibASS::~LibASS()
     ass_library_done(m_subsAss);
 }
 
-void LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
+bool LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
 {
 #ifdef USE_VULKAN
     if (m_vkBufferPool)
@@ -122,7 +122,7 @@ void LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
 
         auto device = m_vkBufferPool->instance()->device();
         if (!device)
-            return;
+            return false;
 
         const auto alignment = device->physicalDevice()->limits().minTexelBufferOffsetAlignment;
 
@@ -144,7 +144,7 @@ void LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
 
         auto buffer = m_vkBufferPool->take(buffSize);
         if (!buffer)
-            return;
+            return false;
 
         auto data = buffer->map<uint8_t>();
 
@@ -178,13 +178,12 @@ void LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
         {
             Q_UNUSED(e)
             osd->clear();
-            return;
+            return false;
         }
 
-        osd->genId();
         osd->setReturnVkBufferFn(m_vkBufferPool, move(buffer));
 
-        return;
+        return true;
     }
 #endif
 
@@ -211,7 +210,7 @@ void LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
         img = img->next;
     }
 
-    osd->genId();
+    return true;
 }
 
 void LibASS::setWindowSize(int _winW, int _winH)
@@ -285,11 +284,16 @@ bool LibASS::getOSD(shared_ptr<QMPlay2OSD> &osd, const QByteArray &txt, double d
     osd_event->Text = nullptr;
     if (!img)
         return false;
-    auto locker = QMPlay2OSD::ensure(osd, ch);
+    auto locker = QMPlay2OSD::ensure(osd);
+    if (ch)
+        osd->clear();
     osd->setText(txt);
     osd->setDuration(duration);
     if (ch || !locker.owns_lock())
-        addImgs(img, osd.get());
+    {
+        if (addImgs(img, osd.get()))
+            osd->genId();
+    }
     osd->start();
     return true;
 }
@@ -472,6 +476,11 @@ bool LibASS::getASS(shared_ptr<QMPlay2OSD> &osd, double pos)
     if (!ass_sub_track || !ass_sub_renderer || !W || !H)
         return false;
 
+    if (qIsNaN(pos))
+        pos = m_lastPos;
+    if (qIsNaN(pos))
+        return false;
+
     int playResX = ass_sub_track->PlayResX;
     int playResY = ass_sub_track->PlayResY;
     if (overridePlayRes)
@@ -503,6 +512,11 @@ bool LibASS::getASS(shared_ptr<QMPlay2OSD> &osd, double pos)
     int ch;
     ASS_Image *img = ass_render_frame(ass_sub_renderer, ass_sub_track, pos * 1000, &ch);
 
+    m_lastPos = pos;
+
+    if (ch)
+        m_assIDs.clear();
+
     if (_fontScale != 1.0)
     {
         for (int i = 0; i < ass_sub_track->n_styles; i++)
@@ -524,10 +538,21 @@ bool LibASS::getASS(shared_ptr<QMPlay2OSD> &osd, double pos)
     if (!img)
         return false;
 
-    auto locker = QMPlay2OSD::ensure(osd, ch);
+    auto locker = QMPlay2OSD::ensure(osd);
+    if (osd->id() != 0 && m_assIDs.count(osd->id()) == 0)
+    {
+        osd->clear();
+    }
     osd->setPTS(pos);
-    if (ch || !locker.owns_lock())
-        addImgs(img, osd.get());
+    if (osd->id() == 0)
+    {
+        if (addImgs(img, osd.get()))
+        {
+            osd->genId();
+            Q_ASSERT(osd->id() != 0);
+            m_assIDs.insert(osd->id());
+        }
+    }
     return true;
 }
 void LibASS::closeASS()
@@ -546,6 +571,8 @@ void LibASS::closeASS()
     ass_sub_track = nullptr;
     ass_sub_renderer = nullptr;
     ass_clear_fonts(m_subsAss);
+    m_lastPos = qQNaN();
+    m_assIDs.clear();
 }
 
 void LibASS::readStyle(const QString &prefix, ASS_Style *style)
@@ -584,7 +611,7 @@ LibASS::LibASS(Settings &settings) :
 LibASS::~LibASS()
 {}
 
-void LibASS::addImgs(ass_image *, QMPlay2OSD *)
+bool LibASS::addImgs(ass_image *, QMPlay2OSD *)
 {}
 
 void LibASS::setWindowSize(int, int)

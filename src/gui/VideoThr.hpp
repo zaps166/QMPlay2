@@ -100,7 +100,8 @@ private:
     quint32 seq;
 
     Decoder *sDec;
-    std::shared_ptr<QMPlay2OSD> m_subtitles;
+    std::shared_ptr<QMPlay2OSD> m_subtitles, m_subtitlesBusy;
+    QMutex m_subsDisplayMutex;
     VideoFilters filters;
     QMutex filtersMutex;
 
