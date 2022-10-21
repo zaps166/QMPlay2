@@ -526,7 +526,7 @@ void VideoThr::run()
                 resetSubs();
             }
         }
-        else
+        else if (playC.ass)
         {
             for (auto &&sPacket : qAsConst(sPackets))
             {
