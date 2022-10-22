@@ -112,7 +112,10 @@ bool VideoThr::videoWriterSet()
 
 bool VideoThr::lock()
 {
-    m_subsDisplayLocker = {};
+    if (QThread::currentThread() == thread())
+    {
+        m_subsDisplayLocker = {};
+    }
     return AVThread::lock();
 }
 
