@@ -118,7 +118,6 @@ bool VideoThr::lock()
 
 void VideoThr::stop(bool terminate)
 {
-    m_subsDisplayLocker = {};
     if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::Legacy)
         QMPlay2Core.gpuInstance()->clearVideoOutput();
     playC.videoSeekPos = -1;
