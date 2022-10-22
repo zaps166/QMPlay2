@@ -85,6 +85,9 @@ public:
     shared_ptr<BufferPool> createBufferPool();
     shared_ptr<ImagePool> createImagePool();
 
+    void maybeWaitForCommandBuffer();
+    void forceWaitForCommandBuffer(bool force);
+
 private:
     bool isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevice) const override final;
     void sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalDevices) const override final;

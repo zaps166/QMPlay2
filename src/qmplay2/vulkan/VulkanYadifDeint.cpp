@@ -150,7 +150,7 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
                 m.computes[p]->groupCount(destImage->size(p))
             );
         }
-        m.commandBuffer->endSubmitAndWait(move(submitInfo));
+        endSubmitAndWait(m.commandBuffer, move(submitInfo));
 
         if (m_deintFlags & DoubleFramerate)
             deinterlaceDoublerCommon(destFrame);

@@ -114,6 +114,7 @@ bool VideoThr::lock()
 {
     if (QThread::currentThread() == thread())
     {
+        waitForVideoWriter();
         m_subsDisplayLocker = {};
     }
     return AVThread::lock();
@@ -310,10 +311,15 @@ bool VideoThr::processParams()
     return writer->processParams();
 }
 
+void VideoThr::waitForVideoWriter()
+{
+    videoWriter()->wait();
+}
 void VideoThr::updateSubs()
 {
     if (playC.ass)
     {
+        waitForVideoWriter();
         playC.subsMutex.lock();
         if (m_subtitlesBusy)
             playC.ass->getASS(m_subtitlesBusy);
@@ -816,6 +822,8 @@ void VideoThr::screenshot(Frame videoFrame)
 {
     ImgScaler imgScaler;
     QImage img;
+
+    waitForVideoWriter();
 
 #ifdef USE_OPENGL
     if (auto hwGLInterop = dynamic_pointer_cast<OpenGLHWInterop>(getHWDecContext()))

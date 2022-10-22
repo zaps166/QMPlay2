@@ -21,8 +21,15 @@
 #include <QDebug>
 
 #ifdef USE_VULKAN
+#   include <QCoreApplication>
+#   include <QTimer>
+
 #   include <QMPlay2Core.hpp>
 
+#   include "../qmvk/PhysicalDevice.hpp"
+#   include "../qmvk/Device.hpp"
+#   include "../qmvk/Queue.hpp"
+#   include "../qmvk/CommandBuffer.hpp"
 #   include "../qmvk/Image.hpp"
 
 #   include <vulkan/VulkanInstance.hpp>
@@ -200,5 +207,38 @@ std::shared_ptr<QmVk::Image> VideoFilter::vulkanImageFromFrame(
     }
 
     return image;
+}
+
+void VideoFilter::endSubmitAndWait(
+    const std::shared_ptr<QmVk::CommandBuffer> &commandBuffer,
+    vk::SubmitInfo &&submitInfo)
+{
+    const auto device = commandBuffer->queue()->device();
+    if (device->numQueues() == 1) // If queue is shared
+    {
+        const auto appInstance = QCoreApplication::instance();
+        const auto instanceWeak = std::weak_ptr<QmVk::Instance>(
+            std::static_pointer_cast<QmVk::Instance>(device->physicalDevice()->instance())
+        );
+        QTimer::singleShot(0, appInstance, [instanceWeak] {
+            if (auto instance = instanceWeak.lock())
+            {
+                instance->maybeWaitForCommandBuffer(); // Trigger wait and wait for queue in GUI thread
+                instance->forceWaitForCommandBuffer(true); // Force sync wait to prevent another queue lock
+            }
+        });
+        commandBuffer->endSubmitAndWait(true, [&] {
+            QTimer::singleShot(0, appInstance, [instanceWeak] {
+                if (auto instance = instanceWeak.lock())
+                {
+                    instance->forceWaitForCommandBuffer(false); // Allow async wait, because we already have the queue locked
+                }
+            });
+        }, std::move(submitInfo));
+    }
+    else
+    {
+        commandBuffer->endSubmitAndWait(std::move(submitInfo));
+    }
 }
 #endif

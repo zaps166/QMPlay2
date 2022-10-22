@@ -22,6 +22,8 @@
 #   include <vulkan/VulkanBufferPool.hpp>
 #endif
 
+#include <QDebug>
+
 #include <atomic>
 
 using namespace std;
@@ -37,7 +39,12 @@ unique_lock<mutex> QMPlay2OSD::ensure(shared_ptr<QMPlay2OSD> &osd)
     }
     else
     {
-        locker = osd->lock();
+        locker = unique_lock<mutex>(osd->m_mutex, std::try_to_lock);
+        if (Q_UNLIKELY(!locker.owns_lock()))
+        {
+            qDebug() << "BUG: OSD is busy";
+            osd = make_shared<QMPlay2OSD>();
+        }
     }
     return locker;
 }

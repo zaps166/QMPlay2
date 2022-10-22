@@ -79,6 +79,7 @@ public:
 
     bool processParams();
 
+    void waitForVideoWriter();
     void updateSubs();
 
 private:

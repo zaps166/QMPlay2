@@ -268,12 +268,42 @@ AVPixelFormats Window::supportedPixelFormats() const
 
 void Window::setFrame(const Frame &frame, QMPlay2OSDList &&osdList)
 {
+    maybeWaitForCommandBuffer(true);
     m_osd = move(osdList);
     if (m.imageFromFrame)
         resetImages(false);
     m_frame = frame;
     m_frameChanged = true;
     maybeRequestUpdate();
+}
+
+void Window::maybeWaitForCommandBuffer(bool catchException)
+{
+    if (!m.waitForCommandBufferFn)
+        return;
+
+    if (catchException)
+    {
+        try
+        {
+            m.waitForCommandBufferFn();
+        }
+        catch (const vk::SystemError &e)
+        {
+            handleException(e);
+            return;
+        }
+    }
+    else
+    {
+        m.waitForCommandBufferFn();
+    }
+
+    m.waitForCommandBufferFn = nullptr; // In case of exception - it must be cleared in exception handler
+}
+void Window::forceWaitForCommandBuffer(bool force)
+{
+    m.forceWaitForCommandBuffer = force;
 }
 
 inline VideoPipelineSpecializationData *Window::getVideoPipelineSpecializationData()
@@ -433,6 +463,8 @@ void Window::render()
 
     try
     {
+        maybeWaitForCommandBuffer(false);
+
         if (!ensureHWImageMapped())
             return;
 
@@ -484,6 +516,9 @@ void Window::render()
         if (!suboptimal || m.swapChain->maybeSuboptimal())
         {
             auto submitInfo = m.swapChain->getSubmitInfo();
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &*m.commandBuffer;
+
             HWInterop::SyncDataPtr syncData;
             if (m_vkHwInterop)
                 syncData = m_vkHwInterop->sync({m_frame}, &submitInfo);
@@ -493,17 +528,26 @@ void Window::render()
 
             maybeClear(imageIdx);
             renderVideo();
-            if (!osdLockers.empty())
-                renderOSD();
+            renderOSD();
 
             m.commandBuffer->endRenderPass();
+            m.commandBuffer->end();
 
             m.queueLocker = m.queue->lock();
-            m.commandBuffer->endSubmitAndWait(false, [&] {
-                m.swapChain->present(imageIdx, &suboptimal);
-                vulkanInstance()->presentQueued(this);
-            }, move(submitInfo));
-            m.queueLocker.unlock(); // It is not unlocked in case of exception
+            m.queue->submitCommandBuffer(move(submitInfo));
+
+            m.swapChain->present(imageIdx, &suboptimal);
+            vulkanInstance()->presentQueued(this);
+
+            m.waitForCommandBufferFn = [this, osdLockers = move(osdLockers)] {
+                m.queue->waitForCommandsFinished();
+                m.commandBuffer->resetStoredData();
+                m.queueLocker.unlock(); // In case of exception - it must be unlocked in exception handler
+            };
+            if (m.forceWaitForCommandBuffer)
+            {
+                maybeWaitForCommandBuffer(false);
+            }
         }
     }
     catch (const vk::OutOfDateKHRError &e)
@@ -532,7 +576,7 @@ void Window::render()
     }
 }
 
-vector<unique_lock<mutex>> Window::prepareOSD(bool &changed)
+shared_ptr<Window::OsdLockers> Window::prepareOSD(bool &changed)
 {
     const auto osdIDs = move(m_osdIDs);
 
@@ -540,15 +584,19 @@ vector<unique_lock<mutex>> Window::prepareOSD(bool &changed)
     {
         if (!osdIDs.empty())
             changed = true;
-        return {};
+        return nullptr;
     }
 
-    vector<unique_lock<mutex>> lockers;
-    lockers.reserve(m_osd.size());
+    shared_ptr<OsdLockers> lockers;
+    if (!m_osd.empty())
+    {
+        lockers = make_shared<OsdLockers>();
+        lockers->reserve(m_osd.size());
+    }
 
     for (auto &&osd : qAsConst(m_osd))
     {
-        lockers.push_back(osd->lock());
+        lockers->push_back(osd->lock());
 
         const auto id = osd->id();
         if (!changed && osdIDs.count(id) == 0)
@@ -596,6 +644,9 @@ void Window::renderVideo()
 }
 void Window::renderOSD()
 {
+    if (m_osd.empty())
+        return;
+
     const auto winSize = devicePixelRatio() * size();
 
     vector<MemoryObjectDescrs> osdAvMemoryObjects;
@@ -1318,6 +1369,8 @@ void Window::resetSwapChainAndGraphicsPipelines(bool takeOldSwapChain) try
 {
     if (!m.device)
         return;
+
+    m.waitForCommandBufferFn = nullptr;
 
     if (takeOldSwapChain)
     {

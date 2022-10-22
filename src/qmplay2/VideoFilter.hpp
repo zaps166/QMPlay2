@@ -26,6 +26,9 @@
 #ifdef USE_VULKAN
 #include <functional>
 
+namespace vk {
+struct SubmitInfo;
+}
 namespace QmVk {
 class Device;
 class CommandBuffer;
@@ -80,6 +83,11 @@ protected:
         Frame &frame,
         const std::shared_ptr<QmVk::Device> &device = nullptr,
         CopyImageLinearToOptimalFn *copyFn = nullptr
+    );
+
+    void endSubmitAndWait(
+        const std::shared_ptr<QmVk::CommandBuffer> &commandBuffer,
+        vk::SubmitInfo &&submitInfo
     );
 #endif
 

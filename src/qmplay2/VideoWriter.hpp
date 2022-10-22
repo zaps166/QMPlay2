@@ -36,6 +36,7 @@ public:
     qint64 write(const QByteArray &) override final;
 
     virtual void writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList) = 0;
+    virtual void wait();
 
     virtual bool setHWDecContext(const std::shared_ptr<HWDecContext> &hwDecContext);
     virtual std::shared_ptr<HWDecContext> hwDecContext() const;

@@ -306,6 +306,17 @@ shared_ptr<ImagePool> Instance::createImagePool()
     return make_shared<ImagePool>(static_pointer_cast<Instance>(shared_from_this()));
 }
 
+void Instance::maybeWaitForCommandBuffer()
+{
+    if (m_videoWriter)
+        m_videoWriter->wait();
+}
+void Instance::forceWaitForCommandBuffer(bool force)
+{
+    if (auto writer = static_cast<QmVk::Writer *>(m_videoWriter))
+        writer->forceWaitForCommandBuffer(force);
+}
+
 bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevice) const try
 {
     const auto &properties = physicalDevice->properties();

@@ -410,6 +410,8 @@ void PlayClass::messageAndOSD(const QString &txt, bool onStatusBar, double durat
 {
     if (ass && QMPlay2Core.getSettings().getBool("OSD/Enabled"))
     {
+        if (vThr)
+            vThr->waitForVideoWriter();
         osdMutex.lock();
         ass->getOSD(osd, txt.toUtf8(), duration);
         osdMutex.unlock();
@@ -705,7 +707,11 @@ void PlayClass::settingsChanged(int page, bool forceRestart, bool initFilters)
                 ass->setOSDStyle();
                 osdMutex.lock();
                 if (osd)
+                {
+                    if (vThr)
+                        vThr->waitForVideoWriter();
                     ass->getOSD(osd, osd->text(), osd->leftDuration());
+                }
                 osdMutex.unlock();
             }
             break;
@@ -722,7 +728,11 @@ void PlayClass::videoResized(int w, int h)
         {
             osdMutex.lock();
             if (osd)
+            {
+                if (vThr)
+                    vThr->waitForVideoWriter();
                 ass->getOSD(osd, osd->text(), osd->leftDuration());
+            }
             osdMutex.unlock();
         }
         if (vThr)

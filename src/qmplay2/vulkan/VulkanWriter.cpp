@@ -130,6 +130,14 @@ void Writer::writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList)
 {
     m_window->setFrame(videoFrame, move(osdList));
 }
+void Writer::wait()
+{
+    m_window->maybeWaitForCommandBuffer(true);
+}
+void Writer::forceWaitForCommandBuffer(bool force)
+{
+    m_window->forceWaitForCommandBuffer(force);
+}
 
 void Writer::pause()
 {

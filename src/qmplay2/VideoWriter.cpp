@@ -33,6 +33,10 @@ qint64 VideoWriter::write(const QByteArray &)
     return -1;
 }
 
+void VideoWriter::wait()
+{
+}
+
 bool VideoWriter::setHWDecContext(const std::shared_ptr<HWDecContext> &hwDecContext)
 {
     Q_UNUSED(hwDecContext)

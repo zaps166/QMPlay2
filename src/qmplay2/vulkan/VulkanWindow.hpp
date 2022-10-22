@@ -57,6 +57,8 @@ class Window : public QWindow, public VideoOutputCommon
 {
     Q_OBJECT
 
+    using OsdLockers = vector<unique_lock<mutex>>;
+
 public:
     Window(const shared_ptr<HWInterop> &hwInterop);
     ~Window();
@@ -89,6 +91,9 @@ public:
 
     void setFrame(const Frame &frame, QMPlay2OSDList &&osdList);
 
+    void maybeWaitForCommandBuffer(bool catchException);
+    void forceWaitForCommandBuffer(bool force);
+
 private:
     inline VideoPipelineSpecializationData *getVideoPipelineSpecializationData();
 
@@ -108,7 +113,7 @@ private:
 
     void render();
 
-    vector<unique_lock<mutex>> prepareOSD(bool &changed);
+    shared_ptr<OsdLockers> prepareOSD(bool &changed);
 
     void beginRenderPass(uint32_t imageIdx);
 
@@ -191,6 +196,9 @@ private:
         shared_ptr<ShaderModule> osdAssFragmentShaderModule;
 
         shared_ptr<CommandBuffer> commandBuffer;
+
+        function<void()> waitForCommandBufferFn;
+        bool forceWaitForCommandBuffer = false;
 
         shared_ptr<RenderPass> renderPass;
         shared_ptr<SwapChain> swapChain;

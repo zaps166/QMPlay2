@@ -46,6 +46,8 @@ public:
     AVPixelFormats supportedPixelFormats() const override;
 
     void writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList) override;
+    void wait() override;
+    void forceWaitForCommandBuffer(bool force);
 
     void pause() override;
 
