@@ -23,6 +23,7 @@
 #include <QByteArray>
 #include <QList>
 
+#include <memory>
 #include <set>
 
 class Settings;
@@ -35,7 +36,6 @@ struct ass_renderer;
 struct ass_image;
 
 #ifdef USE_VULKAN
-#include <memory>
 namespace QmVk {
 class BufferPool;
 }
