@@ -612,7 +612,9 @@ LibASS::~LibASS()
 {}
 
 bool LibASS::addImgs(ass_image *, QMPlay2OSD *)
-{}
+{
+    return false;
+}
 
 void LibASS::setWindowSize(int, int)
 {}
