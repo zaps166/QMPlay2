@@ -4,10 +4,10 @@ Changes in QMPlay2 22.10.23:
     - export "My Radio Stations" to PLS or M3U playlists,
     - add "My Radio Stations" to system tray menu,
     - fix subtitles synchronization with video,
-    - fix language detextion for some locales,
+    - fix language detection for some locales,
     - fix various subtitles scaling issues,
     - fix AV1 aspect ratio in some cases,
-    - other minoir subtitles fixes,
+    - other minor subtitles fixes,
     - other minor fixes,
 
 Changes in QMPlay2 22.08.21:
@@ -259,7 +259,7 @@ Changes in QMPlay2 build 18.03.02:
     - contrast improvements,
 
 Changes in QMPlay2 build 17.12.31:
-    - automaticaly rotate movie or set spherical view if is set in metadata,
+    - automatically rotate movie or set spherical view if is set in metadata,
     - update Ukrainian translation file (Alexey Lugin),
     - add reading of CUE files,
     - VA-API/OpenGL fixes,
