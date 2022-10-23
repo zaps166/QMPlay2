@@ -1715,11 +1715,11 @@
     </message>
     <message>
         <source>Little endian</source>
-        <translation type="unfinished"></translation>
+        <translation>Little endian</translation>
     </message>
     <message>
         <source>Big endian</source>
-        <translation type="unfinished"></translation>
+        <translation>Big endian</translation>
     </message>
     <message>
         <source>Rayman2 music (*.apm)</source>
@@ -1839,7 +1839,7 @@
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertraging</translation>
     </message>
 </context>
 <context>
@@ -2128,11 +2128,11 @@
     </message>
     <message>
         <source>Keep audio pitch during playback speed change</source>
-        <translation type="unfinished"></translation>
+        <translation>Toonhoogte niet veranderen na wijzigen van afspeelsnelheid</translation>
     </message>
     <message>
         <source>Don&apos;t keep audio pitch during playback speed change</source>
-        <translation type="unfinished"></translation>
+        <translation>Toonhoogte veranderen na wijzigen van afspeelsnelheid</translation>
     </message>
 </context>
 <context>
@@ -2195,7 +2195,7 @@
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>Toonhoogte niet &amp;veranderen</translation>
     </message>
 </context>
 <context>
@@ -3137,7 +3137,9 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
         <source>Force audio content to use the specified number of channels.
 Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation type="unfinished"></translation>
+        <translation>Speel de audio af via het opgegeven aantal kanalen.
+Deels aankruisen = minder kanalen dan de opgegeven waarde
+	(bijv. mono naar stereo, maar niet quadrophonisch naar stereo)</translation>
     </message>
 </context>
 <context>
@@ -3566,7 +3568,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&amp;Hide on close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mini&amp;maliseren in plaats van sluiten</translation>
     </message>
 </context>
 <context>
