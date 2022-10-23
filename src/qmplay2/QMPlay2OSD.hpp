@@ -25,13 +25,12 @@
 #include <QRect>
 
 #include <functional>
+#include <memory>
 #include <vector>
 #include <mutex>
 
 #ifdef USE_VULKAN
 #   include <QVector4D>
-
-#   include <memory>
 
 namespace QmVk {
 
