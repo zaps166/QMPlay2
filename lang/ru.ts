@@ -24,14 +24,14 @@
     <name>AVThread</name>
     <message>
         <source>A/V thread has been incorrectly terminated!</source>
-        <translation>А/В поток был завершён некорректно!</translation>
+        <translation>Поток А/В был завершён неверно!</translation>
     </message>
 </context>
 <context>
     <name>AboutWidget</name>
     <message>
         <source>About QMPlay2</source>
-        <translation>О программе QMPlay2</translation>
+        <translation>О QMPlay2</translation>
     </message>
     <message>
         <source>Logs</source>
@@ -59,7 +59,7 @@
     </message>
     <message>
         <source>video and audio player</source>
-        <translation>Проигрыватель видео и аудио</translation>
+        <translation>проигрыватель видео и аудио</translation>
     </message>
     <message>
         <source>Programmer</source>
@@ -67,7 +67,7 @@
     </message>
     <message>
         <source>Contributors</source>
-        <translation>Помощники</translation>
+        <translation>Участники</translation>
     </message>
 </context>
 <context>
@@ -288,23 +288,23 @@
     </message>
     <message>
         <source>AudioCD</source>
-        <translation>Аудио диск</translation>
+        <translation>Аудио-диск</translation>
     </message>
     <message>
         <source>No CD/DVD drives found!</source>
-        <translation>CD/DVD диск не найден!</translation>
+        <translation>Приводы CD/DVD не найдены!</translation>
     </message>
     <message>
         <source>Choose AudioCD image</source>
-        <translation>Выбрать образ AudioCD</translation>
+        <translation>Выбрать образ аудио-диска</translation>
     </message>
     <message>
         <source>Supported AudioCD images</source>
-        <translation>Поддерживаемый образ AudioCD</translation>
+        <translation>Поддерживаемые образы аудио-дисков</translation>
     </message>
     <message>
         <source>Choose the drive</source>
-        <translation>Выбрать диск</translation>
+        <translation>Выбрать привод</translation>
     </message>
 </context>
 <context>
@@ -331,7 +331,7 @@
     </message>
     <message>
         <source>No AudioCD found!</source>
-        <translation>CD диска нет в приводе!</translation>
+        <translation>Аудио-диск не найден!</translation>
     </message>
 </context>
 <context>
@@ -377,7 +377,7 @@
     </message>
     <message>
         <source>requires a change in one of the forced parameters, sound disabled ...</source>
-        <translation>Требуется изменение одного из принудительных параметров, звук отключён...</translation>
+        <translation>Требуется изменение одного из принудительных параметров, звук отключён…</translation>
     </message>
     <message>
         <source>sets the parameters to</source>
@@ -407,7 +407,7 @@
     </message>
     <message>
         <source>Doubles the the number of frames per second</source>
-        <translation>Удваивать количество кадров в секунду</translation>
+        <translation>Удваивать число кадров в секунду</translation>
     </message>
     <message>
         <source>Automatically detect parity</source>
@@ -486,7 +486,7 @@
     </message>
     <message>
         <source>FPS</source>
-        <translation>Частота кадров</translation>
+        <translation>частота кадров</translation>
     </message>
     <message>
         <source>sample rate</source>
@@ -506,7 +506,7 @@
     </message>
     <message>
         <source>loaded from file</source>
-        <translation>загруженные из файла</translation>
+        <translation>загружено из файла</translation>
     </message>
     <message>
         <source>File path</source>
@@ -534,7 +534,7 @@
     </message>
     <message>
         <source>Subtitles streams</source>
-        <translation>Субтитры потоков</translation>
+        <translation>Потоки субтитров</translation>
     </message>
     <message>
         <source>Attached files</source>
@@ -877,7 +877,7 @@
     </message>
     <message>
         <source>Track</source>
-        <translation>Путь</translation>
+        <translation>Дорожка</translation>
     </message>
     <message>
         <source>Voices</source>
@@ -904,11 +904,11 @@
     </message>
     <message>
         <source>Blurred covers as background</source>
-        <translation>Помутнение покрывает как фон</translation>
+        <translation>Размытые обложки в качестве фона</translation>
     </message>
     <message>
         <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>Показывать обложки из каталога, если нет в музыкальном файле</translation>
+        <translation>Показывать обложки из каталога, если их нет в музыкальном файле</translation>
     </message>
     <message>
         <source>Automatically open video window</source>
@@ -1012,7 +1012,7 @@
     </message>
     <message>
         <source>Automatically delete ungrouped entries</source>
-        <translation>Автоматически удалять негруппированные записи</translation>
+        <translation>Автоматически удалять несгруппированные записи</translation>
     </message>
     <message>
         <source>Hide artist metadata</source>
@@ -1134,29 +1134,29 @@
     </message>
     <message>
         <source>Buffer</source>
-        <translation>буфер</translation>
+        <translation>Буфер</translation>
     </message>
     <message>
         <source>interlaced</source>
-        <translation>Чересстрочный</translation>
+        <translation>чересстрочный</translation>
     </message>
     <message>
         <source>visible</source>
-        <translation>Видимость</translation>
+        <translation>отображается</translation>
     </message>
 </context>
 <context>
     <name>Inputs</name>
     <message>
         <source>Tone generator</source>
-        <translation>Тональный генератор</translation>
+        <translation>Генератор тона</translation>
     </message>
 </context>
 <context>
     <name>KeyBindingsDialog</name>
     <message>
         <source>Key bindings settings</source>
-        <translation>Настройка комбинаций клавиш</translation>
+        <translation>Настройки сочетаний клавиш</translation>
     </message>
     <message>
         <source>Some key shortcuts are duplicated!</source>
@@ -1259,7 +1259,7 @@
     </message>
     <message>
         <source>Playlists</source>
-        <translation>Списки воспроизведения</translation>
+        <translation>Плейлисты</translation>
     </message>
     <message>
         <source>Choose playlist</source>
@@ -1341,7 +1341,7 @@
     <name>MediaBrowserResults</name>
     <message>
         <source>Enqueue</source>
-        <translation>Очередь</translation>
+        <translation>В очередь</translation>
     </message>
     <message>
         <source>Play</source>
@@ -1353,7 +1353,7 @@
     </message>
     <message>
         <source>Copy page address</source>
-        <translation>Скопировать адрес страницы</translation>
+        <translation>Копировать адрес страницы</translation>
     </message>
 </context>
 <context>
@@ -1387,11 +1387,11 @@
     </message>
     <message>
         <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
-        <translation>Использовать указанные в FPS MicroDVD субтитры (если есть)</translation>
+        <translation>Использовать частоту кадров, указанную в субтитрах MicroDVD (если есть)</translation>
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
-        <translation>Максимальное отображение субтитров без определённой продолжительности</translation>
+        <translation>Предельное время вывода субтитров без указанной длины</translation>
     </message>
     <message>
         <source>Enabled</source>
@@ -1503,7 +1503,7 @@
     </message>
     <message>
         <source>File extensions (semicolon separated)</source>
-        <translation>Расширение файлов (точкой с запятой)</translation>
+        <translation>Расширения файлов (через точку с запятой)</translation>
     </message>
     <message>
         <source>Format</source>
@@ -1627,11 +1627,11 @@
     </message>
     <message>
         <source>Phase reverse</source>
-        <translation>Опрокидывание фазы</translation>
+        <translation>Обращение фазы</translation>
     </message>
     <message>
         <source>Reverse the right channel phase</source>
-        <translation>Опрокидывание фазы в правом канале</translation>
+        <translation>Обратить фазу в правом канале</translation>
     </message>
     <message>
         <source>Use CDDB if CD-TEXT is not available</source>
@@ -1639,7 +1639,7 @@
     </message>
     <message>
         <source>AudioCD</source>
-        <translation>Аудио диск</translation>
+        <translation>Аудио-диск</translation>
     </message>
     <message>
         <source>Use CD-TEXT</source>
@@ -1663,7 +1663,7 @@
     </message>
     <message>
         <source>Echo surround</source>
-        <translation>Эхо окружающего звука</translation>
+        <translation>Эхо объёмного звучания</translation>
     </message>
     <message>
         <source>Noise reduction</source>
@@ -1675,7 +1675,7 @@
     </message>
     <message>
         <source>Slider count in sound equalizer</source>
-        <translation>Количество ползунков в эквалайзере звука</translation>
+        <translation>Число ползунков в эквалайзере звука</translation>
     </message>
     <message>
         <source>Minimum frequency</source>
@@ -1687,11 +1687,11 @@
     </message>
     <message>
         <source>Default length</source>
-        <translation>Продолжительность по умолчанию</translation>
+        <translation>Длительность по умолчанию</translation>
     </message>
     <message>
         <source>Display available subtitles</source>
-        <translation>Отображать субтитры если доступны</translation>
+        <translation>Отображать доступные субтитры</translation>
     </message>
     <message>
         <source>Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language.</source>
@@ -1703,7 +1703,7 @@
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation>Используйте CUVID только тогда, когда основным является NVIDIA GPU</translation>
+        <translation>Использовать CUVID только тогда, когда основное ГПУ — NVIDIA</translation>
     </message>
     <message>
         <source>Infinite</source>
@@ -1775,7 +1775,7 @@
     </message>
     <message>
         <source>XSPF support</source>
-        <translation>Поддержка XSPF</translation>
+        <translation>Поддержка формата XSPF</translation>
     </message>
     <message>
         <source>Additional notifications</source>
@@ -1839,22 +1839,22 @@
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Задержка</translation>
     </message>
 </context>
 <context>
     <name>ModulesList</name>
     <message>
         <source>Move up</source>
-        <translation>Переместить вверх</translation>
+        <translation>Вверх</translation>
     </message>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation>…</translation>
     </message>
     <message>
         <source>Move down</source>
-        <translation>Переместить вниз</translation>
+        <translation>Вниз</translation>
     </message>
 </context>
 <context>
@@ -1954,7 +1954,7 @@
     <name>Options</name>
     <message>
         <source>Op&amp;tions</source>
-        <translation>Оп&amp;ции</translation>
+        <translation>Парам&amp;етры</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
@@ -1962,11 +1962,11 @@
     </message>
     <message>
         <source>&amp;Show tray icon</source>
-        <translation>&amp;Показывать значок в системном лотке</translation>
+        <translation>&amp;Показывать значок в трее</translation>
     </message>
     <message>
         <source>&amp;Modules settings</source>
-        <translation>&amp;Настройка модулей</translation>
+        <translation>&amp;Настройки модулей</translation>
     </message>
     <message>
         <source>Create new profile</source>
@@ -1998,7 +1998,7 @@
     </message>
     <message>
         <source>&amp;Playback settings</source>
-        <translation>&amp;Настройка воспроизведения</translation>
+        <translation>&amp;Настройки воспроизведения</translation>
     </message>
     <message>
         <source>&amp;Renderer settings</source>
@@ -2048,7 +2048,7 @@
     </message>
     <message>
         <source>Set subtitles delay (sec.)</source>
-        <translation>Установить задержку субтитров (сек.)</translation>
+		<translation>Задать задержку субтитров (секунды)</translation>
     </message>
     <message>
         <source>Loaded subtitles</source>
@@ -2072,7 +2072,7 @@
     </message>
     <message>
         <source>Set video delay (sec.)</source>
-        <translation>Установить задержку видео (сек.)</translation>
+        <translation>Задать задержку видео (секунды)</translation>
     </message>
     <message>
         <source>Set playback speed</source>
@@ -2096,15 +2096,15 @@
     </message>
     <message>
         <source>Rotation 270°</source>
-        <translation>Повернуть 270°</translation>
+        <translation>Поворот на 270°</translation>
     </message>
     <message>
         <source>Rotation 180°</source>
-        <translation>Повернуть 180°</translation>
+        <translation>Поворот на 180°</translation>
     </message>
     <message>
         <source>Rotation 90°</source>
-        <translation>Повернуть 90°</translation>
+        <translation>Поворот на 90°</translation>
     </message>
     <message>
         <source>Rotation is not supported by this video output module</source>
@@ -2116,7 +2116,7 @@
     </message>
     <message>
         <source>Playback has been incorrectly terminated!</source>
-        <translation>Воспроизведение было завершено некорректно!</translation>
+        <translation>Воспроизведение было завершено неверно!</translation>
     </message>
     <message>
         <source>Video off</source>
@@ -2143,11 +2143,11 @@
     </message>
     <message>
         <source>&amp;Enable audio</source>
-        <translation>&amp;Аудио включено</translation>
+        <translation>Включить а&amp;удио</translation>
     </message>
     <message>
         <source>&amp;Enable video</source>
-        <translation>&amp;Видео включено</translation>
+        <translation>Включить &amp;видео</translation>
     </message>
     <message>
         <source>Set &amp;video delay</source>
@@ -2294,23 +2294,23 @@
     </message>
     <message>
         <source>Local buffer size (A/V packages count)</source>
-        <translation>Размер локального буфера (количество пакетов А/V)</translation>
+        <translation>Размер локального буфера (число пакетов А/В)</translation>
     </message>
     <message>
         <source>Network buffer size (A/V packages count)</source>
-        <translation>Размер сетевого буфера (количество пакетов А/V)</translation>
+        <translation>Размер сетевого буфера (число пакетов А/В)</translation>
     </message>
     <message>
         <source>Percent of packages for backwards rewinding</source>
-        <translation>Количество пакетов А/В при обратной перемотке</translation>
+        <translation>Процент пакетов А/В для перемотки назад</translation>
     </message>
     <message>
         <source>Start playback internet stream if it is buffered</source>
-        <translation>Начинать воспроизводить интернет-поток если он буферизован</translation>
+        <translation>Начинать проигрывание интернет-потока, если он буферизован</translation>
     </message>
     <message>
         <source>sec</source>
-        <translation>сек</translation>
+        <translation>с</translation>
     </message>
     <message>
         <source>Amplify</source>
@@ -2437,7 +2437,7 @@
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>Перейти в ждущий режим по заверше&amp;нии воспроизведения</translation>
+        <translation>Перейти в ж&amp;дущий режим по окончании воспроизведения</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
@@ -2453,7 +2453,7 @@
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation>&amp;Останавливать после воспроизведения</translation>
+        <translation>&amp;Стоп после воспроизведения</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2464,7 +2464,7 @@
     <name>Playlist</name>
     <message>
         <source>&amp;Playlist</source>
-        <translation>&amp;Список воспроизведения</translation>
+        <translation>П&amp;лейлист</translation>
     </message>
     <message>
         <source>&amp;Stop loading</source>
@@ -2524,11 +2524,11 @@
     </message>
     <message>
         <source>&amp;Enqueue</source>
-        <translation>В &amp;очередь</translation>
+        <translation>В о&amp;чередь</translation>
     </message>
     <message>
         <source>&amp;Properties</source>
-        <translation>&amp;Параметры</translation>
+        <translation>&amp;Свойства</translation>
     </message>
     <message>
         <source>&amp;Extensions</source>
@@ -2555,15 +2555,15 @@
     <name>PlaylistDock</name>
     <message>
         <source>Playlist</source>
-        <translation>Список воспроизведения</translation>
+        <translation>Плейлист</translation>
     </message>
     <message>
         <source>Filter entries</source>
-        <translation>Фильтр записей</translation>
+        <translation>Фильтр элементов</translation>
     </message>
     <message>
         <source>Playlist is being loaded now...</source>
-        <translation>Список загружается...</translation>
+        <translation>Плейлист загружается…</translation>
     </message>
     <message>
         <source>Visible entries</source>
@@ -2575,7 +2575,7 @@
     </message>
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
-        <translation>Удалить негруппированные записи?</translation>
+        <translation>Удалить несгруппированные записи?</translation>
     </message>
 </context>
 <context>
@@ -2615,7 +2615,7 @@
     <name>QMPlay2CoreClass</name>
     <message>
         <source>invalid QMPlay2 library</source>
-        <translation>Не верная библиотека QMPlay2</translation>
+        <translation>не верная библиотека QMPlay2</translation>
     </message>
     <message>
         <source>Can&apos;t open log file</source>
@@ -2623,19 +2623,19 @@
     </message>
     <message>
         <source>too old QMPlay2 library</source>
-        <translation>Слишком старая библиотека QMPlay2</translation>
+        <translation>слишком старая библиотека QMPlay2</translation>
     </message>
     <message>
         <source>mismatch module API version</source>
-        <translation>Модуль не соответствует версии API</translation>
+        <translation>модуль не соответствует версии API</translation>
     </message>
     <message>
         <source>duplicated module name</source>
-        <translation>Дублированное имя модуля</translation>
+        <translation>повторяющееся имя модуля</translation>
     </message>
     <message>
         <source>mismatch module Qt version</source>
-        <translation>Модуль не соответствует версии Qt</translation>
+        <translation>модуль не соответствует версии Qt</translation>
     </message>
 </context>
 <context>
@@ -2666,7 +2666,7 @@ QMPlay2 не будет отображать значки!</translation>
     <name>Radio</name>
     <message>
         <source>Internet radios</source>
-        <translation>Интернет радио</translation>
+        <translation>Интернет-радио</translation>
     </message>
     <message>
         <source>Adding a new radio station</source>
@@ -2761,7 +2761,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Stream info</source>
-        <translation>Информация о потоке</translation>
+        <translation>Сведения о потоке</translation>
     </message>
     <message>
         <source>Country</source>
@@ -2816,7 +2816,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
-        <translation>&amp;Останавливать воспроизведение после каждого файла</translation>
+        <translation>Останавливать проигр&amp;ывание после каждого файла</translation>
     </message>
 </context>
 <context>
@@ -2866,7 +2866,7 @@ QMPlay2 не будет отображать значки!</translation>
     <name>SIDPlay</name>
     <message>
         <source>Track</source>
-        <translation>Путь</translation>
+        <translation>Дорожка</translation>
     </message>
 </context>
 <context>
@@ -2901,7 +2901,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>OSD</source>
-        <translation>OSD</translation>
+        <translation>Экранное меню</translation>
     </message>
     <message>
         <source>Colors and borders</source>
@@ -2933,7 +2933,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Use the same size</source>
-        <translation>Использовать тот же размер</translation>
+        <translation>Использовать одинаковый размер</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>
@@ -3091,7 +3091,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
-        <translation>Использовать деинтерлейсинг ГП для видео, декодированного процессором</translation>
+        <translation>Устранять чересстрочность через ГП для видео, декодированного на ЦП</translation>
     </message>
     <message>
         <source>High quality image scaling down</source>
@@ -3139,7 +3139,7 @@ Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
         <translation>Принудительно использовать указанное количество каналов для аудиоматериалов.
 Частично включено, только если содержимое содержит каналы меньше указанного значения
-	(например, увеличить моно до стерео, но не ухудшать квадрофоническое звучание до стерео)</translation>
+	(например, увеличить моно до стерео, но не ухудшать квадрафоническое звучание до стерео)</translation>
     </message>
 </context>
 <context>
@@ -3396,7 +3396,7 @@ Partially checked only if the content has less channels than the specified value
     <name>VFilters</name>
     <message>
         <source>Produce one extra frame which is average of two neighbour frames</source>
-        <translation>Создает один дополнительный кадр, который представляет собой среднее из двух соседних кадров</translation>
+        <translation>Создаёт один дополнительный кадр — среднее из двух соседних кадров</translation>
     </message>
 </context>
 <context>
@@ -3568,7 +3568,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&amp;Hide on close</source>
-        <translation type="unfinished"></translation>
+        <translation>Ск&amp;рывать при закрытии</translation>
     </message>
 </context>
 <context>
@@ -3591,7 +3591,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Playlist</source>
-        <translation>Список воспроизведения</translation>
+        <translation>Плейлист</translation>
     </message>
     <message>
         <source>yes</source>
@@ -3638,7 +3638,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Updating &quot;youtube-dl&quot;, please wait...</source>
-        <translation>Обновление «youtube-dl», подождите...</translation>
+        <translation>Обновление «youtube-dl», подождите…</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; update has been aborted!</source>
@@ -3646,7 +3646,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
-        <translation>Загрузка «youtube-dl», подождите...</translation>
+        <translation>Загрузка «youtube-dl», подождите…</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
