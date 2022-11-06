@@ -587,9 +587,15 @@ void QMPlay2CoreClass::setLanguage()
     if (lang.isEmpty())
         lang = QLocale::system().name();
     if (translator->load(lang, langDir))
+    {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         lang = QFileInfo(translator->filePath()).baseName();
+#endif
+    }
     else
+    {
         lang = "en";
+    }
     qtTranslator->load("qtbase_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 }
 
