@@ -702,152 +702,152 @@
     </message>
     <message>
         <source>Incorrect/empty name or command line!</source>
-        <translation>Неправильне/пусте ім&apos;я або командний рядок!</translation>
+        <translation>Yanlış/boş ad veya komut satırı!</translation>
     </message>
     <message>
         <source>Command must contain &lt;input/&gt; tag!</source>
-        <translation>Команда повинна містити тег &lt;input/&gt;!</translation>
+        <translation>Komut satırı şunları içermelidir &lt;input/&gt;!</translation>
     </message>
     <message>
         <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
-        <translation>Команда повинна містити правильний тег  &lt;output&gt;file&lt;/output/&gt;!</translation>
+        <translation>Komut doğru etiketi içermelidir &lt;output&gt;file&lt;/output/&gt;!</translation>
     </message>
     <message>
         <source>Preset name already exists!</source>
-        <translation>Назва передустановки вже існує!</translation>
+        <translation>Ön ayar adı zaten var!</translation>
     </message>
 </context>
 <context>
     <name>DownloaderThread</name>
     <message>
         <source>Invalid address</source>
-        <translation>Недійсна адреса</translation>
+        <translation>Geçersiz adres</translation>
     </message>
 </context>
 <context>
     <name>EntryProperties</name>
     <message>
         <source>Properties</source>
-        <translation>Властивості</translation>
+        <translation>Özellikler</translation>
     </message>
     <message>
         <source>Incorrect path</source>
-        <translation>Некоректний шлях</translation>
+        <translation>Yanlış yol</translation>
     </message>
     <message>
         <source>File size</source>
-        <translation>Розмір файлу</translation>
+        <translation>Dosya boyutu</translation>
     </message>
     <message>
         <source>Error while writing tags, please check if you have permission to modify the file!</source>
-        <translation>Помилка запису тегів, переконайтеся що у вас є права на зміну файлу!</translation>
+        <translation>Etiketleri yazarken hata oluştu, lütfen dosyayı değiştirme izniniz olup olmadığını kontrol edin!</translation>
     </message>
     <message>
         <source>Synchronize with file or directory</source>
-        <translation>Синхронізувати з файлом або каталогом</translation>
+        <translation>Dosya veya dizinle senkronize et</translation>
     </message>
     <message>
         <source>The specified path does not exist</source>
-        <translation>Вказаного шляху не існує</translation>
+        <translation>Belirtilen yol mevcut değil</translation>
     </message>
     <message>
         <source>Browse for a directory</source>
-        <translation>Огляд каталогу</translation>
+        <translation>Dizine göz atın</translation>
     </message>
     <message>
         <source>Browse for a file that contains more than one track</source>
-        <translation>Огляд файлу, що містить більш ніж одну доріжку</translation>
+        <translation>Birden fazla parça içeren bir dosyaya göz atın</translation>
     </message>
     <message>
         <source>Choose a directory</source>
-        <translation>Вибрати каталог</translation>
+        <translation>Вir dizin seçin</translation>
     </message>
     <message>
         <source>Choose a file that contains more than one track</source>
-        <translation>Виберіть файл, що містить більш ніж одну доріжку</translation>
+        <translation>Birden fazla parça içeren bir dosya seçin</translation>
     </message>
     <message>
         <source>Open URL or directory containing chosen file</source>
-        <translation>Відкрити адресу або каталог з вказаним файлом</translation>
+        <translation>Seçilen dosyayı içeren açık URL veya dizin</translation>
     </message>
 </context>
 <context>
     <name>EqualizerGUI</name>
     <message>
         <source>Equalizer</source>
-        <translation>Еквалайзер</translation>
+        <translation>Ekolayzer</translation>
     </message>
     <message>
         <source>ON</source>
-        <translation>Увімкнений</translation>
+        <translation>Aç</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Видалити</translation>
+        <translation>Sil</translation>
     </message>
     <message>
         <source>Add new preset</source>
-        <translation>Додати нову передустановку</translation>
+        <translation>Yeni hazır ayar ekle</translation>
     </message>
     <message>
         <source>Presets</source>
-        <translation>Передустановки</translation>
+        <translation>Ön ayarlar</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation>Параметри</translation>
+        <translation>Ayarlar</translation>
     </message>
     <message>
         <source>New preset</source>
-        <translation>Нова передустановка</translation>
+        <translation>Yeni ön ayar</translation>
     </message>
     <message>
         <source>Enter new preset name</source>
-        <translation>Введіть ім&apos;я нової передустановки</translation>
+        <translation>Yeni ön ayar adını girin</translation>
     </message>
     <message>
         <source>Preamp</source>
-        <translation>Попереднє посилення</translation>
+        <translation>Preamp</translation>
     </message>
     <message>
         <source>Auto</source>
-        <translation>Авто</translation>
+        <translation>Otomatik</translation>
     </message>
 </context>
 <context>
     <name>FFDemux</name>
     <message>
         <source>Track</source>
-        <translation>Доріжка</translation>
+        <translation>İzle</translation>
     </message>
 </context>
 <context>
     <name>FFTSpectrumW</name>
     <message>
         <source>FFT Spectrum</source>
-        <translation>Спектр FFT</translation>
+        <translation>FFT Spektrumu</translation>
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
-        <translation>Вказана частота: %1 Гц</translation>
+        <translation>Nokta frekans: %1 Hz</translation>
     </message>
 </context>
 <context>
     <name>FFmpeg</name>
     <message>
         <source>None</source>
-        <translation>Немає</translation>
+        <translation>Yok</translation>
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation>Метод усунення черезрядковості</translation>
+        <translation>Deinterlacing method</translation>
     </message>
 </context>
 <context>
     <name>FileAssociation</name>
     <message>
         <source>File association</source>
-        <translation>Асоціація файлів</translation>
+        <translation>Dosya ilişkilendirme</translation>
     </message>
     <message>
         <source>Do you want to associate files with QMPlay2</source>
