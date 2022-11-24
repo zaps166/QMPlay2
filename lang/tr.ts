@@ -1759,94 +1759,94 @@
     </message>
     <message>
         <source>Cut frequency</source>
-        <translation>Гранична частота</translation>
+        <translation>Kesme frekansı</translation>
     </message>
     <message>
         <source>Feed level</source>
-        <translation>Рівень подачі</translation>
+        <translation>Besleme seviyesi</translation>
     </message>
     <message>
         <source>Equalizer</source>
-        <translation>Еквалайзер</translation>
+        <translation>Ekolayzer</translation>
     </message>
     <message>
         <source>Default settings</source>
-        <translation>Параметри за замовчуванням</translation>
+        <translation>Varsayılan ayarlar</translation>
     </message>
     <message>
         <source>XSPF support</source>
-        <translation>Підтримка XSPF</translation>
+        <translation>XSPF desteği</translation>
     </message>
     <message>
         <source>Additional notifications</source>
-        <translation>Додаткові сповіщення</translation>
+        <translation>Ek bildirimler</translation>
     </message>
     <message>
         <source>Try to automatically reconnect live streams on error</source>
-        <translation>Намагатися автоматично відновити з&apos;єднання потоків при помилці</translation>
+        <translation>Hata durumunda canlı akışları otomatik olarak yeniden bağlamayı deneyin</translation>
     </message>
     <message>
         <source>Decode MPEG4 videos</source>
-        <translation>Декодування відео MPEG4</translation>
+        <translation>MPEG4 videolarının kodunu çöz</translation>
     </message>
     <message>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
-        <translation>Вимкніть, якщо у вас виникнуть проблеми з декодуванням відео MPEG4 (DivX5)</translation>
+        <translation>MPEG4 (DivX5) videoların kodunu çözmekle ilgili sorunlarınız varsa devre dışı bırakın</translation>
     </message>
     <message>
         <source>Bit-perfect audio</source>
-        <translation>Звук BitPerfect</translation>
+        <translation>Bit-mükemmel ses</translation>
     </message>
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
-        <translation>Встановлює вибраний вихідний пристрій на частоту дискретизації відтворюваного вмісту</translation>
+        <translation>Seçilen çıktı cihazını oynatılmakta olan içeriğin örnekleme hızına ayarlar</translation>
     </message>
     <message>
         <source>Swap stereo channels</source>
-        <translation>Поміняти місцями стереоканали</translation>
+        <translation>Stereo kanalları değiştir</translation>
     </message>
     <message>
         <source>Show user name in search results</source>
-        <translation>Показувати ім&apos;я користувача в результатах пошуку</translation>
+        <translation>Arama sonuçlarında kullanıcı adını göster</translation>
     </message>
     <message>
         <source>Linear scale</source>
-        <translation>Лінійна шкала</translation>
+        <translation>Doğrusal ölçek</translation>
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation>Бажана якість</translation>
+        <translation>Kalite tercihi</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
-        <translation>Копіювати декодоване відео в пам&apos;ять процесора (повільно)</translation>
+        <translation>Kodu çözülmüş videoyu CPU belleğine kopyala (yavaş)</translation>
     </message>
     <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
-        <translation>Декодувати без копіювання для чіпів Intel (експериментально)</translation>
+        <translation>Intel donanımında sıfır kopya kod çözme (deneysel)</translation>
     </message>
     <message>
         <source>Better performance, but can cause garbage or might not work at all.</source>
-        <translation>Краща продуктивність, але може спричинити проблеми з зображенням або взагалі не працювати.</translation>
+        <translation>Daha iyi performans, ancak çöpe neden olabilir veya hiç çalışmayabilir.</translation>
     </message>
     <message>
         <source>Exclusive mode</source>
-        <translation>Монопольний режим</translation>
+        <translation>Özel mod</translation>
     </message>
     <message>
         <source>Preferred video codec</source>
-        <translation>Бажаний відеокодек</translation>
+        <translation>Tercih edilen video codec'i</translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Gecikme</translation>
     </message>
 </context>
 <context>
     <name>ModulesList</name>
     <message>
         <source>Move up</source>
-        <translation>Вище</translation>
+        <translation>Yukarı git</translation>
     </message>
     <message>
         <source>...</source>
@@ -1854,100 +1854,100 @@
     </message>
     <message>
         <source>Move down</source>
-        <translation>Нижче</translation>
+        <translation>Aşağı in</translation>
     </message>
 </context>
 <context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
-        <translation>Гучність: %1%</translation>
+        <translation>Ses: %1%</translation>
     </message>
     <message>
         <source>Volume changed</source>
-        <translation>Гучність змінено</translation>
+        <translation>Ses değiştir</translation>
     </message>
     <message>
         <source>Stopped</source>
-        <translation>Зупинено</translation>
+        <translation>Durduruldu</translation>
     </message>
     <message>
         <source>Playing</source>
-        <translation>Відтворення</translation>
+        <translation>Oynat</translation>
     </message>
     <message>
         <source>Paused</source>
-        <translation>Пауза</translation>
+        <translation>Duraklatıldı</translation>
     </message>
 </context>
 <context>
     <name>OSDSettings</name>
     <message>
         <source>Font</source>
-        <translation>Шрифт</translation>
+        <translation>Yazıtipi</translation>
     </message>
     <message>
         <source>Margins</source>
-        <translation>Краї</translation>
+        <translation>Kenar boşlukları</translation>
     </message>
     <message>
         <source>Subtitles alignment</source>
-        <translation>Розміщення тексту</translation>
+        <translation>Altyazı hizalaması</translation>
     </message>
     <message>
         <source>Border</source>
-        <translation>Рамка</translation>
+        <translation>Sınır</translation>
     </message>
     <message>
         <source>Colors</source>
-        <translation>Колір</translation>
+        <translation>Renkler</translation>
     </message>
     <message>
         <source>Size</source>
-        <translation>Розмір</translation>
+        <translation>Boyut</translation>
     </message>
     <message>
         <source>Spacing</source>
-        <translation>Відстань</translation>
+        <translation>Aralık</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Зліва</translation>
+        <translation>Ayrıldı</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Справа</translation>
+        <translation>Doğru</translation>
     </message>
     <message>
         <source>Vertical</source>
-        <translation>Вертикально</translation>
+        <translation>Dikey</translation>
     </message>
     <message>
         <source>Outline</source>
-        <translation>Контур</translation>
+        <translation>anahat</translation>
     </message>
     <message>
         <source>Shadow</source>
-        <translation>Тінь</translation>
+        <translation>gölge</translation>
     </message>
     <message>
         <source>Text</source>
-        <translation>Текст</translation>
+        <translation>Metin</translation>
     </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
     <message>
         <source>Shader compile/link error</source>
-        <translation>Помилка компіляції/лінкування шейдерів</translation>
+        <translation>Gölgelendirici derleme/bağlantı hatası</translation>
     </message>
     <message>
         <source>Can&apos;t init %1</source>
-        <translation>Неможливо ініціалізувати %1</translation>
+        <translation>Başlatılamıyor %1</translation>
     </message>
     <message>
         <source>texture map error</source>
-        <translation>помилка відображення текстури</translation>
+        <translation>Doku haritası hatası</translation>
     </message>
 </context>
 <context>
@@ -1958,47 +1958,47 @@
     </message>
     <message>
         <source>&amp;Settings</source>
-        <translation>&amp;Загальні параметри</translation>
+        <translation>&amp;Ayarlar</translation>
     </message>
     <message>
         <source>&amp;Show tray icon</source>
-        <translation>&amp;Показувати іконку в системному лотку</translation>
+        <translation>&amp;Tepsi simgesini göster</translation>
     </message>
     <message>
         <source>&amp;Modules settings</source>
-        <translation>&amp;Параметри модулів</translation>
+        <translation>&amp;Modules settings</translation>
     </message>
     <message>
         <source>Create new profile</source>
-        <translation>Створити новий профіль</translation>
+        <translation>Yeni profil oluştur</translation>
     </message>
     <message>
         <source>&amp;Profiles</source>
-        <translation>&amp;Профілі</translation>
+        <translation>&amp;Profiller</translation>
     </message>
     <message>
         <source>&amp;New Profile</source>
-        <translation>&amp;Новий профіль</translation>
+        <translation>&amp;Yeni profil</translation>
     </message>
     <message>
         <source>&amp;Copy Profile</source>
-        <translation>&amp;Копіювати профіль</translation>
+        <translation>&amp;Profili kopyala</translation>
     </message>
     <message>
         <source>&amp;Default</source>
-        <translation>&amp;Умовчання</translation>
+        <translation>&amp;Varsayılan</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Видалити</translation>
+        <translation>Kaldır</translation>
     </message>
     <message>
         <source>Enter new profile name:</source>
-        <translation>Введіть ім&apos;я нового профілю:</translation>
+        <translation>Yeni profil adını girin:</translation>
     </message>
     <message>
         <source>&amp;Playback settings</source>
-        <translation>&amp;Параметри відтворення</translation>
+        <translation>&amp;Oynatma ayarları</translation>
     </message>
     <message>
         <source>&amp;Renderer settings</source>
