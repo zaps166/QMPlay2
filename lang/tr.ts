@@ -2202,159 +2202,159 @@
     <name>PlaybackSettings</name>
     <message>
         <source>Maximum volume</source>
-        <translation>Максимальна гучність</translation>
+        <translation>Yüksek ses</translation>
     </message>
     <message>
         <source>Force samplerate</source>
-        <translation>Примусова частота дискретизації</translation>
+        <translation>Örneklemeyi zorla</translation>
     </message>
     <message>
         <source>Force channels conversion</source>
-        <translation>Примусове перетворення каналів</translation>
+        <translation>Kanalları dönüştürmeye zorla</translation>
     </message>
     <message>
         <source>Use available replay gain</source>
-        <translation>По можливості вирівнювати гучність</translation>
+        <translation>Mümkünse, sesi eşitle</translation>
     </message>
     <message>
         <source>Album mode for replay gain</source>
-        <translation>Режим альбому для вирівнювання гучності</translation>
+        <translation>Ses eşitleme için albüm modu</translation>
     </message>
     <message>
         <source>Prevent clipping</source>
-        <translation>Приглушувати шипіння/тріск</translation>
+        <translation>Kırpmayı önle</translation>
     </message>
     <message>
         <source>Mouse wheel action on video dock</source>
-        <translation>Дія коліща миші у вікні відео</translation>
+        <translation>Fare tekerleğinin video penceresindeki eylemi</translation>
     </message>
     <message>
         <source>Mouse wheel scrolls music/movie</source>
-        <translation>Коліща миші прокручує музику/фільм</translation>
+        <translation>Fare tekerleği müziği/filmi kaydırır</translation>
     </message>
     <message>
         <source>Mouse wheel changes the volume</source>
-        <translation>Коліща миші змінює гучність</translation>
+        <translation>Fare tekerleği sesi değiştirir</translation>
     </message>
     <message>
         <source>Keep zoom</source>
-        <translation>Зберігати масштабування</translation>
+        <translation>yakınlaştırmaya devam et</translation>
     </message>
     <message>
         <source>Show buffered data indicator on slider</source>
-        <translation>Показувати індикатор буферизованих даних на повзунку</translation>
+        <translation>Kaydırıcıda ara belleğe alınmış veri göstergesini göster</translation>
     </message>
     <message>
         <source>Keep aspect ratio</source>
-        <translation>Зберігати співвідношення сторін</translation>
+        <translation>En-boy oranını koru</translation>
     </message>
     <message>
         <source>Remember playback position</source>
-        <translation>Пам&apos;ятати позицію відтворення</translation>
+        <translation>Oynatma konumunu hatırla</translation>
     </message>
     <message>
         <source>Keep subtitles delay</source>
-        <translation>Зберігати затримку субтитрів</translation>
+        <translation>Altyazı gecikmesini koru</translation>
     </message>
     <message>
         <source>Keep subtitles scale</source>
-        <translation>Зберігати масштаб субтитрів</translation>
+        <translation>Altyazı ölçeğini koru</translation>
     </message>
     <message>
         <source>Keep speed</source>
-        <translation>Зберігати частоту кадрів</translation>
+        <translation>Kare hızını koru</translation>
     </message>
     <message>
         <source>Keep video delay</source>
-        <translation>Зберігати затримку відео</translation>
+        <translation>Video gecikmesini koru</translation>
     </message>
     <message>
         <source>Video to audio sync (frame skipping)</source>
-        <translation>Синхронізація аудіо і відео (пропуск кадрів)</translation>
+        <translation>Videodan sese senkronizasyon (çerçeve atlama)</translation>
     </message>
     <message>
         <source>Fade sound</source>
-        <translation>Вимкнення звуку при зупинці відтворення</translation>
+        <translation>Sesi soldur</translation>
     </message>
     <message>
         <source>Remember video equalizer settings</source>
-        <translation>Пам&apos;ятати параметри відеоеквалайзера</translation>
+        <translation>Video ekolayzır ayarlarını hatırla</translation>
     </message>
     <message>
         <source>Play next entry after playback error</source>
-        <translation>Відтворювати наступний при помилці відтворення</translation>
+        <translation>Oynatma hatasından sonra sonraki girişi çal</translation>
     </message>
     <message>
         <source>Short seeking (left and right arrows)</source>
-        <translation>Короткий пошук (ліві і праві стрілки)</translation>
+        <translation>Kısa arama (sol ve sağ oklar)</translation>
     </message>
     <message>
         <source>Long seeking (up and down arrows)</source>
-        <translation>Довгий пошук (стрілки вгору і вниз)</translation>
+        <translation>Uzun arama (yukarı ve aşağı oklar)</translation>
     </message>
     <message>
         <source>Local buffer size (A/V packages count)</source>
-        <translation>Розмір локального буфера (кількість пакетів аудіо/відео)</translation>
+        <translation>Yerel arabellek boyutu (A/V paketleri sayısı)</translation>
     </message>
     <message>
         <source>Network buffer size (A/V packages count)</source>
-        <translation>Розмір мережевого буфера (кількість пакетів аудіо/відео)</translation>
+        <translation>Ağ arabellek boyutu (A/V paketleri sayısı)</translation>
     </message>
     <message>
         <source>Percent of packages for backwards rewinding</source>
-        <translation>Відсоток пакетів аудіо/відео при зворотному перемотуванні</translation>
+        <translation>Geri sarma için paketlerin yüzdesi</translation>
     </message>
     <message>
         <source>Start playback internet stream if it is buffered</source>
-        <translation>Розпочинати відтворювати інтернет-потік при його буферизації</translation>
+        <translation>Arabelleğe alınmışsa internet akışını oynatmaya başlayın</translation>
     </message>
     <message>
         <source>sec</source>
-        <translation>сек</translation>
+        <translation>saniye</translation>
     </message>
     <message>
         <source>Amplify</source>
-        <translation>Посилення</translation>
+        <translation>Yükselt</translation>
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation>Ліва кнопка миші у вікні відео перемикає відтворення</translation>
+        <translation>Video penceresindeki sol fare düğmesi oynatmayı değiştirir</translation>
     </message>
     <message>
         <source>Accurate seeking</source>
-        <translation>Точний пошук</translation>
+        <translation>Bire bir aynı</translation>
     </message>
     <message>
         <source>Store aspect ratio and zoom in config file</source>
-        <translation>Зберегти пропорції і масштаб у конфігураційний файл</translation>
+        <translation>Oranları ve ölçeği yapılandırma dosyasına kaydedin</translation>
     </message>
     <message>
         <source>Unpause when seeking</source>
-        <translation>Поновити відтворення під час прокрутки</translation>
+        <translation>Kaydırma sırasında oynatmaya devam edin</translation>
     </message>
     <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>Використовувати аудіоресемплер та перетворення каналів перед фільтрами та візуалізаціями</translation>
+        <translation>Filtreler ve görselleştirmelerden önce ses yeniden örnekleyici ve kanal dönüştürmeyi kullanın</translation>
     </message>
     <message>
         <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation>Середня кнопка миші у вікні відео перемикає повноекранний режим</translation>
+        <translation>Video penceresindeki orta fare düğmesi tam ekran moduna geçer</translation>
     </message>
     <message>
         <source>Disable subtitles at program startup</source>
-        <translation>Вимкнути субтитри при запуску програми</translation>
+        <translation>Program başlangıcında altyazıları devre dışı bırak</translation>
     </message>
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
-        <translation>Пам&apos;ятати, чи увімкнено аудіо/відео/субтитри</translation>
+        <translation>Ses/video/altyazı etkin durumunu hatırla</translation>
     </message>
     <message>
         <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>Частково позначене означає, що є затримка між натисканням та паузою</translation>
+        <translation>Kısmen işaretli, basma ve duraklatma arasında bir gecikme olduğu anlamına gelir</translation>
     </message>
     <message>
         <source>Amplify (no metadata)</source>
-        <translation>Посилення (без метаданих)</translation>
+        <translation>Amplify (meta veri yok)</translation>
     </message>
 </context>
 <context>
@@ -2555,27 +2555,27 @@
     <name>PlaylistDock</name>
     <message>
         <source>Playlist</source>
-        <translation>Список відтворення</translation>
+        <translation>Çalma listesi</translation>
     </message>
     <message>
         <source>Filter entries</source>
-        <translation>Фільтр записів</translation>
+        <translation>Filtre girişleri</translation>
     </message>
     <message>
         <source>Playlist is being loaded now...</source>
-        <translation>Список завантажується...</translation>
+        <translation>Oynatma listesi şimdi yükleniyor...</translation>
     </message>
     <message>
         <source>Visible entries</source>
-        <translation>Видимі елементи</translation>
+        <translation>Görünür girişler</translation>
     </message>
     <message>
         <source>Are you sure you want to clear the list?</source>
-        <translation>Дійсно очистити список?</translation>
+        <translation>Listeyi temizlemek istediğinizden emin misiniz?</translation>
     </message>
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
-        <translation>Дійсно видалити незгруповані записи?</translation>
+        <translation>Gruplanmamış girişleri silmek istediğinizden emin misiniz?</translation>
     </message>
 </context>
 <context>
@@ -2593,187 +2593,187 @@
     <name>PortAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Неможливо відкрити вихідний потік звуку</translation>
+        <translation>Ses çıkışı akışı açılamıyor</translation>
     </message>
     <message>
         <source>Playback error</source>
-        <translation>Помилка відтворення</translation>
+        <translation>Oynatma hatası</translation>
     </message>
 </context>
 <context>
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Неможливо відкрити вихідний потік звуку</translation>
+        <translation>Ses çıkışı akışı açılamıyor</translation>
     </message>
     <message>
         <source>Playback error</source>
-        <translation>Помилка відтворення</translation>
+        <translation>Oynatma hatası</translation>
     </message>
 </context>
 <context>
     <name>QMPlay2CoreClass</name>
     <message>
         <source>invalid QMPlay2 library</source>
-        <translation>недійсна бібліотека QMPlay2</translation>
+        <translation>Geçersiz QMPlay2 kitaplığı</translation>
     </message>
     <message>
         <source>Can&apos;t open log file</source>
-        <translation>Неможливо відкрити файл журналу</translation>
+        <translation>Günlük dosyası açılamıyor</translation>
     </message>
     <message>
         <source>too old QMPlay2 library</source>
-        <translation>застаріла бібліотека QMPlay2</translation>
+        <translation>çok eski QMPlay2 kitaplığı</translation>
     </message>
     <message>
         <source>mismatch module API version</source>
-        <translation>несумісна версія модуля API</translation>
+        <translation>uyumsuzluk modülü API sürümü</translation>
     </message>
     <message>
         <source>duplicated module name</source>
-        <translation>повторюване ім&apos;я модуля</translation>
+        <translation>yinelenen modül adı</translation>
     </message>
     <message>
         <source>mismatch module Qt version</source>
-        <translation>несумісна версія модуля Qt</translation>
+        <translation>uyumsuzluk modülü Qt versiyonu</translation>
     </message>
 </context>
 <context>
     <name>QMPlay2GUIClass</name>
     <message>
         <source>Saving cover picture</source>
-        <translation>Збереження обкладинки</translation>
+        <translation>Kapak resmi kaydediliyor</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>QMPlay2 has been updated to version</source>
-        <translation>QMPlay2 був оновлений до версії</translation>
+        <translation>QMPlay2 sürüme güncellendi</translation>
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation>QMPlay2 не був оновлений. Бажаєте запустити процес оновлення (рекомендовано)?</translation>
+        <translation>QMPlay2 güncellenmedi. Güncelleme işlemini başlatmak istiyor musunuz (önerilir)?</translation>
     </message>
     <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
 QMPlay2 will not scale up icons!</source>
-        <translation>Плагіну іконок QtSvg не існує.
-QMPlay2 не масштабуватиме іконки!</translation>
+        <translation>QtSvg simge eklentisi yok.
+QMPlay2 simgeleri ölçeklendirmez!</translation>
     </message>
 </context>
 <context>
     <name>Radio</name>
     <message>
         <source>Internet radios</source>
-        <translation>Інтернет-радіо</translation>
+        <translation>İnternet radyoları</translation>
     </message>
     <message>
-        <source>Adding a new radio station</source>
-        <translation>Додавання нової радіостанції</translation>
+        <source>Adding a new radio</source>
+        <translation>Yeni bir radyo istasyonu ekle</translation>
     </message>
     <message>
         <source>Add new radio station</source>
-        <translation>Додати нову радіостанцію</translation>
+        <translation>Yeni radyo istasyonu ekle</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>Назва</translation>
+        <translation>İsim</translation>
     </message>
     <message>
         <source>Address</source>
-        <translation>Адреса</translation>
+        <translation>Adres</translation>
     </message>
     <message>
         <source>My radio stations</source>
-        <translation>Мої радіостанції</translation>
+        <translation>Radyo istasyonlarım</translation>
     </message>
     <message>
         <source>Edit selected radio station</source>
-        <translation>Редагувати вибрану радіостанцію</translation>
+        <translation>Seçilen radyo istasyonunu düzenle</translation>
     </message>
     <message>
         <source>Remove selected radio station</source>
-        <translation>Видалити вибрану радіостанцію</translation>
+        <translation>Seçili radyo istasyonunu kaldır</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Відтворення</translation>
+        <translation>Oynat</translation>
     </message>
     <message>
         <source>Enqueue</source>
-        <translation>Черга</translation>
+        <translation>Sıraya al</translation>
     </message>
     <message>
         <source>Add to my radio stations</source>
-        <translation>Додати до моїх радіостанцій</translation>
+        <translation>Radyo istasyonlarıma ekle</translation>
     </message>
     <message>
         <source>Open radio website</source>
-        <translation>Відкрити веб-сайт радіо</translation>
+        <translation>Radyo web sitesini aç</translation>
     </message>
     <message>
         <source>Editing selected radio station</source>
-        <translation>Редагування вибраної радіостанції</translation>
+        <translation>Seçilen radyo istasyonunu düzenleme</translation>
     </message>
     <message>
         <source>Radio station with given name already exists!</source>
-        <translation>Радіостанція із заданим ім&apos;ям вже існує!</translation>
+        <translation>Belirtilen ada sahip radyo istasyonu zaten var!</translation>
     </message>
     <message>
         <source>Load radio station list from file</source>
-        <translation>Завантажити список радіостанцій з файлу</translation>
+        <translation>Dosyadan radyo istasyonu listesi yükle</translation>
     </message>
     <message>
         <source>Save radio station list to file</source>
-        <translation>Зберети список радіостанцій у файл</translation>
+        <translation>Radyo istasyonu listesini dosyaya kaydet</translation>
     </message>
     <message>
         <source>Load radio station list</source>
-        <translation>Завантажити список радіостанцій</translation>
+        <translation>Radyo istasyonu listesini yükle</translation>
     </message>
     <message>
         <source>Save radio station list</source>
-        <translation>Зберети список радіостанцій</translation>
+        <translation>Radyo istasyonu listesini kaydet</translation>
     </message>
     <message>
         <source>Tag</source>
-        <translation>мітка</translation>
+        <translation>Etiket</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation>Країна</translation>
+        <translation>Ülke</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Мова</translation>
+        <translation>Dil</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>Штат</translation>
+        <translation>Durum</translation>
     </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
     <message>
         <source>Name</source>
-        <translation>Назва</translation>
+        <translation>İsim</translation>
     </message>
     <message>
         <source>Stream info</source>
-        <translation>Інформація про потік</translation>
+        <translation>Akış bilgisi</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation>Країна</translation>
+        <translation>Ülke</translation>
     </message>
     <message>
         <source>Tags</source>
-        <translation>Теги</translation>
+        <translation>Etiket</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation>Рейтинг</translation>
+        <translation>Değerlendirme</translation>
     </message>
 </context>
 <context>
@@ -2823,117 +2823,117 @@ QMPlay2 не масштабуватиме іконки!</translation>
     <name>ResultsYoutube</name>
     <message>
         <source>Title</source>
-        <translation>Назва</translation>
+        <translation>Başlık</translation>
     </message>
     <message>
         <source>Length</source>
-        <translation>Тривалість</translation>
+        <translation>Süre</translation>
     </message>
     <message>
         <source>User</source>
-        <translation>Користувач</translation>
+        <translation>Кullanıcı</translation>
     </message>
     <message>
         <source>Enqueue</source>
-        <translation>Черга</translation>
+        <translation>Sıraya al</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Відтворення</translation>
+        <translation>Oynat</translation>
     </message>
     <message>
         <source>Open the page in the browser</source>
-        <translation>Відкрити сторінку в браузері</translation>
+        <translation>Sayfayı tarayıcıda aç</translation>
     </message>
     <message>
         <source>Copy page address</source>
-        <translation>Копіювати адресу сторінки</translation>
+        <translation>Sayfa adresini kopyala</translation>
     </message>
     <message>
         <source>Audio and video</source>
-        <translation>Аудіо і відео</translation>
+        <translation>Ses ve video</translation>
     </message>
     <message>
         <source>Audio only</source>
-        <translation>Лише аудіо</translation>
+        <translation>Sadece ses</translation>
     </message>
     <message>
         <source>Show related</source>
-        <translation>Показати пов’язані</translation>
+        <translation>İlgili göster</translation>
     </message>
 </context>
 <context>
     <name>SIDPlay</name>
     <message>
         <source>Track</source>
-        <translation>Доріжка</translation>
+        <translation>İzle</translation>
     </message>
 </context>
 <context>
     <name>SettingsWidget</name>
     <message>
         <source>Settings</source>
-        <translation>Параметри</translation>
+        <translation>Ayarlar</translation>
     </message>
     <message>
         <source>Playback settings</source>
-        <translation>Відтворення</translation>
+        <translation>Oynatma ayarları</translation>
     </message>
     <message>
         <source>Modules</source>
-        <translation>Модулі</translation>
+        <translation>Моdüller</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation>Застосувати</translation>
+        <translation>Uygula</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Закрити</translation>
+        <translation>Kapat</translation>
     </message>
     <message>
         <source>Contains</source>
-        <translation>Зміст</translation>
+        <translation>İçerir</translation>
     </message>
     <message>
         <source>Subtitles</source>
-        <translation>Субтитри</translation>
+        <translation>Altyazılar</translation>
     </message>
     <message>
         <source>OSD</source>
-        <translation>Екранна індикація</translation>
+        <translation>OSD Еkran göstergesi</translation>
     </message>
     <message>
         <source>Colors and borders</source>
-        <translation>Колір і рамка</translation>
+        <translation>Renkler ve kenarlıklar</translation>
     </message>
     <message>
         <source>Apply for ASS/SSA subtitles</source>
-        <translation>Застосувати для субтитрів ASS/SSA</translation>
+        <translation>ASS/SSA altyazıları için başvurun</translation>
     </message>
     <message>
         <source>Fonts and spacing</source>
-        <translation>Шрифти і відступ</translation>
+        <translation>Yazı tipleri ve boşluk</translation>
     </message>
     <message>
         <source>Margins and alignment</source>
-        <translation>Краї та вирівнювання</translation>
+        <translation>Kenar boşlukları ve hizalama</translation>
     </message>
     <message>
         <source>General settings</source>
-        <translation>Загальні</translation>
+        <translation>Genel Ayarlar</translation>
     </message>
     <message>
         <source>OSD enabled</source>
-        <translation>Екранну індикацію увімкнено</translation>
+        <translation>OSD Ekran görüntüsü etkinleştirildi</translation>
     </message>
     <message>
         <source>Choose directory</source>
-        <translation>Вибрати каталог</translation>
+        <translation>Dizini seçin</translation>
     </message>
     <message>
         <source>Use the same size</source>
-        <translation>Використовувати той же розмір</translation>
+        <translation>Aynı boyutu kullan</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>
