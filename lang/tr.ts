@@ -1475,51 +1475,51 @@
     </message>
     <message>
         <source>Low</source>
-        <translation>Низька</translation>
+        <translation>Düşük</translation>
     </message>
     <message>
         <source>filter size</source>
-        <translation>розмір</translation>
+        <translation>Filtre boyutu</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Середня</translation>
+        <translation>Orta</translation>
     </message>
     <message>
         <source>High</source>
-        <translation>Висока</translation>
+        <translation>Yüksek</translation>
     </message>
     <message>
         <source>Very high</source>
-        <translation>Дуже висока</translation>
+        <translation>Çok yüksek</translation>
     </message>
     <message>
         <source>Rayman2 music (*.apm)</source>
-        <translation>Музика Rayman2 (* .apm)</translation>
+        <translation>Rayman2 muzik (* .apm)</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
-        <translation>Нестиснутий звук PCM</translation>
+        <translation>Sıkıştırılmamış PCM sesi</translation>
     </message>
     <message>
         <source>File extensions (semicolon separated)</source>
-        <translation>Розширення файлів (крапкою з комою)</translation>
+        <translation>Dosya uzantıları (noktalı virgülle ayrılmış)</translation>
     </message>
     <message>
         <source>Format</source>
-        <translation>Формат</translation>
+        <translation>Biçim</translation>
     </message>
     <message>
         <source>Channel count</source>
-        <translation>Кількість каналів</translation>
+        <translation>Кanal sayısı</translation>
     </message>
     <message>
         <source>Sample rate</source>
-        <translation>Частота дискретизації</translation>
+        <translation>Aynı oran</translation>
     </message>
     <message>
         <source>Offset</source>
-        <translation>Зсув</translation>
+        <translation>Telafi et</translation>
     </message>
     <message>
         <source>Little endian</source>
@@ -1531,231 +1531,231 @@
     </message>
     <message>
         <source>Associate files with QMPlay2</source>
-        <translation>Асоціація файлів QMPlay2</translation>
+        <translation>Dosyaları QMPlay2 ile ilişkilendirin</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation>Вибрати все</translation>
+        <translation>Tümünü seç</translation>
     </message>
     <message>
         <source>Add entry to the directories context menu</source>
-        <translation>Додати каталоги до контекстного меню</translation>
+        <translation>Dizinler içerik menüsüne giriş ekleyin</translation>
     </message>
     <message>
         <source>Add entry to the drives context menu</source>
-        <translation>Додати диски до контекстного меню</translation>
+        <translation>Sürücü içerik menüsüne giriş ekleyin</translation>
     </message>
     <message>
         <source>Enqueue in QMPlay2</source>
-        <translation>Поставити в чергу в QMPlay2</translation>
+        <translation>QMPlay2'de kuyruğa al</translation>
     </message>
     <message>
         <source>Play in QMPlay2</source>
-        <translation>Відтворити в QMPlay2</translation>
+        <translation>QMPlay2 de oynat</translation>
     </message>
     <message>
         <source>FFT spectrum size</source>
-        <translation>Розмір спектра FFT</translation>
+        <translation>FFT spektrum boyutu</translation>
     </message>
     <message>
         <source>Displayed sound length</source>
-        <translation>Виводити на екран тривалість звуку</translation>
+        <translation>Görüntülenen ses uzunluğu</translation>
     </message>
     <message>
         <source>Set as default AudioCD player</source>
-        <translation>Встановити як програвач аудіодисків за замовчуванням</translation>
+        <translation>Varsayılan AudioCD oynatıcı olarak ayarla</translation>
     </message>
     <message>
         <source>Skip some frames</source>
-        <translation>Пропускати деякі кадри</translation>
+        <translation>Bazı kareleri atla</translation>
     </message>
     <message>
         <source>Force frame skipping</source>
-        <translation>Примусово пропускати кадри</translation>
+        <translation>Kare atlamayı zorla</translation>
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
-        <translation>Декодування низької роздатності (лише деякі кодеки)</translation>
+        <translation>Düşük çözünürlüklü kod çözme (yalnızca bazı codec'ler)</translation>
     </message>
     <message>
         <source>Hurry up</source>
-        <translation>Швидше</translation>
+        <translation>Acele et</translation>
     </message>
     <message>
         <source>Number of threads used to decode video</source>
-        <translation>Число потоків для декодування відео</translation>
+        <translation>Videonun kodunu çözmek için kullanılan iş parçacığı sayısı</translation>
     </message>
     <message>
         <source>Demuxer</source>
-        <translation>Демуксер</translation>
+        <translation>Demuxer</translation>
     </message>
     <message>
         <source>Decoder</source>
-        <translation>Декодер</translation>
+        <translation>Kod çözücü</translation>
     </message>
     <message>
         <source>hardware decoding</source>
-        <translation>апаратне декодування</translation>
+        <translation>Donanım kod çözme</translation>
     </message>
     <message>
         <source>Phase reverse</source>
-        <translation>Реверс фази</translation>
+        <translation>Faz ters</translation>
     </message>
     <message>
         <source>Reverse the right channel phase</source>
-        <translation>Реверс фази в правому каналі</translation>
+        <translation>Sağ kanal fazını tersine çevirin</translation>
     </message>
     <message>
         <source>Download covers</source>
-        <translation>Завантаження обкладинок</translation>
+        <translation>Download covers</translation>
     </message>
     <message>
         <source>Scrobble</source>
-        <translation>Скробблінг</translation>
+        <translation>Karalama</translation>
     </message>
     <message>
         <source>User name</source>
-        <translation>Ім&apos;я користувача</translation>
+        <translation>Kullanıcı adı</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>Пароль</translation>
+        <translation>Şifre</translation>
     </message>
     <message>
         <source>Last password</source>
-        <translation>Останній пароль</translation>
+        <translation>Son şifre</translation>
     </message>
     <message>
         <source>Allow to download big covers</source>
-        <translation>Дозволити завантаження великої обкладинки</translation>
+        <translation>Büyük kapakları indirmeye izin ver</translation>
     </message>
     <message>
         <source>Software decoder</source>
-        <translation>Програмний декодер</translation>
+        <translation>Yazılım kod çözücü</translation>
     </message>
     <message>
         <source>Use CDDB if CD-TEXT is not available</source>
-        <translation>Використовувати CDDB, якщо CD-TEXT недоступний</translation>
+        <translation>CD-TEXT mevcut değilse CDDB'yi kullanın</translation>
     </message>
     <message>
         <source>AudioCD</source>
-        <translation>Аудіодиск</translation>
+        <translation>AudioCD</translation>
     </message>
     <message>
         <source>Use CD-TEXT</source>
-        <translation>Використовувати CD-TEXT</translation>
+        <translation>CD-TEXT'i kullan</translation>
     </message>
     <message>
         <source>Echo</source>
-        <translation>Відлуння</translation>
+        <translation>Yankı</translation>
     </message>
     <message>
         <source>Echo delay</source>
-        <translation>Затримка відлуння</translation>
+        <translation>Yankı gecikmesi</translation>
     </message>
     <message>
         <source>Echo volume</source>
-        <translation>Гучність відлуння</translation>
+        <translation>Yankı hacmi</translation>
     </message>
     <message>
         <source>Echo repeat</source>
-        <translation>Повторення відлуння</translation>
+        <translation>Yankı tekrarı</translation>
     </message>
     <message>
         <source>Echo surround</source>
-        <translation>Відлуння звуку оточення</translation>
+        <translation>Yankı çevre</translation>
     </message>
     <message>
         <source>Use the program via MPRIS2 interface</source>
-        <translation>Використання програми через інтерфейс MPRIS2</translation>
+        <translation>Programı MPRIS2 arayüzü üzerinden kullanın</translation>
     </message>
     <message>
         <source>Noise reduction</source>
-        <translation>Шумоприглушення</translation>
+        <translation>Gürültü azaltma</translation>
     </message>
     <message>
         <source>Slider count in sound equalizer</source>
-        <translation>Кількість повзунків в еквалайзері звуку</translation>
+        <translation>Ses ekolayzerinde kaydırıcı sayısı</translation>
     </message>
     <message>
         <source>Minimum frequency</source>
-        <translation>Мінімальна частота</translation>
+        <translation>Minimum frekans</translation>
     </message>
     <message>
         <source>Maximum frequency</source>
-        <translation>Максимальна частота</translation>
+        <translation>Maximum frekans</translation>
     </message>
     <message>
         <source>Default length</source>
-        <translation>Тривалість за замовчуванням</translation>
+        <translation>Varsayılan uzunluk</translation>
     </message>
     <message>
         <source>Display available subtitles</source>
-        <translation>Показувати субтитри, якщо можливо</translation>
+        <translation>Mevcut altyazıları göster</translation>
     </message>
     <message>
         <source>Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language.</source>
-        <translation>Показувати субтитри з YouTube. Враховується мова за замовчуванням субтитрів та QMPlay2.</translation>
+        <translation>YouTube'dan altyazıları görüntüleyin. Varsayılan altyazı dilini ve QMPlay2 dilini takip edin.</translation>
     </message>
     <message>
         <source>Decoder enabled</source>
-        <translation>Декодер увімкнений</translation>
+        <translation>Kod çözücü etkin</translation>
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation>Задіяти CUVID лише якщо першим графічним процесором є NVIDIA</translation>
+        <translation>CUVID'yi yalnızca birincil GPU NVIDIA olduğunda kullanın</translation>
     </message>
     <message>
         <source>Infinite</source>
-        <translation>Нескінченний</translation>
+        <translation>Sonsuz</translation>
     </message>
     <message>
         <source>Show notification when volume changes</source>
-        <translation>Показувати сповіщення при зміні гучності</translation>
+        <translation>Ses düzeyi değiştiğinde bildirim göster</translation>
     </message>
     <message>
         <source>Show notification when media changes</source>
-        <translation>Показувати сповіщення при зміні носія</translation>
+        <translation>Medya değiştiğinde bildirim göster</translation>
     </message>
     <message>
         <source>Show notification when play state changes</source>
-        <translation>Показувати сповіщення при зміні статусу відтворення</translation>
+        <translation>Oynatma durumu değiştiğinde bildirim göster</translation>
     </message>
     <message>
         <source>Use a custom message for media change notifications</source>
-        <translation>Власне повідомлення для сповіщення при зміні носія</translation>
+        <translation>Medya değişikliği bildirimleri için özel bir mesaj kullanın</translation>
     </message>
     <message>
         <source>Summary</source>
-        <translation>Опис</translation>
+        <translation>Özet</translation>
     </message>
     <message>
         <source>Body</source>
-        <translation>Зміст</translation>
+        <translation>Gövde</translation>
     </message>
     <message>
         <source>Notification timeout</source>
-        <translation>Час відображення сповіщень</translation>
+        <translation>Bildirim zaman aşımı</translation>
     </message>
     <message>
         <source>Peak limit</source>
-        <translation>Обмеження піків</translation>
+        <translation>Tepe sınırı</translation>
     </message>
     <message>
         <source>Release time</source>
-        <translation>Час повернення</translation>
+        <translation>Yayın zamanı</translation>
     </message>
     <message>
         <source>Fast compression ratio</source>
-        <translation>Коефіцієнт швидкого стиснення</translation>
+        <translation>Hızlı sıkıştırma oranı</translation>
     </message>
     <message>
         <source>Overall compression ratio</source>
-        <translation>Загальний коефіцієнт стиснення</translation>
+        <translation>Genel sıkıştırma oranı</translation>
     </message>
     <message>
         <source>Dynamic range compression</source>
-        <translation>Стиснення динамічного діапазону</translation>
+        <translation>Dinamik aralık sıkıştırma</translation>
     </message>
     <message>
         <source>Cut frequency</source>
