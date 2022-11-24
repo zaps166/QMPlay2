@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="tr" sourcelanguage="en">
+<TS version="2.1" language="tr_TR" sourcelanguage="en">
 <context>
     <name>ALSAWriter</name>
     <message>
@@ -2937,11 +2937,11 @@ QMPlay2 simgeleri ölçeklendirmez!</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>
-        <translation>Підтвердити видалення параметрів</translation>
+        <translation>Ayarların silinmesini onaylayın</translation>
     </message>
     <message>
         <source>Do you really want to clear all settings?</source>
-        <translation>Дійсно скинути всі параметри?</translation>
+        <translation>Gerçekten tüm ayarları silmek istiyor musunuz?</translation>
     </message>
     <message>
         <source>New language</source>
@@ -2949,47 +2949,47 @@ QMPlay2 simgeleri ölçeklendirmez!</translation>
     </message>
     <message>
         <source>To set up a new language, the program will start again!</source>
-        <translation>Для застосування нової мови програма перезапуститься!</translation>
+        <translation>Yeni dili ayarlamak için program yeniden başlayacak!</translation>
     </message>
     <message>
         <source>Video filters</source>
-        <translation>Відеофільтри</translation>
+        <translation>Video filtreleri</translation>
     </message>
     <message>
         <source>Software video filters</source>
-        <translation>Програмні відеофільтри</translation>
+        <translation>Yazılım video filtreleri</translation>
     </message>
     <message>
         <source>Confirm clearing the cached covers</source>
-        <translation>Підтвердження очищення кеша обкладинок</translation>
+        <translation>Önbelleğe alınan kapakları temizlemeyi onaylayın</translation>
     </message>
     <message>
         <source>Do you want to delete all cached covers?</source>
-        <translation>Дійсно видалити всі кешовані обкладинки?</translation>
+        <translation>Önbelleğe alınan tüm kapakları silmek istiyor musunuz?</translation>
     </message>
     <message>
         <source>Changing icons</source>
-        <translation>Зміна іконок</translation>
+        <translation>Simgeleri değiştirme</translation>
     </message>
     <message>
         <source>Default or first stream</source>
-        <translation>За замовчуванням або перший потік</translation>
+        <translation>Varsayılan veya ilk akış</translation>
     </message>
     <message>
         <source>Audio output priority</source>
-        <translation>Пріоритет виведення аудіо</translation>
+        <translation>Ses çıkışı önceliği</translation>
     </message>
     <message>
         <source>Decoders priority</source>
-        <translation>Пріоритет декодерів</translation>
+        <translation>Kod çözücü önceliği</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation>За замовчуванням</translation>
+        <translation>Varsayılan</translation>
     </message>
     <message>
         <source>Automatically check for updates</source>
-        <translation>Автоматично перевіряти наявність оновлень</translation>
+        <translation>Güncellemeleri otomatik olarak kontrol et</translation>
     </message>
     <message>
         <source>Confirm &quot;youtube-dl&quot; deletion</source>
@@ -3007,27 +3007,27 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Hardware accelerated video filters</source>
-        <translation>Відеофільтри для апаратного прискорення</translation>
+        <translation>Donanım hızlandırmalı video filtreleri</translation>
     </message>
     <message>
         <source>Changing OpenGL mode</source>
-        <translation>Змінити режим OpenGL</translation>
+        <translation>OpenGL modunu değiştirme</translation>
     </message>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
-        <translation>Для застосування нового режиму OpenGL програма перезапуститься!</translation>
+        <translation>Yeni bir OpenGL modu kurmak için program yeniden başlayacak!</translation>
     </message>
     <message>
         <source>To apply the icons change, the program will start again!</source>
-        <translation>Для застосування зміни іконок програма перезапуститься!</translation>
+        <translation>Simge değişikliğini uygulamak için program yeniden başlayacak!</translation>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation>Спадковий пріоритет виведення відео</translation>
+        <translation>Eski video çıkış önceliği</translation>
     </message>
     <message>
         <source>Legacy</source>
-        <translation>Старішого типу</translation>
+        <translation>Eski</translation>
     </message>
     <message>
         <source>OpenGL</source>
@@ -3035,55 +3035,55 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>active</source>
-        <translation>активний</translation>
+        <translation>Aktif</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation>неактивний</translation>
+        <translation>Pasif</translation>
     </message>
     <message>
         <source>Changing renderer</source>
-        <translation>Зміна рендера</translation>
+        <translation>İşleyiciyi değiştirme</translation>
     </message>
     <message>
         <source>To set up a new renderer, the program will start again!</source>
-        <translation>Для застосування нового рендера програма перезапуститься!</translation>
+        <translation>Yeni bir işleyici ayarlamak için program yeniden başlayacak!</translation>
     </message>
     <message>
         <source>Vertical synchronization (V-Sync)</source>
-        <translation>Вертикальна синхронізація (V-Sync)</translation>
+        <translation>Dikey senkronizasyon (V-Sync)</translation>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation>Обходити композитного менеджера вікон при повноекранному режимі</translation>
+        <translation>Düzenleyiciyi tam ekranda atla</translation>
     </message>
     <message>
         <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
-        <translation>Використовувати модулі виведення відео QMPlay2. Вони також використовуватимуться, якщо інші рендери недоступні.</translation>
+        <translation>QMPlay2 video çıkış modüllerini kullanın. Bu, başka işleyiciler mevcut olmadığında da kullanılacaktır.</translation>
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
-        <translation>Використовувати OpenGL для всього вікна</translation>
+        <translation>Tüm pencerede OpenGL kullan</translation>
     </message>
     <message>
         <source>This can improve performance if X11 compositor supports it</source>
-        <translation>Може підвищити продуктивність, якщо композитний менеджер X11 підтримує цю функцію</translation>
+        <translation>Bu, X11 birleştiricisi destekliyorsa performansı artırabilir</translation>
     </message>
     <message>
         <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation>Може підвищити продуктивність. При увімкненні драйвери деяких відеокарт можуть працювати нестабільно.</translation>
+        <translation>Bu, performansı artırabilir. Bazı video sürücüleri etkinleştirildiğinde çökebilir.</translation>
     </message>
     <message>
         <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation>Використовує QOpenGLWidget (візуалізація текстури), також вмикає OpenGL для візуалізації. Використовуйте обережно, це може знизити продуктивність відтворення відео.</translation>
+        <translation>QOpenGLWidget'ı (render-to-texture) kullanın, ayrıca görselleştirmeler için OpenGL'yi etkinleştirin. Dikkatli kullanın, video oynatma performansını düşürebilir.</translation>
     </message>
     <message>
         <source>Renderer:</source>
-        <translation>Рендер:</translation>
+        <translation>İşleyici:</translation>
     </message>
     <message>
         <source>Renderer settings</source>
-        <translation>Параметри рендера</translation>
+        <translation>İşleyici ayarları</translation>
     </message>
     <message>
         <source>Vulkan</source>
@@ -3091,73 +3091,73 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
-        <translation>Усунення черезрядковості графічним процесором для відео, декодованого центральним процесором</translation>
+        <translation>CPU tarafından kodu çözülmüş video için GPU deinterlacing'i kullanın</translation>
     </message>
     <message>
         <source>High quality image scaling down</source>
-        <translation>Високоякісне зменшення зображення</translation>
+        <translation>Yüksek kaliteli görüntü küçültme</translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation>Високоякісне збільшення зображення</translation>
+        <translation>Yüksek kaliteli görüntü ölçeklendirme</translation>
     </message>
     <message>
         <source>First available device</source>
-        <translation>Перший доступний пристрій</translation>
+        <translation>İlk kullanılabilir cihaz</translation>
     </message>
     <message>
         <source>No supported devices found</source>
-        <translation>Не знайдено підтримуваних пристроїв</translation>
+        <translation>Desteklenen cihaz bulunamadı</translation>
     </message>
     <message>
         <source>Partially checked (default):
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation>Частково вибрано (за замовчуванням):
-  - MAILBOX (tear-free) є найкращим сучасним режимом
-  - FIFO (V-Sync) не слід використовувати у віконному режимі</translation>
+        <translation>Kısmen işaretli (varsayılan):
+  - MAILBOX (tear-free) tercih edilen mevcut mod
+  - FIFO (V-Sync) pencereli modda kullanılmamalıdır</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
-        <translation>Дозволити для ексклюзивного повноекранного режиму. Може підвищити продуктивність.</translation>
+        <translation>Özel tam ekrana izin verin. Bu, performansı artırabilir.</translation>
     </message>
     <message>
         <source>Very slow if used with sharpness</source>
-        <translation>Дуже повільно при використанні з різкістю зображення</translation>
+        <translation>Keskinlik ile kullanılırsa çok yavaş</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation>Пристрій:</translation>
+        <translation>Cihaz:</translation>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
-        <translation>Примусово задіяти Yadif через Vulkan для всіх апаратних декодерів</translation>
+        <translation>Vulkan Yadif'i tüm donanım kod çözücüleri için ayrıştırmayı zorla</translation>
     </message>
     <message>
         <source>Force audio content to use the specified number of channels.
 Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation>Примусово використовувати вказану кількість аудіоканалів.
-Частково вибране не зменшить кількість каналів
-	(напр., перетворить моно на стерео, але квадрафонічний звук не буде перетворено на стерео)</translation>
+        <translation>Ses içeriğini belirtilen sayıda kanalı kullanmaya zorlayın.
+Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretlenir
+	(örneğin, mono'yu stereo'ya yükseltin, ancak quadrophonic'i stereo'ya düşürmeyin)</translation>
     </message>
 </context>
 <context>
     <name>ShortcutHandler</name>
     <message>
         <source>Action</source>
-        <translation>Дія</translation>
+        <translation>Eylem</translation>
     </message>
     <message>
         <source>Key sequence</source>
-        <translation>Сполучення клавіш</translation>
+        <translation>Tuş sırası</translation>
     </message>
 </context>
 <context>
     <name>SimpleVisW</name>
     <message>
         <source>Simple visualization</source>
-        <translation>Проста візуалізація</translation>
+        <translation>Basit görselleştirme</translation>
     </message>
 </context>
 <context>
@@ -3187,35 +3187,35 @@ Partially checked only if the content has less channels than the specified value
     <name>StreamInfo</name>
     <message>
         <source>Language</source>
-        <translation>Мова</translation>
+        <translation>Dil</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation>Назва</translation>
+        <translation>Başlık</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation>Виконавець</translation>
+        <translation>Sanatçı</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation>Альбом</translation>
+        <translation>Аlbüm</translation>
     </message>
     <message>
         <source>Genre</source>
-        <translation>Жанр</translation>
+        <translation>Tür</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Рік</translation>
+        <translation>Tarih</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation>Коментар</translation>
+        <translation>Yorum</translation>
     </message>
     <message>
         <source>Lyrics</source>
-        <translation>Текст пісні</translation>
+        <translation>Şarkı sözleri</translation>
     </message>
 </context>
 <context>
@@ -3245,236 +3245,236 @@ Partially checked only if the content has less channels than the specified value
     <name>TagEditor</name>
     <message>
         <source>Add tags</source>
-        <translation>Додати теги</translation>
+        <translation>Etiket ekle</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation>Назва</translation>
+        <translation>Başlık</translation>
     </message>
     <message>
         <source>Artist</source>
-        <translation>Виконавець</translation>
+        <translation>Sanatçı</translation>
     </message>
     <message>
         <source>Album</source>
-        <translation>Альбом</translation>
+        <translation>Albüm</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation>Коментар</translation>
+        <translation>Yorum</translation>
     </message>
     <message>
         <source>Genre</source>
-        <translation>Жанр</translation>
+        <translation>Tür</translation>
     </message>
     <message>
         <source>Year</source>
-        <translation>Рік</translation>
+        <translation>Yıl</translation>
     </message>
     <message>
         <source>None</source>
-        <translation>Немає</translation>
+        <translation>Hiçbiri</translation>
     </message>
     <message>
         <source>Track</source>
-        <translation>Доріжка</translation>
+        <translation>İzle</translation>
     </message>
     <message>
         <source>Cover</source>
-        <translation>Обкладинка</translation>
+        <translation>Kapak</translation>
     </message>
     <message>
         <source>Load cover picture</source>
-        <translation>Завантажити обкладинку</translation>
+        <translation>Kapak resmini yükle</translation>
     </message>
     <message>
         <source>Save cover picture</source>
-        <translation>Зберегти обкладинку</translation>
+        <translation>Kapak resmini kaydet</translation>
     </message>
     <message>
         <source>Pictures</source>
-        <translation>Зображення</translation>
+        <translation>Resimler</translation>
     </message>
     <message>
         <source>Loading cover picture</source>
-        <translation>Завантаження обкладинки</translation>
+        <translation>Kapak resmi yükleniyor</translation>
     </message>
 </context>
 <context>
     <name>ToneGenerator</name>
     <message>
         <source>Tone generator</source>
-        <translation>Тональний генератор</translation>
+        <translation>Ton üreteci</translation>
     </message>
     <message>
         <source>Hz</source>
-        <translation>Гц</translation>
+        <translation>Hz</translation>
     </message>
 </context>
 <context>
     <name>Updater</name>
     <message>
         <source>QMPlay2 updates</source>
-        <translation>Оновлення QMPlay2</translation>
+        <translation>QMPlay2 güncellemeleri</translation>
     </message>
     <message>
         <source>Application is up-to-date</source>
-        <translation>Програму оновлено</translation>
+        <translation>Uygulama güncel</translation>
     </message>
     <message>
         <source>Download update</source>
-        <translation>Завантажити оновлення</translation>
+        <translation>Güncellemeyi indir</translation>
     </message>
     <message>
         <source>Apply update</source>
-        <translation>Встановити оновлення</translation>
+        <translation>Apply update</translation>
     </message>
     <message>
         <source>No update available</source>
-        <translation>Немає доступних оновлень</translation>
+        <translation>Güncelleme mevcut değil</translation>
     </message>
     <message>
         <source>Error checking for updates</source>
-        <translation>Помилка при перевірці оновлень</translation>
+        <translation>Güncellemeler kontrol edilirken hata oluştu</translation>
     </message>
     <message>
         <source>Error downloading the update</source>
-        <translation>Помилка завантаження оновлення</translation>
+        <translation>Güncelleme indirilirken hata oluştu</translation>
     </message>
     <message>
         <source>Checking for updates</source>
-        <translation>Перевірка наявності оновлень</translation>
+        <translation>Güncellemeler kontrol ediliyor</translation>
     </message>
     <message>
         <source>The update has been downloaded</source>
-        <translation>Оновлення завантажене</translation>
+        <translation>güncelleme indirildi</translation>
     </message>
     <message>
         <source>Error creating update file</source>
-        <translation>Помилка створення файлу оновлення</translation>
+        <translation>Güncelleme dosyası oluşturulurken hata oluştu</translation>
     </message>
     <message>
         <source>This auto-update is ignored, press the button to update</source>
-        <translation>Це автооновлення проігнороване, натисніть кнопку для оновлення</translation>
+        <translation>Bu otomatik güncelleme dikkate alınmaz, güncellemek için düğmeye basın</translation>
     </message>
     <message>
         <source>Update is available for QMPlay2!</source>
-        <translation>Доступне оновлення для QMPlay2!</translation>
+        <translation>QMPlay2 için güncelleme mevcut!</translation>
     </message>
     <message>
         <source>New QMPlay2 version: %1</source>
-        <translation>Нова версія QMPlay2: %1</translation>
+        <translation>Yeni QMPlay2 sürümü: %1</translation>
     </message>
 </context>
 <context>
     <name>VAAPI</name>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation>Алгоритм усунення черезрядковості не підтримується</translation>
+        <translation>Ayrıştırma algoritması desteklenmiyor</translation>
     </message>
     <message>
         <source>Cannot open video filters</source>
-        <translation>Неможливо відкрити відеофільтри</translation>
+        <translation>Video filtreleri açılamıyor</translation>
     </message>
 </context>
 <context>
     <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>Непідтримуваний фільтр чіткості зображення</translation>
+        <translation>Desteklenmeyen görüntü netliği filtresi</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation>Непідтримуваний алгоритм усунення черезрядковості</translation>
+        <translation>Ayrıştırma algoritması desteklenmiyor</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
-        <translation>Непідтримуваний фільтр шумоприглушення</translation>
+        <translation>Desteklenmeyen gürültü azaltma filtresi</translation>
     </message>
 </context>
 <context>
     <name>VFilters</name>
     <message>
         <source>Produce one extra frame which is average of two neighbour frames</source>
-        <translation>Створює один додатковий кадр, який є середнім з двох сусідніх кадрів</translation>
+        <translation>İki bitişik çerçevenin ortalaması olan bir ek çerçeve oluşturur</translation>
     </message>
 </context>
 <context>
     <name>VideoAdjustmentW</name>
     <message>
         <source>Reset</source>
-        <translation>Скинути</translation>
+        <translation>Sıfırla</translation>
     </message>
     <message>
         <source>Brightness</source>
-        <translation>Яскравість</translation>
+        <translation>Parlaklık</translation>
     </message>
     <message>
         <source>Contrast</source>
-        <translation>Контрастність</translation>
+        <translation>Kontrast</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation>Насиченість</translation>
+        <translation>Doyma</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation>Відтінок</translation>
+        <translation>Renk</translation>
     </message>
     <message>
         <source>Sharpness</source>
-        <translation>Чіткість</translation>
+        <translation>Keskinlik</translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
-        <translation>Скинути регулювання відео</translation>
+        <translation>Video ayarlarını sıfırla</translation>
     </message>
     <message>
         <source>Brightness down</source>
-        <translation>Яскравість нижче</translation>
+        <translation>Parlaklık azalt</translation>
     </message>
     <message>
         <source>Brightness up</source>
-        <translation>Яскравість вище</translation>
+        <translation>Parlaklık artır</translation>
     </message>
     <message>
         <source>Contrast down</source>
-        <translation>Контрастність нижче</translation>
+        <translation>Kontrast azalt</translation>
     </message>
     <message>
         <source>Saturation down</source>
-        <translation>Насиченість нижче</translation>
+        <translation>Doygunluk azalt</translation>
     </message>
     <message>
         <source>Saturation up</source>
-        <translation>Насиченість вище</translation>
+        <translation>Doygunluk artır</translation>
     </message>
     <message>
         <source>Hue down</source>
-        <translation>Відтінок нижче</translation>
+        <translation>Renk tonu azalt</translation>
     </message>
     <message>
         <source>Hue up</source>
-        <translation>Відтінок вище</translation>
+        <translation>Renk tonu artır</translation>
     </message>
     <message>
         <source>Sharpness down</source>
-        <translation>Чіткість нижче</translation>
+        <translation>Keskinlik azalt</translation>
     </message>
     <message>
         <source>Sharpness up</source>
-        <translation>Чіткість вище</translation>
+        <translation>Keskinlik altır</translation>
     </message>
     <message>
         <source>Contrast up</source>
-        <translation>Контрастність вище</translation>
+        <translation>Kontrast artır</translation>
     </message>
 </context>
 <context>
     <name>VideoDock</name>
     <message>
         <source>Video</source>
-        <translation>Відео</translation>
+        <translation>Video</translation>
     </message>
 </context>
 <context>
@@ -3512,29 +3512,29 @@ Partially checked only if the content has less channels than the specified value
     <name>VideoThr</name>
     <message>
         <source>Cannot create screenshot</source>
-        <translation>Неможливо створити знімок екрану</translation>
+        <translation>Ekran görüntüsü oluşturulamıyor</translation>
     </message>
     <message>
         <source>Cannot initialize the deinterlacing filter</source>
-        <translation>Неможливо ініціалізувати фільтр усунення черезрядковості</translation>
+        <translation>Taramasızlaştırma filtresi başlatılamıyor</translation>
     </message>
     <message>
         <source>Error initializing filter</source>
-        <translation>Помилка ініціалізації фільтра</translation>
+        <translation>Filtre başlatılırken hata oluştu</translation>
     </message>
 </context>
 <context>
     <name>VisWidget</name>
     <message>
         <source>Settings</source>
-        <translation>Параметри</translation>
+        <translation>Ayarlar</translation>
     </message>
 </context>
 <context>
     <name>VolWidget</name>
     <message>
         <source>Split channels</source>
-        <translation>Розділити канали</translation>
+        <translation>Bölünmüş kanallar</translation>
     </message>
 </context>
 <context>
@@ -3591,39 +3591,39 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Playlist</source>
-        <translation>Список відтворення</translation>
+        <translation>Oynatma listesi</translation>
     </message>
     <message>
         <source>yes</source>
-        <translation>так</translation>
+        <translation>evet</translation>
     </message>
     <message>
         <source>Relevance</source>
-        <translation>Точність</translation>
+        <translation>kesin</translation>
     </message>
     <message>
         <source>Upload date</source>
-        <translation>Дата завантаження</translation>
+        <translation>Yükleme tarihi</translation>
     </message>
     <message>
         <source>View count</source>
-        <translation>Кількість переглядів</translation>
+        <translation>Görüntüleme sayısı</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation>Рейтинг</translation>
+        <translation>Değerlendirme</translation>
     </message>
     <message>
         <source>Sort search results by ...</source>
-        <translation>Сортувати результати пошуку за...</translation>
+        <translation>Arama sonuçlarını şuna göre sırala...</translation>
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation>Бажана якість</translation>
+        <translation>Kalite tercihi</translation>
     </message>
     <message>
         <source>Publish time</source>
-        <translation>Час публікації</translation>
+        <translation>Yayın zamanı</translation>
     </message>
 </context>
 <context>
