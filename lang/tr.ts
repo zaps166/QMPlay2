@@ -2002,176 +2002,176 @@
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation>&amp;Параметри рендера</translation>
+        <translation>&amp;Oluşturucu ayarları</translation>
     </message>
 </context>
 <context>
     <name>PipeWireWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Неможливо відкрити вихідний потік звуку</translation>
+        <translation>Ses çıkışı akışı açılamıyor</translation>
     </message>
 </context>
 <context>
     <name>PlayClass</name>
     <message>
         <source>Stopped</source>
-        <translation>Зупинено</translation>
+        <translation>Durduruldu</translation>
     </message>
     <message>
         <source>Aspect ratio</source>
-        <translation>Співвідношення сторін</translation>
+        <translation>En boy oranı</translation>
     </message>
     <message>
         <source>Play speed</source>
-        <translation>Швидкість відтворення</translation>
+        <translation>Oynatma hızı</translation>
     </message>
     <message>
         <source>Volume</source>
-        <translation>Гучність</translation>
+        <translation>Ses</translation>
     </message>
     <message>
         <source>Muted sound</source>
-        <translation>Без звуку</translation>
+        <translation>Sessize al</translation>
     </message>
     <message>
         <source>Video delay</source>
-        <translation>Затримка відео</translation>
+        <translation>Video gecikmesi</translation>
     </message>
     <message>
         <source>Subtitles delay</source>
-        <translation>Затримка субтитрів</translation>
+        <translation>Altyazı gecikmesi</translation>
     </message>
     <message>
         <source>Subtitles size</source>
-        <translation>Розмір субтитрів</translation>
+        <translation>Altyazı boyutu</translation>
     </message>
     <message>
         <source>Set subtitles delay (sec.)</source>
-        <translation>Встановити затримку субтитрів (сек.)</translation>
+        <translation>Altyazı gecikmesini ayarla (sn.)</translation>
     </message>
     <message>
         <source>Loaded subtitles</source>
-        <translation>Завантажені субтитри</translation>
+        <translation>Altyazılar yüklendi</translation>
     </message>
     <message>
         <source>Subtitles off</source>
-        <translation>Субтитри вимкнені</translation>
+        <translation>Altyazı kapalı</translation>
     </message>
     <message>
         <source>Horizontal flip</source>
-        <translation>Відобразити горизонтально</translation>
+        <translation>Yatay çevir</translation>
     </message>
     <message>
         <source>Vertical flip</source>
-        <translation>Відобразити вертикально</translation>
+        <translation>Dikey çevir</translation>
     </message>
     <message>
         <source>No image rotation</source>
-        <translation>Без обертання зображення</translation>
+        <translation>Görüntü döndürme yok</translation>
     </message>
     <message>
         <source>Set video delay (sec.)</source>
-        <translation>Встановити затримку відео (сек.)</translation>
+        <translation>Video gecikmesini ayarla (sn.)</translation>
     </message>
     <message>
         <source>Set playback speed</source>
-        <translation>Встановити швидкість відтворення</translation>
+        <translation>Oynatma hızını ayarla</translation>
     </message>
     <message>
         <source>A-B Repeat</source>
-        <translation>Повторювати А-Б</translation>
+        <translation>A-B Tekrarı</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation>вимкнено</translation>
+        <translation>devredışı</translation>
     </message>
     <message>
         <source>from</source>
-        <translation>з</translation>
+        <translation>ile birlikte</translation>
     </message>
     <message>
         <source>to</source>
-        <translation>до</translation>
+        <translation>ile</translation>
     </message>
     <message>
         <source>Rotation 270°</source>
-        <translation>Обертати на 270°</translation>
+        <translation>Döndür 270°</translation>
     </message>
     <message>
         <source>Rotation 180°</source>
-        <translation>Обертати на 180°</translation>
+        <translation>Döndür 180°</translation>
     </message>
     <message>
         <source>Rotation 90°</source>
-        <translation>Обертати на 90°</translation>
+        <translation>Döndür 90°</translation>
     </message>
     <message>
         <source>Rotation is not supported by this video output module</source>
-        <translation>Обертання не підтримується цим модулем виведення відео</translation>
+        <translation>Döndürme, bu video çıkış modülü tarafından desteklenmiyor</translation>
     </message>
     <message>
         <source>Spherical view is not supported by this video output module</source>
-        <translation>Сферичний вигляд не підтримується цим модулем виведення відео</translation>
+        <translation>Bu video çıkış modülü küresel görünümü desteklemiyor</translation>
     </message>
     <message>
         <source>Playback has been incorrectly terminated!</source>
-        <translation>Відтворення було некоректно зупинене!</translation>
+        <translation>Oynatma hatalı bir şekilde sonlandırıldı!</translation>
     </message>
     <message>
         <source>Video off</source>
-        <translation>Відео вимкнене</translation>
+        <translation>Video kapalı</translation>
     </message>
     <message>
         <source>Audio off</source>
-        <translation>Аудіо вимкнене</translation>
+        <translation>Ses kapalı</translation>
     </message>
     <message>
         <source>Keep audio pitch during playback speed change</source>
-        <translation>Зберігати висоту звуку на різних швидкостях відтворення</translation>
+        <translation>Oynatma hızı değişikliği sırasında ses perdesini koruyun</translation>
     </message>
     <message>
         <source>Don&apos;t keep audio pitch during playback speed change</source>
-        <translation>Не зберігати висоту звуку на різних швидкостях відтворення</translation>
+        <translation>Oynatma hızı değişikliği sırasında ses perdesini koruma</translation>
     </message>
 </context>
 <context>
     <name>Playback</name>
     <message>
         <source>&amp;Playback</source>
-        <translation>&amp;Відтворення</translation>
+        <translation>&amp;Geriçalma</translation>
     </message>
     <message>
         <source>&amp;Enable audio</source>
-        <translation>&amp;Аудіо увімкнене</translation>
+        <translation>&amp;Sesi etkinleştir</translation>
     </message>
     <message>
         <source>&amp;Enable video</source>
-        <translation>&amp;Відео увімкнене</translation>
+        <translation>&amp;Videoyu etkinleştir</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
-        <translation>&amp;Затримка відео</translation>
+        <translation>&amp;Videoyu geciktir</translation>
     </message>
     <message>
         <source>&amp;Speed up video</source>
-        <translation>&amp;Прискорення відео</translation>
+        <translation>&amp;videoyu hızlandır</translation>
     </message>
     <message>
         <source>&amp;Enable subtitles</source>
-        <translation>&amp;Субтитри увімкнені</translation>
+        <translation>&amp;Altyazıları etkinleştir</translation>
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
-        <translation>&amp;Затримка субтитрів</translation>
+        <translation>&amp;Gecikmeli altyazılar</translation>
     </message>
     <message>
         <source>&amp;Speed up subtitles</source>
-        <translation>&amp;Прискорення субтитрів</translation>
+        <translation>&amp;Altyazıları hızlandırın</translation>
     </message>
     <message>
         <source>Scale up subt&amp;itles</source>
-        <translation>Збільшити субти&amp;три</translation>
+        <translation>Збільшити&amp;три</translation>
     </message>
     <message>
         <source>Scale down sub&amp;titles</source>
