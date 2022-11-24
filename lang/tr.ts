@@ -1126,234 +1126,234 @@
     </message>
     <message>
         <source>Video bitrate</source>
-        <translation>Бітрейт відео</translation>
+        <translation>Video bit hızı</translation>
     </message>
     <message>
         <source>Audio bitrate</source>
-        <translation>Бітрейт аудіо</translation>
+        <translation>Ses bit hızı</translation>
     </message>
     <message>
         <source>Buffer</source>
-        <translation>Буфер</translation>
+        <translation>Tampon</translation>
     </message>
     <message>
         <source>interlaced</source>
-        <translation>черезрядковий</translation>
+        <translation>ara hat</translation>
     </message>
     <message>
         <source>visible</source>
-        <translation>видимий</translation>
+        <translation>gözle görülür</translation>
     </message>
 </context>
 <context>
     <name>Inputs</name>
     <message>
         <source>Tone generator</source>
-        <translation>Тональний генератор</translation>
+        <translation>Ton üreteci</translation>
     </message>
 </context>
 <context>
     <name>KeyBindingsDialog</name>
     <message>
         <source>Key bindings settings</source>
-        <translation>Параметри сполучення клавіш</translation>
+        <translation>Klavye kısayol seçenekleri</translation>
     </message>
     <message>
         <source>Some key shortcuts are duplicated!</source>
-        <translation>Деякі сполучення клавіш дублюються!</translation>
+        <translation>Bazı klavye kısayolları yineleniyor!</translation>
     </message>
 </context>
 <context>
     <name>LastFM</name>
     <message>
         <source>LastFM login error.</source>
-        <translation>Помилка входу до LastFM.</translation>
+        <translation>LastFM'de oturum açılamadı.</translation>
     </message>
     <message>
         <source>Check login and password!</source>
-        <translation>Перевірте логін і пароль!</translation>
+        <translation>Kullanıcı adınızı ve şifrenizi kontrol edin!</translation>
     </message>
     <message>
         <source>Logged in to LastFM!</source>
-        <translation>Увійшли до LastFM!</translation>
+        <translation>LastFM'de oturum açtınız!</translation>
     </message>
 </context>
 <context>
     <name>LineEdit</name>
     <message>
         <source>Clear</source>
-        <translation>Очистити</translation>
+        <translation>Temizle</translation>
     </message>
 </context>
 <context>
     <name>Lyrics</name>
     <message>
         <source>Lyrics</source>
-        <translation>Текст пісні</translation>
+        <translation>Şarkı sözleri</translation>
     </message>
     <message>
         <source>Translation</source>
-        <translation>Переклад</translation>
+        <translation>Tercüme</translation>
     </message>
     <message>
         <source>Lyrics not found</source>
-        <translation>Тексту пісні не знайдено</translation>
+        <translation>Şarkı sözleri bulunamadı</translation>
     </message>
 </context>
 <context>
     <name>MPDemux</name>
     <message>
         <source>Samples</source>
-        <translation>Семпли</translation>
+        <translation>Örnekler</translation>
     </message>
     <message>
         <source>Patterns</source>
-        <translation>Шаблони</translation>
+        <translation>Desenler</translation>
     </message>
     <message>
         <source>Channels</source>
-        <translation>Канали</translation>
+        <translation>Каnallar</translation>
     </message>
 </context>
 <context>
     <name>MainWidget</name>
     <message>
         <source>Main toolbar</source>
-        <translation>Головна панель інструментів</translation>
+        <translation>Ana araç çubuğu</translation>
     </message>
     <message>
         <source>&amp;Play</source>
-        <translation>&amp;Відтворення</translation>
+        <translation>&amp;Oynat</translation>
     </message>
     <message>
         <source>Choose files</source>
-        <translation>Вибрати файли</translation>
+        <translation>Dosyaları seçin</translation>
     </message>
     <message>
         <source>Choose directory</source>
-        <translation>Вибрати каталог</translation>
+        <translation>dizini seçin</translation>
     </message>
     <message>
         <source>Pointed position</source>
-        <translation>Зазначена позиція</translation>
+        <translation>Belirtilen konum</translation>
     </message>
     <message>
         <source>&amp;Hide</source>
-        <translation>&amp;Приховати</translation>
+        <translation>&amp;gizli</translation>
     </message>
     <message>
         <source>&amp;Show</source>
-        <translation>&amp;Показати</translation>
+        <translation>&amp;Göster</translation>
     </message>
     <message>
         <source>Stopped</source>
-        <translation>Зупинено</translation>
+        <translation>Durduruldu</translation>
     </message>
     <message>
         <source>Choose subtitles</source>
-        <translation>Вибрати субтитри</translation>
+        <translation>Altyazı seç</translation>
     </message>
     <message>
         <source>Subtitles</source>
-        <translation>Субтитри</translation>
+        <translation>Altyazılar</translation>
     </message>
     <message>
         <source>Playlists</source>
-        <translation>Списки відтворення</translation>
+        <translation>Çalma listesi</translation>
     </message>
     <message>
         <source>Choose playlist</source>
-        <translation>Вибрати список</translation>
+        <translation>Çalma listesi seçin</translation>
     </message>
     <message>
         <source>Save playlist</source>
-        <translation>Зберегти список</translation>
+        <translation>Çalma listesini kaydet</translation>
     </message>
     <message>
         <source>Are you sure you want to quit?</source>
-        <translation>Ви дійсно хочете вийти?</translation>
+        <translation>Çıkmak istediğinden emin misin?</translation>
     </message>
     <message>
         <source>QMPlay2 is doing something in the background.</source>
-        <translation>QMPlay2 працює у фоновому режимі.</translation>
+        <translation>QMPlay2 arka planda çalışıyor.</translation>
     </message>
     <message>
         <source>The update is being downloaded now.</source>
-        <translation>Зараз завантажується оновлення.</translation>
+        <translation>Güncelleme şimdi indiriliyor.</translation>
     </message>
     <message>
         <source>&amp;Lock widgets</source>
-        <translation>&amp;Закріпити віджети</translation>
+        <translation>&amp;Widget'ları kilitle</translation>
     </message>
     <message>
         <source>Save group</source>
-        <translation>Зберегти групу</translation>
+        <translation>Grubu kaydet</translation>
     </message>
     <message>
         <source>Error while saving playlist</source>
-        <translation>Помилка при збереженні списку відтворення</translation>
+        <translation>Çalma listesi kaydedilirken hata oluştu</translation>
     </message>
     <message>
         <source>&amp;Hide menu bar</source>
-        <translation>&amp;Приховати меню</translation>
+        <translation>&amp;Menü çubuğunu gizle</translation>
     </message>
     <message>
         <source>New window</source>
-        <translation>Нове вікно</translation>
+        <translation>Yeni pencere</translation>
     </message>
     <message>
         <source>&amp;Pause</source>
-        <translation>&amp;Пауза</translation>
+        <translation>&amp;Duraklat</translation>
     </message>
     <message>
         <source>Next audio stream</source>
-        <translation>Наступний аудіопотік</translation>
+        <translation>Sonraki ses akışı</translation>
     </message>
     <message>
         <source>Next subtitles stream</source>
-        <translation>Наступний потік субтитрів</translation>
+        <translation>Sonraki altyazı akışı</translation>
     </message>
 </context>
 <context>
     <name>MediaBrowser</name>
     <message>
         <source>Search</source>
-        <translation>Пошук</translation>
+        <translation>Ara</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation>Помилка підключення</translation>
+        <translation>Bağlantı hatası</translation>
     </message>
     <message>
         <source>Website doesn&apos;t exist</source>
-        <translation>Веб-сайту не існує</translation>
+        <translation>Web sitesi mevcut değil</translation>
     </message>
     <message>
         <source>Play all</source>
-        <translation>Відтворити все</translation>
+        <translation>Tümünü oynat</translation>
     </message>
     <message>
         <source>Search on %1</source>
-        <translation>Пошук на %1</translation>
+        <translation>Üzerinde ara %1</translation>
     </message>
 </context>
 <context>
     <name>MediaBrowserResults</name>
     <message>
         <source>Enqueue</source>
-        <translation>Черга</translation>
+        <translation>Sıraya al</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Відтворення</translation>
+        <translation>Oynat</translation>
     </message>
     <message>
         <source>Open the page in the browser</source>
-        <translation>Відкрити сторінку в браузері</translation>
+        <translation>Sayfayı tarayıcıda aç</translation>
     </message>
     <message>
         <source>Copy page address</source>
-        <translation>Копіювати адресу сторінки</translation>
+        <translation>Sayfa adresini kopyala</translation>
     </message>
 </context>
 <context>
