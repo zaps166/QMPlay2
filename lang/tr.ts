@@ -1360,118 +1360,118 @@
     <name>MediaKitWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Неможливо відкрити вихідний потік звуку</translation>
+        <translation>Ses çıkışı akışı açılamıyor</translation>
     </message>
     <message>
         <source>Playback error</source>
-        <translation>Помилка відтворення</translation>
+        <translation>Oynatma hatası</translation>
     </message>
 </context>
 <context>
     <name>ModuleSettingsWidget</name>
     <message>
         <source>enabled</source>
-        <translation>увімкнено</translation>
+        <translation>etkinleştir</translation>
     </message>
     <message>
         <source>M3U support</source>
-        <translation>Підтримка формату M3U</translation>
+        <translation>M3U desteği</translation>
     </message>
     <message>
         <source>SRT reading</source>
-        <translation>Читання SRT</translation>
+        <translation>SRT okuma</translation>
     </message>
     <message>
         <source>Classic subtitles reading</source>
-        <translation>Читання класичних субтитрів</translation>
+        <translation>Klasik altyazı okuma</translation>
     </message>
     <message>
         <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
-        <translation>Використовувати зазначену частоту кадрів в субтитрах MicroDVD (якщо є)</translation>
+        <translation>MicroDVD altyazılarında (varsa) belirtilen FPS'yi kullanın</translation>
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
-        <translation>Максимальна тривалість субтитрів без зазначеної довжини</translation>
+        <translation>Belirli bir uzunluk olmadan altyazıların maksimum süresi</translation>
     </message>
     <message>
         <source>Enabled</source>
-        <translation>Увімкнено</translation>
+        <translation>Etkinleştir</translation>
     </message>
     <message>
         <source>Use shared memory</source>
-        <translation>Використовувати розділювану пам&apos;ять</translation>
+        <translation>Paylaşılan hafızayı kullan</translation>
     </message>
     <message>
         <source>XVideo outputs</source>
-        <translation>Виведення XVideo</translation>
+        <translation>XVideo çıkışları</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation>За замовчуванням</translation>
+        <translation>Varsayılan</translation>
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
-        <translation>Автоматичний пошук багатоканального пристрою</translation>
+        <translation>Çok kanallı bir cihaz için otomatik arama</translation>
     </message>
     <message>
         <source>Playback device</source>
-        <translation>Пристрій відтворення</translation>
+        <translation>Playback aleti</translation>
     </message>
     <message>
         <source>Resampling method</source>
-        <translation>Метод ресеплювання</translation>
+        <translation>Tekrarlama yöntemi</translation>
     </message>
     <message>
         <source>Autodetect</source>
-        <translation>Автовиявлення</translation>
+        <translation>Otomatik algılama</translation>
     </message>
     <message>
         <source>Normal size</source>
-        <translation>Нормальний розмір</translation>
+        <translation>Normal boyut</translation>
     </message>
     <message>
         <source>4x smaller</source>
-        <translation>Зменшення 4x</translation>
+        <translation>4x daha küçük</translation>
     </message>
     <message>
         <source>16x smaller</source>
-        <translation>Зменшення 16x</translation>
+        <translation>16x daha küçük</translation>
     </message>
     <message>
         <source>Method of multithreaded decoding</source>
-        <translation>Метод багатопотокового декодування</translation>
+        <translation>Çok iş parçacıklı kod çözme yöntemi</translation>
     </message>
     <message>
         <source>Frames</source>
-        <translation>Кадри</translation>
+        <translation>Çerçeveler</translation>
     </message>
     <message>
         <source>Slices</source>
-        <translation>Фрагменти</translation>
+        <translation>Dilimler</translation>
     </message>
     <message>
         <source>Maximum latency</source>
-        <translation>Максимальна затримка</translation>
+        <translation>Maksimum gecikme</translation>
     </message>
     <message>
         <source>Refresh time</source>
-        <translation>Час оновлення</translation>
+        <translation>Yenileme zamanı</translation>
     </message>
     <message>
         <source>sec</source>
-        <translation>сек</translation>
+        <translation>saniye</translation>
     </message>
     <message>
         <source>ms</source>
-        <translation>мс</translation>
+        <translation>мs</translation>
     </message>
     <message>
         <source>Voice removal</source>
-        <translation>Видалення голосу</translation>
+        <translation>Sesi sil</translation>
     </message>
     <message>
         <source>Sound equalizer quality</source>
-        <translation>Якість звуку еквалайзера</translation>
+        <translation>Ses ekolayzır kalitesi</translation>
     </message>
     <message>
         <source>Low</source>
