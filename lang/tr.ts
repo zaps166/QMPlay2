@@ -683,22 +683,22 @@
 
 &lt;input/&gt; - specifies downloaded file.
 &lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
-        <translation>Командний рядок для виконання після завантаження.
+        <translation>Türkiye den selamlar
 
-&lt;input/&gt; - вказує завантажений файл.
-&lt;output&gt;%f.mp3&lt;/output&gt; - конвертований файл буде вхідним файлом з розширенням &quot;mp3&quot;.</translation>
+&lt;input/&gt; - indirilen dosyayı gösterir.
+&lt;output&gt;%f.mp3&lt;/output&gt; - dönüştürülen dosya, uzantılı girdi dosyası olacaktır &quot;mp3&quot;.</translation>
     </message>
     <message>
-        <source>Remove</source>
-        <translation>Видалити</translation>
+        <source>Kaldır</source>
+        <translation></translation>
     </message>
     <message>
         <source>Preset name</source>
-        <translation>Назва передустановки</translation>
+        <translation>Ön ayar ismi</translation>
     </message>
     <message>
         <source>Command line</source>
-        <translation>Командний рядок</translation>
+        <translation>Komut satırı</translation>
     </message>
     <message>
         <source>Incorrect/empty name or command line!</source>
