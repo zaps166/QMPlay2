@@ -342,11 +342,11 @@
     </message>
     <message>
         <source>&amp;Mono</source>
-        <translation>&amp;Моно</translation>
+        <translation>&amp;Моno</translation>
     </message>
     <message>
         <source>&amp;Stereo</source>
-        <translation>&amp;Стерео</translation>
+        <translation>&amp;Stereo</translation>
     </message>
     <message>
         <source>&amp;Other</source>
