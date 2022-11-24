@@ -851,278 +851,278 @@
     </message>
     <message>
         <source>Do you want to associate files with QMPlay2</source>
-        <translation>Ви хочете зв&apos;язати файли з QMPlay2</translation>
+        <translation>Dosyaları QMPlay2 ile ilişkilendirmek istiyor musunuz?</translation>
     </message>
 </context>
 <context>
     <name>FormatContext</name>
     <message>
         <source>Track</source>
-        <translation>Доріжка</translation>
+        <translation>İzle</translation>
     </message>
 </context>
 <context>
     <name>GME</name>
     <message>
         <source>System</source>
-        <translation>Система</translation>
+        <translation>Sistem</translation>
     </message>
     <message>
         <source>Copyright</source>
-        <translation>Авторські права</translation>
+        <translation>Telif hakkı</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation>Коментар</translation>
+        <translation>Yorum</translation>
     </message>
     <message>
         <source>Track</source>
-        <translation>Доріжка</translation>
+        <translation>İzle</translation>
     </message>
     <message>
         <source>Voices</source>
-        <translation>Голоси</translation>
+        <translation>Sesler</translation>
     </message>
 </context>
 <context>
     <name>GeneralSettings</name>
     <message>
         <source>Browse</source>
-        <translation>Огляд</translation>
+        <translation>Araştır</translation>
     </message>
     <message>
         <source>Use system icon set</source>
-        <translation>Використовувати системний набір іконок</translation>
+        <translation>Sistem simge setini kullan</translation>
     </message>
     <message>
         <source>Set appearance</source>
-        <translation>Встановити оформлення</translation>
+        <translation>Görünümü ayarla</translation>
     </message>
     <message>
         <source>Show covers</source>
-        <translation>Показати обкладинки</translation>
+        <translation>Kapakları göster</translation>
     </message>
     <message>
         <source>Blurred covers as background</source>
-        <translation>Розмиті обкладинки в якості фону</translation>
+        <translation>Arka plan olarak bulanık kapaklar</translation>
     </message>
     <message>
         <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>Показати обкладинки з каталогу, якщо вони не знаходяться в музичному файлі</translation>
+        <translation>Müzik dosyasında yoksa katalogdaki kapakları göster</translation>
     </message>
     <message>
         <source>Automatically open video window</source>
-        <translation>Автоматичне відкриття вікна відео</translation>
+        <translation>Video penceresini otomatik olarak aç</translation>
     </message>
     <message>
         <source>Automatically check and download updates</source>
-        <translation>Автоматично перевіряти і завантажувати оновлення</translation>
+        <translation>Güncellemeleri otomatik olarak kontrol et ve indir</translation>
     </message>
     <message>
         <source>Show tabs at the top of the main window</source>
-        <translation>Показати вкладки у верхній частині головного вікна</translation>
+        <translation>Sekmeleri ana pencerenin üstünde göster</translation>
     </message>
     <message>
         <source>Allow only one instance</source>
-        <translation>Дозволити лише одну копію програми</translation>
+        <translation>Yalnızca bir örneğe izin ver</translation>
     </message>
     <message>
         <source>Always only display file names in playlist</source>
-        <translation>Завжди відображати тільки імена файлів в списку відтворення</translation>
+        <translation>Çalma listesinde her zaman yalnızca dosya adlarını göster</translation>
     </message>
     <message>
         <source>Remember repeat mode</source>
-        <translation>Пам&apos;ятати режим повтору</translation>
+        <translation>Tekrar modunu hatırla</translation>
     </message>
     <message>
         <source>Use proxy server</source>
-        <translation>Використовувати проксі-сервер</translation>
+        <translation>Proxy sunucusu kullan</translation>
     </message>
     <message>
         <source>Proxy server needs login</source>
-        <translation>Проксі-сервер потребує авторизації</translation>
+        <translation>Proxy sunucusu yetkilendirme gerektiriyor</translation>
     </message>
     <message>
         <source>User name</source>
-        <translation>Ім&apos;я користувача</translation>
+        <translation>Kullanıcı adı</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>Пароль</translation>
+        <translation>Şifre</translation>
     </message>
     <message>
         <source>Proxy server address</source>
-        <translation>Адреса проксі-сервера</translation>
+        <translation>Proxy sunucu adresi</translation>
     </message>
     <message>
         <source>Proxy server port</source>
-        <translation>Порт проксі-сервера</translation>
+        <translation>Proxy sunucusu bağlantı noktası</translation>
     </message>
     <message>
         <source>Clear covers cache</source>
-        <translation>Очистити кеш обкладинок</translation>
+        <translation>Kapak önbelleğini temizle</translation>
     </message>
     <message>
         <source>Reset settings</source>
-        <translation>Скинути параметри</translation>
+        <translation>Ayarları sıfırla</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Мова</translation>
+        <translation>Dil</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation>Стиль</translation>
+        <translation>Stil</translation>
     </message>
     <message>
         <source>Subtitles encoding</source>
-        <translation>Кодування субтитрів</translation>
+        <translation>Altyazı kodlaması</translation>
     </message>
     <message>
         <source>Default audio language</source>
-        <translation>Мова аудіо за замовчуванням</translation>
+        <translation>Varsayılan ses dili</translation>
     </message>
     <message>
         <source>Default subtitles language</source>
-        <translation>Мова субтитрів за замовчуванням</translation>
+        <translation>Varsayılan altyazı dili</translation>
     </message>
     <message>
         <source>Screenshots path</source>
-        <translation>Шлях до знімків екрану</translation>
+        <translation>Ekran görüntüsü yolu</translation>
     </message>
     <message>
         <source>Set key bindings</source>
-        <translation>Встановити сполучення клавіш</translation>
+        <translation>Tuş bağlamalarını ayarla</translation>
     </message>
     <message>
         <source>Selected Profile</source>
-        <translation>Вибраний профіль</translation>
+        <translation>Seçili Profil</translation>
     </message>
     <message>
         <source>Read and display still images</source>
-        <translation>Читати і відображувати статичні зображення</translation>
+        <translation>Hareketsiz görüntüleri okuyun ve görüntüleyin</translation>
     </message>
     <message>
         <source>Use tray notifications as default</source>
-        <translation>Сповіщення в системному треї за замовчуванням</translation>
+        <translation>Tepsi bildirimlerini varsayılan olarak kullan</translation>
     </message>
     <message>
         <source>Remove youtube-dl</source>
-        <translation>Видалити youtube-dl</translation>
+        <translation>youtube-dl'yi kaldır</translation>
     </message>
     <message>
         <source>Automatically delete ungrouped entries</source>
-        <translation>Автоматично видаляти незгруповані записи</translation>
+        <translation>Gruplanmamış girişleri otomatik olarak sil</translation>
     </message>
     <message>
         <source>Hide artist metadata</source>
-        <translation>Приховати метадані виконавця</translation>
+        <translation>Sanatçı meta verilerini gizle</translation>
     </message>
     <message>
         <source>Automatically restore main window when new video file is loaded</source>
-        <translation>Автоматично відновлювати головне вікно при завантаженні нового відеофайлу</translation>
+        <translation>Yeni video dosyası yüklendiğinde ana pencereyi otomatik olarak geri yükle</translation>
     </message>
     <message>
         <source>Don&apos;t load playlist files within other files</source>
-        <translation>Не завантажувати файли списку відтворення до інших файлів</translation>
+        <translation>Çalma listesi dosyalarını başka dosyalara yüklemeyin</translation>
     </message>
     <message>
         <source>Enlarge small covers</source>
-        <translation>Збільшити маленькі обкладинки</translation>
+        <translation>Küçük kapakları büyüt</translation>
     </message>
 </context>
 <context>
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Довідка</translation>
+        <translation>&amp;Yardım</translation>
     </message>
     <message>
         <source>&amp;About QMPlay2</source>
-        <translation>&amp;Про QMPlay2</translation>
+        <translation>&amp;QMPlay2 Hakkında</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
-        <translation>Про &amp;Qt</translation>
+        <translation>Hakkında &amp;Qt</translation>
     </message>
     <message>
         <source>&amp;Updates</source>
-        <translation>&amp;Оновити</translation>
+        <translation>&amp;Güncelle</translation>
     </message>
     <message>
         <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
-        <translation>Не відтворювати після запуску (в обхід опції &quot;Пам&apos;ятати позицію відтворення&quot;).</translation>
+        <translation>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</translation>
     </message>
     <message>
         <source>Ensure that the window will be visible if the application is running.</source>
-        <translation>Забезпечує видимість вікна, якщо програму запущено.</translation>
+        <translation>Uygulama çalışıyorsa pencerenin görünür olacağından emin olun.</translation>
     </message>
     <message>
         <source>Toggle fullscreen.</source>
-        <translation>Перемикає повноекранний режим.</translation>
+        <translation>Tam ekrana geç.</translation>
     </message>
     <message>
         <source>Seek to the specified value.</source>
-        <translation>Прокручує до заданого значення.</translation>
+        <translation>Belirtilen değeri arayın.</translation>
     </message>
     <message>
         <source>Start playback.</source>
-        <translation>Розпочинає відтворення.</translation>
+        <translation>Oynatmayı başlatın.</translation>
     </message>
     <message>
         <source>Stop playback.</source>
-        <translation>Зупиняє відтворення.</translation>
+        <translation>Oynatmayı durdurun.</translation>
     </message>
     <message>
         <source>Toggle playback.</source>
-        <translation>Перемикає відтворення/пауза.</translation>
+        <translation>Oynatmayı aç / kapat.</translation>
     </message>
     <message>
         <source>Terminate the application.</source>
-        <translation>Завершує програму.</translation>
+        <translation>Uygulamayı sonlandırın.</translation>
     </message>
     <message>
         <source>Display this help.</source>
-        <translation>Відображує цю довідку.</translation>
+        <translation>Yardımı görüntüleyin.</translation>
     </message>
     <message>
         <source>Open and play specified &lt;url&gt;.</source>
-        <translation>Відкриває і відтворює вказану &lt;url&gt;.</translation>
+        <translation>Aç ve belirtilen oyna &lt;url&gt;.</translation>
     </message>
     <message>
         <source>Add specified &lt;url&gt; to playlist.</source>
-        <translation>Додає вказану &lt;url&gt; до списку відтворення.</translation>
+        <translation>Belirtilen ekle &lt;url&gt; çalma listesine.</translation>
     </message>
     <message>
         <source>Start the application with given &lt;profile name&gt;.</source>
-        <translation>Запускає програму з вказаним &lt;profile name&gt;.</translation>
+        <translation>Verilen ile uygulamayı başlatın &lt;profile name&gt;.</translation>
     </message>
     <message>
         <source>Set specified volume.</source>
-        <translation>Встановлює вказаний рівень гучності.</translation>
+        <translation>Belirtilen hacmi ayarlayın.</translation>
     </message>
     <message>
         <source>Set specified playback speed.</source>
-        <translation>Встановлює вказану швидкість відтворення.</translation>
+        <translation>Belirtilen oynatma hızını ayarlayın.</translation>
     </message>
     <message>
         <source>Play next entry on playlist.</source>
-        <translation>Відтворює наступний запис у списку відтворення.</translation>
+        <translation>Çalma listesindeki bir sonraki girişi çal.</translation>
     </message>
     <message>
         <source>Play previous entry on playlist.</source>
-        <translation>Відтворює попередній запис у списку відтворення.</translation>
+        <translation>Çalma listesindeki önceki girişi oynatın.</translation>
     </message>
     <message>
         <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
-        <translation>Відкриває нову копію QMPlay2 і відтворює вказану &lt;url&gt;.</translation>
+        <translation>Yeni QMPlay2 örneğini açın ve belirtilenleri oynatın &lt;url&gt;.</translation>
     </message>
 </context>
 <context>
     <name>InfoDock</name>
     <message>
         <source>Information</source>
-        <translation>Відомості</translation>
+        <translation>Віlgi</translation>
     </message>
     <message>
         <source>Video bitrate</source>
