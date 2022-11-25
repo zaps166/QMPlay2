@@ -1495,7 +1495,7 @@
     </message>
     <message>
         <source>Rayman2 music (*.apm)</source>
-        <translation>Rayman2 muzik (* .apm)</translation>
+        <translation>Rayman2 muzik (*.apm)</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
@@ -1954,7 +1954,7 @@
     <name>Options</name>
     <message>
         <source>Op&amp;tions</source>
-        <translation>Нала&amp;штування</translation>
+        <translation>Op&amp;tions</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
@@ -1966,7 +1966,7 @@
     </message>
     <message>
         <source>&amp;Modules settings</source>
-        <translation>&amp;Modules settings</translation>
+        <translation>&amp;Moduler ayarlar</translation>
     </message>
     <message>
         <source>Create new profile</source>
@@ -2171,31 +2171,31 @@
     </message>
     <message>
         <source>Scale up subt&amp;itles</source>
-        <translation>Збільшити&amp;три</translation>
+        <translation>Scale up subt&amp;itles</translation>
     </message>
     <message>
         <source>Scale down sub&amp;titles</source>
-        <translation>Змен&amp;шити субтитри</translation>
+        <translation>Scale down sub&amp;titles</translation>
     </message>
     <message>
         <source>Add &amp;subtities from file</source>
-        <translation>Додати &amp;субтитри з файлу</translation>
+        <translation>Add &amp;subtities from file</translation>
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
-        <translation>Встановити з&amp;атримку субтитрів</translation>
+        <translation>Set &amp;subtitles delay</translation>
     </message>
     <message>
         <source>&amp;Screen shot</source>
-        <translation>&amp;Знімок екрану</translation>
+        <translation>&amp;Screen shot</translation>
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>Встановити з&amp;атримку відео</translation>
+        <translation>Set &amp;video delay</translation>
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation>&amp;Зберігати висоту звуку</translation>
+        <translation>&amp;Keep audio pitch</translation>
     </message>
 </context>
 <context>
@@ -2361,142 +2361,142 @@
     <name>Player</name>
     <message>
         <source>&amp;Player</source>
-        <translation>&amp;Програвач</translation>
+        <translation>&amp;Oynat</translation>
     </message>
     <message>
         <source>&amp;Stop</source>
-        <translation>&amp;Стоп</translation>
+        <translation>&amp;Dur</translation>
     </message>
     <message>
         <source>&amp;Next</source>
-        <translation>&amp;Наступний</translation>
+        <translation>&amp;İleri</translation>
     </message>
     <message>
         <source>&amp;Previous</source>
-        <translation>&amp;Попередній</translation>
+        <translation>&amp;öncesi</translation>
     </message>
     <message>
         <source>Seek &amp;forward</source>
-        <translation>Перемотування &amp;вперед</translation>
+        <translation>Seek &amp;forward</translation>
     </message>
     <message>
         <source>Seek &amp;backward</source>
-        <translation>Перемотування на&amp;зад</translation>
+        <translation>Seek &amp;backward</translation>
     </message>
     <message>
         <source>Long &amp;seek forward</source>
-        <translation>Довге перемотування впе&amp;ред</translation>
+        <translation>Long &amp;seek forward</translation>
     </message>
     <message>
         <source>Long s&amp;eek backward</source>
-        <translation>Довге перемотування на&amp;зад</translation>
+        <translation>Long s&amp;eek backward</translation>
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translation>Шв&amp;идше</translation>
+        <translation>Fa&amp;ster</translation>
     </message>
     <message>
         <source>Slowe&amp;r</source>
-        <translation>Повіл&amp;ьніше</translation>
+        <translation>Slowe&amp;r</translation>
     </message>
     <message>
         <source>Zoom i&amp;n</source>
-        <translation>Збільши&amp;ти</translation>
+        <translation>Zoom i&amp;n</translation>
     </message>
     <message>
         <source>Zoom ou&amp;t</source>
-        <translation>Зменш&amp;ити</translation>
+        <translation>Zoom ou&amp;t</translation>
     </message>
     <message>
         <source>&amp;Mute</source>
-        <translation>&amp;Вимкнути звук</translation>
+        <translation>&amp;Mute</translation>
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
-        <translation>Переключити &amp;співвідношення сторін</translation>
+        <translation>Toggle &amp;aspect ratio</translation>
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>Скинути параметри &amp;зображення</translation>
+        <translation>Reset image &amp;settings</translation>
     </message>
     <message>
         <source>&amp;Set speed</source>
-        <translation>&amp;Встановити швидкість</translation>
+        <translation>&amp;Set speed</translation>
     </message>
     <message>
         <source>Next &amp;frame</source>
-        <translation>Наступний &amp;кадр</translation>
+        <translation>Next &amp;frame</translation>
     </message>
     <message>
         <source>Volume &amp;up</source>
-        <translation>&amp;Збільшити гучність</translation>
+        <translation>Volume &amp;up</translation>
     </message>
     <message>
         <source>Volume &amp;down</source>
-        <translation>&amp;Зменшити гучність</translation>
+        <translation>Volume &amp;down</translation>
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>Призупинити після завершен&amp;ня відтворення</translation>
+        <translation>Suspend after playbac&amp;k is finished</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
-        <translation>&amp;Повторювати A-Б</translation>
+        <translation>A&amp;-B Repeat</translation>
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
-        <translation>Відключення від прийому &amp;команд</translation>
+        <translation>Detach from receiving &amp;commands</translation>
     </message>
     <message>
         <source>&amp;Skip</source>
-        <translation>&amp;Пропустити</translation>
+        <translation>&amp;Skip</translation>
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation>&amp;Зупинити після відтворення</translation>
+        <translation>&amp;Stop after playing</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
-        <translation>Попередній &amp;кадр</translation>
+        <translation>Previous &amp;frame</translation>
     </message>
 </context>
 <context>
     <name>Playlist</name>
     <message>
         <source>&amp;Playlist</source>
-        <translation>&amp;Список відтворення</translation>
+        <translation>&amp;Playlist</translation>
     </message>
     <message>
         <source>&amp;Stop loading</source>
-        <translation>&amp;Зупинити завантаження</translation>
+        <translation>&amp;Stop loading</translation>
     </message>
     <message>
         <source>Load &amp;list</source>
-        <translation>Завантажити с&amp;писок</translation>
+        <translation>Load &amp;list</translation>
     </message>
     <message>
         <source>Save &amp;list</source>
-        <translation>Зберегти &amp;список</translation>
+        <translation>Save &amp;list</translation>
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
-        <translation>&amp;Видалити вибрані записи</translation>
+        <translation>&amp;Remove selected entries</translation>
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
-        <translation>Видалити записи &amp;без групи</translation>
+        <translation>Remove entries &amp;without groups</translation>
     </message>
     <message>
         <source>&amp;Clear list</source>
-        <translation>&amp;Очистити список</translation>
+        <translation>&amp;Clear list</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>&amp;Копіювати</translation>
+        <translation>&amp;Copy</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>&amp;Вставити</translation>
+        <translation>&amp;Paste</translation>
     </message>
     <message>
         <source>&amp;Create group</source>
@@ -2516,7 +2516,7 @@
     </message>
     <message>
         <source>&amp;Expand all</source>
-        <translation>&amp;Розгорнути все</translation>
+        <translation>&amp;Expand all</translation>
     </message>
     <message>
         <source>&amp;Go to the playback</source>
