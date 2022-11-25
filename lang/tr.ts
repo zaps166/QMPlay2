@@ -2500,19 +2500,19 @@
     </message>
     <message>
         <source>&amp;Create group</source>
-        <translation>Створ&amp;ити групу</translation>
+        <translation>&amp;Create group</translation>
     </message>
     <message>
         <source>&amp;Rename</source>
-        <translation>&amp;Перейменувати</translation>
+        <translation>&amp;Rename</translation>
     </message>
     <message>
         <source>&amp;Find entries</source>
-        <translation>&amp;Пошук записів</translation>
+        <translation>&amp;Find entries</translation>
     </message>
     <message>
         <source>&amp;Collapse all</source>
-        <translation>&amp;Згорнути все</translation>
+        <translation>&amp;Collapse all</translation>
     </message>
     <message>
         <source>&amp;Expand all</source>
@@ -2520,35 +2520,35 @@
     </message>
     <message>
         <source>&amp;Go to the playback</source>
-        <translation>&amp;Перейти до</translation>
+        <translation>&amp;Go to the playback</translation>
     </message>
     <message>
         <source>&amp;Enqueue</source>
-        <translation>&amp;Черга</translation>
+        <translation>&amp;Enqueue</translation>
     </message>
     <message>
         <source>&amp;Properties</source>
-        <translation>&amp;Властивості</translation>
+        <translation>&amp;Properties</translation>
     </message>
     <message>
         <source>&amp;Extensions</source>
-        <translation>&amp;Розширення</translation>
+        <translation>&amp;Extensions</translation>
     </message>
     <message>
         <source>Save &amp;group</source>
-        <translation>Зберегти &amp;групу</translation>
+        <translation>Save &amp;group</translation>
     </message>
     <message>
         <source>&amp;Synchronize groups</source>
-        <translation>&amp;Синхронізувати групу</translation>
+        <translation>&amp;Synchronize groups</translation>
     </message>
     <message>
         <source>&amp;Quick group synchronization</source>
-        <translation>&amp;Швидка синхронізація групи</translation>
+        <translation>&amp;Quick group synchronization</translation>
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation>&amp;Завжди синхронізувати</translation>
+        <translation>&amp;Always sync</translation>
     </message>
 </context>
 <context>
@@ -2582,11 +2582,11 @@
     <name>PlaylistWidget</name>
     <message>
         <source>Un&amp;lock</source>
-        <translation>Ро&amp;зблокувати</translation>
+        <translation>Un&amp;lock</translation>
     </message>
     <message>
         <source>&amp;Lock</source>
-        <translation>За&amp;блокувати</translation>
+        <translation>&amp;Lock</translation>
     </message>
 </context>
 <context>
@@ -2780,43 +2780,43 @@ QMPlay2 simgeleri ölçeklendirmez!</translation>
     <name>Repeat</name>
     <message>
         <source>&amp;Repeat</source>
-        <translation>&amp;Повторювати</translation>
+        <translation>&amp;Tekrar</translation>
     </message>
     <message>
         <source>&amp;No repeating</source>
-        <translation>&amp;Без повторення</translation>
+        <translation>&amp;Tekrar yok</translation>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
-        <translation>Повторення &amp;запису</translation>
+        <translation>Giriş tekrarı</translation>
     </message>
     <message>
         <source>&amp;Group repeating</source>
-        <translation>Повторення &amp;групи</translation>
+        <translation>&amp;Group repeating</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>Повторення &amp;списку відтворення</translation>
+        <translation>&amp;Çalma listesi tekrarlanıyor</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
-        <translation>В&amp;ипадковий порядок</translation>
+        <translation>R&amp;andom</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation>Випадковий порядок в &amp;групі</translation>
+        <translation>Random in &amp;group</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
-        <translation>Випадковий порядок і &amp;повторювати</translation>
+        <translation>Random and &amp;repeat</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation>Випадковий порядок і повторю&amp;вати</translation>
+        <translation>Random in group and repea&amp;t</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
-        <translation>&amp;Зупиняти відтворення після кожного файлу</translation>
+        <translation>&amp;Her dosyadan sonra oynatmayı durdur</translation>
     </message>
 </context>
 <context>
@@ -2993,17 +2993,17 @@ QMPlay2 simgeleri ölçeklendirmez!</translation>
     </message>
     <message>
         <source>Confirm &quot;youtube-dl&quot; deletion</source>
-        <translation>Підтвердити видалення &quot;youtube-dl&quot;</translation>
+        <translation>Confirm &quot;youtube-dl&quot; deletion</translation>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
-        <translation>Дійсно видалити &quot;youtube-dl&quot;?</translation>
+        <translation>Do you want to remove &quot;youtube-dl&quot; software?</translation>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
 Partially checked doesn&apos;t affect seeking on slider.</source>
-        <translation>Повільніше, але точніший пошук.
-Частково зазначене не впливає на пошук на повзунку.</translation>
+        <translation>Daha yavaş ama daha doğru arama.
+Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>Hardware accelerated video filters</source>
@@ -3164,23 +3164,23 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <name>Sort</name>
     <message>
         <source>&amp;From the shortest to the longest</source>
-        <translation>&amp;Від коротких до довгих</translation>
+        <translation>&amp;En kısadan en uzuna</translation>
     </message>
     <message>
         <source>&amp;From the longest to the shortest</source>
-        <translation>В&amp;ід довгих до коротких</translation>
+        <translation>&amp;En uzundan en kısaya</translation>
     </message>
     <message>
         <source>&amp;Sort</source>
-        <translation>Сор&amp;тування</translation>
+        <translation>&amp;Çeşit</translation>
     </message>
     <message>
         <source>&amp;A-Z</source>
-        <translation>&amp;А-Я</translation>
+        <translation>&amp;А-Z</translation>
     </message>
     <message>
         <source>&amp;Z-A</source>
-        <translation>&amp;Я-А</translation>
+        <translation>&amp;Z-A</translation>
     </message>
 </context>
 <context>
@@ -3222,23 +3222,23 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <name>Streams</name>
     <message>
         <source>&amp;Audio streams</source>
-        <translation>&amp;Аудіопотоки</translation>
+        <translation>&amp;Ses akışları</translation>
     </message>
     <message>
         <source>&amp;Video streams</source>
-        <translation>&amp;Відеопотоки</translation>
+        <translation>&amp;Video akışları</translation>
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation>&amp;Потоки субтитрів</translation>
+        <translation>&amp;Altyazı akışları</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
-        <translation>&amp;Розділи</translation>
+        <translation>&amp;Bölümler</translation>
     </message>
     <message>
         <source>&amp;Programs</source>
-        <translation>&amp;Програми</translation>
+        <translation>&amp;Programlar</translation>
     </message>
 </context>
 <context>
@@ -3481,31 +3481,31 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <name>VideoFilters</name>
     <message>
         <source>Video &amp;filters</source>
-        <translation>Відеофільтр&amp;и</translation>
+        <translation>&amp;Video filtreler</translation>
     </message>
     <message>
         <source>&amp;Horizontal flip</source>
-        <translation>Відобразити &amp;горизонтально</translation>
+        <translation>&amp;Yatay çevir</translation>
     </message>
     <message>
         <source>&amp;Vertical flip</source>
-        <translation>Відобразити &amp;вертикально</translation>
+        <translation>&amp;Dikey çevir</translation>
     </message>
     <message>
         <source>&amp;More filters</source>
-        <translation>&amp;Додаткові фільтри</translation>
+        <translation>&amp;Daha fazla filtre</translation>
     </message>
     <message>
         <source>&amp;Rotate 90°</source>
-        <translation>&amp;Обертати на 90°</translation>
+        <translation>&amp;Döndür 90°</translation>
     </message>
     <message>
         <source>&amp;Spherical view</source>
-        <translation>&amp;Сферичний вигляд</translation>
+        <translation>&amp;Küresel görünüm</translation>
     </message>
     <message>
         <source>Video &amp;adjustment</source>
-        <translation>Регулювання &amp;відео</translation>
+        <translation>Video &amp;ayarlama</translation>
     </message>
 </context>
 <context>
@@ -3541,30 +3541,30 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <name>Widgets</name>
     <message>
         <source>&amp;Widgets</source>
-        <translation>&amp;Віджети</translation>
+        <translation>&amp;Widget'lar</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
         <source>&amp;Window</source>
-        <translation>&amp;Вікно</translation>
+        <translation>&amp;Pencere</translation>
     </message>
     <message>
         <source>&amp;Full screen</source>
-        <translation>&amp;На весь екран</translation>
+        <translation>&amp;Tam ekran</translation>
     </message>
     <message>
         <source>&amp;Compact view</source>
-        <translation>&amp;Компактний вигляд</translation>
+        <translation>&amp;Kompakt görünüm</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>&amp;Закрити</translation>
+        <translation>&amp;Kapat</translation>
     </message>
     <message>
         <source>&amp;Always on top</source>
-        <translation>&amp;Завжди зверху</translation>
+        <translation>&amp;Her zaman üstte</translation>
     </message>
     <message>
         <source>&amp;Hide on close</source>
@@ -3630,31 +3630,31 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <name>YouTubeDL</name>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully updated!</source>
-        <translation>&quot;youtube-dl&quot; успішно оновлено!</translation>
+        <translation>&quot;youtube-dl&quot; has been successfully updated!</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation>&quot;youtube-dl&quot; успішно завантажено!</translation>
+        <translation>&quot;youtube-dl&quot; has been successfully downloaded!</translation>
     </message>
     <message>
         <source>Updating &quot;youtube-dl&quot;, please wait...</source>
-        <translation>Оновлення &quot;youtube-dl&quot;, зачекайте...</translation>
+        <translation>Updating &quot;youtube-dl&quot;, please wait...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; update has been aborted!</source>
-        <translation>Оновлення &quot;youtube-dl&quot; перервано!</translation>
+        <translation>&quot;youtube-dl&quot; update has been aborted!</translation>
     </message>
     <message>
         <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
-        <translation>Завантаження &quot;youtube-dl&quot;, зачекайте...</translation>
+        <translation>Downloading &quot;youtube-dl&quot;, please wait...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
-        <translation>Завантаження &quot;youtube-dl&quot; перервано!</translation>
+        <translation>&quot;youtube-dl&quot; download has been aborted!</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has failed!</source>
-        <translation>Помилка завантаження &quot;youtube-dl&quot;!</translation>
+        <translation>&quot;youtube-dl&quot; download has failed!</translation>
     </message>
 </context>
 </TS>
