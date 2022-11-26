@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="tr_TR" sourcelanguage="en">
+<TS version="2.1" language="tr_TR" sourcelanguage="en_US">
 <context>
     <name>ALSAWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Ses çıkışı akışı açılamıyor</translation>
+        <translation>Ses çıktı akışı açılamıyor</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -269,7 +269,7 @@
     </message>
     <message>
         <source>&amp;Disabled</source>
-        <translation>&amp;Engelli</translation>
+        <translation>&amp;Devre dışı</translation>
     </message>
     <message>
         <source>&amp;Auto</source>
@@ -277,7 +277,7 @@
     </message>
     <message>
         <source>D&amp;epends on size</source>
-        <translation>&amp;boyuta bağlıdır</translation>
+        <translation>&amp;Boyuta bağlı</translation>
     </message>
 </context>
 <context>
@@ -288,7 +288,7 @@
     </message>
     <message>
         <source>AudioCD</source>
-        <translation>Ses CD'si</translation>
+        <translation>Ses CD&apos;si</translation>
     </message>
     <message>
         <source>No CD/DVD drives found!</source>
@@ -296,11 +296,11 @@
     </message>
     <message>
         <source>Choose AudioCD image</source>
-        <translation>AudioCD görüntüsünü seçin</translation>
+        <translation>Ses CD&apos;si görüntüsünü seçin</translation>
     </message>
     <message>
         <source>Supported AudioCD images</source>
-        <translation>Desteklenen AudioCD görüntüleri</translation>
+        <translation>Desteklenen Ses CD&apos;si görüntüleri</translation>
     </message>
     <message>
         <source>Choose the drive</source>
@@ -331,14 +331,14 @@
     </message>
     <message>
         <source>No AudioCD found!</source>
-        <translation>Ses CD'si bulunamadı!</translation>
+        <translation>Ses CD&apos;si bulunamadı!</translation>
     </message>
 </context>
 <context>
     <name>AudioChannels</name>
     <message>
         <source>&amp;Autodetect</source>
-        <translation>&amp;Otomatik algılama</translation>
+        <translation>&amp;Otomatik algıla</translation>
     </message>
     <message>
         <source>&amp;Mono</source>
@@ -381,7 +381,7 @@
     </message>
     <message>
         <source>sets the parameters to</source>
-        <translation>parametreleri şu şekilde ayarlar:</translation>
+        <translation>parametreleri şu şekilde ayarlar</translation>
     </message>
 </context>
 <context>
@@ -403,7 +403,7 @@
     </message>
     <message>
         <source>Automatically detect interlaced frames</source>
-        <translation>Taramalı çerçeveleri otomatik olarak algıla</translation>
+        <translation>Taramalı kareleri otomatik algıla</translation>
     </message>
     <message>
         <source>Doubles the the number of frames per second</source>
@@ -411,7 +411,7 @@
     </message>
     <message>
         <source>Automatically detect parity</source>
-        <translation>Pariteyi otomatik olarak algıla</translation>
+        <translation>Pariteyi otomatik algıla</translation>
     </message>
     <message>
         <source>Parity (if not detected automatically)</source>
@@ -829,7 +829,7 @@
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
-        <translation>Nokta frekans: %1 Hz</translation>
+        <translation>Nokta frekansı: %1 Hz</translation>
     </message>
 </context>
 <context>
@@ -840,7 +840,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation>Deinterlacing method</translation>
+        <translation>Taramasızlaştırma yöntemi</translation>
     </message>
 </context>
 <context>
@@ -851,7 +851,7 @@
     </message>
     <message>
         <source>Do you want to associate files with QMPlay2</source>
-        <translation>Dosyaları QMPlay2 ile ilişkilendirmek istiyor musunuz?</translation>
+        <translation>Dosyaları QMPlay2 ile ilişkilendirmek istiyor musunuz</translation>
     </message>
 </context>
 <context>
@@ -877,7 +877,7 @@
     </message>
     <message>
         <source>Track</source>
-        <translation>İzle</translation>
+        <translation>Parça</translation>
     </message>
     <message>
         <source>Voices</source>
@@ -1008,7 +1008,7 @@
     </message>
     <message>
         <source>Remove youtube-dl</source>
-        <translation>youtube-dl'yi kaldır</translation>
+        <translation>youtube-dl&apos;yi kaldır</translation>
     </message>
     <message>
         <source>Automatically delete ungrouped entries</source>
@@ -1126,11 +1126,11 @@
     </message>
     <message>
         <source>Video bitrate</source>
-        <translation>Video bit hızı</translation>
+        <translation>Video bit oranı</translation>
     </message>
     <message>
         <source>Audio bitrate</source>
-        <translation>Ses bit hızı</translation>
+        <translation>Ses bit oranı</translation>
     </message>
     <message>
         <source>Buffer</source>
@@ -1138,11 +1138,11 @@
     </message>
     <message>
         <source>interlaced</source>
-        <translation>ara hat</translation>
+        <translation>Taramalı</translation>
     </message>
     <message>
         <source>visible</source>
-        <translation>gözle görülür</translation>
+        <translation>görünür</translation>
     </message>
 </context>
 <context>
@@ -1156,7 +1156,7 @@
     <name>KeyBindingsDialog</name>
     <message>
         <source>Key bindings settings</source>
-        <translation>Klavye kısayol seçenekleri</translation>
+        <translation>Kısayol ayarları</translation>
     </message>
     <message>
         <source>Some key shortcuts are duplicated!</source>
@@ -1167,15 +1167,15 @@
     <name>LastFM</name>
     <message>
         <source>LastFM login error.</source>
-        <translation>LastFM'de oturum açılamadı.</translation>
+        <translation>LastFM giriş hatası.</translation>
     </message>
     <message>
         <source>Check login and password!</source>
-        <translation>Kullanıcı adınızı ve şifrenizi kontrol edin!</translation>
+        <translation>Giriş bilginizi ve parolayı kontrol edin!</translation>
     </message>
     <message>
         <source>Logged in to LastFM!</source>
-        <translation>LastFM'de oturum açtınız!</translation>
+        <translation>LastFM&apos;de oturum açtınız!</translation>
     </message>
 </context>
 <context>
@@ -1193,7 +1193,7 @@
     </message>
     <message>
         <source>Translation</source>
-        <translation>Tercüme</translation>
+        <translation>Çeviri</translation>
     </message>
     <message>
         <source>Lyrics not found</source>
@@ -1259,7 +1259,7 @@
     </message>
     <message>
         <source>Playlists</source>
-        <translation>Çalma listesi</translation>
+        <translation>Oynatma listesi</translation>
     </message>
     <message>
         <source>Choose playlist</source>
@@ -1267,7 +1267,7 @@
     </message>
     <message>
         <source>Save playlist</source>
-        <translation>Çalma listesini kaydet</translation>
+        <translation>Oynatma listesini kaydet</translation>
     </message>
     <message>
         <source>Are you sure you want to quit?</source>
@@ -1283,7 +1283,7 @@
     </message>
     <message>
         <source>&amp;Lock widgets</source>
-        <translation>&amp;Widget'ları kilitle</translation>
+        <translation>&amp;Widget&apos;ları kilitle</translation>
     </message>
     <message>
         <source>Save group</source>
@@ -1326,7 +1326,7 @@
     </message>
     <message>
         <source>Website doesn&apos;t exist</source>
-        <translation>Web sitesi mevcut değil</translation>
+        <translation>Web sitesi yok</translation>
     </message>
     <message>
         <source>Play all</source>
@@ -1334,7 +1334,7 @@
     </message>
     <message>
         <source>Search on %1</source>
-        <translation>Üzerinde ara %1</translation>
+        <translation>%1 sitesinde ara</translation>
     </message>
 </context>
 <context>
@@ -1360,7 +1360,7 @@
     <name>MediaKitWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Ses çıkışı akışı açılamıyor</translation>
+        <translation>Ses çıktı akışı açılamıyor</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -1387,7 +1387,7 @@
     </message>
     <message>
         <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
-        <translation>MicroDVD altyazılarında (varsa) belirtilen FPS'yi kullanın</translation>
+        <translation>MicroDVD altyazılarında (varsa) belirtilen FPS&apos;yi kullanın</translation>
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
@@ -1547,7 +1547,7 @@
     </message>
     <message>
         <source>Enqueue in QMPlay2</source>
-        <translation>QMPlay2'de kuyruğa al</translation>
+        <translation>QMPlay2&apos;de kuyruğa al</translation>
     </message>
     <message>
         <source>Play in QMPlay2</source>
@@ -1575,7 +1575,7 @@
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
-        <translation>Düşük çözünürlüklü kod çözme (yalnızca bazı codec'ler)</translation>
+        <translation>Düşük çözünürlüklü kod çözme (yalnızca bazı codec&apos;ler)</translation>
     </message>
     <message>
         <source>Hurry up</source>
@@ -1635,7 +1635,7 @@
     </message>
     <message>
         <source>Use CDDB if CD-TEXT is not available</source>
-        <translation>CD-TEXT mevcut değilse CDDB'yi kullanın</translation>
+        <translation>CD-TEXT mevcut değilse CDDB&apos;yi kullanın</translation>
     </message>
     <message>
         <source>AudioCD</source>
@@ -1643,7 +1643,7 @@
     </message>
     <message>
         <source>Use CD-TEXT</source>
-        <translation>CD-TEXT'i kullan</translation>
+        <translation>CD-TEXT&apos;i kullan</translation>
     </message>
     <message>
         <source>Echo</source>
@@ -1695,7 +1695,7 @@
     </message>
     <message>
         <source>Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language.</source>
-        <translation>YouTube'dan altyazıları görüntüleyin. Varsayılan altyazı dilini ve QMPlay2 dilini takip edin.</translation>
+        <translation>YouTube&apos;dan altyazıları görüntüleyin. Varsayılan altyazı dilini ve QMPlay2 dilini takip edin.</translation>
     </message>
     <message>
         <source>Decoder enabled</source>
@@ -1703,7 +1703,7 @@
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation>CUVID'yi yalnızca birincil GPU NVIDIA olduğunda kullanın</translation>
+        <translation>CUVID&apos;yi yalnızca birincil GPU NVIDIA olduğunda kullanın</translation>
     </message>
     <message>
         <source>Infinite</source>
@@ -1835,7 +1835,7 @@
     </message>
     <message>
         <source>Preferred video codec</source>
-        <translation>Tercih edilen video codec'i</translation>
+        <translation>Tercih edilen video codec&apos;i</translation>
     </message>
     <message>
         <source>Delay</source>
@@ -1846,7 +1846,7 @@
     <name>ModulesList</name>
     <message>
         <source>Move up</source>
-        <translation>Yukarı git</translation>
+        <translation>Yukarı taşı</translation>
     </message>
     <message>
         <source>...</source>
@@ -1854,7 +1854,7 @@
     </message>
     <message>
         <source>Move down</source>
-        <translation>Aşağı in</translation>
+        <translation>Aşağı taşı</translation>
     </message>
 </context>
 <context>
@@ -1865,7 +1865,7 @@
     </message>
     <message>
         <source>Volume changed</source>
-        <translation>Ses değiştir</translation>
+        <translation>Ses değişti</translation>
     </message>
     <message>
         <source>Stopped</source>
@@ -1873,7 +1873,7 @@
     </message>
     <message>
         <source>Playing</source>
-        <translation>Oynat</translation>
+        <translation>Oynatılıyor</translation>
     </message>
     <message>
         <source>Paused</source>
@@ -1943,7 +1943,7 @@
     </message>
     <message>
         <source>Can&apos;t init %1</source>
-        <translation>Başlatılamıyor %1</translation>
+        <translation>%1 başlatılamıyor</translation>
     </message>
     <message>
         <source>texture map error</source>
@@ -2009,7 +2009,7 @@
     <name>PipeWireWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Ses çıkışı akışı açılamıyor</translation>
+        <translation>Ses çıktı akışı açılamıyor</translation>
     </message>
 </context>
 <context>
@@ -2555,11 +2555,11 @@
     <name>PlaylistDock</name>
     <message>
         <source>Playlist</source>
-        <translation>Çalma listesi</translation>
+        <translation>Oynatma listesi</translation>
     </message>
     <message>
         <source>Filter entries</source>
-        <translation>Filtre girişleri</translation>
+        <translation>Girdileri süz</translation>
     </message>
     <message>
         <source>Playlist is being loaded now...</source>
@@ -2567,7 +2567,7 @@
     </message>
     <message>
         <source>Visible entries</source>
-        <translation>Görünür girişler</translation>
+        <translation>Görünür girdiler</translation>
     </message>
     <message>
         <source>Are you sure you want to clear the list?</source>
@@ -2575,25 +2575,25 @@
     </message>
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
-        <translation>Gruplanmamış girişleri silmek istediğinizden emin misiniz?</translation>
+        <translation>Gruplanmamış girdileri silmek istediğinizden emin misiniz?</translation>
     </message>
 </context>
 <context>
     <name>PlaylistWidget</name>
     <message>
         <source>Un&amp;lock</source>
-        <translation>Un&amp;lock</translation>
+        <translation>Kilidi &amp;aç</translation>
     </message>
     <message>
         <source>&amp;Lock</source>
-        <translation>&amp;Lock</translation>
+        <translation>&amp;Kilitle</translation>
     </message>
 </context>
 <context>
     <name>PortAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Ses çıkışı akışı açılamıyor</translation>
+        <translation>Ses çıktı akışı açılamıyor</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -2604,7 +2604,7 @@
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>Ses çıkışı akışı açılamıyor</translation>
+        <translation>Ses çıktı akışı açılamıyor</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -2615,7 +2615,7 @@
     <name>QMPlay2CoreClass</name>
     <message>
         <source>invalid QMPlay2 library</source>
-        <translation>Geçersiz QMPlay2 kitaplığı</translation>
+        <translation>QMPlay2 kitaplığı geçersiz</translation>
     </message>
     <message>
         <source>Can&apos;t open log file</source>
@@ -2623,19 +2623,19 @@
     </message>
     <message>
         <source>too old QMPlay2 library</source>
-        <translation>çok eski QMPlay2 kitaplığı</translation>
+        <translation>QMPlay2 kitaplığı çok eski</translation>
     </message>
     <message>
         <source>mismatch module API version</source>
-        <translation>uyumsuzluk modülü API sürümü</translation>
+        <translation>Modül API sürümü uyuşmuyor</translation>
     </message>
     <message>
         <source>duplicated module name</source>
-        <translation>yinelenen modül adı</translation>
+        <translation>Yinelenen modül adı</translation>
     </message>
     <message>
         <source>mismatch module Qt version</source>
-        <translation>uyumsuzluk modülü Qt versiyonu</translation>
+        <translation>Modül Qt sürümü uyuşmuyor</translation>
     </message>
 </context>
 <context>
@@ -2653,13 +2653,13 @@
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation>QMPlay2 güncellenmedi. Güncelleme işlemini başlatmak istiyor musunuz (önerilir)?</translation>
+        <translation>QMPlay2 güncellenmedi. Güncellemeyi çalıştırmak istiyor musunuz (önerilir)?</translation>
     </message>
     <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
 QMPlay2 will not scale up icons!</source>
-        <translation>QtSvg simge eklentisi yok.
-QMPlay2 simgeleri ölçeklendirmez!</translation>
+        <translation>QtSvg simge motoru eklentisi yok.
+QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
 </context>
 <context>
@@ -2757,7 +2757,7 @@ QMPlay2 simgeleri ölçeklendirmez!</translation>
     <name>RadioBrowserModel</name>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <source>Stream info</source>
@@ -2769,11 +2769,11 @@ QMPlay2 simgeleri ölçeklendirmez!</translation>
     </message>
     <message>
         <source>Tags</source>
-        <translation>Etiket</translation>
+        <translation>Etiketler</translation>
     </message>
     <message>
         <source>Rating</source>
-        <translation>Değerlendirme</translation>
+        <translation>Beğeni</translation>
     </message>
 </context>
 <context>
@@ -3075,7 +3075,7 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation>QOpenGLWidget'ı (render-to-texture) kullanın, ayrıca görselleştirmeler için OpenGL'yi etkinleştirin. Dikkatli kullanın, video oynatma performansını düşürebilir.</translation>
+        <translation>QOpenGLWidget&apos;ı (render-to-texture) kullanın, ayrıca görselleştirmeler için OpenGL&apos;yi etkinleştirin. Dikkatli kullanın, video oynatma performansını düşürebilir.</translation>
     </message>
     <message>
         <source>Renderer:</source>
@@ -3091,7 +3091,7 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
-        <translation>CPU tarafından kodu çözülmüş video için GPU deinterlacing'i kullanın</translation>
+        <translation type="unfinished">CPU tarafından kodu çözülmüş video için GPU taramasızlaştırması kullan</translation>
     </message>
     <message>
         <source>High quality image scaling down</source>
@@ -3131,7 +3131,7 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
-        <translation>Vulkan Yadif'i tüm donanım kod çözücüleri için ayrıştırmayı zorla</translation>
+        <translation>Vulkan Yadif&apos;i tüm donanım kod çözücüleri için ayrıştırmayı zorla</translation>
     </message>
     <message>
         <source>Force audio content to use the specified number of channels.
@@ -3139,7 +3139,7 @@ Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
         <translation>Ses içeriğini belirtilen sayıda kanalı kullanmaya zorlayın.
 Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretlenir
-	(örneğin, mono'yu stereo'ya yükseltin, ancak quadrophonic'i stereo'ya düşürmeyin)</translation>
+	(örneğin, mono&apos;yu stereo&apos;ya yükseltin, ancak quadrophonic&apos;i stereo&apos;ya düşürmeyin)</translation>
     </message>
 </context>
 <context>
@@ -3172,7 +3172,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>&amp;Sort</source>
-        <translation>&amp;Çeşit</translation>
+        <translation>&amp;Sırala</translation>
     </message>
     <message>
         <source>&amp;A-Z</source>
@@ -3370,7 +3370,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <name>VAAPI</name>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation>Ayrıştırma algoritması desteklenmiyor</translation>
+        <translation>Desteklenmeyen taramasızlaştırma algoritması</translation>
     </message>
     <message>
         <source>Cannot open video filters</source>
@@ -3381,11 +3381,11 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <name>VDPAU</name>
     <message>
         <source>Unsupported image sharpness filter</source>
-        <translation>Desteklenmeyen görüntü netliği filtresi</translation>
+        <translation>Desteklenmeyen görüntü keskinliği filtresi</translation>
     </message>
     <message>
         <source>Unsupported deinterlacing algorithm</source>
-        <translation>Ayrıştırma algoritması desteklenmiyor</translation>
+        <translation>Desteklenmeyen taramasızlaştırma algoritması</translation>
     </message>
     <message>
         <source>Unsupported noise reduction filter</source>
@@ -3396,7 +3396,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <name>VFilters</name>
     <message>
         <source>Produce one extra frame which is average of two neighbour frames</source>
-        <translation>İki bitişik çerçevenin ortalaması olan bir ek çerçeve oluşturur</translation>
+        <translation>İki bitişik karenin ortalaması olan bir ek kare oluşturur</translation>
     </message>
 </context>
 <context>
@@ -3481,7 +3481,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <name>VideoFilters</name>
     <message>
         <source>Video &amp;filters</source>
-        <translation>&amp;Video filtreler</translation>
+        <translation>&amp;Video filtreleri</translation>
     </message>
     <message>
         <source>&amp;Horizontal flip</source>
@@ -3497,7 +3497,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>&amp;Rotate 90°</source>
-        <translation>&amp;Döndür 90°</translation>
+        <translation>&amp;Sağa döndür</translation>
     </message>
     <message>
         <source>&amp;Spherical view</source>
@@ -3534,14 +3534,14 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <name>VolWidget</name>
     <message>
         <source>Split channels</source>
-        <translation>Bölünmüş kanallar</translation>
+        <translation>Kanalları böl</translation>
     </message>
 </context>
 <context>
     <name>Widgets</name>
     <message>
         <source>&amp;Widgets</source>
-        <translation>&amp;Widget'lar</translation>
+        <translation>&amp;Parçacıklar</translation>
     </message>
 </context>
 <context>
@@ -3556,7 +3556,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>&amp;Compact view</source>
-        <translation>&amp;Kompakt görünüm</translation>
+        <translation>&amp;Sıkışık görünüm</translation>
     </message>
     <message>
         <source>&amp;Close</source>
@@ -3568,7 +3568,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>&amp;Hide on close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kapatılırken gizle</translation>
     </message>
 </context>
 <context>
@@ -3630,31 +3630,31 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <name>YouTubeDL</name>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully updated!</source>
-        <translation>&quot;youtube-dl&quot; has been successfully updated!</translation>
+        <translation>&quot;youtube-dl&quot; güncellendi!</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation>&quot;youtube-dl&quot; has been successfully downloaded!</translation>
+        <translation>&quot;youtube-dl&quot; indirildi!</translation>
     </message>
     <message>
         <source>Updating &quot;youtube-dl&quot;, please wait...</source>
-        <translation>Updating &quot;youtube-dl&quot;, please wait...</translation>
+        <translation>&quot;youtube-dl&quot; güncelleniyor, lütfen bekleyin...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; update has been aborted!</source>
-        <translation>&quot;youtube-dl&quot; update has been aborted!</translation>
+        <translation>&quot;youtube-dl&quot; güncellemesi iptal edildi!</translation>
     </message>
     <message>
         <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
-        <translation>Downloading &quot;youtube-dl&quot;, please wait...</translation>
+        <translation>&quot;youtube-dl&quot; indiriliyor, lütfen bekleyin...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
-        <translation>&quot;youtube-dl&quot; download has been aborted!</translation>
+        <translation>&quot;youtube-dl&quot; indirmesi iptal edildi!</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has failed!</source>
-        <translation>&quot;youtube-dl&quot; download has failed!</translation>
+        <translation>&quot;youtube-dl&quot; indirmesi başarısız oldu!</translation>
     </message>
 </context>
 </TS>
