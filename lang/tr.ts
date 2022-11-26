@@ -101,7 +101,7 @@
     </message>
     <message>
         <source>Sample rate</source>
-        <translation>Aynı oran</translation>
+        <translation>Örnekleme oranı</translation>
     </message>
     <message>
         <source>Play</source>
@@ -490,7 +490,7 @@
     </message>
     <message>
         <source>sample rate</source>
-        <translation>aynı oran</translation>
+        <translation>Örnekleme oranı</translation>
     </message>
     <message>
         <source>format</source>
@@ -1515,7 +1515,7 @@
     </message>
     <message>
         <source>Sample rate</source>
-        <translation>Aynı oran</translation>
+        <translation>Örnekleme oranı</translation>
     </message>
     <message>
         <source>Offset</source>
