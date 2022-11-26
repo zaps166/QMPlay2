@@ -1954,7 +1954,7 @@
     <name>Options</name>
     <message>
         <source>Op&amp;tions</source>
-        <translation>Op&amp;tions</translation>
+        <translation>&amp;Seçenekler</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
@@ -2441,7 +2441,7 @@
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
-        <translation>A&amp;-B Repeat</translation>
+        <translation>A&amp;-B Tekrarla</translation>
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
@@ -2449,11 +2449,11 @@
     </message>
     <message>
         <source>&amp;Skip</source>
-        <translation>&amp;Skip</translation>
+        <translation>&amp;Atla</translation>
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation>&amp;Stop after playing</translation>
+        <translation>&amp;Oynadıktan sonra dur</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2464,23 +2464,23 @@
     <name>Playlist</name>
     <message>
         <source>&amp;Playlist</source>
-        <translation>&amp;Playlist</translation>
+        <translation>&amp;Çalma listesi</translation>
     </message>
     <message>
         <source>&amp;Stop loading</source>
-        <translation>&amp;Stop loading</translation>
+        <translation>&amp;Yüklemeyi durdur</translation>
     </message>
     <message>
         <source>Load &amp;list</source>
-        <translation>Load &amp;list</translation>
+        <translation>Yükleme &amp;listesi</translation>
     </message>
     <message>
         <source>Save &amp;list</source>
-        <translation>Save &amp;list</translation>
+        <translation>Listeyi &amp;kaydet</translation>
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
-        <translation>&amp;Remove selected entries</translation>
+        <translation>&amp;Seçili girişleri kaldır</translation>
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
@@ -2488,19 +2488,19 @@
     </message>
     <message>
         <source>&amp;Clear list</source>
-        <translation>&amp;Clear list</translation>
+        <translation>&amp;Listeyi temizle</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>&amp;Copy</translation>
+        <translation>&amp;Kopyala</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>&amp;Paste</translation>
+        <translation>&amp;Yapıştır</translation>
     </message>
     <message>
         <source>&amp;Create group</source>
-        <translation>&amp;Create group</translation>
+        <translation>&amp;Grup oluştur</translation>
     </message>
     <message>
         <source>&amp;Rename</source>
