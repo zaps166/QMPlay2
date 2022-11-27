@@ -39,7 +39,7 @@
     </message>
     <message>
         <source>Clear log</source>
-        <translation>Günlük temizle</translation>
+        <translation>Günlüğü temizle</translation>
     </message>
     <message>
         <source>Close</source>
@@ -55,7 +55,7 @@
     </message>
     <message>
         <source>Version</source>
-        <translation>Versiyon</translation>
+        <translation>Sürüm</translation>
     </message>
     <message>
         <source>video and audio player</source>
@@ -63,7 +63,7 @@
     </message>
     <message>
         <source>Programmer</source>
-        <translation>Programcı</translation>
+        <translation>Programlayan</translation>
     </message>
     <message>
         <source>Contributors</source>
@@ -446,7 +446,7 @@
     </message>
     <message>
         <source>Playback</source>
-        <translation>Geri çalma</translation>
+        <translation>Oynatma</translation>
     </message>
     <message>
         <source>Seeking</source>
@@ -672,7 +672,7 @@
     </message>
     <message>
         <source>Download and convert to &quot;%1&quot;</source>
-        <translation>İndirin ve dönüştürün &quot;%1&quot;</translation>
+        <translation>İndir ve &quot;%1&quot; biçimine dönüştür</translation>
     </message>
     <message>
         <source>Converter preset</source>
@@ -740,23 +740,23 @@
     </message>
     <message>
         <source>Error while writing tags, please check if you have permission to modify the file!</source>
-        <translation>Etiketleri yazarken hata oluştu, lütfen dosyayı değiştirme izniniz olup olmadığını kontrol edin!</translation>
+        <translation>Etiketler yazılırken hata oluştu, lütfen dosyayı değiştirme izniniz olup olmadığını kontrol edin!</translation>
     </message>
     <message>
         <source>Synchronize with file or directory</source>
-        <translation>Dosya veya dizinle senkronize et</translation>
+        <translation>Dosya veya dizinle eşitle</translation>
     </message>
     <message>
         <source>The specified path does not exist</source>
-        <translation>Belirtilen yol mevcut değil</translation>
+        <translation>Belirtilen yol yok</translation>
     </message>
     <message>
         <source>Browse for a directory</source>
-        <translation>Dizine göz atın</translation>
+        <translation>Dizine göz at</translation>
     </message>
     <message>
         <source>Browse for a file that contains more than one track</source>
-        <translation>Birden fazla parça içeren bir dosyaya göz atın</translation>
+        <translation>Birden fazla parça içeren bir dosyaya göz at</translation>
     </message>
     <message>
         <source>Choose a directory</source>
@@ -768,18 +768,18 @@
     </message>
     <message>
         <source>Open URL or directory containing chosen file</source>
-        <translation>Seçilen dosyayı içeren açık URL veya dizin</translation>
+        <translation>Seçilen dosyayı içeren URL veya dizini aç</translation>
     </message>
 </context>
 <context>
     <name>EqualizerGUI</name>
     <message>
         <source>Equalizer</source>
-        <translation>Ekolayzer</translation>
+        <translation>Dengeleyici</translation>
     </message>
     <message>
         <source>ON</source>
-        <translation>Aç</translation>
+        <translation>Açık</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -787,7 +787,7 @@
     </message>
     <message>
         <source>Add new preset</source>
-        <translation>Yeni hazır ayar ekle</translation>
+        <translation>Yeni ön ayar ekle</translation>
     </message>
     <message>
         <source>Presets</source>
@@ -807,7 +807,7 @@
     </message>
     <message>
         <source>Preamp</source>
-        <translation>Preamp</translation>
+        <translation>ÖnAmfi</translation>
     </message>
     <message>
         <source>Auto</source>
@@ -1611,7 +1611,7 @@
     </message>
     <message>
         <source>Scrobble</source>
-        <translation>Karalama</translation>
+        <translation>Dinleme günlüğü</translation>
     </message>
     <message>
         <source>User name</source>
@@ -1884,7 +1884,7 @@
     <name>OSDSettings</name>
     <message>
         <source>Font</source>
-        <translation>Yazıtipi</translation>
+        <translation>Yazı tipi</translation>
     </message>
     <message>
         <source>Margins</source>
@@ -1896,7 +1896,7 @@
     </message>
     <message>
         <source>Border</source>
-        <translation>Sınır</translation>
+        <translation>Kenarlık</translation>
     </message>
     <message>
         <source>Colors</source>
@@ -1912,11 +1912,11 @@
     </message>
     <message>
         <source>Left</source>
-        <translation>Ayrıldı</translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation>Doğru</translation>
+        <translation>Sağ</translation>
     </message>
     <message>
         <source>Vertical</source>
@@ -1924,11 +1924,11 @@
     </message>
     <message>
         <source>Outline</source>
-        <translation>anahat</translation>
+        <translation>Anahat</translation>
     </message>
     <message>
         <source>Shadow</source>
-        <translation>gölge</translation>
+        <translation>Gölge</translation>
     </message>
     <message>
         <source>Text</source>
@@ -1966,7 +1966,7 @@
     </message>
     <message>
         <source>&amp;Modules settings</source>
-        <translation>&amp;Moduler ayarlar</translation>
+        <translation>&amp;Modül ayarları</translation>
     </message>
     <message>
         <source>Create new profile</source>
@@ -1978,11 +1978,11 @@
     </message>
     <message>
         <source>&amp;New Profile</source>
-        <translation>&amp;Yeni profil</translation>
+        <translation>&amp;Yeni Profil</translation>
     </message>
     <message>
         <source>&amp;Copy Profile</source>
-        <translation>&amp;Profili kopyala</translation>
+        <translation>&amp;Profili Kopyala</translation>
     </message>
     <message>
         <source>&amp;Default</source>
@@ -2002,7 +2002,7 @@
     </message>
     <message>
         <source>&amp;Renderer settings</source>
-        <translation>&amp;Oluşturucu ayarları</translation>
+        <translation>&amp;İşleyici ayarları</translation>
     </message>
 </context>
 <context>
@@ -2139,7 +2139,7 @@
     <name>Playback</name>
     <message>
         <source>&amp;Playback</source>
-        <translation>&amp;Geriçalma</translation>
+        <translation>&amp;Oynatma</translation>
     </message>
     <message>
         <source>&amp;Enable audio</source>
@@ -2155,7 +2155,7 @@
     </message>
     <message>
         <source>&amp;Speed up video</source>
-        <translation>&amp;videoyu hızlandır</translation>
+        <translation>&amp;Videoyu hızlandır</translation>
     </message>
     <message>
         <source>&amp;Enable subtitles</source>
@@ -2163,39 +2163,39 @@
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
-        <translation>&amp;Gecikmeli altyazılar</translation>
+        <translation>&amp;Altyazıları geciktir</translation>
     </message>
     <message>
         <source>&amp;Speed up subtitles</source>
-        <translation>&amp;Altyazıları hızlandırın</translation>
+        <translation>&amp;Altyazıları hızlandır</translation>
     </message>
     <message>
         <source>Scale up subt&amp;itles</source>
-        <translation>Scale up subt&amp;itles</translation>
+        <translation>Altyazıları &amp;büyüt</translation>
     </message>
     <message>
         <source>Scale down sub&amp;titles</source>
-        <translation>Scale down sub&amp;titles</translation>
+        <translation>Altyazıları &amp;küçült</translation>
     </message>
     <message>
         <source>Add &amp;subtities from file</source>
-        <translation>Add &amp;subtities from file</translation>
+        <translation>&amp;Dosyadan altyazı ekle</translation>
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
-        <translation>Set &amp;subtitles delay</translation>
+        <translation>&amp;Altyazı gecikmesi ayarla</translation>
     </message>
     <message>
         <source>&amp;Screen shot</source>
-        <translation>&amp;Screen shot</translation>
+        <translation>&amp;Ekran görüntüsü</translation>
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>Set &amp;video delay</translation>
+        <translation>&amp;Video gecikmesi ayarla</translation>
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation>&amp;Keep audio pitch</translation>
+        <translation>&amp;Ses perdesini koru</translation>
     </message>
 </context>
 <context>
@@ -2464,7 +2464,7 @@
     <name>Playlist</name>
     <message>
         <source>&amp;Playlist</source>
-        <translation>&amp;Çalma listesi</translation>
+        <translation>&amp;Oynatma listesi</translation>
     </message>
     <message>
         <source>&amp;Stop loading</source>
@@ -2484,7 +2484,7 @@
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
-        <translation>Remove entries &amp;without groups</translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;Clear list</source>
@@ -2504,51 +2504,51 @@
     </message>
     <message>
         <source>&amp;Rename</source>
-        <translation>&amp;Rename</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Find entries</source>
-        <translation>&amp;Find entries</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Collapse all</source>
-        <translation>&amp;Collapse all</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Expand all</source>
-        <translation>&amp;Expand all</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Go to the playback</source>
-        <translation>&amp;Go to the playback</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Enqueue</source>
-        <translation>&amp;Enqueue</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Properties</source>
-        <translation>&amp;Properties</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Extensions</source>
-        <translation>&amp;Extensions</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Save &amp;group</source>
-        <translation>Save &amp;group</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Synchronize groups</source>
-        <translation>&amp;Synchronize groups</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Quick group synchronization</source>
-        <translation>&amp;Quick group synchronization</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation>&amp;Always sync</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2780,39 +2780,39 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     <name>Repeat</name>
     <message>
         <source>&amp;Repeat</source>
-        <translation>&amp;Tekrar</translation>
+        <translation>&amp;Tekrarla</translation>
     </message>
     <message>
         <source>&amp;No repeating</source>
-        <translation>&amp;Tekrar yok</translation>
+        <translation>&amp;Tekrarlama yok</translation>
     </message>
     <message>
         <source>&amp;Entry repeating</source>
-        <translation>Giriş tekrarı</translation>
+        <translation>&amp;Girdi tekralama</translation>
     </message>
     <message>
         <source>&amp;Group repeating</source>
-        <translation>&amp;Group repeating</translation>
+        <translation>&amp;Grup tekrarlama</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>&amp;Çalma listesi tekrarlanıyor</translation>
+        <translation>&amp;Oynatma listesi tekrarlama</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
-        <translation>R&amp;andom</translation>
+        <translation>R&amp;astgele</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
-        <translation>Random in &amp;group</translation>
+        <translation>&amp;Grupta rastgele</translation>
     </message>
     <message>
         <source>Random and &amp;repeat</source>
-        <translation>Random and &amp;repeat</translation>
+        <translation>Rasgele ve &amp;tekrarla</translation>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation>Random in group and repea&amp;t</translation>
+        <translation>Grupta rastgele ve &amp;tekrarla</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
@@ -2859,7 +2859,7 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Show related</source>
-        <translation>İlgili göster</translation>
+        <translation>İlgilileri göster</translation>
     </message>
 </context>
 <context>
@@ -3273,11 +3273,11 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>None</source>
-        <translation>Hiçbiri</translation>
+        <translation>Yok</translation>
     </message>
     <message>
         <source>Track</source>
-        <translation>İzle</translation>
+        <translation>Parça</translation>
     </message>
     <message>
         <source>Cover</source>
@@ -3285,7 +3285,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Load cover picture</source>
-        <translation>Kapak resmini yükle</translation>
+        <translation>Kapak resmi yükle</translation>
     </message>
     <message>
         <source>Save cover picture</source>
@@ -3327,11 +3327,11 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Apply update</source>
-        <translation>Apply update</translation>
+        <translation>Güncellemeyi uygula</translation>
     </message>
     <message>
         <source>No update available</source>
-        <translation>Güncelleme mevcut değil</translation>
+        <translation>Güncelleme yok</translation>
     </message>
     <message>
         <source>Error checking for updates</source>
@@ -3347,7 +3347,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>The update has been downloaded</source>
-        <translation>güncelleme indirildi</translation>
+        <translation>Güncelleme indirildi</translation>
     </message>
     <message>
         <source>Error creating update file</source>
@@ -3355,11 +3355,11 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>This auto-update is ignored, press the button to update</source>
-        <translation>Bu otomatik güncelleme dikkate alınmaz, güncellemek için düğmeye basın</translation>
+        <translation>Bu otomatik güncelleme yok sayıldı, güncellemek için düğmeye basın</translation>
     </message>
     <message>
         <source>Update is available for QMPlay2!</source>
-        <translation>QMPlay2 için güncelleme mevcut!</translation>
+        <translation>QMPlay2 için güncelleme var!</translation>
     </message>
     <message>
         <source>New QMPlay2 version: %1</source>
@@ -3411,15 +3411,15 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Contrast</source>
-        <translation>Kontrast</translation>
+        <translation>Karşıtlık</translation>
     </message>
     <message>
         <source>Saturation</source>
-        <translation>Doyma</translation>
+        <translation>Doygunluk</translation>
     </message>
     <message>
         <source>Hue</source>
-        <translation>Renk</translation>
+        <translation>Renk tonu</translation>
     </message>
     <message>
         <source>Sharpness</source>
@@ -3431,43 +3431,43 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Brightness down</source>
-        <translation>Parlaklık azalt</translation>
+        <translation>Parlaklığı azalt</translation>
     </message>
     <message>
         <source>Brightness up</source>
-        <translation>Parlaklık artır</translation>
+        <translation>Parlaklığı artır</translation>
     </message>
     <message>
         <source>Contrast down</source>
-        <translation>Kontrast azalt</translation>
+        <translation>Karşıtlığı azalt</translation>
     </message>
     <message>
         <source>Saturation down</source>
-        <translation>Doygunluk azalt</translation>
+        <translation>Doygunluğu azalt</translation>
     </message>
     <message>
         <source>Saturation up</source>
-        <translation>Doygunluk artır</translation>
+        <translation>Doygunluğu artır</translation>
     </message>
     <message>
         <source>Hue down</source>
-        <translation>Renk tonu azalt</translation>
+        <translation>Renk tonunu azalt</translation>
     </message>
     <message>
         <source>Hue up</source>
-        <translation>Renk tonu artır</translation>
+        <translation>Renk tonunu artır</translation>
     </message>
     <message>
         <source>Sharpness down</source>
-        <translation>Keskinlik azalt</translation>
+        <translation>Keskinliği azalt</translation>
     </message>
     <message>
         <source>Sharpness up</source>
-        <translation>Keskinlik altır</translation>
+        <translation>Keskinliği artır</translation>
     </message>
     <message>
         <source>Contrast up</source>
-        <translation>Kontrast artır</translation>
+        <translation>Karşıtlığı artır</translation>
     </message>
 </context>
 <context>
@@ -3583,7 +3583,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Search on YouTube</source>
-        <translation>YouTube da ara</translation>
+        <translation>YouTube&apos;da ara</translation>
     </message>
     <message>
         <source>Connection error</source>
@@ -3599,11 +3599,11 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Relevance</source>
-        <translation>kesin</translation>
+        <translation>İlişki</translation>
     </message>
     <message>
         <source>Upload date</source>
-        <translation>Yükleme tarihi</translation>
+        <translation>Yüklenme tarihi</translation>
     </message>
     <message>
         <source>View count</source>
@@ -3611,7 +3611,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Rating</source>
-        <translation>Değerlendirme</translation>
+        <translation>Beğeni</translation>
     </message>
     <message>
         <source>Sort search results by ...</source>
