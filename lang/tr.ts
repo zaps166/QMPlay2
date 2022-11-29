@@ -186,7 +186,7 @@
     </message>
     <message>
         <source>Do you want to remove</source>
-        <translation>Kaldırmak istiyor musun?</translation>
+        <translation>Kaldırmak istiyor musun</translation>
     </message>
     <message>
         <source>Loading wallpaper</source>
@@ -462,7 +462,7 @@
     </message>
     <message>
         <source>Bitrate</source>
-        <translation>Bit hızı</translation>
+        <translation>Bit oranı</translation>
     </message>
     <message>
         <source>Format</source>
@@ -542,7 +542,7 @@
     </message>
     <message>
         <source>bitrate</source>
-        <translation>bit hızı</translation>
+        <translation>bit oranı</translation>
     </message>
     <message>
         <source>channels</source>
@@ -636,11 +636,11 @@
     </message>
     <message>
         <source>Download directory</source>
-        <translation>Dizini indir</translation>
+        <translation>İndirme dizini</translation>
     </message>
     <message>
         <source>Choose directory for downloaded files</source>
-        <translation>İndirilen dosyalar için dizin seçin</translation>
+        <translation>Dosyaların indirileceği dizini seçin</translation>
     </message>
     <message>
         <source>Clear completed downloads</source>
@@ -648,15 +648,15 @@
     </message>
     <message>
         <source>Enter the address for download</source>
-        <translation>İndirmek için adresi girin</translation>
+        <translation>İndirme adresini girin</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>indir</translation>
+        <translation>İndir</translation>
     </message>
     <message>
         <source>Cannot change downloading files directory</source>
-        <translation>İndirilen dosya dizini değiştirilemiyor</translation>
+        <translation>İndirilen dosyaların dizini değiştirilemez</translation>
     </message>
     <message>
         <source>Enter address</source>
@@ -668,7 +668,7 @@
     </message>
     <message>
         <source>Add, modify, or remove conversion presets</source>
-        <translation>Dönüşüm hazır ayarlarını ekleyin, değiştirin veya kaldırın</translation>
+        <translation>Dönüşüm ön ayarlarını ekleyin, değiştirin veya kaldırın</translation>
     </message>
     <message>
         <source>Download and convert to &quot;%1&quot;</source>
@@ -683,18 +683,18 @@
 
 &lt;input/&gt; - specifies downloaded file.
 &lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
-        <translation>Türkiye den selamlar
+        <translation>İndirme sonrası çalıştırılacak komut satırı.
 
 &lt;input/&gt; - indirilen dosyayı gösterir.
-&lt;output&gt;%f.mp3&lt;/output&gt; - dönüştürülen dosya, uzantılı girdi dosyası olacaktır &quot;mp3&quot;.</translation>
+&lt;output&gt;%f.mp3&lt;/output&gt; - dönüştürülen dosya, girilen dosyanın &quot;mp3&quot; uzantılı hali olacaktır.</translation>
     </message>
     <message>
-        <source>Kaldır</source>
-        <translation></translation>
+        <source>Remove</source>
+        <translation>Kaldır</translation>
     </message>
     <message>
         <source>Preset name</source>
-        <translation>Ön ayar ismi</translation>
+        <translation>Ön ayar adı</translation>
     </message>
     <message>
         <source>Command line</source>
@@ -706,11 +706,11 @@
     </message>
     <message>
         <source>Command must contain &lt;input/&gt; tag!</source>
-        <translation>Komut satırı şunları içermelidir &lt;input/&gt;!</translation>
+        <translation>Komut &lt;input/&gt; etiketi içermelidir!</translation>
     </message>
     <message>
         <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
-        <translation>Komut doğru etiketi içermelidir &lt;output&gt;file&lt;/output/&gt;!</translation>
+        <translation>Komut doğru &lt;output&gt;file&lt;/output/&gt; etiketi içermelidir!</translation>
     </message>
     <message>
         <source>Preset name already exists!</source>
@@ -996,7 +996,7 @@
     </message>
     <message>
         <source>Selected Profile</source>
-        <translation>Seçili Profil</translation>
+        <translation>Seçilen Profil</translation>
     </message>
     <message>
         <source>Read and display still images</source>
@@ -1039,83 +1039,83 @@
     </message>
     <message>
         <source>&amp;About QMPlay2</source>
-        <translation>&amp;QMPlay2 Hakkında</translation>
+        <translation>QMPlay2 &amp;Hakkında</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
-        <translation>Hakkında &amp;Qt</translation>
+        <translation>&amp;Qt Hakkında</translation>
     </message>
     <message>
         <source>&amp;Updates</source>
-        <translation>&amp;Güncelle</translation>
+        <translation>&amp;Güncellemeler</translation>
     </message>
     <message>
         <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
-        <translation>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</translation>
+        <translation>Çalıştırdıktan sonra oynatma (&quot;Oynatma konumunu hatırla&quot; seçeneğini atla).</translation>
     </message>
     <message>
         <source>Ensure that the window will be visible if the application is running.</source>
-        <translation>Uygulama çalışıyorsa pencerenin görünür olacağından emin olun.</translation>
+        <translation>Uygulama çalışırken pencerenin görünür olacağından emin olun.</translation>
     </message>
     <message>
         <source>Toggle fullscreen.</source>
-        <translation>Tam ekrana geç.</translation>
+        <translation>Tam ekranı aç/kapat.</translation>
     </message>
     <message>
         <source>Seek to the specified value.</source>
-        <translation>Belirtilen değeri arayın.</translation>
+        <translation>Belirtilen değeri ara.</translation>
     </message>
     <message>
         <source>Start playback.</source>
-        <translation>Oynatmayı başlatın.</translation>
+        <translation>Oynatmayı başlat.</translation>
     </message>
     <message>
         <source>Stop playback.</source>
-        <translation>Oynatmayı durdurun.</translation>
+        <translation>Oynatmayı durdur.</translation>
     </message>
     <message>
         <source>Toggle playback.</source>
-        <translation>Oynatmayı aç / kapat.</translation>
+        <translation>Oynat/Durdur.</translation>
     </message>
     <message>
         <source>Terminate the application.</source>
-        <translation>Uygulamayı sonlandırın.</translation>
+        <translation>Uygulamayı sonlandır.</translation>
     </message>
     <message>
         <source>Display this help.</source>
-        <translation>Yardımı görüntüleyin.</translation>
+        <translation>Yardımı görüntüle.</translation>
     </message>
     <message>
         <source>Open and play specified &lt;url&gt;.</source>
-        <translation>Aç ve belirtilen oyna &lt;url&gt;.</translation>
+        <translation>Belirtilen &lt;url&gt; adresi aç ve oynat.</translation>
     </message>
     <message>
         <source>Add specified &lt;url&gt; to playlist.</source>
-        <translation>Belirtilen ekle &lt;url&gt; çalma listesine.</translation>
+        <translation>Belirtilen &lt;url&gt; adresini çalma listesine ekle.</translation>
     </message>
     <message>
         <source>Start the application with given &lt;profile name&gt;.</source>
-        <translation>Verilen ile uygulamayı başlatın &lt;profile name&gt;.</translation>
+        <translation>Belirtilen &lt;profile name&gt; profili ile uygulamayı başlat.</translation>
     </message>
     <message>
         <source>Set specified volume.</source>
-        <translation>Belirtilen hacmi ayarlayın.</translation>
+        <translation>Belirtilen sesi ayarla.</translation>
     </message>
     <message>
         <source>Set specified playback speed.</source>
-        <translation>Belirtilen oynatma hızını ayarlayın.</translation>
+        <translation>Belirtilen oynatma hızını ayarla.</translation>
     </message>
     <message>
         <source>Play next entry on playlist.</source>
-        <translation>Çalma listesindeki bir sonraki girişi çal.</translation>
+        <translation>Oynatma listesindeki sonraki girdiyi oynat.</translation>
     </message>
     <message>
         <source>Play previous entry on playlist.</source>
-        <translation>Çalma listesindeki önceki girişi oynatın.</translation>
+        <translation>Oynatma listesindeki önceki girdiyi oynat.</translation>
     </message>
     <message>
         <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
-        <translation>Yeni QMPlay2 örneğini açın ve belirtilenleri oynatın &lt;url&gt;.</translation>
+        <translation>Yeni QMPlay2 örneği aç ve belirtilen &lt;url&gt; adresini oynat.</translation>
     </message>
 </context>
 <context>
@@ -1227,11 +1227,11 @@
     </message>
     <message>
         <source>Choose files</source>
-        <translation>Dosyaları seçin</translation>
+        <translation>Dosyaları seç</translation>
     </message>
     <message>
         <source>Choose directory</source>
-        <translation>dizini seçin</translation>
+        <translation>Dizin seç</translation>
     </message>
     <message>
         <source>Pointed position</source>
@@ -1239,7 +1239,7 @@
     </message>
     <message>
         <source>&amp;Hide</source>
-        <translation>&amp;gizli</translation>
+        <translation>&amp;Gizle</translation>
     </message>
     <message>
         <source>&amp;Show</source>
@@ -1263,7 +1263,7 @@
     </message>
     <message>
         <source>Choose playlist</source>
-        <translation>Çalma listesi seçin</translation>
+        <translation>Çalma listesi seç</translation>
     </message>
     <message>
         <source>Save playlist</source>
@@ -1283,7 +1283,7 @@
     </message>
     <message>
         <source>&amp;Lock widgets</source>
-        <translation>&amp;Widget&apos;ları kilitle</translation>
+        <translation>&amp;Parçacıkları kilitle</translation>
     </message>
     <message>
         <source>Save group</source>
@@ -1291,7 +1291,7 @@
     </message>
     <message>
         <source>Error while saving playlist</source>
-        <translation>Çalma listesi kaydedilirken hata oluştu</translation>
+        <translation>Oynatma listesi kaydedilirken hata oluştu</translation>
     </message>
     <message>
         <source>&amp;Hide menu bar</source>
@@ -1419,7 +1419,7 @@
     </message>
     <message>
         <source>Resampling method</source>
-        <translation>Tekrarlama yöntemi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Autodetect</source>
@@ -2032,7 +2032,7 @@
     </message>
     <message>
         <source>Muted sound</source>
-        <translation>Sessize al</translation>
+        <translation>Sessize alınma sesi</translation>
     </message>
     <message>
         <source>Video delay</source>
@@ -2052,11 +2052,11 @@
     </message>
     <message>
         <source>Loaded subtitles</source>
-        <translation>Altyazılar yüklendi</translation>
+        <translation>Yüklü altyazılar</translation>
     </message>
     <message>
         <source>Subtitles off</source>
-        <translation>Altyazı kapalı</translation>
+        <translation>Altyazılar kapalı</translation>
     </message>
     <message>
         <source>Horizontal flip</source>
@@ -2068,7 +2068,7 @@
     </message>
     <message>
         <source>No image rotation</source>
-        <translation>Görüntü döndürme yok</translation>
+        <translation>Resim döndürme yok</translation>
     </message>
     <message>
         <source>Set video delay (sec.)</source>
@@ -2080,35 +2080,35 @@
     </message>
     <message>
         <source>A-B Repeat</source>
-        <translation>A-B Tekrarı</translation>
+        <translation>A-B Tekrarla</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation>devredışı</translation>
+        <translation>devre dışı</translation>
     </message>
     <message>
         <source>from</source>
-        <translation>ile birlikte</translation>
+        <translation>kaynak</translation>
     </message>
     <message>
         <source>to</source>
-        <translation>ile</translation>
+        <translation>şuraya</translation>
     </message>
     <message>
         <source>Rotation 270°</source>
-        <translation>Döndür 270°</translation>
+        <translation>270° döndür</translation>
     </message>
     <message>
         <source>Rotation 180°</source>
-        <translation>Döndür 180°</translation>
+        <translation>180° döndür</translation>
     </message>
     <message>
         <source>Rotation 90°</source>
-        <translation>Döndür 90°</translation>
+        <translation>90° döndür</translation>
     </message>
     <message>
         <source>Rotation is not supported by this video output module</source>
-        <translation>Döndürme, bu video çıkış modülü tarafından desteklenmiyor</translation>
+        <translation>Bu video çıkış modülü döndürmeyi desteklemiyor</translation>
     </message>
     <message>
         <source>Spherical view is not supported by this video output module</source>
@@ -2128,7 +2128,7 @@
     </message>
     <message>
         <source>Keep audio pitch during playback speed change</source>
-        <translation>Oynatma hızı değişikliği sırasında ses perdesini koruyun</translation>
+        <translation>Oynatma hızı değişikliği sırasında ses perdesini koru</translation>
     </message>
     <message>
         <source>Don&apos;t keep audio pitch during playback speed change</source>
@@ -2361,83 +2361,85 @@
     <name>Player</name>
     <message>
         <source>&amp;Player</source>
-        <translation>&amp;Oynat</translation>
+        <translation>&amp;Oynatıcı</translation>
     </message>
     <message>
         <source>&amp;Stop</source>
-        <translation>&amp;Dur</translation>
+        <translation>&amp;Durdur</translation>
     </message>
     <message>
         <source>&amp;Next</source>
-        <translation>&amp;İleri</translation>
+        <translation>&amp;Sonraki</translation>
     </message>
     <message>
         <source>&amp;Previous</source>
-        <translation>&amp;öncesi</translation>
+        <translation>&amp;Önceki</translation>
     </message>
     <message>
         <source>Seek &amp;forward</source>
-        <translation>Seek &amp;forward</translation>
+        <translation>&amp;İleri git</translation>
     </message>
     <message>
         <source>Seek &amp;backward</source>
-        <translation>Seek &amp;backward</translation>
+        <translation>&amp;Geri git</translation>
     </message>
     <message>
         <source>Long &amp;seek forward</source>
-        <translation>Long &amp;seek forward</translation>
+        <translation>Daha i&amp;leri git</translation>
     </message>
     <message>
         <source>Long s&amp;eek backward</source>
-        <translation>Long s&amp;eek backward</translation>
+        <translation>Daha g&amp;eri git</translation>
     </message>
     <message>
         <source>Fa&amp;ster</source>
-        <translation>Fa&amp;ster</translation>
+        <translation>Daha &amp;hızlı</translation>
     </message>
     <message>
         <source>Slowe&amp;r</source>
-        <translation>Slowe&amp;r</translation>
+        <translation>Daha &amp;yavaş</translation>
     </message>
     <message>
         <source>Zoom i&amp;n</source>
-        <translation>Zoom i&amp;n</translation>
+        <translation>&amp;Yakınlaştır</translation>
     </message>
     <message>
         <source>Zoom ou&amp;t</source>
-        <translation>Zoom ou&amp;t</translation>
+        <translation>&amp;Uzaklaştır</translation>
     </message>
     <message>
         <source>&amp;Mute</source>
-        <translation>&amp;Mute</translation>
+        <translation>&amp;Sustur</translation>
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
-        <translation>Toggle &amp;aspect ratio</translation>
+        <translatorcomment>Normalde Toogle için aç/kapat diyoruz fakat burada sadece iki en-boy oranı arasında geçiş yapıyor</translatorcomment>
+        <translation>En/Boy &amp;oranını değiştir</translation>
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>Reset image &amp;settings</translation>
+        <translation>Resim &amp;ayarlarını sıfırla</translation>
     </message>
     <message>
         <source>&amp;Set speed</source>
-        <translation>&amp;Set speed</translation>
+        <translation>Hızı &amp;ayarla</translation>
     </message>
     <message>
         <source>Next &amp;frame</source>
-        <translation>Next &amp;frame</translation>
+        <translation>Sonraki &amp;kare</translation>
     </message>
     <message>
         <source>Volume &amp;up</source>
-        <translation>Volume &amp;up</translation>
+        <translation>Sesi &amp;artır</translation>
     </message>
     <message>
         <source>Volume &amp;down</source>
-        <translation>Volume &amp;down</translation>
+        <translation>Sesi a&amp;zalt</translation>
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>Suspend after playbac&amp;k is finished</translation>
+        <translatorcomment>Bilgisayar vurgusu eklendi</translatorcomment>
+        <translation>Oynatma bitti&amp;kten sonra bilgisayarı askıya al</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
@@ -2445,7 +2447,7 @@
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
-        <translation>Detach from receiving &amp;commands</translation>
+        <translation>&amp;Komutları almaktan ayır</translation>
     </message>
     <message>
         <source>&amp;Skip</source>
@@ -2453,11 +2455,11 @@
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation>&amp;Oynadıktan sonra dur</translation>
+        <translation>&amp;Oynattıktan sonra durdur</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
-        <translation>Previous &amp;frame</translation>
+        <translation>Önceki &amp;kare</translation>
     </message>
 </context>
 <context>
@@ -2472,7 +2474,7 @@
     </message>
     <message>
         <source>Load &amp;list</source>
-        <translation>Yükleme &amp;listesi</translation>
+        <translation>&amp;Liste yükle</translation>
     </message>
     <message>
         <source>Save &amp;list</source>
@@ -2480,11 +2482,11 @@
     </message>
     <message>
         <source>&amp;Remove selected entries</source>
-        <translation>&amp;Seçili girişleri kaldır</translation>
+        <translation>&amp;Seçilen girdileri kaldır</translation>
     </message>
     <message>
         <source>Remove entries &amp;without groups</source>
-        <translation></translation>
+        <translation>&amp;Grupsuz girdileri kaldır</translation>
     </message>
     <message>
         <source>&amp;Clear list</source>
@@ -2504,51 +2506,51 @@
     </message>
     <message>
         <source>&amp;Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Yeniden adlandır</translation>
     </message>
     <message>
         <source>&amp;Find entries</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Girdi ara</translation>
     </message>
     <message>
         <source>&amp;Collapse all</source>
-        <translation type="unfinished"></translation>
+        <translation>Tümünü &amp;daralt</translation>
     </message>
     <message>
         <source>&amp;Expand all</source>
-        <translation type="unfinished"></translation>
+        <translation>Tümünü &amp;genişlet</translation>
     </message>
     <message>
         <source>&amp;Go to the playback</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Oynatma listesine git</translation>
     </message>
     <message>
         <source>&amp;Enqueue</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sıraya al</translation>
     </message>
     <message>
         <source>&amp;Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Özellikler</translation>
     </message>
     <message>
         <source>&amp;Extensions</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Uzantılar</translation>
     </message>
     <message>
         <source>Save &amp;group</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Grubu kaydet</translation>
     </message>
     <message>
         <source>&amp;Synchronize groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupları &amp;eşitle</translation>
     </message>
     <message>
         <source>&amp;Quick group synchronization</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hızlı grup eşitlemesi</translation>
     </message>
     <message>
         <source>&amp;Always sync</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Her zaman eşitle</translation>
     </message>
 </context>
 <context>
@@ -2669,8 +2671,8 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
         <translation>İnternet radyoları</translation>
     </message>
     <message>
-        <source>Adding a new radio</source>
-        <translation>Yeni bir radyo istasyonu ekle</translation>
+        <source>Adding a new radio station</source>
+        <translation>Yeni radyo istasyonu ekleniyor</translation>
     </message>
     <message>
         <source>Add new radio station</source>
@@ -2678,7 +2680,7 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <source>Address</source>
@@ -2694,7 +2696,7 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Remove selected radio station</source>
-        <translation>Seçili radyo istasyonunu kaldır</translation>
+        <translation>Seçilen radyo istasyonunu kaldır</translation>
     </message>
     <message>
         <source>Play</source>
@@ -2714,11 +2716,11 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Editing selected radio station</source>
-        <translation>Seçilen radyo istasyonunu düzenleme</translation>
+        <translation>Seçilen radyo istasyonu düzenleniyor</translation>
     </message>
     <message>
         <source>Radio station with given name already exists!</source>
-        <translation>Belirtilen ada sahip radyo istasyonu zaten var!</translation>
+        <translation>Belirtilen adla radyo istasyonu zaten var!</translation>
     </message>
     <message>
         <source>Load radio station list from file</source>
@@ -2730,7 +2732,7 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Load radio station list</source>
-        <translation>Radyo istasyonu listesini yükle</translation>
+        <translation>Radyo istasyonu listesi yükle</translation>
     </message>
     <message>
         <source>Save radio station list</source>
@@ -2750,6 +2752,7 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>State</source>
+        <translatorcomment>Belki eyalet anlamındadır. Arayüzdeki duruma göre güncellemek gerekebilir.</translatorcomment>
         <translation>Durum</translation>
     </message>
 </context>
@@ -3505,7 +3508,8 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Video &amp;adjustment</source>
-        <translation>Video &amp;ayarlama</translation>
+        <translatorcomment>Settings de Ayarlar anlamına geldiğinden farkı vurgulamak amacıyla burada &quot;İnce Ayar&quot; çevirisi kullanıldı.</translatorcomment>
+        <translation>Video &amp;ince ayarları</translation>
     </message>
 </context>
 <context>
