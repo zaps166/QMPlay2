@@ -142,7 +142,7 @@
     </message>
     <message>
         <source>Manage color schemes</source>
-        <translation>Renk şemalarını yönetin</translation>
+        <translation>Renk şemalarını yönet</translation>
     </message>
     <message>
         <source>Save</source>
@@ -158,7 +158,7 @@
     </message>
     <message>
         <source>Gradient in the video window</source>
-        <translation>Video penceresindeki gradyan</translation>
+        <translation>Video penceresinde renk geçişi</translation>
     </message>
     <message>
         <source>Wallpaper in the main window</source>
@@ -166,15 +166,15 @@
     </message>
     <message>
         <source>Select wallpaper</source>
-        <translation>Duvarkağıdı seç</translation>
+        <translation>Duvar kağıdı seç</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <source>Enter the name for a color scheme</source>
-        <translation>Renk düzeni için bir ad girin</translation>
+        <translation>Renk şeması için bir ad girin</translation>
     </message>
     <message>
         <source>The specified name already exists!</source>
@@ -182,7 +182,7 @@
     </message>
     <message>
         <source>Removing</source>
-        <translation>Kaldırılma</translation>
+        <translation>Kaldırılıyor</translation>
     </message>
     <message>
         <source>Do you want to remove</source>
@@ -222,7 +222,7 @@
     </message>
     <message>
         <source>Border color</source>
-        <translation>Sınır rengi</translation>
+        <translation>Kenarlık rengi</translation>
     </message>
     <message>
         <source>Highlight color</source>
@@ -234,7 +234,7 @@
     </message>
     <message>
         <source>Text color</source>
-        <translation>Yazı rengi</translation>
+        <translation>Metin rengi</translation>
     </message>
     <message>
         <source>Highlighted text color</source>
@@ -258,7 +258,7 @@
     </message>
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
-        <translation>yazılabilir değil, yeniden başlatmanın ardından ayarlar kaybolacak. Yeni bir renk şeması oluşturmayı düşünün!</translation>
+        <translation>yazılabilir değil, yeniden başlatmanın ardından ayarlar yitecek. Yeni bir renk şeması oluşturmayı düşünün!</translation>
     </message>
 </context>
 <context>
@@ -474,11 +474,11 @@
     </message>
     <message>
         <source>title</source>
-        <translation>Başlık</translation>
+        <translation>başlık</translation>
     </message>
     <message>
         <source>codec</source>
-        <translation>codek</translation>
+        <translation>kodlayıcı</translation>
     </message>
     <message>
         <source>aspect ratio</source>
@@ -490,7 +490,7 @@
     </message>
     <message>
         <source>sample rate</source>
-        <translation>Örnekleme oranı</translation>
+        <translation>örnekleme oranı</translation>
     </message>
     <message>
         <source>format</source>
@@ -522,7 +522,7 @@
     </message>
     <message>
         <source>Chapters</source>
-        <translation>Bölüm</translation>
+        <translation>Bölümler</translation>
     </message>
     <message>
         <source>Video streams</source>
@@ -888,7 +888,7 @@
     <name>GeneralSettings</name>
     <message>
         <source>Browse</source>
-        <translation>Araştır</translation>
+        <translation>Göz at</translation>
     </message>
     <message>
         <source>Use system icon set</source>
@@ -908,7 +908,7 @@
     </message>
     <message>
         <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>Müzik dosyasında yoksa katalogdaki kapakları göster</translation>
+        <translation>Müzik dosyasında yoksa dizindeki kapakları göster</translation>
     </message>
     <message>
         <source>Automatically open video window</source>
@@ -924,7 +924,7 @@
     </message>
     <message>
         <source>Allow only one instance</source>
-        <translation>Yalnızca bir örneğe izin ver</translation>
+        <translation>Yalnızca tek örneğe izin ver</translation>
     </message>
     <message>
         <source>Always only display file names in playlist</source>
@@ -932,15 +932,15 @@
     </message>
     <message>
         <source>Remember repeat mode</source>
-        <translation>Tekrar modunu hatırla</translation>
+        <translation>Tekrar kipini hatırla</translation>
     </message>
     <message>
         <source>Use proxy server</source>
-        <translation>Proxy sunucusu kullan</translation>
+        <translation>Vekil sunucu kullan</translation>
     </message>
     <message>
         <source>Proxy server needs login</source>
-        <translation>Proxy sunucusu yetkilendirme gerektiriyor</translation>
+        <translation>Vekil sunucu oturum açma gerektiriyor</translation>
     </message>
     <message>
         <source>User name</source>
@@ -948,15 +948,15 @@
     </message>
     <message>
         <source>Password</source>
-        <translation>Şifre</translation>
+        <translation>Parola</translation>
     </message>
     <message>
         <source>Proxy server address</source>
-        <translation>Proxy sunucu adresi</translation>
+        <translation>Vekil sunucu adresi</translation>
     </message>
     <message>
         <source>Proxy server port</source>
-        <translation>Proxy sunucusu bağlantı noktası</translation>
+        <translation>Vekil sunucu bağlantı noktası</translation>
     </message>
     <message>
         <source>Clear covers cache</source>
@@ -972,7 +972,7 @@
     </message>
     <message>
         <source>Style</source>
-        <translation>Stil</translation>
+        <translation>Biçem</translation>
     </message>
     <message>
         <source>Subtitles encoding</source>
@@ -992,7 +992,7 @@
     </message>
     <message>
         <source>Set key bindings</source>
-        <translation>Tuş bağlamalarını ayarla</translation>
+        <translation>Kısayolları ayarla</translation>
     </message>
     <message>
         <source>Selected Profile</source>
@@ -1000,11 +1000,11 @@
     </message>
     <message>
         <source>Read and display still images</source>
-        <translation>Hareketsiz görüntüleri okuyun ve görüntüleyin</translation>
+        <translation>Hareketsiz görüntüleri oku ve görüntüle</translation>
     </message>
     <message>
         <source>Use tray notifications as default</source>
-        <translation>Tepsi bildirimlerini varsayılan olarak kullan</translation>
+        <translation>Sistem tepsisi bildirimlerini varsayılan olarak kullan</translation>
     </message>
     <message>
         <source>Remove youtube-dl</source>
@@ -1012,11 +1012,11 @@
     </message>
     <message>
         <source>Automatically delete ungrouped entries</source>
-        <translation>Gruplanmamış girişleri otomatik olarak sil</translation>
+        <translation>Gruplanmamış girdileri otomatik olarak sil</translation>
     </message>
     <message>
         <source>Hide artist metadata</source>
-        <translation>Sanatçı meta verilerini gizle</translation>
+        <translation>Sanatçı üstverilerini gizle</translation>
     </message>
     <message>
         <source>Automatically restore main window when new video file is loaded</source>
@@ -1024,7 +1024,7 @@
     </message>
     <message>
         <source>Don&apos;t load playlist files within other files</source>
-        <translation>Çalma listesi dosyalarını başka dosyalara yüklemeyin</translation>
+        <translation>Çalma listesi dosyalarını başka dosyalara yükleme</translation>
     </message>
     <message>
         <source>Enlarge small covers</source>
@@ -1471,7 +1471,7 @@
     </message>
     <message>
         <source>Sound equalizer quality</source>
-        <translation>Ses ekolayzır kalitesi</translation>
+        <translation>Ses dengeleyici kalitesi</translation>
     </message>
     <message>
         <source>Low</source>
@@ -1675,7 +1675,7 @@
     </message>
     <message>
         <source>Slider count in sound equalizer</source>
-        <translation>Ses ekolayzerinde kaydırıcı sayısı</translation>
+        <translation>Ses dengeleyicide kaydırıcı sayısı</translation>
     </message>
     <message>
         <source>Minimum frequency</source>
@@ -1767,7 +1767,7 @@
     </message>
     <message>
         <source>Equalizer</source>
-        <translation>Ekolayzer</translation>
+        <translation>Dengeleyici</translation>
     </message>
     <message>
         <source>Default settings</source>
@@ -2202,7 +2202,7 @@
     <name>PlaybackSettings</name>
     <message>
         <source>Maximum volume</source>
-        <translation>Yüksek ses</translation>
+        <translation>Azami ses</translation>
     </message>
     <message>
         <source>Force samplerate</source>
@@ -2214,11 +2214,11 @@
     </message>
     <message>
         <source>Use available replay gain</source>
-        <translation>Mümkünse, sesi eşitle</translation>
+        <translation>Mevcut ReplayGain’i kullan</translation>
     </message>
     <message>
         <source>Album mode for replay gain</source>
-        <translation>Ses eşitleme için albüm modu</translation>
+        <translation>ReplayGain için albüm kipi</translation>
     </message>
     <message>
         <source>Prevent clipping</source>
@@ -2226,7 +2226,7 @@
     </message>
     <message>
         <source>Mouse wheel action on video dock</source>
-        <translation>Fare tekerleğinin video penceresindeki eylemi</translation>
+        <translation>Fare tekerleğinin video rıhtımındaki eylemi</translation>
     </message>
     <message>
         <source>Mouse wheel scrolls music/movie</source>
@@ -2238,7 +2238,7 @@
     </message>
     <message>
         <source>Keep zoom</source>
-        <translation>yakınlaştırmaya devam et</translation>
+        <translation>Yakınlaştırmayı koru</translation>
     </message>
     <message>
         <source>Show buffered data indicator on slider</source>
@@ -2262,7 +2262,7 @@
     </message>
     <message>
         <source>Keep speed</source>
-        <translation>Kare hızını koru</translation>
+        <translation>Hızı koru</translation>
     </message>
     <message>
         <source>Keep video delay</source>
@@ -2270,19 +2270,19 @@
     </message>
     <message>
         <source>Video to audio sync (frame skipping)</source>
-        <translation>Videodan sese senkronizasyon (çerçeve atlama)</translation>
+        <translation>Videodan sese eşitlemesi (kare atlama)</translation>
     </message>
     <message>
         <source>Fade sound</source>
-        <translation>Sesi soldur</translation>
+        <translation>Sesi azalt</translation>
     </message>
     <message>
         <source>Remember video equalizer settings</source>
-        <translation>Video ekolayzır ayarlarını hatırla</translation>
+        <translation>Video dengeleyici ayarlarını hatırla</translation>
     </message>
     <message>
         <source>Play next entry after playback error</source>
-        <translation>Oynatma hatasından sonra sonraki girişi çal</translation>
+        <translation>Oynatma hatasından sonra sonraki girdiyi çal</translation>
     </message>
     <message>
         <source>Short seeking (left and right arrows)</source>
@@ -2302,15 +2302,15 @@
     </message>
     <message>
         <source>Percent of packages for backwards rewinding</source>
-        <translation>Geri sarma için paketlerin yüzdesi</translation>
+        <translation>Geri sarılacak paketlerin yüzdesi</translation>
     </message>
     <message>
         <source>Start playback internet stream if it is buffered</source>
-        <translation>Arabelleğe alınmışsa internet akışını oynatmaya başlayın</translation>
+        <translation>Arabelleğe alınmışsa internet akışını oynatmayı başlat</translation>
     </message>
     <message>
         <source>sec</source>
-        <translation>saniye</translation>
+        <translation>sn</translation>
     </message>
     <message>
         <source>Amplify</source>
@@ -2318,27 +2318,28 @@
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation>Video penceresindeki sol fare düğmesi oynatmayı değiştirir</translation>
+        <translatorcomment>Toogle için genelde aç/kapat veya değiştir çevirisi kullanıyoruz, fakat burada olayla uyumlu çeviri yapıldı.</translatorcomment>
+        <translation>Video rıhtımındaki birincil fare düğmesi oynatmayı duraklatır/devam ettirir</translation>
     </message>
     <message>
         <source>Accurate seeking</source>
-        <translation>Bire bir aynı</translation>
+        <translation>Doğru arama</translation>
     </message>
     <message>
         <source>Store aspect ratio and zoom in config file</source>
-        <translation>Oranları ve ölçeği yapılandırma dosyasına kaydedin</translation>
+        <translation>En boy oranını ve yakınlaştırmayı yapılandırma dosyasına kaydet</translation>
     </message>
     <message>
         <source>Unpause when seeking</source>
-        <translation>Kaydırma sırasında oynatmaya devam edin</translation>
+        <translation>Ararken oynatmayı duraklatma</translation>
     </message>
     <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>Filtreler ve görselleştirmelerden önce ses yeniden örnekleyici ve kanal dönüştürmeyi kullanın</translation>
+        <translation>Filtrelerden ve görselleştirmelerden önce ses yeniden örnekleyici ve kanal dönüştürme kullan</translation>
     </message>
     <message>
         <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation>Video penceresindeki orta fare düğmesi tam ekran moduna geçer</translation>
+        <translation>Video rıhtımındaki orta fare düğmesi tam ekran kipini değiştirir</translation>
     </message>
     <message>
         <source>Disable subtitles at program startup</source>
@@ -2346,15 +2347,15 @@
     </message>
     <message>
         <source>Remember audio/video/subtitles enabled state</source>
-        <translation>Ses/video/altyazı etkin durumunu hatırla</translation>
+        <translation>Ses/video/altyazı etkinleştirme durumlarını hatırla</translation>
     </message>
     <message>
         <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>Kısmen işaretli, basma ve duraklatma arasında bir gecikme olduğu anlamına gelir</translation>
+        <translation>Kısmen işaretli, tıklama ve duraklatma arasında gecikme olduğu anlamına gelir</translation>
     </message>
     <message>
         <source>Amplify (no metadata)</source>
-        <translation>Amplify (meta veri yok)</translation>
+        <translation>Yükselt (üstveri yok)</translation>
     </message>
 </context>
 <context>
@@ -2932,7 +2933,7 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Choose directory</source>
-        <translation>Dizini seçin</translation>
+        <translation>Dizin seçin</translation>
     </message>
     <message>
         <source>Use the same size</source>
