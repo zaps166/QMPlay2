@@ -190,7 +190,8 @@
     </message>
     <message>
         <source>Loading wallpaper</source>
-        <translation>Duvar kağıdı yükleniyor</translation>
+        <translatorcomment>Onay kutusu başlığı</translatorcomment>
+        <translation>Duvar kağıdı yükleme</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -1138,7 +1139,7 @@
     </message>
     <message>
         <source>interlaced</source>
-        <translation>Taramalı</translation>
+        <translation>taramalı</translation>
     </message>
     <message>
         <source>visible</source>
@@ -1371,7 +1372,7 @@
     <name>ModuleSettingsWidget</name>
     <message>
         <source>enabled</source>
-        <translation>etkinleştir</translation>
+        <translation>etkin</translation>
     </message>
     <message>
         <source>M3U support</source>
@@ -1395,7 +1396,7 @@
     </message>
     <message>
         <source>Enabled</source>
-        <translation>Etkinleştir</translation>
+        <translation>Etkin</translation>
     </message>
     <message>
         <source>Use shared memory</source>
@@ -1411,11 +1412,11 @@
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
-        <translation>Çok kanallı bir cihaz için otomatik arama</translation>
+        <translation>Çok kanallı bir aygıt için otomatik arama</translation>
     </message>
     <message>
         <source>Playback device</source>
-        <translation>Playback aleti</translation>
+        <translation>Oynatma aygıtı</translation>
     </message>
     <message>
         <source>Resampling method</source>
@@ -1587,7 +1588,8 @@
     </message>
     <message>
         <source>Demuxer</source>
-        <translation>Demuxer</translation>
+        <translatorcomment>VLC çevirisinden alınmıştır</translatorcomment>
+        <translation>Tekleyici</translation>
     </message>
     <message>
         <source>Decoder</source>
@@ -1655,7 +1657,8 @@
     </message>
     <message>
         <source>Echo volume</source>
-        <translation>Yankı hacmi</translation>
+        <translatorcomment>Ses oranı da diyebilirdik</translatorcomment>
+        <translation>Yankı sesi</translation>
     </message>
     <message>
         <source>Echo repeat</source>
@@ -1663,7 +1666,7 @@
     </message>
     <message>
         <source>Echo surround</source>
-        <translation>Yankı çevre</translation>
+        <translation>Yankı çevresi</translation>
     </message>
     <message>
         <source>Use the program via MPRIS2 interface</source>
@@ -1703,10 +1706,11 @@
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation>CUVID&apos;yi yalnızca birincil GPU NVIDIA olduğunda kullanın</translation>
+        <translation>Birincil GPU NVIDIA ise CUVID kullan</translation>
     </message>
     <message>
         <source>Infinite</source>
+        <translatorcomment>Bildirimin süresini ayarlarken kullanılıyor</translatorcomment>
         <translation>Sonsuz</translation>
     </message>
     <message>
@@ -1715,7 +1719,7 @@
     </message>
     <message>
         <source>Show notification when media changes</source>
-        <translation>Medya değiştiğinde bildirim göster</translation>
+        <translation>Ortam değiştiğinde bildirim göster</translation>
     </message>
     <message>
         <source>Show notification when play state changes</source>
@@ -1723,7 +1727,7 @@
     </message>
     <message>
         <source>Use a custom message for media change notifications</source>
-        <translation>Medya değişikliği bildirimleri için özel bir mesaj kullanın</translation>
+        <translation>Ortam değişikliği bildirimleri için özel mesaj kullan</translation>
     </message>
     <message>
         <source>Summary</source>
@@ -1763,7 +1767,7 @@
     </message>
     <message>
         <source>Feed level</source>
-        <translation>Besleme seviyesi</translation>
+        <translation>Besleme düzeyi</translation>
     </message>
     <message>
         <source>Equalizer</source>
@@ -1783,7 +1787,7 @@
     </message>
     <message>
         <source>Try to automatically reconnect live streams on error</source>
-        <translation>Hata durumunda canlı akışları otomatik olarak yeniden bağlamayı deneyin</translation>
+        <translation>Hata durumunda canlı akışları otomatik olarak yeniden bağla</translation>
     </message>
     <message>
         <source>Decode MPEG4 videos</source>
@@ -1799,7 +1803,7 @@
     </message>
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
-        <translation>Seçilen çıktı cihazını oynatılmakta olan içeriğin örnekleme hızına ayarlar</translation>
+        <translation>Seçilen çıktı aygıtını oynatılmakta olan içeriğin örnekleme oranına ayarlar</translation>
     </message>
     <message>
         <source>Swap stereo channels</source>
@@ -2897,7 +2901,8 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Contains</source>
-        <translation>İçerir</translation>
+        <translatorcomment>Modüller listesinde soldaki simgelerin üstünde durunca görünen ipucu ekranında kullanılıyor</translatorcomment>
+        <translation>İçerik</translation>
     </message>
     <message>
         <source>Subtitles</source>
@@ -2905,7 +2910,8 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>OSD</source>
-        <translation>OSD Еkran göstergesi</translation>
+        <translatorcomment>OSD, KDE tarafından kullanılan bir bildirim türü olduğundan bildirim ekranı şeklinde çevirilmiştir.</translatorcomment>
+        <translation>OSD Bildirim Ekranı</translation>
     </message>
     <message>
         <source>Colors and borders</source>
@@ -2913,7 +2919,7 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Apply for ASS/SSA subtitles</source>
-        <translation>ASS/SSA altyazıları için başvurun</translation>
+        <translation>ASS/SSA altyazıları için uygula</translation>
     </message>
     <message>
         <source>Fonts and spacing</source>
@@ -2925,15 +2931,16 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>General settings</source>
-        <translation>Genel Ayarlar</translation>
+        <translation>Genel ayarlar</translation>
     </message>
     <message>
         <source>OSD enabled</source>
-        <translation>OSD Ekran görüntüsü etkinleştirildi</translation>
+        <translatorcomment>OSD, KDE tarafından kullanılan bir bildirim türü olduğundan bildirim ekranı şeklinde çevirilmiştir.</translatorcomment>
+        <translation>OSD Bildirim Ekranı etkin</translation>
     </message>
     <message>
         <source>Choose directory</source>
-        <translation>Dizin seçin</translation>
+        <translation>Dizin seç</translation>
     </message>
     <message>
         <source>Use the same size</source>
@@ -2941,15 +2948,16 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>
-        <translation>Ayarların silinmesini onaylayın</translation>
+        <translatorcomment>Onay kutusu başlığı</translatorcomment>
+        <translation>Ayarların silinmesini onayla</translation>
     </message>
     <message>
         <source>Do you really want to clear all settings?</source>
-        <translation>Gerçekten tüm ayarları silmek istiyor musunuz?</translation>
+        <translation>Tüm ayarları temizlemek istiyor musunuz?</translation>
     </message>
     <message>
         <source>New language</source>
-        <translation>Нова мова</translation>
+        <translation>Yeni dil</translation>
     </message>
     <message>
         <source>To set up a new language, the program will start again!</source>
@@ -2965,7 +2973,8 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Confirm clearing the cached covers</source>
-        <translation>Önbelleğe alınan kapakları temizlemeyi onaylayın</translation>
+        <translatorcomment>Onay kutusu başlığı</translatorcomment>
+        <translation>Önbelleğe alınmış kapakları temizlemeyi onayla</translation>
     </message>
     <message>
         <source>Do you want to delete all cached covers?</source>
@@ -2981,7 +2990,7 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Audio output priority</source>
-        <translation>Ses çıkışı önceliği</translation>
+        <translation>Ses çıktı önceliği</translation>
     </message>
     <message>
         <source>Decoders priority</source>
@@ -2997,11 +3006,12 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Confirm &quot;youtube-dl&quot; deletion</source>
-        <translation>Confirm &quot;youtube-dl&quot; deletion</translation>
+        <translatorcomment>Onay kutusu başlığı</translatorcomment>
+        <translation>&quot;youtube-dl&quot; silme onayı</translation>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
-        <translation>Do you want to remove &quot;youtube-dl&quot; software?</translation>
+        <translation>&quot;youtube-dl&quot; yazılımını kaldırmak istiyor musunuz?</translation>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
@@ -3015,11 +3025,11 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>Changing OpenGL mode</source>
-        <translation>OpenGL modunu değiştirme</translation>
+        <translation>OpenGL kipini değiştirme</translation>
     </message>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
-        <translation>Yeni bir OpenGL modu kurmak için program yeniden başlayacak!</translation>
+        <translation>OpenGL kipini ayarlamak için program yeniden başlayacak!</translation>
     </message>
     <message>
         <source>To apply the icons change, the program will start again!</source>
@@ -3027,7 +3037,7 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation>Eski video çıkış önceliği</translation>
+        <translation>Eski video çıktı önceliği</translation>
     </message>
     <message>
         <source>Legacy</source>
@@ -3039,11 +3049,11 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>active</source>
-        <translation>Aktif</translation>
+        <translation>aktif</translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation>Pasif</translation>
+        <translation>pasif</translation>
     </message>
     <message>
         <source>Changing renderer</source>
@@ -3051,19 +3061,20 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>To set up a new renderer, the program will start again!</source>
-        <translation>Yeni bir işleyici ayarlamak için program yeniden başlayacak!</translation>
+        <translation>Yeni işleyiciyi ayarlamak için program yeniden başlayacak!</translation>
     </message>
     <message>
         <source>Vertical synchronization (V-Sync)</source>
-        <translation>Dikey senkronizasyon (V-Sync)</translation>
+        <translation>Dikey eşitleme (V-Sync)</translation>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation>Düzenleyiciyi tam ekranda atla</translation>
+        <translatorcomment>Compositor:Bileşikleştirici çevirisi Kwin içinden geliyor</translatorcomment>
+        <translation>Bileşikleştiriciyi tam ekranda atla</translation>
     </message>
     <message>
         <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
-        <translation>QMPlay2 video çıkış modüllerini kullanın. Bu, başka işleyiciler mevcut olmadığında da kullanılacaktır.</translation>
+        <translation>QMPlay2 video çıktı modüllerini kullan. Bu, başka işleyiciler mevcut olmadığında da kullanılacak.</translation>
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
@@ -3075,11 +3086,11 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation>Bu, performansı artırabilir. Bazı video sürücüleri etkinleştirildiğinde çökebilir.</translation>
+        <translation>Bu, performansı artırabilir. Etkinleştirildiğinde bazı video sürücüleri çökebilir.</translation>
     </message>
     <message>
         <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation>QOpenGLWidget&apos;ı (render-to-texture) kullanın, ayrıca görselleştirmeler için OpenGL&apos;yi etkinleştirin. Dikkatli kullanın, video oynatma performansını düşürebilir.</translation>
+        <translation>QOpenGLWidget&apos;ı (render-to-texture) kullan, ayrıca görselleştirmeler için OpenGL&apos;i etkinleştir. Dikkatli kullanın, video oynatma performansını düşürebilir.</translation>
     </message>
     <message>
         <source>Renderer:</source>
@@ -3095,7 +3106,7 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
-        <translation type="unfinished">CPU tarafından kodu çözülmüş video için GPU taramasızlaştırması kullan</translation>
+        <translation>CPU tarafından kodu çözülmüş video için GPU taramasızlaştırması kullan</translation>
     </message>
     <message>
         <source>High quality image scaling down</source>
@@ -3103,23 +3114,24 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation>Yüksek kaliteli görüntü ölçeklendirme</translation>
+        <translation>Yüksek kaliteli görüntü büyütme</translation>
     </message>
     <message>
         <source>First available device</source>
-        <translation>İlk kullanılabilir cihaz</translation>
+        <translation>İlk kullanılabilir aygıt</translation>
     </message>
     <message>
         <source>No supported devices found</source>
-        <translation>Desteklenen cihaz bulunamadı</translation>
+        <translation>Desteklenen aygıt yok</translation>
     </message>
     <message>
         <source>Partially checked (default):
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
+        <translatorcomment>Tear: Ekran yırtılması diye geçen bir durum. Bkz: https://www.displayninja.com/what-is-screen-tearing/</translatorcomment>
         <translation>Kısmen işaretli (varsayılan):
-  - MAILBOX (tear-free) tercih edilen mevcut mod
-  - FIFO (V-Sync) pencereli modda kullanılmamalıdır</translation>
+  - MAILBOX (tear-free/yırtılmasız) tercih edilen mevcut kip
+  - FIFO (V-Sync) pencereli kipte kullanılmamalıdır</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
@@ -3131,7 +3143,7 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation>Cihaz:</translation>
+        <translation>Aygıt:</translation>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
@@ -3141,9 +3153,9 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
         <source>Force audio content to use the specified number of channels.
 Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation>Ses içeriğini belirtilen sayıda kanalı kullanmaya zorlayın.
+        <translation>Ses içeriğini belirtilen sayıda kanalı kullanmaya zorla.
 Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretlenir
-	(örneğin, mono&apos;yu stereo&apos;ya yükseltin, ancak quadrophonic&apos;i stereo&apos;ya düşürmeyin)</translation>
+	(örneğin, mono&apos;yu stereo&apos;ya yükselt, ancak quadrophonic&apos;i stereo&apos;ya düşürme)</translation>
     </message>
 </context>
 <context>
