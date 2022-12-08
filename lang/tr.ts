@@ -1388,11 +1388,11 @@
     </message>
     <message>
         <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
-        <translation>MicroDVD altyazılarında (varsa) belirtilen FPS&apos;yi kullanın</translation>
+        <translation>MicroDVD altyazılarında (varsa) belirtilen FPS&apos;yi kullan</translation>
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
-        <translation>Belirli bir uzunluk olmadan altyazıların maksimum süresi</translation>
+        <translation>Belirli bir uzunluk olmadan altyazıların azami süresi</translation>
     </message>
     <message>
         <source>Enabled</source>
@@ -1400,11 +1400,11 @@
     </message>
     <message>
         <source>Use shared memory</source>
-        <translation>Paylaşılan hafızayı kullan</translation>
+        <translation>Paylaşılan bellek kullan</translation>
     </message>
     <message>
         <source>XVideo outputs</source>
-        <translation>XVideo çıkışları</translation>
+        <translation>XVideo çıktıları</translation>
     </message>
     <message>
         <source>Default</source>
@@ -1412,7 +1412,7 @@
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
-        <translation>Çok kanallı bir aygıt için otomatik arama</translation>
+        <translation>Çok kanallı aygıt için otomatik arama</translation>
     </message>
     <message>
         <source>Playback device</source>
@@ -1420,11 +1420,11 @@
     </message>
     <message>
         <source>Resampling method</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeniden örnekleme metodu</translation>
     </message>
     <message>
         <source>Autodetect</source>
-        <translation>Otomatik algılama</translation>
+        <translation>Otomatik algıla</translation>
     </message>
     <message>
         <source>Normal size</source>
@@ -1444,7 +1444,7 @@
     </message>
     <message>
         <source>Frames</source>
-        <translation>Çerçeveler</translation>
+        <translation>Kareler</translation>
     </message>
     <message>
         <source>Slices</source>
@@ -1452,7 +1452,7 @@
     </message>
     <message>
         <source>Maximum latency</source>
-        <translation>Maksimum gecikme</translation>
+        <translation>En yüksek gecikme</translation>
     </message>
     <message>
         <source>Refresh time</source>
@@ -1460,15 +1460,15 @@
     </message>
     <message>
         <source>sec</source>
-        <translation>saniye</translation>
+        <translation>sn</translation>
     </message>
     <message>
         <source>ms</source>
-        <translation>мs</translation>
+        <translation>ms</translation>
     </message>
     <message>
         <source>Voice removal</source>
-        <translation>Sesi sil</translation>
+        <translation>Ses silme</translation>
     </message>
     <message>
         <source>Sound equalizer quality</source>
@@ -1480,10 +1480,11 @@
     </message>
     <message>
         <source>filter size</source>
-        <translation>Filtre boyutu</translation>
+        <translation>filtre boyutu</translation>
     </message>
     <message>
         <source>Medium</source>
+        <translatorcomment>Kalite için kullanılıyor: Low, Medium, High, Very high ile aynı listede kullanılıyor</translatorcomment>
         <translation>Orta</translation>
     </message>
     <message>
@@ -1496,7 +1497,7 @@
     </message>
     <message>
         <source>Rayman2 music (*.apm)</source>
-        <translation>Rayman2 muzik (*.apm)</translation>
+        <translation>Rayman2 müzik (*.apm)</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
@@ -1520,19 +1521,19 @@
     </message>
     <message>
         <source>Offset</source>
-        <translation>Telafi et</translation>
+        <translation>Ofset</translation>
     </message>
     <message>
         <source>Little endian</source>
-        <translation type="unfinished"></translation>
+        <translation>Little endian</translation>
     </message>
     <message>
         <source>Big endian</source>
-        <translation type="unfinished"></translation>
+        <translation>Big endian</translation>
     </message>
     <message>
         <source>Associate files with QMPlay2</source>
-        <translation>Dosyaları QMPlay2 ile ilişkilendirin</translation>
+        <translation>Dosyaları QMPlay2 ile ilişkilendir</translation>
     </message>
     <message>
         <source>Select all</source>
@@ -1540,23 +1541,24 @@
     </message>
     <message>
         <source>Add entry to the directories context menu</source>
-        <translation>Dizinler içerik menüsüne giriş ekleyin</translation>
+        <translation>Dizinler içerik menüsüne girdi ekle</translation>
     </message>
     <message>
         <source>Add entry to the drives context menu</source>
-        <translation>Sürücü içerik menüsüne giriş ekleyin</translation>
+        <translation>Sürücüler içerik menüsüne girdi ekle</translation>
     </message>
     <message>
         <source>Enqueue in QMPlay2</source>
-        <translation>QMPlay2&apos;de kuyruğa al</translation>
+        <translation>QMPlay2 kuyruğuna ekle</translation>
     </message>
     <message>
         <source>Play in QMPlay2</source>
-        <translation>QMPlay2 de oynat</translation>
+        <translation>QMPlay2 ile oynat</translation>
     </message>
     <message>
         <source>FFT spectrum size</source>
-        <translation>FFT spektrum boyutu</translation>
+        <translatorcomment>spectrum KDE içinde tayf diye çevrilmiş. Uymuyorsa uyarlamak gerekebilir.</translatorcomment>
+        <translation>FFT tayf boyutu</translation>
     </message>
     <message>
         <source>Displayed sound length</source>
@@ -1564,7 +1566,7 @@
     </message>
     <message>
         <source>Set as default AudioCD player</source>
-        <translation>Varsayılan AudioCD oynatıcı olarak ayarla</translation>
+        <translation>Varsayılan Ses CD oynatıcısı olarak ayarla</translation>
     </message>
     <message>
         <source>Skip some frames</source>
@@ -1576,7 +1578,7 @@
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
-        <translation>Düşük çözünürlüklü kod çözme (yalnızca bazı codec&apos;ler)</translation>
+        <translation>Düşük çözünürlüklü kod çözme (yalnızca bazı kodlayıcılar)</translation>
     </message>
     <message>
         <source>Hurry up</source>
@@ -1584,7 +1586,7 @@
     </message>
     <message>
         <source>Number of threads used to decode video</source>
-        <translation>Videonun kodunu çözmek için kullanılan iş parçacığı sayısı</translation>
+        <translation>Videonun kodunu çözmek için kullanılacak iş parçacığı sayısı</translation>
     </message>
     <message>
         <source>Demuxer</source>
@@ -1597,22 +1599,23 @@
     </message>
     <message>
         <source>hardware decoding</source>
-        <translation>Donanım kod çözme</translation>
+        <translation>donanım kod çözme</translation>
     </message>
     <message>
         <source>Phase reverse</source>
-        <translation>Faz ters</translation>
+        <translation>Faz ters çevirme</translation>
     </message>
     <message>
         <source>Reverse the right channel phase</source>
-        <translation>Sağ kanal fazını tersine çevirin</translation>
+        <translation>Sağ kanal fazını tersine çevir</translation>
     </message>
     <message>
         <source>Download covers</source>
-        <translation>Download covers</translation>
+        <translation>Kapakları indir</translation>
     </message>
     <message>
         <source>Scrobble</source>
+        <translatorcomment>Last Fm eklentisi. Dinlenen müziğin listesini tutuyor: Kaynak: https://eksisozluk.com/scrobble--2230871</translatorcomment>
         <translation>Dinleme günlüğü</translation>
     </message>
     <message>
@@ -1621,11 +1624,11 @@
     </message>
     <message>
         <source>Password</source>
-        <translation>Şifre</translation>
+        <translation>Parola</translation>
     </message>
     <message>
         <source>Last password</source>
-        <translation>Son şifre</translation>
+        <translation>Son parola</translation>
     </message>
     <message>
         <source>Allow to download big covers</source>
@@ -1637,11 +1640,11 @@
     </message>
     <message>
         <source>Use CDDB if CD-TEXT is not available</source>
-        <translation>CD-TEXT mevcut değilse CDDB&apos;yi kullanın</translation>
+        <translation>CD-TEXT yoksa CDDB kullan</translation>
     </message>
     <message>
         <source>AudioCD</source>
-        <translation>AudioCD</translation>
+        <translation>Ses CD&apos;si</translation>
     </message>
     <message>
         <source>Use CD-TEXT</source>
@@ -1670,7 +1673,7 @@
     </message>
     <message>
         <source>Use the program via MPRIS2 interface</source>
-        <translation>Programı MPRIS2 arayüzü üzerinden kullanın</translation>
+        <translation>Programı MPRIS2 arayüzü üzerinden kullan</translation>
     </message>
     <message>
         <source>Noise reduction</source>
@@ -1678,15 +1681,15 @@
     </message>
     <message>
         <source>Slider count in sound equalizer</source>
-        <translation>Ses dengeleyicide kaydırıcı sayısı</translation>
+        <translation>Ses dengeleyicideki kaydırıcı sayısı</translation>
     </message>
     <message>
         <source>Minimum frequency</source>
-        <translation>Minimum frekans</translation>
+        <translation>En düşük frekans</translation>
     </message>
     <message>
         <source>Maximum frequency</source>
-        <translation>Maximum frekans</translation>
+        <translation>En yüksek frekans</translation>
     </message>
     <message>
         <source>Default length</source>
@@ -1698,7 +1701,7 @@
     </message>
     <message>
         <source>Display subtitles from YouTube. Follow default subtitles language and QMPlay2 language.</source>
-        <translation>YouTube&apos;dan altyazıları görüntüleyin. Varsayılan altyazı dilini ve QMPlay2 dilini takip edin.</translation>
+        <translation>YouTube altyazılarını görüntüle. Varsayılan altyazı dilini ve QMPlay2 dilini takip et.</translation>
     </message>
     <message>
         <source>Decoder enabled</source>
@@ -1807,7 +1810,7 @@
     </message>
     <message>
         <source>Swap stereo channels</source>
-        <translation>Stereo kanalları değiştir</translation>
+        <translation>Stereo kanallarını değiştir</translation>
     </message>
     <message>
         <source>Show user name in search results</source>
@@ -1819,7 +1822,7 @@
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation>Kalite tercihi</translation>
+        <translation>Tercih edilen kalite</translation>
     </message>
     <message>
         <source>Copy decoded video to CPU memory (slow)</source>
@@ -1827,7 +1830,8 @@
     </message>
     <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
-        <translation>Intel donanımında sıfır kopya kod çözme (deneysel)</translation>
+        <translatorcomment>Zero-copy için yerleşik bir çeviri henüz yok.</translatorcomment>
+        <translation>Intel donanımında sıfır-kopya kod çözme (deneysel)</translation>
     </message>
     <message>
         <source>Better performance, but can cause garbage or might not work at all.</source>
@@ -1835,11 +1839,11 @@
     </message>
     <message>
         <source>Exclusive mode</source>
-        <translation>Özel mod</translation>
+        <translation>Özel kip</translation>
     </message>
     <message>
         <source>Preferred video codec</source>
-        <translation>Tercih edilen video codec&apos;i</translation>
+        <translation>Tercih edilen video kodlayıcı</translation>
     </message>
     <message>
         <source>Delay</source>
@@ -2210,11 +2214,11 @@
     </message>
     <message>
         <source>Force samplerate</source>
-        <translation>Örneklemeyi zorla</translation>
+        <translation>Örnekleme oranını zorla</translation>
     </message>
     <message>
         <source>Force channels conversion</source>
-        <translation>Kanalları dönüştürmeye zorla</translation>
+        <translation>Kanalları dönüştürmeyi zorla</translation>
     </message>
     <message>
         <source>Use available replay gain</source>
@@ -2274,7 +2278,7 @@
     </message>
     <message>
         <source>Video to audio sync (frame skipping)</source>
-        <translation>Videodan sese eşitlemesi (kare atlama)</translation>
+        <translation>Videodan sese eşitle (kare atlama)</translation>
     </message>
     <message>
         <source>Fade sound</source>
@@ -3636,7 +3640,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation>Kalite tercihi</translation>
+        <translation>Tercih edilen kalite</translation>
     </message>
     <message>
         <source>Publish time</source>
