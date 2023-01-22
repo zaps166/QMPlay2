@@ -133,6 +133,7 @@ private:
     CommonJS &m_commonJS;
 
     QTreeWidget *const m_treeW;
+    QMetaObject::Connection m_sectionResizedConn;
 
     QJSValue m_script;
     QJSValue m_network;

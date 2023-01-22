@@ -134,10 +134,25 @@ void MediaBrowserJS::prepareWidget()
     m_treeW->header()->setSectionResizeMode(0, QHeaderView::Stretch);
 
     callJS("prepareWidget", {m_treeWidgetJS});
+
+    if (Q_LIKELY(!m_sectionResizedConn)) // It should be always disconnected in "finalize"
+    {
+        m_sectionResizedConn = connect(
+                m_treeW->header(), &QHeaderView::sectionResized,
+                m_treeW->header(), [header = m_treeW->header()](int logicalIndex, int oldSize, int newSize) {
+            Q_UNUSED(oldSize);
+            Q_UNUSED(newSize);
+            if (logicalIndex == 0 && header->sectionResizeMode(0) == QHeaderView::Stretch)
+            {
+                header->setSectionResizeMode(0, QHeaderView::Interactive);
+            }
+        }, Qt::QueuedConnection);
+    }
 }
 
 void MediaBrowserJS::finalize()
 {
+    disconnect(m_sectionResizedConn);
     callJS("finalize");
 }
 
@@ -152,6 +167,8 @@ NetworkReply *MediaBrowserJS::getSearchReply(const QString &text, const qint32 p
 }
 MediaBrowserJS::Description MediaBrowserJS::addSearchResults(const QByteArray &reply)
 {
+    m_treeW->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+
     const auto map = callJS("addSearchResults", {QString(reply)}).toVariant().toMap();
 
     const int count = m_treeW->topLevelItemCount();
