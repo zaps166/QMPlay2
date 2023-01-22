@@ -70,7 +70,7 @@ public:
 
     void prepareWidget();
 
-    void finalize();
+    void finalize(bool providerChanged);
 
     QString getQMPlay2Url(const QString &text) const;
 
@@ -111,6 +111,10 @@ public:
 private:
     QJSValue callJS(const QString &funcName, const QJSValueList &args = {}) const;
 
+    void headerResized();
+    void sectionResized(int logicalIndex, int oldSize, int newSize);
+    void disconnectHeaderConnections();
+
 private:
     bool toBool(const QJSValue &value) const;
     bool toInt(const QJSValue &value) const;
@@ -133,6 +137,7 @@ private:
     CommonJS &m_commonJS;
 
     QTreeWidget *const m_treeW;
+    QMetaObject::Connection m_headersResized;
     QMetaObject::Connection m_sectionResizedConn;
 
     QJSValue m_script;

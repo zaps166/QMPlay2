@@ -657,7 +657,7 @@ void MediaBrowser::providerChanged(int idx)
     if (m_mediaBrowser)
     {
         m_mediaBrowser->setCompleterListCallback(nullptr);
-        m_mediaBrowser->finalize();
+        m_mediaBrowser->finalize(true);
     }
 
     m_searchCB->blockSignals(true);
@@ -740,7 +740,7 @@ void MediaBrowser::search()
     if (m_imageReply)
         m_imageReply->deleteLater();
     if (m_mediaBrowser)
-        m_mediaBrowser->finalize();
+        m_mediaBrowser->finalize(false);
     m_resultsW->clear();
     if (!name.isEmpty())
     {

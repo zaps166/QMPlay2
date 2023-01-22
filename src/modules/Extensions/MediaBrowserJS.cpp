@@ -15,6 +15,7 @@
 #include <QFileInfo>
 #include <QMetaEnum>
 #include <QAction>
+#include <QTimer>
 #include <QDir>
 
 Q_DECLARE_LOGGING_CATEGORY(mb)
@@ -97,7 +98,7 @@ MediaBrowserJS::MediaBrowserJS(const QString &commonCode, const int lineNumber, 
 }
 MediaBrowserJS::~MediaBrowserJS()
 {
-    finalize();
+    finalize(true);
     if (!m_iconFile.fileName().isEmpty())
         m_iconFile.remove();
 }
@@ -135,24 +136,27 @@ void MediaBrowserJS::prepareWidget()
 
     callJS("prepareWidget", {m_treeWidgetJS});
 
-    if (Q_LIKELY(!m_sectionResizedConn)) // It should be always disconnected in "finalize"
+    // They should be always disconnected in "finalize"
+    if (Q_LIKELY(!m_headersResized))
+    {
+        m_headersResized = connect(
+            m_treeW->header(), &QHeaderView::geometriesChanged,
+            this, &MediaBrowserJS::headerResized
+        );
+    }
+    if (Q_LIKELY(!m_sectionResizedConn))
     {
         m_sectionResizedConn = connect(
-                m_treeW->header(), &QHeaderView::sectionResized,
-                m_treeW->header(), [header = m_treeW->header()](int logicalIndex, int oldSize, int newSize) {
-            Q_UNUSED(oldSize);
-            Q_UNUSED(newSize);
-            if (logicalIndex == 0 && header->sectionResizeMode(0) == QHeaderView::Stretch)
-            {
-                header->setSectionResizeMode(0, QHeaderView::Interactive);
-            }
-        }, Qt::QueuedConnection);
+            m_treeW->header(), &QHeaderView::sectionResized,
+            this, &MediaBrowserJS::sectionResized
+        );
     }
 }
 
-void MediaBrowserJS::finalize()
+void MediaBrowserJS::finalize(bool providerChanged)
 {
-    disconnect(m_sectionResizedConn);
+    if (providerChanged)
+        disconnectHeaderConnections();
     callJS("finalize");
 }
 
@@ -167,7 +171,8 @@ NetworkReply *MediaBrowserJS::getSearchReply(const QString &text, const qint32 p
 }
 MediaBrowserJS::Description MediaBrowserJS::addSearchResults(const QByteArray &reply)
 {
-    m_treeW->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    if (m_sectionResizedConn)
+        m_treeW->header()->setSectionResizeMode(0, QHeaderView::Stretch);
 
     const auto map = callJS("addSearchResults", {QString(reply)}).toVariant().toMap();
 
@@ -335,6 +340,39 @@ QJSValue MediaBrowserJS::callJS(const QString &funcName, const QJSValueList &arg
         return QJSValue();
     }
     return value;
+}
+
+void MediaBrowserJS::headerResized()
+{
+    const auto header = m_treeW->header();
+    if (header->sectionResizeMode(0) == QHeaderView::Interactive)
+        header->setSectionResizeMode(0, QHeaderView::Stretch);
+}
+void MediaBrowserJS::sectionResized(int logicalIndex, int oldSize, int newSize)
+{
+    Q_UNUSED(oldSize);
+    Q_UNUSED(newSize);
+
+    if (logicalIndex == 0)
+    {
+        const auto header = m_treeW->header();
+        const auto resizeMode = header->sectionResizeMode(0);
+        if (resizeMode == QHeaderView::Stretch)
+        {
+            QTimer::singleShot(0, header, [header] {
+                header->setSectionResizeMode(0, QHeaderView::Interactive);
+            });
+        }
+        else if (resizeMode == QHeaderView::Interactive)
+        {
+            disconnectHeaderConnections();
+        }
+    }
+}
+void MediaBrowserJS::disconnectHeaderConnections()
+{
+    disconnect(m_sectionResizedConn);
+    disconnect(m_headersResized);
 }
 
 bool MediaBrowserJS::toBool(const QJSValue &value) const
