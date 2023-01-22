@@ -755,6 +755,11 @@ int main(int argc, char *argv[])
         QApplication::setQuitOnLastWindowClosed(false);
         qApp->installEventFilter(new EventFilterWorkarounds(qApp));
         PanGestureEventFilter::install();
+#ifdef Q_OS_WIN
+        auto font = QGuiApplication::font();
+        font.setHintingPreference(QFont::PreferVerticalHinting);
+        QGuiApplication::setFont(font);
+#endif
     }
 
 #ifdef Q_OS_WIN
