@@ -6,7 +6,6 @@ set(VideoFilters_HDR
     BobDeint.hpp
     BlendDeint.hpp
     DiscardDeint.hpp
-    MotionBlur.hpp
     YadifDeint.hpp
 )
 
@@ -15,9 +14,18 @@ set(VideoFilters_SRC
     BobDeint.cpp
     BlendDeint.cpp
     DiscardDeint.cpp
-    MotionBlur.cpp
     YadifDeint.cpp
 )
+
+if(FALSE)
+    list(APPEND VideoFilters_HDR
+        MotionBlur.hpp
+    )
+    list(APPEND VideoFilters_SRC
+        MotionBlur.cpp
+    )
+    add_definitions(-DMOTION_BLUR)
+endif()
 
 set(VideoFilters_RESOURCES
     icon.qrc

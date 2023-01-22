@@ -21,7 +21,9 @@
 #include <YadifDeint.hpp>
 #include <BlendDeint.hpp>
 #include <DiscardDeint.hpp>
-#include <MotionBlur.hpp>
+#ifdef MOTION_BLUR
+#   include <MotionBlur.hpp>
+#endif
 
 VFilters::VFilters() :
     Module("VideoFilters")
@@ -39,7 +41,9 @@ QList<VFilters::Info> VFilters::getModulesInfo(const bool) const
     modulesInfo += Info(BlendDeintName, VIDEOFILTER | DEINTERLACE);
     modulesInfo += Info(DiscardDeintName, VIDEOFILTER | DEINTERLACE);
     modulesInfo += Info(YadifNoSpatialDeintName, VIDEOFILTER | DEINTERLACE, YadifDescr);
+#ifdef MOTION_BLUR
     modulesInfo += Info(MotionBlurName, VIDEOFILTER, tr("Produce one extra frame which is average of two neighbour frames"));
+#endif
     return modulesInfo;
 }
 void *VFilters::createInstance(const QString &name)
@@ -58,8 +62,10 @@ void *VFilters::createInstance(const QString &name)
         return new YadifDeint(false, true);
     else if (name == YadifNoSpatialDeintName)
         return new YadifDeint(false, false);
+#ifdef MOTION_BLUR
     else if (name == MotionBlurName)
         return new MotionBlur;
+#endif
     return nullptr;
 }
 
