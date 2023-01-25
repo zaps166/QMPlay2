@@ -414,6 +414,16 @@ void PipeWireWriter::recreateStream()
         .flags = SPA_AUDIO_FLAG_NONE,
         .rate = m_rate,
         .channels = m_chn,
+        .position = {
+            SPA_AUDIO_CHANNEL_FL,
+            SPA_AUDIO_CHANNEL_FR,
+            SPA_AUDIO_CHANNEL_FC,
+            SPA_AUDIO_CHANNEL_LFE,
+            SPA_AUDIO_CHANNEL_RL,
+            SPA_AUDIO_CHANNEL_RR,
+            SPA_AUDIO_CHANNEL_SL,
+            SPA_AUDIO_CHANNEL_SR,
+        }
     };
 
     const spa_pod *params[2];
