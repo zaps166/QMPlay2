@@ -56,7 +56,7 @@ static AVPixelFormat d3d11vaGetFormat(AVCodecContext *codecCtx, const AVPixelFor
             framesCtx->initial_pool_size = 1;
             if (codecCtx->codec_id == AV_CODEC_ID_H264 || codecCtx->codec_id == AV_CODEC_ID_HEVC)
                 framesCtx->initial_pool_size += 16;
-            else if (codecCtx->codec_id == AV_CODEC_ID_VP9)
+            else if (codecCtx->codec_id == AV_CODEC_ID_VP9 || codecCtx->codec_id == AV_CODEC_ID_AV1)
                 framesCtx->initial_pool_size += 8;
             else
                 framesCtx->initial_pool_size += 2;
@@ -189,6 +189,12 @@ bool FFDecD3D11VA::open(StreamInfo &streamInfo)
     else if (pixFmt != AV_PIX_FMT_YUV420P && pixFmt != AV_PIX_FMT_YUVJ420P)
     {
         return false;
+    }
+
+    if (streamInfo.codec_name == "libdav1d")
+    {
+        streamInfo.codec_name_backup = streamInfo.codec_name;
+        streamInfo.codec_name = "av1";
     }
 
     AVCodec *codec = init(streamInfo);
