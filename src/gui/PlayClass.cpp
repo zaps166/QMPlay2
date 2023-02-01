@@ -453,7 +453,10 @@ double PlayClass::getARatio()
 }
 inline AVRational PlayClass::getSAR()
 {
-    return demuxThr->demuxer->streamsInfo().at(videoStream)->params->sample_aspect_ratio;
+    const auto streamInfo = demuxThr->demuxer->streamsInfo().at(videoStream);
+    if (!streamInfo->custom_sar)
+        return streamInfo->params->sample_aspect_ratio;
+    return {};
 }
 
 void PlayClass::flushAssEvents()

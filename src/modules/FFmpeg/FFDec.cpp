@@ -129,8 +129,6 @@ int FFDec::decodeStep(bool &frameFinished)
         int recvErr = avcodec_receive_frame(codec_ctx, frame);
         if (recvErr == 0)
         {
-            if (codec_ctx->codec_id == AV_CODEC_ID_AV1 && frame->sample_aspect_ratio.num == 1 && frame->sample_aspect_ratio.den == 1)
-                frame->sample_aspect_ratio.num = 0;
             m_frames.push_back(frame);
             frame = av_frame_alloc();
         }

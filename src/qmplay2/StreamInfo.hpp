@@ -107,6 +107,7 @@ public:
     AVRational fps = {0, 1};
     double rotation = qQNaN();
     bool spherical = false;
+    bool custom_sar = false;
 
     AVCodecParameters *params = nullptr;
 

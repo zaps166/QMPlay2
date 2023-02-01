@@ -887,8 +887,11 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
     {
         case AVMEDIA_TYPE_VIDEO:
         {
-            if (stream->sample_aspect_ratio.num)
+            if (stream->sample_aspect_ratio.num && av_cmp_q(streamInfo->params->sample_aspect_ratio, stream->sample_aspect_ratio) != 0)
+            {
                 streamInfo->params->sample_aspect_ratio = stream->sample_aspect_ratio;
+                streamInfo->custom_sar = true;
+            }
 
             if (!stillImage)
                 streamInfo->fps = stream->r_frame_rate;
