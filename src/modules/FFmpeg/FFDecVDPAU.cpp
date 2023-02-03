@@ -66,7 +66,10 @@ FFDecVDPAU::FFDecVDPAU(Module &module)
     SetModule(module);
 }
 FFDecVDPAU::~FFDecVDPAU()
-{}
+{
+    if (m_vdpau.use_count() == 1)
+        destroyDecoder();
+}
 
 bool FFDecVDPAU::set()
 {
