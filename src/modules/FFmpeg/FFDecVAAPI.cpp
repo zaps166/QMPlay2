@@ -64,6 +64,8 @@ FFDecVAAPI::~FFDecVAAPI()
 {
     if (m_swsCtx)
         sws_freeContext(m_swsCtx);
+    if (m_vaapi.use_count() == 1)
+        destroyDecoder();
 }
 
 bool FFDecVAAPI::set()
