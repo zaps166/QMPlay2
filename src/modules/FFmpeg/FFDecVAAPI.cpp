@@ -173,13 +173,20 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
         return false;
 
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
-    if (pix_fmt == AV_PIX_FMT_YUV420P10 && streamInfo.params->codec_id != AV_CODEC_ID_H264 && QMPlay2Core.isVulkanRenderer())
+    if (pix_fmt == AV_PIX_FMT_YUV420P10 && streamInfo.params->codec_id != AV_CODEC_ID_H264)
     {
+        if (QMPlay2Core.isVulkanRenderer())
+        {
 #ifdef USE_VULKAN
-        auto vkInstance = static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance());
-        if (!vkInstance->supportedPixelFormats().contains(pix_fmt))
-            return false;
+            auto vkInstance = static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance());
+            if (!vkInstance->supportedPixelFormats().contains(pix_fmt))
+                return false;
 #endif
+        }
+        else if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::OpenGL)
+        {
+            return false;
+        }
     }
     else if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
     {
