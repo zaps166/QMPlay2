@@ -180,11 +180,15 @@ bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
             ::close(vaSurfaceDescr.objects[o].fd);
     };
 
-    if (vaSyncSurface(m_vaapi->VADisp, id) != VA_STATUS_SUCCESS)
+    const auto syncRet = vaSyncSurface(m_vaapi->VADisp, id);
+    if (syncRet != VA_STATUS_SUCCESS)
     {
-        QMPlay2Core.logError("VA-API :: Unable to sync surface");
         closeFDs();
-        m_error = true;
+        if (syncRet != VA_STATUS_ERROR_INVALID_CONTEXT)
+        {
+            QMPlay2Core.logError("VA-API :: Unable to sync surface");
+            m_error = true;
+        }
         return false;
     }
 
