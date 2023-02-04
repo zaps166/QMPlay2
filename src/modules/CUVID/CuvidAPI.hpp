@@ -88,6 +88,15 @@ extern cuImportExternalMemory importExternalMemory;
 using cuExternalMemoryGetMappedBuffer = CUresult CUDAAPI (*)(CUdeviceptr *devPtrOut, CUexternalMemory extMem, const CUDA_EXTERNAL_MEMORY_BUFFER_DESC *bufferDesc);
 extern cuExternalMemoryGetMappedBuffer externalMemoryGetMappedBuffer;
 
+using cuExternalMemoryGetMappedMipmappedArray = CUresult CUDAAPI (*)(CUmipmappedArray *mipmap, CUexternalMemory extMem, const CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC *mipmapDesc);
+extern cuExternalMemoryGetMappedMipmappedArray externalMemoryGetMappedMipmappedArray;
+
+using cuMipmappedArrayGetLevel = CUresult CUDAAPI (*)(CUarray *pLevelArray, CUmipmappedArray hMipmappedArray, unsigned int level);
+extern cuMipmappedArrayGetLevel mipmappedArrayGetLevel;
+
+using cuMipmappedArrayDestroy = CUresult CUDAAPI (*)(CUmipmappedArray hMipmappedArray);
+extern cuMipmappedArrayDestroy mipmappedArrayDestroy;
+
 using cuDestroyExternalMemory = CUresult CUDAAPI (*)(CUexternalMemory extMem);
 extern cuDestroyExternalMemory destroyExternalMemory;
 

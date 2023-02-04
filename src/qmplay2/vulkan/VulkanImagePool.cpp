@@ -148,14 +148,16 @@ Frame ImagePool::takeOptimalToFrame(
     return frame;
 }
 
-shared_ptr<Image> ImagePool::assignLinearDeviceLocalExport(
+shared_ptr<Image> ImagePool::assignDeviceLocalExport(
     Frame &frame,
-    vk::ExternalMemoryHandleTypeFlags exportMemoryTypes)
+    vk::ExternalMemoryHandleTypeFlags exportMemoryTypes,
+    bool linear)
 {
     Config config;
     config.size = vk::Extent2D(frame.width(), frame.height());
     config.format = Instance::fromFFmpegPixelFormat(frame.pixelFormat());
-    config.paddingHeight = 0;
+    if (linear)
+        config.paddingHeight = 0;
     config.deviceLocal = true;
     config.exportMemoryTypes = exportMemoryTypes;
 

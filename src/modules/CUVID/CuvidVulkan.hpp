@@ -65,4 +65,6 @@ private:
 
     std::mutex m_picturesToSyncMutex;
     std::unordered_set<int> m_picturesToSync;
+
+    bool m_linear = false;
 };

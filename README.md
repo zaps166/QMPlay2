@@ -104,7 +104,6 @@ Hardware acceleration is disabled by default, but you can enable it in "Settings
 - VA-API on Vulkan uses its own deinterlacing filter only on Intel drivers.
 - H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
 - VideoToolBox doesn't support deinterlacing.
-- CUVID + Vulkan might not work properly on RTX devices.
 
 ### VA-API + OpenGL information:
 

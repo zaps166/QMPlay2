@@ -75,11 +75,17 @@ enum CUstreamFlags
     CU_STREAM_DEFAULT = 0x0,
     CU_STREAM_NON_BLOCKING = 0x1
 };
+enum CUarray_format
+{
+    CU_AD_FORMAT_UNSIGNED_INT8 = 0x1,
+    CU_AD_FORMAT_UNSIGNED_INT16 = 0x2,
+};
 
 typedef int CUdevice;
 typedef void *CUcontext;
 typedef quintptr CUdeviceptr;
 typedef void *CUarray;
+typedef void *CUmipmappedArray;
 typedef void *CUgraphicsResource;
 typedef void *CUstream;
 typedef void *CUexternalMemory;
@@ -128,6 +134,24 @@ struct CUDA_EXTERNAL_MEMORY_BUFFER_DESC
     unsigned long long offset;
     unsigned long long size;
     unsigned int flags;
+    unsigned int reserved[16];
+};
+
+struct CUDA_ARRAY3D_DESCRIPTOR
+{
+    size_t Width;
+    size_t Height;
+    size_t Depth;
+    CUarray_format Format;
+    unsigned int NumChannels;
+    unsigned int Flags;
+};
+
+struct CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC
+{
+    unsigned long long offset;
+    CUDA_ARRAY3D_DESCRIPTOR arrayDesc;
+    unsigned int numLevels;
     unsigned int reserved[16];
 };
 

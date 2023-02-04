@@ -46,6 +46,9 @@ cuStreamCreateType streamCreate = nullptr;
 cuStreamDestroyType streamDestroy = nullptr;
 cuImportExternalMemory importExternalMemory = nullptr;
 cuExternalMemoryGetMappedBuffer externalMemoryGetMappedBuffer = nullptr;
+cuExternalMemoryGetMappedMipmappedArray externalMemoryGetMappedMipmappedArray = nullptr;
+cuMipmappedArrayGetLevel mipmappedArrayGetLevel = nullptr;
+cuMipmappedArrayDestroy mipmappedArrayDestroy = nullptr;
 cuDestroyExternalMemory destroyExternalMemory = nullptr;
 cuDeviceGetPCIBusId deviceGetPCIBusId = nullptr;
 cuMemFree memFree = nullptr;
@@ -108,6 +111,9 @@ bool load(bool doInit, bool gl, bool vk)
             streamDestroy = (cuStreamDestroyType)lib.resolve("cuStreamDestroy_v2");
             importExternalMemory = (cuImportExternalMemory)lib.resolve("cuImportExternalMemory");
             externalMemoryGetMappedBuffer = (cuExternalMemoryGetMappedBuffer)lib.resolve("cuExternalMemoryGetMappedBuffer");
+            externalMemoryGetMappedMipmappedArray = (cuExternalMemoryGetMappedMipmappedArray)lib.resolve("cuExternalMemoryGetMappedMipmappedArray");
+            mipmappedArrayGetLevel = (cuMipmappedArrayGetLevel)lib.resolve("cuMipmappedArrayGetLevel");
+            mipmappedArrayDestroy = (cuMipmappedArrayDestroy)lib.resolve("cuMipmappedArrayDestroy");
             destroyExternalMemory = (cuDestroyExternalMemory)lib.resolve("cuDestroyExternalMemory");
             deviceGetPCIBusId = (cuDeviceGetPCIBusId)lib.resolve("cuDeviceGetPCIBusId");
             memFree = (cuMemFree)lib.resolve("cuMemFree_v2");
@@ -122,6 +128,9 @@ bool load(bool doInit, bool gl, bool vk)
                 streamDestroy &&
                 importExternalMemory &&
                 externalMemoryGetMappedBuffer &&
+                externalMemoryGetMappedMipmappedArray &&
+                mipmappedArrayGetLevel &&
+                mipmappedArrayDestroy &&
                 destroyExternalMemory &&
                 memFree
             ;

@@ -72,9 +72,10 @@ public:
         AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE
     );
 
-    shared_ptr<Image> assignLinearDeviceLocalExport(
+    shared_ptr<Image> assignDeviceLocalExport(
         Frame &frame,
-        vk::ExternalMemoryHandleTypeFlags exportMemoryTypes
+        vk::ExternalMemoryHandleTypeFlags exportMemoryTypes,
+        bool linear
     );
 
     void put(const shared_ptr<Image> &image);

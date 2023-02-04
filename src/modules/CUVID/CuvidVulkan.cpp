@@ -28,6 +28,9 @@
 #include <vulkan/VulkanInstance.hpp>
 #include <vulkan/VulkanImagePool.hpp>
 
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+#   include <QOperatingSystemVersion>
+#endif
 #include <QDebug>
 
 #ifndef VK_USE_PLATFORM_WIN32_KHR
@@ -46,6 +49,8 @@ public:
     {
         cu::ContextGuard cuCtxGuard(m_cuCtx);
         cu::memFree(devPtr);
+        for (int p = 0; p < 2; ++p)
+            cu::mipmappedArrayDestroy(mmArray[p]);
         cu::destroyExternalMemory(memory);
 #ifdef VK_USE_PLATFORM_WIN32_KHR
         CloseHandle(handle);
@@ -58,6 +63,8 @@ private:
 public:
     CUexternalMemory memory = nullptr;
     CUdeviceptr devPtr = 0;
+    CUmipmappedArray mmArray[2] = {};
+    CUarray dstArray[2] = {};
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     HANDLE handle = nullptr;
 #endif
@@ -122,6 +129,11 @@ CuvidVulkan::CuvidVulkan(const shared_ptr<CUcontext> &cuCtx)
         return;
     }
 
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+    if (QOperatingSystemVersion::current() <= QOperatingSystemVersion::Windows7)
+        m_linear = true;
+#endif
+
     auto isMemoryExportable = [&] {
         try
         {
@@ -129,7 +141,7 @@ CuvidVulkan::CuvidVulkan(const shared_ptr<CUcontext> &cuCtx)
                 physicalDevice,
                 m_vkMemType,
                 vk::Format::eR8Unorm,
-                true
+                m_linear
             ).externalMemoryFeatures;
             if (externalMemoryFeatures & vk::ExternalMemoryFeatureFlagBits::eExportable)
                 return true;
@@ -200,9 +212,10 @@ void CuvidVulkan::map(Frame &frame) try
     if (m_validPictures.count(pictureIndex) == 0)
         return;
 
-    auto img = m_vkImagePool->assignLinearDeviceLocalExport(
+    auto img = m_vkImagePool->assignDeviceLocalExport(
         frame,
-        m_vkMemType
+        m_vkMemType,
+        m_linear
     );
     if (!img)
     {
@@ -240,12 +253,46 @@ void CuvidVulkan::map(Frame &frame) try
             return;
         }
 
-        CUDA_EXTERNAL_MEMORY_BUFFER_DESC externalMemBufferDesc = {};
-        externalMemBufferDesc.size = img->memorySize();
-        if (cu::externalMemoryGetMappedBuffer(&cudaCustomDataUnique->devPtr, cudaCustomDataUnique->memory, &externalMemBufferDesc) != CUDA_SUCCESS)
+        if (m_linear)
         {
-            m_error = true;
-            return;
+            CUDA_EXTERNAL_MEMORY_BUFFER_DESC externalMemBufferDesc = {};
+            externalMemBufferDesc.size = img->memorySize();
+            if (cu::externalMemoryGetMappedBuffer(&cudaCustomDataUnique->devPtr, cudaCustomDataUnique->memory, &externalMemBufferDesc) != CUDA_SUCCESS)
+            {
+                m_error = true;
+                return;
+            }
+        }
+        else
+        {
+            for (int p = 0; p < 2; ++p)
+            {
+                const CUDA_EXTERNAL_MEMORY_MIPMAPPED_ARRAY_DESC externalMemMipmappedDesc = {
+                    .offset = img->planeOffset(p),
+                    .arrayDesc = {
+                        .Width = static_cast<size_t>(frame.width(p)),
+                        .Height = static_cast<size_t>(frame.height(p)),
+                        .Depth = 0u,
+                        .Format = (frame.pixelFormat() == AV_PIX_FMT_P016)
+                            ? CU_AD_FORMAT_UNSIGNED_INT16
+                            : CU_AD_FORMAT_UNSIGNED_INT8,
+                        .NumChannels = p ? 2u : 1u,
+                        .Flags = 0u,
+                    },
+                    .numLevels = 1u,
+                };
+                if (cu::externalMemoryGetMappedMipmappedArray(&cudaCustomDataUnique->mmArray[p], cudaCustomDataUnique->memory, &externalMemMipmappedDesc) != CUDA_SUCCESS)
+                {
+                    m_error = true;
+                    return;
+                }
+
+                if (cu::mipmappedArrayGetLevel(&cudaCustomDataUnique->dstArray[p], cudaCustomDataUnique->mmArray[p], 0) != CUDA_SUCCESS)
+                {
+                    m_error = true;
+                    return;
+                }
+            }
         }
 
         cudaCustomData = cudaCustomDataUnique.get();
@@ -271,7 +318,7 @@ void CuvidVulkan::map(Frame &frame) try
 
     CUDA_MEMCPY2D cpy = {};
     cpy.srcMemoryType = CU_MEMORYTYPE_DEVICE;
-    cpy.dstMemoryType = CU_MEMORYTYPE_DEVICE;
+    cpy.dstMemoryType = m_linear ? CU_MEMORYTYPE_DEVICE : CU_MEMORYTYPE_ARRAY;
     cpy.srcDevice = mappedFrame;
     cpy.srcPitch = pitch;
     cpy.WidthInBytes = frame.width();
@@ -280,10 +327,17 @@ void CuvidVulkan::map(Frame &frame) try
     for (int p = 0; p < 2; ++p)
     {
         cpy.srcY = p ? m_codedHeight : 0;
-        cpy.dstDevice = cudaCustomData->devPtr;
-        cpy.dstPitch = img->linesize();
+        if (m_linear)
+        {
+            cpy.dstY = p ? img->size().height : 0;
+            cpy.dstDevice = cudaCustomData->devPtr;
+            cpy.dstPitch = img->linesize();
+        }
+        else
+        {
+            cpy.dstArray = cudaCustomData->dstArray[p];
+        }
         cpy.Height = frame.height(p);
-        cpy.dstY = p ? img->size().height : 0;
 
         if (cu::memcpy2DAsync(&cpy, m_cuStream) != CUDA_SUCCESS)
         {
