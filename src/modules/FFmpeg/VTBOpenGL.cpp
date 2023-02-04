@@ -91,22 +91,37 @@ bool VTBOpenGL::mapFrame(Frame &videoFrame)
 
     IOSurfaceRef surface = CVPixelBufferGetIOSurface(pixelBuffer);
 
+    GLenum internalFormat0 = 0, internalFormat1 = 0;
+    GLenum type = 0;
+
     const OSType pixelFormat = IOSurfaceGetPixelFormat(surface);
-    if (pixelFormat != kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
+    switch (pixelFormat)
     {
-        m_error = true;
-        return false;
+        case kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange:
+        case kCVPixelFormatType_420YpCbCr8BiPlanarFullRange:
+            internalFormat0 = GL_R8;
+            internalFormat1 = GL_RG8;
+            type = GL_UNSIGNED_BYTE;
+            break;
+        case kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange:
+            internalFormat0 = GL_R16;
+            internalFormat1 = GL_RG16;
+            type = GL_UNSIGNED_SHORT;
+            break;
+        default:
+            m_error = true;
+            return false;
     }
 
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textures[0]);
-    if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_R8, videoFrame.width(0), videoFrame.height(0), GL_RED, GL_UNSIGNED_BYTE, surface, 0) != kCGLNoError)
+    if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, internalFormat0, videoFrame.width(0), videoFrame.height(0), GL_RED, type, surface, 0) != kCGLNoError)
     {
         m_error = true;
         return false;
     }
 
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, m_textures[1]);
-    if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RG8, videoFrame.width(1), videoFrame.height(1), GL_RG, GL_UNSIGNED_BYTE, surface, 1) != kCGLNoError)
+    if (CGLTexImageIOSurface2D(glCtx, GL_TEXTURE_RECTANGLE_ARB, internalFormat1, videoFrame.width(1), videoFrame.height(1), GL_RG, type, surface, 1) != kCGLNoError)
     {
         m_error = true;
         return false;
@@ -122,7 +137,8 @@ quint32 VTBOpenGL::getTexture(int plane)
 QImage VTBOpenGL::getImage(const Frame &videoFrame)
 {
     CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwData();
-    if (CVPixelBufferGetPixelFormatType(pixelBuffer) == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
+    const OSType pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer);
+    if (pixelFormat == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange || pixelFormat == kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)
     {
         CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
 

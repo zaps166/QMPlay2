@@ -80,7 +80,8 @@ void FFDecVTB::downloadVideoFrame(Frame &decoded)
     if (!pixelBuffer)
         return;
 
-    if (CVPixelBufferGetPixelFormatType(pixelBuffer) == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)
+    const OSType pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer);
+    if (pixelFormat == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange || pixelFormat == kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)
     {
         const size_t w = CVPixelBufferGetWidth(pixelBuffer);
         const size_t h = CVPixelBufferGetHeight(pixelBuffer);
@@ -129,8 +130,15 @@ bool FFDecVTB::open(StreamInfo &streamInfo)
         return false;
 
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
-    if (pix_fmt != AV_PIX_FMT_YUV420P)
+    if (pix_fmt == AV_PIX_FMT_YUV420P10)
+    {
+        if (streamInfo.params->codec_id == AV_CODEC_ID_H264 || QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::OpenGL)
+            return false;
+    }
+    else if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
+    {
         return false;
+    }
 
     AVCodec *codec = init(streamInfo);
     if (!codec || !hasHWAccel("videotoolbox"))
