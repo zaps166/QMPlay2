@@ -48,7 +48,7 @@ protected:
 
     void clearFrames();
 
-    AVCodec *init(StreamInfo &streamInfo);
+    virtual AVCodec *init(StreamInfo &streamInfo);
     bool openCodec(AVCodec *codec);
 
     void decodeFirstStep(const Packet &encodedPacket, bool flush);

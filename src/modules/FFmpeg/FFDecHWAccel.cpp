@@ -18,6 +18,7 @@
 
 #include <FFDecHWAccel.hpp>
 
+#include <StreamInfo.hpp>
 #include <Frame.hpp>
 
 extern "C"
@@ -45,6 +46,16 @@ bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
             return true;
     }
     return false;
+}
+
+AVCodec *FFDecHWAccel::init(StreamInfo &streamInfo)
+{
+    if (streamInfo.codec_name == "libdav1d")
+    {
+        streamInfo.codec_name_backup = streamInfo.codec_name;
+        streamInfo.codec_name = "av1";
+    }
+    return FFDec::init(streamInfo);
 }
 
 bool FFDecHWAccel::hasHWDecContext() const

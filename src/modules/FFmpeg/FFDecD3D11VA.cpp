@@ -191,12 +191,6 @@ bool FFDecD3D11VA::open(StreamInfo &streamInfo)
         return false;
     }
 
-    if (streamInfo.codec_name == "libdav1d")
-    {
-        streamInfo.codec_name_backup = streamInfo.codec_name;
-        streamInfo.codec_name = "av1";
-    }
-
     AVCodec *codec = init(streamInfo);
     if (!codec || !hasHWAccel("d3d11va"))
         return false;

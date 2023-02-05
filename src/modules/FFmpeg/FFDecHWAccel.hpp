@@ -28,6 +28,8 @@ protected:
 
     bool hasHWAccel(const char *hwaccelName) const;
 
+    AVCodec *init(StreamInfo &streamInfo) override;
+
     bool hasHWDecContext() const override final;
 
     int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp) override;
