@@ -425,6 +425,11 @@ void PipeWireWriter::recreateStream()
             SPA_AUDIO_CHANNEL_SR,
         }
     };
+    if (m_chn == 1)
+    {
+        for (int i = 0; i < 8; ++i)
+            info.position[i] = SPA_AUDIO_CHANNEL_MONO;
+    }
 
     const spa_pod *params[2];
     params[0] = spa_format_audio_raw_build(
