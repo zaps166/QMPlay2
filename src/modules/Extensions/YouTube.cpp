@@ -1170,13 +1170,6 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         if (format.isEmpty())
             continue;
 
-        const auto protocol = format["protocol"].toString();
-        if (protocol.contains("dash", Qt::CaseInsensitive))
-        {
-            // Skip MP4 DASH, because it doesn't work properly (old comment, is it still valid?)
-            continue;
-        }
-
         const auto itag = format["format_id"].toString().toInt();
         const auto url = format["url"].toString();
         const auto ext = format["ext"].toString();
