@@ -374,7 +374,7 @@ bool YouTubeDL::update()
     return true;
 #endif
 
-    if (QMPlay2Core.getSettings().getBool("SkipYtDplUpdate"))
+    if (QMPlay2Core.getSettings().getBool("SkipYtDlpUpdate"))
         return true;
 
     // Mutex must be locked here
