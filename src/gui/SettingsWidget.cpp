@@ -711,8 +711,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 
     connect(tabW, SIGNAL(currentChanged(int)), this, SLOT(tabCh(int)));
     tabW->setCurrentIndex(page);
-
-    show();
 }
 SettingsWidget::~SettingsWidget()
 {

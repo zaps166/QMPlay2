@@ -1330,6 +1330,9 @@ void MainWidget::showSettings(const QString &moduleName)
             page = 0;
 
         settingsW = new SettingsWidget(page, moduleName, QMPlay2GUI.videoAdjustment);
+        if (windowFlags() & Qt::WindowStaysOnTopHint)
+            settingsW->setWindowFlag(Qt::WindowStaysOnTopHint);
+        settingsW->show();
         connect(settingsW, SIGNAL(settingsChanged(int, bool, bool)), &playC, SLOT(settingsChanged(int, bool, bool)));
         connect(settingsW, SIGNAL(setWheelStep(int)), seekS, SLOT(setWheelStep(int)));
         connect(settingsW, SIGNAL(setVolMax(int)), volW, SLOT(setMaximumVolume(int)));
