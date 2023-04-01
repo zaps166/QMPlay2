@@ -77,7 +77,7 @@ YouTube videos don't work without external "yt-dlp" software, so QMPlay2 will do
 #### Windows
 
 - Make sure that antivirus or firewall doesn't block "yt-dlp" and doesn't block executing external applications!
-- Vulkan on AMD Radeon GPUs might not switch to full screen exclusive.
+- Vulkan might not switch to full screen exclusive on some configurations or obsolete drivers.
 
 ## Spherical view
 
@@ -154,9 +154,9 @@ You can force single instance for QMPlay2: set "Allow only one instance" in "Set
 
 ## Multimedia keys
 
-In Windows and macOS, multimedia keys should work automatically.
+Multimedia keys should work automatically (on Linux/BSD it might depend on your configuration).
 
-In Linux/BSD, you must associate keys with commands:
+Additionally In Linux/BSD you can associate keys with commands:
 - using QMPlay2 binary, see: `QMPlay2 -h`,
 - using MPRIS2:
     - Toggle play/pause: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause`.
