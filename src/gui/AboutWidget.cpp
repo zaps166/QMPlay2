@@ -105,8 +105,6 @@ AboutWidget::AboutWidget()
     connect(closeB, SIGNAL(clicked()), this, SLOT(close()));
     connect(tabW, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
     connect(&logWatcher, SIGNAL(fileChanged(const QString &)), this, SLOT(refreshLog()));
-
-    show();
 }
 
 void AboutWidget::showEvent(QShowEvent *)

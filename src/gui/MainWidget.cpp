@@ -1455,6 +1455,9 @@ void MainWidget::about()
     if (!aboutW)
     {
         aboutW = new AboutWidget;
+        if (windowFlags() & Qt::WindowStaysOnTopHint)
+            aboutW->setWindowFlag(Qt::WindowStaysOnTopHint);
+        aboutW->show();
         connect(aboutW, SIGNAL(destroyed()), this, SLOT(about()));
     }
     else
