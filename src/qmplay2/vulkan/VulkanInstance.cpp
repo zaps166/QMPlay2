@@ -95,12 +95,12 @@ vk::Format Instance::fromFFmpegPixelFormat(int avPixFmt)
         case AV_PIX_FMT_YUV444P:
         case AV_PIX_FMT_YUVJ444P:
         case AV_PIX_FMT_GBRP:
+            return vk::Format::eG8B8R83Plane444Unorm;
         case AV_PIX_FMT_GBRP9:
         case AV_PIX_FMT_GBRP10:
         case AV_PIX_FMT_GBRP12:
         case AV_PIX_FMT_GBRP14:
         case AV_PIX_FMT_GBRP16:
-            return vk::Format::eG8B8R83Plane444Unorm;
         case AV_PIX_FMT_YUV444P9:
         case AV_PIX_FMT_YUV444P10:
         case AV_PIX_FMT_YUV444P12:
@@ -110,6 +110,8 @@ vk::Format Instance::fromFFmpegPixelFormat(int avPixFmt)
 
         case AV_PIX_FMT_RGBA:
             return vk::Format::eR8G8B8A8Unorm;
+        case AV_PIX_FMT_RGBA64:
+            return vk::Format::eR16G16B16A16Unorm;
         case AV_PIX_FMT_BGRA:
             return vk::Format::eB8G8R8A8Unorm;
     }
@@ -540,11 +542,19 @@ void Instance::fillSupportedFormats()
             AV_PIX_FMT_YUV444P12,
             AV_PIX_FMT_YUV444P14,
             AV_PIX_FMT_YUV444P16,
+
+            AV_PIX_FMT_GBRP9,
+            AV_PIX_FMT_GBRP10,
+            AV_PIX_FMT_GBRP12,
+            AV_PIX_FMT_GBRP14,
+            AV_PIX_FMT_GBRP16,
         };
     }
 
     if (checkImageFormat(vk::Format::eR8G8B8A8Unorm))
         m_supportedPixelFormats += AV_PIX_FMT_RGBA;
+    if (checkImageFormat(vk::Format::eR16G16B16A16Unorm))
+        m_supportedPixelFormats += AV_PIX_FMT_RGBA64;
 
     if (checkImageFormat(vk::Format::eB8G8R8A8Unorm))
         m_supportedPixelFormats += AV_PIX_FMT_BGRA;
