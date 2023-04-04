@@ -283,6 +283,7 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     physicalDeviceExtensions.push_back(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
+    physicalDeviceExtensions.push_back(VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME);
 #endif
 
     auto requiredFeatures = requiredPhysicalDeviceFeatures();
