@@ -569,7 +569,7 @@ void FFDecSW::setPixelFormat()
             }
         }
 
-        qDebug() << "Fallback pixel format:" << desiredPixFmtName;
+        QMPlay2Core.logInfo("Converting to pixel format: " + desiredPixFmtName);
         break;
     }
 }
