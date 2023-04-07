@@ -371,17 +371,27 @@ void DemuxerThr::run()
             if (streamInfo->params->codec_type == AVMEDIA_TYPE_VIDEO) //napisów szukam tylko wtedy, jeżeli jest strumień wideo
             {
                 const QString directory = Functions::filePath(url.mid(7));
+
                 const QString fName = Functions::fileName(url, false).replace('_', ' ');
-                for (const QString &subsFile : QDir(directory).entryList(filter, QDir::Files))
-                {
-                    const QString subsFName = Functions::fileName(subsFile, false).replace('_', ' ');
-                    if (subsFName.contains(fName, Qt::CaseInsensitive) || fName.contains(subsFName, Qt::CaseInsensitive))
+                auto maybeAppendFiles = [this, filter, fName](const QString  &directory) {
+                    for (const QFileInfo &subsFileInfo : QDir(directory).entryInfoList(filter, QDir::Files))
                     {
-                        const QString fileSubsUrl = Functions::Url(directory + subsFile);
-                        if (!playC.fileSubsList.contains(fileSubsUrl))
-                            playC.fileSubsList += fileSubsUrl;
+                        const QString subsFName = Functions::fileName(subsFileInfo.fileName(), false).replace('_', ' ');
+                        if (subsFName.contains(fName, Qt::CaseInsensitive) || fName.contains(subsFName, Qt::CaseInsensitive))
+                        {
+                            const QString fileSubsUrl = Functions::Url(subsFileInfo.filePath());
+                            if (!playC.fileSubsList.contains(fileSubsUrl))
+                                playC.fileSubsList += fileSubsUrl;
+                        }
                     }
-                }
+                };
+
+                maybeAppendFiles(directory);
+
+                const QStringList dirs {"ass", "srt", "sub", "subs", "subtitles"};
+                for (const QFileInfo &dirInfo : QDir(directory).entryInfoList(dirs, QDir::Dirs | QDir::NoDotAndDotDot))
+                    maybeAppendFiles(dirInfo.filePath());
+
                 break;
             }
         }
