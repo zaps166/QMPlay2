@@ -213,6 +213,11 @@
                <string notr="true">.png</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string notr="true">.webp</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
