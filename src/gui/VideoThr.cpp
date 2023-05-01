@@ -858,7 +858,9 @@ void VideoThr::screenshot(Frame videoFrame)
         if (n > num)
             num = n;
     }
-    img.save(dir + "/QMPlay2_snap_" + QString("%1").arg(++num, 5, 10, QChar('0')) + ext);
+    const QString screenshotName = "QMPlay2_snap_" + QString("%1").arg(++num, 5, 10, QChar('0')) + ext;
+    if (img.save(dir + "/" + screenshotName))
+        playC.messageAndOSD(tr("Screenshot saved as: %1").arg(screenshotName));
 }
 void VideoThr::pause()
 {
