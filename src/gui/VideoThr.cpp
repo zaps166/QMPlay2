@@ -851,14 +851,25 @@ void VideoThr::screenshot(Frame videoFrame)
 
     const QString ext = QMPlay2Core.getSettings().getString("screenshotFormat");
     const QString dir = QMPlay2Core.getSettings().getString("screenshotPth");
-    quint16 num = 0;
-    for (const QString &f : QDir(dir).entryList({"QMPlay2_snap_?????" + ext}, QDir::Files, QDir::Name))
+    QString realUrl = playC.getUrl();
+    Functions::splitPrefixAndUrlIfHasPluginPrefix(realUrl, nullptr, &realUrl);
+    QString screenshotName;
+    if (realUrl.startsWith("file://"))
     {
-        const quint16 n = f.midRef(13, 5).toUShort();
-        if (n > num)
-            num = n;
+        screenshotName = Functions::fileName(realUrl) + "_QMPlay2_snapshot_" + Functions::timeToStr(videoFrame.ts(), false, true).replace(":", ".");
     }
-    const QString screenshotName = "QMPlay2_snap_" + QString("%1").arg(++num, 5, 10, QChar('0')) + ext;
+    else
+    {
+        quint16 num = 0;
+        for (const QString &f : QDir(dir).entryList({"QMPlay2_snapshot_?????" + ext}, QDir::Files, QDir::Name))
+        {
+            const quint16 n = f.midRef(13, 5).toUShort();
+            if (n > num)
+                num = n;
+        }
+        screenshotName = "QMPlay2_snap_" + QString("%1").arg(++num, 5, 10, QChar('0'));
+    }
+    screenshotName += ext;
     if (img.save(dir + "/" + screenshotName))
         playC.messageAndOSD(tr("Screenshot saved as: %1").arg(screenshotName));
 }
