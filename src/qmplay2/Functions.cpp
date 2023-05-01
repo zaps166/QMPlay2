@@ -162,7 +162,7 @@ QString Functions::getUrlScheme(const QString &url)
     return QString();
 }
 
-QString Functions::timeToStr(const double t, const bool decimals)
+QString Functions::timeToStr(const double t, const bool decimals, const bool milliseconds)
 {
     if (t < 0.0)
         return QString();
@@ -176,7 +176,9 @@ QString Functions::timeToStr(const double t, const bool decimals)
     if (h > 0)
         timStr = QString("%1:").arg(h, 2, 10, QChar('0'));
     timStr += QString("%1:%2").arg(m, 2, 10, QChar('0')).arg(s, 2, 10, QChar('0'));
-    if (decimals)
+    if (milliseconds)
+        timStr += QString(".%1").arg(qRound((t - floor(t)) * 1000.0), 1, 10);
+    else if (decimals)
         timStr += QString(".%1").arg(qRound((t - floor(t)) * 10.0), 1, 10);
 
     return timStr;

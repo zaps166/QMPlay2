@@ -68,7 +68,7 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT QString Url(QString, const QString &pth = QString());
     QMPLAY2SHAREDLIB_EXPORT QString getUrlScheme(const QString &url);
 
-    QMPLAY2SHAREDLIB_EXPORT QString timeToStr(const double t, const bool decimals = false);
+    QMPLAY2SHAREDLIB_EXPORT QString timeToStr(const double t, const bool decimals = false, const bool milliseconds = false);
 
     QMPLAY2SHAREDLIB_EXPORT QString filePath(const QString &);
     QMPLAY2SHAREDLIB_EXPORT QString fileName(QString, bool extension = true);
