@@ -781,7 +781,7 @@ void PlayClass::slowDown()
 void PlayClass::setSpeed()
 {
     bool ok;
-    double s = QInputDialog::getDouble(nullptr, tr("Play speed"), tr("Set playback speed"), speed, 0.05, 100.0, 2, &ok);
+    double s = QInputDialog::getDouble(nullptr, tr("Play speed"), tr("Set playback speed"), speed, 0.05, 100.0, 3, &ok);
     if (ok)
     {
         speed = s;
