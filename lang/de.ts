@@ -431,11 +431,11 @@
     </message>
     <message>
         <source>Bottom field first</source>
-        <translation type="unfinished"></translation>
+        <translation>Unteres Feld zuerst</translation>
     </message>
     <message>
         <source>Top field first</source>
-        <translation type="unfinished"></translation>
+        <translation>Oberes Feld zuerst</translation>
     </message>
 </context>
 <context>
@@ -1159,7 +1159,7 @@
     </message>
     <message>
         <source>Some key shortcuts are duplicated!</source>
-        <translation type="unfinished"></translation>
+        <translation>Einige Tastenkombinationen sind doppelt vorhanden!</translation>
     </message>
 </context>
 <context>
@@ -1306,11 +1306,11 @@
     </message>
     <message>
         <source>Next audio stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächsten Audio Stream</translation>
     </message>
     <message>
         <source>Next subtitles stream</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächsten Untertitel Stream</translation>
     </message>
 </context>
 <context>
@@ -1522,11 +1522,11 @@
     </message>
     <message>
         <source>Little endian</source>
-        <translation type="unfinished"></translation>
+        <translation>Little Endian</translation>
     </message>
     <message>
         <source>Big endian</source>
-        <translation type="unfinished"></translation>
+        <translation>Big Endian</translation>
     </message>
     <message>
         <source>Associate files with QMPlay2</source>
@@ -1830,15 +1830,15 @@
     </message>
     <message>
         <source>Exclusive mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Exklusiver Modus</translation>
     </message>
     <message>
         <source>Preferred video codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Bevorzugter Videocodec</translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzögerung</translation>
     </message>
 </context>
 <context>
@@ -2127,11 +2127,11 @@
     </message>
     <message>
         <source>Keep audio pitch during playback speed change</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Tonlage beim ändern der Abspielgeschwindigkeit beibehalten</translation>
     </message>
     <message>
         <source>Don&apos;t keep audio pitch during playback speed change</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Tonlage beim ändern der Abspielgeschwindigkeit anpassen</translation>
     </message>
 </context>
 <context>
@@ -2194,7 +2194,7 @@
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Audio Tonlage beibehalten</translation>
     </message>
 </context>
 <context>
@@ -2353,7 +2353,7 @@
     </message>
     <message>
         <source>Amplify (no metadata)</source>
-        <translation type="unfinished"></translation>
+        <translation>Verstärken (ohne Metadaten)</translation>
     </message>
 </context>
 <context>
@@ -2452,7 +2452,7 @@
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Stoppen nach dem Abspielen</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -3136,7 +3136,9 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <source>Force audio content to use the specified number of channels.
 Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation type="unfinished"></translation>
+        <translation>Erzwingt die ausgewählte Anzahl von Audiokanälen.
+Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
+(z. B. wird Mono in Stereo umgewandelt, aber quadrophonisches Audio wird nicht in Stereo umgewandelt)</translation>
     </message>
 </context>
 <context>
@@ -3565,7 +3567,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&amp;Hide on close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Verstecken beim Schließen</translation>
     </message>
 </context>
 <context>
