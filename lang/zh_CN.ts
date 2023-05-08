@@ -24,7 +24,7 @@
     <name>AVThread</name>
     <message>
         <source>A/V thread has been incorrectly terminated!</source>
-        <translation>A/V 线程被错误终止！</translation>
+        <translation>音视频线程被错误终止！</translation>
     </message>
 </context>
 <context>
@@ -178,7 +178,7 @@
     </message>
     <message>
         <source>Base color</source>
-        <translation>标准颜色</translation>
+        <translation>底色</translation>
     </message>
     <message>
         <source>Text color</source>
@@ -1743,7 +1743,7 @@
     </message>
     <message>
         <source>Release time</source>
-        <translation>发布时间</translation>
+        <translation>释放时间</translation>
     </message>
     <message>
         <source>Fast compression ratio</source>
@@ -3599,7 +3599,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Relevance</source>
-        <translation>相关</translation>
+        <translation>相关度</translation>
     </message>
     <message>
         <source>Upload date</source>
