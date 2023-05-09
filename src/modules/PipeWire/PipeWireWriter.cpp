@@ -353,7 +353,10 @@ void PipeWireWriter::onProcess()
     pw_stream_queue_buffer(m_stream, b);
 
     if (m_silence && m_paused && m_silenceElapsed.isValid() && m_silenceElapsed.elapsed() >= 1000)
+    {
+        LoopLocker locker(m_threadLoop);
         pw_stream_set_active(m_stream, false);
+    }
 }
 
 void PipeWireWriter::updateCoreInitSeq()
