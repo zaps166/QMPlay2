@@ -405,6 +405,11 @@ bool VAAPI::filterVideo(const Frame &frame, VASurfaceID &id, int &field)
     return true;
 }
 
+VASurfaceID VAAPI::getVppId()
+{
+    return m_hasVppFrame ? id_vpp : VA_INVALID_ID;
+}
+
 bool VAAPI::checkCodec(const char *codecName) const
 {
     // Optional check - FFmpeg opens VA-API when first frame is given to the codec,

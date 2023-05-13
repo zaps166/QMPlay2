@@ -417,6 +417,10 @@ quint8 *Frame::data(int plane)
     }
     return m_frame->data[plane];
 }
+quint8 **Frame::dataArr()
+{
+    return m_frame->data;
+}
 
 bool Frame::setVideoData(
     AVBufferRef *buffer[],

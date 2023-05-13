@@ -51,6 +51,8 @@ public:
 
     bool filterVideo(const Frame &frame, VASurfaceID &id, int &field);
 
+    VASurfaceID getVppId();
+
     void insertFrame(VASurfaceID id, AVFrame *frame);
 
     bool checkCodec(const char *codecName) const;

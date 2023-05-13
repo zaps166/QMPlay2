@@ -136,6 +136,7 @@ public: // Video
 
     const quint8 *constData(int plane = 0) const;
     quint8 *data(int plane = 0);
+    quint8 **dataArr();
 
     bool setVideoData(
         AVBufferRef *buffer[],

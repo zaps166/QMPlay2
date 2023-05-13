@@ -248,7 +248,22 @@ quint32 VAAPIOpenGL::getTexture(int plane)
 
 Frame VAAPIOpenGL::getCpuFrame(const Frame &videoFrame)
 {
-    return videoFrame.downloadHwData();
+    Frame cpuFrame;
+    const auto vppId = m_vaapi->getVppId();
+    if (vppId != VA_INVALID_ID)
+    {
+        auto tmpFrame = videoFrame;
+        const auto dataArr = tmpFrame.dataArr();
+        const auto idBackup = dataArr[3];
+        reinterpret_cast<quintptr &>(dataArr[3]) = vppId;
+        cpuFrame = tmpFrame.downloadHwData();
+        dataArr[3] = idBackup;
+    }
+    else
+    {
+        cpuFrame = videoFrame.downloadHwData();
+    }
+    return cpuFrame;
 }
 
 void VAAPIOpenGL::clearTextures()
