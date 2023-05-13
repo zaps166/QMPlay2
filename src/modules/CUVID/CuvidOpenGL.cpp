@@ -17,11 +17,14 @@
 */
 
 #include <CuvidOpenGL.hpp>
-#include <ImgScaler.hpp>
 #include <Frame.hpp>
 
 #include <QOpenGLContext>
 #include <QImage>
+
+extern "C" {
+    #include <libavutil/buffer.h>
+}
 
 #ifndef GL_R8
     #define GL_R8 0x8229
@@ -186,7 +189,7 @@ quint32 CuvidOpenGL::getTexture(int plane)
     return m_textures[plane];
 }
 
-QImage CuvidOpenGL::getImage(const Frame &videoFrame)
+Frame CuvidOpenGL::getCpuFrame(const Frame &videoFrame)
 {
     cu::ContextGuard cuCtxGuard(m_cuCtx);
 
@@ -199,7 +202,7 @@ QImage CuvidOpenGL::getImage(const Frame &videoFrame)
     vidProcParams.top_field_first = videoFrame.isTopFieldFirst();
 
     if (cuvid::mapVideoFrame(m_cuvidDec, videoFrame.customData(), &mappedFrame, &pitch, &vidProcParams) != CUDA_SUCCESS)
-        return QImage();
+        return Frame();
 
     const size_t size = pitch * videoFrame.height();
     const size_t halfSize = pitch * ((videoFrame.height() + 1) >> 1);
@@ -208,33 +211,41 @@ QImage CuvidOpenGL::getImage(const Frame &videoFrame)
         (qint32)pitch,
         (qint32)pitch
     };
-    quint8 *data[2] = {
-        new quint8[size],
-        new quint8[halfSize]
+    AVBufferRef *dstBuffer[2] = {
+        av_buffer_alloc(size),
+        av_buffer_alloc(halfSize),
     };
 
-    bool copied = (cu::memcpyDtoH(data[0], mappedFrame, size) == CUDA_SUCCESS);
+    bool copied = (cu::memcpyDtoH(dstBuffer[0]->data, mappedFrame, size) == CUDA_SUCCESS);
     if (copied)
-        copied &= (cu::memcpyDtoH(data[1], mappedFrame + m_codedHeight * pitch, halfSize) == CUDA_SUCCESS);
+        copied &= (cu::memcpyDtoH(dstBuffer[1]->data, mappedFrame + m_codedHeight * pitch, halfSize) == CUDA_SUCCESS);
 
     cuvid::unmapVideoFrame(m_cuvidDec, mappedFrame);
 
     cuCtxGuard.unlock();
 
-    QImage img;
+    Frame cpuFrame;
 
     if (copied)
     {
-        ImgScaler imgScaler;
-        if (imgScaler.create(videoFrame))
-        {
-            img = QImage(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
-            imgScaler.scale((const void **)data, linesize, img.bits());
-        }
+        cpuFrame = Frame::createEmpty(
+            videoFrame.width(),
+            videoFrame.height(),
+            videoFrame.pixelFormat(),
+            videoFrame.isInterlaced(),
+            videoFrame.isTopFieldFirst(),
+            videoFrame.colorSpace(),
+            videoFrame.isLimited()
+        );
+        cpuFrame.setTimeBase(videoFrame.timeBase());
+        cpuFrame.setTSInt(videoFrame.tsInt());
+        cpuFrame.setVideoData(dstBuffer, linesize);
+    }
+    else
+    {
+        for (int p = 0; p < 2; ++p)
+            av_buffer_unref(&dstBuffer[p]);
     }
 
-    for (int p = 0; p < 2; ++p)
-        delete[] data[p];
-
-    return img;
+    return cpuFrame;
 }

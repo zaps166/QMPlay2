@@ -24,7 +24,6 @@
 #ifdef USE_VULKAN
 class VAAPIVulkan;
 #endif
-struct SwsContext;
 
 class FFDecVAAPI final : public FFDecHWAccel
 {
@@ -39,7 +38,6 @@ public:
     std::shared_ptr<VideoFilter> hwAccelFilter() const override;
 
     int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp) override;
-    void downloadVideoFrame(Frame &decoded) override;
 
     bool open(StreamInfo &streamInfo) override;
 
@@ -50,5 +48,4 @@ private:
 #ifdef USE_VULKAN
     std::shared_ptr<VAAPIVulkan> m_vaapiVulkan;
 #endif
-    SwsContext *m_swsCtx = nullptr;
 };

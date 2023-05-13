@@ -112,28 +112,6 @@ int FFDecVDPAU::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixel
 
     return ret;
 }
-void FFDecVDPAU::downloadVideoFrame(Frame &decoded)
-{
-    if (codec_ctx->coded_width <= 0 || codec_ctx->coded_height <= 0)
-        return;
-
-    const int32_t linesize[] = {
-        codec_ctx->coded_width,
-        (codec_ctx->coded_width + 1) / 2,
-        (codec_ctx->coded_width + 1) / 2,
-    };
-    AVBufferRef *buffer[] = {
-        av_buffer_alloc(linesize[0] * codec_ctx->coded_height),
-        av_buffer_alloc(linesize[1] * (codec_ctx->coded_height + 1) / 2),
-        av_buffer_alloc(linesize[2] * (codec_ctx->coded_height + 1) / 2),
-    };
-
-    decoded = Frame::createEmpty(frame, false, AV_PIX_FMT_YUV420P);
-    decoded.setVideoData(buffer, linesize);
-
-    if (!m_vdpau->getYV12(decoded, (quintptr)frame->data[3]))
-        decoded.clear();
-}
 
 bool FFDecVDPAU::open(StreamInfo &streamInfo)
 {

@@ -151,6 +151,8 @@ public: // Video
 
     bool copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const;
 
+    Frame downloadHwData() const;
+
 #ifdef USE_VULKAN
     inline std::shared_ptr<QmVk::Image> vulkanImage() const;
     inline void setVulkanImage(const std::shared_ptr<QmVk::Image> &image);

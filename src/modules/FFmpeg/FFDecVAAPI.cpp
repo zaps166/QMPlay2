@@ -37,7 +37,6 @@ extern "C"
     #include <libavutil/pixdesc.h>
     #include <libavutil/hwcontext.h>
     #include <libavutil/hwcontext_vaapi.h>
-    #include <libswscale/swscale.h>
 }
 
 using namespace std;
@@ -62,8 +61,6 @@ FFDecVAAPI::FFDecVAAPI(Module &module)
 }
 FFDecVAAPI::~FFDecVAAPI()
 {
-    if (m_swsCtx)
-        sws_freeContext(m_swsCtx);
     if (m_vaapi.use_count() == 1)
         destroyDecoder();
 }
@@ -126,48 +123,6 @@ int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixel
     }
     return ret;
 }
-void FFDecVAAPI::downloadVideoFrame(Frame &decoded)
-{
-    VAImage image;
-    quint8 *vaData = m_vaapi->getNV12Image(image, (quintptr)frame->data[3]);
-    if (vaData)
-    {
-        AVBufferRef *dstBuffer[3] = {
-            av_buffer_alloc(image.pitches[0] * frame->height),
-            av_buffer_alloc((image.pitches[1] / 2) * ((frame->height + 1) / 2)),
-            av_buffer_alloc((image.pitches[1] / 2) * ((frame->height + 1) / 2))
-        };
-
-        quint8 *srcData[2] = {
-            vaData + image.offsets[0],
-            vaData + image.offsets[1]
-        };
-        qint32 srcLinesize[2] = {
-            (qint32)image.pitches[0],
-            (qint32)image.pitches[1]
-        };
-
-        uint8_t *dstData[3] = {
-            dstBuffer[0]->data,
-            dstBuffer[1]->data,
-            dstBuffer[2]->data
-        };
-        qint32 dstLinesize[3] = {
-            (qint32)image.pitches[0],
-            (qint32)image.pitches[1] / 2,
-            (qint32)image.pitches[1] / 2
-        };
-
-        m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
-        sws_scale(m_swsCtx, srcData, srcLinesize, 0, frame->height, dstData, dstLinesize);
-
-        decoded = Frame::createEmpty(frame, false, AV_PIX_FMT_YUV420P);
-        decoded.setVideoData(dstBuffer, dstLinesize);
-
-        vaUnmapBuffer(m_vaapi->VADisp, image.buf);
-        vaDestroyImage(m_vaapi->VADisp, image.image_id);
-    }
-}
 
 bool FFDecVAAPI::open(StreamInfo &streamInfo)
 {
@@ -184,10 +139,6 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
             if (!vkInstance->supportedPixelFormats().contains(pix_fmt))
                 return false;
 #endif
-        }
-        else if (QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::OpenGL)
-        {
-            return false;
         }
     }
     else if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)
@@ -223,7 +174,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     if (!m_vaapi)
     {
         m_vaapi = make_shared<VAAPI>();
-        if (!m_vaapi->open(QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::Legacy))
+        if (!m_vaapi->open())
             return false;
 
         m_vaapi->m_hwDeviceBufferRef = av_hwdevice_ctx_alloc(AV_HWDEVICE_TYPE_VAAPI);

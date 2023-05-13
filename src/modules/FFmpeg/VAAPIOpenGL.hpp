@@ -42,7 +42,7 @@ public:
     bool mapFrame(Frame &videoFrame) override;
     quint32 getTexture(int plane) override;
 
-    QImage getImage(const Frame &videoFrame) override;
+    Frame getCpuFrame(const Frame &videoFrame) override;
 
     /**/
 

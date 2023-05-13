@@ -80,19 +80,14 @@ int FFDecHWAccel::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPix
 
     if (frameFinished && ~hurryUp)
     {
-        if (m_hasHWDecContext)
-            decoded = Frame(frame, Frame::convert3PlaneTo2Plane(codec_ctx->sw_pix_fmt));
-        else
-            downloadVideoFrame(decoded);
+        decoded = Frame(frame, Frame::convert3PlaneTo2Plane(codec_ctx->sw_pix_fmt));
+        if (!m_hasHWDecContext)
+            decoded = decoded.downloadHwData();
     }
 
     decodeLastStep(encodedPacket, decoded, frameFinished);
 
     return m_hasCriticalError ? -1 : bytesConsumed;
-}
-void FFDecHWAccel::downloadVideoFrame(Frame &decoded)
-{
-    Q_UNUSED(decoded)
 }
 
 bool FFDecHWAccel::hasCriticalError() const

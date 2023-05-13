@@ -246,9 +246,9 @@ quint32 VAAPIOpenGL::getTexture(int plane)
     return m_textures[plane];
 }
 
-QImage VAAPIOpenGL::getImage(const Frame &videoFrame)
+Frame VAAPIOpenGL::getCpuFrame(const Frame &videoFrame)
 {
-    return m_vaapi->getImage(videoFrame);
+    return videoFrame.downloadHwData();
 }
 
 void VAAPIOpenGL::clearTextures()

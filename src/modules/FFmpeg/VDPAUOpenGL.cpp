@@ -24,6 +24,10 @@
 #include <QDebug>
 #include <QSet>
 
+extern "C" {
+    #include <libavutil/buffer.h>
+}
+
 VDPAUOpenGL::VDPAUOpenGL(const std::shared_ptr<VDPAU> &vdpau)
     : m_vdpau(vdpau)
 {}
@@ -179,12 +183,38 @@ quint32 VDPAUOpenGL::getTexture(int plane)
     return 0;
 }
 
-QImage VDPAUOpenGL::getImage(const Frame &videoFrame)
+Frame VDPAUOpenGL::getCpuFrame(const Frame &videoFrame)
 {
-    QImage img(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
-    if (m_vdpau->getRGB(img.bits(), videoFrame.width(), videoFrame.height()))
-        return img;
-    return QImage();
+    Frame cpuFrame;
+
+    qint32 linesize[1] = {
+        videoFrame.width() * 4,
+    };
+    AVBufferRef *dstBuffer[1] = {
+        av_buffer_alloc(linesize[0] * videoFrame.height()),
+    };
+
+    if (m_vdpau->getRGB(dstBuffer[0]->data, videoFrame.width(), videoFrame.height()))
+    {
+        cpuFrame = Frame::createEmpty(
+            videoFrame.width(),
+            videoFrame.height(),
+            videoFrame.pixelFormat(),
+            videoFrame.isInterlaced(),
+            videoFrame.isTopFieldFirst(),
+            videoFrame.colorSpace(),
+            videoFrame.isLimited()
+        );
+        cpuFrame.setTimeBase(videoFrame.timeBase());
+        cpuFrame.setTSInt(videoFrame.tsInt());
+        cpuFrame.setVideoData(dstBuffer, linesize);
+    }
+    else
+    {
+        av_buffer_unref(&dstBuffer[0]);
+    }
+
+    return cpuFrame;
 }
 
 void VDPAUOpenGL::getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap)

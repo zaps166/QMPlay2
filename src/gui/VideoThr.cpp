@@ -821,10 +821,10 @@ void VideoThr::screenshot(Frame videoFrame)
 #ifdef USE_OPENGL
     if (auto hwGLInterop = dynamic_pointer_cast<OpenGLHWInterop>(getHWDecContext()))
     {
-        img = hwGLInterop->getImage(videoFrame);
+        videoFrame = hwGLInterop->getCpuFrame(videoFrame);
     }
-    else
 #endif
+
     if (imgScaler.create(videoFrame, W, H))
     {
 #ifdef USE_VULKAN

@@ -32,7 +32,6 @@ extern "C"
 {
     #include <libavutil/pixdesc.h>
     #include <libavcodec/avcodec.h>
-    #include <libswscale/swscale.h>
     #include <libavutil/hwcontext.h>
     #include <libavutil/hwcontext_videotoolbox.h>
 }
@@ -59,8 +58,6 @@ FFDecVTB::FFDecVTB(Module &module)
 }
 FFDecVTB::~FFDecVTB()
 {
-    if (m_swsCtx)
-        sws_freeContext(m_swsCtx);
     av_buffer_unref(&m_hwDeviceBufferRef);
 }
 
@@ -74,56 +71,6 @@ QString FFDecVTB::name() const
     return "FFmpeg/VideoToolBox";
 }
 
-void FFDecVTB::downloadVideoFrame(Frame &decoded)
-{
-    CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)frame->data[3];
-    if (!pixelBuffer)
-        return;
-
-    const OSType pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer);
-    if (pixelFormat == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange || pixelFormat == kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)
-    {
-        const size_t w = CVPixelBufferGetWidth(pixelBuffer);
-        const size_t h = CVPixelBufferGetHeight(pixelBuffer);
-
-        CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
-
-        const quint8 *srcData[2] = {
-            (const quint8 *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0),
-            (const quint8 *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1)
-        };
-        const qint32 srcLinesize[2] = {
-            (qint32)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0),
-            (qint32)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1)
-        };
-
-        AVBufferRef *dstBuffer[3] = {
-            av_buffer_alloc(srcLinesize[0] * h),
-            av_buffer_alloc((srcLinesize[1] / 2) * ((h + 1) / 2)),
-            av_buffer_alloc((srcLinesize[1] / 2) * ((h + 1) / 2))
-        };
-
-        quint8 *dstData[3] = {
-            dstBuffer[0]->data,
-            dstBuffer[1]->data,
-            dstBuffer[2]->data
-        };
-        const qint32 dstLinesize[3] = {
-            srcLinesize[0],
-            srcLinesize[1] / 2,
-            srcLinesize[1] / 2
-        };
-
-        m_swsCtx = sws_getCachedContext(m_swsCtx, w, h, AV_PIX_FMT_NV12, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
-        sws_scale(m_swsCtx, srcData, srcLinesize, 0, h, dstData, dstLinesize);
-
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
-
-        decoded = Frame::createEmpty(frame, false, AV_PIX_FMT_YUV420P);
-        decoded.setVideoData(dstBuffer, dstLinesize);
-    }
-}
-
 bool FFDecVTB::open(StreamInfo &streamInfo)
 {
     if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO)
@@ -132,7 +79,7 @@ bool FFDecVTB::open(StreamInfo &streamInfo)
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
     if (pix_fmt == AV_PIX_FMT_YUV420P10)
     {
-        if (streamInfo.params->codec_id == AV_CODEC_ID_H264 || QMPlay2Core.renderer() != QMPlay2CoreClass::Renderer::OpenGL)
+        if (streamInfo.params->codec_id == AV_CODEC_ID_H264)
             return false;
     }
     else if (pix_fmt != AV_PIX_FMT_YUV420P && pix_fmt != AV_PIX_FMT_YUVJ420P)

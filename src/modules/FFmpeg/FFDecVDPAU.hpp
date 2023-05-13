@@ -37,7 +37,6 @@ public:
     std::shared_ptr<VideoFilter> hwAccelFilter() const override;
 
     int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp) override;
-    void downloadVideoFrame(Frame &decoded) override;
 
     bool open(StreamInfo &streamInfo) override;
 

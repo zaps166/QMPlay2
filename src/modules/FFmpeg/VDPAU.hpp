@@ -58,7 +58,6 @@ public:
 
     void maybeCreateVideoMixer(int surfaceW, int surfaceH, const Frame &decoded);
 
-    bool getYV12(Frame &decoded, VdpVideoSurface id);
     bool getRGB(uint8_t *dest, int width, int height);
 
     VDPAUOutputSurface *getDisplayingOutputSurface();

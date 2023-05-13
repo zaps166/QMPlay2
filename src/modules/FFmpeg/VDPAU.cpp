@@ -220,15 +220,6 @@ void VDPAU::maybeCreateVideoMixer(int surfaceW, int surfaceH, const Frame &decod
     m_mustSetCSCMatrix = true;
 }
 
-bool VDPAU::getYV12(Frame &decoded, VdpVideoSurface id)
-{
-    void *data[] = {
-        decoded.data(0),
-        decoded.data(2),
-        decoded.data(1),
-    };
-    return (vdp_surface_get_bits_ycbcr(id, VDP_YCBCR_FORMAT_YV12, data, (uint32_t *)decoded.linesize()) == VDP_STATUS_OK);
-}
 bool VDPAU::getRGB(uint8_t *dest, int width, int height)
 {
     QMutexLocker locker(&m_outputSurfacesMutex);

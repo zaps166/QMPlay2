@@ -32,7 +32,6 @@
 extern "C"
 {
     #include <libavcodec/avcodec.h>
-    #include <libswscale/swscale.h>
     #include <libavutil/hwcontext.h>
     #include <libavutil/hwcontext_dxva2.h>
 }
@@ -59,8 +58,6 @@ FFDecDXVA2::FFDecDXVA2(Module &module)
 }
 FFDecDXVA2::~FFDecDXVA2()
 {
-    if (m_swsCtx)
-        sws_freeContext(m_swsCtx);
     av_buffer_unref(&m_hwDeviceBufferRef);
 }
 
@@ -77,49 +74,6 @@ QString FFDecDXVA2::name() const
 shared_ptr<VideoFilter> FFDecDXVA2::hwAccelFilter() const
 {
     return m_filter;
-}
-
-void FFDecDXVA2::downloadVideoFrame(Frame &decoded)
-{
-    D3DSURFACE_DESC desc;
-    D3DLOCKED_RECT lockedRect;
-    IDirect3DSurface9 *surface = (IDirect3DSurface9 *)frame->data[3];
-    if (SUCCEEDED(surface->GetDesc(&desc)) && SUCCEEDED(surface->LockRect(&lockedRect, nullptr, D3DLOCK_READONLY)))
-    {
-        AVBufferRef *dstBuffer[3] = {
-            av_buffer_alloc(lockedRect.Pitch * frame->height),
-            av_buffer_alloc((lockedRect.Pitch / 2) * ((frame->height + 1) / 2)),
-            av_buffer_alloc((lockedRect.Pitch / 2) * ((frame->height + 1) / 2))
-        };
-
-        quint8 *srcData[2] = {
-            (quint8 *)lockedRect.pBits,
-            (quint8 *)lockedRect.pBits + (lockedRect.Pitch * desc.Height)
-        };
-        qint32 srcLinesize[2] = {
-            lockedRect.Pitch,
-            lockedRect.Pitch
-        };
-
-        uint8_t *dstData[3] = {
-            dstBuffer[0]->data,
-            dstBuffer[1]->data,
-            dstBuffer[2]->data
-        };
-        qint32 dstLinesize[3] = {
-            lockedRect.Pitch,
-            lockedRect.Pitch / 2,
-            lockedRect.Pitch / 2
-        };
-
-        m_swsCtx = sws_getCachedContext(m_swsCtx, frame->width, frame->height, m_pixFmt, frame->width, frame->height, AV_PIX_FMT_YUV420P, SWS_POINT, nullptr, nullptr, nullptr);
-        sws_scale(m_swsCtx, srcData, srcLinesize, 0, frame->height, dstData, dstLinesize);
-
-        decoded = Frame::createEmpty(frame, false, AV_PIX_FMT_YUV420P);
-        decoded.setVideoData(dstBuffer, dstLinesize);
-
-        surface->UnlockRect();
-    }
 }
 
 bool FFDecDXVA2::open(StreamInfo &streamInfo)

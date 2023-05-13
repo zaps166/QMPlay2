@@ -18,7 +18,6 @@
 
 #include <VTBOpenGL.hpp>
 
-#include <ImgScaler.hpp>
 #include <Frame.hpp>
 
 #include <QOpenGLContext>
@@ -134,35 +133,7 @@ quint32 VTBOpenGL::getTexture(int plane)
     return m_textures[plane];
 }
 
-QImage VTBOpenGL::getImage(const Frame &videoFrame)
+Frame VTBOpenGL::getCpuFrame(const Frame &videoFrame)
 {
-    CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwData();
-    const OSType pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer);
-    if (pixelFormat == kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange || pixelFormat == kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)
-    {
-        CVPixelBufferLockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
-
-        const quint8 *srcData[2] = {
-            (const quint8 *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0),
-            (const quint8 *)CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1)
-        };
-        const qint32 srcLinesize[2] = {
-            (qint32)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0),
-            (qint32)CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1)
-        };
-
-        QImage img;
-
-        ImgScaler imgScaler;
-        if (imgScaler.create(videoFrame))
-        {
-            img = QImage(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
-            imgScaler.scale((const void **)srcData, srcLinesize, img.bits());
-        }
-
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, kCVPixelBufferLock_ReadOnly);
-
-        return img;
-    }
-    return QImage();
+    return videoFrame.downloadHwData();
 }

@@ -33,7 +33,6 @@ protected:
     bool hasHWDecContext() const override final;
 
     int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp) override;
-    virtual void downloadVideoFrame(Frame &decoded);
 
     bool hasCriticalError() const override;
 

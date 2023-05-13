@@ -19,7 +19,6 @@
 #include <DXVA2OpenGL.hpp>
 
 #include <QMPlay2Core.hpp>
-#include <ImgScaler.hpp>
 #include <Frame.hpp>
 
 #include <QLibrary>
@@ -249,35 +248,9 @@ quint32 DXVA2OpenGL::getTexture(int plane)
     return m_textures[m_renderTargetIdx];
 }
 
-QImage DXVA2OpenGL::getImage(const Frame &videoFrame)
+Frame DXVA2OpenGL::getCpuFrame(const Frame &videoFrame)
 {
-    D3DSURFACE_DESC desc;
-    D3DLOCKED_RECT lockedRect;
-    IDirect3DSurface9 *surface = (IDirect3DSurface9 *)videoFrame.hwData();
-    if (SUCCEEDED(surface->GetDesc(&desc)) && SUCCEEDED(surface->LockRect(&lockedRect, nullptr, D3DLOCK_READONLY)))
-    {
-        const void *src[2] = {
-            lockedRect.pBits,
-            (quint8 *)lockedRect.pBits + (lockedRect.Pitch * desc.Height)
-        };
-        const int srcLinesize[2] = {
-            lockedRect.Pitch,
-            lockedRect.Pitch
-        };
-
-        QImage img;
-
-        ImgScaler imgScaler;
-        if (imgScaler.create(videoFrame))
-        {
-            img = QImage(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
-            imgScaler.scale(src, srcLinesize, img.bits());
-        }
-
-        surface->UnlockRect();
-        return img;
-    }
-    return QImage();
+    return videoFrame.downloadHwData();
 }
 
 void DXVA2OpenGL::getVideAdjustmentCap(VideoAdjustment &videoAdjustmentCap)

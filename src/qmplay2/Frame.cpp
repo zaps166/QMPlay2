@@ -26,6 +26,7 @@
 
 extern "C"
 {
+    #include <libavcodec/avcodec.h>
     #include <libavutil/frame.h>
     #include <libavutil/pixdesc.h>
     #include <libavutil/imgutils.h>
@@ -479,6 +480,45 @@ bool Frame::copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) con
     };
 
     return copyData(destData, destLinesize);
+}
+
+Frame Frame::downloadHwData() const
+{
+    Frame downloaded;
+    if (isHW() && m_frame->hw_frames_ctx)
+    {
+        auto dstFrame = av_frame_alloc();
+        dstFrame->format = convert2PlaneTo3Plane(m_pixelFormat);
+
+        bool found = false;
+        AVPixelFormat *formats = nullptr;
+        if (av_hwframe_transfer_get_formats(m_frame->hw_frames_ctx, AV_HWFRAME_TRANSFER_DIRECTION_FROM, &formats, 0) == 0)
+        {
+            for (int i = 0; formats[i] != AV_PIX_FMT_NONE; ++i)
+            {
+                if (formats[i] == dstFrame->format)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            av_free(formats);
+        }
+        if (!found)
+        {
+            dstFrame->format = AV_PIX_FMT_NONE;
+        }
+
+        if (av_hwframe_transfer_data(dstFrame, m_frame, 0) == 0)
+        {
+            downloaded = Frame(dstFrame);
+            downloaded.setTimeBase(m_timeBase);
+            downloaded.setTSInt(tsInt());
+        }
+
+        av_frame_free(&dstFrame);
+    }
+    return downloaded;
 }
 
 #ifdef USE_VULKAN

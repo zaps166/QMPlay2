@@ -36,6 +36,9 @@ ImgScaler::ImgScaler() :
 
 bool ImgScaler::create(const Frame &videoFrame, int newWdst, int newHdst)
 {
+    if (videoFrame.isEmpty())
+        return false;
+
     if (newWdst < 0)
         newWdst = videoFrame.width();
     if (newHdst < 0)

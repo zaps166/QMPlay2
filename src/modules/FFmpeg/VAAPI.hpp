@@ -38,7 +38,7 @@ public:
     VAAPI();
     ~VAAPI();
 
-    bool open(bool checkNV12);
+    bool open();
 
     void init(int width, int height, bool allowFilters);
 
@@ -50,9 +50,6 @@ public:
     void applyVideoAdjustment(int brightness, int contrast, int saturation, int hue);
 
     bool filterVideo(const Frame &frame, VASurfaceID &id, int &field);
-
-    quint8 *getNV12Image(VAImage &image, VASurfaceID surfaceID) const;
-    QImage getImage(const Frame &videoFrame) const;
 
     void insertFrame(VASurfaceID id, AVFrame *frame);
 
@@ -70,8 +67,6 @@ public:
 
     int m_fd = -1;
     VADisplay VADisp = nullptr;
-
-    VAImageFormat nv12ImageFmt = {};
 
     int outW = 0, outH = 0;
 

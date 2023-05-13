@@ -62,7 +62,7 @@ VAAPI::~VAAPI()
     }
 }
 
-bool VAAPI::open(bool checkNV12)
+bool VAAPI::open()
 {
     clearVPP();
 
@@ -138,22 +138,6 @@ bool VAAPI::open(bool checkNV12)
 
     m_vendor = vaQueryVendorString(VADisp);
     if (m_vendor.isEmpty())
-        return false;
-
-    int fmtCount = vaMaxNumImageFormats(VADisp);
-    VAImageFormat imgFmt[fmtCount];
-    if (fmtCount > 0 && vaQueryImageFormats(VADisp, imgFmt, &fmtCount) == VA_STATUS_SUCCESS)
-    {
-        for (int i = 0; i < fmtCount; ++i)
-        {
-            if (imgFmt[i].fourcc == VA_FOURCC_NV12)
-            {
-                nv12ImageFmt = imgFmt[i];
-                break;
-            }
-        }
-    }
-    if (checkNV12 && nv12ImageFmt.fourcc != VA_FOURCC_NV12)
         return false;
 
     return true;
@@ -419,48 +403,6 @@ bool VAAPI::filterVideo(const Frame &frame, VASurfaceID &id, int &field)
     field = 0;
     m_hasVppFrame = true;
     return true;
-}
-
-quint8 *VAAPI::getNV12Image(VAImage &image, VASurfaceID surfaceID) const
-{
-    if (nv12ImageFmt.fourcc == VA_FOURCC_NV12)
-    {
-        VAImageFormat imgFmt = nv12ImageFmt;
-        if (vaCreateImage(VADisp, &imgFmt, outW, outH, &image) == VA_STATUS_SUCCESS)
-        {
-            quint8 *data;
-            if
-            (
-                vaSyncSurface(VADisp, surfaceID) == VA_STATUS_SUCCESS &&
-                vaGetImage(VADisp, surfaceID, 0, 0, outW, outH, image.image_id) == VA_STATUS_SUCCESS &&
-                vaMapBuffer(VADisp, image.buf, (void **)&data) == VA_STATUS_SUCCESS
-            ) return data;
-            vaDestroyImage(VADisp, image.image_id);
-        }
-    }
-    return nullptr;
-}
-QImage VAAPI::getImage(const Frame &videoFrame) const
-{
-    ImgScaler imgScaler;
-    if (!imgScaler.create(videoFrame))
-        return QImage();
-
-    VAImage image;
-    quint8 *vaData = getNV12Image(image, m_hasVppFrame ? id_vpp : videoFrame.hwData());
-    if (vaData)
-    {
-        const void *data[2] = {
-            vaData + image.offsets[0],
-            vaData + image.offsets[1]
-        };
-        QImage img(videoFrame.width(), videoFrame.height(), QImage::Format_RGB32);
-        imgScaler.scale(data, (const int *)image.pitches, img.bits());
-        vaUnmapBuffer(VADisp, image.buf);
-        vaDestroyImage(VADisp, image.image_id);
-        return img;
-    }
-    return QImage();
 }
 
 bool VAAPI::checkCodec(const char *codecName) const

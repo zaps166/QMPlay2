@@ -20,8 +20,6 @@
 
 #include <FFDecHWAccel.hpp>
 
-struct SwsContext;
-
 class FFDecVTB final : public FFDecHWAccel
 {
 public:
@@ -32,11 +30,8 @@ public:
 
     QString name() const override;
 
-    void downloadVideoFrame(Frame &decoded) override;
-
     bool open(StreamInfo &streamInfo) override;
 
 private:
     AVBufferRef *m_hwDeviceBufferRef = nullptr;
-    SwsContext *m_swsCtx = nullptr;
 };
