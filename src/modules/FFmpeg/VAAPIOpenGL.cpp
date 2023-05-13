@@ -45,9 +45,8 @@ struct VAAPIOpenGL::EGL
     PFNGLEGLIMAGETARGETTEXTURE2DOESPROC glEGLImageTargetTexture2DOES = nullptr;
 };
 
-VAAPIOpenGL::VAAPIOpenGL(const std::shared_ptr<VAAPI> &vaapi)
-    : m_vaapi(vaapi)
-    , m_egl(std::make_unique<EGL>())
+VAAPIOpenGL::VAAPIOpenGL()
+    : m_egl(std::make_unique<EGL>())
 {}
 VAAPIOpenGL::~VAAPIOpenGL()
 {}

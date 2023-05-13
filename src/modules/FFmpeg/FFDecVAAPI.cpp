@@ -150,13 +150,21 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     if (!codec || !hasHWAccel("vaapi"))
         return false;
 
+    auto isMesaRadeon = [](const QString &vendor) {
+        return vendor.contains("Mesa Gallium") && vendor.contains("AMD Radeon");
+    };
+
 #ifdef USE_OPENGL
     shared_ptr<VAAPIOpenGL> vaapiOpenGL;
     if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
     {
         vaapiOpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<VAAPIOpenGL>();
         if (vaapiOpenGL)
+        {
             m_vaapi = vaapiOpenGL->getVAAPI();
+            if (m_vaapi && isMesaRadeon(m_vaapi->m_vendor))
+                m_vaapi.reset();
+        }
     }
 #endif
 #ifdef USE_VULKAN
@@ -167,6 +175,8 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
         {
             m_vaapi = m_vaapiVulkan->getVAAPI();
             m_vaapiVulkan->clear();
+            if (m_vaapi && isMesaRadeon(m_vaapi->m_vendor))
+                m_vaapi.reset();
         }
     }
 #endif
@@ -191,11 +201,15 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
         return false;
 
 #ifdef USE_OPENGL
-    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL && !vaapiOpenGL)
+    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
     {
-        vaapiOpenGL = make_shared<VAAPIOpenGL>(m_vaapi);
-        if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(vaapiOpenGL))
-            return false;
+        if (!vaapiOpenGL)
+        {
+            vaapiOpenGL = make_shared<VAAPIOpenGL>();
+            if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(vaapiOpenGL))
+                return false;
+        }
+        vaapiOpenGL->setVAAPI(m_vaapi);
         m_vaapi->vpp_deint_type = m_vppDeintType;
     }
     if (vaapiOpenGL)
@@ -205,11 +219,15 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     }
 #endif
 #ifdef USE_VULKAN
-    if (QMPlay2Core.isVulkanRenderer() && !m_vaapiVulkan)
+    if (QMPlay2Core.isVulkanRenderer())
     {
-        m_vaapiVulkan = make_shared<VAAPIVulkan>(m_vaapi);
-        if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(m_vaapiVulkan))
-            return false;
+        if (!m_vaapiVulkan)
+        {
+            m_vaapiVulkan = make_shared<VAAPIVulkan>();
+            if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(m_vaapiVulkan))
+                return false;
+        }
+        m_vaapiVulkan->setVAAPI(m_vaapi);
         m_vaapi->vpp_deint_type = m_vppDeintType;
     }
     if (m_vaapiVulkan)

@@ -49,9 +49,8 @@ struct FDCustomData : public MemoryObjectBase::CustomData
     vector<int> fds;
 };
 
-VAAPIVulkan::VAAPIVulkan(const shared_ptr<VAAPI> &vaapi)
+VAAPIVulkan::VAAPIVulkan()
     : m_vkInstance(static_pointer_cast<Instance>(QMPlay2Core.gpuInstance()))
-    , m_vaapi(vaapi)
 {
     auto physicalDevice = m_vkInstance->physicalDevice();
 

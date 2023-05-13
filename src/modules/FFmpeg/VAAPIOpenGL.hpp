@@ -28,7 +28,7 @@ class VAAPIOpenGL : public OpenGLHWInterop
     struct EGL;
 
 public:
-    VAAPIOpenGL(const std::shared_ptr<VAAPI> &vaapi);
+    VAAPIOpenGL();
     ~VAAPIOpenGL();
 
     QString name() const override;
@@ -46,6 +46,10 @@ public:
 
     /**/
 
+    inline void setVAAPI(const std::shared_ptr<VAAPI> &vaapi)
+    {
+        m_vaapi = vaapi;
+    }
     inline std::shared_ptr<VAAPI> getVAAPI() const
     {
         return m_vaapi;
@@ -55,7 +59,7 @@ private:
     void clearTextures();
 
 private:
-    const std::shared_ptr<VAAPI> m_vaapi;
+    std::shared_ptr<VAAPI> m_vaapi;
     const int m_numPlanes = 2;
 
     quint32 m_textures[2] = {};

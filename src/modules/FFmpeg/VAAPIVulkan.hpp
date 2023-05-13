@@ -17,9 +17,13 @@ class VAAPI;
 class VAAPIVulkan final : public QmVk::HWInterop
 {
 public:
-    VAAPIVulkan(const std::shared_ptr<VAAPI> &vaapi);
+    VAAPIVulkan();
     ~VAAPIVulkan();
 
+    inline void setVAAPI(const std::shared_ptr<VAAPI> &vaapi)
+    {
+        m_vaapi = vaapi;
+    }
     inline std::shared_ptr<VAAPI> getVAAPI() const
     {
         return m_vaapi;
@@ -37,7 +41,7 @@ public:
 
 private:
     const std::shared_ptr<QmVk::Instance> m_vkInstance;
-    const std::shared_ptr<VAAPI> m_vaapi;
+    std::shared_ptr<VAAPI> m_vaapi;
 
     bool m_hasDrmFormatModifier = false;
 
