@@ -43,6 +43,7 @@
 #endif
 
 extern "C" {
+    #include <libavutil/cpu.h>
     #include <libavutil/mem.h>
 }
 
@@ -835,7 +836,7 @@ void VideoThr::screenshot(Frame videoFrame)
                 videoFrame.clear();
         }
 #endif
-        auto imgData = reinterpret_cast<uint8_t *>(av_malloc(W * H * 4));
+        auto imgData = reinterpret_cast<uint8_t *>(av_malloc(W * H * 4 + av_cpu_max_align()));
         img = QImage(imgData, W, H, QImage::Format_RGB32, [](void *ptr) {
             av_free(ptr);
         }, imgData);

@@ -26,6 +26,7 @@
 #include <QPainter>
 
 extern "C" {
+    #include <libavutil/cpu.h>
     #include <libavutil/mem.h>
 }
 
@@ -53,7 +54,7 @@ void Drawable::draw(const Frame &newVideoFrame, bool canRepaint, bool entireScre
     if (imgScaler.create(videoFrame, m_scaleByQt ? -1 : imgW, m_scaleByQt ? -1 : imgH))
     {
         auto createImg = [this](int w, int h) {
-            auto imgData = reinterpret_cast<uint8_t *>(av_malloc(w * h * 4));
+            auto imgData = reinterpret_cast<uint8_t *>(av_malloc(w * h * 4 + av_cpu_max_align()));
             img = QImage(imgData, w, h, QImage::Format_RGB32, [](void *ptr) {
                 av_free(ptr);
             }, imgData);
