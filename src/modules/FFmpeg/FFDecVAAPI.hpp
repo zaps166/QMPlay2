@@ -21,6 +21,9 @@
 #include <FFDecHWAccel.hpp>
 #include <VAAPI.hpp>
 
+#ifdef USE_OPENGL
+class VAAPIOpenGL;
+#endif
 #ifdef USE_VULKAN
 class VAAPIVulkan;
 #endif
@@ -45,6 +48,9 @@ private:
     VAProcDeinterlacingType m_vppDeintType = VAProcDeinterlacingNone;
     std::shared_ptr<VAAPI> m_vaapi;
     std::shared_ptr<VideoFilter> m_filter;
+#ifdef USE_OPENGL
+    std::shared_ptr<VAAPIOpenGL> m_vaapiOpenGL;
+#endif
 #ifdef USE_VULKAN
     std::shared_ptr<VAAPIVulkan> m_vaapiVulkan;
 #endif

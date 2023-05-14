@@ -21,7 +21,11 @@
 #include <opengl/OpenGLHWInterop.hpp>
 #include <VAAPI.hpp>
 
+#include <unordered_map>
 #include <memory>
+#include <mutex>
+
+struct _VADRMPRIMESurfaceDescriptor;
 
 class VAAPIOpenGL : public OpenGLHWInterop
 {
@@ -55,8 +59,12 @@ public:
         return m_vaapi;
     }
 
+    void clearSurfaces(bool lock = true);
+
 private:
     void clearTextures();
+
+    static void closeFDs(const _VADRMPRIMESurfaceDescriptor &vaSurfaceDescr);
 
 private:
     std::shared_ptr<VAAPI> m_vaapi;
@@ -70,4 +78,8 @@ private:
     std::unique_ptr<EGL> m_egl;
 
     bool m_hasDmaBufImportModifiers = false;
+
+    std::mutex m_mutex;
+
+    std::unordered_map<VASurfaceID, _VADRMPRIMESurfaceDescriptor> m_surfaces;
 };

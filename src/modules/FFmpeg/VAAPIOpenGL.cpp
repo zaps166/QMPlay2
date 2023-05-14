@@ -49,7 +49,9 @@ VAAPIOpenGL::VAAPIOpenGL()
     : m_egl(std::make_unique<EGL>())
 {}
 VAAPIOpenGL::~VAAPIOpenGL()
-{}
+{
+    clearSurfaces(false);
+}
 
 QString VAAPIOpenGL::name() const
 {
@@ -160,29 +162,35 @@ bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
     if (!m_vaapi->filterVideo(videoFrame, id, vaField))
         return false;
 
-    VADRMPRIMESurfaceDescriptor vaSurfaceDescr = {};
-    if (vaExportSurfaceHandle(
-            m_vaapi->VADisp,
-            id,
-            VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_2,
-            VA_EXPORT_SURFACE_READ_ONLY | VA_EXPORT_SURFACE_SEPARATE_LAYERS,
-            &vaSurfaceDescr
-        ) != VA_STATUS_SUCCESS)
+    std::lock_guard<std::mutex> locker(m_mutex);
+
+    auto &vaSurfaceDescr = m_surfaces[id];
+    if (vaSurfaceDescr.fourcc == 0 && vaSurfaceDescr.num_objects == 0)
     {
-        QMPlay2Core.logError("VA-API :: Unable to export surface handle");
-        m_error = true;
-        return false;
+        if (vaExportSurfaceHandle(
+                m_vaapi->VADisp,
+                id,
+                VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_2,
+                VA_EXPORT_SURFACE_READ_ONLY | VA_EXPORT_SURFACE_SEPARATE_LAYERS,
+                &vaSurfaceDescr
+            ) != VA_STATUS_SUCCESS)
+        {
+            QMPlay2Core.logError("VA-API :: Unable to export surface handle");
+            m_surfaces.erase(id);
+            m_error = true;
+            return false;
+        }
     }
 
-    auto closeFDs = [&] {
-        for (uint32_t o = 0; o < vaSurfaceDescr.num_objects; ++o)
-            ::close(vaSurfaceDescr.objects[o].fd);
+    auto eraseSurface = [&] {
+        m_surfaces.erase(id);
+        closeFDs(vaSurfaceDescr);
     };
 
     const auto syncRet = vaSyncSurface(m_vaapi->VADisp, id);
     if (syncRet != VA_STATUS_SUCCESS)
     {
-        closeFDs();
+        eraseSurface();
         if (syncRet != VA_STATUS_ERROR_INVALID_CONTEXT)
         {
             QMPlay2Core.logError("VA-API :: Unable to sync surface");
@@ -225,7 +233,7 @@ bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
         if (!image)
         {
             QMPlay2Core.logError("VA-API :: Unable to create EGL image");
-            closeFDs();
+            eraseSurface();
             m_error = true;
             return false;
         }
@@ -236,7 +244,6 @@ bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
         m_egl->eglDestroyImageKHR(m_egl->eglDpy, image);
     }
 
-    closeFDs();
     return true;
 }
 
@@ -265,10 +272,27 @@ Frame VAAPIOpenGL::getCpuFrame(const Frame &videoFrame)
     return cpuFrame;
 }
 
+void VAAPIOpenGL::clearSurfaces(bool lock)
+{
+    if (lock)
+        m_mutex.lock();
+    for (auto &&s : m_surfaces)
+        closeFDs(s.second);
+    m_surfaces.clear();
+    if (lock)
+        m_mutex.unlock();
+}
+
 void VAAPIOpenGL::clearTextures()
 {
     glDeleteTextures(m_numPlanes, m_textures);
     memset(m_textures, 0, sizeof(m_textures));
     memset(m_widths, 0, sizeof(m_widths));
     memset(m_heights, 0, sizeof(m_heights));
+}
+
+void VAAPIOpenGL::closeFDs(const VADRMPRIMESurfaceDescriptor &vaSurfaceDescr)
+{
+    for (uint32_t o = 0; o < vaSurfaceDescr.num_objects; ++o)
+        ::close(vaSurfaceDescr.objects[o].fd);
 }

@@ -85,6 +85,10 @@ bool FFDecVAAPI::set()
         if (reloadVpp)
         {
             m_vaapi->clearVPP(false);
+#ifdef USE_OPENGL
+            if (m_vaapiOpenGL)
+                m_vaapiOpenGL->clearSurfaces();
+#endif
 #ifdef USE_VULKAN
             if (m_vaapiVulkan)
                 m_vaapiVulkan->clear();
@@ -106,6 +110,10 @@ shared_ptr<VideoFilter> FFDecVAAPI::hwAccelFilter() const
 
 int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp)
 {
+#ifdef USE_OPENGL
+    if (flush && m_vaapiOpenGL)
+        m_vaapiOpenGL->clearSurfaces();
+#endif
 #ifdef USE_VULKAN
     if (flush && m_vaapiVulkan)
         m_vaapiVulkan->clear();
@@ -158,13 +166,13 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     };
 
 #ifdef USE_OPENGL
-    shared_ptr<VAAPIOpenGL> vaapiOpenGL;
     if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
     {
-        vaapiOpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<VAAPIOpenGL>();
-        if (vaapiOpenGL)
+        m_vaapiOpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<VAAPIOpenGL>();
+        if (m_vaapiOpenGL)
         {
-            m_vaapi = vaapiOpenGL->getVAAPI();
+            m_vaapi = m_vaapiOpenGL->getVAAPI();
+            m_vaapiOpenGL->clearSurfaces();
             maybeResetVaapi();
         }
     }
@@ -204,16 +212,16 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
 #ifdef USE_OPENGL
     if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
     {
-        if (!vaapiOpenGL)
+        if (!m_vaapiOpenGL)
         {
-            vaapiOpenGL = make_shared<VAAPIOpenGL>();
-            if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(vaapiOpenGL))
+            m_vaapiOpenGL = make_shared<VAAPIOpenGL>();
+            if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(m_vaapiOpenGL))
                 return false;
         }
-        vaapiOpenGL->setVAAPI(m_vaapi);
+        m_vaapiOpenGL->setVAAPI(m_vaapi);
         m_vaapi->vpp_deint_type = m_vppDeintType;
     }
-    if (vaapiOpenGL)
+    if (m_vaapiOpenGL)
     {
         m_filter = make_shared<DeintHWPrepareFilter>();
         m_hasHWDecContext = true;
