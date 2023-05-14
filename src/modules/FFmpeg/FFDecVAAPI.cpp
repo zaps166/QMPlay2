@@ -110,7 +110,9 @@ int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixel
     if (flush && m_vaapiVulkan)
         m_vaapiVulkan->clear();
 #endif
+    m_vaapi->m_mutex.lock();
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
+    m_vaapi->m_mutex.unlock();
     if (m_hasHWDecContext && ret > -1)
     {
         decoded.setOnDestroyFn([vaapi = m_vaapi] {

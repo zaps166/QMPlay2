@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 #include <QVector>
+#include <QMutex>
 #include <QHash>
 
 #include <va/va.h>
@@ -73,6 +74,8 @@ public:
     int outW = 0, outH = 0;
 
     int m_codecId = 0;
+
+    QMutex m_mutex;
 
     // Postprocessing
     VAProcDeinterlacingType vpp_deint_type = VAProcDeinterlacingNone;
