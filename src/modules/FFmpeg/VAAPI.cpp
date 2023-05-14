@@ -143,12 +143,14 @@ bool VAAPI::open()
     return true;
 }
 
-void VAAPI::init(int width, int height,  bool allowFilters)
+void VAAPI::init(int codecId, int width, int height,  bool allowFilters)
 {
     clearVPP();
 
     outW = width;
     outH = height;
+
+    m_codecId = codecId;
 
     m_allowFilters = allowFilters;
 

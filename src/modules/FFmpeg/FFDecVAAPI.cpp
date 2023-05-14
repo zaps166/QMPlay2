@@ -150,8 +150,9 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     if (!codec || !hasHWAccel("vaapi"))
         return false;
 
-    auto isMesaRadeon = [](const QString &vendor) {
-        return vendor.contains("Mesa Gallium") && vendor.contains("AMD Radeon");
+    auto maybeResetVaapi = [this, codec] {
+        if (m_vaapi && m_vaapi->m_codecId != codec->id && m_vaapi->m_vendor.contains("Mesa Gallium") && m_vaapi->m_vendor.contains("AMD Radeon"))
+            m_vaapi.reset();
     };
 
 #ifdef USE_OPENGL
@@ -162,8 +163,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
         if (vaapiOpenGL)
         {
             m_vaapi = vaapiOpenGL->getVAAPI();
-            if (m_vaapi && isMesaRadeon(m_vaapi->m_vendor))
-                m_vaapi.reset();
+            maybeResetVaapi();
         }
     }
 #endif
@@ -175,8 +175,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
         {
             m_vaapi = m_vaapiVulkan->getVAAPI();
             m_vaapiVulkan->clear();
-            if (m_vaapi && isMesaRadeon(m_vaapi->m_vendor))
-                m_vaapi.reset();
+            maybeResetVaapi();
         }
     }
 #endif
@@ -244,7 +243,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     }
 #endif
 
-    m_vaapi->init(codec_ctx->width, codec_ctx->height, static_cast<bool>(m_filter));
+    m_vaapi->init(codec->id, codec_ctx->width, codec_ctx->height, static_cast<bool>(m_filter));
 
     codec_ctx->hw_device_ctx = av_buffer_ref(m_vaapi->m_hwDeviceBufferRef);
     codec_ctx->get_format = vaapiGetFormat;

@@ -40,7 +40,7 @@ public:
 
     bool open();
 
-    void init(int width, int height, bool allowFilters);
+    void init(int codecId, int width, int height, bool allowFilters);
 
     bool vaapiCreateSurface(VASurfaceID &surface, int w, int h);
 
@@ -71,6 +71,8 @@ public:
     VADisplay VADisp = nullptr;
 
     int outW = 0, outH = 0;
+
+    int m_codecId = 0;
 
     // Postprocessing
     VAProcDeinterlacingType vpp_deint_type = VAProcDeinterlacingNone;
