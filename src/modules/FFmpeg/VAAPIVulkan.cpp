@@ -116,6 +116,7 @@ void VAAPIVulkan::map(Frame &frame)
     if (!vkImage)
     {
         VADRMPRIMESurfaceDescriptor vaSurfaceDescr = {};
+        m_vaapi->m_mutex.lock();
         const bool exported = vaExportSurfaceHandle(
             m_vaapi->VADisp,
             id,
@@ -123,6 +124,7 @@ void VAAPIVulkan::map(Frame &frame)
             VA_EXPORT_SURFACE_READ_ONLY | VA_EXPORT_SURFACE_SEPARATE_LAYERS,
             &vaSurfaceDescr
         ) == VA_STATUS_SUCCESS;
+        m_vaapi->m_mutex.unlock();
 
         if (exported)
         {
