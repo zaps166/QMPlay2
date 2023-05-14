@@ -433,6 +433,11 @@ void PipeWireWriter::recreateStream()
         for (int i = 0; i < 8; ++i)
             info.position[i] = SPA_AUDIO_CHANNEL_MONO;
     }
+    else if (m_chn == 4)
+    {
+        qSwap(info.position[2], info.position[4]);
+        qSwap(info.position[3], info.position[5]);
+    }
 
     const spa_pod *params[2];
     params[0] = spa_format_audio_raw_build(
