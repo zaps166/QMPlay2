@@ -25,7 +25,7 @@
 #include <memory>
 #include <mutex>
 
-struct _VADRMPRIMESurfaceDescriptor;
+#include <va/va_drmcommon.h>
 
 class VAAPIOpenGL : public OpenGLHWInterop
 {
@@ -64,7 +64,7 @@ public:
 private:
     void clearTextures();
 
-    static void closeFDs(const _VADRMPRIMESurfaceDescriptor &vaSurfaceDescr);
+    static void closeFDs(const VADRMPRIMESurfaceDescriptor &vaSurfaceDescr);
 
 private:
     std::shared_ptr<VAAPI> m_vaapi;
@@ -81,5 +81,5 @@ private:
 
     std::mutex m_mutex;
 
-    std::unordered_map<VASurfaceID, _VADRMPRIMESurfaceDescriptor> m_surfaces;
+    std::unordered_map<VASurfaceID, VADRMPRIMESurfaceDescriptor> m_surfaces;
 };

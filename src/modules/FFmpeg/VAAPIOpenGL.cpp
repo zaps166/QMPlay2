@@ -24,7 +24,6 @@
 
 #include <QOpenGLContext>
 
-#include <va/va_drmcommon.h>
 #include <unistd.h>
 
 #include <EGL/egl.h>
