@@ -673,8 +673,8 @@ void Window::renderOSD()
         if (img->paletteBufferView)
         {
             multiplier = QVector2D(
-                img->ratio.width()  * m_scaledSize.width()  / m_imgSize.width(),
-                img->ratio.height() * m_scaledSize.height() / m_imgSize.height()
+                static_cast<float>(m_scaledSize.width())  / static_cast<float>(m_imgSize.width()),
+                static_cast<float>(m_scaledSize.height()) / static_cast<float>(m_imgSize.height())
             );
             osdPipeline = m.osdAvPipeline;
             osdDescriptorPool = m.osdAvDescriptorPool;
@@ -692,10 +692,10 @@ void Window::renderOSD()
         mat.translate(
             (-1.0f - m_osdOffset.x())
                 + (m_subsRect.x() * 2.0f / winSize.width())
-                + (img->rect.x()  * 2.0f * multiplier.x() / winSize.width()),
+                + (img->rect.x() * 2.0f * multiplier.x() / winSize.width()),
             (-1.0f - m_osdOffset.y())
                 + (m_subsRect.y() * 2.0f / winSize.height())
-                + (img->rect.y()  * 2.0f * multiplier.y() / winSize.height())
+                + (img->rect.y() * 2.0f * multiplier.y() / winSize.height())
         );
         mat.scale(
             img->rect.width()  * 2.0f * multiplier.x() / winSize.width(),
@@ -704,7 +704,7 @@ void Window::renderOSD()
 
         auto pushConstants = osdPipeline->pushConstants<OSDPushConstants>();
         pushConstants->mat = mat.toGenericMatrix<4, 4>();
-        pushConstants->size = img->rect.size();
+        pushConstants->size = img->size;
         pushConstants->linesize = img->linesize;
         pushConstants->color = img->color; // ASS only
 

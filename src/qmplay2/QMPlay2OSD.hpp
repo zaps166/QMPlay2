@@ -47,10 +47,8 @@ public:
     struct Image
     {
         // Common
-        QRect rect;
-
-        // AV subtitles
-        QSizeF ratio;
+        QRectF rect;
+        QSize size;
 
         // CPU only
         QByteArray rgba;

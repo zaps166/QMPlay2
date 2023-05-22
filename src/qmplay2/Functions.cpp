@@ -385,15 +385,15 @@ bool Functions::mustRepaintOSD(const QMPlay2OSDList &osd_list, const OsdIdList &
                 if (osd->needsRescale())
                 {
                     *bounds |= QRectF(
-                        img.rect.x() * *scaleW * img.ratio.width(),
-                        img.rect.y() * *scaleH * img.ratio.height(),
-                        img.rect.width() * *scaleW * img.ratio.width(),
-                        img.rect.height() * *scaleH * img.ratio.height()
+                        img.rect.x() * *scaleW,
+                        img.rect.y() * *scaleH,
+                        img.rect.width() * *scaleW,
+                        img.rect.height() * *scaleH
                     ).toAlignedRect();
                 }
                 else
                 {
-                    *bounds |= img.rect;
+                    *bounds |= img.rect.toAlignedRect();
                 }
             });
         }
@@ -418,19 +418,13 @@ void Functions::paintOSD(bool rgbSwapped, const QMPlay2OSDList &osd_list, const 
         osd->iterate([&](const QMPlay2OSD::Image &img) {
             const QImage qImg = QImage(
                 (const uchar *)img.rgba.constData(),
-                img.rect.width(),
-                img.rect.height(),
+                img.size.width(),
+                img.size.height(),
                 rgbSwapped ? QImage::Format_RGBA8888 : QImage::Format_ARGB32
             );
             if (osd->needsRescale())
             {
-                const QRectF targetRect(
-                    img.rect.x() * img.ratio.width(),
-                    img.rect.y() * img.ratio.height(),
-                    img.rect.width() * img.ratio.width(),
-                    img.rect.height() * img.ratio.height()
-                );
-                painter.drawImage(targetRect, qImg);
+                painter.drawImage(img.rect, qImg);
             }
             else
             {

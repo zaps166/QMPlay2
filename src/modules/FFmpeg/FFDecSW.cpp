@@ -602,10 +602,14 @@ bool FFDecSW::getFromBitmapSubsBuffer(shared_ptr<QMPlay2OSD> &osd, double pos)
                 );
                 return QRect(point, size);
             };
-            auto getRatio = [this](const QSize &frameSize) {
-                return QSizeF(
-                    static_cast<qreal>(frameSize.width())  / static_cast<qreal>(codec_ctx->width),
-                    static_cast<qreal>(frameSize.height()) / static_cast<qreal>(codec_ctx->height)
+            auto scaleRect = [this](const QRect &rect, const QSize &frameSize) {
+                const auto rx = static_cast<qreal>(frameSize.width())  / static_cast<qreal>(codec_ctx->width);
+                const auto ry = static_cast<qreal>(frameSize.height()) / static_cast<qreal>(codec_ctx->height);
+                return QRectF(
+                    rect.x() * rx,
+                    rect.y() * ry,
+                    rect.width() * rx,
+                    rect.height() * ry
                 );
             };
 
@@ -647,8 +651,9 @@ bool FFDecSW::getFromBitmapSubsBuffer(shared_ptr<QMPlay2OSD> &osd, double pos)
 
                     auto &osdImg = osd->add();
 
-                    osdImg.rect = getRect(avRect);
-                    osdImg.ratio = getRatio(subtitle.frameSize);
+                    const auto rect = getRect(avRect);
+                    osdImg.rect = scaleRect(rect, subtitle.frameSize);
+                    osdImg.size = rect.size();
 
                     memcpy(data + buffOffset, avRect->data[0], rectSize);
                     osdImg.dataBufferView = BufferView::create(buffer, vk::Format::eR8Uint, buffOffset, rectSize);
@@ -677,16 +682,19 @@ bool FFDecSW::getFromBitmapSubsBuffer(shared_ptr<QMPlay2OSD> &osd, double pos)
                     const auto avRect = subtitle.rects[i];
 
                     auto &osdImg = osd->add();
-                    osdImg.rect = getRect(avRect);
-                    osdImg.ratio = getRatio(subtitle.frameSize);
-                    osdImg.rgba = QByteArray(osdImg.rect.width() * osdImg.rect.height() * sizeof(uint32_t), Qt::Uninitialized);
+
+                    const auto rect = getRect(avRect);
+                    osdImg.rect = scaleRect(rect, subtitle.frameSize);
+                    osdImg.size = rect.size();
+
+                    osdImg.rgba = QByteArray(osdImg.size.width() * osdImg.size.height() * sizeof(uint32_t), Qt::Uninitialized);
 
                     const auto source   = (uint8_t  *)avRect->data[0];
                     const auto palette  = (uint32_t *)avRect->data[1];
                     const auto linesize = avRect->linesize[0];
                     auto dest = (uint32_t *)osdImg.rgba.data();
-                    const int w = osdImg.rect.width();
-                    const int h = osdImg.rect.height();
+                    const int w = osdImg.size.width();
+                    const int h = osdImg.size.height();
 
                     for (int y = 0; y < h; ++y)
                     {

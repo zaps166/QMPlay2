@@ -162,7 +162,8 @@ bool LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
             memcpy(data + buffOffset, img->bitmap, imgSize);
 
             auto &osdImg = osd->add();
-            osdImg.rect = QRect(img->dst_x, img->dst_y, img->w, img->h);
+            osdImg.rect = QRectF(img->dst_x, img->dst_y, img->w, img->h);
+            osdImg.size = QSize(img->w, img->h);
             osdImg.dataBufferView = BufferView::create(buffer, vk::Format::eR8Unorm, buffOffset, imgSize);
             osdImg.linesize = img->stride;
             osdImg.color.setX(((img->color >> 24) & 0xff) / 255.0f);
@@ -191,6 +192,7 @@ bool LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
     {
         auto &osdImg = osd->add();
         osdImg.rect = QRect(img->dst_x, img->dst_y, img->w, img->h);
+        osdImg.size = QSize(img->w, img->h);
         osdImg.rgba = QByteArray(img->w * img->h * sizeof(uint32_t), Qt::Uninitialized);
 
         const quint8 r = img->color >> 24;
