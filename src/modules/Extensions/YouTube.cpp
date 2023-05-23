@@ -1170,6 +1170,13 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         if (format.isEmpty())
             continue;
 
+        const auto protocol = format["protocol"].toString();
+        if (protocol.contains("dash", Qt::CaseInsensitive))
+        {
+            if (format.contains("fragment_base_url"))
+                continue; // Skip DASH, because it doesn't work
+        }
+
         const auto itag = format["format_id"].toString().toInt();
         const auto url = format["url"].toString();
         const auto ext = format["ext"].toString();
