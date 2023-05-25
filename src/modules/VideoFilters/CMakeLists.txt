@@ -7,6 +7,7 @@ set(VideoFilters_HDR
     BlendDeint.hpp
     DiscardDeint.hpp
     YadifDeint.hpp
+    FPSDoubler.hpp
 )
 
 set(VideoFilters_SRC
@@ -15,6 +16,7 @@ set(VideoFilters_SRC
     BlendDeint.cpp
     DiscardDeint.cpp
     YadifDeint.cpp
+    FPSDoubler.cpp
 )
 
 if(FALSE)

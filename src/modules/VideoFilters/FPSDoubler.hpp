@@ -18,42 +18,31 @@
 
 #pragma once
 
-#include <Module.hpp>
+#include <VideoFilter.hpp>
 
-#include <QCoreApplication>
-
-class VFilters final : public Module
+class FPSDoubler final : public VideoFilter
 {
-    Q_DECLARE_TR_FUNCTIONS(VFilters)
 public:
-    VFilters();
-private:
-    QList<Info> getModulesInfo(const bool) const override;
-    void *createInstance(const QString &) override;
+    FPSDoubler(Module &module, bool &fullScreen);
+    ~FPSDoubler();
 
-    SettingsWidget *getSettingsWidget() override;
+    bool set() override;
+
+    bool filter(QQueue<Frame> &framesQueue) override;
+
+    bool processParams(bool *paramsCorrected) override;
 
 private:
-    bool m_fullScreen = false;
+    bool &m_fullScreen;
+
+    double m_minFps = 0.0;
+    double m_maxFps = 0.0;
+    bool m_onlyFullScreen = false;
+
+    double m_fps = 0.0;
+
+    double m_frameTimeSum = 0.0;
+    int m_frames = 0;
 };
 
-/**/
-
-class QDoubleSpinBox;
-class QCheckBox;
-
-class ModuleSettingsWidget final : public Module::SettingsWidget
-{
-    Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
-
-public:
-    ModuleSettingsWidget(Module &module);
-
-private:
-    void saveSettings() override;
-
-private:
-    QDoubleSpinBox *const m_minFpsSpinBox;
-    QDoubleSpinBox *const m_maxFpsSpinBox;
-    QCheckBox *const m_onlyFullScreenCheckBox;
-};
+#define FPSDoublerName "FPS Doubler"
