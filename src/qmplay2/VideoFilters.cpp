@@ -236,7 +236,7 @@ void VideoFilters::clear()
     clearBuffers();
 }
 
-std::shared_ptr<VideoFilter> VideoFilters::on(const QString &filterName)
+std::shared_ptr<VideoFilter> VideoFilters::on(const QString &filterName, bool isHw)
 {
     if (filterName.isEmpty())
         return nullptr;
@@ -245,7 +245,7 @@ std::shared_ptr<VideoFilter> VideoFilters::on(const QString &filterName)
     {
         for (const Module::Info &mod : module->getModulesInfo())
         {
-            if ((mod.type & 0xF) == Module::VIDEOFILTER && mod.name == filterName)
+            if ((mod.type & 0xF) == Module::VIDEOFILTER && (!isHw || (mod.type & Module::DATAPRESERVE)) && mod.name == filterName)
             {
                 filter.reset(reinterpret_cast<VideoFilter *>(module->createInstance(mod.name)));
                 break;

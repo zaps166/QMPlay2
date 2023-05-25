@@ -232,6 +232,26 @@ void VideoThr::initFilters()
         };
 #endif
 
+        auto iterateVideoFilters = [this, &QMPSettings](bool isHw) {
+            for (QString filterName : QMPSettings.getStringList("VideoFilters"))
+            {
+                if (filterName.leftRef(1).toInt()) //if filter is enabled
+                {
+                    bool ok = false;
+                    filterName = filterName.mid(1);
+                    if (auto filter = filters.on(filterName, isHw))
+                    {
+                        filter->modParam("W", W);
+                        filter->modParam("H", H);
+                        if (!(ok = filter->processParams()))
+                            filters.off(filter);
+                    }
+                    if (!ok && W > 0 && H > 0)
+                        QMPlay2Core.logError(tr("Error initializing filter") + " \"" + filterName + '"');
+                }
+            }
+        };
+
         if (getHWDecContext())
         {
             if (auto hwFilter = dec->hwAccelFilter())
@@ -248,6 +268,8 @@ void VideoThr::initFilters()
             {
                 enableVulkanDeint();
             }
+
+            iterateVideoFilters(true);
 #endif
         }
         else
@@ -264,7 +286,7 @@ void VideoThr::initFilters()
             if (enableSoftwareDeint)
             {
                 const QString deintFilterName = QMPSettings.getString("Deinterlace/SoftwareMethod");
-                if (auto deintFilter = filters.on(deintFilterName))
+                if (auto deintFilter = filters.on(deintFilterName, false))
                 {
                     bool ok = false;
                     if (deintFilter->modParam("DeinterlaceFlags", deintFlags))
@@ -282,23 +304,7 @@ void VideoThr::initFilters()
                 }
             }
 
-            for (QString filterName : QMPSettings.getStringList("VideoFilters"))
-            {
-                if (filterName.leftRef(1).toInt()) //if filter is enabled
-                {
-                    bool ok = false;
-                    filterName = filterName.mid(1);
-                    if (auto filter = filters.on(filterName))
-                    {
-                        filter->modParam("W", W);
-                        filter->modParam("H", H);
-                        if (!(ok = filter->processParams()))
-                            filters.off(filter);
-                    }
-                    if (!ok && W > 0 && H > 0)
-                        QMPlay2Core.logError(tr("Error initializing filter") + " \"" + filterName + '"');
-                }
-            }
+            iterateVideoFilters(false);
         }
     }
 

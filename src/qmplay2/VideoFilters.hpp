@@ -48,7 +48,7 @@ public:
     void start();
     void clear();
 
-    std::shared_ptr<VideoFilter> on(const QString &filterName);
+    std::shared_ptr<VideoFilter> on(const QString &filterName, bool isHw);
     void on(const std::shared_ptr<VideoFilter> &videoFilter);
     void off(std::shared_ptr<VideoFilter> &videoFilter);
 
