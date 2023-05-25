@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <ModuleCommon.hpp>
 #include <ModuleParams.hpp>
 #include <Frame.hpp>
 
@@ -35,7 +36,7 @@ class HWInterop;
 }
 #endif
 
-class QMPLAY2SHAREDLIB_EXPORT VideoFilter : public ModuleParams
+class QMPLAY2SHAREDLIB_EXPORT VideoFilter : public ModuleCommon, public ModuleParams
 {
 #ifdef USE_VULKAN
 protected:
