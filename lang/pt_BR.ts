@@ -1846,6 +1846,30 @@
         <source>Delay</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Only in full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FPS</source>
+        <translation type="unfinished">FPS</translation>
+    </message>
+    <message>
+        <source>Minimum video FPS to double the frame rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum video FPS to double the frame rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minimum:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3404,6 +3428,10 @@ Partially checked only if the content has less channels than the specified value
         <source>Produce one extra frame which is average of two neighbour frames</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VideoAdjustmentW</name>
@@ -3527,6 +3555,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot create screenshot</source>
         <translation>Não foi possível criar a captura de tela</translation>
+    </message>
+    <message>
+        <source>Screenshot saved as: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

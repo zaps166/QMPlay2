@@ -1841,6 +1841,30 @@
         <source>Delay</source>
         <translation>Vertraging</translation>
     </message>
+    <message>
+        <source>Only in full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FPS</source>
+        <translation type="unfinished">FPS</translation>
+    </message>
+    <message>
+        <source>Minimum video FPS to double the frame rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum video FPS to double the frame rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minimum:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3398,6 +3422,10 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
         <source>Produce one extra frame which is average of two neighbour frames</source>
         <translation>Eén extra frame tonen als gemiddelde van twee nabije frames</translation>
     </message>
+    <message>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VideoAdjustmentW</name>
@@ -3521,6 +3549,10 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     <message>
         <source>Cannot create screenshot</source>
         <translation>Er kan geen schermfoto worden gemaakt</translation>
+    </message>
+    <message>
+        <source>Screenshot saved as: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

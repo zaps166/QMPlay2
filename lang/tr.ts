@@ -1849,6 +1849,30 @@
         <source>Delay</source>
         <translation>Gecikme</translation>
     </message>
+    <message>
+        <source>Only in full screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FPS</source>
+        <translation type="unfinished">FPS</translation>
+    </message>
+    <message>
+        <source>Minimum video FPS to double the frame rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum video FPS to double the frame rate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minimum:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maximum:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3418,6 +3442,10 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
         <source>Produce one extra frame which is average of two neighbour frames</source>
         <translation>İki bitişik karenin ortalaması olan bir ek kare oluşturur</translation>
     </message>
+    <message>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VideoAdjustmentW</name>
@@ -3542,6 +3570,10 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <message>
         <source>Error initializing filter</source>
         <translation>Filtre başlatılırken hata oluştu</translation>
+    </message>
+    <message>
+        <source>Screenshot saved as: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pl_PL" sourcelanguage="en">
+<TS version="2.0" language="pl_PL" sourcelanguage="en">
 <context>
     <name>ALSAWriter</name>
     <message>
@@ -1841,6 +1841,30 @@
         <source>Delay</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Only in full screen</source>
+        <translation>Tylko na pełnym ekranie</translation>
+    </message>
+    <message>
+        <source>FPS</source>
+        <translation>FPS</translation>
+    </message>
+    <message>
+        <source>Minimum video FPS to double the frame rate</source>
+        <translation>Minimalna liczba klatek na sekundę wideo, aby podwoić liczbę klatek na sekundę</translation>
+    </message>
+    <message>
+        <source>Maximum video FPS to double the frame rate</source>
+        <translation>Maksymalna liczba klatek na sekundę wideo, aby podwoić liczbę klatek na sekundę</translation>
+    </message>
+    <message>
+        <source>Minimum:</source>
+        <translation>Minimalny:</translation>
+    </message>
+    <message>
+        <source>Maximum:</source>
+        <translation>Maksymalny:</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3398,6 +3422,10 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
         <source>Produce one extra frame which is average of two neighbour frames</source>
         <translation>Tworzy jedną dodatkową ramkę, która jest średnią z dwóch sąsiadujących klatek</translation>
     </message>
+    <message>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <translation>Podwaja liczbę klatek na sekundę. Przydatne, aby wejść w zakres FreeSync. Ten filtr działa z filmami z akceleracją sprzętową.</translation>
+    </message>
 </context>
 <context>
     <name>VideoAdjustmentW</name>
@@ -3521,6 +3549,10 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     <message>
         <source>Error initializing filter</source>
         <translation>Błąd inicjalizacji filtru</translation>
+    </message>
+    <message>
+        <source>Screenshot saved as: %1</source>
+        <translation>Zrzut ekranu zapisany jako: %1</translation>
     </message>
 </context>
 <context>
