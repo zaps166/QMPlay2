@@ -89,7 +89,7 @@ void VideoFilter::addFramesToInternalQueue(QQueue<Frame> &framesQueue)
     while (!framesQueue.isEmpty())
     {
         const Frame &videoFrame = framesQueue.constFirst();
-        if (videoFrame.isEmpty() || !m_supportedPixelFormats.contains(videoFrame.pixelFormat()))
+        if (videoFrame.isEmpty() || (!m_supportedPixelFormats.isEmpty() && !m_supportedPixelFormats.contains(videoFrame.pixelFormat())))
             break;
         m_internalQueue.enqueue(framesQueue.dequeue());
     }
@@ -99,7 +99,7 @@ void VideoFilter::addFramesToDeinterlace(QQueue<Frame> &framesQueue)
     while (!framesQueue.isEmpty())
     {
         const Frame &videoFrame = framesQueue.constFirst();
-        if (videoFrame.isEmpty() || !m_supportedPixelFormats.contains(videoFrame.pixelFormat()))
+        if (videoFrame.isEmpty() || (!m_supportedPixelFormats.isEmpty() && !m_supportedPixelFormats.contains(videoFrame.pixelFormat())))
             break;
         if ((m_deintFlags & AutoDeinterlace) && !videoFrame.isInterlaced())
             break;
