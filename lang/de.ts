@@ -1846,7 +1846,7 @@
     </message>
     <message>
         <source>FPS</source>
-        <translation type="unfinished">FPS</translation>
+        <translation>FPS</translation>
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
@@ -3029,7 +3029,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
     </message>
     <message>
-        <source>Hardware accelerated video filters</source>
+        <source>Hardware-accelerated video filters</source>
         <translation>Hardware beschleunigte Videofilter</translation>
     </message>
     <message>
@@ -3422,7 +3422,7 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
         <translation>Erzeugt ein zusätzliches Bild, das dem Mittelwert aus beiden Nachbar Bildern entspricht</translation>
     </message>
     <message>
-        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

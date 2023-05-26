@@ -1847,7 +1847,7 @@
     </message>
     <message>
         <source>FPS</source>
-        <translation type="unfinished">FPS</translation>
+        <translation>FPS</translation>
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
@@ -3030,7 +3030,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</translation>
     </message>
     <message>
-        <source>Hardware accelerated video filters</source>
+        <source>Hardware-accelerated video filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3419,7 +3419,7 @@ Partially checked only if the content has less channels than the specified value
         <translation>Produce un fotograma extra que es la media de dos fotogramas contiguos</translation>
     </message>
     <message>
-        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

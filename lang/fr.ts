@@ -1844,7 +1844,7 @@
     </message>
     <message>
         <source>FPS</source>
-        <translation type="unfinished">images/sec</translation>
+        <translation>images/sec</translation>
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
@@ -3025,7 +3025,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hardware accelerated video filters</source>
+        <source>Hardware-accelerated video filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3414,7 +3414,7 @@ Partially checked only if the content has less channels than the specified value
         <translation>Produit une trame supplémentaire qui est à la moyenne des deux trames voisinnes</translation>
     </message>
     <message>
-        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3438,7 +3438,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Hue</source>
-        <translation type="unfinished">Teinte</translation>
+        <translation>Teinte</translation>
     </message>
     <message>
         <source>Sharpness</source>

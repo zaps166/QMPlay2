@@ -1847,7 +1847,7 @@
     </message>
     <message>
         <source>FPS</source>
-        <translation type="unfinished">частота кадрів</translation>
+        <translation>частота кадрів</translation>
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
@@ -3030,7 +3030,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 Частково зазначене не впливає на пошук на повзунку.</translation>
     </message>
     <message>
-        <source>Hardware accelerated video filters</source>
+        <source>Hardware-accelerated video filters</source>
         <translation>Відеофільтри для апаратного прискорення</translation>
     </message>
     <message>
@@ -3423,7 +3423,7 @@ Partially checked only if the content has less channels than the specified value
         <translation>Створює один додатковий кадр, який є середнім з двох сусідніх кадрів</translation>
     </message>
     <message>
-        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

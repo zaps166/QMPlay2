@@ -1849,7 +1849,7 @@
     </message>
     <message>
         <source>FPS</source>
-        <translation type="unfinished">FPS</translation>
+        <translation>FPS</translation>
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
@@ -3031,7 +3031,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>正確なシーク。部分的にチェックしてもスライダーのシークには影響しません。ただし低速です。</translation>
     </message>
     <message>
-        <source>Hardware accelerated video filters</source>
+        <source>Hardware-accelerated video filters</source>
         <translation>ハードウェアアクセラレーションビデオフィルター</translation>
     </message>
     <message>
@@ -3423,7 +3423,7 @@ Partially checked only if the content has less channels than the specified value
         <translation>２つの隣接フレームの平均から1つの追加フレームを生成します</translation>
     </message>
     <message>
-        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

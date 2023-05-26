@@ -486,7 +486,7 @@
     </message>
     <message>
         <source>FPS</source>
-        <translation>帧率</translation>
+        <translation>帧数</translation>
     </message>
     <message>
         <source>sample rate</source>
@@ -1387,7 +1387,7 @@
     </message>
     <message>
         <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
-        <translation>MicroDVD 字幕使用指定的帧率（如果存在）</translation>
+        <translation>MicroDVD 字幕使用指定的帧数（如果存在）</translation>
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
@@ -1843,27 +1843,27 @@
     </message>
     <message>
         <source>Only in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>仅全屏时</translation>
     </message>
     <message>
         <source>FPS</source>
-        <translation type="unfinished">帧率</translation>
+        <translation>帧数</translation>
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>最低视频帧数并加倍帧率</translation>
     </message>
     <message>
         <source>Maximum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>最高视频帧数并加倍帧率</translation>
     </message>
     <message>
         <source>Minimum:</source>
-        <translation type="unfinished"></translation>
+        <translation>最低：</translation>
     </message>
     <message>
         <source>Maximum:</source>
-        <translation type="unfinished"></translation>
+        <translation>最高：</translation>
     </message>
 </context>
 <context>
@@ -3030,7 +3030,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 半选中不影响滑块搜寻。</translation>
     </message>
     <message>
-        <source>Hardware accelerated video filters</source>
+        <source>Hardware-accelerated video filters</source>
         <translation>硬件加速视频滤镜</translation>
     </message>
     <message>
@@ -3423,8 +3423,8 @@ Partially checked only if the content has less channels than the specified value
         <translation>在相临两帧间平均生成一个额外帧</translation>
     </message>
     <message>
-        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
-        <translation type="unfinished"></translation>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
+        <translation>加倍帧率。有助于适配 FreeSync 范围值。此滤镜适用于硬件加速视频。</translation>
     </message>
 </context>
 <context>
@@ -3552,7 +3552,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Screenshot saved as: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>截图保存为：%1</translation>
     </message>
 </context>
 <context>

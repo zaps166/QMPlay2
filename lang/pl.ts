@@ -3030,7 +3030,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
     </message>
     <message>
-        <source>Hardware accelerated video filters</source>
+        <source>Hardware-accelerated video filters</source>
         <translation>Filtry wideo dla akceleracji sprzętowej</translation>
     </message>
     <message>
@@ -3423,7 +3423,7 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
         <translation>Tworzy jedną dodatkową ramkę, która jest średnią z dwóch sąsiadujących klatek</translation>
     </message>
     <message>
-        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
         <translation>Podwaja liczbę klatek na sekundę. Przydatne, aby wejść w zakres FreeSync. Ten filtr działa z filmami z akceleracją sprzętową.</translation>
     </message>
 </context>

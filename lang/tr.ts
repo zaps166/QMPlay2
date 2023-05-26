@@ -1855,7 +1855,7 @@
     </message>
     <message>
         <source>FPS</source>
-        <translation type="unfinished">FPS</translation>
+        <translation>FPS</translation>
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
@@ -3048,7 +3048,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
     </message>
     <message>
-        <source>Hardware accelerated video filters</source>
+        <source>Hardware-accelerated video filters</source>
         <translation>Donanım hızlandırmalı video filtreleri</translation>
     </message>
     <message>
@@ -3443,7 +3443,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
         <translation>İki bitişik karenin ortalaması olan bir ek kare oluşturur</translation>
     </message>
     <message>
-        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
