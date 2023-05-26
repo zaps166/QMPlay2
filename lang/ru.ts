@@ -1847,7 +1847,7 @@
     </message>
     <message>
         <source>FPS</source>
-        <translation type="unfinished">частота кадров</translation>
+        <translation>частота кадров</translation>
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
@@ -3030,7 +3030,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 Частично проверенное не влияет на поиск на слайдере.</translation>
     </message>
     <message>
-        <source>Hardware accelerated video filters</source>
+        <source>Hardware-accelerated video filters</source>
         <translation>Аппаратно ускоренные видеофильтры</translation>
     </message>
     <message>
@@ -3423,7 +3423,7 @@ Partially checked only if the content has less channels than the specified value
         <translation>Создаёт один дополнительный кадр — среднее из двух соседних кадров</translation>
     </message>
     <message>
-        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

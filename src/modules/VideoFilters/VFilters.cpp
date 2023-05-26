@@ -51,7 +51,7 @@ QList<VFilters::Info> VFilters::getModulesInfo(const bool) const
     modulesInfo += Info(BlendDeintName, VIDEOFILTER | DEINTERLACE);
     modulesInfo += Info(DiscardDeintName, VIDEOFILTER | DEINTERLACE);
     modulesInfo += Info(YadifNoSpatialDeintName, VIDEOFILTER | DEINTERLACE, YadifDescr);
-    modulesInfo += Info(FPSDoublerName, VIDEOFILTER | DATAPRESERVE, tr("Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos."));
+    modulesInfo += Info(FPSDoublerName, VIDEOFILTER | DATAPRESERVE, tr("Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos."));
 #ifdef MOTION_BLUR
     modulesInfo += Info(MotionBlurName, VIDEOFILTER, tr("Produce one extra frame which is average of two neighbour frames"));
 #endif

@@ -1847,7 +1847,7 @@
     </message>
     <message>
         <source>FPS</source>
-        <translation type="unfinished">FPS</translation>
+        <translation>FPS</translation>
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
@@ -2994,7 +2994,7 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
         <translation>Softwarematige videofilters</translation>
     </message>
     <message>
-        <source>Hardware accelerated video filters</source>
+        <source>Hardware-accelerated video filters</source>
         <translation>Hardwareversnelde videofilters</translation>
     </message>
     <message>
@@ -3423,7 +3423,7 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
         <translation>Eén extra frame tonen als gemiddelde van twee nabije frames</translation>
     </message>
     <message>
-        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

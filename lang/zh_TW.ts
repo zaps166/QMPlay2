@@ -1843,27 +1843,27 @@
     </message>
     <message>
         <source>Only in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>僅全螢幕時</translation>
     </message>
     <message>
         <source>FPS</source>
-        <translation type="unfinished">每秒影格數</translation>
+        <translation>每秒影格數</translation>
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>最低視訊影格数并雙倍帧率</translation>
     </message>
     <message>
         <source>Maximum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>最高視訊影格数并雙倍帧率</translation>
     </message>
     <message>
         <source>Minimum:</source>
-        <translation type="unfinished"></translation>
+        <translation>最低：</translation>
     </message>
     <message>
         <source>Maximum:</source>
-        <translation type="unfinished"></translation>
+        <translation>最高：</translation>
     </message>
 </context>
 <context>
@@ -3030,7 +3030,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
 部份勾選不影響進度條。</translation>
     </message>
     <message>
-        <source>Hardware accelerated video filters</source>
+        <source>Hardware-accelerated video filters</source>
         <translation>硬體加速視訊濾鏡</translation>
     </message>
     <message>
@@ -3423,8 +3423,8 @@ Partially checked only if the content has less channels than the specified value
         <translation>產生以兩相鄰影格的平均值為外加的影格</translation>
     </message>
     <message>
-        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware accelerated videos.</source>
-        <translation type="unfinished"></translation>
+        <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
+        <translation>雙倍帧率。有助適配 FreeSync 範圍值。此濾鏡適用硬體加速視訊。</translation>
     </message>
 </context>
 <context>
@@ -3552,7 +3552,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Screenshot saved as: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>截圖儲存为：%1</translation>
     </message>
 </context>
 <context>
