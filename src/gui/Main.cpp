@@ -771,7 +771,7 @@ int main(int argc, char *argv[])
     HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, MMKeysHookProc, GetModuleHandle(nullptr), 0);
 #endif
 
-    qsrand(time(nullptr));
+    srand(time(nullptr));
 
     do
     {

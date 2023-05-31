@@ -34,6 +34,7 @@
 #include <QPainter>
 #include <QAction>
 #include <QMessageBox>
+#include <QRandomGenerator>
 
 PlaylistDock::PlaylistDock() :
     repeatMode(RepeatNormal),
@@ -319,7 +320,7 @@ void PlaylistDock::next(bool playingError)
                     tWI = l.at(0);
                 else do
                 {
-                    tWI = l.at(qrand() % l.count());
+                    tWI = l.at(QRandomGenerator::global()->bounded(l.count()));
                     if (PlaylistWidget::getFlags(tWI) & Playlist::Entry::Skip)
                     {
                         //Don't play skipped item.
