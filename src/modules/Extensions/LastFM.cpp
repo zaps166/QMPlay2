@@ -276,7 +276,7 @@ void LastFM::albumFinished()
         {
             for (const QString &size : qAsConst(imageSizes))
             {
-                int idx = reply.indexOf(size);
+                int idx = reply.indexOf(size.toLatin1());
                 if (idx > -1)
                 {
                     idx += size.length();

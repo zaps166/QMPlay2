@@ -369,7 +369,8 @@ void DownloadItemW::startConversion()
     deleteConvertProcess();
 
     m_convertProcess = new QProcess(this);
-    m_convertProcessConn[0] = connect(m_convertProcess, qOverload<int>(&QProcess::finished), this, [this](int exitCode) {
+    m_convertProcessConn[0] = connect(m_convertProcess, qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this, [this](int exitCode, QProcess::ExitStatus exitStatus) {
+        Q_UNUSED(exitStatus)
         if (exitCode == 0)
         {
             sizeL->setText(tr(g_downloadComplete));

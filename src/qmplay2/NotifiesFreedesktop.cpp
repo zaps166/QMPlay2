@@ -44,7 +44,7 @@ QDBusArgument &operator<<(QDBusArgument &arg, const QImage &image)
     arg << scaledImage.hasAlphaChannel(); // Should be always "true" for ARGB32
     arg << scaledImage.depth() / channels;
     arg << channels;
-    arg << QByteArray::fromRawData((const char *)scaledImage.constBits(), scaledImage.byteCount());
+    arg << QByteArray::fromRawData((const char *)scaledImage.constBits(), scaledImage.sizeInBytes());
     arg.endStructure();
 
     return arg;
