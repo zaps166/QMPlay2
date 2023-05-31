@@ -75,7 +75,7 @@ static inline QWindow *getNativeWindow(const QWidget *w)
 
 QDate Functions::parseVersion(const QString &dateTxt)
 {
-    const QStringList l = dateTxt.split(QRegExp("\\D"));
+    const QStringList l = dateTxt.split(QRegularExpression(R"(\D)"));
     int y = 0, m = 0, d = 0;
     if (l.count() >= 3)
     {
