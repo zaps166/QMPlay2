@@ -33,7 +33,6 @@
 #include <QPainter>
 #include <QDir>
 #include <QUrl>
-#include <QRegExp>
 #include <QWindow>
 #include <QLibrary>
 #include <QTextCodec>
@@ -578,18 +577,26 @@ QByteArray Functions::convertToASS(QString txt)
     txt.remove('\r');
     txt.replace('\n', "\\N", Qt::CaseInsensitive);
 
-    //Colors
-    QRegExp colorRegExp("<font\\s+color\\s*=\\s*\\\"?\\#?(\\w{6})\\\"?>(.*)</font>", Qt::CaseInsensitive);
-    colorRegExp.setMinimal(true);
+    // Colors
+    const QRegularExpression colorRegExp(
+        R"(<font\s+color\s*=\s*\"?\#?(\w{6})\"?\s*>(.*)<\/font\s*>)",
+        QRegularExpression::CaseInsensitiveOption | QRegularExpression::InvertedGreedinessOption
+    );
     int pos = 0;
-    while ((pos = colorRegExp.indexIn(txt, pos)) != -1)
+    for (;;)
     {
-        QString rgb = colorRegExp.cap(1);
+        const auto match = colorRegExp.match(txt, pos);
+        if (!match.hasMatch())
+            break;
+
+        pos = match.capturedStart();
+
+        QString rgb = match.captured(1);
         rgb = rgb.mid(4, 2) + rgb.mid(2, 2) + rgb.mid(0, 2);
 
-        const QString replaced = "{\\1c&" + rgb + "&}" + colorRegExp.cap(2) + "{\\1c}";
+        const QString replaced = "{\\1c&" + rgb + "&}" + match.captured(2) + "{\\1c}";
 
-        txt.replace(pos, colorRegExp.matchedLength(), replaced);
+        txt.replace(pos, match.capturedLength(), replaced);
         pos += replaced.length();
     }
 
