@@ -104,7 +104,7 @@ void AudioCD::add()
         layout.addWidget(&drvE, 1, 1, 1, 1);
         layout.addWidget(&browseB, 1, 2, 1, 1);
         layout.addWidget(&bb, 2, 0, 1, 3);
-        layout.setMargin(2);
+        layout.setContentsMargins(2, 2, 2, 2);
         chooseCD.resize(400, 0);
         if (chooseCD.exec() == QDialog::Accepted)
         {

@@ -73,7 +73,7 @@ void FileAssociation::firsttime()
             settingsW->selectAllB->click();
         layout.addWidget(settingsW);
         layout.addWidget(&bb);
-        layout.setMargin(2);
+        layout.setContentsMargins(2, 2, 2, 2);
         d.resize(0, 380);
         if (d.exec() == QDialog::Accepted)
             settingsW->saveSettings();
@@ -215,7 +215,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(associateB);
-    layout->setMargin(2);
+    layout->setContentsMargins(2, 2, 2, 2);
 }
 
 void ModuleSettingsWidget::saveSettings()

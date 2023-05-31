@@ -30,7 +30,7 @@ VolWidget::VolWidget(int max) :
     setContextMenuPolicy(Qt::CustomContextMenu);
 
     QVBoxLayout *volL = new QVBoxLayout(this);
-    volL->setMargin(0);
+    volL->setContentsMargins(0, 0, 0, 0);
 
     for (int i = 0; i < 2; ++i)
     {

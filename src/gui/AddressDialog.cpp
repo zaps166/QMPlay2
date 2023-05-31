@@ -43,7 +43,7 @@ AddressDialog::AddressDialog(QWidget *p)
     layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), 1, 0, 1, 2); //vSpacer
     layout->addWidget(&addAndPlayB, 2, 0, 1, 1);
     layout->addWidget(buttonBox, 2, 1, 1, 1);
-    layout->setMargin(3);
+    layout->setContentsMargins(3, 3, 3, 3);
 
     addrB.setFocus();
     resize(625, 0);

@@ -236,7 +236,7 @@ MediaBrowserPages::MediaBrowserPages() :
     layout->addWidget(m_currentPage, 0, 1, 1, 1);
     layout->addWidget(m_nextPage, 0, 2, 1, 1);
     layout->setSpacing(3);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 }
 MediaBrowserPages::~MediaBrowserPages()
 {}

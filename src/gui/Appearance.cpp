@@ -243,7 +243,7 @@ Appearance::Appearance(QWidget *p) :
     layout->addWidget(newB, 1, 0, 1, 1);
     layout->addWidget(saveB, 1, 1, 1, 1);
     layout->addWidget(deleteB, 1, 2, 1, 1);
-    layout->setMargin(3);
+    layout->setContentsMargins(3, 3, 3, 3);
 
 
     useColorsB = new QGroupBox(tr("Use custom colors"));
@@ -258,7 +258,7 @@ Appearance::Appearance(QWidget *p) :
     formLayout->addRow(tr("Text color") + ":", textC = new ColorButton);
     formLayout->addRow(tr("Highlighted text color") + ":", highlightedTextC = new ColorButton);
     formLayout->addRow(tr("Slider button color") + ":", sliderButtonC = new ColorButton);
-    formLayout->setMargin(3);
+    formLayout->setContentsMargins(3, 3, 3, 3);
 
 
     gradientB = new QGroupBox(tr("Gradient in the video window"));
@@ -287,7 +287,7 @@ Appearance::Appearance(QWidget *p) :
     layout->addWidget(wallpaperW);
     layout->addWidget(alphaB);
     layout->addWidget(wallpaperB);
-    layout->setMargin(3);
+    layout->setContentsMargins(3, 3, 3, 3);
 
 
     buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
@@ -300,7 +300,7 @@ Appearance::Appearance(QWidget *p) :
     layout->addWidget(gradientB, 2, 0, 1, 1);
     layout->addWidget(useWallpaperB, 1, 1, 2, 1);
     layout->addWidget(buttonBox, 3, 0, 1, 2);
-    layout->setMargin(3);
+    layout->setContentsMargins(3, 3, 3, 3);
 
 
     int pos = schemesB->findText(QMPlay2Core.getSettings().getString("ColorScheme"));

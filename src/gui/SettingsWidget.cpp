@@ -291,7 +291,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
     layout->addWidget(tabW, 0, 0, 1, 3);
     layout->addWidget(applyB, 1, 1, 1, 1);
     layout->addWidget(closeB, 1, 2, 1, 1);
-    layout->setMargin(2);
+    layout->setContentsMargins(2, 2, 2, 2);
 
     {
         QWidget *generalSettingsWidget = new QWidget;
@@ -619,7 +619,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         page3->scrollA->setFrameShape(QFrame::NoFrame);
 
         QHBoxLayout *layout = new QHBoxLayout(page3);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(1);
         layout->addWidget(page3->listW);
         layout->addWidget(page3->scrollA);
@@ -671,7 +671,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         QWidget *widget = new QWidget;
 
         QGridLayout *layout = new QGridLayout(widget);
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
 
         page6->deintSettingsW = new DeintSettingsW;
         layout->addWidget(page6->deintSettingsW, 0, 0, 1, 2);
@@ -815,7 +815,7 @@ void SettingsWidget::createRendererSettings()
         auto legacySetttings = new QWidget;
 
         auto layout = new QFormLayout(legacySetttings);
-        layout->setMargin(3);
+        layout->setContentsMargins(3, 3, 3, 3);
         layout->addRow(new QLabel(tr(
             "Use QMPlay2 video output modules. "
             "This will also be used if other renderers aren't available."
@@ -865,7 +865,7 @@ void SettingsWidget::createRendererSettings()
         bypassCompositor->setChecked(settings->getBool("OpenGL/BypassCompositor"));
 
         auto layout = new QFormLayout(openglSettings);
-        layout->setMargin(3);
+        layout->setContentsMargins(3, 3, 3, 3);
         layout->addRow(glOnWindow);
         layout->addRow(vsync);
         layout->addRow(bypassCompositor);
@@ -1001,7 +1001,7 @@ void SettingsWidget::createRendererSettings()
         hqUpscale->setToolTip(tr("Very slow if used with sharpness"));
 
         auto layout = new QFormLayout(vulkanSetttings);
-        layout->setMargin(3);
+        layout->setContentsMargins(3, 3, 3, 3);
         layout->addRow(tr("Device:"), devices);
         layout->addRow(vsync);
         layout->addRow(gpuDeint);
@@ -1052,7 +1052,7 @@ void SettingsWidget::createRendererSettings()
 
     auto widget = new QWidget;
     auto layout = new QGridLayout(widget);
-    layout->setMargin(1);
+    layout->setContentsMargins(1, 1, 1, 1);
     layout->addWidget(new QLabel(tr("Renderer:")), 0, 0);
     layout->addWidget(renderers, 0, 1);
     layout->addWidget(rendererStacked, 1, 0, 1, 2);
@@ -1303,7 +1303,7 @@ void SettingsWidget::chModule(QListWidgetItem *w)
         if (w)
         {
             QLayout *layout = w->layout();
-            layout->setMargin(2);
+            layout->setContentsMargins(2, 2, 2, 2);
             if (QFormLayout *fLayout = qobject_cast<QFormLayout *>(layout))
                 fLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
             else if (QGridLayout *gLayout = qobject_cast<QGridLayout *>(layout))
@@ -1373,7 +1373,7 @@ void SettingsWidget::tabCh(int idx)
     else
     {
         QGridLayout *videoEqLayout = new QGridLayout(page6->videoEqContainer);
-        videoEqLayout->setMargin(0);
+        videoEqLayout->setContentsMargins(0, 0, 0, 0);
         videoEqLayout->addWidget(videoEq);
         videoEqOriginalParent->setDisabled(true);
         videoEq->show();

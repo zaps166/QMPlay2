@@ -192,7 +192,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     layout->addWidget(m_preferredCodec, 2, 1, 1, 1);
     layout->addWidget(new QLabel(tr("Preferred quality") + ": "), 3, 0, 1, 1);
     layout->addWidget(qualityPreset, 3, 1, 1, 1);
-    layout->setMargin(2);
+    layout->setContentsMargins(2, 2, 2, 2);
 #endif
 
 #ifdef USE_LASTFM
@@ -207,7 +207,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
     layout = new QGridLayout(downloadCoversGB);
     layout->addWidget(allowBigCovers);
-    layout->setMargin(3);
+    layout->setContentsMargins(3, 3, 3, 3);
 
     updateNowPlayingAndScrobbleB = new QCheckBox(tr("Scrobble"));
     updateNowPlayingAndScrobbleB->setChecked(sets().getBool("LastFM/UpdateNowPlayingAndScrobble"));
@@ -230,7 +230,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     layout->addWidget(updateNowPlayingAndScrobbleB);
     layout->addWidget(loginE);
     layout->addWidget(passwordE);
-    layout->setMargin(2);
+    layout->setContentsMargins(2, 2, 2, 2);
 #endif
 
     QGridLayout *mainLayout = new QGridLayout(this);

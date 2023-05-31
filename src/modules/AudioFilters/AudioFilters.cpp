@@ -189,7 +189,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     bs2bLayoutB->addWidget(bs2bFcutB);
     bs2bLayoutB->addWidget(bs2bFeedB);
     bs2bLayoutB->setSpacing(3);
-    bs2bLayoutB->setMargin(3);
+    bs2bLayoutB->setContentsMargins(3, 3, 3, 3);
 
 
     voiceRemovalB = new QCheckBox(tr("Voice removal"));
@@ -208,7 +208,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
     QGridLayout *phaseReverseLayout = new QGridLayout(phaseReverseB);
     phaseReverseLayout->addWidget(phaseReverseRightB);
-    phaseReverseLayout->setMargin(3);
+    phaseReverseLayout->setContentsMargins(3, 3, 3, 3);
 
 
     swapStereoB = new QCheckBox(tr("Swap stereo channels"));
@@ -325,7 +325,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     eqLayout->addWidget(eqSlidersB, 2, 1);
     eqLayout->addWidget(eqMinFreqB, 3, 0);
     eqLayout->addWidget(eqMaxFreqB, 3, 1);
-    eqLayout->setMargin(3);
+    eqLayout->setContentsMargins(3, 3, 3, 3);
 
 
     defaultB = new QPushButton(tr("Default settings"));

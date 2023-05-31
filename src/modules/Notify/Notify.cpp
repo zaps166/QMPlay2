@@ -120,7 +120,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     QVBoxLayout *layout = new QVBoxLayout(m_notify);
     layout->addLayout(generalL);
     layout->addWidget(m_customMsgG);
-    layout->setMargin(3);
+    layout->setContentsMargins(3, 3, 3, 3);
 
     /**/
 

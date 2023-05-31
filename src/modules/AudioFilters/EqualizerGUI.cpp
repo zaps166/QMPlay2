@@ -124,7 +124,7 @@ EqualizerGUI::EqualizerGUI(Module &module) :
     headerLayout->addWidget(enabledB);
     headerLayout->addWidget(presetsB);
     headerLayout->addWidget(showSettingsB);
-    headerLayout->setMargin(0);
+    headerLayout->setContentsMargins(0, 0, 0, 0);
 
     QFrame *frame = new QFrame;
     frame->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
@@ -134,7 +134,7 @@ EqualizerGUI::EqualizerGUI(Module &module) :
     frame->setFrameShape(QFrame::StyledPanel);
     QGridLayout *graphLayout = new QGridLayout(frame);
     graphLayout->addWidget(&graph);
-    graphLayout->setMargin(2);
+    graphLayout->setContentsMargins(2, 2, 2, 2);
 
     QWidget *buttonsW = new QWidget;
     QToolButton *maxB = new QToolButton;
@@ -158,7 +158,7 @@ EqualizerGUI::EqualizerGUI(Module &module) :
     buttonsLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
     buttonsLayout->addWidget(minB);
     buttonsLayout->addWidget(setSmallerFont(new QLabel("\n")));
-    buttonsLayout->setMargin(0);
+    buttonsLayout->setContentsMargins(0, 0, 0, 0);
 
     slidersA = new QScrollArea;
     slidersA->setWidgetResizable(true);
@@ -196,7 +196,7 @@ bool EqualizerGUI::set()
     slidersW->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     QHBoxLayout *slidersLayout = new QHBoxLayout(slidersW);
-    slidersLayout->setMargin(0);
+    slidersLayout->setContentsMargins(0, 0, 0, 0);
 
     const QVector<float> freqs = Equalizer::freqs(sets());
     graph.setValues(freqs.count());
@@ -205,7 +205,7 @@ bool EqualizerGUI::set()
         QWidget *sliderW = new QWidget;
 
         QGridLayout *sliderWLaout = new QGridLayout(sliderW);
-        sliderWLaout->setMargin(0);
+        sliderWLaout->setContentsMargins(0, 0, 0, 0);
 
         const int value = sets().getInt(QString("Equalizer/%1").arg(i));
 

@@ -135,7 +135,7 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
     if (fileSizeL)
         layout.addWidget(fileSizeL, row, 0, 1, 1);
     layout.setSpacing(3);
-    layout.setMargin(3);
+    layout.setContentsMargins(3, 3, 3, 3);
 
 #ifdef QMPlay2_TagEditor
     resize(625, tagEditor ? 470 : 0);

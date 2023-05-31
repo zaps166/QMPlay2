@@ -876,7 +876,7 @@ void Downloader::init()
     m_convertsPresetsB->setMenu(m_convertsMenu);
 
     layout = new QGridLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(downloadLW, 0, 0, 1, 6);
     layout->addWidget(setDownloadsDirB, 1, 0, 1, 1);
     layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 1, 1, 1, 1);
@@ -1051,7 +1051,7 @@ bool Downloader::modifyConvertAction(QAction *action, bool addRemoveButton)
     }
 
     QFormLayout *layout = new QFormLayout(&dialog);
-    layout->setMargin(4);
+    layout->setContentsMargins(4, 4, 4, 4);
     layout->setSpacing(4);
     layout->addRow(tr("Preset name"), nameE);
     layout->addRow(tr("Command line"), commandE);

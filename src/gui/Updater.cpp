@@ -60,7 +60,7 @@ Updater::Updater(QObject *parent) :
     connect(installB, SIGNAL(clicked()), this, SLOT(applyUpdate()));
 
     QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setMargin(2);
+    layout->setContentsMargins(2, 2, 2, 2);
     layout->addWidget(infoL);
     layout->addWidget(downloadUpdateB);
     layout->addWidget(progressB);

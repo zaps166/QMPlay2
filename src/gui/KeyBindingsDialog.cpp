@@ -47,7 +47,7 @@ KeyBindingsDialog::KeyBindingsDialog(QWidget *p) :
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(shortcuts);
     layout->addWidget(buttons);
-    layout->setMargin(3);
+    layout->setContentsMargins(3, 3, 3, 3);
 
     if (QWidget *w = parentWidget())
         resize(600, w->height() * 9 / 10);
