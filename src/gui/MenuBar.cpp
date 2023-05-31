@@ -94,13 +94,14 @@ MenuBar::MenuBar()
 #endif
 
     QMPlay2Core.registerProcessWheelEventFn([this](QWheelEvent *e) {
+        const auto deltaY  = e->angleDelta().y();
         auto &settings = QMPlay2Core.getSettings();
-        if (e->orientation() == Qt::Vertical && e->buttons() == Qt::NoButton && settings.getBool("WheelAction"))
+        if (deltaY != 0 && e->buttons() == Qt::NoButton && settings.getBool("WheelAction"))
         {
             if (settings.getBool("WheelSeek"))
-                e->delta() > 0 ? player->seekF->trigger() : player->seekB->trigger();
+                deltaY > 0 ? player->seekF->trigger() : player->seekB->trigger();
             else if (settings.getBool("WheelVolume"))
-                e->delta() > 0 ? player->volUp->trigger() : player->volDown->trigger();
+                deltaY > 0 ? player->volUp->trigger() : player->volDown->trigger();
         }
     });
 }

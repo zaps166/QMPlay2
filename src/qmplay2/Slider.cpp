@@ -151,8 +151,9 @@ void Slider::mouseMoveEvent(QMouseEvent *e)
 }
 void Slider::wheelEvent(QWheelEvent *e)
 {
+    const auto angleDelta  = e->angleDelta();
     int v;
-    if (e->delta() > 0)
+    if ((angleDelta.y() != 0 ? angleDelta.y() : angleDelta.x()) > 0)
         v = value() + wheelStep;
     else
         v = value() - wheelStep;

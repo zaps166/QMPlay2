@@ -277,9 +277,10 @@ void VideoDock::moveEvent(QMoveEvent *e)
 }
 void VideoDock::wheelEvent(QWheelEvent *e)
 {
+    const auto deltaY  = e->angleDelta().y();
     auto player = QMPlay2GUI.menuBar->player;
-    if (e->orientation() == Qt::Vertical && (e->buttons() & Qt::LeftButton))
-        e->delta() > 0 ? player->zoomIn->trigger() : player->zoomOut->trigger();
+    if (deltaY != 0 && (e->buttons() & Qt::LeftButton))
+        deltaY > 0 ? player->zoomIn->trigger() : player->zoomOut->trigger();
     else
         QMPlay2Core.processWheelEvent(e);
     DockWidget::wheelEvent(e);
