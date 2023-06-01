@@ -312,7 +312,7 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
 
                 const QPixmap radioIcon = QIcon(":/radio.svgz").pixmap(elementHeight(), elementHeight());
 
-                for (auto &&item : arrayItems)
+                for (const QJsonValue item : arrayItems)
                 {
                     if (!item.isObject())
                         continue;

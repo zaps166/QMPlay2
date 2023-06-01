@@ -885,7 +885,7 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation)
         const auto onResponseReceivedCommands = jsonObj
             ["onResponseReceivedCommands"].toArray()
         ;
-        for (auto &&val : onResponseReceivedCommands)
+        for (const QJsonValue val : onResponseReceivedCommands)
         {
             items = val
                 ["appendContinuationItemsAction"]
@@ -906,7 +906,7 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation)
         ;
     }
 
-    for (const QJsonValue &obj : items)
+    for (const QJsonValue obj : items)
     {
         const auto contents = obj
             ["itemSectionRenderer"]
@@ -922,7 +922,7 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation)
         if (!token.isEmpty())
             m_continuationToken = token;
 
-        for (auto &&obj : contents)
+        for (const QJsonValue obj : contents)
         {
             const auto videoRenderer = obj["videoRenderer"].toObject();
             const auto playlistRenderer = obj["playlistRenderer"].toObject();
@@ -1030,7 +1030,7 @@ void YouTube::setRelatedResults(const QJsonObject &jsonObj, bool isContinuation)
         ["secondaryResults"]
         ["results"].toArray();
 
-    for (const QJsonValue &obj : items)
+    for (const QJsonValue obj : items)
     {
         const auto videoRenderer = obj["compactVideoRenderer"].toObject();
         const auto playlistRenderer = obj["compactPlaylistRenderer"].toObject();
@@ -1311,7 +1311,7 @@ void YouTube::preparePlaylist(const QByteArray &data, QTreeWidgetItem *tWI)
         ["contents"].toArray()
     ;
 
-    for (auto &&obj : contents)
+    for (const QJsonValue obj : contents)
     {
         const auto title = obj["playlistVideoRenderer"]["title"]["runs"].toArray().at(0)["text"].toString();
         const auto videoId = obj["playlistVideoRenderer"]["videoId"].toString();

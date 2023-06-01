@@ -582,7 +582,7 @@ void MediaBrowser::downloadScripts(const QByteArray &jsonData)
     }();
 
     bool removed = false, downloading = false;
-    for (auto &&jsonVal : jsonArr)
+    for (const QJsonValue jsonVal : jsonArr)
     {
         const auto name = jsonVal["Name"].toString();
         const auto path = jsonVal["Path"].toString();
