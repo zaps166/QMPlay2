@@ -103,13 +103,13 @@ void Slider::mousePressEvent(QMouseEvent *e)
     if (style->styleHint(QStyle::SH_Slider_PageSetButtons) & e->button())
     {
         const auto sliderAbsoluteSetButtons = static_cast<Qt::MouseButtons>(style->styleHint(QStyle::SH_Slider_AbsoluteSetButtons));
-        if (sliderAbsoluteSetButtons & (Qt::LeftButton | Qt::MidButton))
+        if (sliderAbsoluteSetButtons & (Qt::LeftButton | Qt::MiddleButton))
         {
             Qt::MouseButton sliderAbsoluteSetButton = Qt::NoButton;
             if (sliderAbsoluteSetButtons & Qt::LeftButton)
                 sliderAbsoluteSetButton = Qt::LeftButton;
-            else if (sliderAbsoluteSetButtons & Qt::MidButton)
-                sliderAbsoluteSetButton = Qt::MidButton;
+            else if (sliderAbsoluteSetButtons & Qt::MiddleButton)
+                sliderAbsoluteSetButton = Qt::MiddleButton;
 
             QMouseEvent ev(e->type(), e->pos(), sliderAbsoluteSetButton, sliderAbsoluteSetButtons, e->modifiers());
             QSlider::mousePressEvent(&ev);

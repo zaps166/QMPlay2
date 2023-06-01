@@ -1086,7 +1086,7 @@ void PlaylistWidget::createExtensionsMenu()
 void PlaylistWidget::mouseMoveEvent(QMouseEvent *e)
 {
     const bool modifier = (e->modifiers() == Qt::MetaModifier) || (e->modifiers() == Qt::AltModifier);
-    if ((e->buttons() & Qt::MidButton) || ((e->buttons() & Qt::LeftButton) && modifier))
+    if ((e->buttons() & Qt::MiddleButton) || ((e->buttons() & Qt::LeftButton) && modifier))
     {
         const QList<QUrl> urls = getUrls();
         if (!urls.isEmpty())
