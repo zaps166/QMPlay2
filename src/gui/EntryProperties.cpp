@@ -212,7 +212,7 @@ void EntryProperties::accept()
         if (catalogCB->isChecked())
         {
             const QString newPth = pthE->text();
-            const QFileInfo pthInfo = newPth;
+            const QFileInfo pthInfo(newPth);
             if (newPth.contains("://") || pthInfo.isDir() || pthInfo.isFile())
             {
                 if (nameE->text().isEmpty())
