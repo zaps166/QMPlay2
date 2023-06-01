@@ -21,8 +21,8 @@
 #include <Functions.hpp>
 #include <LibASS.hpp>
 
+#include <QRegularExpression>
 #include <QStringList>
-#include <QRegExp>
 
 #include <algorithm>
 #include <cstdlib>
@@ -70,7 +70,7 @@ static inline void initOnce(bool &ok, LibASS *ass)
     }
 }
 
-static inline QString convertLine(const QRegExp &rx, const QString &line)
+static inline QString convertLine(const QRegularExpression &rx, const QString &line)
 {
     return line.section(rx, 1, 1, QString::SectionIncludeTrailingSep).replace('|', '\n');
 }
@@ -100,11 +100,10 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 
     bool ok = false, use_mDVD_FPS = Use_mDVD_FPS;
 
-    const QRegExp TMPRegExp("\\d{1,2}:\\d{1,2}:\\d{1,2}\\D\\s?");
-    const QRegExp MPL2RegExp("\\[\\d+\\]\\[\\d*\\]\\s?");
-    const QRegExp MicroDVDRegExp("\\{\\d+\\}\\{\\d*\\}\\s?");
-    QRegExp MicroDVDStylesRegExp("\\{(\\w):(.*)\\}");
-    MicroDVDStylesRegExp.setMinimal(true);
+    const QRegularExpression TMPRegExp(R"(\d{1,2}:\d{1,2}:\d{1,2}\D\s?)");
+    const QRegularExpression MPL2RegExp(R"(\[\d+\]\[\d*\]\s?)");
+    const QRegularExpression MicroDVDRegExp(R"(\{\d+\}\{\d*\}\s?)");
+    const QRegularExpression MicroDVDStylesRegExp(R"(\{(\w):(.*)\})", QRegularExpression::InvertedGreedinessOption);
 
     QList<SubWithoutEnd> subsWithoutEnd;
 
@@ -176,11 +175,17 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
                 }
 
                 int pos = 0;
-                while ((pos = MicroDVDStylesRegExp.indexIn(sub, pos)) != -1)
+                for (;;)
                 {
-                    const int matchedLength = MicroDVDStylesRegExp.matchedLength();
-                    const QString styleText = MicroDVDStylesRegExp.cap(2);
-                    const QChar s = MicroDVDStylesRegExp.cap(1).at(0);
+                    const auto match = MicroDVDStylesRegExp.match(sub, pos);
+                    if (!match.hasMatch())
+                        break;
+
+                    pos = match.capturedStart();
+
+                    const int matchedLength = match.capturedLength();
+                    const QString styleText = match.captured(2);
+                    const QChar s = match.captured(1).at(0);
                     const bool singleLine = s.isLower();
                     switch (s.toLower().toLatin1())
                     {
@@ -208,7 +213,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
                             replaceText(sub, pos, matchedLength, singleLine, "{\\" + styleText + "1}", "{\\" + styleText + "0}");
                             continue;
                     }
-                    pos += MicroDVDStylesRegExp.matchedLength();
+                    pos += matchedLength;
                 }
 
                 start = s / fps;
