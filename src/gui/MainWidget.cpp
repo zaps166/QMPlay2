@@ -1230,11 +1230,11 @@ void MainWidget::toggleFullScreen()
         if (!visible) //jeżeli okno było wcześniej ukryte, to ma je znowu ukryć
             toggleVisibility();
 
-        infoDock->setFeatures(QDockWidget::AllDockWidgetFeatures);
-        playlistDock->setFeatures(QDockWidget::AllDockWidgetFeatures);
+        infoDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+        playlistDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
         for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
             if (QDockWidget *dw = QMPlay2Ext->getDockWidget())
-                dw->setFeatures(QDockWidget::AllDockWidgetFeatures);
+                dw->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
 
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
         menuBar->setVisible(!hideMenuAct->isChecked());

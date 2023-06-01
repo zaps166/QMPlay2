@@ -132,7 +132,7 @@ void VideoDock::fullScreen(bool b)
         }
 
         setTitleBarVisible(true);
-        setFeatures(DockWidget::AllDockWidgetFeatures);
+        setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
         setFloating(is_floating);
 
         setContentsMargins(m_contentMarginsBackup);
