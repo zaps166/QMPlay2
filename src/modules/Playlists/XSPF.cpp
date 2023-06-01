@@ -52,42 +52,42 @@ Playlist::Entries XSPF::read()
         switch (token)
         {
             case QXmlStreamReader::StartElement:
-                if (name == "track")
+                if (name == QStringLiteral("track"))
                     inTrack = true;
                 else if (inTrack)
                 {
-                    if (name == "extension")
+                    if (name == QStringLiteral("extension"))
                     {
-                        if (xmlReader.attributes().value("application") == "QMPlay2")
+                        if (xmlReader.attributes().value("application") == QStringLiteral("QMPlay2"))
                             inExtension = true;
                     }
                     else
                     {
                         const QString value = xmlReader.readElementText();
-                        if (name == "location")
+                        if (name == QStringLiteral("location"))
                             curr.url = Functions::Url(QUrl::fromPercentEncoding(value.toUtf8()), playlistPath);
-                        else if (name == "title")
+                        else if (name == QStringLiteral("title"))
                             curr.name = value;
-                        else if (name == "duration")
+                        else if (name == QStringLiteral("duration"))
                             curr.length = value.toInt() / 1000.0;
                         if (inExtension)
                         {
-                            if (name == "f")
+                            if (name == QStringLiteral("f"))
                                 curr.flags = value.toInt();
-                            else if (name == "q")
+                            else if (name == QStringLiteral("q"))
                                 curr.queue = value.toInt();
-                            else if (name == "g")
+                            else if (name == QStringLiteral("g"))
                                 curr.GID = value.toInt();
-                            else if (name == "p")
+                            else if (name == QStringLiteral("p"))
                                 curr.parent = value.toInt();
                         }
                     }
                 }
                 break;
             case QXmlStreamReader::EndElement:
-                if (name == "extension")
+                if (name == QStringLiteral("extension"))
                     inExtension = false;
-                else if (name == "track")
+                else if (name == QStringLiteral("track"))
                 {
                     if (inTrack)
                     {
