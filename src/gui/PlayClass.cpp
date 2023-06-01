@@ -566,7 +566,7 @@ void PlayClass::flipRotMsg()
         case Qt::Vertical:
             str = tr("Vertical flip");
             break;
-        case Qt::Horizontal + Qt::Vertical:
+        case Qt::Horizontal | Qt::Vertical:
             if (rotate90)
                 str = tr("Rotation 270°");
             else
