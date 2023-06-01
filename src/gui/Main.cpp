@@ -31,13 +31,14 @@
 #include <IPC.hpp>
 
 #include <QCommandLineParser>
-#include <QDesktopWidget>
 #include <QApplication>
 #include <QImageReader>
 #include <QTreeWidget>
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QPainter>
+#include <QWindow>
+#include <QScreen>
 #include <QBuffer>
 #include <QFile>
 #include <QDir>
@@ -181,18 +182,26 @@ void QMPlay2GUIClass::setCurrentPth(const QString &pth)
 
 void QMPlay2GUIClass::restoreGeometry(const QString &pth, QWidget *w, const int defaultSizePercent)
 {
+    const auto window = w->window()->windowHandle();
+    if (Q_UNLIKELY(!window))
+        return;
+
+    const auto screen = window->screen();
+    Q_ASSERT(screen);
+
+    const auto screenSize = screen->size();
+
     const QRect geo = settings->getRect(pth);
-    QDesktopWidget *desktop = QApplication::desktop();
     if (geo.isValid())
     {
         w->setGeometry(geo);
-        if (!desktop->screenGeometry(w).contains(w->pos()))
-            w->move(desktop->width() / 2 - w->width() / 2, desktop->height() / 2 - w->height() / 2);
+        if (!screen->geometry().contains(w->pos()))
+            w->move(screenSize.width() / 2 - w->width() / 2, screenSize.height() / 2 - w->height() / 2);
     }
     else
     {
-        const QSize defaultSize = desktop->availableGeometry(w).size() * defaultSizePercent / 100;
-        w->move(desktop->width() / 2 - defaultSize.width() / 2, desktop->height() / 2 - defaultSize.height() / 2);
+        const QSize defaultSize = screen->availableGeometry().size() * defaultSizePercent / 100;
+        w->move(screenSize.width() / 2 - defaultSize.width() / 2, screenSize.height() / 2 - defaultSize.height() / 2);
         w->resize(defaultSize);
     }
 }
