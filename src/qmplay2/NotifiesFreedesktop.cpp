@@ -63,7 +63,7 @@ NotifiesFreedesktop::NotifiesFreedesktop() :
     m_notificationId(0),
     m_error(false)
 {
-    static const int metaTypeId = qDBusRegisterMetaType<QImage>();
+    static const auto metaTypeId = qDBusRegisterMetaType<QImage>();
     Q_UNUSED(metaTypeId);
 
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(m_interface->GetCapabilities(), this);
