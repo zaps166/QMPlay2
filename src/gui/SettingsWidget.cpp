@@ -37,6 +37,7 @@
 #include <QStandardPaths>
 #include <QStyleFactory>
 #include <QRadioButton>
+#include <QActionGroup>
 #include <QApplication>
 #include <QFormLayout>
 #include <QFileDialog>

@@ -32,6 +32,7 @@
 #include <QListWidget>
 #include <QWindow>
 #include <QScreen>
+#include <QActionGroup>
 #ifdef Q_OS_MACOS
     #include <QProcess>
 #endif

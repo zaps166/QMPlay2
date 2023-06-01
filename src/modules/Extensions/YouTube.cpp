@@ -25,6 +25,7 @@
 #include <QStringListModel>
 #include <QDesktopServices>
 #include <QJsonParseError>
+#include <QActionGroup>
 #include <QTextDocument>
 #include <QJsonDocument>
 #include <QProgressBar>

@@ -27,6 +27,7 @@
 #include <Main.hpp>
 
 #include <QWidgetAction>
+#include <QActionGroup>
 #include <QInputDialog>
 #include <QMainWindow>
 #include <qevent.h>
