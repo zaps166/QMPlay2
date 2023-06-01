@@ -20,8 +20,8 @@
 #include <Functions.hpp>
 #include <LibASS.hpp>
 
+#include <QRegularExpression>
 #include <QStringList>
-#include <QRegExp>
 
 #include <cstdio>
 
@@ -33,7 +33,7 @@ bool SRT::toASS(const QByteArray &srt, LibASS *ass, double)
     bool ok = false;
     const char *scanfFmt = (srt.left(11 /* Including BOM */).contains("WEBVTT")) ? "%d:%d:%d.%d" : "%d:%d:%d,%d";
 
-    for (const QString &entry : QString(QString("\n\n") + srt).remove('\r').split(QRegExp("\n\n+(\\d+\n)?"), QString::SkipEmptyParts))
+    for (const QString &entry : QString(QString("\n\n") + srt).remove('\r').split(QRegularExpression("\n\n+(\\d+\n)?"), QString::SkipEmptyParts))
     {
         int idx = entry.indexOf('\n');
         if (idx > -1)
