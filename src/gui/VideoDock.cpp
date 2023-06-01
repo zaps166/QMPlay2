@@ -115,7 +115,8 @@ void VideoDock::fullScreen(bool b)
         // FIXME: Is it still needed for something?
         setStyle(&commonStyle);
 
-        m_workaround = true;
+        if (!QGuiApplication::platformName().contains("wayland")) // Wayland doesn't support setting the cursor position
+            m_workaround = true;
     }
     else
     {
