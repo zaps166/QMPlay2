@@ -22,8 +22,9 @@
 #include <Packet.hpp>
 
 #ifdef Q_OS_WIN
+    #include <QRegularExpression>
     #include <QDir>
-    static const QRegExp cdaRegExp("file://\\D:/track\\d\\d.cda");
+    static const QRegularExpression cdaRegExp(R"(file:\/\/\D:\/track\d\d.cda)");
 #endif
 
 #define CD_BLOCKSIZE 2352/2
