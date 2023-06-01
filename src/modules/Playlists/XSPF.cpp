@@ -48,7 +48,7 @@ Playlist::Entries XSPF::read()
     while (!xmlReader.atEnd() && !xmlReader.hasError())
     {
         const QXmlStreamReader::TokenType token = xmlReader.readNext();
-        const QStringRef name = xmlReader.name();
+        const auto name = xmlReader.name();
         switch (token)
         {
             case QXmlStreamReader::StartElement:
