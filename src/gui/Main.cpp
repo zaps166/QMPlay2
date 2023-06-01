@@ -609,11 +609,6 @@ int main(int argc, char *argv[])
     signal(SIGTERM, signal_handler);
     atexit(exitProcedure);
 
-#if defined(Q_OS_LINUX) && defined(USE_VULKAN)
-    if (qEnvironmentVariable("XDG_SESSION_TYPE") == "wayland")
-        qputenv("QT_QPA_PLATFORM", "xcb");
-#endif
-
     qputenv("QT_QPA_UPDATE_IDLE_TIME", "0");
 
 #ifdef Q_OS_HAIKU
