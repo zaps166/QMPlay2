@@ -45,8 +45,14 @@ constexpr auto s_queueFlags = vk::QueueFlagBits::eGraphics | vk::QueueFlagBits::
 vector<uint32_t> Instance::readShader(const QString &fileName)
 {
     const QResource res(":/vulkan/" + fileName + ".spv");
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const auto data = res.uncompressedData();
+    const auto u32Data = reinterpret_cast<const uint32_t *>(data.data());
+    return vector<uint32_t>(u32Data, u32Data + data.size() / sizeof(uint32_t));
+#else
     const auto resData = reinterpret_cast<const uint32_t *>(res.data());
     return vector<uint32_t>(resData, resData + res.size() / sizeof(uint32_t));
+#endif
 }
 
 vk::Format Instance::fromFFmpegPixelFormat(int avPixFmt)
