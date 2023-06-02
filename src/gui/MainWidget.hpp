@@ -148,6 +148,7 @@ private:
     void moveEvent(QMoveEvent *) override;
     void showEvent(QShowEvent *) override;
     void hideEvent(QHideEvent *) override;
+    void changeEvent(QEvent *e) override;
 
     bool eventFilter(QObject *obj, QEvent *event) override;
 

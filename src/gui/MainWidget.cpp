@@ -2018,6 +2018,15 @@ void MainWidget::hideEvent(QHideEvent *)
 #endif
     menuBar->window->toggleVisibility->setText(tr("&Show"));
 }
+void MainWidget::changeEvent(QEvent *e)
+{
+    if (e->type() == QEvent::WindowStateChange)
+    {
+        if (isFullScreen() || isMaximized())
+            videoDock->scheduleEnterEventWorkaround();
+    }
+    QMainWindow::changeEvent(e);
+}
 
 bool MainWidget::eventFilter(QObject *obj, QEvent *event)
 {

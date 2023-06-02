@@ -32,6 +32,8 @@ class VideoDock final : public DockWidget
 public:
     VideoDock();
 
+    void scheduleEnterEventWorkaround();
+
     void fullScreen(bool);
     inline void setLoseHeight(int lh)
     {
@@ -70,7 +72,6 @@ private:
     bool canPopup, is_floating, canHideIDWCursor, doubleClicked;
     QMargins m_contentMarginsBackup;
     double touchZoom;
-    bool m_workaround = false;
 private slots:
     void popup(const QPoint &);
     void hideCursor();

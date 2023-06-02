@@ -27,13 +27,11 @@
 #include <SubsDec.hpp>
 
 #include <QVersionNumber>
-#include <QApplication>
 #include <QMouseEvent>
 #include <QFileInfo>
 #include <QMimeData>
 #include <QPainter>
 #include <QGesture>
-#include <QWindow>
 #include <QMenu>
 
 #include <cmath>
@@ -99,6 +97,25 @@ VideoDock::VideoDock() :
     doubleClicked = false;
 }
 
+void VideoDock::scheduleEnterEventWorkaround()
+{
+    if (QVersionNumber::fromString(qVersion()) >= QVersionNumber(5, 12, 0))
+    {
+        // Something is wrong with enter/leave events after going full screen  or maximized in some configurations since Qt 5.12.
+        // Create a new temporary widget which fills entire parent widget to trigger enter/leave events.
+        QTimer::singleShot(0, this, [this] {
+            QTimer::singleShot(0, this, [this] {
+                if (!underMouse())
+                {
+                    QWidget tmp(this);
+                    tmp.setGeometry(rect());
+                    tmp.show();
+                }
+            });
+        });
+    }
+}
+
 void VideoDock::fullScreen(bool b)
 {
     if (b)
@@ -114,9 +131,6 @@ void VideoDock::fullScreen(bool b)
 
         // FIXME: Is it still needed for something?
         setStyle(&commonStyle);
-
-        if (!QGuiApplication::platformName().contains("wayland")) // Wayland doesn't support setting the cursor position
-            m_workaround = true;
     }
     else
     {
@@ -139,8 +153,6 @@ void VideoDock::fullScreen(bool b)
         setContentsMargins(m_contentMarginsBackup);
 
         setStyle(nullptr);
-
-        m_workaround = false;
     }
 }
 
@@ -331,24 +343,6 @@ bool VideoDock::event(QEvent *e)
                         touchZoom = 0.0;
                     }
                 }
-            }
-            break;
-        case QEvent::Move:
-            if (m_workaround)
-            {
-                if (QVersionNumber::fromString(qVersion()) >= QVersionNumber(5, 12, 0))
-                {
-                    // Something is wrong with enter/leave events after going full screen in some configurations since Qt 5.12,
-                    // do some mouse movements - Qt will see this as mouse move enter and move events.
-                    QScreen *screen = nullptr;
-                    if (auto winHandle = window()->windowHandle())
-                        screen = winHandle->screen();
-                    const auto currPos = QCursor::pos(screen);
-                    QCursor::setPos(screen, currPos + QPoint(1, 1));
-                    QCursor::setPos(screen, currPos - QPoint(1, 1));
-                    QCursor::setPos(screen, currPos);
-                }
-                m_workaround = false;
             }
             break;
         default:
