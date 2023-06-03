@@ -2,13 +2,14 @@
 
 #include <QAndroidJniObject>
 #include <QCoreApplication>
+#include <QtAndroid>
 
 class ScreenSaverPriv
 {
 public:
     inline ScreenSaverPriv()
     {
-        QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative", "activity", "()Landroid/app/Activity;");
+        QAndroidJniObject activity = QtAndroid::androidActivity();
         if (activity.isValid())
         {
             QAndroidJniObject serviceName = QAndroidJniObject::getStaticObjectField<jstring>("android/content/Context", "POWER_SERVICE");
