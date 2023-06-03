@@ -141,9 +141,6 @@ QString Writer::name() const
 
     QStringList additionalText;
 
-    if (m_window->isDeepColor())
-        additionalText += "Deep color";
-
     if (m_vkHwInterop)
         additionalText += m_vkHwInterop->name();
 

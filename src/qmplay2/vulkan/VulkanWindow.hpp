@@ -87,8 +87,6 @@ public:
 
     inline bool hasError() const;
 
-    inline bool isDeepColor() const;
-
     void setFrame(const Frame &frame, QMPlay2OSDList &&osdList);
 
 private:
@@ -169,9 +167,6 @@ private:
     bool m_useRenderPassClear = false;
 
     bool m_error = false;
-
-    bool m_isDeepColor = false;
-    bool m_updateName = false;
 
     bool m_canCreateSurface = false;
 
@@ -256,11 +251,6 @@ private:
 bool Window::hasError() const
 {
     return m_error;
-}
-
-bool Window::isDeepColor() const
-{
-    return m_isDeepColor;
 }
 
 }

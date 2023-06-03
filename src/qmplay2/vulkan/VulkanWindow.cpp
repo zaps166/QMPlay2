@@ -476,12 +476,6 @@ void Window::render()
         if (m.mustUpdateFragUniform)
             fillVideoPipelineFragmentUniform();
 
-        if (m_updateName)
-        {
-            emit QMPlay2Core.updateInformationPanel();
-            m_updateName = false;
-        }
-
         if (m.videoPipeline)
             m.videoPipeline->prepareObjects(m.commandBuffer);
 
@@ -778,16 +772,6 @@ bool Window::ensureSurfaceAndRenderPass()
         vk::ImageLayout::ePresentSrcKHR,
         m_useRenderPassClear
     );
-
-    const bool isDeepColor = (
-        surfaceFormat >= vk::Format::eA2R10G10B10UnormPack32 &&
-        surfaceFormat <= vk::Format::eB10G11R11UfloatPack32
-    );
-    if (m_isDeepColor != isDeepColor)
-    {
-        m_isDeepColor = isDeepColor;
-        m_updateName = true;
-    }
 
     return true;
 }
