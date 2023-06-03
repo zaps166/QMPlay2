@@ -1556,7 +1556,7 @@ void MainWidget::setStreamsMenu(const QStringList &videoStreams, const QStringLi
                 connect(action, &QAction::triggered,
                         this, [this, data = std::move(lines[1])] {
                     if (data.startsWith("seek"))
-                        seek(QStringView(data).mid(4).toDouble());
+                        seek(QStringView(data).mid(4)MAYBE_TO_STRING.toDouble());
                     else
                         playC.chStream(data);
                 });

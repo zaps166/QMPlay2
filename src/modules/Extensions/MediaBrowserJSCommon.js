@@ -50,7 +50,7 @@ const ItemDataRole = {
 
 %1
 
-(() => { return {
+(function() { return {
     getInfo: getInfo,
     prepareWidget: prepareWidget,
     finalize: finalize,

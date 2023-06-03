@@ -324,7 +324,7 @@ void Radio::on_saveMyRadioStationButton_clicked()
     if (idx < 0)
         return;
 
-    const auto suffix = QStringView(filter).mid(idx + 2).chopped(1);
+    const auto suffix = QStringView(filter).mid(idx + 2).chopped(1)MAYBE_TO_STRING;
     if (!filePath.endsWith(suffix, Qt::CaseInsensitive))
         filePath += suffix;
 

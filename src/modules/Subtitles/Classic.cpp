@@ -166,7 +166,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
                 if (use_mDVD_FPS && (s == 0 || s == 1))
                 {
                     use_mDVD_FPS = false;
-                    const double newFPS = QStringView(sub).left(qMin(6, sub.size())).toDouble();
+                    const double newFPS = QStringView(sub).left(qMin(6, sub.size()))MAYBE_TO_STRING.toDouble();
                     if (newFPS > 0.0 && newFPS < 100.0)
                     {
                         fps = newFPS;
