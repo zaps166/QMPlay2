@@ -20,19 +20,22 @@
 
 #include <QMPlay2Core.hpp>
 
+#include <QGuiApplication>
 #include <QOpenGLContext>
 #include <QDockWidget>
 
 OpenGLWindow::OpenGLWindow()
+    : m_platformName(QGuiApplication::platformName())
+    , m_passEventsToParent(m_platformName != "xcb" && m_platformName != "android")
 {
     connect(&updateTimer, SIGNAL(timeout()), this, SLOT(doUpdateGL()));
 
-#ifndef PASS_EVENTS_TO_PARENT
-    setFlags(Qt::WindowTransparentForInput);
-#endif
+    if (!m_passEventsToParent)
+        setFlags(Qt::WindowTransparentForInput);
 
     m_widget = QWidget::createWindowContainer(this);
-    m_widget->setAttribute(Qt::WA_NativeWindow);
+    if (!m_platformName.contains("wayland") && !m_platformName.contains("android"))
+        m_widget->setAttribute(Qt::WA_NativeWindow);
     m_widget->installEventFilter(this);
     m_widget->setAcceptDrops(false);
 
@@ -129,7 +132,6 @@ bool OpenGLWindow::eventFilter(QObject *o, QEvent *e)
     return false;
 }
 
-#ifdef PASS_EVENTS_TO_PARENT
 bool OpenGLWindow::event(QEvent *e)
 {
     switch (e->type())
@@ -153,12 +155,13 @@ bool OpenGLWindow::event(QEvent *e)
         case QEvent::TouchEnd:
         case QEvent::InputMethodQuery:
         case QEvent::TouchCancel:
-            return QCoreApplication::sendEvent(parent(), e);
+            if (m_passEventsToParent)
+                return QCoreApplication::sendEvent(parent(), e);
         case QEvent::Wheel:
-            return QCoreApplication::sendEvent(const_cast<QWidget *>(QMPlay2Core.getVideoDock()), e);
+            if (m_passEventsToParent)
+                return QCoreApplication::sendEvent(const_cast<QWidget *>(QMPlay2Core.getVideoDock()), e);
         default:
             break;
     }
     return QOpenGLWindow::event(e);
 }
-#endif

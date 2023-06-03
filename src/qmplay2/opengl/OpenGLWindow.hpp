@@ -22,10 +22,6 @@
 
 #include <QOpenGLWindow>
 
-#if defined Q_OS_MACOS || defined Q_OS_WIN //QTBUG-50505
-    #define PASS_EVENTS_TO_PARENT
-#endif
-
 class OpenGLWindow final : private QOpenGLWindow, public OpenGLCommon
 {
     Q_OBJECT
@@ -51,10 +47,12 @@ private slots:
 private:
     bool eventFilter(QObject *o, QEvent *e) override;
 
-#ifdef PASS_EVENTS_TO_PARENT
     bool event(QEvent *e) override;
-#endif
 
 private:
+    const QString m_platformName;
+
+    const bool m_passEventsToParent;
+
     bool m_visible = true;
 };
