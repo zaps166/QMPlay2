@@ -169,11 +169,13 @@ Window::~Window()
 
 void Window::deleteWidget()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     if (m_isWayland)
     {
         // "SurfaceAboutToBeDestroyed" is delivered too late when deleting a widget container (Qt bug, tested on 6.5.1)
         resetSurface();
     }
+#endif
     delete widget();
 }
 
@@ -1374,8 +1376,13 @@ bool Window::eventFilter(QObject *o, QEvent *e)
         case QEvent::Hide:
             if (m_isWayland)
             {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
                 // QWindow is reset when hiding a widget container without "SurfaceAboutToBeDestroyed" notification (Qt bug, tested on 6.5.1)
                 resetSurface();
+#else
+                // Destroy the surface to prevent "The Wayland connection experienced a fatal error: Invalid argument" (Qt bug, tested on 5.15.9+kde+r155)
+                destroy();
+#endif
             }
             break;
         default:
