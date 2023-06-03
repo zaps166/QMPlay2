@@ -61,6 +61,8 @@ public:
     Window(const shared_ptr<HWInterop> &hwInterop);
     ~Window();
 
+    void deleteWidget();
+
     void setConfig(
         Qt::CheckState vsync,
         bool hqScaleDown,
@@ -159,6 +161,8 @@ private:
     const QString m_platformName;
 
     QTimer m_initResourcesTimer;
+
+    const bool m_isWayland;
 
     const bool m_passEventsToParent;
 

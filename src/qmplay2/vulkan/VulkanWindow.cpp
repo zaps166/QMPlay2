@@ -114,6 +114,7 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     , m_instance(static_pointer_cast<Instance>(QMPlay2Core.gpuInstance()))
     , m_physicalDevice(m_instance->physicalDevice())
     , m_platformName(QGuiApplication::platformName())
+    , m_isWayland(m_platformName.contains("wayland"))
     , m_passEventsToParent(m_platformName != "xcb" && m_platformName != "android")
     , m_videoPipelineSpecializationData(sizeof(VideoPipelineSpecializationData) / sizeof(int))
     , m_frameProps(make_unique<FrameProps>())
@@ -146,7 +147,7 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     });
 
     m_widget = QWidget::createWindowContainer(this);
-    if (!m_platformName.contains("wayland") && !m_platformName.contains("android"))
+    if (!m_isWayland && !m_platformName.contains("android"))
         m_widget->setAttribute(Qt::WA_NativeWindow);
     m_widget->grabGesture(Qt::PinchGesture);
     m_widget->installEventFilter(this);
@@ -164,6 +165,16 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
 }
 Window::~Window()
 {
+}
+
+void Window::deleteWidget()
+{
+    if (m_isWayland)
+    {
+        // "SurfaceAboutToBeDestroyed" is delivered too late when deleting a widget container (Qt bug, tested on 6.5.1)
+        resetSurface();
+    }
+    delete widget();
 }
 
 void Window::setConfig(
@@ -1356,6 +1367,18 @@ void Window::resetSurface()
 bool Window::eventFilter(QObject *o, QEvent *e)
 {
     Q_ASSERT(o == m_widget);
+    switch (e->type())
+    {
+        case QEvent::Hide:
+            if (m_isWayland)
+            {
+                // QWindow is reset when hiding a widget container without "SurfaceAboutToBeDestroyed" notification (Qt bug, tested on 6.5.1)
+                resetSurface();
+            }
+            break;
+        default:
+            break;
+    }
     dispatchEvent(e, o);
     return QWindow::eventFilter(o, e);
 }

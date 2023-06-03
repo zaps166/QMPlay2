@@ -45,7 +45,7 @@ Writer::Writer()
 }
 Writer::~Writer()
 {
-    delete m_window->widget();
+    m_window->deleteWidget();
 }
 
 bool Writer::set()
