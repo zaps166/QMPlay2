@@ -40,16 +40,18 @@ shared_ptr<GPUInstance> GPUInstance::create()
 #if defined(USE_VULKAN)
     if (renderer == "vulkan") try
     {
+# if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         if (QGuiApplication::platformName().contains("wayland"))
         {
-            // Vulkan on Wayland can crash and scaling is not supported there (see #566)
-#   ifdef USE_OPENGL
+            // Vulkan on Wayland crashes when togging full screen with Qt5 (see #566)
+#  ifdef USE_OPENGL
             renderer = "opengl";
-#   else
+#  else
             return nullptr;
-#   endif
+#  endif
         }
         else
+# endif
         {
             return QmVk::Instance::create();
         }
