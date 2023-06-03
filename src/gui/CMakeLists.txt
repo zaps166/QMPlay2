@@ -34,7 +34,6 @@ set(GUI_HDR
     KeyBindingsDialog.hpp
     RepeatMode.hpp
     PanGestureEventFilter.hpp
-    EventFilterWorkarounds.hpp
 )
 
 set(GUI_SRC
@@ -63,8 +62,10 @@ set(GUI_SRC
     VolWidget.cpp
     ShortcutHandler.cpp
     KeyBindingsDialog.cpp
-    EventFilterWorkarounds.cpp
 )
+
+list(APPEND GUI_HDR EventFilterWorkarounds.hpp)
+list(APPEND GUI_SRC EventFilterWorkarounds.cpp)
 
 set(GUI_FORMS # *.ui files
     Ui/SettingsGeneral.ui
