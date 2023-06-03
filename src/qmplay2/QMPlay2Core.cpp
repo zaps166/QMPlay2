@@ -596,7 +596,8 @@ void QMPlay2CoreClass::setLanguage()
     {
         lang = "en";
     }
-    qtTranslator->load("qtbase_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    const bool loaded = qtTranslator->load("qtbase_" + lang, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    Q_UNUSED(loaded)
 }
 
 void QMPlay2CoreClass::addVideoDeintMethod(QWidget *w)
