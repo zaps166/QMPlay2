@@ -1094,6 +1094,7 @@ void MainWidget::toggleAlwaysOnTop(bool checked)
     else
         flags &= ~Qt::WindowStaysOnTopHint;
     const auto visible = isVisible();
+    destroy(false, false);
     setWindowFlags(flags);
     if (visible)
         show();
@@ -1249,6 +1250,7 @@ void MainWidget::toggleFullScreen()
 
         setFocus();
     }
+    menuBar->window->alwaysOnTop->setEnabled(!fullScreen);
     emit QMPlay2Core.fullScreenChanged(fullScreen);
 }
 void MainWidget::showMessage(const QString &msg, const QString &title, int messageIcon, int ms)
