@@ -124,15 +124,19 @@ if(USE_OPENGL)
         opengl/opengl.qrc
     )
 
+    if(BUILD_WITH_QT6)
+        list(APPEND OPENGL_LIBS Qt6::OpenGL Qt6::OpenGLWidgets)
+    endif()
+
     if(APPLE)
         find_package(OpenGL REQUIRED)
         list(APPEND OPENGL_LIBS ${OPENGL_LIBRARIES})
     elseif(WIN32)
         list(APPEND OPENGL_LIBS opengl32)
-    elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2)
+    elseif(${QT_PREFIX}Gui_OPENGL_IMPLEMENTATION STREQUAL GLESv2)
         add_definitions(-DOPENGL_ES2)
         list(APPEND OPENGL_LIBS GLESv2)
-    elseif(Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL GLES)
+    elseif(${QT_PREFIX}Gui_OPENGL_IMPLEMENTATION STREQUAL GLES)
         message(SEND_ERROR "OpenGL|ES 1.0 is not supported!")
     else()
         list(APPEND OPENGL_LIBS GL)
@@ -227,7 +231,11 @@ endif()
 if(USE_FREEDESKTOP_NOTIFICATIONS)
     list(APPEND QMPLAY2_HDR NotifiesFreedesktop.hpp)
     list(APPEND QMPLAY2_SRC NotifiesFreedesktop.cpp)
-    qt5_add_dbus_interface(QMPLAY2_SRC org.freedesktop.Notifications.xml notifications_interface)
+    if(BUILD_WITH_QT6)
+        qt6_add_dbus_interface(QMPLAY2_SRC org.freedesktop.Notifications.xml notifications_interface)
+    else()
+        qt5_add_dbus_interface(QMPLAY2_SRC org.freedesktop.Notifications.xml notifications_interface)
+    endif()
     add_definitions(-DNOTIFIES_FREEDESKTOP)
 elseif(APPLE)
     list(APPEND QMPLAY2_HDR NotifiesMacOS.hpp)
@@ -241,7 +249,7 @@ if(USE_DBUS_SUSPEND)
 endif()
 
 if(USE_FREEDESKTOP_NOTIFICATIONS OR USE_DBUS_SUSPEND)
-    set(DBUS Qt5::DBus)
+    set(DBUS ${QT_PREFIX}::DBus)
 endif()
 
 if(USE_QML)
@@ -256,7 +264,7 @@ if(USE_QML)
         NetworkAccessJS.cpp
     )
     add_definitions(-DUSE_QML)
-    set(QML Qt5::Qml)
+    set(QML ${QT_PREFIX}::Qml)
 endif()
 
 if(USE_YOUTUBEDL)
@@ -351,10 +359,10 @@ endif()
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
-    Qt5::Svg
+    ${QT_PREFIX}::Core
+    ${QT_PREFIX}::Gui
+    ${QT_PREFIX}::Widgets
+    ${QT_PREFIX}::Svg
     ${LIBAVFORMAT_LIBRARIES}
     ${LIBAVCODEC_LIBRARIES}
     ${LIBSWSCALE_LIBRARIES}
@@ -367,6 +375,12 @@ target_link_libraries(${PROJECT_NAME}
     ${QML}
     ${LIBQMPLAY2_LIBS}
 )
+if(BUILD_WITH_QT6)
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC
+        Qt6::Core5Compat # QTextCodec
+    )
+endif()
 
 if(ANDROID)
     # Android libs must be public, because androiddeployqt copies them

@@ -64,8 +64,10 @@ set(GUI_SRC
     KeyBindingsDialog.cpp
 )
 
-list(APPEND GUI_HDR EventFilterWorkarounds.hpp)
-list(APPEND GUI_SRC EventFilterWorkarounds.cpp)
+if (NOT BUILD_WITH_QT6)
+    list(APPEND GUI_HDR EventFilterWorkarounds.hpp)
+    list(APPEND GUI_SRC EventFilterWorkarounds.cpp)
+endif()
 
 set(GUI_FORMS # *.ui files
     Ui/SettingsGeneral.ui
@@ -95,7 +97,11 @@ if(APPLE)
     include_directories("macOS")
 endif()
 
-qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
+if(BUILD_WITH_QT6)
+    qt6_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
+else()
+    qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
+endif()
 set_property(SOURCE ${GUI_FORM_HDR} PROPERTY SKIP_AUTOMOC ON)
 
 if(USE_UPDATES)
@@ -231,7 +237,7 @@ if(WIN32)
 elseif(APPLE)
     install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX})
 
-    set(QT_LIBS_DIR "${Qt5Widgets_DIR}/../..")
+    set(QT_LIBS_DIR "${${QT_PREFIX}Widgets_DIR}/../..")
     set(QT_PLUGINS_DIR "${QT_LIBS_DIR}/../plugins")
     install(FILES
         "${QT_PLUGINS_DIR}/platforms/libqcocoa.dylib"
