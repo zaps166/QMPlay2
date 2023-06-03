@@ -85,6 +85,7 @@ void VisWidget::setUseOpenGL(bool b)
         glW->setContextMenuPolicy(Qt::NoContextMenu);
         glW->setFocusPolicy(Qt::NoFocus);
         glW->setAutoFillBackground(true);
+        glW->setPalette(Qt::black);
         glW->show();
         glW->installEventFilter(this);
         glW->setGeometry(QRect(QPoint(), size()));
@@ -143,7 +144,6 @@ bool VisWidget::eventFilter(QObject *watched, QEvent *event)
     if (glW && watched == glW && event->type() == QEvent::Paint)
     {
         QPainter p(glW);
-        p.fillRect(rect(), Qt::black);
         paint(p);
         m_pendingUpdate = false;
         return true;

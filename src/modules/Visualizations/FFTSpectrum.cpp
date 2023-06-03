@@ -78,31 +78,36 @@ void FFTSpectrumW::paint(QPainter &p)
         QTransform t;
         t.scale((width() - 1.0) / size, height() - 1.0);
 
-        linearGrad.setFinalStop(t.map(QPointF(size, 0.0)));
+        if (mGradientImg.width() != size || linearGrad.finalStop().x() != size)
+        {
+            mGradientImg = QImage(size, 1, QImage::Format_RGB32);
 
-        p.setPen(QPen(linearGrad, 1.0));
+            linearGrad.setFinalStop(size, 0.0);
+
+            QPainter gp(&mGradientImg);
+            gp.setPen(QPen(linearGrad, 0.0));
+            gp.drawLine(0, 0, mGradientImg.width() - 1, 0);
+        }
 
         const double currTime = Functions::gettime();
         const double realInterval = currTime - time;
         time = currTime;
 
+        const auto gradientLut = reinterpret_cast<const uint32_t *>(mGradientImg.constBits());
         const float *spectrum = spectrumData.constData();
-        QPainterPath path(t.map(QPointF(0.0, 1.0)));
         for (int x = 0; x < size; ++x)
         {
             /* Bars */
             setValue(lastData[x].first, spectrum[x], realInterval * 2.0);
-            path.lineTo(t.map(QPointF(x,       1.0 - lastData[x].first)));
-            path.lineTo(t.map(QPointF(x + 1.0, 1.0 - lastData[x].first)));
+            p.fillRect(t.mapRect(QRectF(x, 1.0 - lastData[x].first, 1.0,lastData[x].first)), gradientLut[x]);
 
             /* Horizontal lines over bars */
             setValue(lastData[x].second, spectrum[x], realInterval * 0.5);
+            p.setPen(gradientLut[x]);
             p.drawLine(t.map(QLineF(x, 1.0 - lastData[x].second.first, x + 1.0, 1.0 - lastData[x].second.first)));
 
             canStop &= (lastData[x].second.first == spectrum[x]);
         }
-        path.lineTo(t.map(QPointF(size, 1.0)));
-        p.fillPath(path, linearGrad);
     }
 
     if (stopped && tim.isActive() && canStop)
@@ -133,6 +138,7 @@ void FFTSpectrumW::stop()
     tim.stop();
     fftSpectrum.soundBuffer(false);
     VisWidget::stop();
+    mGradientImg = QImage();
 }
 
 /**/

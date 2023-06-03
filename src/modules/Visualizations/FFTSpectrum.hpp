@@ -47,6 +47,7 @@ private:
     int interval, fftSize;
     FFTSpectrum &fftSpectrum;
     QLinearGradient linearGrad;
+    QImage mGradientImg;
 };
 
 /**/
