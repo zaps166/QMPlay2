@@ -221,7 +221,7 @@ bool QMPlay2CoreClass::isGlOnWindowForced()
         return true;
 #   endif
 #else
-        return (QApplication::platformName().startsWith("wayland") || QApplication::platformName() == "android");
+        return (QApplication::platformName() == "android");
 #endif
     }();
     return forced;
