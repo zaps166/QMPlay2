@@ -79,7 +79,10 @@ float Equalizer::getAmpl(int val)
 Equalizer::Equalizer(Module &module) :
     FFT_NBITS(0), FFT_SIZE(0), FFT_SIZE_2(0),
     canFilter(false), hasParameters(false), enabled(false),
-    mutex(QMutex::Recursive), fftIn(nullptr), fftOut(nullptr)
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+    mutex(QMutex::Recursive),
+#endif
+    fftIn(nullptr), fftOut(nullptr)
 {
     SetModule(module);
 }

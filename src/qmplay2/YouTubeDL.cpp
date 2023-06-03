@@ -36,7 +36,11 @@
 
 constexpr const char *g_name = "YouTubeDL";
 static bool g_mustUpdate = true;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+static QRecursiveMutex g_mutex;
+#else
 static QMutex g_mutex(QMutex::Recursive);
+#endif
 
 QString YouTubeDL::getFilePath()
 {

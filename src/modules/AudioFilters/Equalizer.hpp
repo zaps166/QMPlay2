@@ -51,7 +51,11 @@ private:
     uint srate;
     bool canFilter, hasParameters, enabled;
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    mutable QRecursiveMutex mutex;
+#else
     mutable QMutex mutex;
+#endif
     FFTContext *fftIn, *fftOut;
     FFTComplex *complex;
     QVector<QVector<float>> input, last_samples;
