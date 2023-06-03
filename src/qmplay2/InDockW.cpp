@@ -21,7 +21,7 @@
 #include <Functions.hpp>
 #include <Settings.hpp>
 
-#include <QCoreApplication>
+#include <QGuiApplication>
 #ifdef Q_OS_WIN
 #   include <QApplication>
 #endif
@@ -103,7 +103,10 @@ void InDockW::resizeEvent(QResizeEvent *)
         int X = 0;
         int Y = 0;
         int W = width();
-        int H = height() + loseHeight;
+        int H = height();
+
+        if (!QGuiApplication::platformName().contains("wayland") || (qstrcmp(w->metaObject()->className(), "QWindowContainer") != 0))
+            H += loseHeight;
 
         const int mappedY = mapToParent(QPoint()).y();
         if (mappedY < 0)
