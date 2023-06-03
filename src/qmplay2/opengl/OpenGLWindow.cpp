@@ -23,8 +23,7 @@
 #include <QOpenGLContext>
 #include <QDockWidget>
 
-OpenGLWindow::OpenGLWindow() :
-    visible(true)
+OpenGLWindow::OpenGLWindow()
 {
     connect(&updateTimer, SIGNAL(timeout()), this, SLOT(doUpdateGL()));
 
@@ -83,7 +82,7 @@ void OpenGLWindow::setVSync(bool enable)
 }
 void OpenGLWindow::updateGL(bool requestDelayed)
 {
-    if (visible && isExposed())
+    if (m_visible && isExposed())
         QMetaObject::invokeMethod(this, "doUpdateGL", Qt::QueuedConnection, Q_ARG(bool, requestDelayed));
 }
 
@@ -120,7 +119,7 @@ void OpenGLWindow::aboutToBeDestroyed()
 }
 void OpenGLWindow::videoVisible(bool v)
 {
-    visible = v && (m_widget->visibleRegion() != QRegion() || QMPlay2Core.getVideoDock()->visibleRegion() != QRegion());
+    m_visible = v && (m_widget->visibleRegion() != QRegion() || QMPlay2Core.getVideoDock()->visibleRegion() != QRegion());
 }
 
 bool OpenGLWindow::eventFilter(QObject *o, QEvent *e)

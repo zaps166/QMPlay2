@@ -55,5 +55,6 @@ private:
     bool event(QEvent *e) override;
 #endif
 
-    bool visible;
+private:
+    bool m_visible = true;
 };
