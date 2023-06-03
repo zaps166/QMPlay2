@@ -1893,7 +1893,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 void MainWidget::leaveEvent(QEvent *e)
 {
     if (fullScreen || isCompactView)
-        QMetaObject::invokeMethod(this, "hideDocksSlot", Qt::QueuedConnection); //Qt5 can't hide docks properly here
+        QMetaObject::invokeMethod(this, "hideDocksSlot", Qt::QueuedConnection); // Qt5 can't hide docks properly here (old comment, is it still relevant?)
     QMainWindow::leaveEvent(e);
 }
 void MainWidget::closeEvent(QCloseEvent *e)
