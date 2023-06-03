@@ -832,12 +832,14 @@ void Window::ensureSwapChain()
         }
     }
 
+    const auto winSize = devicePixelRatio() * size();
+
     SwapChain::CreateInfo createInfo;
     createInfo.device = m.device;
     createInfo.queue = m.queue;
     createInfo.renderPass = m.renderPass;
     createInfo.surface = m.surface;
-    createInfo.fallbackSize = vk::Extent2D(width(), height());
+    createInfo.fallbackSize = vk::Extent2D(winSize.width(), winSize.height());
     createInfo.presentModes = move(presentModes);
     createInfo.oldSwapChain = move(m.oldSwapChain);
 #ifdef VK_USE_PLATFORM_WIN32_KHR
