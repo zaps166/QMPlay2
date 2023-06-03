@@ -160,7 +160,7 @@ private:
 
     QTimer m_initResourcesTimer;
 
-    bool m_passEventsToParent = false;
+    const bool m_passEventsToParent;
 
     bool m_useRenderPassClear = false;
 
