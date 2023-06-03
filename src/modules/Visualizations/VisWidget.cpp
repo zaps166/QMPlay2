@@ -52,6 +52,7 @@ VisWidget::VisWidget()
     setContextMenuPolicy(Qt::CustomContextMenu);
     setAttribute(Qt::WA_OpaquePaintEvent);
     setFocusPolicy(Qt::StrongFocus);
+    setAutoFillBackground(true);
     setMouseTracking(true);
 
     connect(&tim, SIGNAL(timeout()), this, SLOT(updateVisualization()));
@@ -123,7 +124,8 @@ void VisWidget::paintEvent(QPaintEvent *)
         return;
 #endif
     QPainter p(this);
-    p.fillRect(rect(), Qt::black);
+    if (testAttribute(Qt::WA_OpaquePaintEvent))
+        p.fillRect(rect(), Qt::black);
     paint(p);
 }
 void VisWidget::changeEvent(QEvent *event)
@@ -157,6 +159,7 @@ void VisWidget::wallpaperChanged(bool hasWallpaper, double alpha)
     QColor c = Qt::black;
     if (hasWallpaper)
         c.setAlphaF(alpha);
+    setAttribute(Qt::WA_OpaquePaintEvent, !hasWallpaper);
     setPalette(c);
 }
 void VisWidget::contextMenu(const QPoint &point)
