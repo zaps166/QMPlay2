@@ -124,15 +124,10 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     QMPlay2GUI.mainW = this;
 
     /* Looking for touch screen */
-    for (const QTouchDevice *touchDev : QTouchDevice::devices())
+    if (Functions::hasTouchScreen())
     {
-        /* Touchscreen found */
-        if (touchDev->type() == QTouchDevice::TouchScreen)
-        {
-            MainWidgetTmpStyle mainWidgetTmpStyle;
-            setStyle(&mainWidgetTmpStyle);
-            break;
-        }
+        MainWidgetTmpStyle mainWidgetTmpStyle;
+        setStyle(&mainWidgetTmpStyle);
     }
 
     setObjectName("MainWidget");

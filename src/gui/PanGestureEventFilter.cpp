@@ -17,10 +17,10 @@
 */
 
 #include <PanGestureEventFilter.hpp>
+#include <Functions.hpp>
 
 #include <QAbstractItemView>
 #include <QCoreApplication>
-#include <QTouchDevice>
 #include <QScrollBar>
 #include <QScroller>
 #include <qevent.h>
@@ -95,7 +95,7 @@ void PanGestureEventFilter::install()
     if (installed)
         return;
 
-    if (QTouchDevice::devices().isEmpty())
+    if (!Functions::hasTouchScreen())
         return;
 
     QScrollerProperties defaultScrollerProps;

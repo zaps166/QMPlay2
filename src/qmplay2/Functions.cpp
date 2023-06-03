@@ -40,6 +40,11 @@
 #include <QStyleOption>
 #include <QGuiApplication>
 #include <QRegularExpression>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+# include <QInputDevice>
+#else
+# include <QTouchDevice>
+#endif
 
 extern "C"
 {
@@ -1060,4 +1065,28 @@ bool Functions::compareText(const QString &a, const QString &b)
     }
 
     return (a < b);
+}
+
+bool Functions::hasTouchScreen()
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    const auto inputDevs = QInputDevice::devices();
+    for (auto &&inputDev : inputDevs)
+    {
+        if (inputDev->type() == QInputDevice::DeviceType::TouchScreen)
+        {
+            return true;
+        }
+    }
+#else
+    const auto touchDevs = QTouchDevice::devices();
+    for (auto &&touchDev : touchDevs)
+    {
+        if (touchDev->type() == QTouchDevice::TouchScreen)
+        {
+            return true;
+        }
+    }
+#endif
+    return false;
 }

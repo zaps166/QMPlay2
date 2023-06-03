@@ -17,11 +17,11 @@
 */
 
 #include <PanGestureEventFilter.hpp>
+#include <Functions.hpp>
 
 #include <QAbstractNativeEventFilter>
 #include <QAbstractItemView>
 #include <QApplication>
-#include <QTouchDevice>
 #include <QScrollBar>
 #include <QLibrary>
 #include <QPointer>
@@ -225,7 +225,7 @@ void install()
 {
     static bool installed;
 
-    if (QTouchDevice::devices().isEmpty())
+    if (!Functions::hasTouchScreen())
         return;
 
     if (installed)
