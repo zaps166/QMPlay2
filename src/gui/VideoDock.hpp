@@ -60,7 +60,7 @@ private:
     void moveEvent(QMoveEvent *) override;
     void wheelEvent(QWheelEvent *) override;
     void leaveEvent(QEvent *) override;
-    void enterEvent(QEvent *) override;
+    void enterEvent(Q_ENTER_EVENT *) override;
     bool event(QEvent *) override;
 
     QTimer hideCursorTim, leftButtonPlayTim;

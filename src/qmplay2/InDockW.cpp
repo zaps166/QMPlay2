@@ -186,7 +186,7 @@ void InDockW::paintEvent(QPaintEvent *)
         }
     }
 }
-void InDockW::enterEvent(QEvent *)
+void InDockW::enterEvent(Q_ENTER_EVENT *)
 {
 #ifdef Q_OS_WIN
     // For context menu

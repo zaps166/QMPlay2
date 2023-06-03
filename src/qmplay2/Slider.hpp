@@ -50,7 +50,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
     void wheelEvent(QWheelEvent *) override;
-    void enterEvent(QEvent *) override;
+    void enterEvent(Q_ENTER_EVENT *) override;
 private:
     int getMousePos(const QPoint &pos);
 

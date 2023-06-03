@@ -160,7 +160,7 @@ void Slider::wheelEvent(QWheelEvent *e)
     v -= v % wheelStep;
     QSlider::setValue(v);
 }
-void Slider::enterEvent(QEvent *e)
+void Slider::enterEvent(Q_ENTER_EVENT *e)
 {
     lastMousePos = -1;
     QSlider::enterEvent(e);

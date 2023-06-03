@@ -101,6 +101,7 @@ else()
     add_definitions(-DQT_SKIP_EMPTY_PARTS=Qt::SkipEmptyParts)
     add_definitions(-DQT_KEEP_EMPTY_PARTS=Qt::KeepEmptyParts)
 endif()
+add_definitions(-DQ_ENTER_EVENT=QEvent)
 
 option(USE_UPDATES "Build with software updates" ON)
 add_feature_info(Updates USE_UPDATES "Build with software updates")

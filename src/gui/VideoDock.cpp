@@ -309,7 +309,7 @@ void VideoDock::leaveEvent(QEvent *e)
     pixels = 0;
     DockWidget::leaveEvent(e);
 }
-void VideoDock::enterEvent(QEvent *e)
+void VideoDock::enterEvent(Q_ENTER_EVENT *e)
 {
     mouseMoveEvent(nullptr);
     DockWidget::enterEvent(e);
