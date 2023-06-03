@@ -743,7 +743,7 @@ bool Window::ensureSurfaceAndRenderPass()
         return false;
     }
 
-    m.surface = vulkanInstance()->surfaceForWindow(this);
+    m.surface = QVulkanInstance::surfaceForWindow(this);
     if (!m.surface)
         return false;
 
