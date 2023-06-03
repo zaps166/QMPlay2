@@ -316,7 +316,7 @@ void ModuleSettingsWidget::saveSettings()
     if (pcmExtsE->text().isEmpty())
         pcmExtsE->setText(g_standartExts);
     sets().set("PCM", pcmB->isChecked());
-    sets().set("PCM/extensions", pcmExtsE->text().split(';', QString::SkipEmptyParts));
+    sets().set("PCM/extensions", pcmExtsE->text().split(';', QT_SKIP_EMPTY_PARTS));
     for (int i = 0; i < formatB.size(); ++i)
         if (formatB[i]->isChecked())
         {

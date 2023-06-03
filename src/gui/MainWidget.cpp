@@ -529,7 +529,7 @@ void MainWidget::focusChanged(QWidget *old, QWidget *now)
 void MainWidget::processParam(const QString &param, const QString &data)
 {
     auto getItemsToPlay = [&] {
-        auto items = data.split('\n', QString::SkipEmptyParts);
+        auto items = data.split('\n', QT_SKIP_EMPTY_PARTS);
         for (auto &&item : items)
             item = Functions::maybeExtensionAddress(item);
         return items;

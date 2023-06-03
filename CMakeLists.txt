@@ -94,6 +94,14 @@ endif()
 
 add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DQT_USE_FAST_OPERATOR_PLUS)
 
+if (Qt5Core_VERSION VERSION_LESS 5.15.0)
+    add_definitions(-DQT_SKIP_EMPTY_PARTS=QString::SkipEmptyParts)
+    add_definitions(-DQT_KEEP_EMPTY_PARTS=QString::KeepEmptyParts)
+else()
+    add_definitions(-DQT_SKIP_EMPTY_PARTS=Qt::SkipEmptyParts)
+    add_definitions(-DQT_KEEP_EMPTY_PARTS=Qt::KeepEmptyParts)
+endif()
+
 option(USE_UPDATES "Build with software updates" ON)
 add_feature_info(Updates USE_UPDATES "Build with software updates")
 

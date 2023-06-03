@@ -223,7 +223,7 @@ bool FFDemux::open(const QString &entireUrl)
     {
         if (!param.isEmpty())
             addFormatContext(url, param);
-        else for (QString stream : url.split("][", QString::SkipEmptyParts))
+        else for (QString stream : url.split("][", QT_SKIP_EMPTY_PARTS))
         {
             stream.remove('[');
             stream.remove(']');

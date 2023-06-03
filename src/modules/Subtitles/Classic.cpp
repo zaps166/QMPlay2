@@ -107,7 +107,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 
     QList<SubWithoutEnd> subsWithoutEnd;
 
-    for (const QString &line : QString(txt).remove('\r').split('\n', QString::SkipEmptyParts))
+    for (const QString &line : QString(txt).remove('\r').split('\n', QT_SKIP_EMPTY_PARTS))
     {
         double start = 0.0, duration = 0.0;
         QString sub;

@@ -188,7 +188,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
         }
         else
         {
-            result = result.constFirst().split('\n', QString::SkipEmptyParts);
+            result = result.constFirst().split('\n', QT_SKIP_EMPTY_PARTS);
 
             // Verify if URLs has printable characters, because sometimes we
             // can get binary garbage at output (especially on Openload).
