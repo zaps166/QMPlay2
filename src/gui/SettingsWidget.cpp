@@ -771,8 +771,7 @@ void SettingsWidget::createRendererSettings()
     renderers->addItem(tr("OpenGL"), "opengl");
 #endif
 #ifdef USE_VULKAN
-    if (!QGuiApplication::platformName().contains("wayland"))
-        renderers->addItem(tr("Vulkan"), "vulkan");
+    renderers->addItem(tr("Vulkan"), "vulkan");
 #endif
 
     const auto chosenRenderer = settings->getString("Renderer");

@@ -27,7 +27,6 @@
 #endif
 #include <VideoWriter.hpp>
 
-#include <QGuiApplication>
 #include <QDebug>
 
 using namespace std;
@@ -40,19 +39,7 @@ shared_ptr<GPUInstance> GPUInstance::create()
 #if defined(USE_VULKAN)
     if (renderer == "vulkan") try
     {
-        if (QGuiApplication::platformName().contains("wayland"))
-        {
-            // Vulkan on Wayland can crash and scaling is not supported there (see #566)
-#   ifdef USE_OPENGL
-            renderer = "opengl";
-#   else
-            return nullptr;
-#   endif
-        }
-        else
-        {
-            return QmVk::Instance::create();
-        }
+        return QmVk::Instance::create();
     }
     catch (const vk::SystemError &e)
     {
