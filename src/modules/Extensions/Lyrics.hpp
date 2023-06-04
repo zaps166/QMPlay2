@@ -59,7 +59,6 @@ private:
 
     QPointer<NetworkReply> m_tekstowoSearchReply;
     QPointer<NetworkReply> m_tekstowoLyricsReply;
-    QPointer<NetworkReply> m_makeitpersonalLyricsReply;
 };
 
 #define LyricsName "Lyrics"

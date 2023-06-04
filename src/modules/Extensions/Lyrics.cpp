@@ -30,10 +30,6 @@ static inline QString getTekstowoSearchUrl(const QString &artist, const QString 
 {
     return QString("%1szukaj,wykonawca,%2,tytul,%3.html").arg(g_tekstowoUrl, artist.toUtf8().toPercentEncoding(), title.toUtf8().toPercentEncoding());
 }
-static inline QString getMakeitpersonalUrl(const QString &artist, const QString &title)
-{
-    return QString("https://makeitpersonal.co/lyrics?artist=%1&title=%2").arg((QString)artist.toUtf8().toPercentEncoding()).arg((QString)title.toUtf8().toPercentEncoding());
-}
 
 static QString simplifyString(const QString &str)
 {
@@ -128,8 +124,7 @@ void Lyrics::finished(NetworkReply *reply)
     reply->deleteLater();
     if (reply->hasError())
     {
-        if (reply == m_tekstowoSearchReply || reply == m_tekstowoLyricsReply)
-            m_makeitpersonalLyricsReply = m_net.start(getMakeitpersonalUrl(m_artist, m_title));
+        lyricsNotFound();
         return;
     }
     if (reply == m_tekstowoSearchReply)
@@ -211,7 +206,7 @@ void Lyrics::finished(NetworkReply *reply)
 
             if (guesses.empty())
             {
-                m_makeitpersonalLyricsReply = m_net.start(getMakeitpersonalUrl(m_artist, m_title));
+                lyricsNotFound();
             }
             else
             {
@@ -255,13 +250,6 @@ void Lyrics::finished(NetworkReply *reply)
         {
             lyricsNotFound();
         }
-    }
-    else if (reply == m_makeitpersonalLyricsReply)
-    {
-        if (data != "Sorry, We don't have lyrics for this song yet.")
-            setHtml("<center><b>" + m_realTitle + " - " + m_realArtist + "</b><br/>" + QByteArray(data).replace("\n", "<br/>") + "</center>");
-        else
-            lyricsNotFound();
     }
 }
 
