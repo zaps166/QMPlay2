@@ -17,7 +17,6 @@
 */
 
 #include <PanGestureEventFilter.hpp>
-#include <Functions.hpp>
 
 #include <QAbstractNativeEventFilter>
 #include <QAbstractItemView>
@@ -39,6 +38,8 @@
 #ifndef WM_GESTURENOTIFY
     #define WM_GESTURENOTIFY 0x011A
 #endif
+
+#include <Functions.hpp>
 
 namespace PanGestureEventFilter {
 
