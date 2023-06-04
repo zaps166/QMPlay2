@@ -603,7 +603,7 @@ void Window::renderVideo()
 }
 void Window::renderOSD()
 {
-    const auto winSize = devicePixelRatio() * size();
+    const auto winSize = getRealWidgetSize();
 
     vector<MemoryObjectDescrs> osdAvMemoryObjects;
     vector<MemoryObjectDescrs> osdAssMemoryObjects;
@@ -818,7 +818,7 @@ void Window::ensureSwapChain()
         }
     }
 
-    const auto winSize = devicePixelRatio() * size();
+    const auto winSize = getRealWidgetSize();
 
     SwapChain::CreateInfo createInfo;
     createInfo.device = m.device;
