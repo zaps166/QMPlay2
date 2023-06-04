@@ -1,3 +1,21 @@
+Changes in QMPlay2 23.06.04:
+    - display 10 bit RGB images as 10 bit using Vulkan if possible,
+    - load external subtitles that are in sub-directories,
+    - add file name and time into screenshot file name,
+    - more precission for playback speed control,
+    - don't display "Deep color" using Vulkan,
+    - improve bitmap subtitles aspect ratio,
+    - add WebP as screenshots file format,
+    - PipeWire mono and 4 chnannels fix,
+    - VA-API fixes for AMD Radeon GPUs,
+    - remove makeitpersonal.co lyrics,
+    - add FPS Doubler video filter,
+    - "Always on top" improvement,
+    - Qt6 support for Linux,
+    - Wayland Vulkan fixes,
+    - YouTube fixes,
+    - other minor fixes and improvements,
+
 Changes in QMPlay2 23.02.05:
     - add Turkish translation (mobilturka, sabriunal),
     - fix CUVID + Vulkan on modern Nvidia hardware,
