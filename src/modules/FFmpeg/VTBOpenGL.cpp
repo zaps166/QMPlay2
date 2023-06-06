@@ -85,6 +85,9 @@ void VTBOpenGL::clear()
 
 bool VTBOpenGL::mapFrame(Frame &videoFrame)
 {
+    if (!videoFrame.isHW())
+        return false;
+
     CVPixelBufferRef pixelBuffer = (CVPixelBufferRef)videoFrame.hwData();
     CGLContextObj glCtx = CGLGetCurrentContext();
 

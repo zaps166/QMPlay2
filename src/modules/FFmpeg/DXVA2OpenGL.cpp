@@ -171,6 +171,9 @@ void DXVA2OpenGL::clear()
 
 bool DXVA2OpenGL::mapFrame(Frame &videoFrame)
 {
+    if (!videoFrame.isHW())
+        return false;
+
     if (!unlockRenderTargets())
     {
         m_error = true;

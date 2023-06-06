@@ -151,6 +151,9 @@ void VAAPIOpenGL::clear()
 
 bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
 {
+    if (!videoFrame.isHW())
+        return false;
+
     VASurfaceID id;
     int vaField = videoFrame.isInterlaced()
         ? (videoFrame.isTopFieldFirst() != videoFrame.isSecondField())
