@@ -298,15 +298,8 @@ bool Frame::isHW() const
 }
 quintptr Frame::hwData(int idx) const
 {
-    switch (m_frame->format)
-    {
-        case AV_PIX_FMT_DXVA2_VLD:
-        case AV_PIX_FMT_VDPAU:
-        case AV_PIX_FMT_VAAPI:
-        case AV_PIX_FMT_VIDEOTOOLBOX:
-        case AV_PIX_FMT_D3D11:
-            return reinterpret_cast<quintptr>(m_frame->data[idx]);
-    }
+    if (isHW())
+        return reinterpret_cast<quintptr>(m_frame->data[idx]);
     return s_invalidCustomData;
 }
 
