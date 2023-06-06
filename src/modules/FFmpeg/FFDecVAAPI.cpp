@@ -160,11 +160,12 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     if (!codec || !hasHWAccel("vaapi"))
         return false;
 
+#if defined(USE_OPENGL) || defined(USE_VULKAN)
     auto maybeResetVaapi = [this, codec] {
         if (m_vaapi && m_vaapi->m_codecId != codec->id && m_vaapi->m_vendor.contains("Mesa Gallium") && m_vaapi->m_vendor.contains("AMD Radeon"))
             m_vaapi.reset();
     };
-
+#endif
 #ifdef USE_OPENGL
     if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
     {
