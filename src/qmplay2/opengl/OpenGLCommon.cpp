@@ -341,7 +341,7 @@ void OpenGLCommon::initializeGL()
 
 void OpenGLCommon::paintGL()
 {
-    const bool frameIsEmpty = videoFrame.isEmpty();
+    const bool frameIsEmpty = videoFrame.isEmpty() || (static_cast<bool>(m_hwInterop) != videoFrame.isHW());
 
     if (updateTimer.isActive())
         updateTimer.stop();
