@@ -45,6 +45,9 @@ public:
     bool open(StreamInfo &streamInfo) override;
 
 private:
+    void maybeClearHwSurfaces();
+
+private:
     VAProcDeinterlacingType m_vppDeintType = VAProcDeinterlacingNone;
     std::shared_ptr<VAAPI> m_vaapi;
     std::shared_ptr<VideoFilter> m_filter;

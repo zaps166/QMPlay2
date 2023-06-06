@@ -61,6 +61,7 @@ FFDecVAAPI::FFDecVAAPI(Module &module)
 }
 FFDecVAAPI::~FFDecVAAPI()
 {
+    maybeClearHwSurfaces();
     if (m_vaapi.use_count() == 1)
         destroyDecoder();
 }
@@ -85,14 +86,7 @@ bool FFDecVAAPI::set()
         if (reloadVpp)
         {
             m_vaapi->clearVPP(false);
-#ifdef USE_OPENGL
-            if (m_vaapiOpenGL)
-                m_vaapiOpenGL->clearSurfaces();
-#endif
-#ifdef USE_VULKAN
-            if (m_vaapiVulkan)
-                m_vaapiVulkan->clear();
-#endif
+            maybeClearHwSurfaces();
         }
     }
     return sets().getBool("DecoderVAAPIEnabled");
@@ -110,14 +104,8 @@ shared_ptr<VideoFilter> FFDecVAAPI::hwAccelFilter() const
 
 int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurryUp)
 {
-#ifdef USE_OPENGL
-    if (flush && m_vaapiOpenGL)
-        m_vaapiOpenGL->clearSurfaces();
-#endif
-#ifdef USE_VULKAN
-    if (flush && m_vaapiVulkan)
-        m_vaapiVulkan->clear();
-#endif
+    if (flush)
+        maybeClearHwSurfaces();
     m_vaapi->m_mutex.lock();
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
     m_vaapi->m_mutex.unlock();
@@ -126,6 +114,10 @@ int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixel
         decoded.setOnDestroyFn([vaapi = m_vaapi] {
         });
         m_vaapi->maybeInitVPP(codec_ctx->coded_width, codec_ctx->coded_height);
+#ifdef USE_OPENGL
+        if (m_vaapiOpenGL)
+            m_vaapiOpenGL->insertAvailableSurface(decoded.hwData());
+#endif
 #ifdef USE_VULKAN
         if (m_vaapiVulkan)
             m_vaapiVulkan->insertAvailableSurface(decoded.hwData());
@@ -265,4 +257,16 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
 
     m_timeBase = streamInfo.time_base;
     return true;
+}
+
+void FFDecVAAPI::maybeClearHwSurfaces()
+{
+#ifdef USE_OPENGL
+    if (m_vaapiOpenGL)
+        m_vaapiOpenGL->clearSurfaces();
+#endif
+#ifdef USE_VULKAN
+    if (m_vaapiVulkan)
+        m_vaapiVulkan->clear();
+#endif
 }

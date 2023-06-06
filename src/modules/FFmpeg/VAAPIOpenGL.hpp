@@ -21,6 +21,7 @@
 #include <opengl/OpenGLHWInterop.hpp>
 #include <VAAPI.hpp>
 
+#include <unordered_set>
 #include <unordered_map>
 #include <memory>
 #include <mutex>
@@ -61,6 +62,9 @@ public:
 
     void clearSurfaces(bool lock = true);
 
+public:
+    void insertAvailableSurface(uintptr_t id);
+
 private:
     void clearTextures();
 
@@ -81,5 +85,6 @@ private:
 
     std::mutex m_mutex;
 
+    std::unordered_set<uintptr_t> m_availableSurfaces;
     std::unordered_map<VASurfaceID, VADRMPRIMESurfaceDescriptor> m_surfaces;
 };

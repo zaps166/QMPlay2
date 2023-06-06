@@ -154,6 +154,11 @@ bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
     if (!videoFrame.isHW())
         return false;
 
+    std::lock_guard<std::mutex> locker(m_mutex);
+
+    if (m_availableSurfaces.count(videoFrame.hwData()) == 0)
+        return false;
+
     VASurfaceID id;
     int vaField = videoFrame.isInterlaced()
         ? (videoFrame.isTopFieldFirst() != videoFrame.isSecondField())
@@ -163,8 +168,6 @@ bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
     ;
     if (!m_vaapi->filterVideo(videoFrame, id, vaField))
         return false;
-
-    std::lock_guard<std::mutex> locker(m_mutex);
 
     auto &vaSurfaceDescr = m_surfaces[id];
     if (vaSurfaceDescr.fourcc == 0 && vaSurfaceDescr.num_objects == 0)
@@ -283,9 +286,16 @@ void VAAPIOpenGL::clearSurfaces(bool lock)
         m_mutex.lock();
     for (auto &&s : m_surfaces)
         closeFDs(s.second);
+    m_availableSurfaces.clear();
     m_surfaces.clear();
     if (lock)
         m_mutex.unlock();
+}
+
+void VAAPIOpenGL::insertAvailableSurface(uintptr_t id)
+{
+    std::lock_guard<std::mutex> locker(m_mutex);
+    m_availableSurfaces.insert(id);
 }
 
 void VAAPIOpenGL::clearTextures()
