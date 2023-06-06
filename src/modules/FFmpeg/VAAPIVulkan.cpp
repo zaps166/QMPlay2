@@ -211,8 +211,6 @@ void VAAPIVulkan::map(Frame &frame)
     if (vkImage)
     {
         frame.setVulkanImage(vkImage);
-        frame.setOnDestroyFn([vaapi = m_vaapi] {
-        });
     }
     else
     {
