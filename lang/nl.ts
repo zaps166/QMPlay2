@@ -1843,7 +1843,7 @@
     </message>
     <message>
         <source>Only in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Alleen in schermvullende weergave</translation>
     </message>
     <message>
         <source>FPS</source>
@@ -1851,19 +1851,19 @@
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Het minimumaantal fps om de framesnelheid te verdubbelen</translation>
     </message>
     <message>
         <source>Maximum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Het maximumaantal fps om de framesnelheid te verdubbelen</translation>
     </message>
     <message>
         <source>Minimum:</source>
-        <translation type="unfinished"></translation>
+        <translation>Minimum:</translation>
     </message>
     <message>
         <source>Maximum:</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximum:</translation>
     </message>
 </context>
 <context>
@@ -3424,7 +3424,7 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     </message>
     <message>
         <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verdubbelt de framesnelheid. Dit maakt het eenvoudiger om met FreeSync te werken. Let op: dit filter werkt alleen in combinatie met hardwareversnelde video&apos;s.</translation>
     </message>
 </context>
 <context>
@@ -3552,7 +3552,7 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     </message>
     <message>
         <source>Screenshot saved as: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>De schermfoto is opgeslagen als ‘%1’</translation>
     </message>
 </context>
 <context>
@@ -3600,7 +3600,7 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     </message>
     <message>
         <source>&amp;Hide on close</source>
-        <translation type="unfinished">Mini&amp;maliseren in plaats van sluiten</translation>
+        <translation>Mini&amp;maliseren in plaats van sluiten</translation>
     </message>
 </context>
 <context>
