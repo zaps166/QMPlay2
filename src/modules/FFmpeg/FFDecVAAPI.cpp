@@ -165,7 +165,6 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
         if (m_vaapiOpenGL)
         {
             m_vaapi = m_vaapiOpenGL->getVAAPI();
-            m_vaapiOpenGL->clearSurfaces();
             maybeResetVaapi();
         }
     }
@@ -177,7 +176,6 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
         if (m_vaapiVulkan)
         {
             m_vaapi = m_vaapiVulkan->getVAAPI();
-            m_vaapiVulkan->clear();
             maybeResetVaapi();
         }
     }
