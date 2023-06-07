@@ -1205,12 +1205,12 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         appendUrl(audioItags);
         if (!audioOnly)
             appendUrl(videoItags);
-    }
 
-    if (urls.count() != 1 + (audioOnly ? 0 : 1))
-    {
-        urls.clear();
-        exts.clear();
+        if (urls.count() != 1 + (audioOnly ? 0 : 1))
+        {
+            urls.clear();
+            exts.clear();
+        }
     }
 
     if (urls.isEmpty())
