@@ -75,7 +75,16 @@ bool FFDecVTB::open(StreamInfo &streamInfo)
 {
     if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO)
         return false;
-
+    if (streamInfo.params->codec_id == AV_CODEC_ID_VP9)
+    {
+#if __has_builtin(__builtin_available)
+        if (! __builtin_available(macOS 10.15, *))
+#endif
+        {
+            qWarning() << "VP9 not supported by VTB";
+            return false;
+        }
+    }
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
     if (pix_fmt == AV_PIX_FMT_YUV420P10)
     {
