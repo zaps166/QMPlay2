@@ -308,7 +308,11 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
     QCoreApplication::installTranslator(qtTranslator);
     setLanguage();
 
-    av_log_set_level(AV_LOG_ERROR);
+#ifdef QT_DEBUG
+    av_log_set_level(AV_LOG_INFO);
+#else
+    av_log_set_level(AV_LOG_WARNING);
+#endif
     av_log_set_callback(avQMPlay2LogHandler);
     avformat_network_init();
 
