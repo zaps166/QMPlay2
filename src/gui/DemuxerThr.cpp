@@ -477,6 +477,10 @@ void DemuxerThr::run()
     if (stillImage && playC.paused)
         playC.paused = false;
 
+    const bool isHls = (demuxer->name() == "hls");
+    QElapsedTimer waitForDataTimer;
+    bool firstWaitForData = true;
+
     while (!demuxer.isAborted())
     {
         {
@@ -560,9 +564,25 @@ void DemuxerThr::run()
             )
         )
         {
+            if (isHls && !firstWaitForData && !playC.endOfStream)
+            {
+                // Wait a bit longer for HLS streams to prevent stuttering on every HLS chunk. Do a short
+                // sleep and continue, because reading from demuxer might block for HLS chunk length.
+                if (!waitForDataTimer.isValid())
+                    waitForDataTimer.start();
+                if (waitForDataTimer.elapsed() / 1e3 <= playIfBuffered)
+                {
+                    msleep(50);
+                    continue;
+                }
+                waitForDataTimer.invalidate();
+            }
+
             playC.waitForData = false;
             if (!paused)
                 playC.emptyBufferCond.wakeAll();
+
+            firstWaitForData = false;
         }
 
         if (playC.endOfStream || bufferedAllPackets(vS, aS, forwardPackets))
