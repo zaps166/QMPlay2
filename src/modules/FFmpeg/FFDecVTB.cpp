@@ -41,7 +41,7 @@ extern "C"
 
 using namespace std;
 
-static bool isCodecSupported(const StreamInfo &streamInfo) // Put this above "vtbGetFormat"
+static bool isCodecSupported(const StreamInfo &streamInfo)
 {
     CMVideoCodecType cmCType;
     switch (streamInfo.params->codec_id)
