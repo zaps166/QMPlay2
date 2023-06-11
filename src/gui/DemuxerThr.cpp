@@ -435,8 +435,21 @@ void DemuxerThr::run()
     localStream = demuxer->localStream();
     time = localStream ? 0.0 : Functions::gettime();
 
-    int forwardPackets = demuxer->dontUseBuffer() ? 1 : (localStream ? minBuffSizeLocal : minBuffSizeNetwork), backwardPackets;
+    const int minBuffered = demuxer->dontUseBuffer()
+        ? 1
+        : localStream
+          ? qMax(1, minBuffSizeLocal)
+          : 0 // Use "forwardTime"
+    ;
+    const double forwardTime = (minBuffered == 0)
+        ? unknownLength
+          ? qMax(0.1, m_minBuffTimeNetworkLive)
+          : qMax(0.1, m_minBuffTimeNetwork)
+        : 0.0
+    ;
+    double backwardTime = 0.0;
     int vS, aS;
+    double vT, aT;
 
     demuxerReady = true;
 
@@ -451,23 +464,28 @@ void DemuxerThr::run()
             emitInfo();
     });
 
-    if (forwardPackets == 1 || localStream || unknownLength)
-        PacketBuffer::setBackwardPackets((backwardPackets = 0));
-    else
+    if (!unknownLength && forwardTime > 0.0)
     {
-        int percent = 25;
+        Q_ASSERT(!localStream);
+        double percent = 50.0;
         switch (QMPlay2Core.getSettings().getUInt("BackwardBuffer"))
         {
             case 0:
                 percent = 10;
                 break;
-            case 2:
-                percent = 50;
+            case 1:
+                percent = 25;
+                break;
+            case 3:
+                percent = 75;
+                break;
+            case 4:
+                percent = 100;
                 break;
         }
-        PacketBuffer::setBackwardPackets((backwardPackets = forwardPackets * percent / 100));
-        forwardPackets -= backwardPackets;
+        backwardTime = forwardTime * percent / 100.0;
     }
+    PacketBuffer::setBackwardTime(backwardTime);
 
     if (!localStream)
         setPriority(QThread::LowPriority); //Network streams should have low priority, because slow single core CPUs have problems with smooth video playing during buffering
@@ -518,7 +536,7 @@ void DemuxerThr::run()
         }
 
         const bool updateBuffered = localStream ? false : canUpdateBuffered();
-        const double remainingDuration = getAVBuffersSize(vS, aS);
+        const double remainingDuration = getAVBuffersSize(vS, aS, vT, aT);
         if (playC.endOfStream && !vS && !aS && canBreak(aThr, vThr))
         {
             if (!stillImage)
@@ -548,7 +566,7 @@ void DemuxerThr::run()
         else if (localStream && demuxer->metadataChanged())
             updateCoverAndPlaying(true);
 
-        if (!localStream && !playC.waitForData && !playC.endOfStream && playIfBuffered > 0.0 && emptyBuffers(vS, aS))
+        if (minBuffered == 0 && !localStream && !playC.waitForData && !playC.endOfStream && playIfBuffered > 0.0 && emptyBuffers(vS, aS))
         {
             playC.waitForData = true;
             updateBufferedTime = 0.0;
@@ -558,7 +576,7 @@ void DemuxerThr::run()
             playC.waitForData &&
             (
                 playC.endOfStream                                                  ||
-                bufferedAllPackets(vS, aS, forwardPackets)                         || //Buffer is full
+                bufferedAllPackets(vT, aT, forwardTime)                            || //Buffer is full
                 (remainingDuration >= playIfBuffered)                              ||
                 (qFuzzyIsNull(remainingDuration) && bufferedAllPackets(vS, aS, 2))    //Buffer has at least 2 packets, but still without length (in seconds) information
             )
@@ -585,7 +603,7 @@ void DemuxerThr::run()
             firstWaitForData = false;
         }
 
-        if (playC.endOfStream || bufferedAllPackets(vS, aS, forwardPackets))
+        if (playC.endOfStream || ((minBuffered > 0) ? bufferedAllPackets(vS, aS, minBuffered) : bufferedAllPackets(vT, aT, forwardTime)))
         {
             if (paused && !demuxerPaused)
             {
@@ -653,7 +671,7 @@ void DemuxerThr::run()
         }
         else if (!skipBufferSeek)
         {
-            getAVBuffersSize(vS, aS);
+            getAVBuffersSize(vS, aS, vT, aT);
             playC.endOfStream = true;
             if (vS || aS || !canBreak(aThr, vThr))
             {
@@ -1105,7 +1123,7 @@ bool DemuxerThr::mustReloadStreams()
     }
     return false;
 }
-bool DemuxerThr::bufferedAllPackets(int vS, int aS, int p)
+template<typename T> bool DemuxerThr::bufferedAllPackets(T vS, T aS, T p)
 {
     return
     (
@@ -1122,7 +1140,7 @@ bool DemuxerThr::canBreak(const AVThread *avThr1, const AVThread *avThr2)
 {
     return (!avThr1 || avThr1->isWaiting()) && (!avThr2 || avThr2->isWaiting());
 }
-double DemuxerThr::getAVBuffersSize(int &vS, int &aS)
+double DemuxerThr::getAVBuffersSize(int &vS, int &aS, double &vT, double &aT)
 {
     double remainingDuration = 0.0;
 
@@ -1130,19 +1148,27 @@ double DemuxerThr::getAVBuffersSize(int &vS, int &aS)
     playC.aPackets.lock();
 
     if (playC.vPackets.isEmpty())
+    {
         vS = 0;
+        vT = 0.0;
+    }
     else
     {
         vS = playC.vPackets.remainingPacketsCount();
-        remainingDuration = playC.vPackets.remainingDuration();
+        vT = playC.vPackets.remainingDuration();
+        remainingDuration = vT;
     }
 
     if (playC.aPackets.isEmpty())
+    {
         aS = 0;
+        aT = 0.0;
+    }
     else
     {
         aS = playC.aPackets.remainingPacketsCount();
-        remainingDuration = remainingDuration > 0.0 ? qMin(remainingDuration, playC.aPackets.remainingDuration()) : playC.aPackets.remainingDuration();
+        aT = playC.aPackets.remainingDuration();
+        remainingDuration = remainingDuration > 0.0 ? qMin(remainingDuration, aT) : aT;
     }
 
     playC.aPackets.unlock();

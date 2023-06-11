@@ -260,17 +260,26 @@
          <item row="3" column="0">
           <widget class="QLabel" name="bufferNetworkL">
            <property name="text">
-            <string>Network buffer size (A/V packages count)</string>
+            <string>Network buffer length</string>
            </property>
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QSpinBox" name="bufferNetworkB">
+          <widget class="QDoubleSpinBox" name="bufferNetworkB">
+           <property name="suffix">
+            <string>sec</string>
+           </property>
+           <property name="decimals">
+            <number>1</number>
+           </property>
            <property name="minimum">
-            <number>100</number>
+            <double>0.100000000000000</double>
            </property>
            <property name="maximum">
-            <number>1000000</number>
+            <double>10000.00000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.1</double>
            </property>
           </widget>
          </item>
@@ -298,16 +307,54 @@
              <string notr="true">50 %</string>
             </property>
            </item>
+           <item>
+            <property name="text">
+             <string notr="true">75 %</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string notr="true">100 %</string>
+            </property>
+           </item>
           </widget>
          </item>
+
          <item row="5" column="0">
+          <widget class="QLabel" name="bufferLiveL">
+           <property name="text">
+            <string>Live stream buffer length</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QDoubleSpinBox" name="bufferLiveB">
+           <property name="suffix">
+            <string>sec</string>
+           </property>
+           <property name="decimals">
+            <number>1</number>
+           </property>
+           <property name="minimum">
+            <double>0.100000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>10000.00000000000</double>
+           </property>
+           <property name="singleStep">
+            <double>0.1</double>
+           </property>
+          </widget>
+         </item>
+
+         <item row="6" column="0">
           <widget class="QLabel" name="playIfBufferedL">
            <property name="text">
             <string>Start playback internet stream if it is buffered</string>
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item row="6" column="1">
           <widget class="QDoubleSpinBox" name="playIfBufferedB">
            <property name="suffix">
             <string>sec</string>
@@ -320,14 +367,14 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="0">
+         <item row="7" column="0">
           <widget class="QLabel" name="maxVolL">
            <property name="text">
             <string>Maximum volume</string>
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
+         <item row="7" column="1">
           <widget class="QSpinBox" name="maxVolB">
            <property name="suffix">
             <string notr="true"> %</string>
@@ -343,14 +390,14 @@
            </property>
           </widget>
          </item>
-         <item row="7" column="0">
+         <item row="8" column="0">
           <widget class="QCheckBox" name="forceSamplerate">
            <property name="text">
             <string>Force samplerate</string>
            </property>
           </widget>
          </item>
-         <item row="7" column="1">
+         <item row="8" column="1">
           <widget class="QSpinBox" name="samplerateB">
            <property name="minimum">
             <number>4000</number>
@@ -360,7 +407,7 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="0">
+         <item row="9" column="0">
           <widget class="QCheckBox" name="forceChannels">
            <property name="text">
             <string>Force channels conversion</string>
@@ -370,7 +417,7 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="1">
+         <item row="9" column="1">
           <widget class="QSpinBox" name="channelsB">
            <property name="minimum">
             <number>1</number>
@@ -380,7 +427,7 @@
            </property>
           </widget>
          </item>
-         <item row="9" column="0" colspan="2">
+         <item row="10" column="0" colspan="2">
           <widget class="QCheckBox" name="resamplerFirst">
            <property name="text">
             <string>Use audio resampler and channel conversion before filters and visualizations</string>

@@ -79,10 +79,10 @@ private:
     void addSubtitleStream(bool, QString &, int, int, const QString &, const QString &, const QString &, QStringList &, const QVector<QMPlay2Tag> &other_info = QVector<QMPlay2Tag>());
 
     bool mustReloadStreams();
-    bool bufferedAllPackets(int vS, int aS, int p);
+    template<typename T> bool bufferedAllPackets(T vS, T aS, T p);
     bool emptyBuffers(int vS, int aS);
     bool canBreak(const AVThread *avThr1, const AVThread *avThr2);
-    double getAVBuffersSize(int &vS, int &aS);
+    double getAVBuffersSize(int &vS, int &aS, double &vT, double &aT);
     BufferInfo getBufferInfo(bool clearBackwards);
     void clearBuffers();
 
@@ -92,7 +92,8 @@ private:
 
     QString name, url, updatePlayingName;
 
-    int minBuffSizeLocal, minBuffSizeNetwork;
+    int minBuffSizeLocal;
+    double m_minBuffTimeNetwork, m_minBuffTimeNetworkLive;
     bool err, updateBufferedSeconds, demuxerReady, hasCover, skipBufferSeek, localStream, unknownLength, waitingForFillBufferB, paused, demuxerPaused;
     QMutex stopVAMutex, endMutex, seekMutex;
     IOController<> ioCtrl;

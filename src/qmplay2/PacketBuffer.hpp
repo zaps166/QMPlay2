@@ -25,11 +25,11 @@
 
 class QMPLAY2SHAREDLIB_EXPORT PacketBuffer : private QList<Packet>
 {
-    static int backwardPackets;
+    static double s_backwardTime;
 public:
-    static void setBackwardPackets(int backwardPackets)
+    static void setBackwardTime(double time)
     {
-        PacketBuffer::backwardPackets = backwardPackets;
+        s_backwardTime = time;
     }
 
     bool seekTo(double seekPos, bool backward);

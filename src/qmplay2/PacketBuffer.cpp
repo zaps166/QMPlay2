@@ -20,7 +20,7 @@
 
 #include <cmath>
 
-int PacketBuffer::backwardPackets;
+double PacketBuffer::s_backwardTime;
 
 bool PacketBuffer::seekTo(double seekPos, bool backward)
 {
@@ -128,7 +128,7 @@ Packet PacketBuffer::fetch()
 
 void PacketBuffer::clearBackwards()
 {
-    while (m_pos > backwardPackets)
+    while (m_backwardDuration > s_backwardTime && m_pos > 0)
     {
         const Packet &tmpPacket = first();
         m_backwardDuration -= tmpPacket.duration();

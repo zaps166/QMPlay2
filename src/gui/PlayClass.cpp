@@ -107,7 +107,8 @@ void PlayClass::play(const QString &_url)
             url = _url;
             demuxThr = new DemuxerThr(*this);
             demuxThr->minBuffSizeLocal = QMPlay2Core.getSettings().getInt("AVBufferLocal");
-            demuxThr->minBuffSizeNetwork = QMPlay2Core.getSettings().getInt("AVBufferNetwork");
+            demuxThr->m_minBuffTimeNetwork = QMPlay2Core.getSettings().getDouble("AVBufferTimeNetwork");
+            demuxThr->m_minBuffTimeNetworkLive = QMPlay2Core.getSettings().getDouble("AVBufferTimeNetworkLive");
             demuxThr->playIfBuffered = QMPlay2Core.getSettings().getDouble("PlayIfBuffered");
             demuxThr->updateBufferedSeconds = QMPlay2Core.getSettings().getBool("ShowBufferedTimeOnSlider");
 

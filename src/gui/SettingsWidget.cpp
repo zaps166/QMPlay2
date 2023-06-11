@@ -197,8 +197,9 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("ShortSeek", 5);
     QMPSettings.init("LongSeek", 30);
     QMPSettings.init("AVBufferLocal", 100);
-    QMPSettings.init("AVBufferNetwork", 50000);
+    QMPSettings.init("AVBufferTimeNetwork", 500.0);
     QMPSettings.init("BackwardBuffer", 1);
+    QMPSettings.init("AVBufferTimeNetworkLive", 5.0);
     QMPSettings.init("PlayIfBuffered", 1.75);
     QMPSettings.init("MaxVol", 100);
     QMPSettings.init("VolumeL", 100);
@@ -487,7 +488,9 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 
         playbackSettingsPage->shortSeekB->setSuffix(" " + playbackSettingsPage->shortSeekB->suffix());
         playbackSettingsPage->longSeekB->setSuffix(" " + playbackSettingsPage->longSeekB->suffix());
+        playbackSettingsPage->bufferNetworkB->setSuffix(" " + playbackSettingsPage->bufferNetworkB->suffix());
         playbackSettingsPage->playIfBufferedB->setSuffix(" " + playbackSettingsPage->playIfBufferedB->suffix());
+        playbackSettingsPage->bufferLiveB->setSuffix(" " + playbackSettingsPage->bufferLiveB->suffix());
         playbackSettingsPage->replayGainPreamp->setPrefix(playbackSettingsPage->replayGainPreamp->prefix() + ": ");
         playbackSettingsPage->replayGainPreampNoMetadata->setPrefix(playbackSettingsPage->replayGainPreampNoMetadata->prefix() + ": ");
 
@@ -496,8 +499,9 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         playbackSettingsPage->shortSeekB->setValue(QMPSettings.getInt("ShortSeek"));
         playbackSettingsPage->longSeekB->setValue(QMPSettings.getInt("LongSeek"));
         playbackSettingsPage->bufferLocalB->setValue(QMPSettings.getInt("AVBufferLocal"));
-        playbackSettingsPage->bufferNetworkB->setValue(QMPSettings.getInt("AVBufferNetwork"));
+        playbackSettingsPage->bufferNetworkB->setValue(QMPSettings.getDouble("AVBufferTimeNetwork"));
         playbackSettingsPage->backwardBufferNetworkB->setCurrentIndex(QMPSettings.getUInt("BackwardBuffer"));
+        playbackSettingsPage->bufferLiveB->setValue(QMPSettings.getDouble("AVBufferTimeNetworkLive"));
         playbackSettingsPage->playIfBufferedB->setValue(QMPSettings.getDouble("PlayIfBuffered"));
         playbackSettingsPage->maxVolB->setValue(QMPSettings.getInt("MaxVol"));
 
@@ -1211,8 +1215,9 @@ void SettingsWidget::apply()
             QMPSettings.set("ShortSeek", playbackSettingsPage->shortSeekB->value());
             QMPSettings.set("LongSeek", playbackSettingsPage->longSeekB->value());
             QMPSettings.set("AVBufferLocal", playbackSettingsPage->bufferLocalB->value());
-            QMPSettings.set("AVBufferNetwork", playbackSettingsPage->bufferNetworkB->value());
+            QMPSettings.set("AVBufferTimeNetwork", playbackSettingsPage->bufferNetworkB->value());
             QMPSettings.set("BackwardBuffer", playbackSettingsPage->backwardBufferNetworkB->currentIndex());
+            QMPSettings.set("AVBufferTimeNetworkLive", playbackSettingsPage->bufferLiveB->value());
             QMPSettings.set("PlayIfBuffered", playbackSettingsPage->playIfBufferedB->value());
             QMPSettings.set("ForceSamplerate", playbackSettingsPage->forceSamplerate->isChecked());
             QMPSettings.set("Samplerate", playbackSettingsPage->samplerateB->value());
