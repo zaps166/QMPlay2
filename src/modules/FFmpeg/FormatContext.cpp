@@ -830,6 +830,36 @@ void FormatContext::setStreamOffset(double offset)
         streamsOffset[i] = offset - streamsTS.at(i);
 }
 
+void FormatContext::selectStreams(const QSet<int> &selectedStreams)
+{
+    for (unsigned i = 0; i < formatCtx->nb_programs; ++i)
+    {
+        auto &program = formatCtx->programs[i];
+        program->discard = AVDISCARD_ALL;
+        for (unsigned s = 0; s < program->nb_stream_indexes; ++s)
+        {
+            const int idx = index_map.at(program->stream_index[s]);
+            if (idx >= 0 && selectedStreams.contains(idx))
+            {
+                program->discard = AVDISCARD_NONE;
+                break;
+            }
+        }
+    }
+
+    for (AVStream *stream : qAsConst(streams))
+    {
+        if (stream->codecpar->codec_type != AVMEDIA_TYPE_VIDEO && stream->codecpar->codec_type != AVMEDIA_TYPE_AUDIO)
+            continue;
+
+        const int idx = index_map.at(stream->index);
+        stream->discard = (idx >= 0 && selectedStreams.contains(idx))
+            ? AVDISCARD_NONE
+            : AVDISCARD_ALL
+        ;
+    }
+}
+
 /**/
 
 AVDictionary *FormatContext::getMetadata() const

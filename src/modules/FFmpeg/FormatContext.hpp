@@ -69,6 +69,8 @@ public:
 
     void setStreamOffset(double offset);
 
+    void selectStreams(const QSet<int> &selectedStreams);
+
     bool isLocal, isStreamed, isError;
     QList<StreamInfo *> streamsInfo;
     double currPos;

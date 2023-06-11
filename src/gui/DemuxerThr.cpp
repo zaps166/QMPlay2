@@ -324,6 +324,7 @@ bool DemuxerThr::load(bool canEmitInfo)
     emit load(demuxer.rawPtr()); //to wykonuje się w głównym wątku (wywołuje load() z "playC")
     playC.loadMutex.lock(); //i czeka na koniec wykonywania
     playC.loadMutex.unlock();
+    demuxer->selectStreams({playC.audioStream, playC.videoStream, playC.subtitlesStream});
     if (canEmitInfo)
         emitInfo();
     return playC.audioStream >= 0 || playC.videoStream >= 0;

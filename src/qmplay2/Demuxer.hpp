@@ -76,6 +76,8 @@ public:
     virtual bool localStream() const;
     virtual bool dontUseBuffer() const;
 
+    virtual void selectStreams(const QSet<int> &selectedStreams);
+
     virtual bool seek(double pos, bool backward) = 0;
     virtual bool read(Packet &, int &) = 0;
 

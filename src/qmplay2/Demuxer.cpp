@@ -117,6 +117,11 @@ bool Demuxer::dontUseBuffer() const
     return false;
 }
 
+void Demuxer::selectStreams(const QSet<int> &selectedStreams)
+{
+    Q_UNUSED(selectedStreams)
+}
+
 Playlist::Entries Demuxer::fetchTracks(const QString &url, bool &ok)
 {
     Q_UNUSED(url)

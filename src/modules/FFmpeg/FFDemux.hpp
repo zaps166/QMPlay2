@@ -50,6 +50,8 @@ private:
 
     bool localStream() const override;
 
+    void selectStreams(const QSet<int> &selectedStreams) override;
+
     bool seek(double pos, bool backward) override;
     bool read(Packet &encoded, int &idx) override;
     void pause() override;

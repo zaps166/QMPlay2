@@ -153,6 +153,30 @@ bool FFDemux::localStream() const
     return true;
 }
 
+void FFDemux::selectStreams(const QSet<int> &selectedStreams)
+{
+    bool first = true;
+    int baseIdx = 0;
+    for (FormatContext *fmtCtx : qAsConst(formatContexts))
+    {
+        if (first)
+        {
+            fmtCtx->selectStreams(selectedStreams);
+            first = false;
+        }
+        else
+        {
+            QSet<int> selectedStreamsTranslated;
+            for (int selectedStreamIdx : selectedStreams)
+            {
+                selectedStreamsTranslated.insert(selectedStreamIdx - ((selectedStreamIdx >= 0) ? baseIdx : 0));
+            }
+            fmtCtx->selectStreams(selectedStreamsTranslated);
+        }
+        baseIdx += fmtCtx->streamsInfo.count();
+    }
+}
+
 bool FFDemux::seek(double pos, bool backward)
 {
     bool seeked = false;
