@@ -2378,11 +2378,11 @@
     </message>
     <message>
         <source>Network buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation>網路緩衝長度</translation>
     </message>
     <message>
         <source>Live stream buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation>直播串流緩衝長度</translation>
     </message>
 </context>
 <context>
