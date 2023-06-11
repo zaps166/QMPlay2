@@ -56,7 +56,7 @@ bool FFDemux::set()
 bool FFDemux::metadataChanged() const
 {
     bool isMetadataChanged = false;
-    for (const FormatContext *fmtCtx : formatContexts)
+    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
         isMetadataChanged |= fmtCtx->metadataChanged();
     return isMetadataChanged;
 }
@@ -64,7 +64,7 @@ bool FFDemux::metadataChanged() const
 bool FFDemux::isStillImage() const
 {
     bool stillImage = true;
-    for (const FormatContext *fmtCtx : formatContexts)
+    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
         stillImage &= fmtCtx->isStillImage();
     return stillImage;
 }
@@ -85,7 +85,7 @@ QList<ChapterInfo> FFDemux::getChapters() const
 QString FFDemux::name() const
 {
     QString name;
-    for (const FormatContext *fmtCtx : formatContexts)
+    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
     {
         const QString fmtCtxName = fmtCtx->name();
         if (!name.contains(fmtCtxName))
@@ -115,7 +115,7 @@ bool FFDemux::getReplayGain(bool album, float &gain_db, float &peak) const
 qint64 FFDemux::size() const
 {
     qint64 bytes = -1;
-    for (const FormatContext *fmtCtx : formatContexts)
+    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
     {
         const qint64 s = fmtCtx->size();
         if (s < 0)
@@ -127,14 +127,14 @@ qint64 FFDemux::size() const
 double FFDemux::length() const
 {
     double length = -1.0;
-    for (const FormatContext *fmtCtx : formatContexts)
+    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
         length = qMax(length, fmtCtx->length());
     return length;
 }
 int FFDemux::bitrate() const
 {
     int bitrate = 0;
-    for (const FormatContext *fmtCtx : formatContexts)
+    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
         bitrate += fmtCtx->bitrate();
     return bitrate;
 }
@@ -147,7 +147,7 @@ QByteArray FFDemux::image(bool forceCopy) const
 
 bool FFDemux::localStream() const
 {
-    for (const FormatContext *fmtCtx : formatContexts)
+    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
         if (!fmtCtx->isLocal)
             return false;
     return true;
