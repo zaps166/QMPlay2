@@ -248,24 +248,21 @@ bool FormatContext::isStillImage() const
 QList<ProgramInfo> FormatContext::getPrograms() const
 {
     QList<ProgramInfo> programs;
-    for (unsigned i = 0; i < formatCtx->nb_programs; ++i)
+    if (formatCtx->nb_programs > 1)
     {
-        const AVProgram &program = *formatCtx->programs[i];
-        if (program.discard != AVDISCARD_ALL)
+        for (unsigned i = 0; i < formatCtx->nb_programs; ++i)
         {
-            ProgramInfo programInfo(program.program_num);
-            if (program.nb_stream_indexes)
+            const AVProgram &program = *formatCtx->programs[i];
+            ProgramInfo programInfo(program.id);
+            for (unsigned s = 0; s < program.nb_stream_indexes; ++s)
             {
-                for (unsigned s = 0; s < program.nb_stream_indexes; ++s)
+                const int ff_idx = program.stream_index[s];
+                const int idx = index_map[ff_idx];
+                if (idx > -1)
                 {
-                    const int ff_idx = program.stream_index[s];
-                    const int idx = index_map[ff_idx];
-                    if (idx > -1)
-                    {
-                        const AVMediaType type = streams[ff_idx]->codecpar->codec_type;
-                        if (type != AVMEDIA_TYPE_UNKNOWN)
-                            programInfo.streams += {idx, type};
-                    }
+                    const AVMediaType type = streams[ff_idx]->codecpar->codec_type;
+                    if (type != AVMEDIA_TYPE_UNKNOWN)
+                        programInfo.streams += {idx, type};
                 }
             }
             programs += programInfo;
