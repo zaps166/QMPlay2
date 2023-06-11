@@ -2313,10 +2313,6 @@
         <translation>本地缓冲大小（音视频包计数）</translation>
     </message>
     <message>
-        <source>Network buffer size (A/V packages count)</source>
-        <translation>网络缓冲大小（音视频包计数）</translation>
-    </message>
-    <message>
         <source>Percent of packages for backwards rewinding</source>
         <translation>回退时数据包的百分比</translation>
     </message>
@@ -2379,6 +2375,14 @@
     <message>
         <source>Amplify (no metadata)</source>
         <translation>放大（无元数据）</translation>
+    </message>
+    <message>
+        <source>Network buffer length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Live stream buffer length</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

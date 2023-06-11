@@ -2310,10 +2310,6 @@
         <translation>Taille de la mémoire tampon locale (nombre de paquets A/V)</translation>
     </message>
     <message>
-        <source>Network buffer size (A/V packages count)</source>
-        <translation>Taille de la mémoire tampon réseau (nombre de paquets A/V)</translation>
-    </message>
-    <message>
         <source>Percent of packages for backwards rewinding</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2375,6 +2371,14 @@
     </message>
     <message>
         <source>Amplify (no metadata)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network buffer length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Live stream buffer length</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

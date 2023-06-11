@@ -2312,10 +2312,6 @@
         <translation>Lokale Puffergröße (A/V-Paketzählung)</translation>
     </message>
     <message>
-        <source>Network buffer size (A/V packages count)</source>
-        <translation>Netzwerk Puffergröße (A/V-Paketzählung)</translation>
-    </message>
-    <message>
         <source>Percent of packages for backwards rewinding</source>
         <translation>Prozentuales Zurückspulen</translation>
     </message>
@@ -2378,6 +2374,14 @@
     <message>
         <source>Amplify (no metadata)</source>
         <translation>Verstärken (ohne Metadaten)</translation>
+    </message>
+    <message>
+        <source>Network buffer length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Live stream buffer length</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -2321,10 +2321,6 @@
         <translation>Розмір локального буфера (кількість пакетів аудіо/відео)</translation>
     </message>
     <message>
-        <source>Network buffer size (A/V packages count)</source>
-        <translation>Розмір мережевого буфера (кількість пакетів аудіо/відео)</translation>
-    </message>
-    <message>
         <source>Percent of packages for backwards rewinding</source>
         <translation>Відсоток пакетів аудіо/відео при зворотному перемотуванні</translation>
     </message>
@@ -2379,6 +2375,14 @@
     <message>
         <source>Amplify (no metadata)</source>
         <translation>Посилення (без метаданих)</translation>
+    </message>
+    <message>
+        <source>Network buffer length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Live stream buffer length</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

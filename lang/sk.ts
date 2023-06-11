@@ -2321,10 +2321,6 @@
         <translation>Veľkosť miestneho buffera (počet A/V balíkov)</translation>
     </message>
     <message>
-        <source>Network buffer size (A/V packages count)</source>
-        <translation>Veľkosť sieťového buffera (počet A/V balíkov)</translation>
-    </message>
-    <message>
         <source>Percent of packages for backwards rewinding</source>
         <translation>Percento balíkov pre spätné pretáčanie</translation>
     </message>
@@ -2379,6 +2375,14 @@
     <message>
         <source>Amplify (no metadata)</source>
         <translation>Zosilniť (žiadne metadáta)</translation>
+    </message>
+    <message>
+        <source>Network buffer length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Live stream buffer length</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -2313,10 +2313,6 @@
         <translation>本地緩衝尺寸（影音封包計量）</translation>
     </message>
     <message>
-        <source>Network buffer size (A/V packages count)</source>
-        <translation>網路緩衝尺寸（影音封包計量）</translation>
-    </message>
-    <message>
         <source>Percent of packages for backwards rewinding</source>
         <translation>允與倒轉的封包百分比</translation>
     </message>
@@ -2379,6 +2375,14 @@
     <message>
         <source>Amplify (no metadata)</source>
         <translation>增益（無詮釋資料）</translation>
+    </message>
+    <message>
+        <source>Network buffer length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Live stream buffer length</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

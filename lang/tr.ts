@@ -2329,10 +2329,6 @@
         <translation>Yerel arabellek boyutu (A/V paketleri sayısı)</translation>
     </message>
     <message>
-        <source>Network buffer size (A/V packages count)</source>
-        <translation>Ağ arabellek boyutu (A/V paketleri sayısı)</translation>
-    </message>
-    <message>
         <source>Percent of packages for backwards rewinding</source>
         <translation>Geri sarılacak paketlerin yüzdesi</translation>
     </message>
@@ -2388,6 +2384,14 @@
     <message>
         <source>Amplify (no metadata)</source>
         <translation>Yükselt (üstveri yok)</translation>
+    </message>
+    <message>
+        <source>Network buffer length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Live stream buffer length</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

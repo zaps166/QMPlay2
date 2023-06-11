@@ -2321,10 +2321,6 @@
         <translation>Rozmiar bufora dla lokalnych strumieni (ilość paczek A/V)</translation>
     </message>
     <message>
-        <source>Network buffer size (A/V packages count)</source>
-        <translation>Rozmiar bufora dla internetowych strumieni (ilość paczek A/V)</translation>
-    </message>
-    <message>
         <source>Percent of packages for backwards rewinding</source>
         <translation>Ilość procent przeznaczonych paczek A/V dla przewijania w tył</translation>
     </message>
@@ -2379,6 +2375,14 @@
     <message>
         <source>Amplify (no metadata)</source>
         <translation>Wzmocnienie (brak metadanych)</translation>
+    </message>
+    <message>
+        <source>Network buffer length</source>
+        <translation>Długość bufora sieciowego</translation>
+    </message>
+    <message>
+        <source>Live stream buffer length</source>
+        <translation>Długość bufora dla transmisji na żywo</translation>
     </message>
 </context>
 <context>
