@@ -97,7 +97,7 @@ private:
     bool isOneStreamOgg;
     bool forceCopy;
 
-    int invalErrCount, errFromSeek;
+    int m_retErrCount, errFromSeek;
     bool maybeHasFrame;
 
     bool artistWithTitle;

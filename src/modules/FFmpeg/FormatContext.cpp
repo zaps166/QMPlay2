@@ -207,7 +207,7 @@ FormatContext::FormatContext(bool reconnectStreamed) :
     isPaused(false), fixMkvAss(false),
     isMetadataChanged(false),
     lastTime(0.0),
-    invalErrCount(0), errFromSeek(0),
+    m_retErrCount(0), errFromSeek(0),
     maybeHasFrame(false),
     artistWithTitle(true),
     stillImage(false),
@@ -501,6 +501,7 @@ bool FormatContext::seek(double pos, bool backward)
             currPos = pos;
             nextDts.fill(pos);
             isError = false;
+            m_retErrCount = 0;
         }
     }
     return isOk;
@@ -533,20 +534,25 @@ bool FormatContext::read(Packet &encoded, int &idx)
         errFromSeek = 0;
     }
 
-    if (ret == AVERROR_INVALIDDATA)
+    if (ret == AVERROR_INVALIDDATA || ret == AVERROR_EXIT)
     {
-        if (invalErrCount < 1000)
+        if (m_retErrCount < 1000)
         {
-            ++invalErrCount;
+            ++m_retErrCount;
             return true;
         }
         isError = true;
         return false;
     }
     else
-        invalErrCount = 0;
+    {
+        m_retErrCount = 0;
+    }
+
     if (ret == AVERROR(EAGAIN))
+    {
         return true;
+    }
     else if (ret)
     {
         isError = true;
