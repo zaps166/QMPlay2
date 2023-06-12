@@ -499,6 +499,7 @@ void DemuxerThr::run()
     const bool isHls = (demuxer->name() == "hls");
     QElapsedTimer waitForDataTimer;
     bool firstWaitForData = true;
+    bool canWaitForData = true;
 
     while (!demuxer.isAborted())
     {
@@ -583,7 +584,7 @@ void DemuxerThr::run()
             )
         )
         {
-            if (isHls && !firstWaitForData && !playC.endOfStream)
+            if (isHls && !firstWaitForData && canWaitForData && !playC.endOfStream)
             {
                 // Wait a bit longer for HLS streams to prevent stuttering on every HLS chunk. Do a short
                 // sleep and continue, because reading from demuxer might block for HLS chunk length.
@@ -595,6 +596,7 @@ void DemuxerThr::run()
                     continue;
                 }
                 waitForDataTimer.invalidate();
+                canWaitForData = false;
             }
 
             playC.waitForData = false;
@@ -602,6 +604,10 @@ void DemuxerThr::run()
                 playC.emptyBufferCond.wakeAll();
 
             firstWaitForData = false;
+        }
+        else
+        {
+            canWaitForData = true;
         }
 
         if (playC.endOfStream || ((minBuffered > 0) ? bufferedAllPackets(vS, aS, minBuffered) : bufferedAllPackets(vT, aT, forwardTime)))
