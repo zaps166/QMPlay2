@@ -201,7 +201,7 @@ bool FFDemux::read(Packet &encoded, int &idx)
     for (int i = 0; i < formatContexts.count(); ++i)
     {
         FormatContext *fmtCtx = formatContexts.at(i);
-        if (fmtCtx->isError)
+        if (fmtCtx->isError || fmtCtx->m_allDiscarded)
         {
             ++numErrors;
             continue;

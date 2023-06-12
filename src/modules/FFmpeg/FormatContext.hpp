@@ -71,7 +71,7 @@ public:
 
     void selectStreams(const QSet<int> &selectedStreams);
 
-    bool isLocal, isStreamed, isError;
+    bool isLocal, isStreamed, isError, m_allDiscarded = false;
     QList<StreamInfo *> streamsInfo;
     double currPos;
 private:

@@ -514,6 +514,13 @@ bool FormatContext::read(Packet &encoded, int &idx)
         return false;
     }
 
+    if (m_allDiscarded && !maybeHasFrame)
+    {
+        if (!isPaused)
+            pause();
+        return false;
+    }
+
     if (isPaused)
     {
         isPaused = false;
@@ -835,31 +842,23 @@ void FormatContext::setStreamOffset(double offset)
 
 void FormatContext::selectStreams(const QSet<int> &selectedStreams)
 {
-    for (unsigned i = 0; i < formatCtx->nb_programs; ++i)
-    {
-        auto &program = formatCtx->programs[i];
-        program->discard = AVDISCARD_ALL;
-        for (unsigned s = 0; s < program->nb_stream_indexes; ++s)
-        {
-            const int idx = index_map.at(program->stream_index[s]);
-            if (idx >= 0 && selectedStreams.contains(idx))
-            {
-                program->discard = AVDISCARD_NONE;
-                break;
-            }
-        }
-    }
-
+    m_allDiscarded = true;
     for (AVStream *stream : qAsConst(streams))
     {
-        if (stream->codecpar->codec_type != AVMEDIA_TYPE_VIDEO && stream->codecpar->codec_type != AVMEDIA_TYPE_AUDIO)
+        if (stream->codecpar->codec_type == AVMEDIA_TYPE_DATA || stream->codecpar->codec_type == AVMEDIA_TYPE_ATTACHMENT)
+        {
+            // Attachment is used once at "open()", data is not used at all.
+            stream->discard = AVDISCARD_ALL;
             continue;
+        }
 
         const int idx = index_map.at(stream->index);
         stream->discard = (idx >= 0 && selectedStreams.contains(idx))
-            ? AVDISCARD_NONE
+            ? AVDISCARD_DEFAULT
             : AVDISCARD_ALL
         ;
+        if (stream->discard == AVDISCARD_DEFAULT)
+            m_allDiscarded = false;
     }
 }
 
