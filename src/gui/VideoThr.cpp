@@ -337,7 +337,7 @@ inline VideoWriter *VideoThr::videoWriter() const
 
 void VideoThr::run()
 {
-    bool skip = false, paused = false, oneFrame = false, useLastDelay = false, maybeFlush = false, lastAVDesync = false, interlaced = false, err = false;
+    bool skip = false, paused = false, oneFrame = false, useLastDelay = false, maybeFlush = false, lastAVDesync = false, interlaced = false, err = false, skipNonKey = false;
     double tmp_time = 0.0, sync_last_pts = 0.0, frame_timer = -1.0, sync_timer = 0.0, framesDisplayedTime = 0.0;
     QMutex emptyBufferMutex;
     Frame videoFrame;
@@ -453,17 +453,18 @@ void VideoThr::run()
         const bool flushVideo = playC.flushVideo;
 
         filtersMutex.lock();
-        if (flushVideo)
+        if (flushVideo || skipNonKey)
         {
             filters.clearBuffers();
-            frame_timer = -1.0;
+            if (flushVideo)
+                frame_timer = -1.0;
         }
 
-        if (!packet.isEmpty() || maybeFlush)
+        if ((!packet.isEmpty() || maybeFlush) && (!skipNonKey || packet.hasKeyFrame()))
         {
             Frame decoded;
             AVPixelFormat newPixelFormat = AV_PIX_FMT_NONE;
-            const int bytes_consumed = dec->decodeVideo(packet, decoded, newPixelFormat, flushVideo, skip ? ~0 : (fast >> 1));
+            const int bytes_consumed = dec->decodeVideo(packet, decoded, newPixelFormat, flushVideo || skipNonKey, (skip && !skipNonKey) ? ~0 : (fast >> 1));
             ts = decoded.isTsValid() ? decoded.ts() : qQNaN();
             if (newPixelFormat != AV_PIX_FMT_NONE)
                 emit playC.pixelFormatUpdate(newPixelFormat);
@@ -493,7 +494,9 @@ void VideoThr::run()
                 gotFrameOrError = true;
             }
             else if (skip)
+            {
                 filters.removeLastFromInputBuffer();
+            }
             if (bytes_consumed < 0)
             {
                 gotFrameOrError = true;
@@ -503,6 +506,7 @@ void VideoThr::run()
             {
                 tmp_br += bytes_consumed;
             }
+            skipNonKey = false;
         }
 
         // This thread will wait for "DemuxerThr" which'll detect this error and restart with new decoder.
@@ -693,6 +697,8 @@ void VideoThr::run()
                         delay = 0.0;
                         if (fast >= 7)
                             skip = true;
+                        if (fast >= 56 || (fast >= 28 && fDiff >= max_threshold * 4.0))
+                            skipNonKey = true;
                     }
                     else if (diff > 0.0) //obraz idzie za szybko
                     {
@@ -755,7 +761,7 @@ void VideoThr::run()
                         write(videoFrame, move(osdList), seq);
                         m_subsDisplayLocker = {};
                     });
-                    if (canSkipFrames)
+                    if (canSkipFrames && !skipNonKey)
                         ++framesDisplayed;
                 }
                 if (canSkipFrames)
