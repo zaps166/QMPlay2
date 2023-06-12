@@ -169,7 +169,7 @@ void FFTSpectrum::soundBuffer(const bool enable)
             tmpData = (FFTComplex *)av_malloc(tmpDataSize * sizeof(FFTComplex));
             m_winFunc.resize(tmpDataSize);
             for (int i = 0; i < tmpDataSize; ++i)
-                m_winFunc[i] = 0.5f - 0.5f * cos(2.0f * M_PI * i / (tmpDataSize - 1));
+                m_winFunc[i] = 0.5f - 0.5f * cos(2.0f * static_cast<float>(M_PI) * i / (tmpDataSize - 1));
             w.spectrumData.resize(tmpDataSize / 2);
             w.lastData.resize(tmpDataSize / 2);
         }
