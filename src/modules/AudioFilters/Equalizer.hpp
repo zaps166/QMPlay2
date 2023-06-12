@@ -20,6 +20,8 @@
 
 #include <AudioFilter.hpp>
 
+#include <vector>
+
 struct FFTContext;
 struct FFTComplex;
 
@@ -45,22 +47,28 @@ private:
     void alloc(bool);
     void interpolateFilterCurve();
 
-    int FFT_NBITS, FFT_SIZE, FFT_SIZE_2;
+private:
+    int m_fftNBits = 0;
+    int m_fftSize = 0;
 
-    uchar chn;
-    uint srate;
-    bool canFilter, hasParameters, enabled;
+    uchar m_chn = 0;
+    uint m_srate = 0;
+
+    bool m_canFilter = false;
+    bool m_hasParameters = false;
+    bool m_enabled = false;
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    mutable QRecursiveMutex mutex;
+    mutable QRecursiveMutex m_mutex;
 #else
-    mutable QMutex mutex;
+    mutable QMutex m_mutex;
 #endif
-    FFTContext *fftIn, *fftOut;
-    FFTComplex *complex;
-    QVector<QVector<float>> input, last_samples;
-    QVector<float> wind_f, f;
-    float preamp;
+    FFTContext *m_fftIn = nullptr;
+    FFTContext *m_fftOut = nullptr;
+    FFTComplex *m_complex = nullptr;
+    std::vector<std::vector<float>> m_input, m_lastSamples;
+    std::vector<float> m_windF, m_f;
+    float m_preamp = 0.0f;
 };
 
 #define EqualizerName "Audio Equalizer"

@@ -34,7 +34,7 @@ static inline void fft_calc(FFTContext *fft_ctx, FFTComplex *cplx)
 
 static inline float cosI(const float y1, const float y2, float p)
 {
-    p = (1.0f - cosf(p * M_PI)) / 2.0f;
+    p = (1.0f - cos(p * static_cast<float>(M_PI))) / 2.0f;
     return y1 * (1.0f - p) + y2 * p;
 }
 
@@ -76,13 +76,10 @@ float Equalizer::getAmpl(int val)
     return powf(50.0f / (100 - val), 3.33f);
 }
 
-Equalizer::Equalizer(Module &module) :
-    FFT_NBITS(0), FFT_SIZE(0), FFT_SIZE_2(0),
-    canFilter(false), hasParameters(false), enabled(false),
+Equalizer::Equalizer(Module &module)
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-    mutex(QMutex::Recursive),
+    : m_mutex(QMutex::Recursive)
 #endif
-    fftIn(nullptr), fftOut(nullptr)
 {
     SetModule(module);
 }
@@ -93,155 +90,165 @@ Equalizer::~Equalizer()
 
 bool Equalizer::set()
 {
-    mutex.lock();
-    enabled = sets().getBool("Equalizer");
-    if (FFT_NBITS && sets().getInt("Equalizer/nbits") != FFT_NBITS)
+    QMutexLocker locker(&m_mutex);
+    m_enabled = sets().getBool("Equalizer");
+    if (m_fftNBits && sets().getInt("Equalizer/nbits") != m_fftNBits)
         alloc(false);
-    alloc(enabled && hasParameters);
-    mutex.unlock();
+    alloc(m_enabled && m_hasParameters);
     return true;
 }
 
 bool Equalizer::setAudioParameters(uchar chn, uint srate)
 {
-    hasParameters = chn && srate;
-    if (hasParameters)
+    m_hasParameters = chn && srate;
+    if (m_hasParameters)
     {
-        this->chn = chn;
-        this->srate = srate;
+        m_chn = chn;
+        m_srate = srate;
         clearBuffers();
     }
-    alloc(enabled && hasParameters);
+    alloc(m_enabled && m_hasParameters);
     return true;
 }
 int Equalizer::bufferedSamples() const
 {
-    if (canFilter)
+    if (m_canFilter)
     {
-        mutex.lock();
-        int bufferedSamples = input.at(0).size();
-        mutex.unlock();
+        QMutexLocker locker(&m_mutex);
+        int bufferedSamples = m_input[0].size();
         return bufferedSamples;
     }
     return 0;
 }
 void Equalizer::clearBuffers()
 {
-    mutex.lock();
-    if (canFilter)
+    QMutexLocker locker(&m_mutex);
+    if (m_canFilter)
     {
-        input.clear();
-        input.resize(chn);
-        last_samples.clear();
-        last_samples.resize(chn);
+        m_input.clear();
+        m_input.resize(m_chn);
+        m_lastSamples.clear();
+        m_lastSamples.resize(m_chn);
     }
-    mutex.unlock();
 }
 double Equalizer::filter(QByteArray &data, bool flush)
 {
-    if (canFilter)
+    if (!m_canFilter)
+        return 0.0;
+
+    QMutexLocker locker(&m_mutex);
+
+    const int fftSize = m_fftSize;
+    const int fftSizeDiv2 = fftSize / 2;
+    const float fftSizeFlt = fftSize;
+    const int chn = m_chn;
+
+    if (!flush)
     {
-        mutex.lock();
+        float *samples = (float *)data.data();
+        const int size = data.size() / sizeof(float);
+        for (int c = 0; c < chn; ++c) // Buffering data
+            for (int i = 0; i < size; i += chn)
+                m_input[c].push_back(samples[c + i]);
+    }
+    else for (int c = 0; c < chn; ++c) // Adding silence
+    {
+        m_input[c].resize(fftSize);
+    }
 
-        if (!flush)
+    data.resize(0);
+    const int chunks = m_input[0].size() / fftSizeDiv2 - 1;
+    if (chunks > 0) // If there's enough data
+    {
+        data.resize(chn * sizeof(float) * fftSizeDiv2 * chunks);
+        auto samples = reinterpret_cast<float *>(data.data());
+        for (int c = 0; c < chn; ++c)
         {
-            float *samples = (float *)data.data();
-            const int size = data.size() / sizeof(float);
-            for (int c = 0; c < chn; ++c) //Buforowanie danych
-                for (int i = 0; i < size; i += chn)
-                    input[c].append(samples[c+i]);
-        }
-        else for (int c = 0; c < chn; ++c) //Dokładanie ciszy
-            input[c].resize(FFT_SIZE);
-
-        data.clear();
-        const int chunks = input.at(0).size() / FFT_SIZE_2 - 1;
-        if (chunks > 0) //Jeżeli jest wystarczająca ilość danych
-        {
-            data.resize(chn * sizeof(float) * FFT_SIZE_2 * chunks);
-            float *samples = (float *)data.data();
-            for (int c = 0; c < chn; ++c)
+            int pos = c;
+            while (m_input[c].size() >= fftSize)
             {
-                int pos = c;
-                while (input.at(c).size() >= FFT_SIZE)
+                for (int i = 0; i < fftSize; ++i)
                 {
-                    for (int i = 0; i < FFT_SIZE; ++i)
-                        complex[i] = (FFTComplex){input.at(c).at(i), 0.0f};
-                    if (!flush)
-                        input[c].remove(0, FFT_SIZE_2);
-                    else
-                        input[c].clear();
-
-                    fft_calc(fftIn, complex);
-                    for (int i = 0; i < FFT_SIZE_2; ++i)
-                    {
-                        const float coeff = f.at(i) * preamp;
-                        complex[           i].re *= coeff;
-                        complex[           i].im *= coeff;
-                        complex[FFT_SIZE-1-i].re *= coeff;
-                        complex[FFT_SIZE-1-i].im *= coeff;
-                    }
-                    fft_calc(fftOut, complex);
-
-                    if (last_samples.at(c).isEmpty())
-                    {
-                        for (int i = 0; i < FFT_SIZE_2; ++i, pos += chn)
-                            samples[pos] = complex[i].re / FFT_SIZE;
-                        last_samples[c].resize(FFT_SIZE_2);
-                    }
-                    else for (int i = 0; i < FFT_SIZE_2; ++i, pos += chn)
-                        samples[pos] = (complex[i].re / FFT_SIZE) * wind_f.at(i) + last_samples.at(c).at(i);
-
-                    for (int i = FFT_SIZE_2; i < FFT_SIZE; ++i)
-                        last_samples[c][i-FFT_SIZE_2] = (complex[i].re / FFT_SIZE) * wind_f.at(i);
+                    m_complex[i].re = m_input[c][i];
+                    m_complex[i].im = 0.0f;
                 }
+
+                if (!flush)
+                    m_input[c].erase(m_input[c].begin(), m_input[c].begin() + fftSizeDiv2);
+                else
+                    m_input[c].clear();
+
+                fft_calc(m_fftIn, m_complex);
+                for (int i = 0; i < fftSizeDiv2; ++i)
+                {
+                    const float coeff = m_f[i] * m_preamp;
+                    m_complex[              i].re *= coeff;
+                    m_complex[              i].im *= coeff;
+                    m_complex[fftSize - 1 - i].re *= coeff;
+                    m_complex[fftSize - 1 - i].im *= coeff;
+                }
+                fft_calc(m_fftOut, m_complex);
+
+                if (m_lastSamples[c].empty())
+                {
+                    for (int i = 0; i < fftSizeDiv2; ++i, pos += chn)
+                        samples[pos] = m_complex[i].re / fftSizeFlt;
+                    m_lastSamples[c].resize(fftSizeDiv2);
+                }
+                else for (int i = 0; i < fftSizeDiv2; ++i, pos += chn)
+                {
+                    samples[pos] = (m_complex[i].re / fftSizeFlt) * m_windF[i] + m_lastSamples[c][i];
+                }
+
+                for (int i = fftSizeDiv2; i < fftSize; ++i)
+                    m_lastSamples[c][i - fftSizeDiv2] = (m_complex[i].re / fftSizeFlt) * m_windF[i];
             }
         }
-
-        mutex.unlock();
-        return FFT_SIZE / (double)srate;
     }
-    return 0.0;
+
+    return fftSizeFlt / m_srate;
 }
 
 void Equalizer::alloc(bool b)
 {
-    mutex.lock();
-    if (!b && (fftIn || fftOut))
+    QMutexLocker locker(&m_mutex);
+    if (!b && (m_fftIn || m_fftOut))
     {
-        canFilter = false;
-        FFT_NBITS = FFT_SIZE = FFT_SIZE_2 = 0;
-        av_fft_end(fftIn);
-        av_fft_end(fftOut);
-        fftIn = nullptr;
-        fftOut = nullptr;
-        av_free(complex);
-        complex = nullptr;
-        input.clear();
-        last_samples.clear();
-        wind_f.clear();
-        f.clear();
+        m_canFilter = false;
+        m_fftNBits = m_fftSize = 0;
+        av_fft_end(m_fftIn);
+        av_fft_end(m_fftOut);
+        m_fftIn = nullptr;
+        m_fftOut = nullptr;
+        av_free(m_complex);
+        m_complex = nullptr;
+        m_input.clear();
+        m_input.shrink_to_fit();
+        m_lastSamples.clear();
+        m_lastSamples.shrink_to_fit();
+        m_windF.clear();
+        m_windF.shrink_to_fit();
+        m_f.clear();
+        m_f.shrink_to_fit();
     }
     else if (b)
     {
-        if (!fftIn || !fftOut)
+        if (!m_fftIn || !m_fftOut)
         {
-            FFT_NBITS  = sets().getInt("Equalizer/nbits");
-            FFT_SIZE   = 1 << FFT_NBITS;
-            FFT_SIZE_2 = FFT_SIZE / 2;
-            fftIn  = av_fft_init(FFT_NBITS, false);
-            fftOut = av_fft_init(FFT_NBITS, true);
-            complex = (FFTComplex *)av_malloc(FFT_SIZE * sizeof(FFTComplex));
-            input.resize(chn);
-            last_samples.resize(chn);
-            wind_f.resize(FFT_SIZE);
-            for (int i = 0; i < FFT_SIZE; ++i)
-                wind_f[i] = 0.5f - 0.5f * cos(2.0f * M_PI * i / (FFT_SIZE - 1));
+            m_fftNBits  = sets().getInt("Equalizer/nbits");
+            m_fftSize   = 1 << m_fftNBits;
+            m_fftIn  = av_fft_init(m_fftNBits, false);
+            m_fftOut = av_fft_init(m_fftNBits, true);
+            m_complex = (FFTComplex *)av_malloc(m_fftSize * sizeof(FFTComplex));
+            m_input.resize(m_chn);
+            m_lastSamples.resize(m_chn);
+            m_windF.resize(m_fftSize);
+            for (int i = 0; i < m_fftSize; ++i)
+                m_windF[i] = 0.5f - 0.5f * cos(2.0f * M_PI * i / (m_fftSize - 1));
         }
         interpolateFilterCurve();
-        canFilter = true;
+        m_canFilter = true;
     }
-    mutex.unlock();
 }
 void Equalizer::interpolateFilterCurve()
 {
@@ -253,8 +260,10 @@ void Equalizer::interpolateFilterCurve()
 
     int preampVal = sets().getInt("Equalizer/-1");
     if (preampVal >= 0)
-        preamp = getAmpl(preampVal);
-    else //auto preamp
+    {
+        m_preamp = getAmpl(preampVal);
+    }
+    else // Auto preamp
     {
         preampVal = 0;
         for (int i = 0; i < size; ++i)
@@ -262,16 +271,16 @@ void Equalizer::interpolateFilterCurve()
             const int val = sets().getInt(QString("Equalizer/%1").arg(i));
             preampVal = qMax(val < 0 ? 0 : val, preampVal);
         }
-        preamp = getAmpl(100 - preampVal);
+        m_preamp = getAmpl(100 - preampVal);
     }
 
-    const int len = FFT_SIZE_2;
-    if (f.size() != len)
-        f.resize(len);
-    if (srate && size >= 2)
+    const int len = m_fftSize / 2;
+    if (m_f.size() != len)
+        m_f.resize(len);
+    if (m_srate && size >= 2)
     {
         QVector<float> freqs = Equalizer::freqs(sets());
-        const int maxHz = srate / 2;
+        const int maxHz = m_srate / 2;
         int x = 0, start = 0;
         for (int i = 0; i < len; ++i)
         {
@@ -287,9 +296,9 @@ void Equalizer::interpolateFilterCurve()
                 }
             }
             if (x+1 < size)
-                f[i] = cosI(src[x], src[x + 1], (i - start) / (len * freqs[x + 1] / maxHz - 1 - start)); /* start / end */
+                m_f[i] = cosI(src[x], src[x + 1], (i - start) / (len * freqs[x + 1] / maxHz - 1 - start)); /* start / end */
             else
-                f[i] = src[x];
+                m_f[i] = src[x];
         }
     }
 }
