@@ -218,8 +218,11 @@ bool FFDemux::read(Packet &encoded, int &idx)
 
     if (formatContexts.at(fmtCtxIdx)->read(encoded, idx))
     {
-        for (int i = 0; i < fmtCtxIdx; ++i)
-            idx += formatContexts.at(i)->streamsInfo.count();
+        if (idx >= 0)
+        {
+            for (int i = 0; i < fmtCtxIdx; ++i)
+                idx += formatContexts.at(i)->streamsInfo.count();
+        }
         return true;
     }
 
