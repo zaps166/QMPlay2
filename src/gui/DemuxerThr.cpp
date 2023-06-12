@@ -986,6 +986,7 @@ void DemuxerThr::emitInfo()
             {
                 const QString streamLink = "video" + QString::number(i);
                 const QString streamCountStr = QString::number(++videoStreamCount);
+                const QString sizeStr = QString::number(streamInfo->params->width) + "x" + QString::number(streamInfo->params->height);
                 const bool currentPlaying = getCurrentPlaying(playC.videoStream, streamsInfo, streamInfo);
                 videoStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'><li>";
                 if (currentPlaying)
@@ -1005,7 +1006,7 @@ void DemuxerThr::emitInfo()
                     videoStreams += "<li><b>" + tr("title") + ":</b> " + streamInfo->title + "</li>";
                 if (!streamInfo->codec_name.isEmpty())
                     videoStreams += "<li><b>" + tr("codec") + ":</b> " + streamInfo->codec_name + "</li>";
-                videoStreams += "<li><b>" + tr("size") + ":</b> " + QString::number(streamInfo->params->width) + "x" + QString::number(streamInfo->params->height) + "</li>";
+                videoStreams += "<li><b>" + tr("size") + ":</b> " + sizeStr + "</li>";
                 videoStreams += "<li><b>" + tr("aspect ratio") + ":</b> " + QString::number(streamInfo->getAspectRatio()) + "</li>";
                 const double FPS = streamInfo->getFPS();
                 if (FPS)
@@ -1018,7 +1019,7 @@ void DemuxerThr::emitInfo()
                 printOtherInfo(streamInfo->other_info, videoStreams);
                 videoStreams += "</ul></ul>";
 
-                QString streamMenuText;
+                QString streamMenuText = " - " + sizeStr;
                 if (!streamInfo->codec_name.isEmpty())
                     streamMenuText.push_back(" (" + streamInfo->codec_name + ")");
                 addStreamsMenuString(videoStreamsMenu, streamCountStr, streamLink, currentPlaying, streamMenuText);
