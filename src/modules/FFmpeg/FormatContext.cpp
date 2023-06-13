@@ -910,6 +910,16 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
         }
         if (!(value = getTag(stream->metadata, "language", false)).isEmpty() && value != "und")
             streamInfo->other_info += {QString::number(QMPLAY2_TAG_LANGUAGE), value};
+        if (streamInfo->params->codec_type == AVMEDIA_TYPE_VIDEO)
+        {
+            if (!(value = getTag(stream->metadata, "variant_bitrate", false)).isEmpty())
+            {
+                bool ok = false;
+                int64_t bitRate = value.toLongLong(&ok);
+                if (ok && bitRate > 0)
+                    streamInfo->params->bit_rate = bitRate;
+            }
+        }
     }
 
     switch (streamInfo->params->codec_type)
