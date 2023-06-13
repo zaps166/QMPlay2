@@ -986,6 +986,13 @@ void DemuxerThr::emitInfo()
     int videoStreamCount = 0, audioStreamCount = 0, subtitlesStreamCount = 0, i = 0;
     for (StreamInfo *streamInfo : streamsInfo)
     {
+        auto getBitrateStr = [](const int64_t bitRate)->QString {
+            if (bitRate < 1000)
+                return QString("%1 bps").arg(bitRate);
+            if (bitRate < 1000000)
+                return QString("%1 kbps").arg(qRound64(bitRate / 1000.0));
+            return QString("%1 Mbps").arg(bitRate / 1000000.0, 0, 'f', 3);
+        };
         switch (streamInfo->params->codec_type)
         {
             case AVMEDIA_TYPE_VIDEO:
@@ -1018,7 +1025,7 @@ void DemuxerThr::emitInfo()
                 if (FPS)
                     videoStreams += "<li><b>" + tr("FPS") + ":</b> " + QString::number(FPS) + "</li>";
                 if (streamInfo->params->bit_rate)
-                    videoStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->params->bit_rate / 1000) + "kbps</li>";
+                    videoStreams += "<li><b>" + tr("bitrate") + ":</b> " + getBitrateStr(streamInfo->params->bit_rate) + "</li>";
                 const auto formatName = streamInfo->getFormatName();
                 if (!formatName.isEmpty())
                     videoStreams += "<li><b>" + tr("format") + ":</b> " + formatName + "</li>";
@@ -1056,7 +1063,7 @@ void DemuxerThr::emitInfo()
                     audioStreams += "<li><b>" + tr("artist") + ":</b> " + streamInfo->artist + "</li>";
                 if (!streamInfo->codec_name.isEmpty())
                     audioStreams += "<li><b>" + tr("codec") + ":</b> " + streamInfo->codec_name + "</li>";
-                audioStreams += "<li><b>" + tr("sample rate") + ":</b> " + QString::number(streamInfo->params->sample_rate) + "Hz</li>";
+                audioStreams += "<li><b>" + tr("sample rate") + ":</b> " + QString::number(streamInfo->params->sample_rate) + " Hz</li>";
 
                 QString channels;
                 if (streamInfo->params->channels == 1)
@@ -1068,7 +1075,7 @@ void DemuxerThr::emitInfo()
                 audioStreams += "<li><b>" + tr("channels") + ":</b> " + channels + "</li>";
 
                 if (streamInfo->params->bit_rate)
-                    audioStreams += "<li><b>" + tr("bitrate") + ":</b> " + QString::number(streamInfo->params->bit_rate / 1000) + "kbps</li>";
+                    audioStreams += "<li><b>" + tr("bitrate") + ":</b> " + getBitrateStr(streamInfo->params->bit_rate) + "</li>";
                 const auto formatName = streamInfo->getFormatName();
                 if (!formatName.isEmpty())
                     audioStreams += "<li><b>" + tr("format") + ":</b> " + formatName + "</li>";
