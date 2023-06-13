@@ -496,7 +496,9 @@ void DemuxerThr::run()
     if (stillImage && playC.paused)
         playC.paused = false;
 
-    const bool isChunkedLive = (!localStream && unknownLength && (demuxer->name() == "hls" || demuxer->name() == "dash"));
+    const QString demuxerName = demuxer->name();
+
+    const bool isChunkedLive = (!localStream && unknownLength && (demuxerName == "hls" || demuxerName == "dash"));
     QElapsedTimer waitForDataTimer;
     bool firstWaitForData = true;
     bool canWaitForData = true;
