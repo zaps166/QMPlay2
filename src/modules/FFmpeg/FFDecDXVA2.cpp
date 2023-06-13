@@ -78,7 +78,7 @@ shared_ptr<VideoFilter> FFDecDXVA2::hwAccelFilter() const
 
 bool FFDecDXVA2::open(StreamInfo &streamInfo)
 {
-    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO)
+    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO || !hasHWAccel("dxva2"))
         return false;
 
     m_pixFmt = Frame::convert3PlaneTo2Plane(streamInfo.pixelFormat());
@@ -86,7 +86,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo)
         return false;
 
     AVCodec *codec = init(streamInfo);
-    if (!codec || !hasHWAccel("dxva2"))
+    if (!codec)
         return false;
 
 #ifdef USE_OPENGL

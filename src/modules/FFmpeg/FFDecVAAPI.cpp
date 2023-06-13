@@ -128,7 +128,7 @@ int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixel
 
 bool FFDecVAAPI::open(StreamInfo &streamInfo)
 {
-    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO)
+    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO || !hasHWAccel("vaapi"))
         return false;
 
     const AVPixelFormat pix_fmt = streamInfo.pixelFormat();
@@ -149,7 +149,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     }
 
     AVCodec *codec = init(streamInfo);
-    if (!codec || !hasHWAccel("vaapi"))
+    if (!codec)
         return false;
 
 #if defined(USE_OPENGL) || defined(USE_VULKAN)

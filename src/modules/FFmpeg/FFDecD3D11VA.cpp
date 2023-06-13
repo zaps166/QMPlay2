@@ -176,7 +176,7 @@ int FFDecD3D11VA::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPix
 
 bool FFDecD3D11VA::open(StreamInfo &streamInfo)
 {
-    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO)
+    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO || !hasHWAccel("d3d11va"))
         return false;
 
     const auto pixFmt = streamInfo.pixelFormat();
@@ -192,7 +192,7 @@ bool FFDecD3D11VA::open(StreamInfo &streamInfo)
     }
 
     AVCodec *codec = init(streamInfo);
-    if (!codec || !hasHWAccel("d3d11va"))
+    if (!codec)
         return false;
 
     m_d3d11vaVulkan = QMPlay2Core.gpuInstance()->getHWDecContext<D3D11VAVulkan>();

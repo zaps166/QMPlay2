@@ -115,7 +115,7 @@ int FFDecVDPAU::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixel
 
 bool FFDecVDPAU::open(StreamInfo &streamInfo)
 {
-    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO)
+    if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO || !hasHWAccel("vdpau"))
         return false;
 
     if (Functions::isX11EGL() && QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
@@ -126,7 +126,7 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo)
         return false;
 
     AVCodec *codec = init(streamInfo);
-    if (!codec || !hasHWAccel("vdpau"))
+    if (!codec)
         return false;
 
 #ifdef USE_OPENGL
