@@ -496,7 +496,7 @@ void DemuxerThr::run()
     if (stillImage && playC.paused)
         playC.paused = false;
 
-    const bool isHls = (demuxer->name() == "hls");
+    const bool isChunkedLive = (!localStream && unknownLength && (demuxer->name() == "hls" || demuxer->name() == "dash"));
     QElapsedTimer waitForDataTimer;
     bool firstWaitForData = true;
     bool canWaitForData = true;
@@ -584,7 +584,7 @@ void DemuxerThr::run()
             )
         )
         {
-            if (isHls && !firstWaitForData && canWaitForData && !playC.endOfStream)
+            if (isChunkedLive && !firstWaitForData && canWaitForData && !playC.endOfStream)
             {
                 // Wait a bit longer for HLS streams to prevent stuttering on every HLS chunk. Do a short
                 // sleep and continue, because reading from demuxer might block for HLS chunk length.
