@@ -31,7 +31,7 @@ FFDecHWAccel::FFDecHWAccel()
 FFDecHWAccel::~FFDecHWAccel()
 {}
 
-bool FFDecHWAccel::hasHWAccel(const char *hwaccelName) const
+bool FFDecHWAccel::hasHWAccel(const char *hwaccelName)
 {
     const AVHWDeviceType requestedType = av_hwdevice_find_type_by_name(hwaccelName);
     if (requestedType == AV_HWDEVICE_TYPE_NONE)

@@ -26,7 +26,7 @@ protected:
     FFDecHWAccel();
     ~FFDecHWAccel();
 
-    bool hasHWAccel(const char *hwaccelName) const;
+    static bool hasHWAccel(const char *hwaccelName);
 
     AVCodec *init(StreamInfo &streamInfo) override;
 
