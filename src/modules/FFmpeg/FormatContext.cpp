@@ -797,16 +797,28 @@ bool FormatContext::open(const QString &_url, const QString &param)
     streamsTS.resize(formatCtx->nb_streams);
     streamsOffset.resize(formatCtx->nb_streams);
     nextDts.resize(formatCtx->nb_streams);
+
+    int nVideoStreams = 0;
+    int nDefaultVideoStreams = 0;
     for (unsigned i = 0; i < formatCtx->nb_streams; ++i)
     {
         fixFontsAttachment(formatCtx->streams[i]);
         StreamInfo *streamInfo = getStreamInfo(formatCtx->streams[i]);
         if (!streamInfo)
+        {
             index_map[i] = -1;
+        }
         else
         {
             index_map[i] = streamsInfo.count();
             streamsInfo += streamInfo;
+
+            if (streamInfo->params->codec_type == AVMEDIA_TYPE_VIDEO)
+            {
+                if (streamInfo->is_default)
+                    ++nDefaultVideoStreams;
+                ++nVideoStreams;
+            }
         }
         if (!fixMkvAss && formatCtx->streams[i]->codecpar->codec_id == AV_CODEC_ID_ASS && !strncasecmp(formatCtx->iformat->name, "matroska", 8))
             fixMkvAss = true;
@@ -822,6 +834,69 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
     if (isStreamed && streamsInfo.count() == 1 && streamsInfo.at(0)->params->codec_type == AVMEDIA_TYPE_SUBTITLE && formatCtx->pb && avio_size(formatCtx->pb) > 0)
         isStreamed = false; //Allow subtitles streams to be non-streamed if size is known
+
+    // Choose best quality streams for HLS or DASH
+    if (nVideoStreams > 1 && (nDefaultVideoStreams == 0 || nVideoStreams == nDefaultVideoStreams) && (name() == "hls" || name() == "dash"))
+    {
+        int streamInfoMaxBitRate = -1;
+
+        // Find stream with highest bitrate, unset default video streams
+        int64_t maxBitRate = 0;
+        for (int i = 0; i < streamsInfo.count(); ++i)
+        {
+            auto &streamInfo = streamsInfo.at(i);
+
+            if (streamInfo->params->codec_type != AVMEDIA_TYPE_VIDEO)
+                continue;
+
+            streamInfo->is_default = false;
+            if (streamInfo->params->bit_rate > maxBitRate)
+            {
+                maxBitRate = streamInfo->params->bit_rate;
+                streamInfoMaxBitRate = i;
+            }
+        }
+
+        if (streamInfoMaxBitRate > -1)
+        {
+            // Set best video stream as default
+            streamsInfo.at(streamInfoMaxBitRate)->is_default = true;
+
+            // Find first audio stream in the same program for the new default video stream and set it as default, too
+            for (unsigned i = 0; i < formatCtx->nb_programs; ++i)
+            {
+                const AVProgram &program = *formatCtx->programs[i];
+                int firstAudioIdx = -1;
+                bool found = false;
+                for (unsigned s = 0; s < program.nb_stream_indexes; ++s)
+                {
+                    const int ff_idx = program.stream_index[s];
+                    const int idx = index_map.at(ff_idx);
+                    if (streamInfoMaxBitRate == idx)
+                    {
+                        found = true;
+                    }
+                    if (firstAudioIdx == -1 && streams.at(ff_idx)->codecpar->codec_type == AVMEDIA_TYPE_AUDIO)
+                    {
+                        firstAudioIdx = idx;
+                    }
+                }
+                if (found)
+                {
+                    if (firstAudioIdx > -1)
+                    {
+                        for (auto &&streamInfo : qAsConst(streamsInfo))
+                        {
+                            if (streamInfo->params->codec_type == AVMEDIA_TYPE_AUDIO)
+                                streamInfo->is_default = false;
+                        }
+                        streamsInfo.at(firstAudioIdx)->is_default = true;
+                    }
+                    break;
+                }
+            }
+        }
+    }
 
     formatCtx->event_flags = 0;
 
