@@ -41,7 +41,7 @@ AboutWidget::AboutWidget()
 
     QString labelText;
     labelText += "<b>QMPlay2:</b> " + tr("video and audio player");
-    labelText += "<br/><b>" + tr("Programmer") + ":</b> <a href='mailto:spaz16@wp.pl'>Błażej Szczygieł</a>";
+    labelText += "<br/><b>" + tr("Programmer") + ":</b> <a href='mailto:mumei6102@gmail.com'>Błażej Szczygieł</a>";
     labelText += "<br/><b>" + tr("Version") + ":</b> " + QMPlay2Core.getSettings().getString("Version") + " (" + QSysInfo::buildCpuArchitecture() + ")";
     QLabel *label = new QLabel(labelText);
 
