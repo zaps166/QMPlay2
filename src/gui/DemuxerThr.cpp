@@ -924,6 +924,8 @@ void DemuxerThr::emitInfo()
     bool once = false;
     for (const ProgramInfo &program : demuxer->getPrograms())
     {
+        const QString bitRateStr = Functions::getBitrateStr(program.bitrate);
+
         if (!once)
         {
             info += "<p style='margin-bottom: 0px;'><b><big>" + tr("Programs") + ":</big></b></p>";
@@ -958,6 +960,8 @@ void DemuxerThr::emitInfo()
             info += "</b>";
         if (!streams.isEmpty())
             info += "</a>";
+        if (program.bitrate > 0)
+            info += " (" + bitRateStr + ")";
         info += "</li></ul>";
 
         addStreamsMenuString(programsMenu, programNumberStr, streams, isCurrent, QString());

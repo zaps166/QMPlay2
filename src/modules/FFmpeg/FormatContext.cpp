@@ -252,6 +252,11 @@ QList<ProgramInfo> FormatContext::getPrograms() const
     {
         const AVProgram &program = *formatCtx->programs[i];
         ProgramInfo programInfo(program.id);
+
+        const QString bitRateStr = getTag(program.metadata, "variant_bitrate", false);
+        if (!bitRateStr.isEmpty())
+            programInfo.bitrate = bitRateStr.toLongLong();
+
         for (unsigned s = 0; s < program.nb_stream_indexes; ++s)
         {
             const int ff_idx = program.stream_index[s];

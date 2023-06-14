@@ -45,4 +45,5 @@ public:
 
     int number;
     QVector<QPair<int, AVMediaType>> streams;
+    int64_t bitrate = 0;
 };
