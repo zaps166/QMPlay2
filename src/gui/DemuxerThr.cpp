@@ -988,15 +988,6 @@ void DemuxerThr::emitInfo()
     int videoStreamCount = 0, audioStreamCount = 0, subtitlesStreamCount = 0, i = 0;
     for (StreamInfo *streamInfo : streamsInfo)
     {
-        auto getBitrateStr = [](const int64_t bitRate)->QString {
-            if (bitRate <= 0)
-                return QString();
-            if (bitRate < 1000)
-                return QString("%1 bps").arg(bitRate);
-            if (bitRate < 1000000)
-                return QString("%1 kbps").arg(qRound64(bitRate / 1000.0));
-            return QString("%1 Mbps").arg(bitRate / 1000000.0, 0, 'f', 3);
-        };
         auto appendCodecBitRate = [](QString &txt, const QByteArray &codec, const QString &bitRate) {
             if (!codec.isEmpty() || !bitRate.isEmpty())
             {
@@ -1021,7 +1012,7 @@ void DemuxerThr::emitInfo()
                 const QString streamLink = "video" + QString::number(i);
                 const QString streamCountStr = QString::number(++videoStreamCount);
                 const QString sizeStr = QString::number(streamInfo->params->width) + "x" + QString::number(streamInfo->params->height);
-                const QString bitRateStr = getBitrateStr(streamInfo->params->bit_rate);
+                const QString bitRateStr = Functions::getBitrateStr(streamInfo->params->bit_rate);
                 const bool currentPlaying = getCurrentPlaying(playC.videoStream, streamsInfo, streamInfo);
                 videoStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'><li>";
                 if (currentPlaying)
@@ -1062,7 +1053,7 @@ void DemuxerThr::emitInfo()
             {
                 const QString streamLink = "audio" + QString::number(i);
                 const QString streamCountStr = QString::number(++audioStreamCount);
-                const QString bitRateStr = getBitrateStr(streamInfo->params->bit_rate);
+                const QString bitRateStr = Functions::getBitrateStr(streamInfo->params->bit_rate);
                 QString lang;
                 const bool currentPlaying = getCurrentPlaying(playC.audioStream, streamsInfo, streamInfo);
                 audioStreams += "<ul style='margin-top: 0px; margin-bottom: 0px;'><li>";
@@ -1097,7 +1088,7 @@ void DemuxerThr::emitInfo()
                 audioStreams += "<li><b>" + tr("channels") + ":</b> " + channels + "</li>";
 
                 if (!bitRateStr.isEmpty())
-                    audioStreams += "<li><b>" + tr("bitrate") + ":</b> " + getBitrateStr(streamInfo->params->bit_rate) + "</li>";
+                    audioStreams += "<li><b>" + tr("bitrate") + ":</b> " + bitRateStr + "</li>";
                 const auto formatName = streamInfo->getFormatName();
                 if (!formatName.isEmpty())
                     audioStreams += "<li><b>" + tr("format") + ":</b> " + formatName + "</li>";

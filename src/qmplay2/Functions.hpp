@@ -156,4 +156,6 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT bool compareText(const QString &a, const QString &b);
 
     QMPLAY2SHAREDLIB_EXPORT bool hasTouchScreen();
+
+    QMPLAY2SHAREDLIB_EXPORT QString getBitrateStr(const int64_t bitRate);
 }

@@ -1090,3 +1090,14 @@ bool Functions::hasTouchScreen()
 #endif
     return false;
 }
+
+QString Functions::getBitrateStr(const int64_t bitRate)
+{
+    if (bitRate <= 0)
+        return QString();
+    if (bitRate < 1000)
+        return QString("%1 bps").arg(bitRate);
+    if (bitRate < 1000000)
+        return QString("%1 kbps").arg(qRound64(bitRate / 1000.0));
+    return QString("%1 Mbps").arg(bitRate / 1000000.0, 0, 'f', 3);
+}
