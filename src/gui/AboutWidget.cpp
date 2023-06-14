@@ -20,6 +20,7 @@
 
 #include <Functions.hpp>
 #include <Settings.hpp>
+#include <Version.hpp>
 #include <Main.hpp>
 
 #include <QUrl>
@@ -32,6 +33,7 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QPlainTextEdit>
+#include <QGuiApplication>
 #include <QDesktopServices>
 
 AboutWidget::AboutWidget()
@@ -42,7 +44,11 @@ AboutWidget::AboutWidget()
     QString labelText;
     labelText += "<b>QMPlay2:</b> " + tr("video and audio player");
     labelText += "<br/><b>" + tr("Programmer") + ":</b> <a href='mailto:mumei6102@gmail.com'>Błażej Szczygieł</a>";
-    labelText += "<br/><b>" + tr("Version") + ":</b> " + QMPlay2Core.getSettings().getString("Version") + " (" + QSysInfo::buildCpuArchitecture() + ")";
+    labelText += "<br/><b>" + tr("Version") + ":</b> " + Version::get() + " (" + QSysInfo::buildCpuArchitecture();
+#if !defined(Q_OS_MACOS) && !defined(Q_OS_WIN)
+    labelText += ", " + QGuiApplication::platformName();
+#endif
+    labelText += ")";
     QLabel *label = new QLabel(labelText);
 
     QLabel *iconL = new QLabel;
