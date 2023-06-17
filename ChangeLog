@@ -1,3 +1,17 @@
+Changes in QMPlay2 23.06.17:
+    - improve video playback if it's far too slow (display only key frames),
+    - change network buffering options from packets to seconds,
+    - more HWAccel stabilizations (mostly VTB and VA-API),
+    - demux/download only selected streams (if possible),
+    - add more info into audio and video streams menu,
+    - choose best quality for HLS and DASH streams,
+    - add separate live streams buffering option,
+    - generally improve live streams playback,
+    - audio equalizer optimizations,
+    - improve bitrate information,
+    - fix YouTube live streams,
+    - other minor changes,
+
 Changes in QMPlay2 23.06.04:
     - display 10 bit RGB images as 10 bit using Vulkan if possible,
     - load external subtitles that are in sub-directories,
