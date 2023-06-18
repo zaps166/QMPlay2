@@ -127,6 +127,8 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_D3D11V
     endif()
 endif()
 
+add_definitions(-DFFMPEG_MODULE)
+
 add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
     ${FFmpeg_HDR}
     ${FFmpeg_SRC}

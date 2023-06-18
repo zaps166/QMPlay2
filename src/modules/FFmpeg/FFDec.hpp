@@ -23,6 +23,14 @@
 #include <QString>
 #include <QList>
 
+#include <QtGlobal>
+
+#if defined(FFMPEG_MODULE)
+    #define FFMPEGVTB_EXPORT Q_DECL_EXPORT
+#else
+    #define FFMPEGVTB_EXPORT Q_DECL_IMPORT
+#endif
+
 #ifdef USE_VULKAN
 namespace QmVk {
 class ImagePool;
@@ -34,7 +42,7 @@ struct AVPacket;
 struct AVCodec;
 struct AVFrame;
 
-class FFDec : public Decoder
+class FFMPEGVTB_EXPORT FFDec : public Decoder
 {
 protected:
     FFDec();

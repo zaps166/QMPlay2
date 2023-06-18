@@ -20,7 +20,7 @@
 
 #include <FFDec.hpp>
 
-class FFDecHWAccel : public FFDec
+class FFMPEGVTB_EXPORT FFDecHWAccel : public FFDec
 {
 protected:
     FFDecHWAccel();
