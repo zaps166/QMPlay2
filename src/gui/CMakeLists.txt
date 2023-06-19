@@ -221,7 +221,8 @@ if(WIN32)
     target_link_libraries(${PROJECT_NAME} Qt5::WinExtras winmm)
 elseif(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")
+        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "org.zaps166.${PROJECT_NAME}")
     target_link_libraries(${PROJECT_NAME} ${APPKIT_LIBRARY} ${IOKIT_LIBRARY})
 endif()
 if(USE_TAGLIB AND (NOT WIN32 OR CMAKE_HOST_WIN32))

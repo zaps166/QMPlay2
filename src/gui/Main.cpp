@@ -287,7 +287,7 @@ static QCommandLineParser *createCmdParser(bool descriptions)
 }
 static QString fileArg(const QString &arg)
 {
-    if (!arg.contains("://"))
+    if (!arg.contains("://") && !arg.startsWith("youtube:"))
     {
         const QFileInfo argInfo(arg);
         if (!argInfo.isAbsolute())

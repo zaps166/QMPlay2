@@ -2035,7 +2035,9 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
 #ifdef Q_OS_MACOS
     else if (event->type() == QEvent::FileOpen)
     {
-        filesToAdd.append(((QFileOpenEvent *)event)->file());
+        auto url = ((QFileOpenEvent *)event)->url();
+        filesToAdd.append(url.scheme() == "file" ? ((QFileOpenEvent *)event)->file()
+            : Functions::maybeExtensionAddress(url.url()));
         fileOpenTimer.start(10);
     }
 #endif

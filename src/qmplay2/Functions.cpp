@@ -641,13 +641,30 @@ QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData, const bool
 
 QString Functions::maybeExtensionAddress(const QString &url)
 {
-    for (const QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+    if (url.startsWith("youtube:"))
     {
-        const QString prefix = QMPlay2Ext->matchAddress(url);
-        if (!prefix.isEmpty())
-            return prefix + "://{" + url + "}";
+        // we want to support both youtube:vID and youtube://vID but the latter form
+        // is often passed to us as "youtube://vid" (vID interpreted as the remote host). 
+        // So we also support the full URI form with an empty host string and strip
+        // the leading '/' from the path to recover the intact vID. This implementation
+        // also supports youtube:/vID as a side effect ... why not!
+        auto vid = url.mid(8);
+        while (vid.at(0) == '/')
+        {
+            vid.remove(0, 1);
+        }
+        return maybeExtensionAddress("http://www.youtube.com/watch?v=" + vid);
     }
-    return url;
+    else
+    {
+        for (const QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+        {
+            const QString prefix = QMPlay2Ext->matchAddress(url);
+            if (!prefix.isEmpty())
+                return prefix + "://{" + url + "}";
+        }
+        return url;
+    }
 }
 
 bool Functions::splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param)
