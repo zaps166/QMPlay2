@@ -1843,7 +1843,7 @@
     </message>
     <message>
         <source>Only in full screen</source>
-        <translation>Лише при повноекранному режимі<</translation>
+        <translation>Лише при повноекранному режимі</translation>
     </message>
     <message>
         <source>FPS</source>
