@@ -25,7 +25,7 @@
 
 class ImgScaler;
 
-class OpenGLHWInterop : public HWDecContext
+class QMPLAY2SHAREDLIB_EXPORT OpenGLHWInterop : public HWDecContext
 {
 public:
     enum Format
