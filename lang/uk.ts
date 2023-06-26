@@ -1523,11 +1523,11 @@
     </message>
     <message>
         <source>Little endian</source>
-        <translation type="unfinished"></translation>
+        <translation>Little endian</translation>
     </message>
     <message>
         <source>Big endian</source>
-        <translation type="unfinished"></translation>
+        <translation>Big endian</translation>
     </message>
     <message>
         <source>Associate files with QMPlay2</source>
@@ -1839,11 +1839,11 @@
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Затримка</translation>
     </message>
     <message>
         <source>Only in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Лише при повноекранному режимі</translation>
     </message>
     <message>
         <source>FPS</source>
@@ -1851,19 +1851,19 @@
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Мінімальна частота кадрів відео для її подвоєння</translation>
     </message>
     <message>
         <source>Maximum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимальна частота кадрів відео для її подвоєння</translation>
     </message>
     <message>
         <source>Minimum:</source>
-        <translation type="unfinished"></translation>
+        <translation>Мінімум:</translation>
     </message>
     <message>
         <source>Maximum:</source>
-        <translation type="unfinished"></translation>
+        <translation>Максимум:</translation>
     </message>
 </context>
 <context>
@@ -2378,11 +2378,11 @@
     </message>
     <message>
         <source>Network buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation>Довжина мережевого буфера</translation>
     </message>
     <message>
         <source>Live stream buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation>Довжина буфера прямої трансляції</translation>
     </message>
 </context>
 <context>
@@ -3428,7 +3428,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
-        <translation type="unfinished"></translation>
+        <translation>Подвоює частоту кадрів. Корисно для доступу до діапазону FreeSync. Цей фільтр працює з відео з апаратним прискоренням.</translation>
     </message>
 </context>
 <context>
@@ -3556,7 +3556,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Screenshot saved as: %1</source>
-        <translation type="unfinished"></translation>
+        <translatio>Знімок екрана збережено як: %1</translation>
     </message>
 </context>
 <context>
@@ -3604,7 +3604,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&amp;Hide on close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Приховати при закритті</translation>
     </message>
 </context>
 <context>
