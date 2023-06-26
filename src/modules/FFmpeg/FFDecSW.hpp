@@ -49,7 +49,7 @@ public:
 
 struct SwsContext;
 
-class FFMPEGVTB_EXPORT FFDecSW final : public FFDec
+class FFMPEG_EXPORT FFDecSW final : public FFDec
 {
 public:
     FFDecSW(Module &);

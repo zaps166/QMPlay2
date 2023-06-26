@@ -20,7 +20,7 @@
 
 #include <FFDecHWAccel.hpp>
 
-class FFDecDXVA2 final : public FFDecHWAccel
+class FFMPEG_EXPORT FFDecDXVA2 final : public FFDecHWAccel
 {
 public:
     FFDecDXVA2(Module &module);

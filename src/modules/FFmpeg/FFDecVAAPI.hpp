@@ -28,7 +28,7 @@ class VAAPIOpenGL;
 class VAAPIVulkan;
 #endif
 
-class FFDecVAAPI final : public FFDecHWAccel
+class FFMPEG_EXPORT FFDecVAAPI final : public FFDecHWAccel
 {
 public:
     FFDecVAAPI(Module &);

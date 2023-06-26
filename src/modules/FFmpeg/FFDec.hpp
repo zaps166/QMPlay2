@@ -23,12 +23,10 @@
 #include <QString>
 #include <QList>
 
-#include <QtGlobal>
-
 #if defined(FFMPEG_MODULE)
-    #define FFMPEGVTB_EXPORT Q_DECL_EXPORT
+    #define FFMPEG_EXPORT Q_DECL_EXPORT
 #else
-    #define FFMPEGVTB_EXPORT Q_DECL_IMPORT
+    #define FFMPEG_EXPORT Q_DECL_IMPORT
 #endif
 
 #ifdef USE_VULKAN
@@ -42,7 +40,7 @@ struct AVPacket;
 struct AVCodec;
 struct AVFrame;
 
-class FFMPEGVTB_EXPORT FFDec : public Decoder
+class FFMPEG_EXPORT FFDec : public Decoder
 {
 protected:
     FFDec();

@@ -27,7 +27,7 @@
 class D3D11VAVulkan;
 struct SwsContext;
 
-class FFDecD3D11VA final : public FFDecHWAccel
+class FFMPEG_EXPORT FFDecD3D11VA final : public FFDecHWAccel
 {
 public:
     FFDecD3D11VA(Module &module);

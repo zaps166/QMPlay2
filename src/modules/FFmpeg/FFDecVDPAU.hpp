@@ -24,7 +24,7 @@
 
 class VDPAU;
 
-class FFDecVDPAU final : public FFDecHWAccel
+class FFMPEG_EXPORT FFDecVDPAU final : public FFDecHWAccel
 {
 public:
     FFDecVDPAU(Module &);
