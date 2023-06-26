@@ -3556,7 +3556,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Screenshot saved as: %1</source>
-        <translatio>Знімок екрана збережено як: %1</translation>
+        <translation>Знімок екрана збережено як: %1</translation>
     </message>
 </context>
 <context>
