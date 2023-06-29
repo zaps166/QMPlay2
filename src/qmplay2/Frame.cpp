@@ -323,8 +323,6 @@ AVPixelFormat Frame::pixelFormat() const
 
 AVColorSpace Frame::colorSpace() const
 {
-    if (m_frame->colorspace == AVCOL_SPC_UNSPECIFIED && m_frame->height > 576)
-        return AVCOL_SPC_BT709;
     return m_frame->colorspace;
 }
 bool Frame::isLimited() const
