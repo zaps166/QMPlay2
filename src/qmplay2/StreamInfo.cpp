@@ -105,6 +105,31 @@ void StreamInfo::setFormat(int newFormat)
     params->format = newFormat;
 }
 
+QByteArray StreamInfo::getColorRangeName() const
+{
+    if (params->color_range != AVCOL_RANGE_UNSPECIFIED)
+        return av_color_range_name(params->color_range);
+    return QByteArray();
+}
+QByteArray StreamInfo::getColorPrimariesName() const
+{
+    if (params->color_primaries != AVCOL_PRI_UNSPECIFIED)
+        return av_color_primaries_name(params->color_primaries);
+    return QByteArray();
+}
+QByteArray StreamInfo::getColorTrcName() const
+{
+    if (params->color_trc != AVCOL_TRC_UNSPECIFIED)
+        return av_color_transfer_name(params->color_trc);
+    return QByteArray();
+}
+QByteArray StreamInfo::getColorSpaceName() const
+{
+    if (params->color_space != AVCOL_SPC_UNSPECIFIED)
+        return av_color_space_name(params->color_space);
+    return QByteArray();
+}
+
 inline void StreamInfo::resetSAR()
 {
     params->sample_aspect_ratio.num = params->sample_aspect_ratio.den = 1;

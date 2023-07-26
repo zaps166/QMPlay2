@@ -96,6 +96,11 @@ public:
     QByteArray getFormatName() const;
     void setFormat(int newFormat);
 
+    QByteArray getColorRangeName() const;
+    QByteArray getColorPrimariesName() const;
+    QByteArray getColorTrcName() const;
+    QByteArray getColorSpaceName() const;
+
     QByteArray codec_name, title, artist;
     QByteArray codec_name_backup;
     QVector<QMPlay2Tag> other_info;

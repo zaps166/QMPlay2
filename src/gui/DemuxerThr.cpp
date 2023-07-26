@@ -1045,7 +1045,38 @@ void DemuxerThr::emitInfo()
                     videoStreams += "<li><b>" + tr("bitrate") + ":</b> " + bitrateStr + "</li>";
                 const auto formatName = streamInfo->getFormatName();
                 if (!formatName.isEmpty())
-                    videoStreams += "<li><b>" + tr("format") + ":</b> " + formatName + "</li>";
+                {
+                    const QString colorRangeName = streamInfo->getColorRangeName();
+                    QString colorSpaceName = streamInfo->getColorSpaceName();
+                    QString colorPrimariesName = streamInfo->getColorPrimariesName();
+                    QString colorTrcName = streamInfo->getColorTrcName();
+                    QString additionalFormatInfo;
+                    if (!colorSpaceName.isEmpty() || !colorPrimariesName.isEmpty() || !colorTrcName.isEmpty())
+                    {
+                        if (colorSpaceName.isEmpty())
+                            colorSpaceName = tr("unknown");
+                        if (colorPrimariesName.isEmpty() && !colorTrcName.isEmpty())
+                            colorPrimariesName = tr("unknown");
+                        if (colorTrcName.isEmpty() && !colorPrimariesName.isEmpty())
+                            colorTrcName = tr("unknown");
+                        additionalFormatInfo = " (" + colorRangeName + ", " + colorSpaceName;
+                        if (!colorPrimariesName.isEmpty())
+                        {
+                            additionalFormatInfo += "/" + colorPrimariesName;
+                            if (!colorTrcName.isEmpty())
+                            {
+                                additionalFormatInfo += "/" + colorTrcName;
+                            }
+                        }
+                        additionalFormatInfo += ")";
+                    }
+                    else if (!colorRangeName.isEmpty())
+                    {
+                        additionalFormatInfo = " (" + colorRangeName + ")";
+                    }
+
+                    videoStreams += "<li><b>" + tr("format") + ":</b> " + formatName + additionalFormatInfo + "</li>";
+                }
                 printOtherInfo(streamInfo->other_info, videoStreams);
                 videoStreams += "</ul></ul>";
 
