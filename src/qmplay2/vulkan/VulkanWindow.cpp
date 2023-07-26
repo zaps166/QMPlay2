@@ -22,7 +22,6 @@
 #include "../../qmvk/MemoryObjectDescr.hpp"
 #include "../../qmvk/GraphicsPipeline.hpp"
 #include "../../qmvk/PhysicalDevice.hpp"
-#include "../../qmvk/DescriptorInfo.hpp"
 #include "../../qmvk/DescriptorPool.hpp"
 #include "../../qmvk/CommandBuffer.hpp"
 #include "../../qmvk/ShaderModule.hpp"
