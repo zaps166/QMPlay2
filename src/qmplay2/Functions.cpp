@@ -963,49 +963,36 @@ QByteArray Functions::textWithFallbackEncoding(const QByteArray &data)
 
 QMatrix4x4 Functions::getYUVtoRGBmatrix(AVColorSpace colorSpace)
 {
-    struct LumaCoefficients
-    {
-        float cR, cG, cB;
-    };
-
-    const auto lumaCoeff = [&]()->LumaCoefficients {
+    const auto rbCoeff = [&]()->pair<float, float> {
         switch (colorSpace)
         {
             case AVCOL_SPC_BT709:
-                return {0.2126f, 0.7152f, 0.0722f};
+                return {0.2126f, 0.0722f};
             case AVCOL_SPC_SMPTE170M:
-                return {0.299f, 0.587f, 0.114f};
+                return {0.299f, 0.114f};
             case AVCOL_SPC_SMPTE240M:
-                return {0.212f, 0.701f, 0.087f};
+                return {0.212f, 0.087f};
             case AVCOL_SPC_BT2020_CL:
             case AVCOL_SPC_BT2020_NCL:
-                return {0.2627f, 0.6780f, 0.0593f};
+                return {0.2627f, 0.0593f};
             default:
                 break;
         }
-        return {0.299f, 0.587f, 0.114f}; // AVCOL_SPC_BT470BG
+        return {0.299f, 0.114f}; // AVCOL_SPC_BT470BG
     }();
 
-    const float bscale = 0.5f / (lumaCoeff.cB - 1.0f);
-    const float rscale = 0.5f / (lumaCoeff.cR - 1.0f);
+    const float cR = rbCoeff.first;
+    const float cB = rbCoeff.second;
+    const float cG = 1.0f - cR - cB;
+
+    const float bscale = 0.5f / (cB - 1.0f);
+    const float rscale = 0.5f / (cR - 1.0f);
 
     auto mat = QMatrix4x4(
-        lumaCoeff.cR,
-        lumaCoeff.cG,
-        lumaCoeff.cB,
-        0.0f,
-        bscale * lumaCoeff.cR,
-        bscale * lumaCoeff.cG,
-        0.5f,
-        0.0f,
-        0.5f,
-        rscale * lumaCoeff.cG,
-        rscale * lumaCoeff.cB,
-        0.0f,
-        0.0f,
-        0.0f,
-        0.0f,
-        1.0f
+       cR,          cG,          cB,          0.0f,
+       bscale * cR, bscale * cG, 0.5f,        0.0f,
+       0.5f,        rscale * cG, rscale * cB, 0.0f,
+       0.0f,        0.0f,        0.0f,        1.0f
     ).inverted();
 
     return mat;
