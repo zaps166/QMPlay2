@@ -28,6 +28,7 @@
 extern "C" {
     #include <libavutil/pixfmt.h>
     #include <libavutil/rational.h>
+    #include <libavutil/mastering_display_metadata.h>
 }
 
 #ifdef USE_VULKAN
@@ -116,6 +117,8 @@ public: // Video
 
     AVColorSpace colorSpace() const;
     bool isLimited() const;
+
+    const AVMasteringDisplayMetadata *masteringDisplayMetadata() const;
 
     bool isGray() const;
     bool isPlannar() const;

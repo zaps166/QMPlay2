@@ -998,6 +998,117 @@ QMatrix4x4 Functions::getYUVtoRGBmatrix(AVColorSpace colorSpace)
     return mat;
 }
 
+bool Functions::isColorPrimariesSupported(AVColorPrimaries colorPrimaries)
+{
+    switch (colorPrimaries)
+    {
+        case AVCOL_PRI_BT709:
+        case AVCOL_PRI_BT2020:
+            return true;
+        default:
+            break;
+    }
+    return false;
+}
+bool Functions::fillColorPrimariesData(AVColorPrimaries colorPrimaries, QVector2D &wp, array<QVector2D, 3> &primaries)
+{
+    switch (colorPrimaries)
+    {
+        case AVCOL_PRI_BT709:
+        {
+            primaries[0] = QVector2D(0.64f, 0.33f);
+            primaries[1] = QVector2D(0.30f, 0.60f);
+            primaries[2] = QVector2D(0.15f, 0.06f);
+            break;
+        }
+        case AVCOL_PRI_BT2020:
+        {
+            primaries[0] = QVector2D(0.708f, 0.292f);
+            primaries[1] = QVector2D(0.170f, 0.797f);
+            primaries[2] = QVector2D(0.131f, 0.046f);
+            break;
+        }
+        default:
+        {
+            return false;
+        }
+    }
+    wp = QVector2D(0.31271f, 0.32902f); // D65
+    return true;
+}
+
+QMatrix4x4 Functions::getColorPrimariesTo709Matrix(const QVector2D &wp, array<QVector2D, 3> &primaries)
+{
+    // D65 is only supported for now
+
+    auto getRgbToXyzMatrix = [](const QVector2D &wp, const QVector2D &r, const QVector2D &g, const QVector2D &b) {
+        auto xyToXyz = [](const QVector2D &v) {
+            return QVector3D(
+                v[0] / v[1],
+                1.0f,
+                (1.0f - v[0] - v[1]) / v[1]
+            );
+        };
+
+        const auto wpXyz = xyToXyz(wp);
+
+        const auto ry = r[1];
+        const auto gy = g[1];
+        const auto by = b[1];
+
+        const auto Xr = r[0] / ry;
+        const auto Yr = 1.0f;
+        const auto Zr = (1.0f - r[0] - r[1]) / ry;
+
+        const auto Xg = g[0] / gy;
+        const auto Yg = 1.0f;
+        const auto Zg = (1.0f - g[0] - g[1]) / gy;
+
+        const auto Xb = b[0] / by;
+        const auto Yb = 1.0f;
+        const auto Zb = (1.0f - b[0] - b[1]) / by;
+
+        const auto S = QMatrix4x4(
+            Xr,   Xg,   Xb,   0.0f,
+            Yr,   Yg,   Yb,   0.0f,
+            Zr,   Zg,   Zb,   0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+        ).inverted() * wpXyz;
+
+        return QMatrix4x4(
+            S[0] * Xr, S[1] * Xg, S[2] * Xb, 0.0f,
+            S[0] * Yr, S[1] * Yg, S[2] * Yb, 0.0f,
+            S[0] * Zr, S[1] * Zg, S[2] * Zb, 0.0f,
+            0.0f,      0.0f,      0.0f,      1.0f
+        );
+    };
+
+    QVector2D dstWp;
+    array<QVector2D, 3> dstPrimaries;
+    fillColorPrimariesData(AVCOL_PRI_BT709, dstWp, dstPrimaries);
+
+    const auto xyzTo709 = getRgbToXyzMatrix(dstWp, dstPrimaries[0], dstPrimaries[1], dstPrimaries[2]).inverted();
+    const auto srcToXyz = getRgbToXyzMatrix(wp, primaries[0], primaries[1], primaries[2]);
+    return xyzTo709 * srcToXyz;
+}
+QMatrix4x4 Functions::getColorPrimariesTo709Matrix(AVColorPrimaries colorPrimaries)
+{
+    if (colorPrimaries == AVCOL_PRI_BT709)
+        return QMatrix4x4();
+
+    QVector2D wp;
+    array<QVector2D, 3> primaries;
+    const bool ok = Functions::fillColorPrimariesData(
+        colorPrimaries,
+        wp,
+        primaries
+    );
+    if (!ok)
+        return QMatrix4x4();
+
+    return getColorPrimariesTo709Matrix(wp, primaries);
+}
+
 bool Functions::isX11EGL()
 {
     static bool isEGL = (QString(qgetenv("QT_XCB_GL_INTEGRATION")).compare("xcb_egl", Qt::CaseInsensitive) == 0);

@@ -330,6 +330,13 @@ bool Frame::isLimited() const
     return (m_frame->color_range != AVCOL_RANGE_JPEG && !isRGB() && !isGray());
 }
 
+const AVMasteringDisplayMetadata *Frame::masteringDisplayMetadata() const
+{
+    if (AVFrameSideData *sideData = av_frame_get_side_data(m_frame, AV_FRAME_DATA_MASTERING_DISPLAY_METADATA))
+        return reinterpret_cast<const AVMasteringDisplayMetadata *>(sideData->data);
+    return nullptr;
+}
+
 bool Frame::isGray() const
 {
     if (m_pixelFmtDescriptor)

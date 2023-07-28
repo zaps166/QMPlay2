@@ -24,8 +24,11 @@
 
 #include <QStringList>
 #include <QMatrix4x4>
+#include <QVector2D>
 #include <QIcon>
 #include <QDate>
+
+#include <array>
 
 extern "C" {
     #include <libavutil/pixfmt.h>
@@ -150,6 +153,12 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT QByteArray textWithFallbackEncoding(const QByteArray &data);
 
     QMPLAY2SHAREDLIB_EXPORT QMatrix4x4 getYUVtoRGBmatrix(AVColorSpace colorSpace);
+
+    QMPLAY2SHAREDLIB_EXPORT bool isColorPrimariesSupported(AVColorPrimaries colorPrimaries);
+    QMPLAY2SHAREDLIB_EXPORT bool fillColorPrimariesData(AVColorPrimaries colorPrimaries, QVector2D &wp, std::array<QVector2D, 3> &primaries);
+
+    QMPLAY2SHAREDLIB_EXPORT QMatrix4x4 getColorPrimariesTo709Matrix(const QVector2D &wp, std::array<QVector2D, 3> &primaries);
+    QMPLAY2SHAREDLIB_EXPORT QMatrix4x4 getColorPrimariesTo709Matrix(AVColorPrimaries colorPrimaries);
 
     QMPLAY2SHAREDLIB_EXPORT bool isX11EGL();
 
