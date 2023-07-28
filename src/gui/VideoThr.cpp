@@ -146,6 +146,12 @@ void VideoThr::destroySubtitlesDecoder()
         delete sDec;
         sDec = nullptr;
     }
+    m_decodeToAss = false;
+}
+void VideoThr::setSubtitlesDecoder(Decoder *dec, bool decodeToAss)
+{
+    sDec = dec;
+    m_decodeToAss = decodeToAss;
 }
 
 bool VideoThr::setSpherical()
@@ -539,7 +545,7 @@ void VideoThr::run()
             m_subtitles.reset();
             m_subtitlesBusy.reset();
         };
-        if (sDec) //Image subs (pgssub, dvdsub, ...)
+        if (sDec && !m_decodeToAss) //Image subs (pgssub, dvdsub, ...)
         {
             if (!sDec->decodeSubtitle(sPackets, subsPts, m_subtitles, QSize(W, H), flushVideo))
             {
@@ -550,11 +556,19 @@ void VideoThr::run()
         {
             for (auto &&sPacket : qAsConst(sPackets))
             {
-                const QByteArray sPacketData = QByteArray::fromRawData((const char *)sPacket.data(), sPacket.size());
-                if (playC.ass->isASS())
-                    playC.ass->addASSEvent(sPacketData);
+                if (sDec && m_decodeToAss)
+                {
+                    const auto events = sDec->decodeSubtitle(sPacket);
+                    playC.ass->addASSEvents(events, sPacket.ts(), sPacket.duration());
+                }
                 else
-                    playC.ass->addASSEvent(Functions::convertToASS(sPacketData), sPacket.ts(), sPacket.duration());
+                {
+                    const auto sPacketData = QByteArray::fromRawData(reinterpret_cast<const char *>(sPacket.data()), sPacket.size());
+                    if (playC.ass->isASS())
+                        playC.ass->addASSEvent(sPacketData);
+                    else
+                        playC.ass->addASSEvent(Functions::convertToASS(sPacketData), sPacket.ts(), sPacket.duration());
+                }
             }
             if (tsIsNotNan && !playC.ass->getASS(m_subtitles, subsPts))
             {

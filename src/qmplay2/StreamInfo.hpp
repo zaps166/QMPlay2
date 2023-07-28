@@ -106,6 +106,7 @@ public:
     QVector<QMPlay2Tag> other_info;
     bool is_default = true;
     bool must_decode = false;
+    bool decode_to_ass = false;
     AVRational time_base = {1, 10000};
 
     // Video only

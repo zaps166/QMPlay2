@@ -98,6 +98,11 @@ std::shared_ptr<VideoFilter> Decoder::hwAccelFilter() const
     return nullptr;
 }
 
+QByteArray Decoder::subtitleHeader() const
+{
+    return QByteArray();
+}
+
 void Decoder::setSupportedPixelFormats(const AVPixelFormats &pixelFormats)
 {
     Q_UNUSED(pixelFormats)
@@ -129,6 +134,11 @@ bool Decoder::decodeSubtitle(const QVector<Packet> &encodedPackets, double pos, 
     Q_UNUSED(size)
     Q_UNUSED(flush)
     return false;
+}
+QList<QByteArray> Decoder::decodeSubtitle(const Packet &encodedPacket)
+{
+    Q_UNUSED(encodedPacket)
+    return {};
 }
 
 int Decoder::pendingFrames() const

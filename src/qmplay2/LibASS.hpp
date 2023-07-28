@@ -67,6 +67,7 @@ public:
     bool isASS() const;
     void setASSStyle();
     void addASSEvent(const QByteArray &);
+    void addASSEvents(const QList<QByteArray> &events, double start, double duration);
     void addASSEvent(const QByteArray &, double, double);
     void flushASSEvents();
     bool getASS(std::shared_ptr<QMPlay2OSD> &osd, double pos = qQNaN());

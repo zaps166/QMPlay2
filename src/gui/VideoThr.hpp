@@ -61,10 +61,7 @@ public:
     }
 
     void destroySubtitlesDecoder();
-    inline void setSubtitlesDecoder(Decoder *dec)
-    {
-        sDec = dec;
-    }
+    void setSubtitlesDecoder(Decoder *dec, bool decodeToAss);
 
     bool setSpherical();
     bool setFlip();
@@ -102,6 +99,7 @@ private:
     quint32 seq;
 
     Decoder *sDec;
+    bool m_decodeToAss = false;
     std::shared_ptr<QMPlay2OSD> m_subtitles, m_subtitlesBusy;
     std::mutex m_subsDisplayMutex;
     std::unique_lock<std::mutex> m_subsDisplayLocker;

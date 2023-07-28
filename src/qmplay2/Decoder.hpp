@@ -46,6 +46,8 @@ public:
     virtual bool hasHWDecContext() const;
     virtual std::shared_ptr<VideoFilter> hwAccelFilter() const;
 
+    virtual QByteArray subtitleHeader() const;
+
     virtual void setSupportedPixelFormats(const AVPixelFormats &pixelFormats);
 
     /*
@@ -56,6 +58,7 @@ public:
     virtual int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up);
     virtual int decodeAudio(const Packet &encodedPacket, QByteArray &decoded, double &ts, quint8 &channels, quint32 &sampleRate, bool flush = false);
     virtual bool decodeSubtitle(const QVector<Packet> &encodedPackets, double pos, std::shared_ptr<QMPlay2OSD> &osd, const QSize &size, bool flush = false);
+    virtual QList<QByteArray> decodeSubtitle(const Packet &encodedPacket);
 
     virtual int pendingFrames() const;
 

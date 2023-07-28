@@ -455,6 +455,16 @@ void LibASS::addASSEvent(const QByteArray &event)
         return;
     ass_process_data(ass_sub_track, (char *)event.constData(), event.size());
 }
+void LibASS::addASSEvents(const QList<QByteArray> &events, double start, double duration)
+{
+    if (!ass_sub_track || !ass_sub_renderer || events.isEmpty())
+        return;
+
+    for (auto &&event : events)
+    {
+        ass_process_chunk(ass_sub_track, const_cast<char *>(event.constData()), event.size(), start * 1000, duration * 1000);
+    }
+}
 void LibASS::addASSEvent(const QByteArray &text, double Start, double Duration)
 {
     if (!ass_sub_track || !ass_sub_renderer || text.isEmpty() || Start < 0 || Duration < 0)
@@ -650,6 +660,8 @@ bool LibASS::isASS() const
 void LibASS::setASSStyle()
 {}
 void LibASS::addASSEvent(const QByteArray &)
+{}
+void LibASS::addASSEvents(const QList<QByteArray> &, double, double)
 {}
 void LibASS::addASSEvent(const QByteArray &, double, double)
 {}

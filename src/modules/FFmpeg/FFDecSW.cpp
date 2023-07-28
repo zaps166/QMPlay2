@@ -128,6 +128,14 @@ QString FFDecSW::name() const
     return "FFmpeg";
 }
 
+QByteArray FFDecSW::subtitleHeader() const
+{
+    if (codec_ctx->codec_type != AVMEDIA_TYPE_SUBTITLE)
+        return QByteArray();
+
+    return QByteArray::fromRawData(reinterpret_cast<const char *>(codec_ctx->subtitle_header), codec_ctx->subtitle_header_size);
+}
+
 void FFDecSW::setSupportedPixelFormats(const AVPixelFormats &pixelFormats)
 {
     supportedPixelFormats = pixelFormats;
@@ -393,6 +401,27 @@ bool FFDecSW::decodeSubtitle(const QVector<Packet> &encodedPackets, double pos, 
         ? true
         : getFromBitmapSubsBuffer(osd, pos)
     ;
+}
+QList<QByteArray> FFDecSW::decodeSubtitle(const Packet &encodedPacket)
+{
+    if (codec_ctx->codec_type != AVMEDIA_TYPE_SUBTITLE || !(codec_ctx->codec_descriptor->props & AV_CODEC_PROP_TEXT_SUB))
+        return {};
+
+    decodeFirstStep(encodedPacket, false);
+
+    int gotSubtitles = 0;
+    AVSubtitle subtitle = {};
+    if (avcodec_decode_subtitle2(codec_ctx, &subtitle, &gotSubtitles, packet) >= 0 && gotSubtitles && subtitle.format == 1)
+    {
+        QList<QByteArray> events;
+        for (uint32_t i = 0; i < subtitle.num_rects; ++i)
+        {
+            events += subtitle.rects[i]->ass;
+        }
+        return events;
+    }
+
+    return {};
 }
 
 bool FFDecSW::open(StreamInfo &streamInfo)

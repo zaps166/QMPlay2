@@ -1503,17 +1503,24 @@ void PlayClass::load(Demuxer *demuxer)
                         subtitlesSync = 0.0;
                     subsMutex.lock();
                     if (dec)
-                        vThr->setSubtitlesDecoder(dec);
-                    QByteArray assHeader = streams[subtitlesStream]->getExtraData();
-                    if (!assHeader.isEmpty() && (streams[subtitlesStream]->codec_name == "ssa" || streams[subtitlesStream]->codec_name == "ass"))
                     {
-                        loadAssFonts(streams);
+                        vThr->setSubtitlesDecoder(dec, streams[subtitlesStream]->decode_to_ass);
+                        if (streams[subtitlesStream]->decode_to_ass)
+                            ass->initASS(dec->subtitleHeader());
                     }
                     else
                     {
-                        assHeader.clear();
+                        QByteArray assHeader = streams[subtitlesStream]->getExtraData();
+                        if (!assHeader.isEmpty() && (streams[subtitlesStream]->codec_name == "ssa" || streams[subtitlesStream]->codec_name == "ass"))
+                        {
+                            loadAssFonts(streams);
+                        }
+                        else
+                        {
+                            assHeader.clear();
+                        }
+                        ass->initASS(assHeader);
                     }
-                    ass->initASS(assHeader);
                     if (reload)
                     {
                         seekTo = SEEK_STREAM_RELOAD;

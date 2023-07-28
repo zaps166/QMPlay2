@@ -960,7 +960,12 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
     if (const AVCodecDescriptor *codecDescr = avcodec_descriptor_get(streamInfo->params->codec_id))
     {
         if (codecDescr->props & AV_CODEC_PROP_TEXT_SUB)
-            streamInfo->must_decode = false;
+        {
+            if (codecDescr->id == AV_CODEC_ID_MOV_TEXT)
+                streamInfo->decode_to_ass = true;
+            else
+                streamInfo->must_decode = false;
+        }
 
         if (streamInfo->codec_name.isEmpty())
             streamInfo->codec_name = codecDescr->name;
