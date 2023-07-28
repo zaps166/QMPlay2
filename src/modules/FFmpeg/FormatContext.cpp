@@ -604,7 +604,6 @@ bool FormatContext::read(Packet &encoded, int &idx)
         }
         encoded.setDuration(newDuration);
     }
-    streamsTS[ff_idx] = encoded.ts();
 
     if (isStreamed)
     {
@@ -624,9 +623,11 @@ bool FormatContext::read(Packet &encoded, int &idx)
         return false;
     }
 
-    // Generate DTS for key frames if DTS doesn't exist (workaround for some M3U8 seekable streams)
+    // Generate DTS for key frames if DTS doesn't exist (e.g. workaround for some M3U8 seekable streams or other streams)
     if (encoded.hasKeyFrame() && !encoded.hasDts())
         encoded.setDts(nextDts.at(ff_idx));
+
+    streamsTS[ff_idx] = encoded.ts();
     nextDts[ff_idx] = encoded.ts() + encoded.duration();
 
     currPos = encoded.ts();
