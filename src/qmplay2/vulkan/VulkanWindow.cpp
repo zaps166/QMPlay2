@@ -72,12 +72,12 @@ struct VideoPipelineSpecializationData
     int idxComponent0;
     int idxComponent1;
     int idxComponent2;
-    int hasLuma;
-    int isGray;
-    int useBicubic;
-    int useBrightnessContrast;
-    int useHueSaturation;
-    int useSharpness;
+    vk::Bool32 hasLuma;
+    vk::Bool32 isGray;
+    vk::Bool32 useBicubic;
+    vk::Bool32 useBrightnessContrast;
+    vk::Bool32 useHueSaturation;
+    vk::Bool32 useSharpness;
     int trc;
 };
 
