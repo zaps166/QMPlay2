@@ -61,6 +61,7 @@ struct FrameProps
     bool rgb;
     int numPlanes;
     int paddingBits;
+    float maxLuminance;
 };
 
 struct VideoPipelineSpecializationData
@@ -101,6 +102,8 @@ struct alignas(16) FragUniform
     float hue;
     float saturation;
     float sharpness;
+
+    float maxLuminance;
 };
 
 struct alignas(16) OSDPushConstants
@@ -117,6 +120,7 @@ static inline bool isTrcSupported(AVColorTransferCharacteristic trc)
     switch (trc)
     {
         case AVCOL_TRC_BT709:
+        case AVCOL_TRC_SMPTE2084:
             return true;
         default:
             break;
@@ -328,6 +332,17 @@ bool Window::obtainFrameProps()
     frameProps.rgb = m_frame.isRGB();
     frameProps.numPlanes = m_frame.numPlanes();
     frameProps.paddingBits = m_frame.paddingBits();
+    frameProps.maxLuminance = 1000.0f;
+
+    if (auto metadata = m_frame.masteringDisplayMetadata())
+    {
+        if (metadata->has_luminance)
+        {
+            const float maxLuminance = av_q2d(metadata->max_luminance);
+            if (maxLuminance > 1.0f && maxLuminance <= 10000.0f)
+                frameProps.maxLuminance = maxLuminance;
+        }
+    }
 
     const auto comp = memcmp(m_frameProps.get(), &frameProps, sizeof(FrameProps));
     if (comp != 0)
@@ -1245,6 +1260,8 @@ void Window::fillVideoPipelineFragmentUniform()
     fragData->hue = m_hue;
     fragData->saturation = m_saturation;
     fragData->sharpness = m_sharpness;
+
+    fragData->maxLuminance = m_frameProps->maxLuminance;
 
     m.fragUniform->unmap();
 
