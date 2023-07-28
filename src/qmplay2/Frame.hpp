@@ -115,6 +115,8 @@ public: // Video
 
     AVPixelFormat pixelFormat() const;
 
+    AVColorPrimaries colorPrimaries() const;
+    AVColorTransferCharacteristic colorTrc() const;
     AVColorSpace colorSpace() const;
     bool isLimited() const;
 

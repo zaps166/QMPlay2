@@ -321,6 +321,14 @@ AVPixelFormat Frame::pixelFormat() const
     return m_pixelFormat;
 }
 
+AVColorPrimaries Frame::colorPrimaries() const
+{
+    return m_frame->color_primaries;
+}
+AVColorTransferCharacteristic Frame::colorTrc() const
+{
+    return m_frame->color_trc;
+}
 AVColorSpace Frame::colorSpace() const
 {
     return m_frame->colorspace;
