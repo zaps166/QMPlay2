@@ -330,8 +330,12 @@ bool Window::obtainFrameProps()
     frameProps.paddingBits = m_frame.paddingBits();
 
     const auto comp = memcmp(m_frameProps.get(), &frameProps, sizeof(FrameProps));
-    *m_frameProps = frameProps;
-    return (comp != 0);
+    if (comp != 0)
+    {
+        *m_frameProps = frameProps;
+        return true;
+    }
+    return false;
 }
 
 void Window::updateSizesAndMatrix()
