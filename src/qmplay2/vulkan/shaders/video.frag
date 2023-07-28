@@ -180,7 +180,10 @@ void main()
         }
     }
 
-    value = conversionMatrix * value;
+    if (!isGray && hasLuma)
+    {
+        value = clamp(conversionMatrix * value, 0.0, 1.0);
+    }
 
     if (!isGray && !hasLuma && useHueSaturation)
     {
