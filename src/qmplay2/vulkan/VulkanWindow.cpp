@@ -52,6 +52,8 @@ namespace QmVk {
 
 struct FrameProps
 {
+    AVColorPrimaries colorPrimaries;
+    AVColorTransferCharacteristic colorTrc;
     AVColorSpace colorSpace;
     bool limited;
     bool gray;
@@ -76,6 +78,7 @@ struct VideoPipelineSpecializationData
     int useBrightnessContrast;
     int useHueSaturation;
     int useSharpness;
+    int trc;
 };
 
 struct alignas(16) VertPushConstants
@@ -86,7 +89,9 @@ struct alignas(16) VertPushConstants
 
 struct alignas(16) FragUniform
 {
-    QGenericMatrix<3, 4, float> conversionMatrix;
+    QGenericMatrix<3, 4, float> yuvToRgbMatrix;
+    QGenericMatrix<3, 4, float> colorPrimariesMatrix;
+
     QVector2D levels;
     QVector2D rangeMultiplier;
     float bitsMultiplier;
@@ -106,6 +111,18 @@ struct alignas(16) OSDPushConstants
     int padding;
     QVector4D color; // ASS only
 };
+
+static inline bool isTrcSupported(AVColorTransferCharacteristic trc)
+{
+    switch (trc)
+    {
+        case AVCOL_TRC_BT709:
+            return true;
+        default:
+            break;
+    }
+    return false;
+}
 
 Window::Window(const shared_ptr<HWInterop> &hwInterop)
     : VideoOutputCommon(true)
@@ -302,6 +319,8 @@ void Window::maybeRequestUpdate()
 bool Window::obtainFrameProps()
 {
     FrameProps frameProps;
+    frameProps.colorPrimaries = m_frame.colorPrimaries();
+    frameProps.colorTrc = m_frame.colorTrc();
     frameProps.colorSpace = m_frame.colorSpace();
     frameProps.limited = m_frame.isLimited();
     frameProps.gray = m_frame.isGray();
@@ -1150,6 +1169,22 @@ void Window::obtainVideoPipelineSpecializationFrameProps()
     }
     specializationData->hasLuma = !m_frameProps->rgb;
     specializationData->isGray = m_frameProps->gray;
+
+    if (
+        !m_frameProps->gray &&
+        isTrcSupported(m_frameProps->colorTrc) && (
+            m_frameProps->colorTrc != AVCOL_TRC_BT709 || (
+                Functions::isColorPrimariesSupported(m_frameProps->colorPrimaries) &&
+                m_frameProps->colorPrimaries != AVCOL_PRI_BT709
+            )
+        )
+    ) {
+        specializationData->trc = m_frameProps->colorTrc;
+    }
+    else
+    {
+        specializationData->trc = 0;
+    }
 }
 
 void Window::fillVideoPipelineFragmentUniform()
@@ -1158,17 +1193,28 @@ void Window::fillVideoPipelineFragmentUniform()
 
     if (m_frameProps->rgb || m_frameProps->gray)
     {
-        fragData->conversionMatrix.setToIdentity();
+        fragData->yuvToRgbMatrix.setToIdentity();
 
         fragData->levels.setY(0.0f);
     }
     else
     {
-        fragData->conversionMatrix = Functions::getYUVtoRGBmatrix(
+        fragData->yuvToRgbMatrix = Functions::getYUVtoRGBmatrix(
             m_frameProps->colorSpace
         ).toGenericMatrix<3, 4>();
 
         fragData->levels.setY(128.0 / 255.0f);
+    }
+
+    if (isTrcSupported(m_frameProps->colorTrc))
+    {
+        fragData->colorPrimariesMatrix = Functions::getColorPrimariesTo709Matrix(
+            m_frameProps->colorPrimaries
+        ).toGenericMatrix<3, 4>();
+    }
+    else
+    {
+        fragData->colorPrimariesMatrix.setToIdentity();
     }
 
     fragData->levels.setX(m_frameProps->limited

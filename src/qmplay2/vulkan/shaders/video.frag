@@ -11,13 +11,18 @@ layout(constant_id =  9) const bool useBicubic = false;
 layout(constant_id = 10) const bool useBrightnessContrast = false;
 layout(constant_id = 11) const bool useHueSaturation = false;
 layout(constant_id = 12) const bool useSharpness = false;
+layout(constant_id = 13) const int trc = 0;
+
+const int AVCOL_TRC_BT709 = 1;
 
 layout(location = 0) in vec2 inTextureCoord;
 layout(location = 0) out vec4 outColor;
 
 layout(binding = 0) uniform FragUniform
 {
-    mat3 conversionMatrix;
+    mat3 yuvToRgbMatrix;
+    mat3 colorPrimariesMatrix;
+
     vec2 levels;
     vec2 rangeMultiplier;
     float bitsMultiplier;
@@ -182,7 +187,7 @@ void main()
 
     if (!isGray && hasLuma)
     {
-        value = clamp(conversionMatrix * value, 0.0, 1.0);
+        value = clamp(yuvToRgbMatrix * value, 0.0, 1.0);
     }
 
     if (!isGray && !hasLuma && useHueSaturation)
@@ -190,7 +195,14 @@ void main()
         value = rgb2hsv(value);
         value.x += hue;
         value.y *= saturation;
-        value = hsv2rgb(value);
+        value = clamp(hsv2rgb(value), 0.0, 1.0);
+    }
+
+    if (trc == AVCOL_TRC_BT709)
+    {
+        value = pow(value, vec3(2.4));
+        value = clamp(colorPrimariesMatrix * value, 0.0, 1.0);
+        value = pow(value, vec3(1.0 / 2.4));
     }
 
     if (useBrightnessContrast)
