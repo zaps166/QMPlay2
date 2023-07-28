@@ -382,8 +382,15 @@ YouTube::~YouTube()
 
 bool YouTube::set()
 {
-    const bool oldPpreferredH264 = m_preferredH264;
-    m_preferredH264 = (sets().getString("YouTube/PreferredCodec") == "H.264");
+    const auto preferredCodec = sets().getString("YouTube/PreferredCodec");
+    const auto oldPpreferredCodec = m_preferredCodec;
+
+    if (preferredCodec == "H.264")
+        m_preferredCodec = PreferredCodec::H264;
+    else if (preferredCodec == "AV1")
+        m_preferredCodec = PreferredCodec::AV1;
+    else
+        m_preferredCodec = PreferredCodec::VP9;
 
     const auto qualityActions = m_qualityGroup->actions();
     const auto qualityText = sets().getString("YouTube/QualityPreset");
@@ -394,7 +401,7 @@ bool YouTube::set()
         {
             if (qualityAction->text() == qualityText)
             {
-                if (oldPpreferredH264 != m_preferredH264 && qualityAction->isChecked())
+                if (oldPpreferredCodec != m_preferredCodec && qualityAction->isChecked())
                     qualityAction->setChecked(false); // Force "toggled" signal
                 qualityAction->setChecked(true);
                 qualityActionChecked = true;
@@ -404,7 +411,7 @@ bool YouTube::set()
     }
     if (!qualityActionChecked)
     {
-        if (oldPpreferredH264 != m_preferredH264 && qualityActions[3]->isChecked())
+        if (oldPpreferredCodec != m_preferredCodec && qualityActions[3]->isChecked())
             qualityActions[3]->setChecked(false); // Force "toggled" signal
         qualityActions[3]->setChecked(true);
     }
@@ -717,6 +724,23 @@ void YouTube::setItags(int qualityIdx)
         VP9_2160p60 = 315,
         VP9_4320p60 = 272,
 
+        AV1_480p = 397,
+        AV1_360p = 396,
+        AV1_240p = 395,
+        AV1_144p = 394,
+
+        AV1_HFR_4320p_1 = 571,
+        AV1_HFR_4320p_2 = 402,
+        AV1_HFR_2160p = 401,
+        AV1_HFR_1440p = 400,
+        AV1_HFR_1080p = 399,
+        AV1_HFR_720p = 398,
+
+        AV1_HFR_HIGH_2160p = 701,
+        AV1_HFR_HIGH_1440p = 700,
+        AV1_HFR_HIGH_1080p = 699,
+        AV1_HFR_HIGH_720p = 698,
+
         // Live video
         H264_144p_AAC_48 = 91,
         H264_240p_AAC_48 = 92,
@@ -754,7 +778,7 @@ void YouTube::setItags(int qualityIdx)
 
     QVector<int> qualityPresets[PresetCount];
     {
-        if (!m_preferredH264)
+        if (m_preferredCodec == PreferredCodec::VP9)
         {
             qualityPresets[Preset_480p]  << VP9_480p << H264_480p << VP9_360p << H264_360p << H264_360P_AAC_128 << VP9_240p << H264_240p << VP9_144p << H264_144p;
             qualityPresets[Preset_720p]  << VP9_720p << H264_720p << H264_720P_AAC_128 << qualityPresets[Preset_480p];
@@ -768,7 +792,7 @@ void YouTube::setItags(int qualityIdx)
             qualityPresets[Preset_2160p60] << VP9_2160p60 << H264_2160p60 << qualityPresets[Preset_1440p60];
             qualityPresets[Preset_4320p60] << VP9_4320p60 << qualityPresets[Preset_2160p60];
         }
-        else
+        else if (m_preferredCodec == PreferredCodec::H264)
         {
             qualityPresets[Preset_480p]  << H264_480p << VP9_480p << H264_360p << VP9_360p << H264_360P_AAC_128 << H264_240p << VP9_240p << H264_144p << VP9_144p;
             qualityPresets[Preset_720p]  << H264_720p << VP9_720p << H264_720P_AAC_128 << qualityPresets[Preset_480p];
@@ -781,6 +805,20 @@ void YouTube::setItags(int qualityIdx)
             qualityPresets[Preset_1440p60] << H264_1440p60 << VP9_1440p60 << qualityPresets[Preset_1080p60];
             qualityPresets[Preset_2160p60] << H264_2160p60 << VP9_2160p60 << qualityPresets[Preset_1440p60];
             qualityPresets[Preset_4320p60] << VP9_4320p60 << qualityPresets[Preset_2160p60];
+        }
+        else if (m_preferredCodec == PreferredCodec::AV1)
+        {
+            qualityPresets[Preset_480p]  << AV1_480p << AV1_360p << VP9_480p << H264_480p << VP9_360p << H264_360p << H264_360P_AAC_128 << AV1_240p << VP9_240p << H264_240p << AV1_144p << VP9_144p << H264_144p;
+            qualityPresets[Preset_720p]  << VP9_720p << H264_720p << H264_720P_AAC_128 << qualityPresets[Preset_480p];
+            qualityPresets[Preset_1080p] << VP9_1080p << H264_1080p << qualityPresets[Preset_720p];
+            qualityPresets[Preset_1440p] << VP9_1440p << H264_1440p << qualityPresets[Preset_1080p];
+            qualityPresets[Preset_2160p] << VP9_2160p << H264_2160p << qualityPresets[Preset_1440p];
+
+            qualityPresets[Preset_720p60]  << AV1_HFR_HIGH_720p << AV1_HFR_720p << VP9_720p60 << H264_720p60;
+            qualityPresets[Preset_1080p60] << AV1_HFR_HIGH_1080p << AV1_HFR_1080p << VP9_1080p60 << H264_1080p60 << qualityPresets[Preset_720p60];
+            qualityPresets[Preset_1440p60] << AV1_HFR_HIGH_1440p << AV1_HFR_1440p << VP9_1440p60 << H264_1440p60 << qualityPresets[Preset_1080p60];
+            qualityPresets[Preset_2160p60] << AV1_HFR_HIGH_2160p << AV1_HFR_2160p << VP9_2160p60 << H264_2160p60 << qualityPresets[Preset_1440p60];
+            qualityPresets[Preset_4320p60] << AV1_HFR_4320p_1 << AV1_HFR_4320p_2 << VP9_4320p60 << qualityPresets[Preset_2160p60];
         }
 
         // Append also non-60 FPS itags to 60 FPS itags

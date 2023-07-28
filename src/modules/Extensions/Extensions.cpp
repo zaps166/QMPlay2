@@ -175,7 +175,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
     m_preferredCodec = new QComboBox;
     m_preferredCodec->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
-    m_preferredCodec->addItems({"VP9", "H.264"});
+    m_preferredCodec->addItems({"VP9", "H.264", "AV1"}); // Must match "PreferredCodec" enum
     idx = m_preferredCodec->findText(sets().getString("YouTube/PreferredCodec"));
     m_preferredCodec->setCurrentIndex(idx > -1 ? idx : 0);
 

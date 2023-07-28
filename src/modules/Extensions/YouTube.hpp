@@ -36,6 +36,13 @@ class QSpinBox;
 class LineEdit;
 class QLabel;
 
+enum class PreferredCodec
+{
+    VP9,
+    H264,
+    AV1,
+};
+
 /**/
 
 class ResultsYoutube final : public QTreeWidget
@@ -169,7 +176,7 @@ private:
     int m_sortByIdx = 0;
 
     QMutex m_itagsMutex;
-    bool m_preferredH264 = false;
+    PreferredCodec m_preferredCodec = PreferredCodec::VP9;
     QVector<int> m_videoItags, m_audioItags, m_hlsItags, m_singleUrlItags;
 
     QString m_apiKey, m_clientName, m_clientVersion, m_continuationToken;
