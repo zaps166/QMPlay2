@@ -71,7 +71,9 @@ public:
         bool interlaced,
         bool topFieldFirst,
         AVColorSpace colorSpace,
-        bool isLimited
+        bool isLimited,
+        AVColorPrimaries colorPrimaries = AVCOL_PRI_UNSPECIFIED,
+        AVColorTransferCharacteristic colorTrc = AVCOL_TRC_UNSPECIFIED
     );
 
 public:

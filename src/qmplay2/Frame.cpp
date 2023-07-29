@@ -139,7 +139,9 @@ Frame Frame::createEmpty(
     bool interlaced,
     bool topFieldFirst,
     AVColorSpace colorSpace,
-    bool isLimited)
+    bool isLimited,
+    AVColorPrimaries colorPrimaries,
+    AVColorTransferCharacteristic colorTrc)
 {
     Frame frame;
 
@@ -148,6 +150,8 @@ Frame Frame::createEmpty(
     frame.m_frame->format = pixelFormat;
     if (interlaced)
         frame.setInterlaced(topFieldFirst);
+    frame.m_frame->color_primaries = colorPrimaries;
+    frame.m_frame->color_trc = colorTrc;
     frame.m_frame->colorspace = colorSpace;
     frame.m_frame->color_range = isLimited ? AVCOL_RANGE_MPEG : AVCOL_RANGE_JPEG;
 
