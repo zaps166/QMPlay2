@@ -41,6 +41,8 @@ extern "C" {
 #include <algorithm>
 #include <vector>
 
+#undef RSHIFT
+
 using namespace std;
 
 static void (*filterLinePtr)(quint8 *, const void *const,
