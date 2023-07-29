@@ -91,7 +91,6 @@ bool CuvidDec::canCreateInstance()
 
 CuvidDec::CuvidDec(Module &module) :
     m_limited(false),
-    m_colorSpace(AVCOL_SPC_UNSPECIFIED),
     m_lastCuvidTS(0),
     m_deintMethod(cudaVideoDeinterlaceMode_Weave),
     m_forceFlush(false),
@@ -339,7 +338,9 @@ int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFo
                     !dispInfo.progressive_frame,
                     dispInfo.top_field_first,
                     m_colorSpace,
-                    m_limited
+                    m_limited,
+                    colorPrimaries,
+                    colorTrc
                 );
             };
             if (m_cuvidHwInterop)
@@ -569,6 +570,8 @@ bool CuvidDec::open(StreamInfo &streamInfo)
         return false;
 
     m_limited = (streamInfo.params->color_range != AVCOL_RANGE_JPEG);
+    colorPrimaries = streamInfo.params->color_primaries;
+    colorTrc = streamInfo.params->color_trc;
     m_colorSpace = streamInfo.params->color_space;
 
     if (!m_cuvidHwInterop)

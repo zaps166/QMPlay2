@@ -83,7 +83,9 @@ private:
     std::shared_ptr<CuvidHWInterop> m_cuvidHwInterop;
 
     bool m_limited;
-    AVColorSpace m_colorSpace;
+    AVColorPrimaries colorPrimaries = AVCOL_PRI_UNSPECIFIED;
+    AVColorTransferCharacteristic colorTrc = AVCOL_TRC_UNSPECIFIED;
+    AVColorSpace m_colorSpace = AVCOL_SPC_UNSPECIFIED;
     int m_depth = 0;
 
     bool m_hasP016 = false;
