@@ -111,7 +111,7 @@ public: // Video
 
     bool hasCustomData() const;
     quintptr customData() const;
-    void setCustomData(quintptr customData);
+    void setCustomData(quintptr customData, bool isCustomHW = false);
 
     AVPixelFormat pixelFormat() const;
 
@@ -188,6 +188,7 @@ private:
     AVPixelFormat m_pixelFormat = AV_PIX_FMT_NONE;
     const AVPixFmtDescriptor *m_pixelFmtDescriptor = nullptr;
     bool m_isSecondField = false;
+    bool m_isCustomHW = false;
 #ifdef USE_VULKAN
     std::shared_ptr<QmVk::Image> m_vkImage;
 #endif

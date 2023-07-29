@@ -212,6 +212,7 @@ void Frame::clear()
     m_pixelFormat = AV_PIX_FMT_NONE;
     m_pixelFmtDescriptor = nullptr;
     m_isSecondField = false;
+    m_isCustomHW = false;
 #ifdef USE_VULKAN
     m_vkImage.reset();
 #endif
@@ -294,11 +295,11 @@ bool Frame::isHW() const
         case AV_PIX_FMT_D3D11:
             return true;
     }
-    return false;
+    return m_isCustomHW;
 }
 quintptr Frame::hwData(int idx) const
 {
-    if (isHW())
+    if (!m_isCustomHW && isHW())
         return reinterpret_cast<quintptr>(m_frame->data[idx]);
     return s_invalidCustomData;
 }
@@ -311,9 +312,10 @@ quintptr Frame::customData() const
 {
     return m_customData;
 }
-void Frame::setCustomData(quintptr customData)
+void Frame::setCustomData(quintptr customData, bool isCustomHW)
 {
     m_customData = customData;
+    m_isCustomHW = (isCustomHW && hasCustomData() && !hasCPUAccess());
 }
 
 AVPixelFormat Frame::pixelFormat() const
@@ -575,6 +577,7 @@ Frame &Frame::operator =(const Frame &other)
     m_pixelFormat = other.m_pixelFormat;
     m_pixelFmtDescriptor = other.m_pixelFmtDescriptor;
     m_isSecondField = other.m_isSecondField;
+    m_isCustomHW = other.m_isCustomHW;
 #ifdef USE_VULKAN
     m_vkImage = other.m_vkImage;
 #endif
@@ -594,6 +597,7 @@ Frame &Frame::operator =(Frame &&other)
     qSwap(m_pixelFormat, other.m_pixelFormat);
     qSwap(m_pixelFmtDescriptor, other.m_pixelFmtDescriptor);
     qSwap(m_isSecondField, other.m_isSecondField);
+    qSwap(m_isCustomHW, other.m_isCustomHW);
 #ifdef USE_VULKAN
     qSwap(m_vkImage, other.m_vkImage);
 #endif

@@ -407,7 +407,7 @@ bool VDPAU::filter(QQueue<Frame> &framesQueue)
         }
 
         outputSurfacePtr->busy = true;
-        destFrame.setCustomData(currID);
+        destFrame.setCustomData(currID, true);
         destFrame.setOnDestroyFn([self = shared_from_this(), currID] {
             QMutexLocker locker(&self->m_outputSurfacesMutex);
             auto it = self->m_outputSurfacesMap.find(currID);

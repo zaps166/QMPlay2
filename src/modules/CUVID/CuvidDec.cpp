@@ -345,7 +345,7 @@ int CuvidDec::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFo
             if (m_cuvidHwInterop)
             {
                 createFrame();
-                decoded.setCustomData(dispInfo.picture_index);
+                decoded.setCustomData(dispInfo.picture_index, true);
                 m_cuvidHwInterop->setAvailableSurface(dispInfo.picture_index);
             }
             else
