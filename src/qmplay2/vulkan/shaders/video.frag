@@ -306,7 +306,6 @@ void main()
         value = pow(value, vec3(1.0 / 2.4));
     }
 
-
     if (useBrightnessContrast)
     {
         value = (value - 0.5) * contrast + 0.5 + brightness;
