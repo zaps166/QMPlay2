@@ -465,7 +465,7 @@ void DemuxerThr::run()
             emitInfo();
     });
 
-    if (!unknownLength && forwardTime > 0.0)
+    if (forwardTime > 0.0)
     {
         Q_ASSERT(!localStream);
         double percent = 50.0;
@@ -484,7 +484,7 @@ void DemuxerThr::run()
                 percent = 100;
                 break;
         }
-        backwardTime = forwardTime * percent / 100.0;
+        backwardTime = qMax(0.1, m_minBuffTimeNetwork) * percent / 100.0;
     }
     PacketBuffer::setBackwardTime(backwardTime);
 
