@@ -554,6 +554,13 @@
          </property>
         </widget>
        </item>
+       <item row="25" column="0">
+        <widget class="QCheckBox" name="storeUrlPosB">
+         <property name="text">
+          <string>Remember playback position for each playlist entry</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>

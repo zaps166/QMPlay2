@@ -242,4 +242,5 @@ signals:
     void videoNotStarted();
     void uncheckSuspend();
     void setVideoCheckState(bool rotate90, bool hFlip, bool vFlip, bool spherical);
+    void continuePos(double pos);
 };

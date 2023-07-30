@@ -222,6 +222,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("UnpauseWhenSeeking", false);
     QMPSettings.init("RestoreAVSState", false);
     QMPSettings.init("DisableSubtitlesAtStartup", false);
+    QMPSettings.init("StoreUrlPos", false);
     QMPSettings.init("StoreARatioAndZoom", false);
     QMPSettings.init("SavePos", false);
     QMPSettings.init("KeepZoom", false);
@@ -575,6 +576,8 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 
         playbackSettingsPage->restoreAVSStateB->setChecked(QMPSettings.getBool("RestoreAVSState"));
         playbackSettingsPage->disableSubtitlesAtStartup->setChecked(QMPSettings.getBool("DisableSubtitlesAtStartup"));
+
+        playbackSettingsPage->storeUrlPosB->setChecked(QMPSettings.getBool("StoreUrlPos"));
 
         for (int m = 1; m < 3; ++m)
             playbackSettingsPage->modulesListLayout->addWidget(m_modulesListGroupBox[m]);
@@ -1251,6 +1254,7 @@ void SettingsWidget::apply()
             QMPSettings.set("UnpauseWhenSeeking", playbackSettingsPage->unpauseWhenSeekingB->isChecked());
             QMPSettings.set("RestoreAVSState", playbackSettingsPage->restoreAVSStateB->isChecked());
             QMPSettings.set("DisableSubtitlesAtStartup", playbackSettingsPage->disableSubtitlesAtStartup->isChecked());
+            QMPSettings.set("StoreUrlPos", playbackSettingsPage->storeUrlPosB->isChecked());
             QMPSettings.set("StoreARatioAndZoom", playbackSettingsPage->storeARatioAndZoomB->isChecked());
 
             QStringList audioWriters, decoders;

@@ -253,9 +253,15 @@ MenuBar::Player::Player(MenuBar *parent) :
     newAction(Player::tr("Reset image &settings"), this, reset, false, QIcon(), false);
 
     addSeparator();
+    newAction(Player::tr("&Continue playback"), this, continuePlayback, false, QIcon(), false);
+
+    addSeparator();
     newAction(Player::tr("Volume &up"), this, volUp, true, QIcon(), false);
     newAction(Player::tr("Volume &down"), this, volDown, true, QIcon(), false);
     newAction(Player::tr("&Mute"), this, toggleMute, false, QMPlay2Core.getIconFromTheme("audio-volume-high"), true);
+
+    continuePlayback->setToolTip(tr("Continue playing from the last position"));
+    continuePlayback->setVisible(false);
 
     if (!QMPlay2GUI.pipe)
         detach = nullptr;
@@ -621,6 +627,7 @@ void MenuBar::setKeyShortcuts()
     shortcuts->appendAction(player->reset, "KeyBindings/Player-reset", "R");
     shortcuts->appendAction(player->volUp, "KeyBindings/Player-volUp", "*");
     shortcuts->appendAction(player->volDown, "KeyBindings/Player-volDown", "/");
+    shortcuts->appendAction(player->continuePlayback, "KeyBindings/Player-continuePlayback", "C");
     shortcuts->appendAction(player->toggleMute, "KeyBindings/Player-toggleMute", "M");
     if (player->detach)
         shortcuts->appendAction(player->detach, "KeyBindings/Player-detach", "");

@@ -1309,6 +1309,22 @@ void DemuxerThr::stopVADec()
     playC.stopVDec();
     playC.stopADec();
 
+    const QString key = "UrlPos/" + playC.getUrl();
+    auto &settings = QMPlay2Core.getSettings();
+    const double pos = playC.getPos();
+    bool store = !err && !unknownLength && demuxer && settings.getBool("StoreUrlPos");
+    if (store)
+    {
+        const double length = demuxer->length();
+        const double percent = pos * 100.0 / length;
+        if (length < 480.0 || percent < 1.0 || percent > 99.0)
+            store = false;
+    }
+    if (store)
+        settings.set(key, pos);
+    else
+        settings.remove(key);
+
     stopVAMutex.unlock();
 
     endMutex.lock(); //Czeka do czasu zniszczenia demuxer'a - jeżeli wcześniej mutex był zablokowany (wykonał się z wątku)

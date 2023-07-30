@@ -104,6 +104,7 @@ void PlayClass::play(const QString &_url)
         {
             audioStream = videoStream = subtitlesStream = -1;
 
+
             url = _url;
             demuxThr = new DemuxerThr(*this);
             demuxThr->minBuffSizeLocal = QMPlay2Core.getSettings().getInt("AVBufferLocal");
@@ -167,6 +168,9 @@ void PlayClass::play(const QString &_url)
             paused = false;
 
             demuxThr->start();
+
+            if (QMPlay2Core.getSettings().getBool("StoreUrlPos"))
+                emit continuePos(QMPlay2Core.getSettings().getDouble("UrlPos/" + url));
         }
     }
     else
@@ -177,6 +181,7 @@ void PlayClass::play(const QString &_url)
 }
 void PlayClass::stop(bool _quitApp)
 {
+    emit continuePos(0.0);
     quitApp = _quitApp;
     if (stopPauseMutex.tryLock())
     {
@@ -227,6 +232,7 @@ void PlayClass::chPos(double newPos, bool updateGUI)
 
 void PlayClass::togglePause()
 {
+    emit continuePos(0.0);
     if (stopPauseMutex.tryLock())
     {
         if (aThr && !paused)
@@ -240,6 +246,7 @@ void PlayClass::togglePause()
 }
 void PlayClass::seek(double pos, bool allowAccurate)
 {
+    emit continuePos(0.0);
     if (pos < 0.0)
         pos = 0.0;
     if (qFuzzyCompare(lastSeekTo, pos))

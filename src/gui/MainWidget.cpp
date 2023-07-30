@@ -263,6 +263,8 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     vLine->setFrameShadow(QFrame::Sunken);
     mainTB->addWidget(vLine);
 
+    mainTB->addAction(menuBar->player->continuePlayback);
+
     mainTB->addAction(menuBar->player->toggleMute);
 
     volW = new VolWidget(settings.getInt("MaxVol"));
@@ -335,6 +337,10 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
         menuBar->playback->videoFilters->hFlip->setChecked(hFlip);
         menuBar->playback->videoFilters->vFlip->setChecked(vFlip);
         menuBar->playback->videoFilters->spherical->setChecked(spherical);
+    });
+    connect(&playC, &PlayClass::continuePos, this, [this](double pos) {
+        menuBar->player->continuePlayback->setProperty("Pos", pos);
+        menuBar->player->continuePlayback->setVisible(pos > 0.0);
     });
     /**/
 
@@ -446,11 +452,14 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
         const QString url = settings.getString("Url");
         if (!url.isEmpty() && url == playlistDock->getUrl())
         {
-            const double pos = settings.getDouble("Pos", 0.0);
             playC.setDoSilenceOnStart();
             playlistDock->start();
-            if (pos > 0.0)
-                seek(pos);
+            if (!settings.getBool("StoreUrlPos"))
+            {
+                const double pos = settings.getDouble("Pos", 0.0);
+                if (pos > 0.0)
+                    seek(pos);
+            }
         }
         else
             playStateChanged(false);
@@ -915,6 +924,13 @@ void MainWidget::createMenuBar()
     connect(menuBar->player->reset, SIGNAL(triggered()), this, SLOT(resetARatio()));
     connect(menuBar->player->reset, SIGNAL(triggered()), &playC, SLOT(zoomReset()));
     connect(menuBar->player->reset, SIGNAL(triggered()), &playC, SLOT(otherReset()));
+    connect(menuBar->player->continuePlayback, &QAction::triggered, this, [this] {
+        const double pos = menuBar->player->continuePlayback->property("Pos").toDouble();
+        if (pos > 0.0)
+            playC.seek(pos);
+        else
+            emit playC.continuePos(0.0);
+    });
     connect(menuBar->player->volUp, SIGNAL(triggered()), this, SLOT(volUpDown()));
     connect(menuBar->player->volDown, SIGNAL(triggered()), this, SLOT(volUpDown()));
     connect(menuBar->player->toggleMute, SIGNAL(triggered()), &playC, SLOT(toggleMute()));
