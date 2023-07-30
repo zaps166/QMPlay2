@@ -576,6 +576,10 @@
         <source>Program</source>
         <translation>Program</translation>
     </message>
+    <message>
+        <source>unknown</source>
+        <translation>nieznany</translation>
+    </message>
 </context>
 <context>
     <name>DownloadItemW</name>
@@ -2384,6 +2388,10 @@
         <source>Live stream buffer length</source>
         <translation>Długość bufora dla transmisji na żywo</translation>
     </message>
+    <message>
+        <source>Remember playback position for each playlist entry</source>
+        <translation>Zapamiętaj pozycję odtwarzania dla każdego wpisu listy odtwarzania</translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -2486,6 +2494,14 @@
     <message>
         <source>Previous &amp;frame</source>
         <translation>&amp;Poprzednia klatka</translation>
+    </message>
+    <message>
+        <source>&amp;Continue playback</source>
+        <translation type="unfinished">Kontynuuj &amp;odtwarzanie</translation>
+    </message>
+    <message>
+        <source>Continue playing from the last position</source>
+        <translation>Kontynuuj odtwarzanie od ostatniej pozycji</translation>
     </message>
 </context>
 <context>

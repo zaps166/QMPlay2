@@ -576,6 +576,10 @@
         <source>Program</source>
         <translation>Program</translation>
     </message>
+    <message>
+        <source>unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DownloadItemW</name>
@@ -2384,6 +2388,10 @@
         <source>Live stream buffer length</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Remember playback position for each playlist entry</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Player</name>
@@ -2486,6 +2494,14 @@
     <message>
         <source>Previous &amp;frame</source>
         <translation>&amp;Predchádzajúca snímka</translation>
+    </message>
+    <message>
+        <source>&amp;Continue playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continue playing from the last position</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
