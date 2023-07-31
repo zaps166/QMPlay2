@@ -2497,7 +2497,7 @@
     </message>
     <message>
         <source>&amp;Continue playback</source>
-        <translation type="unfinished">Kontynuuj &amp;odtwarzanie</translation>
+        <translation>Kontynuuj &amp;odtwarzanie</translation>
     </message>
     <message>
         <source>Continue playing from the last position</source>
