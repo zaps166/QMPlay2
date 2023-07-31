@@ -165,7 +165,7 @@ double Equalizer::filter(QByteArray &data, bool flush)
         for (int c = 0; c < chn; ++c)
         {
             int pos = c;
-            while (m_input[c].size() >= fftSize)
+            while (static_cast<int>(m_input[c].size()) >= fftSize)
             {
                 for (int i = 0; i < fftSize; ++i)
                 {
@@ -275,7 +275,7 @@ void Equalizer::interpolateFilterCurve()
     }
 
     const int len = m_fftSize / 2;
-    if (m_f.size() != len)
+    if (static_cast<int>(m_f.size()) != len)
         m_f.resize(len);
     if (m_srate && size >= 2)
     {
