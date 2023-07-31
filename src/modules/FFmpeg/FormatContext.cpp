@@ -80,7 +80,7 @@ static QByteArray getTag(AVDictionary *metadata, const char *key, const bool ded
     AVDictionaryEntry *avTag = av_dict_get(metadata, key, nullptr, 0);
     if (avTag && avTag->value)
     {
-        const QByteArray tag = QByteArray(avTag->value);
+        const QByteArray tag = Functions::textWithFallbackEncoding(QByteArray(avTag->value));
         if (deduplicate)
         {
             // Workaround for duplicated tags separated by ';'.
