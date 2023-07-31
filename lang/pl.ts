@@ -979,10 +979,6 @@
         <translation>Styl</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>Kodowanie napisów</translation>
-    </message>
-    <message>
         <source>Default audio language</source>
         <translation>Domyślny język dla dźwięku</translation>
     </message>
@@ -1033,6 +1029,10 @@
     <message>
         <source>Enlarge small covers</source>
         <translation>Powiększaj małe okładki</translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding</source>
+        <translation>Kodowanie napisów i tagów</translation>
     </message>
 </context>
 <context>

@@ -979,10 +979,6 @@
         <translation>元件樣式</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>字幕編碼</translation>
-    </message>
-    <message>
         <source>Default audio language</source>
         <translation>預設音訊語言</translation>
     </message>
@@ -1033,6 +1029,10 @@
     <message>
         <source>Enlarge small covers</source>
         <translation>放大小型的封面</translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

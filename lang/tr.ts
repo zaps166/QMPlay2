@@ -980,10 +980,6 @@
         <translation>Biçem</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>Altyazı kodlaması</translation>
-    </message>
-    <message>
         <source>Default audio language</source>
         <translation>Varsayılan ses dili</translation>
     </message>
@@ -1034,6 +1030,10 @@
     <message>
         <source>Enlarge small covers</source>
         <translation>Küçük kapakları büyüt</translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

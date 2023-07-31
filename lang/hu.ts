@@ -927,10 +927,6 @@
         <translation>Stílus</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>Felirat karakterkódolása</translation>
-    </message>
-    <message>
         <source>Default audio language</source>
         <translation>Hang alapértelmezett nyelve</translation>
     </message>
@@ -1032,6 +1028,10 @@
     </message>
     <message>
         <source>Enlarge small covers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -979,10 +979,6 @@
         <translation>样式</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>字幕编码</translation>
-    </message>
-    <message>
         <source>Default audio language</source>
         <translation>默认音频语言</translation>
     </message>
@@ -1033,6 +1029,10 @@
     <message>
         <source>Enlarge small covers</source>
         <translation>放大小尺寸封面</translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

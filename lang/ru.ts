@@ -979,10 +979,6 @@
         <translation>Стиль</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>Кодировка субтитров</translation>
-    </message>
-    <message>
         <source>Default audio language</source>
         <translation>Язык аудио по умолчанию</translation>
     </message>
@@ -1033,6 +1029,10 @@
     <message>
         <source>Enlarge small covers</source>
         <translation>Увеличивать небольшие обложки</translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

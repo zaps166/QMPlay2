@@ -931,10 +931,6 @@
         <translation>Stijl</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>Tekensen van ondertiteling</translation>
-    </message>
-    <message>
         <source>Default audio language</source>
         <translation>Standaard audiotaal</translation>
     </message>
@@ -1033,6 +1029,10 @@
     <message>
         <source>Don&apos;t load playlist files within other files</source>
         <translation>Afspeellijstbestanden niet laden binnen andere bestanden</translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

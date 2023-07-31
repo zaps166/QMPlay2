@@ -980,10 +980,6 @@
         <translation>スタイル</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>字幕のエンコード</translation>
-    </message>
-    <message>
         <source>Default audio language</source>
         <translation>デフォルトのオーディオの言語</translation>
     </message>
@@ -1034,6 +1030,10 @@
     <message>
         <source>Enlarge small covers</source>
         <translation>小さなカバー画像を拡大</translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -934,10 +934,6 @@
         <translation>Estilo</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>Codificação de legendas</translation>
-    </message>
-    <message>
         <source>Default audio language</source>
         <translation>Idioma padrão do áudio</translation>
     </message>
@@ -1037,6 +1033,10 @@
     <message>
         <source>Don&apos;t load playlist files within other files</source>
         <translation>Não carregar arquivos de playlists junto com outros arquivos</translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -979,10 +979,6 @@
         <translation>Estilo</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>Codificación de los subtítulos</translation>
-    </message>
-    <message>
         <source>Default audio language</source>
         <translation>Idioma por omisión del audio</translation>
     </message>
@@ -1032,6 +1028,10 @@
     </message>
     <message>
         <source>Enlarge small covers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

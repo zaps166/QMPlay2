@@ -978,10 +978,6 @@
         <translation>Stil</translation>
     </message>
     <message>
-        <source>Subtitles encoding</source>
-        <translation>Untertitel Encoding</translation>
-    </message>
-    <message>
         <source>Default audio language</source>
         <translation>Standard Audio Sprache</translation>
     </message>
@@ -1032,6 +1028,10 @@
     <message>
         <source>Enlarge small covers</source>
         <translation>Kleine Covers vergrößern</translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
