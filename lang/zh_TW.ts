@@ -578,7 +578,7 @@
     </message>
     <message>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>未知</translation>
     </message>
 </context>
 <context>
@@ -1615,7 +1615,7 @@
     </message>
     <message>
         <source>Scrobble</source>
-        <translation>共用</translation>
+        <translation>播放記錄</translation>
     </message>
     <message>
         <source>User name</source>
@@ -2390,7 +2390,7 @@
     </message>
     <message>
         <source>Remember playback position for each playlist entry</source>
-        <translation type="unfinished"></translation>
+        <translation>記住每個播放列表項目的播放位置</translation>
     </message>
 </context>
 <context>
@@ -2497,11 +2497,11 @@
     </message>
     <message>
         <source>&amp;Continue playback</source>
-        <translation type="unfinished"></translation>
+        <translation>繼續播放(&amp;C)</translation>
     </message>
     <message>
         <source>Continue playing from the last position</source>
-        <translation type="unfinished"></translation>
+        <translation>繼續从最後位置播放</translation>
     </message>
 </context>
 <context>
