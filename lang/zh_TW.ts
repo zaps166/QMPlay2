@@ -1032,7 +1032,7 @@
     </message>
     <message>
         <source>Subtitles and tags encoding</source>
-        <translation type="unfinished"></translation>
+        <translation>字幕及標籤編碼</translation>
     </message>
 </context>
 <context>
