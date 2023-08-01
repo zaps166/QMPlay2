@@ -196,7 +196,7 @@ private:
         vk::UniqueSwapchainKHR oldSwapChain;
 
         shared_ptr<Buffer> fragUniform;
-        bool mustUpdateFragUniform = true;
+        bool mustUpdateFragUniform = false;
 
         shared_ptr<Buffer> verticesStagingBuffer;
         shared_ptr<Buffer> verticesBuffer;
