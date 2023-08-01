@@ -24,8 +24,6 @@
 
 #include "../../qmvk/AbstractInstance.hpp"
 
-#include <mutex>
-
 class QVulkanInstance;
 class QWindow;
 
@@ -101,9 +99,6 @@ private:
 
     shared_ptr<PhysicalDevice> m_physicalDevice;
     AVPixelFormats m_supportedPixelFormats;
-
-    weak_ptr<Device> m_deviceWeak;
-    mutable mutex m_deviceMutex;
 
     QWindow *m_testWin = nullptr;
 };

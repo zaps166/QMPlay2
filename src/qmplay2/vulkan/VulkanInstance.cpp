@@ -19,7 +19,6 @@
 #include "../../qmvk/PhysicalDevice.hpp"
 #include "../../qmvk/Device.hpp"
 #include "../../qmvk/MemoryPropertyFlags.hpp"
-#include "../../qmvk/Image.hpp"
 
 #include "VulkanInstance.hpp"
 #include "VulkanBufferPool.hpp"
