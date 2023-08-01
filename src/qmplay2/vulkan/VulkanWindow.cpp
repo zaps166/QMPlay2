@@ -483,8 +483,7 @@ void Window::render()
 
     try
     {
-        if (!ensureHWImageMapped())
-            return;
+        const bool imageReady = ensureHWImageMapped();
 
         if (!ensureSurfaceAndRenderPass())
             return;
@@ -497,7 +496,8 @@ void Window::render()
         if (!m.commandBufferDrawFn)
             fillVerticesBuffer();
 
-        loadImage();
+        if (imageReady)
+            loadImage();
 
         const bool mustGenerateMipmaps = this->mustGenerateMipmaps();
         const bool mipmapsUsed = ensureMipmaps(mustGenerateMipmaps);
