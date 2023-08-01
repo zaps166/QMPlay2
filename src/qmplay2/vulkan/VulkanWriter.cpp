@@ -75,7 +75,8 @@ bool Writer::set()
         sets.getWithBounds("Vulkan/VSync", Qt::Unchecked, Qt::Checked),
         sets.getBool("Vulkan/HQScaleDown"),
         sets.getBool("Vulkan/HQScaleUp"),
-        sets.getBool("Vulkan/BypassCompositor")
+        sets.getBool("Vulkan/BypassCompositor"),
+        sets.getBool("Vulkan/HDR")
     );
 
     return !mustRestart;
@@ -144,6 +145,9 @@ QString Writer::name() const
     QString name = "Vulkan";
 
     QStringList additionalText;
+
+    if (m_window->isHdr10St2084())
+        additionalText += "HDR";
 
     if (m_vkHwInterop)
         additionalText += m_vkHwInterop->name();

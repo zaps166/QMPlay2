@@ -193,6 +193,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("Vulkan/HQScaleDown", false);
     QMPSettings.init("Vulkan/HQScaleUp", false);
     QMPSettings.init("Vulkan/BypassCompositor", true);
+    QMPSettings.init("Vulkan/HDR", false);
 
     QMPSettings.init("ShortSeek", 5);
     QMPSettings.init("LongSeek", 30);
@@ -917,6 +918,7 @@ void SettingsWidget::createRendererSettings()
         auto hqDownscale = new QCheckBox(tr("High quality image scaling down"));
         auto hqUpscale = new QCheckBox(tr("High quality image scaling up"));
         auto bypassCompositor = createBypassCompositor();
+        auto hdr = new QCheckBox(tr("Try to display HDR10 videos in HDR mode (experimental)"));
 
 #ifdef Q_OS_WIN
         auto noExclusiveFullScreenDevIDs = std::make_shared<QSet<QByteArray>>();
@@ -936,6 +938,8 @@ void SettingsWidget::createRendererSettings()
 
 #ifdef Q_OS_WIN
             bypassCompositor->setEnabled(!noExclusiveFullScreenDevIDs->contains(devices->itemData(idx).toByteArray()));
+#else
+            hdr->setVisible(false);
 #endif
         });
 
@@ -1005,6 +1009,7 @@ void SettingsWidget::createRendererSettings()
         hqDownscale->setChecked(settings->getBool("Vulkan/HQScaleDown"));
         hqUpscale->setChecked(settings->getBool("Vulkan/HQScaleUp"));
         bypassCompositor->setChecked(settings->getBool("Vulkan/BypassCompositor"));
+        hdr->setChecked(settings->getBool("Vulkan/HDR"));
 
         hqUpscale->setToolTip(tr("Very slow if used with sharpness"));
 
@@ -1017,6 +1022,7 @@ void SettingsWidget::createRendererSettings()
         layout->addRow(hqDownscale);
         layout->addRow(hqUpscale);
         layout->addRow(bypassCompositor);
+        layout->addRow(hdr);
 
         m_rendererApplyFunctions.push_back([=](bool &initFilters) {
             const bool alwaysGPUDeint = gpuDeint->isChecked();
@@ -1039,6 +1045,7 @@ void SettingsWidget::createRendererSettings()
             settings->set("Vulkan/HQScaleDown", hqDownscale->isChecked());
             settings->set("Vulkan/HQScaleUp", hqUpscale->isChecked());
             settings->set("Vulkan/BypassCompositor", bypassCompositor->isChecked());
+            settings->set("Vulkan/HDR", hdr->isChecked());
         });
 
         rendererStacked->addWidget(vulkanSetttings);

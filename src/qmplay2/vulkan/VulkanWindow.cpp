@@ -52,6 +52,11 @@ namespace QmVk {
 
 struct FrameProps
 {
+    bool isHdr10St2084() const
+    {
+        return (colorPrimaries == AVCOL_PRI_BT2020 && colorTrc == AVCOL_TRC_SMPTE2084);
+    }
+
     AVColorPrimaries colorPrimaries;
     AVColorTransferCharacteristic colorTrc;
     AVColorSpace colorSpace;
@@ -203,7 +208,8 @@ void Window::setConfig(
     Qt::CheckState vsync,
     bool hqScaleDown,
     bool hqScaleUp,
-    bool bypassCompositor)
+    bool bypassCompositor,
+    bool hdr)
 {
     if (m_vsync != vsync)
     {
@@ -236,6 +242,14 @@ void Window::setConfig(
             resetSwapChainAndGraphicsPipelines(false);
             maybeRequestUpdate();
         }
+    }
+    if (m_hdr != hdr)
+    {
+        m_hdr = hdr;
+        m.checkSurfaceColorSpace = true;
+        m.hdrSettingsChanged = true;
+        m.mustUpdateVideoPipelineSpecialization = true;
+        maybeRequestUpdate();
     }
 #endif
 }
@@ -318,6 +332,7 @@ void Window::setFrame(const Frame &frame, QMPlay2OSDList &&osdList)
     if (obtainFrameProps())
     {
         // Frame properties changed
+        m.checkSurfaceColorSpace = true;
         m.mustUpdateVideoPipelineSpecialization = true;
         m.mustUpdateFragUniform = true;
     }
@@ -495,6 +510,18 @@ void Window::render()
             handleException(e);
         }
     };
+
+    if (m.checkSurfaceColorSpace)
+    {
+        const bool surfaceMatchesFrameProps = (isHdr10St2084() == m_frameProps->isHdr10St2084());
+        if (m.renderPass && ((m.hasHdr10St2084 && !surfaceMatchesFrameProps) || (m.hdrSettingsChanged && m_hdr != surfaceMatchesFrameProps)))
+        {
+            resetSwapChainAndGraphicsPipelines(true);
+            m.renderPass.reset();
+        }
+        m.checkSurfaceColorSpace = false;
+        m.hdrSettingsChanged = false;
+    }
 
     try
     {
@@ -805,21 +832,46 @@ bool Window::ensureSurfaceAndRenderPass()
         return false;
     }
 
-    m.surface = QVulkanInstance::surfaceForWindow(this);
+    if (!m.surface)
+        m.surface = QVulkanInstance::surfaceForWindow(this);
     if (!m.surface)
         return false;
 
-    auto surfaceFormat = SwapChain::getSurfaceFormat(
-        m_physicalDevice->getSurfaceFormatsKHR(m.surface),
-        {
-            vk::Format::eA2B10G10R10UnormPack32,
-            vk::Format::eA2R10G10B10UnormPack32,
-            vk::Format::eB8G8R8A8Unorm,
-            vk::Format::eR8G8B8A8Unorm,
-        }
-    );
-    if (surfaceFormat == vk::Format::eUndefined)
+    const auto surfaceFormats = m_physicalDevice->getSurfaceFormatsKHR(m.surface);
+    if (surfaceFormats.empty())
         return false;
+
+    auto getSurfaceFormat = [&] {
+        return SwapChain::getSurfaceFormat(
+            surfaceFormats,
+            {
+                vk::Format::eA2B10G10R10UnormPack32,
+                vk::Format::eA2R10G10B10UnormPack32,
+                vk::Format::eB8G8R8A8Unorm,
+                vk::Format::eR8G8B8A8Unorm,
+            },
+            m.colorSpace
+        );
+    };
+
+    const auto prevColorSpace = m.colorSpace;
+
+    auto surfaceFormat = vk::Format::eUndefined;
+    if (m_hdr)
+    {
+        m.colorSpace = vk::ColorSpaceKHR::eHdr10St2084EXT;
+        surfaceFormat = getSurfaceFormat();
+    }
+    m.hasHdr10St2084 = (surfaceFormat != vk::Format::eUndefined);
+    if (!m.hasHdr10St2084 || !m_frameProps->isHdr10St2084())
+    {
+        m.colorSpace = vk::ColorSpaceKHR::eSrgbNonlinear;
+        surfaceFormat = getSurfaceFormat();
+    }
+    if (surfaceFormat == vk::Format::eUndefined)
+    {
+        surfaceFormat = surfaceFormats[0].format;
+    }
 
     m.renderPass = RenderPass::create(
         m.device,
@@ -827,6 +879,9 @@ bool Window::ensureSurfaceAndRenderPass()
         vk::ImageLayout::ePresentSrcKHR,
         m_useRenderPassClear
     );
+
+    if (m.colorSpace != prevColorSpace)
+        emit QMPlay2Core.updateInformationPanel();
 
     return true;
 }
@@ -883,6 +938,7 @@ void Window::ensureSwapChain()
     createInfo.fallbackSize = vk::Extent2D(winSize.width(), winSize.height());
     createInfo.presentModes = move(presentModes);
     createInfo.oldSwapChain = move(m.oldSwapChain);
+    createInfo.colorSpace = m.colorSpace;
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     createInfo.exclusiveFullScreen = m_widget->property("bypassCompositor").toBool()
         ? vk::FullScreenExclusiveEXT::eAllowed
@@ -1202,6 +1258,7 @@ void Window::obtainVideoPipelineSpecializationFrameProps()
 
     if (
         !m_frameProps->gray &&
+        !isHdr10St2084() &&
         isTrcSupported(m_frameProps->colorTrc) && (
             m_frameProps->colorTrc != AVCOL_TRC_BT709 || (
                 Functions::isColorPrimariesSupported(m_frameProps->colorPrimaries) &&

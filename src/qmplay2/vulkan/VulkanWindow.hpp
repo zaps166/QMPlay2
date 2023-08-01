@@ -67,7 +67,8 @@ public:
         Qt::CheckState vsync,
         bool hqScaleDown,
         bool hqScaleUp,
-        bool bypassCompositor
+        bool bypassCompositor,
+        bool hdr
     );
     void setParams(
         const QSize &size,
@@ -90,6 +91,8 @@ public:
     inline bool hasError() const;
 
     void setFrame(const Frame &frame, QMPlay2OSDList &&osdList);
+
+    inline bool isHdr10St2084() const;
 
 private:
     inline VideoPipelineSpecializationData *getVideoPipelineSpecializationData();
@@ -179,6 +182,8 @@ private:
 
         vk::SurfaceKHR surface;
 
+        bool hasHdr10St2084 = false;
+
         unique_lock<mutex> queueLocker;
 
         shared_ptr<ShaderModule> clearVertexShaderModule;
@@ -197,7 +202,11 @@ private:
         shared_ptr<SwapChain> swapChain;
         vk::UniqueSwapchainKHR oldSwapChain;
 
+        bool checkSurfaceColorSpace = false;
+        bool hdrSettingsChanged = false;
         bool mustUpdateVideoPipelineSpecialization = false;
+
+        vk::ColorSpaceKHR colorSpace = vk::ColorSpaceKHR::eSrgbNonlinear;
 
         shared_ptr<Buffer> fragUniform;
         bool mustUpdateFragUniform = false;
@@ -231,6 +240,7 @@ private:
     Qt::CheckState m_vsync = Qt::PartiallyChecked;
     bool m_hqScaleDown = false;
     bool m_hqScaleUp = false;
+    bool m_hdr = false;
 
     QSize m_imgSize;
     int m_flip = 0;
@@ -255,6 +265,11 @@ private:
 bool Window::hasError() const
 {
     return m_error;
+}
+
+bool Window::isHdr10St2084() const
+{
+    return (m.colorSpace == vk::ColorSpaceKHR::eHdr10St2084EXT);
 }
 
 }
