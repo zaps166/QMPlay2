@@ -191,6 +191,14 @@ void VideoThr::setZoom()
     updateSubs();
     writer->modParam("Zoom", playC.zoom);
 }
+
+void VideoThr::setColorInfo(AVColorPrimaries colorPrimaries, AVColorTransferCharacteristic colorTrc)
+{
+    if (writer->hasParam("ColorPrimaries"))
+        writer->modParam("ColorPrimaries", colorPrimaries);
+    if (writer->hasParam("ColorTrc"))
+        writer->modParam("ColorTrc", colorTrc);
+}
 void VideoThr::otherReset()
 {
     if (writer->hasParam("ResetOther"))

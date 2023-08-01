@@ -70,6 +70,7 @@ public:
     void setFrameSize(int w, int h);
     void setARatio(double aRatio, const AVRational &sar);
     void setZoom();
+    void setColorInfo(AVColorPrimaries colorPrimaries, AVColorTransferCharacteristic colorTrc);
     void otherReset();
 
     void initFilters();

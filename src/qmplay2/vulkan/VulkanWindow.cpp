@@ -250,7 +250,9 @@ void Window::setParams(
     float contrast,
     float hue,
     float saturation,
-    float sharpness)
+    float sharpness,
+    AVColorPrimaries colorPrimaries,
+    AVColorTransferCharacteristic colorTrc)
 {
     const bool flipRotateChanged = (m_flip != flip || m_rotate90 != rotate90);
 
@@ -289,6 +291,13 @@ void Window::setParams(
 
     if (setSphericalView(sphericalView) || (!m_sphericalView && flipRotateChanged))
         resetVerticesBuffer();
+
+    if (m_frameProps->numPlanes == 0)
+    {
+        // Set only if frame properties are not yet set
+        m_frameProps->colorPrimaries = colorPrimaries;
+        m_frameProps->colorTrc = colorTrc;
+    }
 
     updateSizesAndMatrix();
     maybeRequestUpdate();

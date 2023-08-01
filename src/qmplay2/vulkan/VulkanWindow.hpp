@@ -80,7 +80,9 @@ public:
         float contrast,
         float hue,
         float saturation,
-        float sharpness
+        float sharpness,
+        AVColorPrimaries colorPrimaries,
+        AVColorTransferCharacteristic colorTrc
     );
 
     AVPixelFormats supportedPixelFormats() const;

@@ -1374,6 +1374,7 @@ void PlayClass::load(Demuxer *demuxer)
                 const bool hasSpherical = vThr->setSpherical();
                 const bool hasRotate90 = vThr->setRotate90();
                 vThr->setFlip();
+                vThr->setColorInfo(streams[videoStream]->params->color_primaries, streams[videoStream]->params->color_trc);
                 vThr->initFilters();
 
                 bool mustEmitSetVideoCheckState = false;
