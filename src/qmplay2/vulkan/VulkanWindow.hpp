@@ -195,6 +195,8 @@ private:
         shared_ptr<SwapChain> swapChain;
         vk::UniqueSwapchainKHR oldSwapChain;
 
+        bool mustUpdateVideoPipelineSpecialization = false;
+
         shared_ptr<Buffer> fragUniform;
         bool mustUpdateFragUniform = false;
 

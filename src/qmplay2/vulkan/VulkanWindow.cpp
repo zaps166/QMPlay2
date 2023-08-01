@@ -306,6 +306,12 @@ void Window::setFrame(const Frame &frame, QMPlay2OSDList &&osdList)
         resetImages(false);
     m_frame = frame;
     m_frameChanged = true;
+    if (obtainFrameProps())
+    {
+        // Frame properties changed
+        m.mustUpdateVideoPipelineSpecialization = true;
+        m.mustUpdateFragUniform = true;
+    }
     maybeRequestUpdate();
 }
 
@@ -498,6 +504,9 @@ void Window::render()
 
         if (imageReady)
             loadImage();
+
+        if (m.mustUpdateVideoPipelineSpecialization)
+            obtainVideoPipelineSpecializationFrameProps();
 
         const bool mustGenerateMipmaps = this->mustGenerateMipmaps();
         const bool mipmapsUsed = ensureMipmaps(mustGenerateMipmaps);
@@ -1133,13 +1142,6 @@ void Window::loadImage()
     {
         m.shouldUpdateImageOptimalTiling = true;
         m_format = newFormat;
-
-        const bool framePropsChanged = obtainFrameProps();
-        if (framePropsChanged)
-        {
-            obtainVideoPipelineSpecializationFrameProps();
-            m.mustUpdateFragUniform = true;
-        }
     }
 
     m_frameChanged = false;
@@ -1204,6 +1206,8 @@ void Window::obtainVideoPipelineSpecializationFrameProps()
     {
         specializationData->trc = 0;
     }
+
+    m.mustUpdateVideoPipelineSpecialization = false;
 }
 
 void Window::fillVideoPipelineFragmentUniform()
