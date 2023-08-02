@@ -71,6 +71,7 @@ private:
 #ifdef USE_YOUTUBE
     QCheckBox *userNameB, *subtitlesB;
     QComboBox *m_preferredCodec, *qualityPreset;
+    QCheckBox *m_allowVp9Hdr;
 #endif
 
 #ifdef USE_LASTFM

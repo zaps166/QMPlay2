@@ -177,6 +177,7 @@ private:
 
     QMutex m_itagsMutex;
     PreferredCodec m_preferredCodec = PreferredCodec::VP9;
+    bool m_allowVp9Hdr = false;
     QVector<int> m_videoItags, m_audioItags, m_hlsItags, m_singleUrlItags;
 
     QString m_apiKey, m_clientName, m_clientVersion, m_continuationToken;

@@ -185,6 +185,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     idx = qualityPreset->findText(sets().getString("YouTube/QualityPreset"));
     qualityPreset->setCurrentIndex(idx > -1 ? idx : 3);
 
+    m_allowVp9Hdr = new QCheckBox(tr("Allow HDR content for VP9 codec"));
+    m_allowVp9Hdr->setChecked(sets().getBool("YouTube/AllowVp9HDR"));
+
     layout = new QGridLayout(youTubeB);
     layout->addWidget(userNameB, 0, 0, 1, 2);
     layout->addWidget(subtitlesB, 1, 0, 1, 2);
@@ -192,6 +195,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     layout->addWidget(m_preferredCodec, 2, 1, 1, 1);
     layout->addWidget(new QLabel(tr("Preferred quality") + ": "), 3, 0, 1, 1);
     layout->addWidget(qualityPreset, 3, 1, 1, 1);
+    layout->addWidget(m_allowVp9Hdr, 4, 0, 1, 2);
     layout->setContentsMargins(2, 2, 2, 2);
 #endif
 
@@ -269,6 +273,7 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("YouTube/Subtitles", subtitlesB->isChecked());
     sets().set("YouTube/QualityPreset", qualityPreset->currentText());
     sets().set("YouTube/PreferredCodec", m_preferredCodec->currentText());
+    sets().set("YouTube/AllowVp9HDR", m_allowVp9Hdr->isChecked());
 #endif
 
 #ifdef USE_LASTFM
