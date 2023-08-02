@@ -1871,7 +1871,7 @@
     </message>
     <message>
         <source>Allow HDR content for VP9 codec</source>
-        <translation type="unfinished"></translation>
+        <translation>允许 VP9 编解码器使用 HDR 内容</translation>
     </message>
 </context>
 <context>
@@ -3191,7 +3191,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>尝试在 HDR 模式显示 HDR10 视频（实验）</translation>
     </message>
 </context>
 <context>
