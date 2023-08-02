@@ -998,7 +998,7 @@ void Window::ensureVideoPipeline()
         vertexAttrDescrs[1].format = vk::Format::eR32G32Sfloat;
         vertexAttrDescrs[1].offset = 0;
 
-        vk::PipelineColorBlendAttachmentState colorBlendAttachment = {};
+        vk::PipelineColorBlendAttachmentState colorBlendAttachment;
         colorBlendAttachment.colorWriteMask =
             vk::ColorComponentFlagBits::eR |
             vk::ColorComponentFlagBits::eG |
