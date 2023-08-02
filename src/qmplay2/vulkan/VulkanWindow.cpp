@@ -952,12 +952,21 @@ void Window::ensureClearPipeline()
     if (m_useRenderPassClear || m.clearPipeline)
         return;
 
+    vk::PipelineColorBlendAttachmentState colorBlendAttachment = {};
+    colorBlendAttachment.colorWriteMask =
+        vk::ColorComponentFlagBits::eR |
+        vk::ColorComponentFlagBits::eG |
+        vk::ColorComponentFlagBits::eB |
+        vk::ColorComponentFlagBits::eA
+    ;
+
     GraphicsPipeline::CreateInfo createInfo;
     createInfo.device = m.device;
     createInfo.vertexShaderModule = m.clearVertexShaderModule;
     createInfo.fragmentShaderModule = m.clearFragmentShaderModule;
     createInfo.renderPass = m.renderPass;
     createInfo.size = m.swapChain->size();
+    createInfo.colorBlendAttachment = &colorBlendAttachment;
     m.clearPipeline = GraphicsPipeline::create(createInfo);
     m.clearPipeline->prepare();
 }
@@ -989,6 +998,13 @@ void Window::ensureVideoPipeline()
         vertexAttrDescrs[1].format = vk::Format::eR32G32Sfloat;
         vertexAttrDescrs[1].offset = 0;
 
+        vk::PipelineColorBlendAttachmentState colorBlendAttachment = {};
+        colorBlendAttachment.colorWriteMask =
+            vk::ColorComponentFlagBits::eR |
+            vk::ColorComponentFlagBits::eG |
+            vk::ColorComponentFlagBits::eB
+        ;
+
         GraphicsPipeline::CreateInfo createInfo;
         createInfo.device = m.device;
         createInfo.vertexShaderModule = m.vertexShaderModule;
@@ -998,6 +1014,7 @@ void Window::ensureVideoPipeline()
         createInfo.pushConstantsSize = sizeof(VertPushConstants);
         createInfo.vertexBindingDescrs = move(vertexBindingDescrs);
         createInfo.vertexAttrDescrs = move(vertexAttrDescrs);
+        createInfo.colorBlendAttachment = &colorBlendAttachment;
         m.videoPipeline = GraphicsPipeline::create(createInfo);
     }
 
