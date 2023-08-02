@@ -106,19 +106,42 @@ vec3 getBicubic(in vec2 uv) // CatmullRom
     texPos3 /= texSize;
     texPos12 /= texSize;
 
-    return
-        getBilinear(vec2(texPos0.x,  texPos0.y)) * w0.x  * w0.y +
-        getBilinear(vec2(texPos12.x, texPos0.y)) * w12.x * w0.y +
-        getBilinear(vec2(texPos3.x,  texPos0.y)) * w3.x  * w0.y +
+    if (hasLuma)
+    {
+        // Luminance only
+        return vec3(
+            getBilinear(vec2(texPos0.x,  texPos0.y))[0] * w0.x  * w0.y +
+            getBilinear(vec2(texPos12.x, texPos0.y))[0] * w12.x * w0.y +
+            getBilinear(vec2(texPos3.x,  texPos0.y))[0] * w3.x  * w0.y +
 
-        getBilinear(vec2(texPos0.x,  texPos12.y)) * w0.x  * w12.y +
-        getBilinear(vec2(texPos12.x, texPos12.y)) * w12.x * w12.y +
-        getBilinear(vec2(texPos3.x,  texPos12.y)) * w3.x  * w12.y +
+            getBilinear(vec2(texPos0.x,  texPos12.y))[0] * w0.x  * w12.y +
+            getBilinear(vec2(texPos12.x, texPos12.y))[0] * w12.x * w12.y +
+            getBilinear(vec2(texPos3.x,  texPos12.y))[0] * w3.x  * w12.y +
 
-        getBilinear(vec2(texPos0.x,  texPos3.y)) * w0.x  * w3.y +
-        getBilinear(vec2(texPos12.x, texPos3.y)) * w12.x * w3.y +
-        getBilinear(vec2(texPos3.x,  texPos3.y)) * w3.x  * w3.y
-    ;
+            getBilinear(vec2(texPos0.x,  texPos3.y))[0] * w0.x  * w3.y +
+            getBilinear(vec2(texPos12.x, texPos3.y))[0] * w12.x * w3.y +
+            getBilinear(vec2(texPos3.x,  texPos3.y))[0] * w3.x  * w3.y,
+
+            getBilinear(uv).yz
+        );
+    }
+    else
+    {
+        // All channels
+        return vec3(
+            getBilinear(vec2(texPos0.x,  texPos0.y)) * w0.x  * w0.y +
+            getBilinear(vec2(texPos12.x, texPos0.y)) * w12.x * w0.y +
+            getBilinear(vec2(texPos3.x,  texPos0.y)) * w3.x  * w0.y +
+
+            getBilinear(vec2(texPos0.x,  texPos12.y)) * w0.x  * w12.y +
+            getBilinear(vec2(texPos12.x, texPos12.y)) * w12.x * w12.y +
+            getBilinear(vec2(texPos3.x,  texPos12.y)) * w3.x  * w12.y +
+
+            getBilinear(vec2(texPos0.x,  texPos3.y)) * w0.x  * w3.y +
+            getBilinear(vec2(texPos12.x, texPos3.y)) * w12.x * w3.y +
+            getBilinear(vec2(texPos3.x,  texPos3.y)) * w3.x  * w3.y
+        );
+    }
 }
 
 // HSL <-> RGB converter is not written by me
