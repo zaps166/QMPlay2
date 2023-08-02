@@ -411,20 +411,6 @@ void Window::initResources() try
 
     m.queue = m.device->queue();
 
-    if (!m_useRenderPassClear)
-    {
-        m.clearVertexShaderModule = ShaderModule::create(
-            m.device,
-            vk::ShaderStageFlagBits::eVertex,
-            Instance::readShader("clear.vert")
-        );
-        m.clearFragmentShaderModule = ShaderModule::create(
-            m.device,
-            vk::ShaderStageFlagBits::eFragment,
-            Instance::readShader("clear.frag")
-        );
-    }
-
     m.vertexShaderModule = ShaderModule::create(
         m.device,
         vk::ShaderStageFlagBits::eVertex,
@@ -552,7 +538,6 @@ void Window::render()
 
         ensureBicubic();
 
-        ensureClearPipeline();
         ensureVideoPipeline();
 
         if (m.mustUpdateFragUniform)
@@ -670,8 +655,13 @@ void Window::maybeClear(uint32_t imageIdx)
     if (m_useRenderPassClear || m_sphericalView || m.clearedImages.count(imageIdx) > 0)
         return;
 
-    m.clearPipeline->recordCommands(m.commandBuffer);
-    draw4Vertices();
+    vk::ClearAttachment clearAttachment;
+    clearAttachment.aspectMask = vk::ImageAspectFlagBits::eColor;
+    clearAttachment.clearValue.color.float32[3] = 1.0f;
+
+    vk::ClearRect clearRect(vk::Rect2D(vk::Offset2D(), m.swapChain->size()), 0, 1);
+
+    m.commandBuffer->clearAttachments(clearAttachment, clearRect);
 
     m.clearedImages.insert(imageIdx);
 }
@@ -946,29 +936,6 @@ void Window::ensureSwapChain()
     ;
 #endif
     m.swapChain = SwapChain::create(createInfo);
-}
-void Window::ensureClearPipeline()
-{
-    if (m_useRenderPassClear || m.clearPipeline)
-        return;
-
-    vk::PipelineColorBlendAttachmentState colorBlendAttachment = {};
-    colorBlendAttachment.colorWriteMask =
-        vk::ColorComponentFlagBits::eR |
-        vk::ColorComponentFlagBits::eG |
-        vk::ColorComponentFlagBits::eB |
-        vk::ColorComponentFlagBits::eA
-    ;
-
-    GraphicsPipeline::CreateInfo createInfo;
-    createInfo.device = m.device;
-    createInfo.vertexShaderModule = m.clearVertexShaderModule;
-    createInfo.fragmentShaderModule = m.clearFragmentShaderModule;
-    createInfo.renderPass = m.renderPass;
-    createInfo.size = m.swapChain->size();
-    createInfo.colorBlendAttachment = &colorBlendAttachment;
-    m.clearPipeline = GraphicsPipeline::create(createInfo);
-    m.clearPipeline->prepare();
 }
 void Window::ensureVideoPipeline()
 {
@@ -1488,7 +1455,6 @@ void Window::resetSwapChainAndGraphicsPipelines(bool takeOldSwapChain) try
 
     m.commandBuffer->resetStoredData();
 
-    m.clearPipeline.reset();
     m.videoPipeline.reset();
     m.osdAvPipeline.reset();
     m.osdAssPipeline.reset();

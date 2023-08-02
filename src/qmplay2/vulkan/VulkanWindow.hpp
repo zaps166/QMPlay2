@@ -125,7 +125,6 @@ private:
 
     bool ensureSurfaceAndRenderPass();
     void ensureSwapChain();
-    void ensureClearPipeline();
     void ensureVideoPipeline();
 
     void resetVerticesBuffer();
@@ -186,9 +185,6 @@ private:
 
         unique_lock<mutex> queueLocker;
 
-        shared_ptr<ShaderModule> clearVertexShaderModule;
-        shared_ptr<ShaderModule> clearFragmentShaderModule;
-
         shared_ptr<ShaderModule> vertexShaderModule;
         shared_ptr<ShaderModule> fragmentShaderModule;
 
@@ -221,7 +217,6 @@ private:
         bool imageFromFrame = false;
         bool shouldUpdateImageOptimalTiling = false;
 
-        shared_ptr<GraphicsPipeline> clearPipeline;
         set<uint32_t> clearedImages;
 
         shared_ptr<GraphicsPipeline> videoPipeline;
