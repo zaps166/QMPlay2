@@ -166,8 +166,6 @@ if(USE_VULKAN)
         vulkan/VulkanYadifDeint.cpp
     )
     set(VULKAN_SHADERS
-        vulkan/shaders/clear.frag
-        vulkan/shaders/clear.vert
         vulkan/shaders/osd.vert
         vulkan/shaders/osd_ass.frag
         vulkan/shaders/osd_av.frag
