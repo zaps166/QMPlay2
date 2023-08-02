@@ -1869,6 +1869,10 @@
         <source>Maximum:</source>
         <translation>Максимум:</translation>
     </message>
+    <message>
+        <source>Allow HDR content for VP9 codec</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3184,6 +3188,10 @@ Partially checked only if the content has less channels than the specified value
         <translation>Примусово використовувати вказану кількість аудіоканалів.
 Частково вибране не зменшить кількість каналів
 	(напр., перетворить моно на стерео, але квадрафонічний звук не буде перетворено на стерео)</translation>
+    </message>
+    <message>
+        <source>Try to display HDR10 videos in HDR mode (experimental)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1868,6 +1868,10 @@
         <source>Maximum:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Allow HDR content for VP9 codec</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3183,6 +3187,10 @@ Partially checked only if the content has less channels than the specified value
         <translation>Erzwingt die ausgewählte Anzahl von Audiokanälen.
 Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
 (z. B. wird Mono in Stereo umgewandelt, aber quadrophonisches Audio wird nicht in Stereo umgewandelt)</translation>
+    </message>
+    <message>
+        <source>Try to display HDR10 videos in HDR mode (experimental)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

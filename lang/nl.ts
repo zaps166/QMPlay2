@@ -1869,6 +1869,10 @@
         <source>Maximum:</source>
         <translation>Maximum:</translation>
     </message>
+    <message>
+        <source>Allow HDR content for VP9 codec</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3184,6 +3188,10 @@ Partially checked only if the content has less channels than the specified value
         <translation>Speel de audio af via het opgegeven aantal kanalen.
 Deels aankruisen = minder kanalen dan de opgegeven waarde
 	(bijv. mono naar stereo, maar niet quadrophonisch naar stereo)</translation>
+    </message>
+    <message>
+        <source>Try to display HDR10 videos in HDR mode (experimental)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1877,6 +1877,10 @@
         <source>Maximum:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Allow HDR content for VP9 codec</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3204,6 +3208,10 @@ Partially checked only if the content has less channels than the specified value
         <translation>Ses içeriğini belirtilen sayıda kanalı kullanmaya zorla.
 Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretlenir
 	(örneğin, mono&apos;yu stereo&apos;ya yükselt, ancak quadrophonic&apos;i stereo&apos;ya düşürme)</translation>
+    </message>
+    <message>
+        <source>Try to display HDR10 videos in HDR mode (experimental)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

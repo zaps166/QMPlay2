@@ -1869,6 +1869,10 @@
         <source>Maximum:</source>
         <translation>最高：</translation>
     </message>
+    <message>
+        <source>Allow HDR content for VP9 codec</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3184,6 +3188,10 @@ Partially checked only if the content has less channels than the specified value
         <translation>強制音訊內容使用指定的聲道數。
 僅在內容聲道數少於指定值時為部份勾選
 	（例如將單聲道升為立體聲但不將四聲道降為立體聲）</translation>
+    </message>
+    <message>
+        <source>Try to display HDR10 videos in HDR mode (experimental)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

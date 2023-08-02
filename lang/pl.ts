@@ -1869,6 +1869,10 @@
         <source>Maximum:</source>
         <translation>Maksymalny:</translation>
     </message>
+    <message>
+        <source>Allow HDR content for VP9 codec</source>
+        <translation>Zazwalaj na zawartość HDR dla kodeka VP9</translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3184,6 +3188,10 @@ Partially checked only if the content has less channels than the specified value
         <translation>Wymuś wybraną liczbę kanałów dźwięku.
 Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
 	(np. skonwertuje mono do stereo, ale dźwięk kwadrofoniczny nie zostanie skonwertowany do stereo)</translation>
+    </message>
+    <message>
+        <source>Try to display HDR10 videos in HDR mode (experimental)</source>
+        <translation>Spróbuj wyświetlić filmy HDR10 w trybie HDR</translation>
     </message>
 </context>
 <context>

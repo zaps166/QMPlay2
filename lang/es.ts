@@ -1869,6 +1869,10 @@
         <source>Maximum:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Allow HDR content for VP9 codec</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -3179,6 +3183,10 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
         <source>Force audio content to use the specified number of channels.
 Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Try to display HDR10 videos in HDR mode (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
