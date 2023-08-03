@@ -495,7 +495,7 @@ void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalD
     for (auto &&physicalDevice : physicalDevices)
     {
         const auto type = physicalDevice->properties().deviceType;
-        if (type == vk::PhysicalDeviceType::eIntegratedGpu || type == vk::PhysicalDeviceType::eDiscreteGpu)
+        if (type != vk::PhysicalDeviceType::eOther && type != vk::PhysicalDeviceType::eCpu)
             ++nGpus;
     }
     if (nGpus <= 1)
