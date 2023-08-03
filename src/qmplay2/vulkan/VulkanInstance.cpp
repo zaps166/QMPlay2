@@ -25,6 +25,7 @@
 #include "VulkanImagePool.hpp"
 #include "VulkanWriter.hpp"
 
+#include <QGuiApplication>
 #include <QVulkanInstance>
 #include <QResource>
 #include <QLibrary>
@@ -38,6 +39,76 @@
 #endif
 
 namespace QmVk {
+
+static QFileInfo getPrimaryX11CardFile()
+{
+    // FIXME: Is it better way to ask X11 about primary GPU?
+
+    if (QGuiApplication::platformName() != "xcb")
+        return QFileInfo();
+
+    QLibrary libX11("libX11.so.6");
+    QLibrary libEGL("libEGL.so.1");
+    if (!libX11.load() || !libEGL.load())
+        return QFileInfo();
+
+    using XOpenDisplayType = void *(*)(const char *name);
+    using XCloseDisplayType = int (*)(void *display);
+
+    auto XOpenDisplayFunc = (XOpenDisplayType)libX11.resolve("XOpenDisplay");
+    auto XCloseDisplayFunc = (XCloseDisplayType)libX11.resolve("XCloseDisplay");
+    if (!XOpenDisplayFunc || !XCloseDisplayFunc)
+        return QFileInfo();
+
+    using eglGetProcAddressType = void *(*)(const char *);
+    using eglGetDisplayType = void *(*)(void *);
+    using eglInitializeType = unsigned (*)(void *, int *, int *);
+    using eglQueryStringType = const char *(*)(void *, int);
+    using eglQueryDisplayAttribEXTType = unsigned (*)(void *, int, void *);
+    using eglTerminateType = unsigned (*)(void *);
+
+    auto eglGetProcAddress = (eglGetProcAddressType)libEGL.resolve("eglGetProcAddress");
+    auto eglGetDisplayFunc = (eglGetDisplayType)libEGL.resolve("eglGetDisplay");
+    auto eglInitializeFunc = (eglInitializeType)libEGL.resolve("eglInitialize");
+    auto eglQueryStringFunc = (eglQueryStringType)libEGL.resolve("eglQueryString");
+    auto eglTerminateFunc = (eglTerminateType)libEGL.resolve("eglTerminate");
+    if (!eglGetProcAddress || !eglGetDisplayFunc || !eglInitializeFunc || !eglQueryStringFunc || !eglTerminateFunc)
+        return QFileInfo();
+
+    auto dpy = XOpenDisplayFunc(nullptr);
+    if (!dpy)
+        return QFileInfo();
+
+    QByteArray cardFilePath;
+
+    auto eglDpy = eglGetDisplayFunc(dpy);
+    if (eglDpy && eglInitializeFunc(eglDpy, nullptr, nullptr))
+    {
+        constexpr int EGLExtensions = 0x3055;
+        const bool hasDeviceQuery = QByteArray(eglQueryStringFunc(nullptr, EGLExtensions)).contains("EGL_EXT_device_query");
+
+        auto eglQueryDisplayAttribEXTFunc = (eglQueryDisplayAttribEXTType)eglGetProcAddress("eglQueryDisplayAttribEXT");
+        auto eglQueryDeviceStringEXTFunc = (eglQueryStringType)eglGetProcAddress("eglQueryDeviceStringEXT");
+
+        if (hasDeviceQuery && eglQueryDisplayAttribEXTFunc && eglQueryDeviceStringEXTFunc)
+        {
+            constexpr int EGLDeviceExt = 0x322C;
+            constexpr int EGLDrmDeviceFileExt = 0x3233;
+            void *eglDev = nullptr;
+            if (eglQueryDisplayAttribEXTFunc(eglDpy, EGLDeviceExt, &eglDev) && eglDev)
+            {
+                if (const char *file = eglQueryDeviceStringEXTFunc(eglDev, EGLDrmDeviceFileExt))
+                    cardFilePath = file;
+            }
+        }
+
+        eglTerminateFunc(eglDpy);
+    }
+
+    XCloseDisplayFunc(dpy);
+
+    return QFileInfo(cardFilePath);
+}
 
 constexpr auto s_queueFlags = vk::QueueFlagBits::eGraphics | vk::QueueFlagBits::eCompute;
 
@@ -435,6 +506,7 @@ void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalD
         physicalDevices.erase(it);
         physicalDevices.insert(physicalDevices.begin(), move(primaryPhysicalDevice));
     };
+
 #if defined(Q_OS_WIN)
     for (DWORD devIdx = 0;; ++devIdx)
     {
@@ -467,6 +539,16 @@ void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalD
         break;
     }
 #elif defined(Q_OS_LINUX)
+    auto maybeSetAsFirst = [&](const QString &nameWithPath) {
+        auto it = find_if(physicalDevices.begin(), physicalDevices.end(), [&](const shared_ptr<PhysicalDevice> &physicalDevice) {
+            return nameWithPath.contains(QString::fromStdString(physicalDevice->linuxPCIPath()));
+        });
+        if (it != physicalDevices.begin() && it != physicalDevices.end())
+        {
+            setAsFirst(it);
+        }
+    };
+
     const auto cards = QDir("/sys/class/drm").entryInfoList({"renderD*"}, QDir::Dirs);
     for (auto &&card : cards)
     {
@@ -474,15 +556,22 @@ void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalD
         char c = 0;
         if (f.open(QFile::ReadOnly) && f.getChar(&c) && c == '1')
         {
-            const auto cardRealPath = card.symLinkTarget();
-            auto it = find_if(physicalDevices.begin(), physicalDevices.end(), [&](const shared_ptr<PhysicalDevice> &physicalDevice) {
-                return cardRealPath.contains(QString::fromStdString(physicalDevice->linuxPCIPath()));
-            });
-            if (it != physicalDevices.begin() && it != physicalDevices.end())
-            {
-                setAsFirst(it);
-            }
+            maybeSetAsFirst(card.symLinkTarget());
             break;
+        }
+    }
+
+    const auto primaryCard = getPrimaryX11CardFile();
+    if (primaryCard.exists())
+    {
+        const auto cards = QDir("/dev/dri/by-path").entryInfoList({"*-card"}, QDir::Files);
+        for (auto &&card : cards)
+        {
+            if (card.symLinkTarget() == primaryCard.filePath())
+            {
+                maybeSetAsFirst(card.fileName());
+                break;
+            }
         }
     }
 #else
