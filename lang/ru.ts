@@ -3158,10 +3158,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Поддерживаемые устройства не найдены</translation>
     </message>
     <message>
-        <source>Partially checked (default):
+        <source>Partially checked:
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation>Частично включено (по умолчанию):
+        <translation>Частично включено:
   - MAILBOX (без тиринга) — предпочтительный режим представления
   - FIFO (V-Sync) не должен использоваться в оконном режиме</translation>
     </message>
@@ -3191,6 +3191,14 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Low quality image scaling (nearest neighbor)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -3158,10 +3158,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <translation>Nie znaleziono obsługiwanych urządzeń</translation>
     </message>
     <message>
-        <source>Partially checked (default):
+        <source>Partially checked:
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation>Częściowo zaznaczone (domyślne):
+        <translation>Częściowo zaznaczone:
   - MAILBOX (tear-free) jest to preferowany tryb prezentacji
   - FIFO (V-Sync) nie powinien być używany w trybie okienkowym</translation>
     </message>
@@ -3192,6 +3192,14 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
         <translation>Spróbuj wyświetlić filmy HDR10 w trybie HDR</translation>
+    </message>
+    <message>
+        <source>Low quality image scaling (nearest neighbor)</source>
+        <translation>Niska jakość skalowana obrazu (nearest neighbor)</translation>
+    </message>
+    <message>
+        <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
+        <translation>Przydatne do skalowania retro. Może być również używane do programowej implementacji Vulkan w celu obniżenia obciążenia procesora.</translation>
     </message>
 </context>
 <context>

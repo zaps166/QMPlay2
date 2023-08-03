@@ -3157,10 +3157,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <translation>Keine unterstützten Geräte gefunden</translation>
     </message>
     <message>
-        <source>Partially checked (default):
+        <source>Partially checked:
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation>Teilweise geprüft (Standard):
+        <translation>Teilweise geprüft:
   - MAILBOX (reißfrei) ist der bevorzugte derzeitige Modus
   - FIFO (V-Sync) sollte nicht im Fenstermodus verwendet werden</translation>
     </message>
@@ -3190,6 +3190,14 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Low quality image scaling (nearest neighbor)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

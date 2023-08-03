@@ -3177,11 +3177,11 @@ Kısmen işaretli, kaydırıcıda aramayı etkilemez.</translation>
         <translation>Desteklenen aygıt yok</translation>
     </message>
     <message>
-        <source>Partially checked (default):
+        <source>Partially checked:
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
         <translatorcomment>Tear: Ekran yırtılması diye geçen bir durum. Bkz: https://www.displayninja.com/what-is-screen-tearing/</translatorcomment>
-        <translation>Kısmen işaretli (varsayılan):
+        <translation>Kısmen işaretli:
   - MAILBOX (tear-free/yırtılmasız) tercih edilen mevcut kip
   - FIFO (V-Sync) pencereli kipte kullanılmamalıdır</translation>
     </message>
@@ -3211,6 +3211,14 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Low quality image scaling (nearest neighbor)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
