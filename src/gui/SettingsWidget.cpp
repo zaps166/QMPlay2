@@ -915,10 +915,17 @@ void SettingsWidget::createRendererSettings()
         auto vsync = createVSync();
         auto gpuDeint = new QCheckBox(tr("Use GPU deinterlacing for CPU-decoded video"));
         auto forceYadif = new QCheckBox(tr("Force Vulkan Yadif deinterlacing for all hardware decoders"));
+        auto nearestScaling = new QCheckBox(tr("Low quality image scaling (nearest neighbor)"));
         auto hqDownscale = new QCheckBox(tr("High quality image scaling down"));
         auto hqUpscale = new QCheckBox(tr("High quality image scaling up"));
         auto bypassCompositor = createBypassCompositor();
         auto hdr = new QCheckBox(tr("Try to display HDR10 videos in HDR mode (experimental)"));
+
+        connect(nearestScaling, &QCheckBox::toggled,
+                this, [=](bool checked) {
+            hqDownscale->setEnabled(!checked);
+            hqUpscale->setEnabled(!checked);
+        });
 
 #ifdef Q_OS_WIN
         auto noExclusiveFullScreenDevIDs = std::make_shared<QSet<QByteArray>>();
@@ -1006,11 +1013,13 @@ void SettingsWidget::createRendererSettings()
         vsync->setCheckState(settings->getWithBounds("Vulkan/VSync", Qt::Unchecked, Qt::Checked));
         gpuDeint->setChecked(settings->getBool("Vulkan/AlwaysGPUDeint"));
         forceYadif->setChecked(settings->getBool("Vulkan/ForceVulkanYadif"));
+        nearestScaling->setChecked(settings->getBool("Vulkan/NearestScaling"));
         hqDownscale->setChecked(settings->getBool("Vulkan/HQScaleDown"));
         hqUpscale->setChecked(settings->getBool("Vulkan/HQScaleUp"));
         bypassCompositor->setChecked(settings->getBool("Vulkan/BypassCompositor"));
         hdr->setChecked(settings->getBool("Vulkan/HDR"));
 
+        nearestScaling->setToolTip(tr("Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead."));
         hqUpscale->setToolTip(tr("Very slow if used with sharpness"));
 
         auto layout = new QFormLayout(vulkanSetttings);
@@ -1019,6 +1028,7 @@ void SettingsWidget::createRendererSettings()
         layout->addRow(vsync);
         layout->addRow(gpuDeint);
         layout->addRow(forceYadif);
+        layout->addRow(nearestScaling);
         layout->addRow(hqDownscale);
         layout->addRow(hqUpscale);
         layout->addRow(bypassCompositor);
@@ -1042,6 +1052,7 @@ void SettingsWidget::createRendererSettings()
             settings->set("Vulkan/VSync", vsync->checkState());
             settings->set("Vulkan/AlwaysGPUDeint", alwaysGPUDeint);
             settings->set("Vulkan/ForceVulkanYadif", forceYadif->isChecked());
+            settings->set("Vulkan/NearestScaling", nearestScaling->isChecked());
             settings->set("Vulkan/HQScaleDown", hqDownscale->isChecked());
             settings->set("Vulkan/HQScaleUp", hqUpscale->isChecked());
             settings->set("Vulkan/BypassCompositor", bypassCompositor->isChecked());

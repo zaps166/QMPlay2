@@ -65,6 +65,7 @@ public:
 
     void setConfig(
         Qt::CheckState vsync,
+        bool nearestScaling,
         bool hqScaleDown,
         bool hqScaleUp,
         bool bypassCompositor,
@@ -141,6 +142,8 @@ private:
     bool mustGenerateMipmaps();
 
     bool ensureSupportedSampledImage(bool mustGenerateMipmaps);
+
+    void ensureSampler();
 
     void ensureBicubic();
 
@@ -233,6 +236,7 @@ private:
     set<uint64_t> m_osdIDs;
 
     Qt::CheckState m_vsync = Qt::PartiallyChecked;
+    bool m_nearestScaling = false;
     bool m_hqScaleDown = false;
     bool m_hqScaleUp = false;
     bool m_hdr = false;

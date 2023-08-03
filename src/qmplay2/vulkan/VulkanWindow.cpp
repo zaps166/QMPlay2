@@ -206,15 +206,27 @@ void Window::deleteWidget()
 
 void Window::setConfig(
     Qt::CheckState vsync,
+    bool nearestScaling,
     bool hqScaleDown,
     bool hqScaleUp,
     bool bypassCompositor,
     bool hdr)
 {
+    if (nearestScaling)
+    {
+        hqScaleDown = false;
+        hqScaleUp = false;
+    }
+
     if (m_vsync != vsync)
     {
         m_vsync = vsync;
         resetSwapChainAndGraphicsPipelines(true);
+        maybeRequestUpdate();
+    }
+    if (m_nearestScaling != nearestScaling)
+    {
+        m_nearestScaling = nearestScaling;
         maybeRequestUpdate();
     }
     if (m_hqScaleDown != hqScaleDown)
@@ -441,8 +453,6 @@ void Window::initResources() try
     m.commandBuffer = CommandBuffer::create(m.queue);
 
     m.fragUniform = Buffer::createUniformWrite(m.device, sizeof(FragUniform));
-
-    m.sampler = Sampler::createLinear(m.device);
 } catch (const vk::SystemError &e) {
     handleException(e);
 }
@@ -535,6 +545,8 @@ void Window::render()
         const bool imageOptimalCopied = ensureSupportedSampledImage(mustGenerateMipmaps);
         if (!mipmapsUsed && !imageOptimalCopied)
             m.imageOptimalTiling.reset();
+
+        ensureSampler();
 
         ensureBicubic();
 
@@ -1413,6 +1425,20 @@ bool Window::ensureSupportedSampledImage(bool mustGenerateMipmaps)
     }
 
     return true;
+}
+
+void Window::ensureSampler()
+{
+    if (m.sampler && m_nearestScaling == (m.sampler->createInfo().magFilter == vk::Filter::eNearest))
+        return;
+
+    m.sampler.reset();
+    m.sampler = Sampler::createClampToEdge(
+        m.device,
+        m_nearestScaling
+            ? vk::Filter::eNearest
+            : vk::Filter::eLinear
+    );
 }
 
 void Window::ensureBicubic()

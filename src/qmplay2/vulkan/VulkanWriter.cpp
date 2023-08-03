@@ -73,6 +73,7 @@ bool Writer::set()
 
     m_window->setConfig(
         sets.getWithBounds("Vulkan/VSync", Qt::Unchecked, Qt::Checked),
+        sets.getBool("Vulkan/NearestScaling"),
         sets.getBool("Vulkan/HQScaleDown"),
         sets.getBool("Vulkan/HQScaleUp"),
         sets.getBool("Vulkan/BypassCompositor"),
