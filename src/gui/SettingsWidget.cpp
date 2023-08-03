@@ -986,7 +986,7 @@ void SettingsWidget::createRendererSettings()
 
         vsync->setTristate(true);
         vsync->setToolTip(tr(
-            "Partially checked (default):\n"
+            "Partially checked:\n"
             "  - MAILBOX (tear-free) is the preferred present mode\n"
             "  - FIFO (V-Sync) should not be used in windowed mode"
         ));
