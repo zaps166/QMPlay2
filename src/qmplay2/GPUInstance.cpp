@@ -26,7 +26,6 @@
 #endif
 #ifdef USE_VULKAN
 #   include <vulkan/VulkanInstance.hpp>
-#   include "../qmvk/PhysicalDevice.hpp"
 #endif
 #include <VideoWriter.hpp>
 
@@ -44,9 +43,7 @@ shared_ptr<GPUInstance> GPUInstance::create()
     {
         auto vkInstance = QmVk::Instance::create();
 #   ifdef USE_OPENGL
-        const auto type = vkInstance->physicalDevice()->properties().deviceType;
-        const bool notGpu = (type == vk::PhysicalDeviceType::eOther || type == vk::PhysicalDeviceType::eCpu);
-        if (notGpu && !sets.getBool("Vulkan/UserApplied"))
+        if (!vkInstance->isPhysicalDeviceGpu() && !sets.getBool("Vulkan/UserApplied"))
         {
             QOffscreenSurface surface;
             QOpenGLContext glCtx;

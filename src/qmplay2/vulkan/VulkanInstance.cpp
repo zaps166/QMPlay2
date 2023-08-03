@@ -337,6 +337,13 @@ void Instance::obtainPhysicalDevice()
     fillSupportedFormats();
 }
 
+bool Instance::isPhysicalDeviceGpu() const
+{
+    if (m_physicalDevice)
+        return m_physicalDevice->isGpu();
+    return false;
+}
+
 AVPixelFormats Instance::supportedPixelFormats() const
 {
     return m_supportedPixelFormats;
@@ -391,7 +398,6 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
     const auto &limits = physicalDevice->limits();
 
     QStringList errors;
-
 
     if (limits.maxPushConstantsSize < 128)
         errors.push_back("Push constants size is too small");
@@ -486,8 +492,7 @@ void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalD
     int nGpus = 0;
     for (auto &&physicalDevice : physicalDevices)
     {
-        const auto type = physicalDevice->properties().deviceType;
-        if (type != vk::PhysicalDeviceType::eOther && type != vk::PhysicalDeviceType::eCpu)
+        if (physicalDevice->isGpu())
             ++nGpus;
     }
     if (nGpus <= 1)

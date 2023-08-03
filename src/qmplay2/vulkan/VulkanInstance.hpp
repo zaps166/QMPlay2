@@ -76,6 +76,8 @@ public:
 
     inline shared_ptr<PhysicalDevice> physicalDevice() const;
 
+    bool isPhysicalDeviceGpu() const;
+
     AVPixelFormats supportedPixelFormats() const;
 
     shared_ptr<Device> createDevice(const shared_ptr<PhysicalDevice> &physicalDevice);
