@@ -420,6 +420,16 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
 }
 void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalDevices) const
 {
+    int nGpus = 0;
+    for (auto &&physicalDevice : physicalDevices)
+    {
+        const auto type = physicalDevice->properties().deviceType;
+        if (type == vk::PhysicalDeviceType::eIntegratedGpu || type == vk::PhysicalDeviceType::eDiscreteGpu)
+            ++nGpus;
+    }
+    if (nGpus <= 1)
+        return; // Nothing to do
+
     auto setAsFirst = [&](auto &&it) {
         auto primaryPhysicalDevice = move(*it);
         physicalDevices.erase(it);
