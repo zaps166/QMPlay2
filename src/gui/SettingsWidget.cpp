@@ -795,11 +795,13 @@ void SettingsWidget::createRendererSettings()
 
     auto rendererStacked = new QStackedWidget;
 
+    auto canRestart = std::make_shared<bool>(false);
+
     m_rendererApplyFunctions.push_back([=](bool &initFilters) {
         Q_UNUSED(initFilters)
         const auto rendererName = renderers->currentData().toString();
         settings->set("Renderer", rendererName);
-        if (currentRendererName != rendererName && chosenRenderer != rendererName)
+        if (currentRendererName != rendererName && (*canRestart || chosenRenderer != rendererName))
         {
             QMessageBox::information(this, tr("Changing renderer"), tr("To set up a new renderer, the program will start again!"));
             restartApp();
@@ -983,6 +985,7 @@ void SettingsWidget::createRendererSettings()
             {
                 devices->insertItem(0, tr("First available device"));
                 devices->setCurrentIndex(idIdx);
+                *canRestart = true;
             }
             else
             {
@@ -1057,6 +1060,8 @@ void SettingsWidget::createRendererSettings()
             settings->set("Vulkan/HQScaleUp", hqUpscale->isChecked());
             settings->set("Vulkan/BypassCompositor", bypassCompositor->isChecked());
             settings->set("Vulkan/HDR", hdr->isChecked());
+            if (renderers->currentData().toString() == "vulkan")
+                settings->set("Vulkan/UserApplied", true);
         });
 
         rendererStacked->addWidget(vulkanSetttings);

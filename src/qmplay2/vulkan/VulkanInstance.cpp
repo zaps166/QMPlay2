@@ -392,14 +392,6 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
 
     QStringList errors;
 
-#ifndef Q_OS_HAIKU
-    if (properties.deviceType == vk::PhysicalDeviceType::eCpu)
-    {
-        static bool allowCpu = (qEnvironmentVariableIntValue("QMPLAY2_ALLOW_VULKAN_CPU", nullptr) != 0);
-        if (!allowCpu)
-            errors.push_back("Not a GPU");
-    }
-#endif
 
     if (limits.maxPushConstantsSize < 128)
         errors.push_back("Push constants size is too small");

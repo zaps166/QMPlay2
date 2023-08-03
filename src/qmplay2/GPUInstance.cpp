@@ -21,9 +21,12 @@
 
 #ifdef USE_OPENGL
 #   include <opengl/OpenGLInstance.hpp>
+#   include <QOffscreenSurface>
+#   include <QOpenGLFunctions>
 #endif
 #ifdef USE_VULKAN
 #   include <vulkan/VulkanInstance.hpp>
+#   include "../qmvk/PhysicalDevice.hpp"
 #endif
 #include <VideoWriter.hpp>
 
@@ -39,7 +42,33 @@ shared_ptr<GPUInstance> GPUInstance::create()
 #if defined(USE_VULKAN)
     if (renderer == "vulkan") try
     {
-        return QmVk::Instance::create();
+        auto vkInstance = QmVk::Instance::create();
+#   ifdef USE_OPENGL
+        const auto type = vkInstance->physicalDevice()->properties().deviceType;
+        const bool notGpu = (type == vk::PhysicalDeviceType::eOther || type == vk::PhysicalDeviceType::eCpu);
+        if (notGpu && !sets.getBool("Vulkan/UserApplied"))
+        {
+            QOffscreenSurface surface;
+            QOpenGLContext glCtx;
+
+            surface.create();
+            if (!glCtx.create() || !glCtx.makeCurrent(&surface))
+                return vkInstance;
+
+            const auto currentRenderer = QByteArray(reinterpret_cast<const char *>(glCtx.functions()->glGetString(GL_RENDERER))).toLower();
+            for (auto &&swRendererName : {"llvmpipe", "software", "swrast", "softpipe"})
+            {
+                if (currentRenderer.contains(swRendererName))
+                    return vkInstance;
+            }
+
+            qInfo() << "Using OpenGL instead of Vulkan software rasterizer";
+            vkInstance.reset();
+            renderer = "opengl";
+        }
+#   endif
+        if (vkInstance)
+            return vkInstance;
     }
     catch (const vk::SystemError &e)
     {
