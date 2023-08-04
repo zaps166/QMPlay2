@@ -542,11 +542,9 @@ Frame Frame::downloadHwData() const
 
         if (av_hwframe_transfer_data(dstFrame, m_frame, 0) == 0)
         {
+            av_frame_copy_props(dstFrame, m_frame);
             downloaded = Frame(dstFrame);
-            if (isInterlaced())
-                downloaded.setInterlaced(isTopFieldFirst());
             downloaded.setTimeBase(m_timeBase);
-            downloaded.setTSInt(tsInt());
         }
 
         av_frame_free(&dstFrame);
