@@ -1707,7 +1707,7 @@
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation>只有主要圖形處理器為 NVIDIA 時使用 CUVID</translation>
+        <translation>只有主要圖形處理器為輝達時使用 CUVID</translation>
     </message>
     <message>
         <source>Infinite</source>
@@ -1827,7 +1827,7 @@
     </message>
     <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
-        <translation>在 Intel 硬體上使用零複製解碼（實驗性）</translation>
+        <translation>在英特爾硬體上使用零複製解碼（實驗性）</translation>
     </message>
     <message>
         <source>Better performance, but can cause garbage or might not work at all.</source>
@@ -3195,11 +3195,11 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation type="unfinished"></translation>
+        <translation>低品質圖像縮放（最臨近）</translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation type="unfinished"></translation>
+        <translation>有助復古縮放。也可用於軟體 Vulkan 實現以降低 CPU 開銷。</translation>
     </message>
 </context>
 <context>
