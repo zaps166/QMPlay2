@@ -220,7 +220,7 @@ bool Instance::checkFiltersSupported(const shared_ptr<PhysicalDevice> &physicalD
     if (!physicalDevice)
         return false;
 
-    if (!physicalDevice->getFeatures().shaderStorageImageWriteWithoutFormat)
+    if (!physicalDevice->isGpu() || !physicalDevice->getFeatures().shaderStorageImageWriteWithoutFormat)
         return false;
 
     return true;
