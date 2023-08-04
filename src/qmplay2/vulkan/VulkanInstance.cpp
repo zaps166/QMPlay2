@@ -40,6 +40,7 @@
 
 namespace QmVk {
 
+#if defined(Q_OS_LINUX)
 static QFileInfo getPrimaryX11CardFile()
 {
     // FIXME: Is it better way to ask X11 about primary GPU?
@@ -109,6 +110,7 @@ static QFileInfo getPrimaryX11CardFile()
 
     return QFileInfo(cardFilePath);
 }
+#endif
 
 constexpr auto s_queueFlags = vk::QueueFlagBits::eGraphics | vk::QueueFlagBits::eCompute;
 
