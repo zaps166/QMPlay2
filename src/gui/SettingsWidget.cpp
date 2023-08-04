@@ -923,6 +923,8 @@ void SettingsWidget::createRendererSettings()
         auto bypassCompositor = createBypassCompositor();
         auto hdr = new QCheckBox(tr("Try to display HDR10 videos in HDR mode (experimental)"));
 
+        auto selectedDeviceFiltersEnabled = std::make_shared<int>(-1);
+
         connect(nearestScaling, &QCheckBox::toggled,
                 this, [=](bool checked) {
             hqDownscale->setEnabled(!checked);
@@ -944,6 +946,9 @@ void SettingsWidget::createRendererSettings()
             const bool filtersEnabled = !noFiltersDevIDs->contains(devices->itemData(idx).toByteArray());
             gpuDeint->setEnabled(filtersEnabled);
             forceYadif->setEnabled(filtersEnabled);
+
+            if (*selectedDeviceFiltersEnabled == -1)
+                *selectedDeviceFiltersEnabled = filtersEnabled;
 
 #ifdef Q_OS_WIN
             bypassCompositor->setEnabled(!noExclusiveFullScreenDevIDs->contains(devices->itemData(idx).toByteArray()));
@@ -1038,8 +1043,10 @@ void SettingsWidget::createRendererSettings()
         layout->addRow(hdr);
 
         m_rendererApplyFunctions.push_back([=](bool &initFilters) {
+            const bool filtersEnabled = gpuDeint->isEnabled();
             const bool alwaysGPUDeint = gpuDeint->isChecked();
-            if (QMPlay2Core.isVulkanRenderer() && settings->getBool("Vulkan/AlwaysGPUDeint") != alwaysGPUDeint)
+
+            if (QMPlay2Core.isVulkanRenderer() && (*selectedDeviceFiltersEnabled == true && settings->getBool("Vulkan/AlwaysGPUDeint")) != (alwaysGPUDeint && filtersEnabled))
                 initFilters = true;
 
             if (devices->isEnabled() && devices->count() > 0)
@@ -1062,6 +1069,8 @@ void SettingsWidget::createRendererSettings()
             settings->set("Vulkan/HDR", hdr->isChecked());
             if (renderers->currentData().toString() == "vulkan")
                 settings->set("Vulkan/UserApplied", true);
+
+            *selectedDeviceFiltersEnabled = filtersEnabled;
         });
 
         rendererStacked->addWidget(vulkanSetttings);
