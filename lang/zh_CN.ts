@@ -3195,11 +3195,11 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation type="unfinished"></translation>
+        <translation>低质量图像缩放（最临近）</translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation type="unfinished"></translation>
+        <translation>有助于复古缩放。也可用于软件 Vulkan 实现以降低 CPU 开销。</translation>
     </message>
 </context>
 <context>
