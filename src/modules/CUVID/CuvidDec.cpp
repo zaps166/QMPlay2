@@ -28,6 +28,7 @@
 #   include <CuvidOpenGL.hpp>
 #endif
 #ifdef USE_VULKAN
+#   include <vulkan/VulkanInstance.hpp>
 #   include <CuvidVulkan.hpp>
 #endif
 
@@ -580,10 +581,13 @@ bool CuvidDec::open(StreamInfo &streamInfo)
         if (QMPlay2Core.isVulkanRenderer())
         {
 #ifdef USE_VULKAN
-            auto cuvidVulkan = make_shared<CuvidVulkan>(m_cuCtx);
-            if (cuvidVulkan->hasError())
-                return false;
-            cuvidHwInterop = move(cuvidVulkan);
+            if (static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->isPhysicalDeviceGpu())
+            {
+                auto cuvidVulkan = make_shared<CuvidVulkan>(m_cuCtx);
+                if (cuvidVulkan->hasError())
+                    return false;
+                cuvidHwInterop = move(cuvidVulkan);
+            }
 #endif
         }
         else if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)

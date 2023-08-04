@@ -219,7 +219,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
     }
 #endif
 #ifdef USE_VULKAN
-    if (QMPlay2Core.isVulkanRenderer())
+    if (QMPlay2Core.isVulkanRenderer() && static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->isPhysicalDeviceGpu())
     {
         if (!m_vaapiVulkan)
         {
