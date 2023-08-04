@@ -18,6 +18,10 @@
 
 #include <DeintSettingsW.hpp>
 
+#ifdef USE_VULKAN
+    #include <vulkan/VulkanInstance.hpp>
+#endif
+
 #include <Settings.hpp>
 #include <Module.hpp>
 #include <Main.hpp>
@@ -102,8 +106,10 @@ DeintSettingsW::~DeintSettingsW()
 
 void DeintSettingsW::setSoftwareDeintEnabledDisabled()
 {
-    if (QMPlay2Core.isVulkanRenderer())
+#ifdef USE_VULKAN
+    if (QMPlay2Core.isVulkanRenderer() && QmVk::Instance::checkFiltersSupported(std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->physicalDevice()))
         softwareMethodsCB->setEnabled(!QMPlay2Core.getSettings().getBool("Vulkan/AlwaysGPUDeint"));
+#endif
 }
 
 void DeintSettingsW::writeSettings()
