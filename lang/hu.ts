@@ -118,10 +118,6 @@
         <source>Additional module parameter</source>
         <translation>További modul paraméter</translation>
     </message>
-    <message>
-        <source>Autodetect address</source>
-        <translation>Cím automatikus felismerése</translation>
-    </message>
 </context>
 <context>
     <name>AddressDialog</name>

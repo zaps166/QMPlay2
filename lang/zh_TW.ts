@@ -118,10 +118,6 @@
         <source>Additional module parameter</source>
         <translation>附加模組參數</translation>
     </message>
-    <message>
-        <source>Autodetect address</source>
-        <translation>自動偵測位址</translation>
-    </message>
 </context>
 <context>
     <name>AddressDialog</name>

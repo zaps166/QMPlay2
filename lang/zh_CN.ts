@@ -118,10 +118,6 @@
         <source>Additional module parameter</source>
         <translation>额外模块参数</translation>
     </message>
-    <message>
-        <source>Autodetect address</source>
-        <translation>自动检测地址</translation>
-    </message>
 </context>
 <context>
     <name>AddressDialog</name>

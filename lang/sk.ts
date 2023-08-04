@@ -118,10 +118,6 @@
         <source>Additional module parameter</source>
         <translation>Dodatočný parameter modulu</translation>
     </message>
-    <message>
-        <source>Autodetect address</source>
-        <translation>Automaticky zisťovať adresu</translation>
-    </message>
 </context>
 <context>
     <name>AddressDialog</name>

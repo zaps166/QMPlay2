@@ -118,10 +118,6 @@
         <source>Additional module parameter</source>
         <translation>Erweiterte Modulparameter</translation>
     </message>
-    <message>
-        <source>Autodetect address</source>
-        <translation>Automatische Adresserkennung</translation>
-    </message>
 </context>
 <context>
     <name>AddressDialog</name>

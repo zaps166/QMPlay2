@@ -118,10 +118,6 @@
         <source>Additional module parameter</source>
         <translation>Дополнительный параметр модуль</translation>
     </message>
-    <message>
-        <source>Autodetect address</source>
-        <translation>Автоматически определять адрес</translation>
-    </message>
 </context>
 <context>
     <name>AddressDialog</name>

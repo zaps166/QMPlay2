@@ -118,10 +118,6 @@
         <source>Additional module parameter</source>
         <translation>追加のモジュールパラメータ</translation>
     </message>
-    <message>
-        <source>Autodetect address</source>
-        <translation>アドレスの自動検出</translation>
-    </message>
 </context>
 <context>
     <name>AddressDialog</name>

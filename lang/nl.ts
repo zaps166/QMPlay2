@@ -111,10 +111,6 @@
 <context>
     <name>AddressBox</name>
     <message>
-        <source>Autodetect address</source>
-        <translation>Adres automatisch detecteren</translation>
-    </message>
-    <message>
         <source>Direct address</source>
         <translation>Direct adres</translation>
     </message>

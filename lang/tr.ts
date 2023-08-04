@@ -118,10 +118,6 @@
         <source>Additional module parameter</source>
         <translation>Ek modül parametresi</translation>
     </message>
-    <message>
-        <source>Autodetect address</source>
-        <translation>Adresi otomatik algıla</translation>
-    </message>
 </context>
 <context>
     <name>AddressDialog</name>
