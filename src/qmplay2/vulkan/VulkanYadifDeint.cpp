@@ -49,6 +49,9 @@ YadifDeint::YadifDeint(const shared_ptr<HWInterop> &hwInterop)
     m_supportedPixelFormats += {
             AV_PIX_FMT_NV12,
             AV_PIX_FMT_P010,
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 2, 100)
+            AV_PIX_FMT_P012,
+#endif
             AV_PIX_FMT_P016,
             AV_PIX_FMT_NV16,
             AV_PIX_FMT_NV20,

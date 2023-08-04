@@ -156,7 +156,7 @@ void D3D11VAVulkan::map(Frame &frame)
     if (m_error || frame.vulkanImage() || !frame.isHW())
         return;
 
-    m_formatVk = (frame.pixelFormat() == AV_PIX_FMT_P016)
+    m_formatVk = (frame.depth() > 8)
         ? vk::Format::eG16B16R162Plane420Unorm
         : vk::Format::eG8B8R82Plane420Unorm
     ;

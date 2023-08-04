@@ -72,6 +72,14 @@ static AVPixelFormat d3d11vaGetFormat(AVCodecContext *codecCtx, const AVPixelFor
                 case AV_PIX_FMT_YUV420P10:
                     framesCtx->sw_format = AV_PIX_FMT_P010;
                     break;
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 2, 100)
+                case AV_PIX_FMT_YUV420P12:
+                    framesCtx->sw_format = AV_PIX_FMT_P012;
+                    break;
+#endif
+                case AV_PIX_FMT_YUV420P16:
+                    framesCtx->sw_format = AV_PIX_FMT_P016;
+                    break;
                 default:
                     framesCtx->sw_format = AV_PIX_FMT_NONE;
                     break;

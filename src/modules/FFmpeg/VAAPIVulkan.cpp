@@ -81,7 +81,7 @@ void VAAPIVulkan::map(Frame &frame)
 
     lock_guard<mutex> locker(m_mutex);
 
-    const auto format = (frame.pixelFormat() == AV_PIX_FMT_P016)
+    const auto format = (frame.depth() > 8)
         ? vk::Format::eG16B16R162Plane420Unorm
         : vk::Format::eG8B8R82Plane420Unorm
     ;

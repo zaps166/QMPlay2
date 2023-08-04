@@ -44,6 +44,11 @@ AVPixelFormat Frame::convert3PlaneTo2Plane(AVPixelFormat fmt)
         case AV_PIX_FMT_YUVJ420P:
             return AV_PIX_FMT_NV12;
         case AV_PIX_FMT_YUV420P10:
+            return AV_PIX_FMT_P010;
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 2, 100)
+        case AV_PIX_FMT_YUV420P12:
+            return AV_PIX_FMT_P012;
+#endif
         case AV_PIX_FMT_YUV420P16:
             return AV_PIX_FMT_P016;
 
@@ -72,6 +77,10 @@ AVPixelFormat Frame::convert2PlaneTo3Plane(AVPixelFormat fmt)
             return AV_PIX_FMT_YUV420P;
         case AV_PIX_FMT_P010:
             return AV_PIX_FMT_YUV420P10;
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 2, 100)
+        case AV_PIX_FMT_P012:
+            return AV_PIX_FMT_YUV420P12;
+#endif
         case AV_PIX_FMT_P016:
             return AV_PIX_FMT_YUV420P16;
 
@@ -383,10 +392,16 @@ int Frame::numPlanes() const
     return m_pixelFmtDescriptor ? av_pix_fmt_count_planes(m_pixelFormat) : 0;
 }
 
+int Frame::depth() const
+{
+    if (m_pixelFmtDescriptor)
+        return m_pixelFmtDescriptor->comp[0].depth;
+    return 0;
+}
 int Frame::paddingBits() const
 {
     if (m_pixelFmtDescriptor)
-        return (m_pixelFmtDescriptor->comp[0].step << 3) - m_pixelFmtDescriptor->comp[0].depth;
+        return (m_pixelFmtDescriptor->comp[0].step << 3) - m_pixelFmtDescriptor->comp[0].depth - m_pixelFmtDescriptor->comp[0].shift;
     return 0;
 }
 

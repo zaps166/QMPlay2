@@ -143,6 +143,9 @@ vk::Format Instance::fromFFmpegPixelFormat(int avPixFmt)
         case AV_PIX_FMT_NV12:
             return vk::Format::eG8B8R82Plane420Unorm;
         case AV_PIX_FMT_P010:
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 2, 100)
+        case AV_PIX_FMT_P012:
+#endif
         case AV_PIX_FMT_P016:
             return vk::Format::eG16B16R162Plane420Unorm;
         case AV_PIX_FMT_NV16:
@@ -354,6 +357,7 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     auto physicalDeviceExtensions = requiredPhysicalDeviceExtenstions();
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
+
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     physicalDeviceExtensions.push_back(VK_KHR_WIN32_KEYED_MUTEX_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME);
@@ -623,6 +627,9 @@ void Instance::fillSupportedFormats()
             AV_PIX_FMT_GRAY16,
 
             AV_PIX_FMT_P010,
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 2, 100)
+            AV_PIX_FMT_P012,
+#endif
             AV_PIX_FMT_P016,
             AV_PIX_FMT_NV20,
 

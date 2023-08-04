@@ -132,6 +132,7 @@ public: // Video
     int chromaShiftH() const;
     int numPlanes() const;
 
+    int depth() const;
     int paddingBits() const;
 
     int *linesize() const;
