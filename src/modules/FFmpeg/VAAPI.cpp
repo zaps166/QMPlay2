@@ -276,6 +276,7 @@ void VAAPI::clearVPP(bool resetAllowFilters)
     }
     clearVPPFrames();
     m_vppDeintBuff = VA_INVALID_ID;
+    id_vpp = VA_INVALID_ID;
     context_vpp = 0;
     config_vpp = 0;
     m_nBackwardRefs = m_nForwardRefs = 0;
