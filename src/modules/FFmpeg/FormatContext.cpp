@@ -758,6 +758,12 @@ bool FormatContext::open(const QString &_url, const QString &param)
         formatCtx->flags |= AVFMT_FLAG_FAST_SEEK; //This should be set before "avformat_open_input", but seems to be working for MP3...
     }
 
+    if (name() == "mpegts")
+    {
+        // Workaround to detect initial audio parameters for some TS files
+        formatCtx->probesize *= 2;
+    }
+
     if (avformat_find_stream_info(formatCtx, nullptr) < 0)
         return false;
 
