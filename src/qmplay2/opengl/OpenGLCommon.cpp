@@ -60,23 +60,12 @@ OpenGLCommon::OpenGLCommon() :
     texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
     numPlanes(0),
     target(0),
-    hasPbo(false),
+    hasPbo(m_glInstance->hasPbo),
     isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), canUseHueSharpness(true),
     outW(-1), outH(-1), verticesIdx(0),
-    hasVbo(true),
+    hasVbo(m_glInstance->hasVbo),
     nIndices(0)
 {
-#ifndef OPENGL_ES2
-    glActiveTexture = m_glInstance->glActiveTexture;
-    glGenBuffers = m_glInstance->glGenBuffers;
-    glBindBuffer = m_glInstance->glBindBuffer;
-    glBufferData = m_glInstance->glBufferData;
-    glDeleteBuffers = m_glInstance->glDeleteBuffers;
-#endif
-    glMapBufferRange = m_glInstance->glMapBufferRange;
-    glMapBuffer = m_glInstance->glMapBuffer;
-    glUnmapBuffer = m_glInstance->glUnmapBuffer;
-
     videoAdjustment.unset();
 
     /* Initialize texCoordYCbCr array */
@@ -243,6 +232,16 @@ void OpenGLCommon::setTextureParameters(GLenum target, quint32 texture, GLint pa
 
 void OpenGLCommon::initializeGL()
 {
+    initializeOpenGLFunctions();
+
+#if !defined(QT_OPENGL_ES_2)
+    if (hasPbo && !m_glInstance->hasMapBufferRange)
+    {
+        Q_ASSERT(m_glInstance->hasMapBuffer);
+        m_gl15.initializeOpenGLFunctions();
+    }
+#endif
+
     shaderProgramVideo.reset(new QOpenGLShaderProgram);
     shaderProgramOSD.reset(new QOpenGLShaderProgram);
 
@@ -448,11 +447,13 @@ void OpenGLCommon::paintGL()
                 if (hasPbo)
                 {
                     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
-                    quint8 *dst;
-                    if (glMapBufferRange)
+                    quint8 *dst = nullptr;
+                    if (m_glInstance->hasMapBufferRange)
                         dst = (quint8 *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, w * h, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+#if !defined(QT_OPENGL_ES_2)
                     else
-                        dst = (quint8 *)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+                        dst = (quint8 *)m_gl15.glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+#endif
                     if (!dst)
                         glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
                     else
@@ -602,11 +603,13 @@ void OpenGLCommon::paintGL()
                 glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[0]);
                 if (hasNewSize)
                     glBufferData(GL_PIXEL_UNPACK_BUFFER, dataSize, nullptr, GL_DYNAMIC_DRAW);
-                quint8 *dst;
-                if (glMapBufferRange)
+                quint8 *dst = nullptr;
+                if (m_glInstance->hasMapBufferRange)
                     dst = (quint8 *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, dataSize, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+#if !defined(QT_OPENGL_ES_2)
                 else
-                    dst = (quint8 *)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+                    dst = (quint8 *)m_gl15.glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
+#endif
                 if (!dst)
                     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
                 else
@@ -680,9 +683,8 @@ QByteArray OpenGLCommon::readShader(const QString &fileName, bool pure)
     QByteArray shader;
     if (!pure)
     {
-#ifdef OPENGL_ES2
-        shader = "precision highp float;\n";
-#endif
+        if (m_glInstance->isGLES)
+            shader = "precision highp float;\n";
         shader.append("#line 1\n");
     }
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)

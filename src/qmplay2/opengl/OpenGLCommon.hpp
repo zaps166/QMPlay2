@@ -26,18 +26,16 @@
 #include <QMPlay2OSD.hpp>
 
 #include <QOpenGLShaderProgram>
+#include <QOpenGLFunctions_1_5>
+#include <QOpenGLExtraFunctions>
 
 #include <QCoreApplication>
 #include <QImage>
 #include <QTimer>
 
-#if !defined OPENGL_ES2 && !defined Q_OS_MACOS
-    #include <GL/glext.h>
-#endif
-
 class OpenGLHWInterop;
 
-class OpenGLCommon : public VideoOutputCommon
+class OpenGLCommon : public VideoOutputCommon, public QOpenGLExtraFunctions
 {
     Q_DECLARE_TR_FUNCTIONS(OpenGLCommon)
 
@@ -78,23 +76,16 @@ public:
 
     bool setSphericalView(bool spherical) override;
 protected:
-    static void setTextureParameters(GLenum target, quint32 texture, GLint param);
+    void setTextureParameters(GLenum target, quint32 texture, GLint param);
 
     void initializeGL();
     void paintGL();
 
     void contextAboutToBeDestroyed();
 
-#ifndef OPENGL_ES2
-    OpenGLInstance::GLActiveTexture glActiveTexture = nullptr;
-    OpenGLInstance::GLGenBuffers glGenBuffers = nullptr;
-    OpenGLInstance::GLBindBuffer glBindBuffer = nullptr;
-    OpenGLInstance::GLBufferData glBufferData = nullptr;
-    OpenGLInstance::GLDeleteBuffers glDeleteBuffers = nullptr;
+#if !defined(QT_OPENGL_ES_2)
+    QOpenGLFunctions_1_5 m_gl15;
 #endif
-    OpenGLInstance::GLMapBufferRange glMapBufferRange = nullptr;
-    OpenGLInstance::GLMapBuffer glMapBuffer = nullptr;
-    OpenGLInstance::GLUnmapBuffer glUnmapBuffer = nullptr;
 
     bool vSync;
 

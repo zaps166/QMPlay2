@@ -204,11 +204,9 @@ QString OpenGLWriter::name() const
         glStr += " " + m_drawable->m_hwInterop->name();
     if (m_useRtt)
         glStr += " (render-to-texture)";
-#ifdef OPENGL_ES2
-    return "OpenGL|ES " + glStr;
-#else
+    if (m_drawable->m_glInstance->isGLES)
+        return "OpenGL|ES " + glStr;
     return "OpenGL " + glStr;
-#endif
 }
 
 bool OpenGLWriter::open()

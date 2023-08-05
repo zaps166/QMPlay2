@@ -47,7 +47,7 @@
 #ifdef CHECK_FOR_EGL
     #include <QLibrary>
 #endif
-#ifdef Q_OS_MACOS
+#if defined(CHECK_FOR_EGL) || defined(Q_OS_MACOS)
     #include <QSurfaceFormat>
 #endif
 
@@ -525,7 +525,7 @@ static void checkForEGL()
 {
     // FIXME: Non-X11 environment must also get the device file.
 
-    if (!qEnvironmentVariableIsSet("DISPLAY"))
+    if (QGuiApplication::platformName() != "xcb")
         return;
 
     QLibrary libX11("libX11.so.6");
@@ -561,34 +561,34 @@ static void checkForEGL()
         return;
 
     QByteArray cardFilePath;
+    QByteArray eglVendor;
 
     auto eglDpy = eglGetDisplayFunc(dpy);
     if (eglDpy && eglInitializeFunc(eglDpy, nullptr, nullptr))
     {
         constexpr int EGLVendor = 0x3053;
-        const QByteArray eglVendor = eglQueryStringFunc(eglDpy, EGLVendor);
-        if (eglVendor == "Mesa Project") // Don't allow to run Qt over EGL on NVIDIA
+        eglVendor = eglQueryStringFunc(eglDpy, EGLVendor);
+
+        constexpr int EGLExtensions = 0x3055;
+        const bool hasDeviceQuery = QByteArray(eglQueryStringFunc(nullptr, EGLExtensions)).contains("EGL_EXT_device_query");
+
+        auto eglQueryDisplayAttribEXTFunc = (eglQueryDisplayAttribEXTType)eglGetProcAddress("eglQueryDisplayAttribEXT");
+        auto eglQueryDeviceStringEXTFunc = (eglQueryStringType)eglGetProcAddress("eglQueryDeviceStringEXT");
+
+        if (hasDeviceQuery && eglQueryDisplayAttribEXTFunc && eglQueryDeviceStringEXTFunc)
         {
-            constexpr int EGLExtensions = 0x3055;
-            const bool hasDeviceQuery = QByteArray(eglQueryStringFunc(nullptr, EGLExtensions)).contains("EGL_EXT_device_query");
-
-            auto eglQueryDisplayAttribEXTFunc = (eglQueryDisplayAttribEXTType)eglGetProcAddress("eglQueryDisplayAttribEXT");
-            auto eglQueryDeviceStringEXTFunc = (eglQueryStringType)eglGetProcAddress("eglQueryDeviceStringEXT");
-
-            if (hasDeviceQuery && eglQueryDisplayAttribEXTFunc && eglQueryDeviceStringEXTFunc)
+            constexpr int EGLDeviceExt = 0x322C;
+            constexpr int EGLDrmDeviceFileExt = 0x3233;
+            void *eglDev = nullptr;
+            if (eglQueryDisplayAttribEXTFunc(eglDpy, EGLDeviceExt, &eglDev) && eglDev)
             {
-                constexpr int EGLDeviceExt = 0x322C;
-                constexpr int EGLDrmDeviceFileExt = 0x3233;
-                void *eglDev = nullptr;
-                if (eglQueryDisplayAttribEXTFunc(eglDpy, EGLDeviceExt, &eglDev) && eglDev)
-                {
-                    if (const char *file = eglQueryDeviceStringEXTFunc(eglDev, EGLDrmDeviceFileExt))
-                        cardFilePath = file;
-                    else
-                        cardFilePath = "";
-                }
+                if (const char *file = eglQueryDeviceStringEXTFunc(eglDev, EGLDrmDeviceFileExt))
+                    cardFilePath = file;
+                else
+                    cardFilePath = "";
             }
         }
+
         eglTerminateFunc(eglDpy);
     }
 
@@ -598,8 +598,16 @@ static void checkForEGL()
     {
         if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
             qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
+
         if (!qEnvironmentVariableIsSet("QMPLAY2_EGL_CARD_FILE_PATH") && !cardFilePath.isEmpty())
             qputenv("QMPLAY2_EGL_CARD_FILE_PATH", cardFilePath);
+
+        if (eglVendor != "Mesa Project" && qEnvironmentVariable("QT_XCB_GL_INTEGRATION").toLower() == "xcb_egl")
+        {
+            auto fmt = QSurfaceFormat::defaultFormat();
+            fmt.setRenderableType(QSurfaceFormat::OpenGLES);
+            QSurfaceFormat::setDefaultFormat(fmt);
+        }
     }
 }
 #endif

@@ -21,6 +21,7 @@
 #include <QMPlay2Core.hpp>
 #include <Frame.hpp>
 
+#include <QOpenGLFunctions>
 #include <QLibrary>
 
 extern "C"
@@ -91,7 +92,7 @@ bool DXVA2OpenGL::init(const int *widths, const int *heights, const SetTexturePa
         m_width = widths[0];
         m_height = heights[0];
 
-        glGenTextures(2, m_textures);
+        QOpenGLContext::currentContext()->functions()->glGenTextures(2, m_textures);
     }
 
     for (int i = 0; i < 2; ++i)
@@ -497,7 +498,7 @@ void DXVA2OpenGL::clearTextures()
         }
     }
 
-    glDeleteTextures(2, m_textures);
+    QOpenGLContext::currentContext()->functions()->glDeleteTextures(2, m_textures);
     memset(m_textures, 0, sizeof(m_textures));
     m_width = m_height = 0;
 }
