@@ -165,6 +165,10 @@ if(USE_VULKAN)
         vulkan/shaders/video.vert
         vulkan/shaders/yadif.comp
     )
+    set(VULKAN_SHADERS_INCLUDE
+        shaderscommon/colorspace.glsl
+        shaderscommon/hsl.glsl
+    )
 
     if(USE_GLSLC) # Shaders compilation
         foreach(VULKAN_SHADER ${VULKAN_SHADERS})
@@ -173,7 +177,7 @@ if(USE_VULKAN)
 
         add_custom_target( # Needed to display GLSL files in QtCreator
             VulkanShaders
-            SOURCES ${VULKAN_SHADERS}
+            SOURCES ${VULKAN_SHADERS} ${VULKAN_SHADERS_INCLUDE}
             DEPENDS ${QMVK_SHADER_COMPILED_FILES}
         )
     else()

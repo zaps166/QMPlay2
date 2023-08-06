@@ -1,3 +1,6 @@
+# include "../../shaderscommon/hsl.glsl"
+# include "../../shaderscommon/colorspace.glsl"
+
 layout(constant_id =  0) const int numPlanes = 3;
 layout(constant_id =  1) const int idxPlane0 = 0;
 layout(constant_id =  2) const int idxPlane1 = 0;
@@ -12,9 +15,6 @@ layout(constant_id = 10) const bool useBrightnessContrast = false;
 layout(constant_id = 11) const bool useHueSaturation = false;
 layout(constant_id = 12) const bool useSharpness = false;
 layout(constant_id = 13) const int trc = 0;
-
-const int AVCOL_TRC_BT709 = 1;
-const int AVCOL_TRC_SMPTE2084 = 16;
 
 layout(location = 0) in vec2 inTextureCoord;
 layout(location = 0) out vec4 outColor;
@@ -144,127 +144,12 @@ vec3 getBicubic(in vec2 uv) // CatmullRom
     }
 }
 
-// HSL <-> RGB converter is not written by me
-vec3 rgb2hsl(in vec3 c)
-{
-    const float eps = 1.19209e-07;
-
-    float cmin = min(c.r, min(c.g, c.b));
-    float cmax = max(c.r, max(c.g, c.b));
-    float cd = cmax - cmin;
-
-    vec3 a = vec3(1.0 - step(eps, abs(cmax - c)));
-    a = mix(vec3(a.x, 0.0, a.z), a, step(0.5, 2.0 - a.x - a.y));
-    a = mix(vec3(a.x, a.y, 0.0), a, step(0.5, 2.0 - a.x - a.z));
-    a = mix(vec3(a.x, a.y, 0.0), a, step(0.5, 2.0 - a.y - a.z));
-
-    vec3 hsl;
-    hsl.z = (cmax + cmin) / 2.0;
-    hsl.y = mix(cd / max(cmax + cmin, eps), cd / max(2.0 - (cmax + cmin), eps), step(0.5, hsl.z));
-    hsl.x = dot(vec3(0.0, 2.0, 4.0) + ((c.gbr - c.brg) / max(cd, eps)), a);
-    hsl.x = (hsl.x + (1.0 - step(0.0, hsl.x)) * 6.0) / 6.0;
-    return hsl;
-}
-vec3 hsl2rgb(in vec3 c)
-{
-    vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
-    return c.z + c.y * (rgb - 0.5) * (1.0 - abs(2.0 * c.z - 1.0));
-}
-
 vec3 getPixel(in float ox, in float oy)
 {
     return useBicubic
         ? getBicubic(inTextureCoord + vec2(ox, oy))
         : getBilinear(inTextureCoord + vec2(ox, oy))
     ;
-}
-
-// https://en.wikipedia.org/wiki/Perceptual_quantizer
-vec3 smpte2084(in vec3 E)
-{
-    const float m1 = 1305.0 / 8192.0;
-    const float m2 = 2523.0 / 32.0;
-    const float c2 = 2413.0 / 128.0;
-    const float c3 = 2392.0 / 128.0;
-    const float c1 = c3 - c2 + 1.0;
-    const vec3 E1m2 = pow(E, vec3(1.0 / m2));
-    return pow(max(E1m2 - c1, 0.0) / (c2 - c3 * max(E1m2, 1e-6)), vec3(1.0 / m1));
-}
-
-// https://64.github.io/tonemapping/
-float uncharted2_tonemap_partial(in float x)
-{
-    const float A = 0.15;
-    const float B = 0.50;
-    const float C = 0.10;
-    const float D = 0.20;
-    const float E = 0.02;
-    const float F = 0.30;
-    return ((x * (A * x + C * B) + D * E) / (x * (A * x + B) + D * F)) - E / F;
-}
-float uncharted2_filmic(in float v)
-{
-    const float exposure_bias = 10.0;
-    float curr = uncharted2_tonemap_partial(v * exposure_bias);
-    float white_scale = 1.0 / uncharted2_tonemap_partial(7.5);
-    return curr * white_scale;
-}
-
-// Tone curve according to Adobe's reference implementation (https://github.com/Beep6581/RawTherapee/blob/dev/rtengine/curves.h)
-void rgbToneHelper(inout float maxVal, inout float medVal, inout float minVal)
-{
-    float minValOld = minVal;
-    float medValOld = medVal;
-    float maxValOld = maxVal;
-    maxVal = uncharted2_filmic(maxValOld);
-    minVal = uncharted2_filmic(minValOld);
-    medVal = minVal + ((maxVal - minVal) * (medValOld - minValOld) / (maxValOld - minValOld));
-}
-void adobeFilmLikeUncharted2Filmic(inout vec3 rgb)
-{
-    if (rgb.r >= rgb.g)
-    {
-        if (rgb.g > rgb.b)
-        {
-            // Case 1: r >= g >  b
-            rgbToneHelper(rgb.r, rgb.g, rgb.b);
-        }
-        else if (rgb.b > rgb.r)
-        {
-            // Case 2: b >  r >= g
-            rgbToneHelper(rgb.b, rgb.r, rgb.g);
-        }
-        else if (rgb.b > rgb.g)
-        {
-            // Case 3: r >= b >  g
-            rgbToneHelper(rgb.r, rgb.b, rgb.g);
-        }
-        else
-        {
-            // Case 4: r == g == b
-            rgb.r = uncharted2_filmic(rgb.r);
-            rgb.g = uncharted2_filmic(rgb.g);
-            rgb.b = rgb.g;
-        }
-    }
-    else
-    {
-        if (rgb.r >= rgb.b)
-        {
-            // Case 5: g >  r >= b
-            rgbToneHelper(rgb.g, rgb.r, rgb.b);
-        }
-        else if (rgb.b >  rgb.g)
-        {
-            // Case 6: b >  g >  r
-            rgbToneHelper(rgb.b, rgb.g, rgb.r);
-        }
-        else
-        {
-            // Case 7: g >= b >  r
-            rgbToneHelper(rgb.g, rgb.b, rgb.r);
-        }
-    }
 }
 
 void main()
@@ -323,19 +208,11 @@ void main()
 
     if (trc == AVCOL_TRC_BT709)
     {
-        value = pow(value, vec3(2.4));
-        value = clamp(colorPrimariesMatrix * value, 0.0, 1.0);
-        value = pow(value, vec3(1.0 / 2.4));
+        colorspace_trc_bt709(value, colorPrimariesMatrix);
     }
     else if (trc == AVCOL_TRC_SMPTE2084)
     {
-        value = smpte2084(value);
-        value *= 10000.0 / maxLuminance;
-        value = clamp(value, 0.0, 1.0);
-        adobeFilmLikeUncharted2Filmic(value);
-        value = colorPrimariesMatrix * value;
-        value = clamp(value, 0.0, 1.0);
-        value = pow(value, vec3(1.0 / 2.4));
+        colorspace_trc_smpte2084(value, colorPrimariesMatrix, maxLuminance);
     }
 
     if (useBrightnessContrast)
