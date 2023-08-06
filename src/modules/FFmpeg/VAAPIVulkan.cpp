@@ -131,20 +131,28 @@ void VAAPIVulkan::map(Frame &frame)
             bool isLinear = false;
 
             MemoryObject::FdDescriptors fdDescriptors(vaSurfaceDescr.num_objects);
-            for (uint32_t i = 0; i < vaSurfaceDescr.num_objects; ++i)
+            vector<vk::DeviceSize> offsets(vaSurfaceDescr.num_layers);
+
+            for (uint32_t i = 0; i < vaSurfaceDescr.num_layers; ++i)
             {
-                fdDescriptors[i].first = vaSurfaceDescr.objects[i].fd;
-                fdDescriptors[i].second = ::lseek(vaSurfaceDescr.objects[i].fd, 0, SEEK_END);
+                const auto &layer = vaSurfaceDescr.layers[i];
+                if (!m_hasDrmFormatModifier)
+                    offsets[i] = layer.offset[0];
+
+                const auto objIdx = layer.object_index[0];
+                const auto &object = vaSurfaceDescr.objects[objIdx];
+                fdDescriptors[objIdx].first = object.fd;
+                fdDescriptors[objIdx].second = (object.size > 0)
+                    ? object.size
+                    : ::lseek(object.fd, 0, SEEK_END) // Older AMD Mesa drivers requires this, because the reported size is 0
+                ;
+
                 if (!m_hasDrmFormatModifier && i == 0)
                 {
-                    const auto drmFormatModifier = vaSurfaceDescr.objects[i].drm_format_modifier;
+                    const auto drmFormatModifier = object.drm_format_modifier;
                     isLinear = (drmFormatModifier == DRM_FORMAT_MOD_LINEAR || drmFormatModifier == DRM_FORMAT_MOD_INVALID);
                 }
             }
-
-            vector<vk::DeviceSize> offsets(vaSurfaceDescr.num_layers);
-            for (uint32_t i = 0; i < vaSurfaceDescr.num_layers; ++i)
-                offsets[i] = vaSurfaceDescr.layers[i].offset[0];
 
             try
             {
@@ -160,7 +168,9 @@ void VAAPIVulkan::map(Frame &frame)
                     if (plane >= vaSurfaceDescr.num_layers)
                         throw vk::LogicError("Pitches count and planes count missmatch");
 
-                    auto drmFormatModifier = vaSurfaceDescr.objects[min(plane, vaSurfaceDescr.num_objects - 1)].drm_format_modifier;
+                    const auto &layer = vaSurfaceDescr.layers[plane];
+
+                    auto drmFormatModifier = vaSurfaceDescr.objects[layer.object_index[0]].drm_format_modifier;
                     if (drmFormatModifier == DRM_FORMAT_MOD_INVALID)
                         drmFormatModifier = DRM_FORMAT_MOD_LINEAR;
 
@@ -169,7 +179,8 @@ void VAAPIVulkan::map(Frame &frame)
                     imageDrmFormatModifierExplicitCreateInfo.pPlaneLayouts = &drmFormatModifierPlaneLayout;
                     imageDrmFormatModifierExplicitCreateInfo.pNext = imageCreateInfo.pNext;
 
-                    drmFormatModifierPlaneLayout.rowPitch = vaSurfaceDescr.layers[plane].pitch[0];
+                    drmFormatModifierPlaneLayout.offset = layer.offset[0];
+                    drmFormatModifierPlaneLayout.rowPitch = layer.pitch[0];
 
                     imageCreateInfo.tiling = vk::ImageTiling::eDrmFormatModifierEXT;
                     imageCreateInfo.pNext = &imageDrmFormatModifierExplicitCreateInfo;
