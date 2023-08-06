@@ -365,6 +365,8 @@ void OpenGLCommon::paintGL()
             videoFrame.height(1),
             videoFrame.height(2),
         };
+        const int bytesMultiplier = (m_depth + 7) / 8;
+        const GLenum dataType = (bytesMultiplier == 1) ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT;
 
         if (doReset)
         {
@@ -397,21 +399,21 @@ void OpenGLCommon::paintGL()
                 /* Prepare textures */
                 for (qint32 p = 0; p < 3; ++p)
                 {
-                    const GLsizei w = correctLinesize ? videoFrame.linesize(p) : widths[p];
+                    const GLsizei w = correctLinesize ? videoFrame.linesize(p) / bytesMultiplier : widths[p];
                     const GLsizei h = heights[p];
                     if (p == 0)
                         m_textureSize = QSize(w, h);
                     if (hasPbo)
                     {
                         glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
-                        glBufferData(GL_PIXEL_UNPACK_BUFFER, w * h, nullptr, GL_DYNAMIC_DRAW);
+                        glBufferData(GL_PIXEL_UNPACK_BUFFER, w * h * bytesMultiplier, nullptr, GL_DYNAMIC_DRAW);
                     }
                     glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, w, h, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, nullptr);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, w, h, 0, GL_LUMINANCE, dataType, nullptr);
                 }
 
                 /* Prepare texture coordinates */
-                texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize(0) == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize(0) + 1.0f));
+                texCoordYCbCr[2] = texCoordYCbCr[6] = (videoFrame.linesize(0) / bytesMultiplier == widths[0]) ? 1.0f : (widths[0] / (videoFrame.linesize(0) / bytesMultiplier + 1.0f));
             }
             resetDone = true;
             hasImage = false;
@@ -445,14 +447,14 @@ void OpenGLCommon::paintGL()
             for (qint32 p = 0; p < 3; ++p)
             {
                 const quint8 *data = videoFrame.constData(p);
-                const GLsizei w = correctLinesize ? videoFrame.linesize(p) : widths[p];
+                const GLsizei w = correctLinesize ? videoFrame.linesize(p) / bytesMultiplier : widths[p];
                 const GLsizei h = heights[p];
                 if (hasPbo)
                 {
                     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo[p + 1]);
                     quint8 *dst = nullptr;
                     if (m_glInstance->hasMapBufferRange)
-                        dst = (quint8 *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, w * h, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+                        dst = (quint8 *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, w * h * bytesMultiplier, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
 #if !defined(QT_OPENGL_ES_2)
                     else
                         dst = (quint8 *)m_gl15.glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
@@ -462,12 +464,12 @@ void OpenGLCommon::paintGL()
                     else
                     {
                         if (correctLinesize)
-                            memcpy(dst, data, w * h);
+                            memcpy(dst, data, w * h * bytesMultiplier);
                         else for (int y = 0; y < h; ++y)
                         {
-                            memcpy(dst, data, w);
+                            memcpy(dst, data, w * bytesMultiplier);
                             data += videoFrame.linesize(p);
-                            dst  += w;
+                            dst  += w * bytesMultiplier;
                         }
                         glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);
                         data = nullptr;
@@ -476,10 +478,10 @@ void OpenGLCommon::paintGL()
                 glActiveTexture(GL_TEXTURE0 + p);
                 glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
                 if (hasPbo || correctLinesize)
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
+                    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_LUMINANCE, dataType, data);
                 else for (int y = 0; y < h; ++y)
                 {
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, w, 1, GL_LUMINANCE, GL_UNSIGNED_BYTE, data);
+                    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, w, 1, GL_LUMINANCE, dataType, data);
                     data += videoFrame.linesize(p);
                 }
             }
@@ -547,6 +549,7 @@ void OpenGLCommon::paintGL()
             const float hue = videoAdjustment.hue / -31.831f;
             shaderProgramVideo->setUniformValue("uVideoEq", brightness, contrast, saturation, hue);
             shaderProgramVideo->setUniformValue("uSharpness", sharpness);
+            shaderProgramVideo->setUniformValue("uBitsMultiplier", m_bitsMultiplier);
 
             if (m_colorPrimaries == AVCOL_PRI_BT2020 && (m_colorTrc == AVCOL_TRC_BT709 || m_colorTrc == AVCOL_TRC_SMPTE2084))
             {

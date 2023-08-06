@@ -19,6 +19,7 @@ uniform float uBL;
 uniform vec4 uVideoEq;
 uniform float uSharpness;
 uniform vec2 uTextureSize;
+uniform float uBitsMultiplier;
 uniform int uTrc;
 uniform mat3 uColorPrimariesMatrix;
 uniform float uMaxLuminance;
@@ -57,6 +58,7 @@ void main()
         texture(uCr, texCoordUV)[0]
     );
 #endif
+    YCbCr *= uBitsMultiplier;
     YCbCr -= vec3(uBL, vec2(128.0 / 255.0));
 
 #ifdef GL3

@@ -174,6 +174,24 @@ AVPixelFormats OpenGLWriter::supportedPixelFormats() const
         AV_PIX_FMT_YUVJ411P,
         AV_PIX_FMT_YUV440P,
         AV_PIX_FMT_YUVJ440P,
+
+        AV_PIX_FMT_YUV420P9,
+        AV_PIX_FMT_YUV420P10,
+        AV_PIX_FMT_YUV420P12,
+        AV_PIX_FMT_YUV420P14,
+        AV_PIX_FMT_YUV420P16,
+        AV_PIX_FMT_YUV422P9,
+        AV_PIX_FMT_YUV422P10,
+        AV_PIX_FMT_YUV422P12,
+        AV_PIX_FMT_YUV422P14,
+        AV_PIX_FMT_YUV422P16,
+        AV_PIX_FMT_YUV444P9,
+        AV_PIX_FMT_YUV444P10,
+        AV_PIX_FMT_YUV444P12,
+        AV_PIX_FMT_YUV444P14,
+        AV_PIX_FMT_YUV444P16,
+        AV_PIX_FMT_YUV440P10,
+        AV_PIX_FMT_YUV440P12,
     };
 }
 
@@ -190,17 +208,22 @@ void OpenGLWriter::writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList)
         if (maxLuminance < 1.0f || maxLuminance > 10000.0f)
             maxLuminance = 1000.0f;
     }
-    if (m_drawable->m_colorPrimaries != m_drawable->videoFrame.colorPrimaries() ||
-            m_drawable->m_colorTrc != m_drawable->videoFrame.colorTrc() ||
-            m_drawable->m_colorSpace != m_drawable->videoFrame.colorSpace() ||
-            m_drawable->m_limited != m_drawable->videoFrame.isLimited() ||
-            m_drawable->m_maxLuminance != maxLuminance)
+    const float bitsMultiplier = (1 << videoFrame.paddingBits());
+    if (m_drawable->m_colorPrimaries != videoFrame.colorPrimaries() ||
+            m_drawable->m_colorTrc != videoFrame.colorTrc() ||
+            m_drawable->m_colorSpace != videoFrame.colorSpace() ||
+            m_drawable->m_maxLuminance != maxLuminance ||
+            m_drawable->m_bitsMultiplier != bitsMultiplier ||
+            m_drawable->m_depth != videoFrame.depth() ||
+            m_drawable->m_limited != videoFrame.isLimited())
     {
-        m_drawable->m_colorPrimaries = m_drawable->videoFrame.colorPrimaries();
-        m_drawable->m_colorTrc = m_drawable->videoFrame.colorTrc();
-        m_drawable->m_colorSpace = m_drawable->videoFrame.colorSpace();
-        m_drawable->m_limited = m_drawable->videoFrame.isLimited();
+        m_drawable->m_colorPrimaries = videoFrame.colorPrimaries();
+        m_drawable->m_colorTrc = videoFrame.colorTrc();
+        m_drawable->m_colorSpace = videoFrame.colorSpace();
         m_drawable->m_maxLuminance = maxLuminance;
+        m_drawable->m_bitsMultiplier = bitsMultiplier;
+        m_drawable->m_depth = videoFrame.depth();
+        m_drawable->m_limited = videoFrame.isLimited();
         m_drawable->doReset = true;
     }
 
