@@ -268,6 +268,7 @@ void OpenGLCommon::initializeGL()
         {
             //Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
             videoFrag.prepend("#define GL3\n");
+            videoFrag.prepend(readShader(":/opengl/colorspace.glsl"));
         }
     }
     if (target == GL_TEXTURE_RECTANGLE_ARB)
@@ -546,6 +547,17 @@ void OpenGLCommon::paintGL()
             const float hue = videoAdjustment.hue / -31.831f;
             shaderProgramVideo->setUniformValue("uVideoEq", brightness, contrast, saturation, hue);
             shaderProgramVideo->setUniformValue("uSharpness", sharpness);
+
+            if (m_colorPrimaries == AVCOL_PRI_BT2020 && (m_colorTrc == AVCOL_TRC_BT709 || m_colorTrc == AVCOL_TRC_SMPTE2084))
+            {
+                shaderProgramVideo->setUniformValue("uTrc", m_colorTrc);
+                shaderProgramVideo->setUniformValue("uMaxLuminance", m_maxLuminance);
+                shaderProgramVideo->setUniformValue("uColorPrimariesMatrix", Functions::getColorPrimariesTo709Matrix(m_colorPrimaries).toGenericMatrix<3, 3>());
+            }
+            else
+            {
+                shaderProgramVideo->setUniformValue("uTrc", 0);
+            }
         }
         shaderProgramVideo->setUniformValue("uTextureSize", m_textureSize);
 

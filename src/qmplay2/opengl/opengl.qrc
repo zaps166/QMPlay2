@@ -6,5 +6,7 @@
 
         <file alias="opengl/OSD.vert">shaders/OSD.vert</file>
         <file alias="opengl/OSD.frag">shaders/OSD.frag</file>
+
+        <file alias="opengl/colorspace.glsl">../shaderscommon/colorspace.glsl</file>
     </qresource>
 </RCC>

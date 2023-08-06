@@ -104,8 +104,11 @@ public:
     QStringList videoAdjustmentKeys;
     Frame videoFrame;
 
-    bool m_limited = false;
+    AVColorPrimaries m_colorPrimaries = AVCOL_PRI_UNSPECIFIED;
+    AVColorTransferCharacteristic m_colorTrc = AVCOL_TRC_UNSPECIFIED;
     AVColorSpace m_colorSpace = AVCOL_SPC_UNSPECIFIED;
+    float m_maxLuminance = 1000.0f;
+    bool m_limited = false;
 
     std::unique_ptr<QOpenGLShaderProgram> shaderProgramVideo, shaderProgramOSD;
 

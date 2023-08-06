@@ -182,12 +182,28 @@ void OpenGLWriter::writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList)
     m_drawable->osdList = move(osdList);
     m_drawable->isPaused = false;
     m_drawable->videoFrame = videoFrame;
-    if (m_drawable->m_limited != m_drawable->videoFrame.isLimited() || m_drawable->m_colorSpace != m_drawable->videoFrame.colorSpace())
+
+    float maxLuminance = 1000.0f;
+    if (auto masteringDisplayMetadata = videoFrame.masteringDisplayMetadata())
     {
-        m_drawable->m_limited = m_drawable->videoFrame.isLimited();
+        maxLuminance = static_cast<float>(av_q2d(masteringDisplayMetadata->max_luminance));
+        if (maxLuminance < 1.0f || maxLuminance > 10000.0f)
+            maxLuminance = 1000.0f;
+    }
+    if (m_drawable->m_colorPrimaries != m_drawable->videoFrame.colorPrimaries() ||
+            m_drawable->m_colorTrc != m_drawable->videoFrame.colorTrc() ||
+            m_drawable->m_colorSpace != m_drawable->videoFrame.colorSpace() ||
+            m_drawable->m_limited != m_drawable->videoFrame.isLimited() ||
+            m_drawable->m_maxLuminance != maxLuminance)
+    {
+        m_drawable->m_colorPrimaries = m_drawable->videoFrame.colorPrimaries();
+        m_drawable->m_colorTrc = m_drawable->videoFrame.colorTrc();
         m_drawable->m_colorSpace = m_drawable->videoFrame.colorSpace();
+        m_drawable->m_limited = m_drawable->videoFrame.isLimited();
+        m_drawable->m_maxLuminance = maxLuminance;
         m_drawable->doReset = true;
     }
+
     m_drawable->updateGL(m_drawable->isSphericalView());
 }
 

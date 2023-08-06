@@ -19,6 +19,9 @@ uniform float uBL;
 uniform vec4 uVideoEq;
 uniform float uSharpness;
 uniform vec2 uTextureSize;
+uniform int uTrc;
+uniform mat3 uColorPrimariesMatrix;
+uniform float uMaxLuminance;
 uniform sampler uY;
 #ifdef NV12
     uniform sampler uCbCr;
@@ -83,5 +86,18 @@ void main()
     }
 #endif
 
-    gl_FragColor = vec4(clamp(uYUVtRGB * ((YCbCr * uRangeMultiplier.xyy - vec3(0.5, 0.0, 0.0)) * contrastSaturation + vec3(0.5, 0.0, 0.0)), 0.0, 1.0) + brightness, 1.0);
+    vec3 rgb = clamp(uYUVtRGB * ((YCbCr * uRangeMultiplier.xyy - vec3(0.5, 0.0, 0.0)) * contrastSaturation + vec3(0.5, 0.0, 0.0)), 0.0, 1.0);
+
+#ifdef GL3
+    if (uTrc == AVCOL_TRC_BT709)
+    {
+        colorspace_trc_bt709(rgb, uColorPrimariesMatrix);
+    }
+    else if (uTrc == AVCOL_TRC_SMPTE2084)
+    {
+        colorspace_trc_smpte2084(rgb, uColorPrimariesMatrix, uMaxLuminance);
+    }
+#endif
+
+    gl_FragColor = vec4(rgb + brightness, 1.0);
 }
