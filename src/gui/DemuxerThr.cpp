@@ -1338,7 +1338,7 @@ void DemuxerThr::updateCover(const QString &title, const QString &artist, const 
         if (this->title == title && this->artist == artist && (this->album == album || (album.isEmpty() && !title.isEmpty())))
             emit playC.updateImage(coverImg);
 
-        static bool useCoversCache = (qEnvironmentVariableIntValue("QMPLAY2_NO_COVERS_CACHE") <= 0);
+        static bool useCoversCache = !QMPlay2Core.getSettings().getBool("NoCoversCache");
         if (!useCoversCache)
             return;
 

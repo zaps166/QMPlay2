@@ -169,6 +169,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("StillImages", false);
     QMPSettings.init("TrayNotifiesDefault", false);
     QMPSettings.init("AutoDelNonGroupEntries", false);
+    QMPSettings.init("NoCoversCache", false);
     QMPSettings.init("Proxy/Use", false);
     QMPSettings.init("Proxy/Host", QString());
     QMPSettings.init("Proxy/Port", 80);
