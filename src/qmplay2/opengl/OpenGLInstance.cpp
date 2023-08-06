@@ -28,7 +28,7 @@ bool OpenGLInstance::init()
     isGLES = context.isOpenGLES();
 
     const auto extensions = context.extensions();
-    const auto majorVersion = surface.format().majorVersion();
+    const auto majorVersion = context.format().majorVersion();
 
     if (fns->hasOpenGLFeature(QOpenGLFunctions::TextureRGFormats))
     {
@@ -50,7 +50,7 @@ bool OpenGLInstance::init()
         hasPbo = (hasMapBuffer || hasMapBufferRange) && (majorVersion >= (isGLES ? 3 : 2) || extensions.contains("GL_ARB_pixel_buffer_object"));
     }
 
-    glVer = context.format().majorVersion() * 10 + context.format().minorVersion();
+    glVer = majorVersion * 10 + context.format().minorVersion();
 
     return true;
 }
