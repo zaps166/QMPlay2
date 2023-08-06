@@ -61,7 +61,7 @@ OpenGLCommon::OpenGLCommon() :
     numPlanes(0),
     target(0),
     hasPbo(m_glInstance->hasPbo),
-    isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), canUseHueSharpness(true),
+    isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), m_gl3(true),
     outW(-1), outH(-1), verticesIdx(0),
     hasVbo(m_glInstance->hasVbo),
     nIndices(0)
@@ -73,7 +73,7 @@ OpenGLCommon::OpenGLCommon() :
     texCoordYCbCr[1] = texCoordYCbCr[3] = 1.0f;
 
 #ifndef Q_OS_MACOS
-    canUseHueSharpness = (m_glInstance->glVer >= 30);
+    m_gl3 = (m_glInstance->glVer >= 30);
 #endif
 
     m_matrixChangeFn = [this] {
@@ -251,22 +251,24 @@ void OpenGLCommon::initializeGL()
     if (numPlanes == 1)
     {
         videoFrag = readShader(":/opengl/VideoRGB.frag");
-        if (canUseHueSharpness)
+        if (m_gl3)
         {
             //Use sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
-            videoFrag.prepend("#define Sharpness\n");
+            videoFrag.prepend("#define GL3\n");
         }
     }
     else
     {
         videoFrag = readShader(":/opengl/VideoYCbCr.frag");
-        if (canUseHueSharpness)
+        if (numPlanes == 2)
+        {
+            videoFrag.prepend("#define NV12\n");
+        }
+        if (m_gl3)
         {
             //Use hue and sharpness only when OpenGL/OpenGL|ES version >= 3.0, because it can be slow on old hardware and/or buggy drivers and may increase CPU usage!
-            videoFrag.prepend("#define HueAndSharpness\n");
+            videoFrag.prepend("#define GL3\n");
         }
-        if (numPlanes == 2)
-            videoFrag.prepend("#define NV12\n");
     }
     if (target == GL_TEXTURE_RECTANGLE_ARB)
         videoFrag.prepend("#define TEXTURE_RECTANGLE\n");

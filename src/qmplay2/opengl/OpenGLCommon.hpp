@@ -120,7 +120,7 @@ public:
     quint32 pbo[4];
     bool hasPbo;
 
-    bool isPaused, isOK, hasImage, doReset, setMatrix, correctLinesize, canUseHueSharpness;
+    bool isPaused, isOK, hasImage, doReset, setMatrix, correctLinesize, m_gl3;
     int outW, outH, verticesIdx;
 
     QMPlay2OSDList osdList;

@@ -26,7 +26,7 @@ uniform sampler uY;
     uniform sampler uCb, uCr;
 #endif
 
-#ifdef HueAndSharpness
+#ifdef GL3
 float getLumaAtOffset(float x, float y)
 {
     return texture(uY, texCoordYWithOffset(vec2(x, y)))[0] - uBL;
@@ -56,7 +56,7 @@ void main()
 #endif
     YCbCr -= vec3(uBL, vec2(128.0 / 255.0));
 
-#ifdef HueAndSharpness
+#ifdef GL3
     if (uSharpness != 0.0)
     {
         // Kernel 3x3

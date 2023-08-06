@@ -262,13 +262,13 @@ void OpenGLWriter::initialize(const shared_ptr<OpenGLHWInterop> &hwInterop)
     else if (m_drawable->numPlanes > 1)
     {
         addAdditionalParam("Saturation");
-        if (m_drawable->canUseHueSharpness)
+        if (m_drawable->m_gl3)
             addAdditionalParam("Hue");
     }
     if (!hasBrightness)
         addAdditionalParam("Brightness");
     if (!hasContrast)
         addAdditionalParam("Contrast");
-    if (!hasSharpness && m_drawable->canUseHueSharpness)
+    if (!hasSharpness && m_drawable->m_gl3)
         addAdditionalParam("Sharpness");
 }
