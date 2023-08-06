@@ -40,5 +40,7 @@ public:
     bool hasMapBuffer = false;
     bool hasMapBufferRange = false;
 
+    bool canUse16bitTexture = false;
+
     int glVer = 0;
 };

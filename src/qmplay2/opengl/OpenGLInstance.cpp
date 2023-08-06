@@ -30,6 +30,11 @@ bool OpenGLInstance::init()
     const auto extensions = context.extensions();
     const auto majorVersion = surface.format().majorVersion();
 
+    if (fns->hasOpenGLFeature(QOpenGLFunctions::TextureRGFormats))
+    {
+        canUse16bitTexture = (isGLES ? extensions.contains("GL_EXT_texture_norm16") : (majorVersion >= 3));
+    }
+
     hasVbo = (majorVersion >= 2 || extensions.contains("GL_ARB_vertex_buffer_object"));
     if (hasVbo)
     {

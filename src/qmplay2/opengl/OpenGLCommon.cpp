@@ -60,6 +60,7 @@ OpenGLCommon::OpenGLCommon() :
     texCoordYCbCrLoc(-1), positionYCbCrLoc(-1), texCoordOSDLoc(-1), positionOSDLoc(-1),
     numPlanes(0),
     target(0),
+    m_canUse16bitTexture(m_glInstance->canUse16bitTexture),
     hasPbo(m_glInstance->hasPbo),
     isPaused(false), isOK(false), hasImage(false), doReset(true), setMatrix(true), correctLinesize(false), m_gl3(true),
     outW(-1), outH(-1), verticesIdx(0),
@@ -367,6 +368,8 @@ void OpenGLCommon::paintGL()
         };
         const int bytesMultiplier = (m_depth + 7) / 8;
         const GLenum dataType = (bytesMultiplier == 1) ? GL_UNSIGNED_BYTE : GL_UNSIGNED_SHORT;
+        const GLint internalFmt = (bytesMultiplier == 1) ? GL_LUMINANCE : GL_R16;
+        const GLenum fmt = (bytesMultiplier == 1) ? GL_LUMINANCE : GL_RED;
 
         if (doReset)
         {
@@ -409,7 +412,7 @@ void OpenGLCommon::paintGL()
                         glBufferData(GL_PIXEL_UNPACK_BUFFER, w * h * bytesMultiplier, nullptr, GL_DYNAMIC_DRAW);
                     }
                     glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, w, h, 0, GL_LUMINANCE, dataType, nullptr);
+                    glTexImage2D(GL_TEXTURE_2D, 0, internalFmt, w, h, 0, fmt, dataType, nullptr);
                 }
 
                 /* Prepare texture coordinates */
@@ -478,10 +481,10 @@ void OpenGLCommon::paintGL()
                 glActiveTexture(GL_TEXTURE0 + p);
                 glBindTexture(GL_TEXTURE_2D, textures[p + 1]);
                 if (hasPbo || correctLinesize)
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, GL_LUMINANCE, dataType, data);
+                    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, fmt, dataType, data);
                 else for (int y = 0; y < h; ++y)
                 {
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, w, 1, GL_LUMINANCE, dataType, data);
+                    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, y, w, 1, fmt, dataType, data);
                     data += videoFrame.linesize(p);
                 }
             }

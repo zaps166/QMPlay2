@@ -122,6 +122,8 @@ public:
     qint32 numPlanes;
     quint32 target;
 
+    bool m_canUse16bitTexture = false;
+
     quint32 pbo[4];
     bool hasPbo;
 

@@ -162,7 +162,7 @@ bool OpenGLWriter::processParams(bool *)
 
 AVPixelFormats OpenGLWriter::supportedPixelFormats() const
 {
-    return {
+    AVPixelFormats formats {
         AV_PIX_FMT_YUV420P,
         AV_PIX_FMT_YUVJ420P,
         AV_PIX_FMT_YUV422P,
@@ -174,25 +174,30 @@ AVPixelFormats OpenGLWriter::supportedPixelFormats() const
         AV_PIX_FMT_YUVJ411P,
         AV_PIX_FMT_YUV440P,
         AV_PIX_FMT_YUVJ440P,
-
-        AV_PIX_FMT_YUV420P9,
-        AV_PIX_FMT_YUV420P10,
-        AV_PIX_FMT_YUV420P12,
-        AV_PIX_FMT_YUV420P14,
-        AV_PIX_FMT_YUV420P16,
-        AV_PIX_FMT_YUV422P9,
-        AV_PIX_FMT_YUV422P10,
-        AV_PIX_FMT_YUV422P12,
-        AV_PIX_FMT_YUV422P14,
-        AV_PIX_FMT_YUV422P16,
-        AV_PIX_FMT_YUV444P9,
-        AV_PIX_FMT_YUV444P10,
-        AV_PIX_FMT_YUV444P12,
-        AV_PIX_FMT_YUV444P14,
-        AV_PIX_FMT_YUV444P16,
-        AV_PIX_FMT_YUV440P10,
-        AV_PIX_FMT_YUV440P12,
     };
+    if (m_drawable->m_canUse16bitTexture)
+    {
+        formats += {
+            AV_PIX_FMT_YUV420P9,
+            AV_PIX_FMT_YUV420P10,
+            AV_PIX_FMT_YUV420P12,
+            AV_PIX_FMT_YUV420P14,
+            AV_PIX_FMT_YUV420P16,
+            AV_PIX_FMT_YUV422P9,
+            AV_PIX_FMT_YUV422P10,
+            AV_PIX_FMT_YUV422P12,
+            AV_PIX_FMT_YUV422P14,
+            AV_PIX_FMT_YUV422P16,
+            AV_PIX_FMT_YUV444P9,
+            AV_PIX_FMT_YUV444P10,
+            AV_PIX_FMT_YUV444P12,
+            AV_PIX_FMT_YUV444P14,
+            AV_PIX_FMT_YUV444P16,
+            AV_PIX_FMT_YUV440P10,
+            AV_PIX_FMT_YUV440P12,
+        };
+    }
+    return formats;
 }
 
 void OpenGLWriter::writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList)
