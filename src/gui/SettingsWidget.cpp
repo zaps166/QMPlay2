@@ -954,6 +954,7 @@ void SettingsWidget::createRendererSettings()
 
 #ifdef Q_OS_WIN
             bypassCompositor->setEnabled(!noExclusiveFullScreenDevIDs->contains(devices->itemData(idx).toByteArray()));
+            hdr->setVisible(QSysInfo::windowsVersion() >= QSysInfo::WV_10_0);
 #else
             hdr->setVisible(false);
 #endif
