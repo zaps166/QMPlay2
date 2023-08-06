@@ -27,22 +27,22 @@ bool OpenGLInstance::init()
 
     isGLES = context.isOpenGLES();
 
-    hasVbo = fns->hasOpenGLFeature(QOpenGLFunctions::Buffers);
+    const auto extensions = context.extensions();
+    const auto majorVersion = surface.format().majorVersion();
+
+    hasVbo = (majorVersion >= 2 || extensions.contains("GL_ARB_vertex_buffer_object"));
     if (hasVbo)
     {
-        const auto extensions = context.extensions();
-
         if (!isGLES)
             hasMapBufferRange = extensions.contains("GL_ARB_map_buffer_range");
-        else if (surface.format().majorVersion() >= 3)
+        else if (majorVersion >= 3)
             hasMapBufferRange = true;
 
-        if (!isGLES)
-            hasMapBuffer = true;
-        else
-            hasMapBuffer = extensions.contains("GL_OES_mapbuffer");
+        hasMapBuffer = extensions.contains("GL_OES_mapbuffer");
+        if (Q_UNLIKELY(!isGLES && !hasMapBuffer))
+            hasMapBuffer = (majorVersion >= 2);
 
-        hasPbo = hasVbo && (hasMapBuffer || hasMapBufferRange);
+        hasPbo = (hasMapBuffer || hasMapBufferRange) && (majorVersion >= (isGLES ? 3 : 2) || extensions.contains("GL_ARB_pixel_buffer_object"));
     }
 
     glVer = context.format().majorVersion() * 10 + context.format().minorVersion();
