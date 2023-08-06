@@ -596,13 +596,17 @@ static void checkForEGL()
 
     if (!cardFilePath.isNull())
     {
-        if (!qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
+        const bool isMesa = (eglVendor == "Mesa Project");
+
+        if (isMesa && !qEnvironmentVariableIsSet("QT_XCB_GL_INTEGRATION"))
             qputenv("QT_XCB_GL_INTEGRATION", "xcb_egl");
 
-        if (!qEnvironmentVariableIsSet("QMPLAY2_EGL_CARD_FILE_PATH") && !cardFilePath.isEmpty())
+        const bool isEgl = (qEnvironmentVariable("QT_XCB_GL_INTEGRATION").toLower() == "xcb_egl");
+
+        if (isEgl && !qEnvironmentVariableIsSet("QMPLAY2_EGL_CARD_FILE_PATH") && !cardFilePath.isEmpty())
             qputenv("QMPLAY2_EGL_CARD_FILE_PATH", cardFilePath);
 
-        if (eglVendor != "Mesa Project" && qEnvironmentVariable("QT_XCB_GL_INTEGRATION").toLower() == "xcb_egl")
+        if (!isMesa && isEgl)
         {
             auto fmt = QSurfaceFormat::defaultFormat();
             fmt.setRenderableType(QSurfaceFormat::OpenGLES);
