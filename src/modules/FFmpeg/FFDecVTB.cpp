@@ -26,6 +26,7 @@
 #   include <VTBOpenGL.hpp>
 #endif
 
+#include <QOperatingSystemVersion>
 #include <QDebug>
 
 extern "C"
@@ -37,56 +38,25 @@ extern "C"
     #include <libavcodec/videotoolbox.h>
 }
 
-#include <dlfcn.h>
-
 using namespace std;
 
 static bool isCodecSupported(const StreamInfo &streamInfo)
 {
-    CMVideoCodecType cmCType;
     switch (streamInfo.params->codec_id)
     {
         case AV_CODEC_ID_H263:
-            cmCType = kCMVideoCodecType_H263;
-            break;
         case AV_CODEC_ID_H264:
-            cmCType = kCMVideoCodecType_H264;
-            break;
         case AV_CODEC_ID_HEVC:
-            // kCMVideoCodecType_HEVC isn't defined on all Mac OS versions
-            cmCType = 'hvc1';
-            break;
         case AV_CODEC_ID_MPEG1VIDEO:
-            cmCType = kCMVideoCodecType_MPEG1Video;
-            break;
         case AV_CODEC_ID_MPEG2VIDEO:
-            cmCType = kCMVideoCodecType_MPEG2Video;
-            break;
         case AV_CODEC_ID_MPEG4:
-            cmCType = kCMVideoCodecType_MPEG4Video;
-            break;
+            return true;
         case AV_CODEC_ID_VP9:
-            // kCMVideoCodecType_VP9 isn't defined on all Mac OS versions
-            cmCType = 'vp09';
-            break;
+            return (QOperatingSystemVersion::current().majorVersion() >= 11);
         default:
-            cmCType = 0;
             break;
     }
-
-    if (!cmCType)
-        return false;
-
-    // VTIsHardwareDecodeSupported() was introduced in 10.13 only so in order to run on older OS versions
-    // without resorting to conditional code we obtain (and cache) a pointer to the function via dlsym().
-    // According to https://www.objc.io/issues/23-video/videotoolbox/ Macs (running OS X 10.10) support
-    // "usually both H.264 and MPEG-4 Part 2 in hardware". H263 and MPEG 1,2 are supported in software
-    // which is of no use for us here.
-    static auto VTIsHardwareDecodeSupported = (bool (*)(CMVideoCodecType))dlsym(RTLD_DEFAULT, "VTIsHardwareDecodeSupported");
-    return VTIsHardwareDecodeSupported 
-        ? VTIsHardwareDecodeSupported(cmCType)
-        : (cmCType == kCMVideoCodecType_H264 || cmCType == kCMVideoCodecType_MPEG4Video)
-    ;
+    return false;
 }
 
 static AVPixelFormat vtbGetFormat(AVCodecContext *codecCtx, const AVPixelFormat *pixFmt)
@@ -137,7 +107,7 @@ bool FFDecVTB::open(StreamInfo &streamInfo)
     {
         return false;
     }
-    
+
     if (!isCodecSupported(streamInfo))
     {
         qWarning() << streamInfo.codec_name << "is not supported by VTB";
