@@ -46,11 +46,15 @@ static bool isCodecSupported(const StreamInfo &streamInfo)
     {
         case AV_CODEC_ID_H263:
         case AV_CODEC_ID_H264:
-        case AV_CODEC_ID_HEVC:
         case AV_CODEC_ID_MPEG1VIDEO:
         case AV_CODEC_ID_MPEG2VIDEO:
         case AV_CODEC_ID_MPEG4:
             return true;
+        case AV_CODEC_ID_HEVC:
+        {
+            const auto version = QOperatingSystemVersion::current();
+            return (version.majorVersion() > 10 || (version.majorVersion() == 10 && version.minorVersion() >= 13));
+        }
         case AV_CODEC_ID_VP9:
             return (QOperatingSystemVersion::current().majorVersion() >= 11);
         default:
