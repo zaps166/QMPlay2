@@ -51,6 +51,12 @@
 #ifndef GL_TEXTURE_RECTANGLE_ARB
     #define GL_TEXTURE_RECTANGLE_ARB 0x84F5
 #endif
+#ifndef GL_R16
+    #define GL_R16 GL_R16_EXT
+#endif
+#ifndef GL_RED
+    #define GL_RED GL_RED_EXT
+#endif
 
 OpenGLCommon::OpenGLCommon() :
     VideoOutputCommon(false),
