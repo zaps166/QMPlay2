@@ -50,7 +50,9 @@ bool OpenGLInstance::init()
         hasPbo = (hasMapBuffer || hasMapBufferRange) && (majorVersion >= (isGLES ? 3 : 2) || extensions.contains("GL_ARB_pixel_buffer_object"));
     }
 
+#ifndef Q_OS_MACOS // On macOS I have always OpenGL 2.1...
     glVer = majorVersion * 10 + context.format().minorVersion();
+#endif
 
     return true;
 }
