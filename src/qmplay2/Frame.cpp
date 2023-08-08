@@ -76,10 +76,8 @@ AVPixelFormat Frame::convert2PlaneTo3Plane(AVPixelFormat fmt)
         case AV_PIX_FMT_NV12:
             return AV_PIX_FMT_YUV420P;
         case AV_PIX_FMT_P010:
-            return AV_PIX_FMT_YUV420P10;
 #if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 2, 100)
         case AV_PIX_FMT_P012:
-            return AV_PIX_FMT_YUV420P12;
 #endif
         case AV_PIX_FMT_P016:
             return AV_PIX_FMT_YUV420P16;
