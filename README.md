@@ -107,7 +107,7 @@ Hardware acceleration is disabled by default, but you can enable it in "Settings
 
 ### VA-API + OpenGL information:
 
-VA-API + OpenGL uses EGL for OpenGL context creation. On X11 QMPlay2 tries to detect if EGL can be used, but the detection can fail. In this case you can try do it manually: `export QT_XCB_GL_INTEGRATION=xcb_glx` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally. This doesn't work on NVIDIA drivers. In case of multiple GPUs installed in system VA-API requires to use the same device as OpenGL. QMPlay2 detects it automatically, but if the detection fails, try to do it manually, e.g.: `export QMPLAY2_EGL_CARD_FILE_PATH=/dev/dri/card1` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally.
+VA-API + OpenGL uses EGL for OpenGL context creation. On X11 QMPlay2 tries to detect if EGL can be used, but the detection can fail. In this case you can try do it manually: `export QT_XCB_GL_INTEGRATION=xcb_glx` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally. In case of multiple GPUs installed in system VA-API requires to use the same device as OpenGL. QMPlay2 detects it automatically, but if the detection fails, try to do it manually, e.g.: `export QMPLAY2_EGL_CARD_FILE_PATH=/dev/dri/card1` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally.
 
 ## Deinterlacing
 
@@ -147,6 +147,14 @@ Go to "Options->settings" and check "Read and display still images".
 ### Custom user agent
 
 You can specify a `CustomUserAgent` in `QMPlay2.ini` file in `General` section.
+
+### Disable yt-dlp update
+
+Set `SkipYtDlpUpdate` to `true` in `QMPlay2.ini` file in `General` section.
+
+### Disable covers cache
+
+Set `NoCoversCache` to `true` in `QMPlay2.ini` file in `General` section.
 
 ### Single instance
 
