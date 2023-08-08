@@ -1059,7 +1059,10 @@ void DemuxerThr::emitInfo()
                             colorPrimariesName = tr("unknown");
                         if (colorTrcName.isEmpty() && !colorPrimariesName.isEmpty())
                             colorTrcName = tr("unknown");
-                        additionalFormatInfo = " (" + colorRangeName + ", " + colorSpaceName;
+                        additionalFormatInfo = " (";
+                        if (!colorRangeName.isEmpty())
+                            additionalFormatInfo += colorRangeName + ", ";
+                        additionalFormatInfo += colorSpaceName;
                         if (!colorPrimariesName.isEmpty())
                         {
                             additionalFormatInfo += "/" + colorPrimariesName;
