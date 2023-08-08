@@ -59,6 +59,28 @@ YadifDeint::YadifDeint(const shared_ptr<HWInterop> &hwInterop)
             AV_PIX_FMT_NV24,
 #endif
     };
+    if (m_instance->supportedPixelFormats().contains(AV_PIX_FMT_YUV420P10))
+    {
+        m_supportedPixelFormats += {
+                AV_PIX_FMT_YUV420P9,
+                AV_PIX_FMT_YUV420P10,
+                AV_PIX_FMT_YUV420P12,
+                AV_PIX_FMT_YUV420P14,
+                AV_PIX_FMT_YUV420P16,
+
+                AV_PIX_FMT_YUV422P9,
+                AV_PIX_FMT_YUV422P10,
+                AV_PIX_FMT_YUV422P12,
+                AV_PIX_FMT_YUV422P14,
+                AV_PIX_FMT_YUV422P16,
+
+                AV_PIX_FMT_YUV444P9,
+                AV_PIX_FMT_YUV444P10,
+                AV_PIX_FMT_YUV444P12,
+                AV_PIX_FMT_YUV444P14,
+                AV_PIX_FMT_YUV444P16,
+        };
+    }
 
     m_vkHwInterop = hwInterop;
 
