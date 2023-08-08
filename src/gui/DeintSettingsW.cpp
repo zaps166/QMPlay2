@@ -39,7 +39,7 @@ void DeintSettingsW::init()
     QMPSettings.init("Deinterlace/Auto", true);
     QMPSettings.init("Deinterlace/Doubler", true);
     QMPSettings.init("Deinterlace/AutoParity", true);
-    QMPSettings.init("Deinterlace/SoftwareMethod", "Bob");
+    QMPSettings.init("Deinterlace/SoftwareMethod", "Yadif 2x");
     QMPSettings.init("Deinterlace/TFF", false);
 }
 
