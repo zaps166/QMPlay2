@@ -18,9 +18,9 @@
 
 #include <D3D11VAVulkan.hpp>
 
-#include <QResource>
 #include <QLibrary>
 #include <QDebug>
+#include <QFile>
 #include <QDir>
 
 #include <QMPlay2Core.hpp>
@@ -393,8 +393,12 @@ bool D3D11VAVulkan::init()
             return false;
     }
 
-    const QResource res(m_linearImage ? ":/D3D11VABuffer.dxcs" : ":/D3D11VATexture.dxcs");
-    auto dxcs = QByteArray::fromRawData(reinterpret_cast<const char *>(res.data()), res.size());
+    QFile res(m_linearImage ? ":/D3D11VABuffer.dxcs" : ":/D3D11VATexture.dxcs");
+    if (Q_UNLIKELY(!res.open(QFile::ReadOnly)))
+        return false;
+
+    const auto dxcs = res.readAll();
+    res.close();
 
     ComPtr<ID3DBlob> csData;
     d3dCompile(
