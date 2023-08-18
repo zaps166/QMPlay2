@@ -81,9 +81,16 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo)
     if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO || !hasHWAccel("dxva2"))
         return false;
 
-    m_pixFmt = Frame::convert3PlaneTo2Plane(streamInfo.pixelFormat());
-    if (m_pixFmt != AV_PIX_FMT_NV12 && (m_pixFmt != AV_PIX_FMT_P016 || streamInfo.params->codec_id == AV_CODEC_ID_H264))
+    const auto pixFmt = streamInfo.pixelFormat();
+    if (pixFmt == AV_PIX_FMT_YUV420P10)
+    {
+        if (streamInfo.params->codec_id == AV_CODEC_ID_H264)
+            return false;
+    }
+    else if (pixFmt != AV_PIX_FMT_YUV420P && pixFmt != AV_PIX_FMT_YUVJ420P)
+    {
         return false;
+    }
 
     AVCodec *codec = init(streamInfo);
     if (!codec)
@@ -114,7 +121,7 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo)
             if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(dxva2OpenGL))
                 return false;
         }
-        if (!dxva2OpenGL->checkCodec(streamInfo.codec_name, m_pixFmt == AV_PIX_FMT_YUV420P10))
+        if (!dxva2OpenGL->checkCodec(streamInfo.codec_name, pixFmt == AV_PIX_FMT_YUV420P10))
             return false;
     }
 

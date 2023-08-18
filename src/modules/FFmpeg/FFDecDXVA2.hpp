@@ -37,5 +37,4 @@ public:
 private:
     AVBufferRef *m_hwDeviceBufferRef = nullptr;
     std::shared_ptr<VideoFilter> m_filter;
-    AVPixelFormat m_pixFmt = AV_PIX_FMT_NONE;
 };
