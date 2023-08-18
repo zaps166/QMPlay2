@@ -179,7 +179,7 @@ void D3D11VAVulkan::map(Frame &frame)
 
     if (m_images.empty())
     {
-        if (frame.pixelFormat() == AV_PIX_FMT_P016)
+        if (frame.depth() > 8)
         {
             m_format1 = DXGI_FORMAT_R16_UNORM;
             m_format2 = DXGI_FORMAT_R16G16_UNORM;
