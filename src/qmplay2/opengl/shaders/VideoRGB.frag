@@ -5,7 +5,7 @@ uniform vec3 uVideoAdj;
 uniform vec2 uTextureSize;
 uniform sampler2D uRGB;
 
-#ifdef Sharpness
+#ifdef GL3
 vec4 getRGBAtOffset(float x, float y)
 {
     return texture(uRGB, vTexCoord + vec2(x, y));
@@ -17,7 +17,7 @@ void main()
     float brightness = uVideoAdj[0];
     float contrast = uVideoAdj[1];
     vec4 RGB = texture(uRGB, vTexCoord);
-#ifdef Sharpness
+#ifdef GL3
     float sharpness = uVideoAdj[2];
     if (sharpness != 0.0)
     {
