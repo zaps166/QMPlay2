@@ -16,7 +16,7 @@ if(WIN32)
 endif()
 
 # Set default build type as Release
-if(NOT CMAKE_BUILD_TYPE)
+if(NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "None")
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
