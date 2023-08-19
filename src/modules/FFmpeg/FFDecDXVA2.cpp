@@ -96,41 +96,26 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo)
     if (!codec)
         return false;
 
-#ifdef USE_OPENGL
-    shared_ptr<DXVA2OpenGL> dxva2OpenGL;
-
-    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
-    {
-        dxva2OpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<DXVA2OpenGL>();
-        if (dxva2OpenGL)
-            m_hwDeviceBufferRef = av_buffer_ref(dxva2OpenGL->m_hwDeviceBufferRef);
-    }
-#endif
+    auto dxva2OpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<DXVA2OpenGL>();
+    if (dxva2OpenGL)
+        m_hwDeviceBufferRef = av_buffer_ref(dxva2OpenGL->m_hwDeviceBufferRef);
 
     if (!m_hwDeviceBufferRef && av_hwdevice_ctx_create(&m_hwDeviceBufferRef, AV_HWDEVICE_TYPE_DXVA2, nullptr, nullptr, 0) != 0)
         return false;
 
-#ifdef USE_OPENGL
-    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
+    if (!dxva2OpenGL)
     {
-        if (!dxva2OpenGL)
-        {
-            dxva2OpenGL = make_shared<DXVA2OpenGL>(m_hwDeviceBufferRef);
-            if (!dxva2OpenGL->initVideoProcessor())
-                return false;
-            if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(dxva2OpenGL))
-                return false;
-        }
-        if (!dxva2OpenGL->checkCodec(streamInfo.codec_name, pixFmt == AV_PIX_FMT_YUV420P10))
+        dxva2OpenGL = make_shared<DXVA2OpenGL>(m_hwDeviceBufferRef);
+        if (!dxva2OpenGL->initVideoProcessor())
+            return false;
+        if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(dxva2OpenGL))
             return false;
     }
+    if (!dxva2OpenGL->checkCodec(streamInfo.codec_name, pixFmt == AV_PIX_FMT_YUV420P10))
+        return false;
 
-    if (dxva2OpenGL)
-    {
-        m_filter = make_shared<DeintHWPrepareFilter>();
-        m_hasHWDecContext = true;
-    }
-#endif
+    m_filter = make_shared<DeintHWPrepareFilter>();
+    m_hasHWDecContext = true;
 
     codec_ctx->hw_device_ctx = av_buffer_ref(m_hwDeviceBufferRef);
     codec_ctx->get_format = dxva2GetFormat;

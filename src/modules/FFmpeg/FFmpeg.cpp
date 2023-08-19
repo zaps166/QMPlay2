@@ -63,7 +63,7 @@ FFmpeg::FFmpeg() :
     dxIcon = QIcon(":/DXVA2.svgz");
     if (QMPlay2Core.isVulkanRenderer())
         d3d11vaSupported = (QSysInfo::windowsVersion() >= QSysInfo::WV_6_2);
-    else
+    else if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
         dxva2Supported = (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0);
 #endif
 #ifdef QMPlay2_VTB
