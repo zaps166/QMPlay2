@@ -336,10 +336,6 @@ if(USE_GIT_VERSION)
 endif()
 add_feature_info("Git version" QMPLAY2_GIT_HEAD "Append Git HEAD to QMPlay2 version")
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU") # GCC
-    set(CMAKE_CXX_FLAGS "--param vect-max-version-for-alias-checks=12  ${CMAKE_CXX_FLAGS}") # Required for better Yadif vectorization
-endif()
-
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang") # GCC or Clang
     option(USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds" OFF)
     add_feature_info("Link Time Optimization" USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds")

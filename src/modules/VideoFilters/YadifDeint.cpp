@@ -64,7 +64,7 @@ static inline void check(const quint8 *const curr,
 }
 template<bool isNotEdge>
 static inline void filterLine(quint8 *dest, const void *const destEnd,
-                              const quint8 *prev, const quint8 *curr, const quint8 *next,
+                              const quint8 *__restrict__ prev, const quint8 *__restrict__ curr, const quint8 *__restrict__ next,
                               const qptrdiff prefs, const qptrdiff mrefs,
                               const int spatialCheck, const bool filterParity)
 {
