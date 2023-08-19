@@ -4,6 +4,9 @@ varying vec2 vTexCoord;
 uniform vec3 uVideoAdj;
 uniform vec2 uTextureSize;
 uniform sampler2D uRGB;
+uniform int uTrc;
+uniform mat3 uColorPrimariesMatrix;
+uniform float uMaxLuminance;
 
 #ifdef GL3
 vec4 getRGBAtOffset(float x, float y)
@@ -33,6 +36,14 @@ void main()
         );
         // Subtract blur from original image, multiply and then add it to the original image
         RGB = clamp(RGB + (RGB - blur) * sharpness, 0.0, 1.0);
+    }
+    if (uTrc == AVCOL_TRC_BT709)
+    {
+        colorspace_trc_bt709(RGB.rgb, uColorPrimariesMatrix);
+    }
+    else if (uTrc == AVCOL_TRC_SMPTE2084)
+    {
+        colorspace_trc_smpte2084(RGB.rgb, uColorPrimariesMatrix, uMaxLuminance);
     }
 #endif
     gl_FragColor = clamp((RGB - 0.5) * contrast + 0.5, 0.0, 1.0) + brightness;
