@@ -641,16 +641,16 @@ bool D3D11VAVulkan::createImageInteropZeroCopy(const shared_ptr<Device> &device,
         CloseHandle(handle);
     });
 
-    const auto globalOffset = image->memorySize() * textureIdx;
     image->importWin32Handle(
         {
             handle,
         },
         {
-            globalOffset + image->planeOffset(0),
-            globalOffset + image->planeOffset(1),
+            image->planeOffset(0),
+            image->planeOffset(1),
         },
-        m_externalMemoryHandleType
+        m_externalMemoryHandleType,
+        image->memorySize() * textureIdx
     );
 
     return true;
