@@ -132,8 +132,6 @@ static void filterSlice(const int plane, const int parity, const int tff, const 
     const quint8 *const nextData = nextFrame.constData(plane);
     quint8 *const destData = destFrame.data(plane);
 
-    constexpr int toSub = 3;
-
     for (int y = sliceStart; y < sliceEnd; ++y)
     {
         const quint8 *curr  = &currData[y * refs];
@@ -163,22 +161,10 @@ static void filterSlice(const int plane, const int parity, const int tff, const 
             filterLine<true>
             (
                 dest  + 3,
-                dest  + w - toSub,
+                dest  + w - 3,
                 prev  + 3,
                 curr  + 3,
                 next  + 3,
-                prefs,
-                mrefs,
-                doSpatialCheck,
-                filterParity
-            );
-            filterLine<true>
-            (
-                dest  + w - toSub,
-                dest  + w - 3,
-                prev  + w - toSub,
-                curr  + w - toSub,
-                next  + w - toSub,
                 prefs,
                 mrefs,
                 doSpatialCheck,
