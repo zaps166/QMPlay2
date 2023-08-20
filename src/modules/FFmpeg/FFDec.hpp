@@ -46,6 +46,8 @@ protected:
     FFDec();
     ~FFDec();
 
+    void setSupportedPixelFormats(const AVPixelFormats &pixelFormats) override;
+
     int pendingFrames() const override;
 
     /**/
@@ -69,6 +71,8 @@ protected:
     QList<AVFrame *> m_frames;
     AVRational m_timeBase;
     bool codecIsOpen;
+
+    AVPixelFormats m_supportedPixelFormats;
 
 #ifdef USE_VULKAN
     std::shared_ptr<QmVk::ImagePool> m_vkImagePool;

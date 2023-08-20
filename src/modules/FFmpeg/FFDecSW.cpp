@@ -138,7 +138,7 @@ QByteArray FFDecSW::subtitleHeader() const
 
 void FFDecSW::setSupportedPixelFormats(const AVPixelFormats &pixelFormats)
 {
-    supportedPixelFormats = pixelFormats;
+    FFDec::setSupportedPixelFormats(pixelFormats);
     setPixelFormat();
 }
 
@@ -489,7 +489,7 @@ void FFDecSW::setPixelFormat()
         return;
     }
 
-    m_dontConvert = supportedPixelFormats.contains(codec_ctx->pix_fmt);
+    m_dontConvert = m_supportedPixelFormats.contains(codec_ctx->pix_fmt);
     if (m_dontConvert)
     {
         m_desiredPixFmt = codec_ctx->pix_fmt;
@@ -514,7 +514,7 @@ void FFDecSW::setPixelFormat()
 
     const QByteArray srcPixFmtName = srcPixDesc->name;
 
-    for (const AVPixelFormat pixFmt : qAsConst(supportedPixelFormats))
+    for (const AVPixelFormat pixFmt : qAsConst(m_supportedPixelFormats))
     {
         if (!sws_isSupportedOutput(pixFmt))
             continue;

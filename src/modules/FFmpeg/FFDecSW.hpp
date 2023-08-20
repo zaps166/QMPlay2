@@ -90,7 +90,6 @@ private:
     int lastFrameW, lastFrameH, lastPixFmt;
     SwsContext *sws_ctx;
 
-    AVPixelFormats supportedPixelFormats;
     const AVPixFmtDescriptor *m_origPixDesc = nullptr;
     AVPixelFormat m_desiredPixFmt = AV_PIX_FMT_NONE;
     bool m_dontConvert = false;

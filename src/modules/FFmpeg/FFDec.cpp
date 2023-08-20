@@ -42,6 +42,11 @@ FFDec::~FFDec()
     destroyDecoder();
 }
 
+void FFDec::setSupportedPixelFormats(const AVPixelFormats &pixelFormats)
+{
+    m_supportedPixelFormats = pixelFormats;
+}
+
 int FFDec::pendingFrames() const
 {
     return m_frames.count();
