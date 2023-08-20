@@ -287,29 +287,32 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     const auto copyVideoText = tr("Copy decoded video to CPU memory (slow)");
 
 #ifdef QMPlay2_VDPAU
-    decoderVDPAUB = new QGroupBox(tr("Decoder") + " VDPAU - " + tr("hardware decoding"));
-    decoderVDPAUB->setCheckable(true);
-    decoderVDPAUB->setChecked(sets().getBool("DecoderVDPAUEnabled"));
+    if (!QMPlay2Core.isVulkanRenderer())
+    {
+        decoderVDPAUB = new QGroupBox(tr("Decoder") + " VDPAU - " + tr("hardware decoding"));
+        decoderVDPAUB->setCheckable(true);
+        decoderVDPAUB->setChecked(sets().getBool("DecoderVDPAUEnabled"));
 
-    noisereductionVDPAUB = new QCheckBox(tr("Noise reduction"));
-    noisereductionVDPAUB->setChecked(sets().getBool("VDPAUNoiseReductionEnabled"));
-    connect(noisereductionVDPAUB, &QCheckBox::clicked,
-            this, [this] {
+        noisereductionVDPAUB = new QCheckBox(tr("Noise reduction"));
+        noisereductionVDPAUB->setChecked(sets().getBool("VDPAUNoiseReductionEnabled"));
+        connect(noisereductionVDPAUB, &QCheckBox::clicked,
+                this, [this] {
+            checkEnables();
+            setVDPAU();
+        });
+        noisereductionLvlVDPAUS = new Slider;
+        noisereductionLvlVDPAUS->setRange(0, 50);
+        noisereductionLvlVDPAUS->setTickInterval(50);
+        noisereductionLvlVDPAUS->setTickPosition(QSlider::TicksBelow);
+        noisereductionLvlVDPAUS->setValue(sets().getDouble("VDPAUNoiseReductionLvl") * 50);
+        connect(noisereductionLvlVDPAUS, &Slider::valueChanged,
+                this, &ModuleSettingsWidget::setVDPAU);
+
         checkEnables();
-        setVDPAU();
-    });
-    noisereductionLvlVDPAUS = new Slider;
-    noisereductionLvlVDPAUS->setRange(0, 50);
-    noisereductionLvlVDPAUS->setTickInterval(50);
-    noisereductionLvlVDPAUS->setTickPosition(QSlider::TicksBelow);
-    noisereductionLvlVDPAUS->setValue(sets().getDouble("VDPAUNoiseReductionLvl") * 50);
-    connect(noisereductionLvlVDPAUS, &Slider::valueChanged,
-            this, &ModuleSettingsWidget::setVDPAU);
 
-    checkEnables();
-
-    QFormLayout *vdpauLayout = new QFormLayout(decoderVDPAUB);
-    vdpauLayout->addRow(noisereductionVDPAUB, noisereductionLvlVDPAUS);
+        QFormLayout *vdpauLayout = new QFormLayout(decoderVDPAUB);
+        vdpauLayout->addRow(noisereductionVDPAUB, noisereductionLvlVDPAUS);
+    }
 #endif
 
 #ifdef QMPlay2_VAAPI
@@ -402,7 +405,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(demuxerB);
 #ifdef QMPlay2_VDPAU
-    layout->addWidget(decoderVDPAUB);
+    if (decoderVDPAUB)
+        layout->addWidget(decoderVDPAUB);
 #endif
 #ifdef QMPlay2_VAAPI
     layout->addWidget(decoderVAAPIEB);
@@ -446,7 +450,8 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("LowresValue", lowresB->currentIndex());
     sets().set("ThreadTypeSlice", thrTypeB->currentIndex());
 #ifdef QMPlay2_VDPAU
-    sets().set("DecoderVDPAUEnabled", decoderVDPAUB->isChecked());
+    if (decoderVDPAUB)
+        sets().set("DecoderVDPAUEnabled", decoderVDPAUB->isChecked());
 #endif
 #ifdef QMPlay2_VAAPI
     sets().set("DecoderVAAPIEnabled", decoderVAAPIEB->isChecked());

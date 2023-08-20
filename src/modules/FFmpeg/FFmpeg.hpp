@@ -93,9 +93,9 @@ private:
     QCheckBox *skipFramesB, *forceSkipFramesB;
     QGroupBox *decoderB;
 #ifdef QMPlay2_VDPAU
-    QGroupBox *decoderVDPAUB;
-    QCheckBox *noisereductionVDPAUB;
-    Slider *noisereductionLvlVDPAUS;
+    QGroupBox *decoderVDPAUB = nullptr;
+    QCheckBox *noisereductionVDPAUB = nullptr;
+    Slider *noisereductionLvlVDPAUS = nullptr;
 #endif
 #ifdef QMPlay2_VAAPI
     QCheckBox *decoderVAAPIEB;
