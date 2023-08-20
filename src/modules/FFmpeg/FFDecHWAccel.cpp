@@ -24,12 +24,15 @@
 extern "C"
 {
     #include <libavcodec/avcodec.h>
+    #include <libswscale/swscale.h>
 }
 
 FFDecHWAccel::FFDecHWAccel()
 {}
 FFDecHWAccel::~FFDecHWAccel()
-{}
+{
+    sws_freeContext(m_swsCtx);
+}
 
 bool FFDecHWAccel::hasHWAccel(const char *hwaccelName)
 {
@@ -82,7 +85,7 @@ int FFDecHWAccel::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPix
     {
         decoded = Frame(frame, Frame::convert3PlaneTo2Plane(codec_ctx->sw_pix_fmt));
         if (!m_hasHWDecContext)
-            decoded = decoded.downloadHwData();
+            decoded = decoded.downloadHwData(&m_swsCtx, m_supportedPixelFormats);
     }
 
     decodeLastStep(encodedPacket, decoded, frameFinished);

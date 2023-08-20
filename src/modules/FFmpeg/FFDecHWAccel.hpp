@@ -39,4 +39,5 @@ protected:
 protected:
     bool m_hasCriticalError = false;
     bool m_hasHWDecContext = false;
+    SwsContext *m_swsCtx = nullptr;
 };

@@ -39,6 +39,7 @@ class Image;
 
 struct AVPixFmtDescriptor;
 struct AVBufferRef;
+struct SwsContext;
 struct AVFrame;
 
 using AVPixelFormats = QVector<AVPixelFormat>;
@@ -160,7 +161,7 @@ public: // Video
 
     bool copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) const;
 
-    Frame downloadHwData() const;
+    Frame downloadHwData(SwsContext **swsCtx = nullptr, const AVPixelFormats &supportedPixelFormats = {}) const;
 
 #ifdef USE_VULKAN
     inline std::shared_ptr<QmVk::Image> vulkanImage() const;

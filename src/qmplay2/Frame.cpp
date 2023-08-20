@@ -30,6 +30,7 @@ extern "C"
     #include <libavutil/frame.h>
     #include <libavutil/pixdesc.h>
     #include <libavutil/imgutils.h>
+    #include <libswscale/swscale.h>
 }
 
 #include <cmath>
@@ -511,7 +512,7 @@ bool Frame::copyYV12(void *dest, qint32 linesizeLuma, qint32 linesizeChroma) con
     return copyData(destData, destLinesize);
 }
 
-Frame Frame::downloadHwData() const
+Frame Frame::downloadHwData(SwsContext **swsCtx, const AVPixelFormats &supportedPixelFormats) const
 {
     Frame downloaded;
     if (isHW() && m_frame->hw_frames_ctx)
@@ -538,11 +539,61 @@ Frame Frame::downloadHwData() const
             dstFrame->format = AV_PIX_FMT_NONE;
         }
 
+        const bool convert =
+            swsCtx &&
+            !supportedPixelFormats.isEmpty() &&
+            !supportedPixelFormats.contains(found ? static_cast<AVPixelFormat>(dstFrame->format) : m_pixelFormat)
+        ;
+
         if (av_hwframe_transfer_data(dstFrame, m_frame, 0) == 0)
         {
-            av_frame_copy_props(dstFrame, m_frame);
-            downloaded = Frame(dstFrame);
+            AVFrame *dstFrame2 = nullptr;
+
+            if (convert)
+            {
+                dstFrame2 = av_frame_alloc();
+                dstFrame2->width = dstFrame->width;
+                dstFrame2->height = dstFrame->height;
+                dstFrame2->format = AV_PIX_FMT_YUV420P;
+                if (av_frame_get_buffer(dstFrame2, 0) == 0)
+                {
+                    *swsCtx = sws_getCachedContext(
+                        *swsCtx,
+                        dstFrame->width,
+                        dstFrame->height,
+                        m_pixelFormat,
+                        dstFrame2->width,
+                        dstFrame2->height,
+                        static_cast<AVPixelFormat>(dstFrame2->format),
+                        SWS_POINT,
+                        nullptr,
+                        nullptr,
+                        nullptr
+                    );
+                    if (*swsCtx)
+                    {
+                        sws_scale(
+                            *swsCtx,
+                            dstFrame->data,
+                            dstFrame->linesize,
+                            0,
+                            dstFrame->height,
+                            dstFrame2->data,
+                            dstFrame2->linesize
+                        );
+                    }
+                    downloaded = Frame(dstFrame2);
+                }
+            }
+
+            if (downloaded.isEmpty())
+                downloaded = Frame(dstFrame);
+            av_frame_copy_props(downloaded.m_frame, m_frame);
+            downloaded.m_frame->key_frame = m_frame->key_frame;
             downloaded.setTimeBase(m_timeBase);
+
+            if (dstFrame2)
+                av_frame_free(&dstFrame2);
         }
 
         av_frame_free(&dstFrame);
