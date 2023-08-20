@@ -21,6 +21,7 @@
 #include <DockWidget.hpp>
 #include <Functions.hpp>
 
+#include <QGuiApplication>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QMenu>
@@ -146,6 +147,8 @@ bool VisWidget::eventFilter(QObject *watched, QEvent *event)
     if (glW && watched == glW && event->type() == QEvent::Paint)
     {
         QPainter p(glW);
+        if (QGuiApplication::platformName().contains("wayland"))
+            p.fillRect(rect(), Qt::black);
         paint(p);
         m_pendingUpdate = false;
         return true;
