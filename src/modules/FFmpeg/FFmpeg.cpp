@@ -167,7 +167,7 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
     if (showDisabled || getBool("DecoderEnabled"))
         modulesInfo += Info(DecoderName, DECODER, m_icon);
 #ifdef QMPlay2_VDPAU
-    if (showDisabled || (getBool("DecoderVDPAUEnabled") && QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL))
+    if (showDisabled || (getBool("DecoderVDPAUEnabled") && !QMPlay2Core.isVulkanRenderer()))
     {
         modulesInfo += Info(DecoderVDPAUName, DECODER, vdpauIcon);
         modulesInfo += Info(VDPAUWriterName, WRITER | VIDEOHWFILTER, vdpauIcon);
@@ -202,7 +202,7 @@ void *FFmpeg::createInstance(const QString &name)
     else if (name == DecoderName && getBool("DecoderEnabled"))
         return new FFDecSW(*this);
 #ifdef QMPlay2_VDPAU
-    else if (name == DecoderVDPAUName && getBool("DecoderVDPAUEnabled") && QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
+    else if (name == DecoderVDPAUName && getBool("DecoderVDPAUEnabled") && !QMPlay2Core.isVulkanRenderer())
         return new FFDecVDPAU(*this);
 #endif
 #ifdef QMPlay2_VAAPI

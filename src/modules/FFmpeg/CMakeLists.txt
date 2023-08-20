@@ -79,8 +79,12 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_D3D11V
 
     if(USE_FFMPEG_VDPAU) # VDPAU
         add_definitions(-DQMPlay2_VDPAU)
-        list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAU.hpp VDPAUOpenGL.hpp)
-        list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAU.cpp VDPAUOpenGL.cpp)
+        list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAU.hpp)
+        list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAU.cpp)
+        if(USE_OPENGL)
+            list(APPEND FFmpeg_HDR VDPAUOpenGL.hpp)
+            list(APPEND FFmpeg_SRC VDPAUOpenGL.cpp)
+        endif()
         pkg_check_modules(LIBVDPAU REQUIRED vdpau)
         include_directories(${LIBVDPAU_INCLUDE_DIRS})
         link_directories(${LIBVDPAU_LIBRARY_DIRS})
