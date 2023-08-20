@@ -240,10 +240,8 @@ option(USE_FFMPEG_VDPAU "Build VDPAU acceleration into FFmpeg" ${LIBS_VDPAU_FOUN
 add_feature_info(VDPAU USE_FFMPEG_VDPAU "Build VDPAU acceleration into FFmpeg")
 
 if(WIN32)
-    if(USE_OPENGL)
-        option(USE_FFMPEG_DXVA2 "Build DXVA2 acceleration into FFmpeg" ON)
-        add_feature_info(DXVA2 USE_FFMPEG_DXVA2 "Build DXVA2 acceleration into FFmpeg")
-    endif()
+    option(USE_FFMPEG_DXVA2 "Build DXVA2 acceleration into FFmpeg" ON)
+    add_feature_info(DXVA2 USE_FFMPEG_DXVA2 "Build DXVA2 acceleration into FFmpeg")
 
     if(USE_VULKAN)
         option(USE_FFMPEG_D3D11VA "Build D3D11VA acceleration into FFmpeg" ON)

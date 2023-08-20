@@ -97,8 +97,12 @@ if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_D3D11V
 
     if(USE_FFMPEG_DXVA2) # DXVA2
         add_definitions(-DQMPlay2_DXVA2 -DINITGUID)
-        list(APPEND FFmpeg_HDR FFDecDXVA2.hpp DXVA2OpenGL.hpp)
-        list(APPEND FFmpeg_SRC FFDecDXVA2.cpp DXVA2OpenGL.cpp)
+        list(APPEND FFmpeg_HDR FFDecDXVA2.hpp)
+        list(APPEND FFmpeg_SRC FFDecDXVA2.cpp)
+        if(USE_OPENGL)
+            list(APPEND FFmpeg_HDR DXVA2OpenGL.hpp)
+            list(APPEND FFmpeg_SRC DXVA2OpenGL.cpp)
+        endif()
     endif()
 
     if(USE_FFMPEG_D3D11VA) #D3D11VA
