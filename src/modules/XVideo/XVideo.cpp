@@ -19,6 +19,8 @@
 #include <XVideo.hpp>
 #include <XVideoWriter.hpp>
 
+#include <QGuiApplication>
+
 XVideo::XVideo() :
     Module("XVideo")
 {
@@ -31,13 +33,13 @@ XVideo::XVideo() :
 QList<XVideo::Info> XVideo::getModulesInfo(const bool showDisabled) const
 {
     QList<Info> modulesInfo;
-    if (showDisabled || getBool("Enabled"))
+    if (showDisabled || (QGuiApplication::platformName() == "xcb" && getBool("Enabled")))
         modulesInfo += Info(XVideoWriterName, WRITER, QStringList{"video"});
     return modulesInfo;
 }
 void *XVideo::createInstance(const QString &name)
 {
-    if (name == XVideoWriterName && getBool("Enabled"))
+    if (name == XVideoWriterName && QGuiApplication::platformName() == "xcb" && getBool("Enabled"))
         return new XVideoWriter(*this);
     return nullptr;
 }
