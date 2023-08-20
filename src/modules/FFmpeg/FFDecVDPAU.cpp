@@ -21,9 +21,7 @@
 #include <Functions.hpp>
 #include <FFCommon.hpp>
 #include <VDPAU.hpp>
-#ifdef USE_OPENGL
-#   include <VDPAUOpenGL.hpp>
-#endif
+#include <VDPAUOpenGL.hpp>
 #include <GPUInstance.hpp>
 
 extern "C"
@@ -129,19 +127,12 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo)
     if (!codec)
         return false;
 
-#ifdef USE_OPENGL
-    shared_ptr<VDPAUOpenGL> vdpauOpenGL;
-
-    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL)
+    auto vdpauOpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<VDPAUOpenGL>();
+    if (vdpauOpenGL)
     {
-        vdpauOpenGL = QMPlay2Core.gpuInstance()->getHWDecContext<VDPAUOpenGL>();
-        if (vdpauOpenGL)
-        {
-            m_vdpau = vdpauOpenGL->getVDPAU();
-            Q_ASSERT(m_vdpau);
-        }
+        m_vdpau = vdpauOpenGL->getVDPAU();
+        Q_ASSERT(m_vdpau);
     }
-#endif
 
     AVBufferRef *hwDeviceBufferRef = nullptr;
     if (!m_vdpau)
@@ -178,17 +169,11 @@ bool FFDecVDPAU::open(StreamInfo &streamInfo)
     if (!openCodec(codec))
         return false;
 
-#ifdef USE_OPENGL
-    if (QMPlay2Core.renderer() == QMPlay2CoreClass::Renderer::OpenGL && !vdpauOpenGL)
-    {
-        vdpauOpenGL = make_shared<VDPAUOpenGL>(m_vdpau);
-        if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(vdpauOpenGL))
-            return false;
-    }
+    vdpauOpenGL = make_shared<VDPAUOpenGL>(m_vdpau);
+    if (!QMPlay2Core.gpuInstance()->setHWDecContextForVideoOutput(vdpauOpenGL))
+        return false;
 
-    if (vdpauOpenGL)
-        m_hasHWDecContext = true;
-#endif
+    m_hasHWDecContext = true;
 
     m_timeBase = streamInfo.time_base;
     return true;
