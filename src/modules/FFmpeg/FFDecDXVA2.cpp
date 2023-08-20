@@ -21,9 +21,7 @@
 #include <DeintHWPrepareFilter.hpp>
 #include <GPUInstance.hpp>
 #include <StreamInfo.hpp>
-#ifdef USE_OPENGL
-#   include <DXVA2OpenGL.hpp>
-#endif
+#include <DXVA2OpenGL.hpp>
 
 #include <QDebug>
 
