@@ -147,7 +147,11 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     setSurfaceType(VulkanSurface);
     setVulkanInstance(m_instance->qVulkanInstance());
 
-    switch (m_physicalDevice->properties().vendorID)
+    if (m_platformName == "xcb" && !qgetenv("WAYLAND_DISPLAY").isEmpty())
+    {
+        m_useRenderPassClear = true;
+    }
+    else switch (m_physicalDevice->properties().vendorID)
     {
 #if !defined(Q_OS_WIN)
         case 0x8086: // Intel
