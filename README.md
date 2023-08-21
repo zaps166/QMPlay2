@@ -188,6 +188,7 @@ For CMake build be sure that you have CMake 3.9 or higher.
     - Qt5Svg - for SVG icons,
     - Qt5Qml - for MediaBrowser,
     - Qt5WinExtras - for Windows,
+    - Qt6Core5Compat - for Qt6,
 - FFmpeg >= 4.0:
     - libavformat - requires OpenSSL or GnuTLS for https support,
     - libavcodec - for FFmpeg module only,
@@ -206,6 +207,7 @@ For CMake build be sure that you have CMake 3.9 or higher.
 - DirectX (Windows only): DirectDraw SDK (included in mingw-w64),
 - AudioCD: libcdio and libcddb,
 - ALSA (Linux only): libasound,
+- PipeWire - libpipewire,
 - PulseAudio - libpulse-simple,
 - PortAudio: portaudio (v19),
 - XVideo (X11 only): libxv.
