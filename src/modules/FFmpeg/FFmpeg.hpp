@@ -51,12 +51,14 @@ private:
 #endif
 #if defined(QMPlay2_DXVA2) || defined(QMPlay2_D3D11VA)
     QIcon dxIcon;
-    bool dxva2Supported = false;
-    bool d3d11vaSupported = false;
 #endif
 #ifdef QMPlay2_VTB
     QIcon vtbIcon;
 #endif
+
+    bool dxva2Supported = false;
+    bool d3d11vaSupported = false;
+    bool vdpauSupported = false;
 };
 
 /**/
@@ -74,11 +76,7 @@ class ModuleSettingsWidget final : public Module::SettingsWidget
     Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
 #endif
 public:
-#if defined(QMPlay2_DXVA2) || defined(QMPlay2_D3D11VA)
-    ModuleSettingsWidget(Module &module, bool dxva2, bool d3d11va);
-#else
-    ModuleSettingsWidget(Module &module);
-#endif
+    ModuleSettingsWidget(Module &module, bool dxva2, bool d3d11va, bool vdpau);
 #ifdef QMPlay2_VDPAU
 private:
     void setVDPAU();

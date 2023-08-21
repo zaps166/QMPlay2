@@ -45,6 +45,7 @@ extern "C"
 #endif
 }
 
+#include <QGuiApplication>
 #include <QComboBox>
 
 FFmpeg::FFmpeg() :
@@ -55,6 +56,8 @@ FFmpeg::FFmpeg() :
 
 #ifdef QMPlay2_VDPAU
     vdpauIcon = QIcon(":/VDPAU.svgz");
+    if (!QMPlay2Core.isVulkanRenderer() && !QGuiApplication::platformName().contains("wayland"))
+        vdpauSupported = true;
 #endif
 #ifdef QMPlay2_VAAPI
     vaapiIcon = QIcon(":/VAAPI.svgz");
@@ -111,7 +114,7 @@ FFmpeg::FFmpeg() :
 #   endif
 
 #   if defined(QMPlay2_VDPAU)
-    if (!QMPlay2Core.isVulkanRenderer())
+    if (vdpauSupported)
     {
         m_vdpauDeintMethodB = new QComboBox;
         m_vdpauDeintMethodB->addItems({tr("None"), "Temporal", "Temporal-spatial"});
@@ -167,7 +170,7 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
     if (showDisabled || getBool("DecoderEnabled"))
         modulesInfo += Info(DecoderName, DECODER, m_icon);
 #ifdef QMPlay2_VDPAU
-    if (showDisabled || (getBool("DecoderVDPAUEnabled") && !QMPlay2Core.isVulkanRenderer()))
+    if (showDisabled || (getBool("DecoderVDPAUEnabled") && vdpauSupported))
     {
         modulesInfo += Info(DecoderVDPAUName, DECODER, vdpauIcon);
         modulesInfo += Info(VDPAUWriterName, WRITER | VIDEOHWFILTER, vdpauIcon);
@@ -202,7 +205,7 @@ void *FFmpeg::createInstance(const QString &name)
     else if (name == DecoderName && getBool("DecoderEnabled"))
         return new FFDecSW(*this);
 #ifdef QMPlay2_VDPAU
-    else if (name == DecoderVDPAUName && getBool("DecoderVDPAUEnabled") && !QMPlay2Core.isVulkanRenderer())
+    else if (name == DecoderVDPAUName && getBool("DecoderVDPAUEnabled") && vdpauSupported)
         return new FFDecVDPAU(*this);
 #endif
 #ifdef QMPlay2_VAAPI
@@ -228,11 +231,7 @@ void *FFmpeg::createInstance(const QString &name)
 
 FFmpeg::SettingsWidget *FFmpeg::getSettingsWidget()
 {
-#if defined(QMPlay2_DXVA2) || defined(QMPlay2_D3D11VA)
-    return new ModuleSettingsWidget(*this, dxva2Supported, d3d11vaSupported);
-#else
-    return new ModuleSettingsWidget(*this);
-#endif
+    return new ModuleSettingsWidget(*this, dxva2Supported, d3d11vaSupported, vdpauSupported);
 }
 
 void FFmpeg::videoDeintSave()
@@ -266,12 +265,8 @@ QMPLAY2_EXPORT_MODULE(FFmpeg)
 #include <QSpinBox>
 #include <QLabel>
 
-#if defined(QMPlay2_DXVA2) || defined(QMPlay2_D3D11VA)
-ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool dxva2, bool d3d11va) :
-#else
-ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
-#endif
-    Module::SettingsWidget(module)
+ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool dxva2, bool d3d11va, bool vdpau)
+    : Module::SettingsWidget(module)
 {
     demuxerB = new QGroupBox(tr("Demuxer"));
     demuxerB->setCheckable(true);
@@ -287,7 +282,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     const auto copyVideoText = tr("Copy decoded video to CPU memory (slow)");
 
 #ifdef QMPlay2_VDPAU
-    if (!QMPlay2Core.isVulkanRenderer())
+    if (vdpau)
     {
         decoderVDPAUB = new QGroupBox(tr("Decoder") + " VDPAU - " + tr("hardware decoding"));
         decoderVDPAUB->setCheckable(true);
@@ -313,6 +308,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
         QFormLayout *vdpauLayout = new QFormLayout(decoderVDPAUB);
         vdpauLayout->addRow(noisereductionVDPAUB, noisereductionLvlVDPAUS);
     }
+#else
+    Q_UNUSED(vdpau)
 #endif
 
 #ifdef QMPlay2_VAAPI
@@ -326,6 +323,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
         decoderDXVA2EB = new QCheckBox(tr("Decoder") + " DXVA2 - " + tr("hardware decoding"));
         decoderDXVA2EB->setChecked(sets().getBool("DecoderDXVA2Enabled"));
     }
+#else
+    Q_UNUSED(dxva2)
 #endif
 #ifdef QMPlay2_D3D11VA
     if (d3d11va)
@@ -343,6 +342,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
 
         decoderD3D11VA->setLayout(d3d11vaLayout);
     }
+#else
+    Q_UNUSED(d3d11va)
 #endif
 
 #ifdef QMPlay2_VTB
