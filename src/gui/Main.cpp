@@ -28,6 +28,7 @@
 #include <Functions.hpp>
 #include <VideoDock.hpp>
 #include <Settings.hpp>
+#include <Demuxer.hpp>
 #include <Version.hpp>
 #include <Module.hpp>
 #include <IPC.hpp>
@@ -766,6 +767,7 @@ int main(int argc, char *argv[])
     }
 
     qRegisterMetaType<AVRational>("AVRational");
+    qRegisterMetaType<Demuxer *>("Demuxer*");
 
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
     QApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
