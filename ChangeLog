@@ -1,3 +1,11 @@
+Changes in QMPlay2 23.08.22:
+    - don't display empty color space name in Information panel,
+    - Yadif: Remove inline assembly and optimize C++ code,
+    - convert HDR->SDR on OpenGL + DXVA2,
+    - HWAccel fixes with legacy outputs,
+    - DXVA2 and D3D11VA 10-bit fixes,
+    - other minor fixes,
+
 Changes in QMPlay2 23.08.08:
     - improve playback of HDR10 videos on SDR displays (OpenGL >= 3 and Vulkan),
     - don't set BT.709 for video height > 576 if color space is not specified,
