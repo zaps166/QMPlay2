@@ -3187,7 +3187,7 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation>Spróbuj wyświetlić filmy HDR10 w trybie HDR</translation>
+        <translation>Spróbuj wyświetlić filmy HDR10 w trybie HDR (eksperymentalne)</translation>
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
