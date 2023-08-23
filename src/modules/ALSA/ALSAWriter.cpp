@@ -226,7 +226,7 @@ bool ALSAWriter::processParams(bool *paramsCorrected)
                                 modParam("rate", sample_rate);
                             }
 
-                            canPause = snd_pcm_hw_params_can_pause(params) && snd_pcm_hw_params_can_resume(params);
+                            canPause = snd_pcm_hw_params_can_pause(params);
 
                             mustSwapChn = channels == 6 || channels == 8;
 #ifdef HAVE_CHMAP
