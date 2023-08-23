@@ -71,7 +71,7 @@ ALSAWriter::ALSAWriter(Module &module) :
     snd(nullptr),
     delay(0.0),
     sample_rate(0), channels(0),
-    autoFindMultichannelDevice(false), err(false)
+    autoFindMultichannelDevice(false), err(false), canPause(false)
 {
     addParam("delay");
     addParam("rate");
