@@ -198,7 +198,7 @@ Window::~Window()
 
 void Window::deleteWidget()
 {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
     if (m_isWayland)
     {
         // "SurfaceAboutToBeDestroyed" is delivered too late when deleting a widget container (Qt bug, tested on 6.5.1)
@@ -1509,7 +1509,7 @@ bool Window::eventFilter(QObject *o, QEvent *e)
         case QEvent::Hide:
             if (m_isWayland)
             {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
                 // QWindow is reset when hiding a widget container without "SurfaceAboutToBeDestroyed" notification (Qt bug, tested on 6.5.1)
                 resetSurface();
 #else
