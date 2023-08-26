@@ -98,5 +98,6 @@ private:
 
 #ifdef USE_VULKAN
     std::shared_ptr<QmVk::BufferPool> m_vkBufferPool;
+    bool m_disableZeroCopy = false;
 #endif
 };

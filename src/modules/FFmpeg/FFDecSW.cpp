@@ -120,6 +120,10 @@ bool FFDecSW::set()
         restartPlaying = true;
     }
 
+#ifdef USE_VULKAN
+    m_disableZeroCopy = sets().getBool("DisableZeroCopy");
+#endif
+
     return !restartPlaying && sets().getBool("DecoderEnabled");
 }
 
@@ -443,7 +447,11 @@ bool FFDecSW::open(StreamInfo &streamInfo)
 #ifdef USE_VULKAN
         if ((codec->capabilities & AV_CODEC_CAP_DR1) && QMPlay2Core.isVulkanRenderer())
         {
-            try
+            if (m_disableZeroCopy)
+            {
+                qDebug() << "Vulkan :: Zero-copy decoding is disabled";
+            }
+            else try
             {
                 static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->physicalDevice()->findMemoryType(
                     vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent | vk::MemoryPropertyFlagBits::eHostCached
