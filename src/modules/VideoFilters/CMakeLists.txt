@@ -33,7 +33,7 @@ set(VideoFilters_RESOURCES
     icon.qrc
 )
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${VideoFilters_HDR}
     ${VideoFilters_SRC}
     ${VideoFilters_RESOURCES}

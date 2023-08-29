@@ -15,7 +15,7 @@ set(OpenSLES_RESOURCES
     icon.qrc
 )
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${OpenSLES_HDR}
     ${OpenSLES_SRC}
     ${OpenSLES_RESOURCES}

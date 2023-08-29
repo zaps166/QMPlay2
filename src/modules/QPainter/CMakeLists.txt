@@ -15,7 +15,7 @@ set(QPainter_RESOURCES
     icon.qrc
 )
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${QPainter_HDR}
     ${QPainter_SRC}
     ${QPainter_RESOURCES}

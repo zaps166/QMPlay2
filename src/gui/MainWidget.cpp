@@ -1039,7 +1039,7 @@ void MainWidget::createMenuBar()
     secondMenu->addSeparator();
     secondMenu->addAction(newInstanceAct);
 
-    qt_mac_set_dock_menu(secondMenu);
+    secondMenu->setAsDockMenu();
 #endif
 }
 void MainWidget::trayIconClicked(QSystemTrayIcon::ActivationReason reason)

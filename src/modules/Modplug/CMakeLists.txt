@@ -49,7 +49,7 @@ set(Modplug_RESOURCES
 
 include_directories(libmodplug)
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${Modplug_HDR}
     ${Modplug_SRC}
     ${Modplug_RESOURCES}

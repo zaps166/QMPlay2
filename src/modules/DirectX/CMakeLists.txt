@@ -15,7 +15,7 @@ set(DirectX_RESOURCES
     icon.qrc
 )
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${DirectX_HDR}
     ${DirectX_SRC}
     ${DirectX_RESOURCES}

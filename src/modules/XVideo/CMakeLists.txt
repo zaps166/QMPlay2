@@ -22,7 +22,7 @@ link_directories(${LIB_X11_XV_LIBRARY_DIRS})
 
 include_directories(${LIB_X11_XV_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${XVideo_HDR}
     ${XVideo_SRC}
     ${XVideo_RESOURCES}

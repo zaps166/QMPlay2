@@ -21,7 +21,7 @@ set(MediaKit_RESOURCES
 
 include_directories(../../qmplay2/headers)
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${MediaKit_HDR}
     ${MediaKit_SRC}
     ${MediaKit_RESOURCES}

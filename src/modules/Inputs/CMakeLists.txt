@@ -19,7 +19,7 @@ set(Inputs_RESOURCES
     icons.qrc
 )
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${Inputs_HDR}
     ${Inputs_SRC}
     ${Inputs_RESOURCES}

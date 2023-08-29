@@ -41,7 +41,7 @@ if(USE_CHIPTUNE_SID)
     list(APPEND Chiptune_LIBS ${LIBSIDPLAYFP_LIBRARIES})
 endif()
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${Chiptune_HDR}
     ${Chiptune_SRC}
     ${Chiptune_RESOURCES}

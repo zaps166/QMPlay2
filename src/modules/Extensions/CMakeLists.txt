@@ -70,7 +70,7 @@ else()
 endif()
 set_property(SOURCE ${Extensions_FORM_HDR} PROPERTY SKIP_AUTOMOC ON)
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${Extensions_HDR}
     ${Extensions_SRC}
     ${Extensions_FORM_HDR}

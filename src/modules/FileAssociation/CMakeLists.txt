@@ -13,7 +13,7 @@ set(FileAssociation_RESOURCES
     icon.qrc
 )
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${FileAssociation_HDR}
     ${FileAssociation_SRC}
     ${FileAssociation_RESOURCES}

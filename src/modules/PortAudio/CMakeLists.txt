@@ -29,7 +29,7 @@ link_directories(${LIBPORTAUDIO_LIBRARY_DIRS})
 
 include_directories(${LIBPORTAUDIO_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${PortAudio_HDR}
     ${PortAudio_SRC}
     ${PortAudio_RESOURCES}

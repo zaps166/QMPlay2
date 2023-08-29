@@ -32,7 +32,7 @@ set(AudioFilters_RESOURCES
     icon.qrc
 )
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${AudioFilters_HDR}
     ${AudioFilters_SRC}
     ${AudioFilters_RESOURCES}

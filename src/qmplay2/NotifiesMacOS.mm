@@ -4,7 +4,6 @@
 
 #include <QPixmap>
 #include <QTimer>
-#include <QtMac>
 
 @interface QMPlay2NotificationItem : NSObject<NSUserNotificationCenterDelegate>
 {}
@@ -61,7 +60,15 @@ bool NotifiesMacOS::doNotify(const QString &title, const QString &message, const
     notification.title = title.toNSString();
     notification.informativeText = message.toNSString();
     if (!pixmap.isNull())
-        notification.contentImage = QtMac::toNSImage(pixmap);
+    {
+        auto cgimage = pixmap.toImage().toCGImage();
+        auto bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:cgimage];
+        auto image = [[NSImage alloc] init];
+        [image addRepresentation:bitmapRep];
+        [bitmapRep release];
+        CFRelease(cgimage);
+        notification.contentImage = image;
+    }
 
     [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 

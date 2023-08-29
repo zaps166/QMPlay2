@@ -19,7 +19,7 @@ set(Playlists_RESOURCES
     icon.qrc
 )
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${Playlists_HDR}
     ${Playlists_SRC}
     ${Playlists_RESOURCES}

@@ -3,16 +3,12 @@ cmake_minimum_required(VERSION 3.12)
 if(WIN32)
     set(MODULES_INSTALL_PATH "modules")
     set(CMAKE_SHARED_MODULE_PREFIX "") # remove lib prefix
-    set(QMPLAY2_MODULE MODULE)
 elseif(APPLE)
     set(MODULES_INSTALL_PATH "${CMAKE_INSTALL_LIBDIR}/modules")
-    set(QMPLAY2_MODULE SHARED) # otherwise CMake uses ".so" extension
 elseif(HAIKU)
     set(MODULES_INSTALL_PATH "modules")
-    set(QMPLAY2_MODULE MODULE)
 else()
     set(MODULES_INSTALL_PATH "${CMAKE_INSTALL_LIBDIR}/qmplay2/modules")
-    set(QMPLAY2_MODULE MODULE)
 endif()
 
 add_subdirectory(FFmpeg)

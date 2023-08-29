@@ -237,7 +237,6 @@ if(USE_FREEDESKTOP_NOTIFICATIONS)
 elseif(APPLE)
     list(APPEND QMPLAY2_HDR NotifiesMacOS.hpp)
     list(APPEND QMPLAY2_SRC NotifiesMacOS.mm)
-    find_package(Qt5MacExtras REQUIRED)
     add_definitions(-DNOTIFIES_MACOS)
 endif()
 
@@ -325,7 +324,6 @@ target_include_directories(
 if(APPLE)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
-        Qt5::MacExtras
         ${APPKIT_LIBRARY}
     )
 endif()

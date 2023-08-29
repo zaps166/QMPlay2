@@ -21,7 +21,7 @@ find_package(ALSA REQUIRED)
 
 include_directories(${ALSA_INCLUDE_DIR})
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${ALSA_HDR}
     ${ALSA_SRC}
     ${ALSA_RESOURCES}

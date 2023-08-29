@@ -22,7 +22,7 @@ link_directories(${LIBPULSE_LIBRARY_DIRS})
 
 include_directories(${LIBPULSE_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${PulseAudio_HDR}
     ${PulseAudio_SRC}
     ${PulseAudio_RESOURCES}

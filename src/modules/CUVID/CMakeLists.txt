@@ -27,7 +27,7 @@ if (USE_VULKAN)
     list(APPEND CUVID_SRC CuvidVulkan.cpp)
 endif()
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${CUVID_HDR}
     ${CUVID_SRC}
     ${CUVID_RESOURCES}

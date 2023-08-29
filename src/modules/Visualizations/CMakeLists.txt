@@ -19,7 +19,7 @@ set(Visualizations_RESOURCES
     icon.qrc
 )
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${Visualizations_HDR}
     ${Visualizations_SRC}
     ${Visualizations_RESOURCES}

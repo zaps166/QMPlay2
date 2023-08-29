@@ -20,7 +20,7 @@ link_directories(${LIBPIPEWIRE_LIBRARY_DIRS})
 
 include_directories(${LIBPIPEWIRE_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${PipeWire_HDR}
     ${PipeWire_SRC}
     ${PipeWire_RESOURCES}

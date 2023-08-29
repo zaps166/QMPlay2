@@ -20,7 +20,7 @@ link_directories(${LIBCD_LIBRARY_DIRS})
 
 include_directories(${LIBCD_INCLUDE_DIRS})
 
-add_library(${PROJECT_NAME} ${QMPLAY2_MODULE}
+add_library(${PROJECT_NAME} MODULE
     ${AudioCD_HDR}
     ${AudioCD_SRC}
     ${AudioCD_RESOURCES}
