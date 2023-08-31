@@ -392,10 +392,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
         string(REPLACE ",--no-undefined" "" CMAKE_MODULE_LINKER_FLAGS ${CMAKE_MODULE_LINKER_FLAGS})
         string(REPLACE "--no-undefined" "" CMAKE_MODULE_LINKER_FLAGS ${CMAKE_MODULE_LINKER_FLAGS})
     endif()
-
-    if(APPLE)
-        set(CMAKE_CXX_FLAGS "-D\"NS_FORMAT_ARGUMENT\(A\)=\" ${CMAKE_CXX_FLAGS}")
-    endif()
 endif()
 
 if(APPLE)

@@ -1191,8 +1191,10 @@ void MainWidget::toggleFullScreen()
 #ifndef Q_OS_MACOS
         showFullScreen();
 #else
+        const auto geo = window()->windowHandle()->screen()->geometry();
+        setMinimumSize(geo.size());
         setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-        setGeometry(window()->windowHandle()->screen()->geometry());
+        setGeometry(geo);
         QMPlay2MacExtensions::showSystemUi(windowHandle(), false);
         show();
 #endif
@@ -1213,6 +1215,7 @@ void MainWidget::toggleFullScreen()
 
 #ifndef Q_OS_ANDROID
 #ifdef Q_OS_MACOS
+        setMinimumSize(0, 0);
         QMPlay2MacExtensions::showSystemUi(windowHandle(), true);
         setWindowFlags(Qt::Window);
 #else
