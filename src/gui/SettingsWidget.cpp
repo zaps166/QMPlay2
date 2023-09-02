@@ -1113,8 +1113,11 @@ void SettingsWidget::restoreVideoEq()
     if (videoEq->parentWidget() != videoEqOriginalParent)
     {
         videoEq->setParent(videoEqOriginalParent);
-        videoEq->setGeometry(videoEqOriginalParent->rect());
-        videoEqOriginalParent->setEnabled(true);
+        if (videoEqOriginalParent)
+        {
+            videoEq->setGeometry(videoEqOriginalParent->rect());
+            videoEqOriginalParent->setEnabled(true);
+        }
     }
     if (QLayout *videoEqLayout = page6->videoEqContainer->layout())
         videoEqLayout->deleteLater();
@@ -1420,7 +1423,8 @@ void SettingsWidget::tabCh(int idx)
         QGridLayout *videoEqLayout = new QGridLayout(page6->videoEqContainer);
         videoEqLayout->setContentsMargins(0, 0, 0, 0);
         videoEqLayout->addWidget(videoEq);
-        videoEqOriginalParent->setDisabled(true);
+        if (videoEqOriginalParent)
+            videoEqOriginalParent->setDisabled(true);
         videoEq->show();
     }
 }

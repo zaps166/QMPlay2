@@ -433,28 +433,18 @@ MenuBar::Playback::VideoFilters::VideoFilters(QMenu *parent) :
     QMenu(VideoFilters::tr("Video &filters"), parent)
 {
     /** Korektor wideo */
+#ifndef Q_OS_MACOS
     videoAdjustmentMenu = new QMenu(VideoFilters::tr("Video &adjustment"), this);
     addMenu(videoAdjustmentMenu);
     QWidgetAction *widgetAction = new QWidgetAction(this);
     widgetAction->setDefaultWidget(QMPlay2GUI.videoAdjustment);
     QMPlay2GUI.videoAdjustment->setObjectName(videoAdjustmentMenu->title().remove('&'));
     videoAdjustmentMenu->addAction(widgetAction);
-#ifdef Q_OS_MACOS
-    // Update visibility and update geometry of video adjustment widget
-    connect(videoAdjustmentMenu, &VideoFilters::aboutToShow, [] {
-        if (QWidget *parent = QMPlay2GUI.videoAdjustment->parentWidget())
-        {
-            if (qstrcmp(parent->metaObject()->className(), "QMenu") == 0)
-            {
-                QTimer::singleShot(0, [parent] {
-                    QMPlay2GUI.videoAdjustment->setGeometry(QRect(QPoint(), parent->sizeHint()));
-                });
-            }
-        }
-    });
+    addSeparator();
+#else
+    videoAdjustmentMenu = nullptr;
 #endif
     /**/
-    addSeparator();
     newAction(VideoFilters::tr("&Spherical view"), this, spherical, true, QIcon(), true);
     addSeparator();
     newAction(VideoFilters::tr("&Horizontal flip"), this, hFlip, true, QIcon(), true);
