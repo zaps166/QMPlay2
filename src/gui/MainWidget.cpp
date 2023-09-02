@@ -96,18 +96,37 @@ public:
 };
 
 #ifndef Q_OS_MACOS
-static void copyMenu(QMenu *dest, QMenu *src, QMenu *dontCopy = nullptr)
+static void copyMenu(QMenu *dest, QMenu *src, const QSet<QMenu *> &dontCopy = {}, const QSet<QMenu *> &dontAdd = {})
 {
     QMenu *newMenu = new QMenu(src->title(), dest);
     for (QAction *act : src->actions())
     {
         QMenu *menu = act->menu();
         if (!menu)
-            newMenu->addAction(act);
-        else if (menu != dontCopy)
-            copyMenu(newMenu, menu, dontCopy);
-        else if (dontCopy)
-            newMenu->addMenu(dontCopy);
+        {
+            if (!act->isSeparator())
+            {
+                newMenu->addAction(act);
+            }
+            else
+            {
+                const auto actions = newMenu->actions();
+                if (!actions.isEmpty() && !actions.constLast()->isSeparator())
+                    newMenu->addAction(act);
+            }
+        }
+        else if (dontAdd.contains(menu))
+        {
+            continue;
+        }
+        else if (!dontCopy.contains(menu))
+        {
+            copyMenu(newMenu, menu, dontCopy, dontAdd);
+        }
+        else
+        {
+            newMenu->addMenu(menu);
+        }
     }
     dest->addMenu(newMenu);
 }
@@ -994,9 +1013,22 @@ void MainWidget::createMenuBar()
         auto secondMenu = new QMenu(this);
         copyMenu(secondMenu, menuBar->window);
         secondMenu->addMenu(menuBar->widgets);
-        copyMenu(secondMenu, menuBar->playlist, menuBar->playlist->extensions);
+        copyMenu(secondMenu, menuBar->playlist, {menuBar->playlist->extensions});
         copyMenu(secondMenu, menuBar->player);
-        copyMenu(secondMenu, menuBar->playback, menuBar->playback->videoFilters->videoAdjustmentMenu);
+        copyMenu(secondMenu, menuBar->playback,
+             {
+                 menuBar->playback->audioStreams,
+                 menuBar->playback->videoStreams,
+                 menuBar->playback->subtitlesStreams,
+                 menuBar->playback->chapters,
+                 menuBar->playback->programs,
+             },
+             {
+#ifdef Q_OS_WIN
+                 menuBar->playback->videoFilters->videoAdjustmentMenu,
+#endif
+             }
+        );
         copyMenu(secondMenu, menuBar->options);
         for (auto ext : QMPlay2Extensions::QMPlay2ExtensionsList())
         {
