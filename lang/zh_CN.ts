@@ -2798,11 +2798,11 @@ QMPlay2 将不会放大图标！</translation>
     </message>
     <message>
         <source>Type the station name and press Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>输入电台名称并按确认</translation>
     </message>
     <message>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
-        <translation type="unfinished"></translation>
+        <translation>从下拉列表选择一个 &quot;%1&quot;</translation>
     </message>
 </context>
 <context>
@@ -2825,7 +2825,7 @@ QMPlay2 将不会放大图标！</translation>
     </message>
     <message>
         <source>Clicks</source>
-        <translation type="unfinished"></translation>
+        <translation>点击量</translation>
     </message>
 </context>
 <context>
