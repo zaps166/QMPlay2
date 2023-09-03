@@ -32,7 +32,7 @@
 
 struct Column
 {
-    QString url, homePageUrl, id;
+    QString url, homePageUrl, uuid;
 
     QString iconUrl;
     QPointer<NetworkReply> iconReply;
@@ -40,7 +40,7 @@ struct Column
     bool hasIcon = false;
 
     QString name, streamInfo, country, tags;
-    qint32 rating;
+    qint64 clickcount;
 };
 
 /**/
@@ -59,10 +59,8 @@ RadioBrowserModel::~RadioBrowserModel()
     delete m_net;
 }
 
-void RadioBrowserModel::searchRadios(const QString &text, const QString &searchBy)
+void RadioBrowserModel::clear()
 {
-    const QByteArray postData = searchBy.toLatin1().toLower() + "=" + text.toUtf8().toPercentEncoding();
-
     for (const std::shared_ptr<Column> &column : qAsConst(m_rows))
         delete column->iconReply;
     delete m_replySearch;
@@ -72,7 +70,12 @@ void RadioBrowserModel::searchRadios(const QString &text, const QString &searchB
     endResetModel();
 
     m_rows.clear();
+}
 
+void RadioBrowserModel::searchRadios(const QString &text, const QString &searchBy)
+{
+    const QByteArray postData = searchBy.toLatin1().toLower() + "=" + text.toUtf8().toPercentEncoding();
+    clear();
     m_replySearch = m_net->start(QString("%1/stations/search").arg(g_radioBrowserBaseApiUrl), postData, NetworkAccess::UrlEncoded);
 }
 
@@ -115,6 +118,10 @@ QPixmap RadioBrowserModel::getIcon(const QModelIndex &index) const
 QUrl RadioBrowserModel::getHomePageUrl(const QModelIndex &index) const
 {
     return QUrl(m_rowsToDisplay[index.row()]->homePageUrl);
+}
+QString RadioBrowserModel::getUUID(const QModelIndex &index) const
+{
+    return m_rowsToDisplay[index.row()]->uuid;
 }
 
 QModelIndex RadioBrowserModel::index(int row, int column, const QModelIndex &parent) const
@@ -159,7 +166,7 @@ QVariant RadioBrowserModel::data(const QModelIndex &index, int role) const
                     case 3:
                         return column->tags;
                     case 4:
-                        return column->rating;
+                        return column->clickcount;
                 }
                 break;
             }
@@ -200,7 +207,7 @@ QVariant RadioBrowserModel::headerData(int section, Qt::Orientation orientation,
             case 3:
                 return tr("Tags");
             case 4:
-                return tr("Rating");
+                return tr("Clicks");
         }
     }
     return QVariant();
@@ -239,9 +246,9 @@ void RadioBrowserModel::sort(int columnIdx, Qt::SortOrder order)
                 switch (order)
                 {
                     case Qt::AscendingOrder:
-                        return a->rating > b->rating;
+                        return a->clickcount > b->clickcount;
                     case Qt::DescendingOrder:
-                        return a->rating < b->rating;
+                        return a->clickcount < b->clickcount;
                 }
                 break;
         }
@@ -329,7 +336,7 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
                         }
                         else
                         {
-                            const int bitrate = item["bitrate"].toString().toInt();
+                            const int bitrate = item["bitrate"].toInt();
                             if (bitrate > 0)
                                 streamInfo += QString("\n%1 kbps").arg(bitrate);
                         }
@@ -357,12 +364,12 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
                         }
                     }
 
-                    const qint32 rating = item["votes"].toString().toInt() - item["negativevotes"].toString().toInt();
+                    const qint32 clickcount = item["clickcount"].toDouble();
 
                     m_rows.append(std::shared_ptr<Column>(new Column {
                         item["url"].toString(),
                         item["homepage"].toString(),
-                        item["id"].toString(),
+                        item["stationuuid"].toString(),
 
                         item["favicon"].toString(),
                         nullptr,
@@ -373,7 +380,7 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
                         streamInfo,
                         country,
                         tags,
-                        rating
+                        clickcount
                     }));
                 }
                 m_rowsToDisplay = m_rows;

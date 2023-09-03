@@ -103,10 +103,13 @@ private:
     Ui::Radio *ui;
 
     bool m_loaded = false;
+    bool m_loadCurrentCountry = false;
     bool m_storeMyRadios = false;
     bool m_recreateTrayMenu = true;
     DockWidget *m_dw;
     QMenu *m_menu = nullptr;
+
+    QMetaObject::Connection m_sectionResizedConn;
 
     QMap<int, QPair<QStringList, QPointer<NetworkReply>>> m_searchInfo;
     RadioBrowserModel *m_radioBrowserModel;
@@ -114,6 +117,7 @@ private:
     QTimer *m_loadIconsTimer;
     QStringList m_nameItems;
     NetworkAccess *m_net;
+    int m_searchByComboBoxIdx = -1;
 };
 
 #define RadioName "Radio Browser"

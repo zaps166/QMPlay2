@@ -38,6 +38,15 @@
 #include <QMenu>
 #include <QUrl>
 
+enum SearchByIndexes
+{
+    Name,
+    Tag,
+    Country,
+    Language,
+    State,
+};
+
 Radio::Radio(Module &module) :
     m_newStationTxt(tr("Adding a new radio station")),
     m_radioIcon(":/radio.svgz"),
@@ -74,12 +83,9 @@ Radio::Radio(Module &module) :
     ui->searchByComboBox->addItem(tr("Language"), QStringList{"Language", "languages"});
     ui->searchByComboBox->addItem(tr("State"), QStringList{"State", "states"});
 
+    ui->radioView->sortByColumn(4, Qt::AscendingOrder); // Click count
     ui->radioView->setModel(m_radioBrowserModel);
     ui->radioView->setIconSize({m_radioBrowserModel->elementHeight(), m_radioBrowserModel->elementHeight()});
-
-    QHeaderView *header = ui->radioView->header();
-    header->setSectionResizeMode(0, QHeaderView::Stretch);
-    header->setSectionResizeMode(4, QHeaderView::ResizeToContents);
 
     connect(m_radioBrowserMenu->addAction(tr("Play")), SIGNAL(triggered(bool)), this, SLOT(radioBrowserPlay()));
     connect(m_radioBrowserMenu->addAction(tr("Enqueue")), SIGNAL(triggered(bool)), this, SLOT(radioBrowserEnqueue()));
@@ -194,6 +200,28 @@ void Radio::searchData()
 }
 void Radio::searchFinished()
 {
+    QHeaderView *header = ui->radioView->header();
+    int s = 0;
+    for (int i = 0; i < 5; ++i)
+        s += header->sectionSize(i);
+    if (s < header->width()) // It's inaccurate comparison
+    {
+        header->setSectionResizeMode(0, QHeaderView::Stretch);
+        if (!m_sectionResizedConn)
+        {
+            m_sectionResizedConn = connect(header, &QHeaderView::sectionResized,
+                                           header, [this, header](int logicalIndex, int oldSize, int newSize) {
+                Q_UNUSED(oldSize)
+                Q_UNUSED(newSize)
+
+                if (logicalIndex != 0)
+                    return;
+
+                disconnect(m_sectionResizedConn);
+                header->setSectionResizeMode(0, QHeaderView::Interactive);
+            }, Qt::QueuedConnection);
+        }
+    }
     ui->radioView->setEnabled(true);
 }
 
@@ -354,11 +382,19 @@ void Radio::on_myRadioListWidget_itemDoubleClicked(QListWidgetItem *item)
 void Radio::on_searchByComboBox_activated(int idx)
 {
     const QString toDownload = ui->searchByComboBox->itemData(idx).toStringList().at(1);
-    if (!toDownload.isEmpty())
+
+    QString placeholderText;
+    if (idx == Name)
+        placeholderText = tr("Type the station name and press Enter");
+    else
+        placeholderText = tr("Select a \"%1\" from the drop-down list").arg(ui->searchByComboBox->itemText(idx));
+    ui->searchComboBox->lineEdit()->setPlaceholderText(placeholderText);
+
+    if (idx != Name)
     {
-        if (m_nameItems.isEmpty())
+        Q_ASSERT(!toDownload.isEmpty());
+        if (m_searchByComboBoxIdx == Name && m_nameItems.isEmpty())
         {
-            m_nameItems += ui->searchComboBox->lineEdit()->text();
             for (int i = 0; i < ui->searchComboBox->count(); ++i)
                 m_nameItems += ui->searchComboBox->itemText(i);
             ui->searchComboBox->clear();
@@ -381,13 +417,16 @@ void Radio::on_searchByComboBox_activated(int idx)
         ui->searchComboBox->clear();
         if (!m_nameItems.isEmpty())
         {
-            const QString text = m_nameItems.takeFirst();
             ui->searchComboBox->addItems(m_nameItems);
-            ui->searchComboBox->lineEdit()->setText(text);
+            ui->searchComboBox->lineEdit()->clear();
             m_nameItems.clear();
         }
         ui->searchComboBox->setInsertPolicy(QComboBox::InsertAtBottom);
     }
+
+    m_radioBrowserModel->clear();
+
+    m_searchByComboBoxIdx = idx;
 }
 void Radio::on_addRadioBrowserStationButton_clicked()
 {
@@ -448,6 +487,12 @@ void Radio::radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &p
 {
     const QString title = m_radioBrowserModel->getName(index);
     const QString url = m_radioBrowserModel->getUrl(index).toString();
+    const QString uuid = m_radioBrowserModel->getUUID(index);
+
+    // Increase clickcount
+    auto reply = m_net->start(QString("%1/url/%2").arg(g_radioBrowserBaseApiUrl, uuid));
+    connect(reply, &NetworkReply::finished, reply, &NetworkReply::deleteLater);
+
     QMPlay2Core.addNameForUrl(url, title);
     emit QMPlay2Core.processParam(param, url);
 }
@@ -483,6 +528,23 @@ void Radio::setSearchInfo(const QStringList &list)
     ui->searchComboBox->clear();
     ui->searchComboBox->addItems(list);
     ui->searchComboBox->lineEdit()->clear();
+    if (m_loadCurrentCountry)
+    {
+        m_loadCurrentCountry = false;
+        if (ui->searchByComboBox->currentIndex() == Country)
+        {
+            const auto country = QLocale::countryToString(QLocale::system().country());
+            auto it = std::find_if(list.crbegin(), list.crend(), [&](const QString &str) {
+                return str.contains(country, Qt::CaseInsensitive);
+            });
+            const int idx = list.size() - std::distance(list.crbegin(), it) - 1;
+            if (!country.isEmpty() && idx >= 0 && idx < list.size())
+            {
+                ui->searchComboBox->setCurrentIndex(idx);
+                searchData();
+            }
+        }
+    }
 }
 
 void Radio::restoreSettings()
@@ -503,12 +565,13 @@ void Radio::restoreSettings()
     if (!ui->radioBrowserSplitter->restoreState(QByteArray::fromBase64(sets().getByteArray("Radio/RadioBrowserSplitter"))))
         ui->radioBrowserSplitter->setSizes({width() * 1 / 4, width() * 3 / 4});
 
-    const int searchByIdx = qBound(0, sets().getInt("Radio/SearchByIndex"), ui->searchByComboBox->count() - 1);
+    const int searchByIdx = qBound(0, sets().getInt("Radio/SearchByIndex", Country), ui->searchByComboBox->count() - 1);
     if (searchByIdx > 0)
     {
         ui->searchByComboBox->setCurrentIndex(searchByIdx);
-        on_searchByComboBox_activated(searchByIdx);
     }
+    m_loadCurrentCountry = (searchByIdx == Country);
+    on_searchByComboBox_activated(searchByIdx);
 
     m_loaded = true;
 }

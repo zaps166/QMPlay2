@@ -40,6 +40,8 @@ public:
 
     inline int elementHeight() const;
 
+    void clear();
+
     void searchRadios(const QString &text, const QString &searchBy);
 
     void loadIcons(const int first, const int last);
@@ -48,6 +50,7 @@ public:
     QUrl getUrl(const QModelIndex &index) const;
     QPixmap getIcon(const QModelIndex &index) const;
     QUrl getHomePageUrl(const QModelIndex &index) const;
+    QString getUUID(const QModelIndex &index) const;
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     QModelIndex parent(const QModelIndex &child) const override;
