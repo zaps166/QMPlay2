@@ -2808,6 +2808,14 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
         <translatorcomment>Belki eyalet anlamındadır. Arayüzdeki duruma göre güncellemek gerekebilir.</translatorcomment>
         <translation>Durum</translation>
     </message>
+    <message>
+        <source>Type the station name and press Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a &quot;%1&quot; from the drop-down list</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
@@ -2828,8 +2836,8 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
         <translation>Etiketler</translation>
     </message>
     <message>
-        <source>Rating</source>
-        <translation>Beğeni</translation>
+        <source>Clicks</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

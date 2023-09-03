@@ -2796,6 +2796,14 @@ QMPlay2 не будет отображать значки!</translation>
         <source>State</source>
         <translation>Штат/область</translation>
     </message>
+    <message>
+        <source>Type the station name and press Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a &quot;%1&quot; from the drop-down list</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
@@ -2816,8 +2824,8 @@ QMPlay2 не будет отображать значки!</translation>
         <translation>Теги</translation>
     </message>
     <message>
-        <source>Rating</source>
-        <translation>Оценка</translation>
+        <source>Clicks</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

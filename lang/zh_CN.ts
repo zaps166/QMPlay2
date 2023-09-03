@@ -2796,6 +2796,14 @@ QMPlay2 将不会放大图标！</translation>
         <source>State</source>
         <translation>州</translation>
     </message>
+    <message>
+        <source>Type the station name and press Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a &quot;%1&quot; from the drop-down list</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
@@ -2816,8 +2824,8 @@ QMPlay2 将不会放大图标！</translation>
         <translation>标签</translation>
     </message>
     <message>
-        <source>Rating</source>
-        <translation>分级</translation>
+        <source>Clicks</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

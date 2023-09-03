@@ -2807,6 +2807,14 @@ QMPlay2 will not scale up icons!</source>
         <source>Radio station with given name already exists!</source>
         <translation>Já existe uma estação de rádio com esse nome!</translation>
     </message>
+    <message>
+        <source>Type the station name and press Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a &quot;%1&quot; from the drop-down list</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
@@ -2827,8 +2835,8 @@ QMPlay2 will not scale up icons!</source>
         <translation>Tags</translation>
     </message>
     <message>
-        <source>Rating</source>
-        <translation>Avaliação</translation>
+        <source>Clicks</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

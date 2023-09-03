@@ -2796,6 +2796,14 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
         <source>State</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Type the station name and press Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a &quot;%1&quot; from the drop-down list</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
@@ -2816,8 +2824,8 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
         <translation>Címkék</translation>
     </message>
     <message>
-        <source>Rating</source>
-        <translation>Értékelés</translation>
+        <source>Clicks</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

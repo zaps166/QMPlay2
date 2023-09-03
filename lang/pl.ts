@@ -2796,6 +2796,14 @@ QMPlay2 nie będzie skalować ikon!</translation>
         <source>State</source>
         <translation>Stan</translation>
     </message>
+    <message>
+        <source>Type the station name and press Enter</source>
+        <translation>Wpisz nazwę stacji i naciśnij Enter</translation>
+    </message>
+    <message>
+        <source>Select a &quot;%1&quot; from the drop-down list</source>
+        <translation>Wybierz &quot;%1&quot; z listy rozwijanej</translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
@@ -2816,8 +2824,8 @@ QMPlay2 nie będzie skalować ikon!</translation>
         <translation>Tagi</translation>
     </message>
     <message>
-        <source>Rating</source>
-        <translation>Ocena</translation>
+        <source>Clicks</source>
+        <translation>Kliknięcia</translation>
     </message>
 </context>
 <context>
