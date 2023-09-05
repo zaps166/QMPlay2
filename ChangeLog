@@ -1,3 +1,10 @@
+Changes in QMPlay2 23.09.05:
+    - Wayland Vulkan crash fix for Qt <= 6.4,
+    - RadioBrowser improvements and fixes,
+    - ALSA crash fix on early pause,
+    - tray menu fixes,
+    - Qt6 for macOS,
+
 Changes in QMPlay2 23.08.22:
     - don't display empty color space name in Information panel,
     - Yadif: Remove inline assembly and optimize C++ code,
