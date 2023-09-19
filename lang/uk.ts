@@ -1027,8 +1027,8 @@
         <translation>Збільшити маленькі обкладинки</translation>
     </message>
     <message>
-        <source>Кодування субтитрів і тегів</source>
-        <translation></translation>
+        <source>Subtitles and tags encoding</source>
+        <translation>Кодування субтитрів і тегів</translation>
     </message>
 </context>
 <context>
