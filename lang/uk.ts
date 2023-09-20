@@ -574,7 +574,7 @@
     </message>
     <message>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>невідомо</translation>
     </message>
 </context>
 <context>
@@ -1028,7 +1028,7 @@
     </message>
     <message>
         <source>Subtitles and tags encoding</source>
-        <translation type="unfinished"></translation>
+        <translation>Кодування субтитрів і тегів</translation>
     </message>
 </context>
 <context>
@@ -1867,7 +1867,7 @@
     </message>
     <message>
         <source>Allow HDR content for VP9 codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити вміст HDR для кодека VP9</translation>
     </message>
 </context>
 <context>
@@ -2390,7 +2390,7 @@
     </message>
     <message>
         <source>Remember playback position for each playlist entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Пам'ятати позицію відтворення для кожного запису зі списку</translation>
     </message>
 </context>
 <context>
@@ -2497,11 +2497,11 @@
     </message>
     <message>
         <source>&amp;Continue playback</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Продовжити відтворення</translation>
     </message>
     <message>
         <source>Continue playing from the last position</source>
-        <translation type="unfinished"></translation>
+        <translation>Продовжити відтворення з останньої позиції</translation>
     </message>
 </context>
 <context>
@@ -2798,11 +2798,11 @@ QMPlay2 не масштабуватиме іконки!</translation>
     </message>
     <message>
         <source>Type the station name and press Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Введіть назву станції і натисніть Enter</translation>
     </message>
     <message>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
-        <translation type="unfinished"></translation>
+        <translation>Виберіть &quot;%1&quot; зі спадного списку</translation>
     </message>
 </context>
 <context>
@@ -2825,7 +2825,7 @@ QMPlay2 не масштабуватиме іконки!</translation>
     </message>
     <message>
         <source>Clicks</source>
-        <translation type="unfinished"></translation>
+        <translation>Кліки</translation>
     </message>
 </context>
 <context>
@@ -3195,15 +3195,15 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Спробувати переглянути відео HDR10 у режимі HDR (експериментально)</translation>
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation type="unfinished"></translation>
+        <translation>Низька якість масштабування зображення (nearest neighbor)</translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Корисно для ретро масштабування. Також можна використовувати для програмної реалізації Vulkan для зменшення навантаження на ЦП.</translation>
     </message>
 </context>
 <context>
