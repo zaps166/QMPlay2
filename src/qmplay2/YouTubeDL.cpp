@@ -249,7 +249,12 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
                 for (const QJsonValue &formats : json["formats"].toArray())
                 {
                     if (url == formats["url"].toString())
-                        QMPlay2Core.addCookies(url, formats["http_headers"]["Cookie"].toString().toUtf8());
+                    {
+                        auto cookies = formats["http_headers"]["Cookie"].toString();
+                        if (cookies.isEmpty())
+                            cookies = formats["cookies"].toString();
+                        QMPlay2Core.addCookies(url, cookies.toUtf8());
+                    }
                 }
 
                 result.removeAt(i);
