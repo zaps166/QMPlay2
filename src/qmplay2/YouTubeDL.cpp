@@ -42,17 +42,25 @@ static QRecursiveMutex g_mutex;
 static QMutex g_mutex(QMutex::Recursive);
 #endif
 
+static inline QString getYtDlpFileName()
+{
+    return "yt-dlp"
+#ifdef Q_OS_WIN
+# ifdef Q_PROCESSOR_X86_32
+        "_x86"
+# endif
+        ".exe"
+#endif
+    ;
+}
+
 QString YouTubeDL::getFilePath()
 {
 #ifdef Q_OS_HAIKU
-    return "/bin/yt-dlp"
+    return "/bin/" + getYtDlpFileName();
 #else
-    return QMPlay2Core.getSettingsDir() + "yt-dlp"
-#ifdef Q_OS_WIN
-    "_x86.exe"
+    return QMPlay2Core.getSettingsDir() + getYtDlpFileName();
 #endif
-#endif
-    ;
 }
 QStringList YouTubeDL::getCommonArgs()
 {
@@ -328,11 +336,7 @@ bool YouTubeDL::download()
 #endif
     // Mutex must be locked here
 
-    const QString downloadUrl = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp"
-#ifdef Q_OS_WIN
-    "_x86.exe"
-#endif
-    ;
+    const QString downloadUrl = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/" + getYtDlpFileName();
 
     QMPlay2Core.setWorking(true);
 
