@@ -261,7 +261,7 @@ void VideoThr::initFilters()
                             filters.off(filter);
                     }
                     if (!ok && W > 0 && H > 0)
-                        QMPlay2Core.logError(tr("Error initializing filter") + " \"" + filterName + '"');
+                        QMPlay2Core.logError("Error initializing filter" + " \"" + filterName + '"');
                 }
             }
         };
@@ -313,7 +313,7 @@ void VideoThr::initFilters()
                     {
                         filters.off(deintFilter);
                         if (W > 0 && H > 0)
-                            QMPlay2Core.logError(tr("Cannot initialize the deinterlacing filter") + " \"" + deintFilterName + '"', true, true);
+                            QMPlay2Core.logError("Cannot initialize the deinterlacing filter" + " \"" + deintFilterName + '"', true, true);
                     }
                 }
             }
@@ -880,7 +880,7 @@ void VideoThr::screenshot(Frame videoFrame)
 
     if (img.isNull())
     {
-        QMPlay2Core.logError(tr("Cannot create screenshot"));
+        QMPlay2Core.logError("Cannot create screenshot");
         return;
     }
 

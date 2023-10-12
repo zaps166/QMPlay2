@@ -50,7 +50,7 @@ bool MediaKitWriter::processParams( bool * )
         if ( !err )
             modParam( "delay", player.delay );
         else
-            QMPlay2Core.logError( "MediaKitWriter :: " + tr ( "Cannot open audio output stream" ) );
+            QMPlay2Core.logError( "MediaKitWriter :: Cannot open audio output stream" );
     }
 
     return readyWrite();
@@ -63,7 +63,7 @@ qint64 MediaKitWriter::write( const QByteArray &arr )
     err = !player.write( arr );
     if ( err )
     {
-        QMPlay2Core.logError( "MediaKitWriter :: " + tr ( "Playback error" ) );
+        QMPlay2Core.logError( "MediaKitWriter :: Playback error" );
         return 0;
     }
 

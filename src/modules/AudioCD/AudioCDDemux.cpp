@@ -263,13 +263,13 @@ bool AudioCDDemux::open(const QString &_url)
                     return true;
                 }
                 else
-                    QMPlay2Core.log(tr("Error reading track"));
+                    QMPlay2Core.log("Error reading track");
             }
             else
-                QMPlay2Core.log(tr("No CD"));
+                QMPlay2Core.log("No CD");
         }
         else
-            QMPlay2Core.log(tr("Invalid path to CD drive"));
+            QMPlay2Core.log("Invalid path to CD drive");
     }
     return false;
 }
@@ -282,7 +282,7 @@ Playlist::Entries AudioCDDemux::fetchTracks(const QString &url, bool &ok)
         const QString realUrl = url.mid(strlen(AudioCDName) + 3);
         entries = getTracks(realUrl);
         if (entries.isEmpty())
-            emit QMPlay2Core.sendMessage(tr("No AudioCD found!"), AudioCDName, 2, 0);
+            emit QMPlay2Core.sendMessage("No AudioCD found!", AudioCDName, 2, 0);
         else
         {
             for (int i = 0; i < entries.count(); ++i)
