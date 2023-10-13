@@ -1149,7 +1149,7 @@ void MainWidget::toggleAlwaysOnTop(bool checked)
 }
 void MainWidget::toggleFullScreen()
 {
-    static bool visible, compact_view, tb_movable;
+    static bool visible, tb_movable;
 #ifndef Q_OS_ANDROID
     static bool maximized;
 #endif
@@ -1164,7 +1164,7 @@ void MainWidget::toggleFullScreen()
     {
         visible = isVisible();
 
-        if ((compact_view = isCompactView))
+        if ((m_compactViewBeforeFullScreen = isCompactView))
             toggleCompactView();
 
 #ifndef Q_OS_ANDROID
@@ -1290,7 +1290,7 @@ void MainWidget::toggleFullScreen()
 
         mainTB->setMovable(tb_movable);
 
-        if (compact_view)
+        if (m_compactViewBeforeFullScreen)
             toggleCompactView();
 
         playlistDock->scrollToCurrectItem();
@@ -1988,6 +1988,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
 #ifndef Q_OS_MACOS
     settings.set("MainWidget/isVisible", isVisible());
 #endif
+    settings.set("MainWidget/IsCompactView", fullScreen ? m_compactViewBeforeFullScreen : isCompactView);
     if (tray)
         settings.set("TrayVisible", tray->isVisible());
     settings.set("VolumeL", volW->volumeL());
@@ -2051,6 +2052,8 @@ void MainWidget::showEvent(QShowEvent *)
 #ifdef Q_OS_WIN
         setWindowsTaskBarFeatures();
 #endif
+        if (QMPlay2Core.getSettings().getBool("MainWidget/IsCompactView"))
+            menuBar->window->toggleCompactView->trigger();
         wasShow = true;
     }
     menuBar->window->toggleVisibility->setText(tr("&Hide"));
