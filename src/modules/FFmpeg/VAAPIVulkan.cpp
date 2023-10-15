@@ -111,27 +111,32 @@ void VAAPIVulkan::map(Frame &frame)
     if (!m_vaapi->filterVideo(frame, id, vaField))
         return;
 
+    VADRMPRIMESurfaceDescriptor vaSurfaceDescr = {};
+    MemoryObject::FdDescriptors fdDescriptors;
+    vector<vk::DeviceSize> offsets;
+    bool isLinear = false;
+    bool exported = false;
+
     auto &vkImage = m_images[id];
 
-    if (!vkImage)
+    if (!vkImage || (vaField != VA_FRAME_PICTURE && m_vaapi->m_isMesaRadeon && m_vaapi->m_driverVersion >= QVersionNumber(23, 3, 0)))
     {
-        VADRMPRIMESurfaceDescriptor vaSurfaceDescr = {};
-        m_vaapi->m_mutex.lock();
-        const bool exported = vaExportSurfaceHandle(
+        if (m_vaapi->m_mutex)
+            m_vaapi->m_mutex->lock();
+        exported = vaExportSurfaceHandle(
             m_vaapi->VADisp,
             id,
             VA_SURFACE_ATTRIB_MEM_TYPE_DRM_PRIME_2,
             VA_EXPORT_SURFACE_READ_ONLY | VA_EXPORT_SURFACE_SEPARATE_LAYERS,
             &vaSurfaceDescr
         ) == VA_STATUS_SUCCESS;
-        m_vaapi->m_mutex.unlock();
+        if (m_vaapi->m_mutex)
+            m_vaapi->m_mutex->unlock();
 
         if (exported)
         {
-            bool isLinear = false;
-
-            MemoryObject::FdDescriptors fdDescriptors(vaSurfaceDescr.num_objects);
-            vector<vk::DeviceSize> offsets(vaSurfaceDescr.num_layers);
+            fdDescriptors.resize(vaSurfaceDescr.num_objects);
+            offsets.resize(vaSurfaceDescr.num_layers);
 
             for (uint32_t i = 0; i < vaSurfaceDescr.num_layers; ++i)
             {
@@ -153,70 +158,85 @@ void VAAPIVulkan::map(Frame &frame)
                     isLinear = (drmFormatModifier == DRM_FORMAT_MOD_LINEAR || drmFormatModifier == DRM_FORMAT_MOD_INVALID);
                 }
             }
+        }
+    }
 
-            try
-            {
-                constexpr auto externalMemoryHandleType = vk::ExternalMemoryHandleTypeFlagBits::eDmaBufEXT;
+    auto closeFDs = [&] {
+        for (auto &&fdDescriptor : fdDescriptors)
+        {
+            ::close(fdDescriptor.first);
+        }
+    };
 
-                vk::ImageDrmFormatModifierExplicitCreateInfoEXT imageDrmFormatModifierExplicitCreateInfo;
-                vk::SubresourceLayout drmFormatModifierPlaneLayout;
+    if (!vkImage)
+    {
+        if (exported) try
+        {
+            constexpr auto externalMemoryHandleType = vk::ExternalMemoryHandleTypeFlagBits::eDmaBufEXT;
 
-                auto imageCreateInfoCallback = [&](uint32_t plane, vk::ImageCreateInfo &imageCreateInfo) {
-                    if (!m_hasDrmFormatModifier)
-                        return;
+            vk::ImageDrmFormatModifierExplicitCreateInfoEXT imageDrmFormatModifierExplicitCreateInfo;
+            vk::SubresourceLayout drmFormatModifierPlaneLayout;
 
-                    if (plane >= vaSurfaceDescr.num_layers)
-                        throw vk::LogicError("Pitches count and planes count missmatch");
+            auto imageCreateInfoCallback = [&](uint32_t plane, vk::ImageCreateInfo &imageCreateInfo) {
+                if (!m_hasDrmFormatModifier)
+                    return;
 
-                    const auto &layer = vaSurfaceDescr.layers[plane];
+                if (plane >= vaSurfaceDescr.num_layers)
+                    throw vk::LogicError("Pitches count and planes count missmatch");
 
-                    auto drmFormatModifier = vaSurfaceDescr.objects[layer.object_index[0]].drm_format_modifier;
-                    if (drmFormatModifier == DRM_FORMAT_MOD_INVALID)
-                        drmFormatModifier = DRM_FORMAT_MOD_LINEAR;
+                const auto &layer = vaSurfaceDescr.layers[plane];
 
-                    imageDrmFormatModifierExplicitCreateInfo.drmFormatModifier = drmFormatModifier;
-                    imageDrmFormatModifierExplicitCreateInfo.drmFormatModifierPlaneCount = 1;
-                    imageDrmFormatModifierExplicitCreateInfo.pPlaneLayouts = &drmFormatModifierPlaneLayout;
-                    imageDrmFormatModifierExplicitCreateInfo.pNext = imageCreateInfo.pNext;
+                auto drmFormatModifier = vaSurfaceDescr.objects[layer.object_index[0]].drm_format_modifier;
+                if (drmFormatModifier == DRM_FORMAT_MOD_INVALID)
+                    drmFormatModifier = DRM_FORMAT_MOD_LINEAR;
 
-                    drmFormatModifierPlaneLayout.offset = layer.offset[0];
-                    drmFormatModifierPlaneLayout.rowPitch = layer.pitch[0];
+                imageDrmFormatModifierExplicitCreateInfo.drmFormatModifier = drmFormatModifier;
+                imageDrmFormatModifierExplicitCreateInfo.drmFormatModifierPlaneCount = 1;
+                imageDrmFormatModifierExplicitCreateInfo.pPlaneLayouts = &drmFormatModifierPlaneLayout;
+                imageDrmFormatModifierExplicitCreateInfo.pNext = imageCreateInfo.pNext;
 
-                    imageCreateInfo.tiling = vk::ImageTiling::eDrmFormatModifierEXT;
-                    imageCreateInfo.pNext = &imageDrmFormatModifierExplicitCreateInfo;
-                };
+                drmFormatModifierPlaneLayout.offset = layer.offset[0];
+                drmFormatModifierPlaneLayout.rowPitch = layer.pitch[0];
 
-                vkImage = Image::createExternalImport(
-                    device,
-                    vk::Extent2D(frame.width(), frame.height()),
-                    format,
-                    isLinear,
-                    externalMemoryHandleType,
-                    imageCreateInfoCallback
-                );
+                imageCreateInfo.tiling = vk::ImageTiling::eDrmFormatModifierEXT;
+                imageCreateInfo.pNext = &imageDrmFormatModifierExplicitCreateInfo;
+            };
 
-                auto fdCustomData = make_unique<FDCustomData>();
-                for (auto &&fdDescriptor : fdDescriptors)
-                    fdCustomData->fds.push_back(::dup(fdDescriptor.first));
-                vkImage->setCustomData(move(fdCustomData));
+            vkImage = Image::createExternalImport(
+                device,
+                vk::Extent2D(frame.width(), frame.height()),
+                format,
+                isLinear,
+                externalMemoryHandleType,
+                imageCreateInfoCallback
+            );
 
-                vkImage->importFD(
-                    fdDescriptors,
-                    offsets,
-                    externalMemoryHandleType
-                );
-            }
-            catch (const vk::Error &e)
-            {
-                QMPlay2Core.logError(QString("VA-API :: %1").arg(e.what()));
-                vkImage.reset();
-                for (uint32_t o = 0; o < vaSurfaceDescr.num_objects; ++o)
-                    ::close(vaSurfaceDescr.objects[o].fd);
-            }
+            auto fdCustomData = make_unique<FDCustomData>();
+            for (auto &&fdDescriptor : fdDescriptors)
+                fdCustomData->fds.push_back(::dup(fdDescriptor.first));
+            vkImage->setCustomData(move(fdCustomData));
+
+            vkImage->importFD(
+                fdDescriptors,
+                offsets,
+                externalMemoryHandleType
+            );
+        }
+        catch (const vk::Error &e)
+        {
+            QMPlay2Core.logError(QString("VA-API :: %1").arg(e.what()));
+            vkImage.reset();
+            closeFDs();
         }
 
         if (!vkImage)
             m_error = true;
+    }
+    else if (exported)
+    {
+        // Interlaced videos needs to call "vaExportSurfaceHandle" on every frame since Mesa 23.3.0,
+        // but it reuses the image buffer, so close FDs here.
+        closeFDs();
     }
 
     if (vkImage)

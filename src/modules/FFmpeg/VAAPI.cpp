@@ -35,6 +35,7 @@ extern "C"
 }
 
 #include <QGuiApplication>
+#include <QVersionNumber>
 #include <QFileInfo>
 #include <QDebug>
 #include <QDir>
@@ -139,6 +140,27 @@ bool VAAPI::open()
     m_vendor = vaQueryVendorString(VADisp);
     if (m_vendor.isEmpty())
         return false;
+
+    m_isMesaRadeon = m_vendor.contains("Mesa Gallium") && m_vendor.contains("AMD Radeon");
+    if (m_isMesaRadeon)
+    {
+        // Some issues discussed here: https://gitlab.freedesktop.org/mesa/mesa/-/issues/8740
+
+        const auto parts = m_vendor.simplified().split(" ");
+        for (auto &&part : parts)
+        {
+            const auto ver = QVersionNumber::fromString(part);
+            if (!ver.isNull())
+            {
+                m_driverVersion = ver;
+                break;
+            }
+        }
+        if (m_driverVersion >= QVersionNumber(22, 0, 0) && m_driverVersion < QVersionNumber(23, 3, 0))
+        {
+            m_mutex = std::make_unique<QMutex>();
+        }
+    }
 
     return true;
 }

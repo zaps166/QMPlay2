@@ -19,9 +19,12 @@
 #pragma once
 
 #include <QCoreApplication>
+#include <QVersionNumber>
 #include <QVector>
 #include <QMutex>
 #include <QHash>
+
+#include <memory>
 
 #include <va/va.h>
 #include <va/va_vpp.h>
@@ -65,6 +68,8 @@ public:
     AVBufferRef *m_hwDeviceBufferRef = nullptr;
 
     QString m_vendor;
+    bool m_isMesaRadeon = false;
+    QVersionNumber m_driverVersion; // Used for Mesa Radeon workarounds
 
     bool ok = false;
 
@@ -75,7 +80,7 @@ public:
 
     int m_codecId = 0;
 
-    QMutex m_mutex;
+    std::unique_ptr<QMutex> m_mutex;
 
     // Postprocessing
     VAProcDeinterlacingType vpp_deint_type = VAProcDeinterlacingNone;

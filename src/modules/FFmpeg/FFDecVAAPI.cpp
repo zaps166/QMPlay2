@@ -106,9 +106,11 @@ int FFDecVAAPI::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixel
 {
     if (flush)
         maybeClearHwSurfaces();
-    m_vaapi->m_mutex.lock();
+    if (m_vaapi->m_mutex)
+        m_vaapi->m_mutex->lock();
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
-    m_vaapi->m_mutex.unlock();
+    if (m_vaapi->m_mutex)
+        m_vaapi->m_mutex->unlock();
     if (m_hasHWDecContext && ret > -1)
     {
         decoded.setOnDestroyFn([vaapi = m_vaapi] {
@@ -154,7 +156,7 @@ bool FFDecVAAPI::open(StreamInfo &streamInfo)
 
 #if defined(USE_OPENGL) || defined(USE_VULKAN)
     auto maybeResetVaapi = [this, codec] {
-        if (m_vaapi && m_vaapi->m_codecId != codec->id && m_vaapi->m_vendor.contains("Mesa Gallium") && m_vaapi->m_vendor.contains("AMD Radeon"))
+        if (m_vaapi && m_vaapi->m_codecId != codec->id && m_vaapi->m_isMesaRadeon && m_vaapi->m_driverVersion >= QVersionNumber(22, 0, 0))
             m_vaapi.reset();
     };
 #endif

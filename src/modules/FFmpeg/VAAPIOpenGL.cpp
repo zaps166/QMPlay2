@@ -172,7 +172,8 @@ bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
     auto &vaSurfaceDescr = m_surfaces[id];
     if (vaSurfaceDescr.fourcc == 0 && vaSurfaceDescr.num_objects == 0)
     {
-        m_vaapi->m_mutex.lock();
+        if (m_vaapi->m_mutex)
+            m_vaapi->m_mutex->lock();
         if (vaExportSurfaceHandle(
                 m_vaapi->VADisp,
                 id,
@@ -181,13 +182,15 @@ bool VAAPIOpenGL::mapFrame(Frame &videoFrame)
                 &vaSurfaceDescr
             ) != VA_STATUS_SUCCESS)
         {
-            m_vaapi->m_mutex.unlock();
+            if (m_vaapi->m_mutex)
+                m_vaapi->m_mutex->unlock();
             QMPlay2Core.logError("VA-API :: Unable to export surface handle");
             m_surfaces.erase(id);
             m_error = true;
             return false;
         }
-        m_vaapi->m_mutex.unlock();
+        if (m_vaapi->m_mutex)
+            m_vaapi->m_mutex->unlock();
     }
 
     auto eraseSurface = [&] {
