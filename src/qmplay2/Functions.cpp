@@ -571,6 +571,11 @@ int Functions::scaleEQValue(int val, int min, int max)
 
 QByteArray Functions::convertToASS(QString txt)
 {
+    txt.replace("&nbsp;", " ", Qt::CaseInsensitive);
+    txt.replace("&lt;", "<", Qt::CaseInsensitive);
+    txt.replace("&gt;", ">", Qt::CaseInsensitive);
+    txt.replace("&amp;", "&", Qt::CaseInsensitive);
+    txt.replace("&quot;", "\"", Qt::CaseInsensitive);
     txt.replace("<i>", "{\\i1}", Qt::CaseInsensitive);
     txt.replace("</i>", "{\\i0}", Qt::CaseInsensitive);
     txt.replace("<b>", "{\\b1}", Qt::CaseInsensitive);
