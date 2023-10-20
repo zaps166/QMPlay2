@@ -31,6 +31,10 @@
 #include <QLibrary>
 #include <QWindow>
 
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+#   include <QVersionNumber>
+#endif
+
 #if defined(Q_OS_WIN)
 #   include <QRegularExpression>
 #elif defined(Q_OS_LINUX)
@@ -266,8 +270,36 @@ void Instance::init()
         VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME,
     });
 
-    if (!m_qVulkanInstance->create())
-        throw vk::InitializationFailedError("Can't create Vulkan instance");
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+    const bool maybeSetEnvVar = (QVersionNumber::fromString(qVersion()) < QVersionNumber(6, 3, 0) || QGuiApplication::platformName().contains("wayland")) && !qEnvironmentVariableIsSet("QT_VULKAN_LIB");
+
+    QtMessageHandler oldMsgHandler = nullptr;
+    if (maybeSetEnvVar)
+        oldMsgHandler = qInstallMessageHandler(nullptr);
+#endif
+
+    bool ok = m_qVulkanInstance->create();
+
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+    if (maybeSetEnvVar && oldMsgHandler)
+        qInstallMessageHandler(oldMsgHandler);
+#endif
+
+    if (!ok)
+    {
+#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
+        if (maybeSetEnvVar)
+        {
+            qputenv("QT_VULKAN_LIB", "libvulkan.so.1");
+            qDebug() << "Set QT_VULKAN_LIB to \"libvulkan.so.1\"";
+            ok = m_qVulkanInstance->create();
+        }
+        if (!ok)
+#endif
+        {
+            throw vk::InitializationFailedError("Can't create Vulkan instance");
+        }
+    }
 
 #ifdef QT_DEBUG
     if (!m_qVulkanInstance->layers().contains("VK_LAYER_KHRONOS_validation"))
