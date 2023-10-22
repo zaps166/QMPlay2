@@ -1,3 +1,10 @@
+Changes in QMPlay2 23.10.22:
+    - fix loading of Vulkan library in some Linux distributions,
+    - add Mesa 23.3.0 interlaced video workaround for VA-API,
+    - (re)store compact view on application launch,
+    - unescape HTML content in subtitles,
+    - yt-dlp fixes,
+
 Changes in QMPlay2 23.09.05:
     - Wayland Vulkan crash fix for Qt <= 6.4,
     - RadioBrowser improvements and fixes,
