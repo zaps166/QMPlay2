@@ -41,6 +41,7 @@
     #include <QWinThumbnailToolBar>
     #include <QWinTaskbarProgress>
     #include <QWinTaskbarButton>
+    #include <dwmapi.h>
 #endif
 #ifdef Q_OS_ANDROID
     #include <QtAndroid>
@@ -1809,6 +1810,17 @@ void MainWidget::setWindowsTaskBarFeatures()
     m_thumbnailToolBar->addButton(toggleMute);
     m_thumbnailToolBar->addButton(settings);
 }
+void MainWidget::setTitleBarStyle()
+{
+    if (auto winId = reinterpret_cast<HWND>(window()->internalWinId()))
+    {
+        constexpr WORD DwmwaUseImmersiveDarkMode = 20;
+        constexpr WORD DwmwaUseImmersiveDarkModeBefore20h1 = 19;
+        const BOOL darkBorder = (palette().window().color().lightnessF() < 0.5) ? TRUE : FALSE;
+        if (DwmSetWindowAttribute(winId, DwmwaUseImmersiveDarkMode, &darkBorder, sizeof(darkBorder)) != S_OK)
+            DwmSetWindowAttribute(winId, DwmwaUseImmersiveDarkModeBefore20h1, &darkBorder, sizeof(darkBorder));
+    }
+}
 #endif
 
 void MainWidget::keyPressEvent(QKeyEvent *e)
@@ -2051,6 +2063,7 @@ void MainWidget::showEvent(QShowEvent *)
         doRestoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"));
 #ifdef Q_OS_WIN
         setWindowsTaskBarFeatures();
+        setTitleBarStyle();
 #endif
         if (QMPlay2Core.getSettings().getBool("MainWidget/IsCompactView"))
             menuBar->window->toggleCompactView->trigger();
@@ -2076,6 +2089,12 @@ void MainWidget::changeEvent(QEvent *e)
         if (isFullScreen() || isMaximized())
             videoDock->scheduleEnterEventWorkaround();
     }
+#ifdef Q_OS_WIN
+    else if (e->type() == QEvent::PaletteChange)
+    {
+        setTitleBarStyle();
+    }
+#endif
     QMainWindow::changeEvent(e);
 }
 

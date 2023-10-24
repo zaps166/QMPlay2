@@ -139,6 +139,7 @@ private:
 
 #ifdef Q_OS_WIN
     void setWindowsTaskBarFeatures();
+    void setTitleBarStyle();
 #endif
 
     void keyPressEvent(QKeyEvent *) override;

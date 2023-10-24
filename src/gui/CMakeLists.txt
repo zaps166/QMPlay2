@@ -219,6 +219,7 @@ endif()
 if(WIN32)
     set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Custom libraries for GUI")
     target_link_libraries(${PROJECT_NAME} Qt5::WinExtras winmm)
+    target_link_libraries(${PROJECT_NAME} dwmapi) # Remove for Qt >= 6.4
 elseif(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")
