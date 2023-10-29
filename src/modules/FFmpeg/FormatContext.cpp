@@ -25,6 +25,7 @@
 #include <Settings.hpp>
 #include <Packet.hpp>
 
+#include <cstring>
 #include <limits>
 
 extern "C"
@@ -75,9 +76,8 @@ static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
     }
 }
 
-static QByteArray getTag(AVDictionary *metadata, const char *key, const bool deduplicate = true)
+static QByteArray getTag(const AVDictionaryEntry *avTag, const bool deduplicate = true)
 {
-    AVDictionaryEntry *avTag = av_dict_get(metadata, key, nullptr, 0);
     if (avTag && avTag->value)
     {
         const QByteArray tag = Functions::textWithFallbackEncoding(QByteArray(avTag->value));
@@ -120,6 +120,11 @@ static QByteArray getTag(AVDictionary *metadata, const char *key, const bool ded
         return tag.trimmed();
     }
     return QByteArray();
+}
+
+static QByteArray getTag(AVDictionary *metadata, const char *key, const bool deduplicate = true)
+{
+    return getTag(av_dict_get(metadata, key, nullptr, 0), deduplicate);
 }
 
 static void fixFontsAttachment(AVStream *stream)
@@ -351,8 +356,17 @@ QList<QMPlay2Tag> FormatContext::tags() const
             tagList += {QString::number(QMPLAY2_TAG_DATE), value};
         if (!(value = getTag(dict, "comment")).isEmpty())
             tagList += {QString::number(QMPLAY2_TAG_COMMENT), value};
-        if (!(value = getTag(dict, "lyrics")).isEmpty())
+        if (!(value = getTag(dict, "lyrics")).isEmpty()) {
             tagList += {QString::number(QMPLAY2_TAG_LYRICS), value};
+        } else {
+            // check for all fields starting with "lyrics-" because libavformat's ID3v2 code adds lyric fields like that
+            for (const AVDictionaryEntry *avTag = av_dict_iterate(dict, nullptr); avTag; avTag = av_dict_iterate(dict, avTag)) {
+                if (!std::strncmp(avTag->key, "lyrics-", sizeof("lyrics-")) && !(value = getTag(avTag)).isEmpty()) {
+                    tagList += {QString::number(QMPLAY2_TAG_LYRICS), value};
+                    break;
+                }
+            }
+        }
     }
     return tagList;
 }
