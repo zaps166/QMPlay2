@@ -356,12 +356,17 @@ QList<QMPlay2Tag> FormatContext::tags() const
             tagList += {QString::number(QMPLAY2_TAG_DATE), value};
         if (!(value = getTag(dict, "comment")).isEmpty())
             tagList += {QString::number(QMPLAY2_TAG_COMMENT), value};
-        if (!(value = getTag(dict, "lyrics")).isEmpty()) {
+        if (!(value = getTag(dict, "lyrics")).isEmpty())
+        {
             tagList += {QString::number(QMPLAY2_TAG_LYRICS), value};
-        } else {
+        }
+        else
+        {
             // check for all fields starting with "lyrics-" because libavformat's ID3v2 code adds lyric fields like that
-            for (const AVDictionaryEntry *avTag = av_dict_iterate(dict, nullptr); avTag; avTag = av_dict_iterate(dict, avTag)) {
-                if (!std::strncmp(avTag->key, "lyrics-", sizeof("lyrics-")) && !(value = getTag(avTag)).isEmpty()) {
+            for (const AVDictionaryEntry *avTag = av_dict_iterate(dict, nullptr); avTag; avTag = av_dict_iterate(dict, avTag))
+            {
+                if (!std::strncmp(avTag->key, "lyrics-", sizeof("lyrics-")) && !(value = getTag(avTag)).isEmpty())
+                {
                     tagList += {QString::number(QMPLAY2_TAG_LYRICS), value};
                     break;
                 }
