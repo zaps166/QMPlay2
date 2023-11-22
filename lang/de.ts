@@ -1019,7 +1019,7 @@
     </message>
     <message>
         <source>Don&apos;t load playlist files within other files</source>
-        <translation>Laden Sie k&apos;eine Wiedergabelistendateien in andere Dateien</translation>
+        <translation>Keine Wiedergabelistendateien innerhalb anderer Dateien laden</translation>
     </message>
     <message>
         <source>Enlarge small covers</source>
