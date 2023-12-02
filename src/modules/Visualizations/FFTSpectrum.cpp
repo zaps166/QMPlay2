@@ -23,15 +23,9 @@
 #include <QPainterPath>
 #include <qevent.h>
 
-extern "C"
-{
-    #include <libavutil/mem.h>
-    #include <libavcodec/avfft.h>
-}
-
 #include <cmath>
 
-static inline void fltmix(FFTComplex *dest, const float *winFunc, const float *src, const int size, const uchar chn)
+static inline void fltmix(FFT::Complex *dest, const float *winFunc, const float *src, const int size, const uchar chn)
 {
     for (int i = 0, j = 0; i < size; i += chn)
     {
@@ -144,7 +138,7 @@ void FFTSpectrumW::stop()
 /**/
 
 FFTSpectrum::FFTSpectrum(Module &module) :
-    w(*this), fft_ctx(nullptr), tmpData(nullptr), tmpDataSize(0), tmpDataPos(0), m_linearScale(false)
+    w(*this), tmpDataSize(0), tmpDataPos(0), m_linearScale(false)
 {
     SetModule(module);
 }
@@ -156,17 +150,15 @@ void FFTSpectrum::soundBuffer(const bool enable)
     if (arrSize != tmpDataSize)
     {
         tmpDataPos = 0;
-        av_free(tmpData);
-        tmpData = nullptr;
+        FFT::freeComplex(m_complex);
         m_winFunc.clear();
         w.spectrumData.clear();
         w.lastData.clear();
-        av_fft_end(fft_ctx);
-        fft_ctx = nullptr;
+        m_fft.finish();
         if ((tmpDataSize = arrSize))
         {
-            fft_ctx = av_fft_init(w.fftSize, false);
-            tmpData = (FFTComplex *)av_malloc(tmpDataSize * sizeof(FFTComplex));
+            m_fft.init(w.fftSize, false);
+            m_complex = FFT::allocComplex(tmpDataSize);
             m_winFunc.resize(tmpDataSize);
             for (int i = 0; i < tmpDataSize; ++i)
                 m_winFunc[i] = 0.5f - 0.5f * cos(2.0f * static_cast<float>(M_PI) * i / (tmpDataSize - 1));
@@ -240,18 +232,17 @@ void FFTSpectrum::sendSoundData(const QByteArray &data)
         const int size = qMin((data.size() - newDataPos) / (int)sizeof(float), (tmpDataSize - tmpDataPos) * w.chn);
         if (!size)
             break;
-        fltmix(tmpData + tmpDataPos, m_winFunc.data() + tmpDataPos, (const float *)(data.constData() + newDataPos), size, w.chn);
+        fltmix(m_complex + tmpDataPos, m_winFunc.data() + tmpDataPos, (const float *)(data.constData() + newDataPos), size, w.chn);
         newDataPos += size * sizeof(float);
         tmpDataPos += size / w.chn;
         if (tmpDataPos == tmpDataSize)
         {
-            av_fft_permute(fft_ctx, tmpData);
-            av_fft_calc(fft_ctx, tmpData);
+            m_fft.calc(m_complex);
             tmpDataPos /= 2;
             float *spectrumData = w.spectrumData.data();
             for (int i = 0; i < tmpDataPos; ++i)
             {
-                spectrumData[i] = sqrt(tmpData[i].re * tmpData[i].re + tmpData[i].im * tmpData[i].im) / tmpDataPos;
+                spectrumData[i] = sqrt(m_complex[i].re * m_complex[i].re + m_complex[i].im * m_complex[i].im) / tmpDataPos;
                 if (m_linearScale)
                     spectrumData[i] *= 2.0f;
                 else

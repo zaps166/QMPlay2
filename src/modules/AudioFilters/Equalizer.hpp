@@ -19,11 +19,9 @@
 #pragma once
 
 #include <AudioFilter.hpp>
+#include <FFT.hpp>
 
 #include <vector>
-
-struct FFTContext;
-struct FFTComplex;
 
 class Equalizer final : public AudioFilter
 {
@@ -63,9 +61,9 @@ private:
 #else
     mutable QMutex m_mutex;
 #endif
-    FFTContext *m_fftIn = nullptr;
-    FFTContext *m_fftOut = nullptr;
-    FFTComplex *m_complex = nullptr;
+    FFT m_fftIn;
+    FFT m_fftOut;
+    FFT::Complex *m_complex = nullptr;
     std::vector<std::vector<float>> m_input, m_lastSamples;
     std::vector<float> m_windF, m_f;
     float m_preamp = 0.0f;

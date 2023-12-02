@@ -20,6 +20,7 @@
 
 #include <QMPlay2Extensions.hpp>
 #include <VisWidget.hpp>
+#include <FFT.hpp>
 
 #include <QCoreApplication>
 #include <QLinearGradient>
@@ -52,9 +53,6 @@ private:
 
 /**/
 
-struct FFTContext;
-struct FFTComplex;
-
 class FFTSpectrum final : public QMPlay2Extensions
 {
 public:
@@ -76,8 +74,8 @@ private:
 
     FFTSpectrumW w;
 
-    FFTContext *fft_ctx;
-    FFTComplex *tmpData;
+    FFT m_fft;
+    FFT::Complex *m_complex = nullptr;
     std::vector<float> m_winFunc;
     int tmpDataSize, tmpDataPos;
     bool m_linearScale;

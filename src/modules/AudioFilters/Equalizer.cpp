@@ -18,19 +18,7 @@
 
 #include <Equalizer.hpp>
 
-extern "C"
-{
-    #include <libavutil/mem.h>
-    #include <libavcodec/avfft.h>
-}
-
 #include <cmath>
-
-static inline void fft_calc(FFTContext *fft_ctx, FFTComplex *cplx)
-{
-    av_fft_permute(fft_ctx, cplx);
-    av_fft_calc(fft_ctx, cplx);
-}
 
 static inline float cosI(const float y1, const float y2, float p)
 {
@@ -178,7 +166,7 @@ double Equalizer::filter(QByteArray &data, bool flush)
                 else
                     m_input[c].clear();
 
-                fft_calc(m_fftIn, m_complex);
+                m_fftIn.calc(m_complex);
                 for (int i = 0; i < fftSizeDiv2; ++i)
                 {
                     const float coeff = m_f[i] * m_preamp;
@@ -187,7 +175,7 @@ double Equalizer::filter(QByteArray &data, bool flush)
                     m_complex[fftSize - 1 - i].re *= coeff;
                     m_complex[fftSize - 1 - i].im *= coeff;
                 }
-                fft_calc(m_fftOut, m_complex);
+                m_fftOut.calc(m_complex);
 
                 if (m_lastSamples[c].empty())
                 {
@@ -212,14 +200,12 @@ double Equalizer::filter(QByteArray &data, bool flush)
 void Equalizer::alloc(bool b)
 {
     QMutexLocker locker(&m_mutex);
-    if (!b && (m_fftIn || m_fftOut))
+    if (!b && (m_fftIn.isValid() || m_fftOut.isValid()))
     {
         m_canFilter = false;
         m_fftNBits = m_fftSize = 0;
-        av_fft_end(m_fftIn);
-        av_fft_end(m_fftOut);
-        m_fftIn = nullptr;
-        m_fftOut = nullptr;
+        m_fftIn.finish();
+        m_fftOut.finish();
         av_free(m_complex);
         m_complex = nullptr;
         m_input.clear();
@@ -233,13 +219,13 @@ void Equalizer::alloc(bool b)
     }
     else if (b)
     {
-        if (!m_fftIn || !m_fftOut)
+        if (!m_fftIn.isValid() || !m_fftOut.isValid())
         {
             m_fftNBits  = sets().getInt("Equalizer/nbits");
             m_fftSize   = 1 << m_fftNBits;
-            m_fftIn  = av_fft_init(m_fftNBits, false);
-            m_fftOut = av_fft_init(m_fftNBits, true);
-            m_complex = (FFTComplex *)av_malloc(m_fftSize * sizeof(FFTComplex));
+            m_fftIn.init(m_fftNBits, false);
+            m_fftOut.init(m_fftNBits, true);
+            m_complex = FFT::allocComplex(m_fftSize);
             m_input.resize(m_chn);
             m_lastSamples.resize(m_chn);
             m_windF.resize(m_fftSize);

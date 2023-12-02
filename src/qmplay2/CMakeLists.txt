@@ -50,6 +50,7 @@ set(QMPLAY2_HDR
     VideoOutputCommon.hpp
     HWDecContext.hpp
     GPUInstance.hpp
+    FFT.hpp
 )
 
 set(QMPLAY2_SRC
