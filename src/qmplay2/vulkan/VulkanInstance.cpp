@@ -27,13 +27,10 @@
 
 #include <QGuiApplication>
 #include <QVulkanInstance>
+#include <QVersionNumber>
 #include <QResource>
 #include <QLibrary>
 #include <QWindow>
-
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-#   include <QVersionNumber>
-#endif
 
 #if defined(Q_OS_WIN)
 #   include <QRegularExpression>
@@ -269,6 +266,8 @@ void Instance::init()
         VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME,
         VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME,
     });
+
+    m_qVulkanInstance->setApiVersion(QVersionNumber(1, 0));
 
 #if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
     const bool maybeSetEnvVar = (QVersionNumber::fromString(qVersion()) < QVersionNumber(6, 3, 0) || QGuiApplication::platformName().contains("wayland")) && !qEnvironmentVariableIsSet("QT_VULKAN_LIB");
