@@ -75,9 +75,9 @@ static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
     }
 }
 
-static QByteArray getTag(AVDictionary *metadata, const char *key, const bool deduplicate = true)
+static QByteArray getTag(AVDictionary *metadata, const char *key, const bool deduplicate = true, const int flags = 0)
 {
-    AVDictionaryEntry *avTag = av_dict_get(metadata, key, nullptr, 0);
+    AVDictionaryEntry *avTag = av_dict_get(metadata, key, nullptr, flags);
     if (avTag && avTag->value)
     {
         const QByteArray tag = Functions::textWithFallbackEncoding(QByteArray(avTag->value));
@@ -351,7 +351,7 @@ QList<QMPlay2Tag> FormatContext::tags() const
             tagList += {QString::number(QMPLAY2_TAG_DATE), value};
         if (!(value = getTag(dict, "comment")).isEmpty())
             tagList += {QString::number(QMPLAY2_TAG_COMMENT), value};
-        if (!(value = getTag(dict, "lyrics")).isEmpty())
+        if (!(value = getTag(dict, "lyrics", true, AV_DICT_IGNORE_SUFFIX)).isEmpty())
             tagList += {QString::number(QMPLAY2_TAG_LYRICS), value};
     }
     return tagList;
