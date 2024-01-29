@@ -198,7 +198,7 @@ For CMake build be sure that you have CMake 3.9 or higher.
     - libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
 
 #### Important:
-- TagLib >= 1.9,
+- TagLib >= 1.11,
 - libass - for OSD and non-graphical subtitles.
 
 #### For modules (some of them can be automatically disabled if not found):

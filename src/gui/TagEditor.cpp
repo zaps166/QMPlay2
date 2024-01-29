@@ -21,17 +21,10 @@
 #include <Functions.hpp>
 #include <Main.hpp>
 
-#define TAGLIB_VERSION ((TAGLIB_MAJOR_VERSION << 8) | TAGLIB_MINOR_VERSION)
-#define TAGLIB1B (TAGLIB_VERSION >= 0x10B)
-
 #ifdef TAGLIB_FULL_INCLUDE_PATH
     #include <taglib/taglib.h>
 #else
     #include <taglib.h>
-#endif
-
-#if TAGLIB_VERSION < 0x109
-    #error Taglib 1.9 or newer is needed!
 #endif
 
 #ifdef TAGLIB_FULL_INCLUDE_PATH
@@ -54,6 +47,7 @@
     #include <taglib/itfile.h>
     #include <taglib/xmfile.h>
     #include <taglib/opusfile.h>
+    #include <taglib/attachedpictureframe.h>
 #else
     #include <trueaudiofile.h>
     #include <oggflacfile.h>
@@ -74,6 +68,7 @@
     #include <itfile.h>
     #include <xmfile.h>
     #include <opusfile.h>
+    #include <attachedpictureframe.h>
 #endif
 using namespace TagLib;
 
@@ -136,17 +131,9 @@ static void removeXiphComment(Ogg::XiphComment *xiphComment)
 {
     if (xiphComment)
     {
-#if TAGLIB1B
         xiphComment->removeAllPictures();
         xiphComment->removeAllFields();
-#else
-        const Ogg::FieldListMap &fieldListMap = xiphComment->fieldListMap();
-        for (Ogg::FieldListMap::ConstIterator it = fieldListMap.begin(); it != fieldListMap.end(); ++it)
-        {
-            if (xiphComment->contains(it->first))
-                xiphComment->removeField(it->first);
-        }
-#endif
+
     }
 }
 
@@ -312,10 +299,10 @@ bool TagEditor::open(const QString &fileName)
         }
         else if (instanceOf(file, MP4::File))
         {
-            MP4::ItemListMap &itemListMap = ((MP4::File &)file).tag()->itemListMap();
-            MP4::ItemListMap::ConstIterator it = itemListMap.find("covr");
+            auto &&itemMap = ((MP4::File &)file).tag()->itemMap();
+            auto it = itemMap.find("covr");
             pictureB->setEnabled(true);
-            if (it != itemListMap.end())
+            if (it != itemMap.end())
             {
                 MP4::CoverArtList coverArtList = it->second.toCoverArtList();
                 if (!coverArtList.isEmpty())
@@ -355,25 +342,12 @@ bool TagEditor::open(const QString &fileName)
             {
                 FLAC::Picture *flacPicture = nullptr;
                 pictureB->setEnabled(true);
-#if TAGLIB1B
                 const List<FLAC::Picture *> pictures = xiphComment->pictureList();
                 if (!pictures.isEmpty())
                 {
                     flacPicture = pictures[0];
                     hasTags = true;
                 }
-#else
-                const Ogg::FieldListMap &fieldListMap = xiphComment->fieldListMap();
-                Ogg::FieldListMap::ConstIterator it = fieldListMap.find("METADATA_BLOCK_PICTURE");
-                FLAC::Picture tmpFlacPicture;
-                if (it != fieldListMap.end() && !it->second.isEmpty())
-                {
-                    /* OGG picture and FLAC picture are the same except OGG picture is encoded into Base64 */
-                    const QByteArray pict_frame_decoded = QByteArray::fromBase64(it->second.front().toCString());
-                    if (tmpFlacPicture.parse(ByteVector(pict_frame_decoded.data(), pict_frame_decoded.size())))
-                        flacPicture = &tmpFlacPicture;
-                }
-#endif
                 if (flacPicture)
                 {
                     pictureMimeType = flacPicture->mimeType().toCString();
@@ -489,12 +463,12 @@ bool TagEditor::save()
             }
             else if (instanceOf(file, MP4::File))
             {
-                MP4::ItemListMap &itemListMap = ((MP4::File &)file).tag()->itemListMap();
-                if (itemListMap.contains("covr"))
-                    itemListMap.erase("covr");
+                auto &itemMap = const_cast<MP4::ItemMap &>(((MP4::File &)file).tag()->itemMap());
+                if (itemMap.contains("covr"))
+                    itemMap.erase("covr");
                 if (hasPicture)
                 {
-                    MP4::CoverArt::Format format = (MP4::CoverArt::Format)0;
+                    auto format = MP4::CoverArt::Format::Unknown;
                     if (pictureMimeType == "image/jpeg")
                         format = MP4::CoverArt::JPEG;
                     else if (pictureMimeType == "image/png")
@@ -503,11 +477,11 @@ bool TagEditor::save()
                         format = MP4::CoverArt::BMP;
                     else if (pictureMimeType == "image/gif")
                         format = MP4::CoverArt::GIF;
-                    if (format)
+                    if (format != MP4::CoverArt::Format::Unknown)
                     {
                         MP4::CoverArtList coverArtList;
                         coverArtList.append(MP4::CoverArt(format, *picture));
-                        itemListMap.insert("covr", coverArtList);
+                        itemMap.insert("covr", coverArtList);
                     }
                 }
                 mustSave = true;
@@ -525,19 +499,9 @@ bool TagEditor::save()
                         flacPicture->setType(FLAC::Picture::FrontCover);
                         flacPicture->setData(*picture);
                     }
-#if TAGLIB1B
                     xiphComment->removeAllPictures();
                     if (flacPicture)
                         xiphComment->addPicture(flacPicture);
-#else
-                    xiphComment->removeField("METADATA_BLOCK_PICTURE");
-                    if (flacPicture)
-                    {
-                        const ByteVector pict_data = flacPicture->render();
-                        xiphComment->addField("METADATA_BLOCK_PICTURE", QByteArray::fromRawData(pict_data.data(), pict_data.size()).toBase64().data());
-                        delete flacPicture;
-                    }
-#endif
                     mustSave = true;
                 }
             }
@@ -557,7 +521,7 @@ bool TagEditor::save()
             else if (instanceOf(file, APE::File))
                 ((APE::File &)file).strip();
             else if (instanceOf(file, MP4::File))
-                ((MP4::File &)file).tag()->itemListMap().clear();
+                const_cast<MP4::ItemMap &>(((MP4::File &)file).tag()->itemMap()).clear();
             else if (instanceOf(file, ASF::File))
                 ((ASF::File &)file).tag()->attributeListMap().clear();
             else if (isOgg(file))
@@ -591,7 +555,7 @@ bool TagEditor::save()
                 else if (instanceOf(file, XM::File))
                     modTag = ((XM::File &)file).tag();
                 if (modTag)
-                    modTag->setTrackerName(String::null);
+                    modTag->setTrackerName(String());
             }
         }
 
@@ -601,21 +565,7 @@ bool TagEditor::save()
             FLAC::File &flacF = (FLAC::File &)file;
             if (flacF.hasID3v1Tag() || flacF.hasID3v2Tag())
             {
-#if TAGLIB1B
                 flacF.strip(FLAC::File::ID3v1 | FLAC::File::ID3v2);
-#else
-    #ifdef Q_OS_WIN
-                const FileName fName = file.name(); //Class with "std::string"
-    #else
-                const QByteArray fName = file.name(); //Raw pointer, so copy it
-    #endif
-                result = fRef->save();
-                delete fRef;
-                fRef = nullptr;
-                if (result)
-                    result = MPEG::File(fName, false).save(MPEG::File::NoTags);
-                mustSave = false;
-#endif
             }
         }
 
