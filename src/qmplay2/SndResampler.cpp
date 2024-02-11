@@ -98,6 +98,9 @@ bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate,
     if (!m_srcSamplerate || !m_dstSamplerate || !srcChnLayout || !dstChnLayout)
         return false;
 
+    if (m_sndConvertCtx)
+        swr_close(m_sndConvertCtx);
+
     m_sndConvertCtx = swr_alloc_set_opts(
         m_sndConvertCtx,
         dstChnLayout,
