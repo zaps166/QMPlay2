@@ -208,7 +208,7 @@ private:
         vk::ColorSpaceKHR colorSpace = vk::ColorSpaceKHR::eSrgbNonlinear;
 
         shared_ptr<Buffer> fragUniform;
-        bool mustUpdateFragUniform = false;
+        bool mustUpdateFragUniform = true;
 
         shared_ptr<Buffer> verticesStagingBuffer;
         shared_ptr<Buffer> verticesBuffer;
