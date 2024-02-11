@@ -99,5 +99,7 @@ private:
 #ifdef USE_VULKAN
     std::shared_ptr<QmVk::BufferPool> m_vkBufferPool;
     bool m_disableZeroCopy = false;
+    bool m_defaultGetBufferUsed = false;
+    decltype(AVFrame::linesize) m_vkLineSizes = {};
 #endif
 };

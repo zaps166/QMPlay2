@@ -776,7 +776,7 @@ int FFDecSW::vulkanGetVideoBufferStatic(AVCodecContext *codecCtx, AVFrame *frame
 }
 int FFDecSW::vulkanGetVideoBuffer(AVCodecContext *codecCtx, AVFrame *frame, int flags)
 {
-    if (m_dontConvert)
+    if (m_dontConvert && !m_defaultGetBufferUsed)
     {
         int w = frame->width;
         int h = frame->height;
@@ -796,8 +796,51 @@ int FFDecSW::vulkanGetVideoBuffer(AVCodecContext *codecCtx, AVFrame *frame, int 
         }
 
         if (m_vkImagePool->takeToAVFrame(vk::Extent2D(w, codec_ctx->height), frame, paddingHeight))
+        {
+            memcpy(m_vkLineSizes, frame->linesize, sizeof(m_vkLineSizes));
             return 0;
+        }
+
+        // If Vulkan allocation fails (e.g. DeviceLost), allocate frames with same linesize to make FFmpeg happy
+        size_t buffSize = 0;
+        size_t offsets[AV_NUM_DATA_POINTERS] = {};
+        for (int i = 0; i < AV_NUM_DATA_POINTERS; ++i)
+        {
+            if (m_vkLineSizes[i] == 0)
+                break;
+
+            auto log2_chroma_h = m_origPixDesc->log2_chroma_h;
+            if (i == 0)
+                log2_chroma_h = 0;
+
+            offsets[i] = buffSize;
+            buffSize += m_vkLineSizes[i] * AV_CEIL_RSHIFT((codec_ctx->height + paddingHeight), log2_chroma_h);
+        }
+        if (buffSize > 0)
+        {
+            // It's temporary, no need to use buffer pool
+            frame->buf[0] = av_buffer_alloc(buffSize);
+        }
+        if (frame->buf[0])
+        {
+            for (int i = 0; i < AV_NUM_DATA_POINTERS; ++i)
+            {
+                if (m_vkLineSizes[i] == 0)
+                    break;
+
+                frame->linesize[i] = m_vkLineSizes[i];
+                frame->data[i] = frame->buf[0]->data + offsets[i];
+            }
+            frame->extended_data = frame->data;
+            return 0;
+        }
     }
+
+    // FFmpeg can't use reference frames with different linesize (Vulkan uses different linesize)
+    if (!m_defaultGetBufferUsed && m_dontConvert)
+        qDebug() << "Vulkan :: Zero-copy decoding disabled due to an error";
+    m_defaultGetBufferUsed = true;
+
     return avcodec_default_get_buffer2(codecCtx, frame, flags);
 }
 #endif
