@@ -268,6 +268,12 @@ HWInterop::SyncDataPtr VAAPIVulkan::sync(const vector<Frame> &frames, vk::Submit
         if (!image)
             continue;
 
+        {
+            lock_guard<mutex> locker(m_mutex);
+            if (m_images.count(frame.hwData()) == 0)
+                continue;
+        }
+
         const auto &fds = image->customData<FDCustomData>()->fds;
         for (auto &&fd : fds)
         {
