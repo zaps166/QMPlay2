@@ -21,7 +21,6 @@
 #define DecoderName "FFmpeg Decoder"
 #define DecoderVAAPIName "FFmpeg VA-API Decoder"
 #define DecoderVDPAUName "FFmpeg VDPAU Decoder"
-#define DecoderVDPAU_NWName DecoderVDPAUName " (no output)"
 #define DecoderDXVA2Name "FFmpeg DXVA2 Decoder"
 #define DecoderD3D11VAName "FFmpeg D3D11VA Decoder"
 #define DecoderVTBName "FFmpeg VideoToolbox Decoder"
