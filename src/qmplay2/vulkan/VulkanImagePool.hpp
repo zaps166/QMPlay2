@@ -22,6 +22,7 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include <memory>
 #include <mutex>
 
 extern "C" {

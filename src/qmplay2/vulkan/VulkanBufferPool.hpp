@@ -22,6 +22,7 @@
 
 #include <vulkan/vulkan.hpp>
 
+#include <memory>
 #include <deque>
 #include <mutex>
 
