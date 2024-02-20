@@ -1,0 +1,9 @@
+[Desktop Entry]
+Exec=QMPlay2 --show %u
+Icon=QMPlay2
+Name=Play youtube:VID URI in QMPlay2
+StartupNotify=false
+Type=Application
+Categories=Qt;AudioVideo;Player;Audio;Video;
+MimeType=x-scheme-handler/youtube;
+NoDisplay=true
