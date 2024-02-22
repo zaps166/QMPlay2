@@ -118,7 +118,7 @@ private slots:
     void lockWidgets(bool);
 
     void hideDocksSlot();
-    void doRestoreState(const QByteArray &data);
+    void doRestoreState(const QByteArray &data, bool doToggleCompactView = false);
 
     void uncheckSuspend();
 private:

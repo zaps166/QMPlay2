@@ -1560,7 +1560,7 @@ void MainWidget::hideDocksSlot()
             hideDocks();
     }
 }
-void MainWidget::doRestoreState(const QByteArray &data)
+void MainWidget::doRestoreState(const QByteArray &data, bool doToggleCompactView)
 {
     if (isMaximized())
     {
@@ -1568,6 +1568,8 @@ void MainWidget::doRestoreState(const QByteArray &data)
         QTimer::singleShot(0, this, [=] {
             QTimer::singleShot(0, this, [=] {
                 restoreState(data);
+                if (doToggleCompactView)
+                    menuBar->window->toggleCompactView->trigger();
                 setUpdatesEnabled(true);
                 repaint();
             });
@@ -1576,6 +1578,8 @@ void MainWidget::doRestoreState(const QByteArray &data)
     else
     {
         restoreState(data);
+        if (doToggleCompactView)
+            menuBar->window->toggleCompactView->trigger();
     }
 }
 
@@ -2060,13 +2064,11 @@ void MainWidget::showEvent(QShowEvent *)
         if (QMPlay2Core.getSettings().getBool("MainWidget/isMaximized"))
 #endif
             showMaximized();
-        doRestoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"));
+        doRestoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"), QMPlay2Core.getSettings().getBool("MainWidget/IsCompactView"));
 #ifdef Q_OS_WIN
         setWindowsTaskBarFeatures();
         setTitleBarStyle();
 #endif
-        if (QMPlay2Core.getSettings().getBool("MainWidget/IsCompactView"))
-            menuBar->window->toggleCompactView->trigger();
         wasShow = true;
     }
     menuBar->window->toggleVisibility->setText(tr("&Hide"));
