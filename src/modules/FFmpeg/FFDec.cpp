@@ -79,6 +79,8 @@ AVCodec *FFDec::init(StreamInfo &streamInfo)
     if (codec)
     {
         codec_ctx = avcodec_alloc_context3(codec);
+        if (!codec_ctx)
+            return nullptr;
         avcodec_parameters_to_context(codec_ctx, streamInfo.params);
 //        codec_ctx->debug_mv = FF_DEBUG_VIS_MV_P_FOR | FF_DEBUG_VIS_MV_B_FOR | FF_DEBUG_VIS_MV_B_BACK;
     }
