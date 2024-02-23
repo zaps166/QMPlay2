@@ -154,14 +154,10 @@ private:
             do
             {
                 for (const std::shared_ptr<VideoFilter> &vFilter : qAsConst(videoFilters.filters))
-                {
                     pending |= vFilter->filter(queue);
-                    if (queue.isEmpty())
-                    {
-                        pending = false;
-                        break;
-                    }
-                }
+
+                if (queue.isEmpty())
+                    pending = false;
 
                 {
                     QMutexLocker locker(&bufferMutex);
