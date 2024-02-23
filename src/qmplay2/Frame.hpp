@@ -107,6 +107,9 @@ public: // Video
     void setNoInterlaced();
     void setIsSecondField(bool secondField);
 
+    inline bool hasBorders() const;
+    inline void setHasBorders(bool hasBorders);
+
     bool hasCPUAccess() const;
 
     bool isHW() const;
@@ -193,12 +196,22 @@ private:
     const AVPixFmtDescriptor *m_pixelFmtDescriptor = nullptr;
     bool m_isSecondField = false;
     bool m_isCustomHW = false;
+    bool m_hasBorders = false;
 #ifdef USE_VULKAN
     std::shared_ptr<QmVk::Image> m_vkImage;
 #endif
 };
 
 /* Inline implementation */
+
+bool Frame::hasBorders() const
+{
+    return m_hasBorders;
+}
+void Frame::setHasBorders(bool hasBorders)
+{
+    m_hasBorders = hasBorders;
+}
 
 template<typename D, typename L>
 bool Frame::copyData(D *dest[4], L linesize[4]) const

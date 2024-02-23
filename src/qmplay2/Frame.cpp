@@ -225,6 +225,7 @@ void Frame::clear()
     m_pixelFmtDescriptor = nullptr;
     m_isSecondField = false;
     m_isCustomHW = false;
+    m_hasBorders = false;
 #ifdef USE_VULKAN
     m_vkImage.reset();
 #endif
@@ -646,6 +647,7 @@ Frame &Frame::operator =(const Frame &other)
     m_pixelFmtDescriptor = other.m_pixelFmtDescriptor;
     m_isSecondField = other.m_isSecondField;
     m_isCustomHW = other.m_isCustomHW;
+    m_hasBorders = other.m_hasBorders;
 #ifdef USE_VULKAN
     m_vkImage = other.m_vkImage;
 #endif
@@ -666,6 +668,7 @@ Frame &Frame::operator =(Frame &&other)
     qSwap(m_pixelFmtDescriptor, other.m_pixelFmtDescriptor);
     qSwap(m_isSecondField, other.m_isSecondField);
     qSwap(m_isCustomHW, other.m_isCustomHW);
+    qSwap(m_hasBorders, other.m_hasBorders);
 #ifdef USE_VULKAN
     qSwap(m_vkImage, other.m_vkImage);
 #endif
