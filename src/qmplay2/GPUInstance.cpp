@@ -41,7 +41,7 @@ shared_ptr<GPUInstance> GPUInstance::create()
 #if defined(USE_VULKAN)
     if (renderer == "vulkan") try
     {
-        auto vkInstance = QmVk::Instance::create();
+        auto vkInstance = QmVk::Instance::create(true);
 #   ifdef USE_OPENGL
         if (!vkInstance->isPhysicalDeviceGpu() && !sets.getBool("Vulkan/UserApplied"))
         {

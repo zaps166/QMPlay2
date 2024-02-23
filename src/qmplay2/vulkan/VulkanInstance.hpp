@@ -50,7 +50,7 @@ public: // Helpers
     static bool checkFiltersSupported(const shared_ptr<PhysicalDevice> &physicalDevice);
 
 public:
-    static shared_ptr<Instance> create();
+    static shared_ptr<Instance> create(bool doObtainPhysicalDevice);
 
 public:
     Instance(Priv);
@@ -59,7 +59,7 @@ public:
     void prepareDestroy() override;
 
 private:
-    void init();
+    void init(bool doObtainPhysicalDevice);
 
 public:
     QString name() const override;

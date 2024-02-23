@@ -206,7 +206,7 @@ vector<shared_ptr<PhysicalDevice>> Instance::enumerateSupportedPhysicalDevices()
     {
         return (QMPlay2Core.isVulkanRenderer()
             ? std::static_pointer_cast<Instance>(QMPlay2Core.gpuInstance())
-            : Instance::create()
+            : Instance::create(false)
         )->enumeratePhysicalDevices(true);
     }
     catch (const vk::SystemError &e)
@@ -232,10 +232,10 @@ bool Instance::checkFiltersSupported(const shared_ptr<PhysicalDevice> &physicalD
     return true;
 }
 
-shared_ptr<Instance> Instance::create()
+shared_ptr<Instance> Instance::create(bool doObtainPhysicalDevice)
 {
     auto instance = make_shared<Instance>(Priv());
-    instance->init();
+    instance->init(doObtainPhysicalDevice);
     return instance;
 }
 
@@ -254,7 +254,7 @@ void Instance::prepareDestroy()
     fillSupportedFormats();
 }
 
-void Instance::init()
+void Instance::init(bool doObtainPhysicalDevice)
 {
 #ifdef QT_DEBUG
     m_qVulkanInstance->setLayers({"VK_LAYER_KHRONOS_validation"});
@@ -327,7 +327,8 @@ void Instance::init()
     m_testWin->setVulkanInstance(m_qVulkanInstance);
     m_testWin->create();
 
-    obtainPhysicalDevice();
+    if (doObtainPhysicalDevice)
+        obtainPhysicalDevice();
 }
 
 QString Instance::name() const
