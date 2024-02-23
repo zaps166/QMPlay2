@@ -100,7 +100,7 @@ bool PacketBuffer::seekTo(double seekPos, bool backward)
 void PacketBuffer::clear()
 {
     lock();
-    QList<Packet>::clear();
+    std::deque<Packet>::clear();
     m_remainingDuration = m_backwardDuration = 0.0;
     m_remainingBytes = m_backwardBytes = 0;
     m_pos = 0;
@@ -111,7 +111,7 @@ void PacketBuffer::put(const Packet &packet)
 {
     lock();
     clearBackwards();
-    append(packet);
+    push_back(packet);
     m_remainingBytes += packet.size();
     m_remainingDuration += packet.duration();
     unlock();
@@ -130,10 +130,10 @@ void PacketBuffer::clearBackwards()
 {
     while (m_backwardDuration > s_backwardTime && m_pos > 0)
     {
-        const Packet &tmpPacket = first();
+        const Packet &tmpPacket = *begin();
         m_backwardDuration -= tmpPacket.duration();
         m_backwardBytes -= tmpPacket.size();
-        removeFirst();
+        erase(begin());
         --m_pos;
     }
 }

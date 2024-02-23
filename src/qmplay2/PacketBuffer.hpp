@@ -21,9 +21,10 @@
 #include <Packet.hpp>
 
 #include <QMutex>
-#include <QList>
 
-class QMPLAY2SHAREDLIB_EXPORT PacketBuffer : private QList<Packet>
+#include <deque>
+
+class QMPLAY2SHAREDLIB_EXPORT PacketBuffer : private std::deque<Packet>
 {
     static double s_backwardTime;
 public:
@@ -42,7 +43,7 @@ public:
 
     inline bool isEmpty() const
     {
-        return QList<Packet>::isEmpty();
+        return empty();
     }
 
     inline bool canFetch() const
@@ -55,7 +56,7 @@ public:
     }
     inline int packetsCount() const
     {
-        return count();
+        return size();
     }
 
     inline double firstPacketTime() const
