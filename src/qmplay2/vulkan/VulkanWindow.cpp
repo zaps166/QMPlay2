@@ -90,7 +90,7 @@ struct VideoPipelineSpecializationData
 struct alignas(16) VertPushConstants
 {
     QGenericMatrix<4, 4, float> mat;
-    float imgWidthMultiplier;
+    QVector2D imgSizeMultiplier;
 };
 
 struct alignas(16) FragUniform
@@ -1016,12 +1016,24 @@ void Window::ensureVideoPipeline()
     const int vkImgW = vkImage->size().width;
     const int imgW = m_imgSize.width();
 
+    const int vkImgH = vkImage->size().height;
+    const int imgH = m_imgSize.height();
+
+    const float subtract = m_frame.hasBorders()
+        ? 0.0f
+        : 1.0f
+    ;
+
     auto pushConstants = m.videoPipeline->pushConstants<VertPushConstants>();
     pushConstants->mat = m_matrix.toGenericMatrix<4, 4>();
-    pushConstants->imgWidthMultiplier = (imgW == vkImgW)
+    pushConstants->imgSizeMultiplier.setX((imgW == vkImgW)
         ? 1.0f
-        : (imgW - 1.0f) / vkImgW
-    ;
+        : (imgW - subtract) / vkImgW
+    );
+    pushConstants->imgSizeMultiplier.setY((imgH == vkImgH)
+        ? 1.0f
+        : (imgH - subtract) / vkImgH
+    );
 }
 
 void Window::resetVerticesBuffer()
