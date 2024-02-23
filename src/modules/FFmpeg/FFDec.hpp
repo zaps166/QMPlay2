@@ -70,7 +70,6 @@ protected:
     AVFrame *frame;
     QList<AVFrame *> m_frames;
     AVRational m_timeBase;
-    bool codecIsOpen;
 
     AVPixelFormats m_supportedPixelFormats;
 

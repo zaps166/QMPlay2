@@ -34,8 +34,7 @@ extern "C"
 FFDec::FFDec() :
     codec_ctx(nullptr),
     packet(nullptr),
-    frame(nullptr),
-    codecIsOpen(false)
+    frame(nullptr)
 {}
 FFDec::~FFDec()
 {
@@ -57,12 +56,7 @@ void FFDec::destroyDecoder()
     clearFrames();
     av_frame_free(&frame);
     av_packet_free(&packet);
-    if (codecIsOpen)
-    {
-        avcodec_close(codec_ctx);
-        codecIsOpen = false;
-    }
-    av_freep(&codec_ctx);
+    avcodec_free_context(&codec_ctx);
 }
 
 void FFDec::clearFrames()
@@ -105,7 +99,7 @@ bool FFDec::openCodec(AVCodec *codec)
         default:
             break;
     }
-    return (codecIsOpen = true);
+    return true;
 }
 
 void FFDec::decodeFirstStep(const Packet &encodedPacket, bool flush)
