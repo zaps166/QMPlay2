@@ -194,6 +194,8 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
 
             if (lastIteration)
             {
+                if (m_vkHwInterop)
+                    m_vkHwInterop->updateInfo(syncFrames);
                 m.commandBuffer->endSubmitAndWait(move(submitInfo));
             }
 

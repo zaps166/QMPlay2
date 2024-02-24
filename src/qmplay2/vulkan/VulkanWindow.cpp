@@ -551,7 +551,11 @@ void Window::render()
             fillVideoPipelineFragmentUniform();
 
         if (m.videoPipeline)
+        {
             m.videoPipeline->prepareObjects(m.commandBuffer);
+            if (m_vkHwInterop)
+                m_vkHwInterop->updateInfo({m_frame});
+        }
 
         bool osdChanged = false;
 

@@ -40,13 +40,15 @@ public:
     public:
         virtual ~SyncData() = default;
     };
-    using SyncDataPtr = std::unique_ptr<SyncData>;
+    using SyncDataPtr = unique_ptr<SyncData>;
 
 public:
     virtual void map(Frame &frame) = 0;
     virtual void clear() = 0;
 
-    virtual SyncDataPtr sync(const std::vector<Frame> &frames, vk::SubmitInfo *submitInfo = nullptr) = 0;
+    virtual SyncDataPtr sync(const vector<Frame> &frames, vk::SubmitInfo *submitInfo = nullptr) = 0;
+
+    virtual void updateInfo(const vector<Frame> &frames);
 
 protected:
     bool syncNow(vk::SubmitInfo &submitInfo);
