@@ -23,6 +23,7 @@
 #ifdef USE_VULKAN
 #   include <QMPlay2Core.hpp>
 
+#   include "../qmvk/Device.hpp"
 #   include "../qmvk/Image.hpp"
 
 #   include <vulkan/VulkanInstance.hpp>
@@ -151,6 +152,16 @@ Frame VideoFilter::getNewFrame(const Frame &other)
 }
 
 #ifdef USE_VULKAN
+std::shared_ptr<QmVk::Queue> VideoFilter::getVulkanComputeQueue(
+    const std::shared_ptr<QmVk::Device> &device)
+{
+    // Queue family at logical index 1 should be compute-only (if exists)
+    const uint32_t logicalIdx = std::min(1u, device->numQueueFamilies() - 1u);
+    const uint32_t queueFamilyIndex = device->queueFamilyIndex(logicalIdx);
+    const uint32_t index = device->numQueues(queueFamilyIndex) - 1u;
+    return device->queue(queueFamilyIndex, index);
+}
+
 std::shared_ptr<QmVk::Image> VideoFilter::vulkanImageFromFrame(
     Frame &frame,
     const std::shared_ptr<QmVk::Device> &device,

@@ -33,7 +33,7 @@ bool HWInterop::syncNow(vk::SubmitInfo &submitInfo)
         if (!device)
             return false;
 
-        m_commandBuffer = CommandBuffer::create(device->queue());
+        m_commandBuffer = CommandBuffer::create(device->firstQueue());
     }
 
     m_commandBuffer->resetAndBegin();

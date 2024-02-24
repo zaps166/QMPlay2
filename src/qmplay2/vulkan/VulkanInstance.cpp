@@ -19,6 +19,7 @@
 #include "../../qmvk/PhysicalDevice.hpp"
 #include "../../qmvk/Device.hpp"
 #include "../../qmvk/MemoryPropertyFlags.hpp"
+#include "../../qmvk/Image.hpp"
 
 #include "VulkanInstance.hpp"
 #include "VulkanBufferPool.hpp"
@@ -40,6 +41,31 @@
 #endif
 
 namespace QmVk {
+
+#ifdef QT_DEBUG
+#   define USE_VALIDATION_LAYER 1
+#else
+#   define USE_VALIDATION_LAYER 0
+#endif
+
+#if USE_VALIDATION_LAYER
+static VKAPI_ATTR vk::Bool32 VKAPI_CALL debugCallback(
+    vk::DebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+    vk::DebugUtilsMessageTypeFlagBitsEXT messageType,
+    const vk::DebugUtilsMessengerCallbackDataEXT *pCallbackData,
+    void *pUserData)
+{
+    if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eError)
+        qDebug() << pCallbackData->pMessage;
+    else if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning)
+        qDebug() << pCallbackData->pMessage;
+    else if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eInfo)
+        qInfo() << pCallbackData->pMessage;
+    else if (messageSeverity & vk::DebugUtilsMessageSeverityFlagBitsEXT::eVerbose)
+        qDebug() << pCallbackData->pMessage;
+    return VK_FALSE;
+}
+#endif
 
 #if defined(Q_OS_LINUX)
 static QFileInfo getPrimaryX11CardFile()
@@ -246,6 +272,9 @@ Instance::~Instance()
 {
     delete m_testWin;
     delete m_qVulkanInstance;
+    m_debugUtilsMessanger.reset();
+    if (*this)
+        destroy();
 }
 
 void Instance::prepareDestroy()
@@ -256,71 +285,92 @@ void Instance::prepareDestroy()
 
 void Instance::init(bool doObtainPhysicalDevice)
 {
-#ifdef QT_DEBUG
-    m_qVulkanInstance->setLayers({"VK_LAYER_KHRONOS_validation"});
-#endif
+    static const auto getInstanceProcAddr = AbstractInstance::loadVulkanLibrary(
+        qEnvironmentVariable("QT_VULKAN_LIB").toStdString()
+    );
+    if (!getInstanceProcAddr)
+        throw vk::InitializationFailedError("Can't resolve \"vkGetInstanceProcAddr\" Vulkan function");
 
-    m_qVulkanInstance->setExtensions({
+    AbstractInstance::initDispatchLoaderDynamic(getInstanceProcAddr);
+    fetchAllExtensions();
+
+    vector<const char *> layers;
+    const auto instanceExtensions = filterAvailableExtensions({
         VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME,
         VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME,
         VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME,
         VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME,
+        VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME,
+        VK_KHR_SURFACE_EXTENSION_NAME,
+        "VK_KHR_android_surface",
+        "VK_KHR_wayland_surface",
+        "VK_KHR_win32_surface",
+        "VK_KHR_xcb_surface",
+#if USE_VALIDATION_LAYER
+        VK_EXT_DEBUG_UTILS_EXTENSION_NAME,
+#endif
     });
 
-    m_qVulkanInstance->setApiVersion(QVersionNumber(1, 0));
-
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-    const bool maybeSetEnvVar = (QVersionNumber::fromString(qVersion()) < QVersionNumber(6, 3, 0) || QGuiApplication::platformName().contains("wayland")) && !qEnvironmentVariableIsSet("QT_VULKAN_LIB");
-
-    QtMessageHandler oldMsgHandler = nullptr;
-    if (maybeSetEnvVar)
-        oldMsgHandler = qInstallMessageHandler(nullptr);
+#if USE_VALIDATION_LAYER
+    const bool hasValidationLayer =
+           checkExtension(VK_EXT_DEBUG_UTILS_EXTENSION_NAME)
+        && getAllInstanceLayers().count("VK_LAYER_KHRONOS_validation") > 0
+    ;
+    if (hasValidationLayer)
+        layers.push_back("VK_LAYER_KHRONOS_validation");
 #endif
 
-    bool ok = m_qVulkanInstance->create();
+    vk::ApplicationInfo appInfo;
+    appInfo.pApplicationName = "QMPlay2";
+    appInfo.apiVersion = AbstractInstance::isVk10()
+        ? VK_API_VERSION_1_0
+        : VK_API_VERSION_1_1
+    ;
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-    if (maybeSetEnvVar && oldMsgHandler)
-        qInstallMessageHandler(oldMsgHandler);
-#endif
+    vk::InstanceCreateInfo createInfo;
+    if (checkExtension(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME))
+        createInfo.flags = vk::InstanceCreateFlagBits::eEnumeratePortabilityKHR;
+    createInfo.pApplicationInfo = &appInfo;
+    createInfo.enabledLayerCount = layers.size();
+    createInfo.ppEnabledLayerNames = layers.data();
+    createInfo.enabledExtensionCount = instanceExtensions.size();
+    createInfo.ppEnabledExtensionNames = instanceExtensions.data();
 
-    if (!ok)
+    static_cast<vk::Instance &>(*this) = vk::createInstance(createInfo);
+    AbstractInstance::initDispatchLoaderDynamic(getInstanceProcAddr, *this);
+
+    m_extensions.clear();
+    m_extensions.reserve(instanceExtensions.size());
+    for (auto &&extension : instanceExtensions)
+        m_extensions.insert(extension);
+
+#if USE_VALIDATION_LAYER
+    if (hasValidationLayer)
     {
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MAC)
-        if (maybeSetEnvVar)
-        {
-            qputenv("QT_VULKAN_LIB", "libvulkan.so.1");
-            qDebug() << "Set QT_VULKAN_LIB to \"libvulkan.so.1\"";
-            ok = m_qVulkanInstance->create();
-        }
-        if (!ok)
-#endif
-        {
-            throw vk::InitializationFailedError("Can't create Vulkan instance");
-        }
+        vk::DebugUtilsMessengerCreateInfoEXT debugUtilsMessagngerCreateInfo;
+        debugUtilsMessagngerCreateInfo.messageSeverity =
+            vk::DebugUtilsMessageSeverityFlagBitsEXT::eWarning |
+            vk::DebugUtilsMessageSeverityFlagBitsEXT::eError
+        ;
+        debugUtilsMessagngerCreateInfo.messageType =
+            vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
+            vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation |
+            vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance
+        ;
+        debugUtilsMessagngerCreateInfo.pfnUserCallback = reinterpret_cast<PFN_vkDebugUtilsMessengerCallbackEXT>(debugCallback);
+        m_debugUtilsMessanger = createDebugUtilsMessengerEXTUnique(debugUtilsMessagngerCreateInfo);
     }
-
-#ifdef QT_DEBUG
-    if (!m_qVulkanInstance->layers().contains("VK_LAYER_KHRONOS_validation"))
+    else
+    {
         qWarning() << "Vulkan validation layer not found!";
+    }
 #endif
 
-    for (auto &&extension : m_qVulkanInstance->extensions())
-        m_extensions.insert(extension.constData());
+    m_qVulkanInstance->setVkInstance(*this);
+    if (!m_qVulkanInstance->create())
+        throw vk::InitializationFailedError("Can't create Qt Vulkan instance");
 
-    static_cast<vk::Instance &>(*this) = m_qVulkanInstance->vkInstance();
-
-    auto vkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(m_qVulkanInstance->getInstanceProcAddr("vkGetInstanceProcAddr"));
-    if (!vkGetInstanceProcAddr && qEnvironmentVariableIsSet("QT_VULKAN_LIB"))
-    {
-        QLibrary vulkanLib(QString::fromUtf8(qgetenv("QT_VULKAN_LIB")));
-        if (vulkanLib.load())
-            vkGetInstanceProcAddr = reinterpret_cast<PFN_vkGetInstanceProcAddr>(vulkanLib.resolve("vkGetInstanceProcAddr"));
-        if (Q_UNLIKELY(!vkGetInstanceProcAddr))
-            throw vk::InitializationFailedError(("Unable to get \"vkGetInstanceProcAddr\" from " + vulkanLib.fileName()).toUtf8().toStdString());
-    }
-
-    AbstractInstance::init(vkGetInstanceProcAddr);
+    m_vkGetInstanceProcAddr = getInstanceProcAddr;
 
     m_testWin = new QWindow;
     m_testWin->setSurfaceType(QWindow::VulkanSurface);
@@ -329,6 +379,10 @@ void Instance::init(bool doObtainPhysicalDevice)
 
     if (doObtainPhysicalDevice)
         obtainPhysicalDevice();
+
+    m_unsetFiltersOnOtherQueueFamiliyFn = [this] {
+        --m_filtersOnOtherQueueFamiliy;
+    };
 }
 
 QString Instance::name() const
@@ -392,6 +446,12 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
 
+    physicalDeviceExtensions.push_back(VK_KHR_MAINTENANCE1_EXTENSION_NAME);
+    physicalDeviceExtensions.push_back(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
+    physicalDeviceExtensions.push_back(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
+    physicalDeviceExtensions.push_back(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
+    physicalDeviceExtensions.push_back(VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
+
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     physicalDeviceExtensions.push_back(VK_KHR_WIN32_KEYED_MUTEX_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME);
@@ -401,24 +461,40 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME);
-    physicalDeviceExtensions.push_back(VK_KHR_MAINTENANCE1_EXTENSION_NAME);
-    physicalDeviceExtensions.push_back(VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
-    physicalDeviceExtensions.push_back(VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
-    physicalDeviceExtensions.push_back(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
-    physicalDeviceExtensions.push_back(VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME);
 #endif
 
-    auto requiredFeatures = requiredPhysicalDeviceFeatures();
-    requiredFeatures.shaderStorageImageWriteWithoutFormat = physicalDevice->getFeatures().shaderStorageImageWriteWithoutFormat;
+    m_enabledDeviceFeatures.features.shaderStorageImageWriteWithoutFormat = physicalDevice->getFeatures().shaderStorageImageWriteWithoutFormat;
+
+    // Don't change the order here, it's used in e.g. VideoFilters.cpp
+    const auto cq = physicalDevice->getQueuesFamily(vk::QueueFlagBits::eCompute);
+    auto queues = physicalDevice->getQueuesFamily(s_queueFlags, false, false, true);
+    queues.reserve(queues.size() + cq.size());
+    queues.insert(queues.end(), cq.begin(), cq.end());
 
     return AbstractInstance::createDevice(
         physicalDevice,
-        s_queueFlags,
-        requiredFeatures,
+        m_enabledDeviceFeatures,
         physicalDeviceExtensions,
-        2
+        queues
     );
+}
+shared_ptr<Device> Instance::createOrGetDevice(const shared_ptr<PhysicalDevice> &physicalDevice)
+{
+    lock_guard<mutex> locker(m_createOrGetDeviceMutex);
+    if (auto dev = device())
+    {
+        if (dev && *dev->physicalDevice() != *physicalDevice)
+        {
+            resetDevice(dev);
+            dev.reset();
+        }
+        else
+        {
+            return dev;
+        }
+    }
+    return createDevice(physicalDevice);
 }
 
 shared_ptr<BufferPool> Instance::createBufferPool()
@@ -430,6 +506,14 @@ shared_ptr<ImagePool> Instance::createImagePool()
     return make_shared<ImagePool>(static_pointer_cast<Instance>(shared_from_this()));
 }
 
+shared_ptr<function<void()>> Instance::setFiltersOnOtherQueueFamiliy()
+{
+    ++m_filtersOnOtherQueueFamiliy;
+    return shared_ptr<function<void()>>(&m_unsetFiltersOnOtherQueueFamiliyFn, [](auto &&fn) {
+        (*fn)();
+    });
+}
+
 bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevice) const try
 {
     const auto &properties = physicalDevice->properties();
@@ -439,20 +523,6 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
 
     if (limits.maxPushConstantsSize < 128)
         errors.push_back("Push constants size is too small");
-
-    constexpr auto featuresLen = sizeof(vk::PhysicalDeviceFeatures) / sizeof(vk::Bool32);
-    const auto availableFeatures = physicalDevice->getFeatures();
-    const auto requiredFeatures = requiredPhysicalDeviceFeatures();
-    const auto availableFeaturesArr = reinterpret_cast<const vk::Bool32 *>(&availableFeatures);
-    const auto requiredFeaturesArr = reinterpret_cast<const vk::Bool32 *>(&requiredFeatures);
-    for (size_t i = 0; i < featuresLen; ++i)
-    {
-        if (requiredFeaturesArr[i] && !availableFeaturesArr[i])
-        {
-            errors.push_back("Missing one or more required physical device features");
-            break;
-        }
-    }
 
     const auto requiredExtenstions = requiredPhysicalDeviceExtenstions();
     if (!physicalDevice->checkExtensions(requiredExtenstions))
@@ -467,10 +537,10 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
         errors.push_back("Missing one or more required physical device extensions: " + names);
     }
 
-    uint32_t queueFamilyIndex = ~0u;
+    vector<pair<uint32_t, uint32_t>> queuesFamily;
     try
     {
-        queueFamilyIndex = physicalDevice->getQueueFamilyIndex(s_queueFlags);
+        queuesFamily = physicalDevice->getQueuesFamily(s_queueFlags, false, true, true);
     }
     catch (const vk::SystemError &e)
     {
@@ -494,7 +564,8 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
         const auto &fmtProps = physicalDevice->getFormatPropertiesCached(format);
         if (img)
         {
-            if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage | vk::FormatFeatureFlagBits::eSampledImageFilterLinear)))
+            constexpr auto flags = vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage | vk::FormatFeatureFlagBits::eSampledImageFilterLinear;
+            if ((fmtProps.optimalTilingFeatures & flags) != flags)
                 errors.push_back(QString::fromStdString("Missing optimal tiling sampled or storage image for format: " + vk::to_string(format)));
         }
         if (buff)
@@ -507,14 +578,14 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
     checkFormat(vk::Format::eR8G8Unorm, true, false);
     checkFormat(vk::Format::eB8G8R8A8Unorm, false, true);
 
-    if (queueFamilyIndex != ~0u && !m_qVulkanInstance->supportsPresent(*physicalDevice, queueFamilyIndex, m_testWin))
+    if (!queuesFamily.empty() && !m_qVulkanInstance->supportsPresent(*physicalDevice, queuesFamily[0].first, m_testWin))
         errors.push_back("Present is not supported");
 
     if (errors.isEmpty())
         return true;
 
     QString errorString = "Vulkan :: Discarding \"";
-    errorString += properties.deviceName;
+    errorString += properties.deviceName.data();
     errorString += "\", because:";
     for (auto &&error : qAsConst(errors))
         errorString += "\n   - " + error;
@@ -625,10 +696,12 @@ void Instance::fillSupportedFormats()
     // Supported image formats
 
     auto checkImageFormat = [this](vk::Format format) {
-        const auto &fmtProps = m_physicalDevice->getFormatPropertiesCached(format);
-        if (!(fmtProps.optimalTilingFeatures & (vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage | vk::FormatFeatureFlagBits::eSampledImageFilterLinear)))
-            return false;
-        return true;
+        return Image::checkImageFormat(
+            m_physicalDevice,
+            format,
+            false,
+            vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage | vk::FormatFeatureFlagBits::eSampledImageFilterLinear
+        );
     };
 
     m_supportedPixelFormats += {
@@ -702,12 +775,6 @@ void Instance::fillSupportedFormats()
         m_supportedPixelFormats += AV_PIX_FMT_BGRA;
 }
 
-vk::PhysicalDeviceFeatures Instance::requiredPhysicalDeviceFeatures()
-{
-    vk::PhysicalDeviceFeatures requiredFeatures;
-    requiredFeatures.robustBufferAccess = true;
-    return requiredFeatures;
-}
 vector<const char *> Instance::requiredPhysicalDeviceExtenstions()
 {
     return {

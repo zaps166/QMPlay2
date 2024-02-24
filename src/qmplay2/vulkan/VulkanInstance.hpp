@@ -71,6 +71,7 @@ public:
 
 public:
     inline QVulkanInstance *qVulkanInstance();
+    inline PFN_vkGetInstanceProcAddr getVkGetInstanceProcAddr();
 
     void obtainPhysicalDevice();
 
@@ -81,9 +82,15 @@ public:
     AVPixelFormats supportedPixelFormats() const;
 
     shared_ptr<Device> createDevice(const shared_ptr<PhysicalDevice> &physicalDevice);
+    shared_ptr<Device> createOrGetDevice(const shared_ptr<PhysicalDevice> &physicalDevice);
+
+    inline const vk::PhysicalDeviceFeatures2 &enabledDeviceFeatures() const;
 
     shared_ptr<BufferPool> createBufferPool();
     shared_ptr<ImagePool> createImagePool();
+
+    shared_ptr<function<void()>> setFiltersOnOtherQueueFamiliy();
+    inline bool hasFiltersOnOtherQueueFamiliy() const;
 
 private:
     bool isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevice) const override final;
@@ -93,14 +100,23 @@ private:
     void fillSupportedFormats();
 
 private:
-    static vk::PhysicalDeviceFeatures requiredPhysicalDeviceFeatures();
     static vector<const char *> requiredPhysicalDeviceExtenstions();
 
 private:
     QVulkanInstance *const m_qVulkanInstance;
+    PFN_vkGetInstanceProcAddr m_vkGetInstanceProcAddr = nullptr;
+
+    vk::UniqueDebugUtilsMessengerEXT m_debugUtilsMessanger;
+
+    vk::PhysicalDeviceFeatures2 m_enabledDeviceFeatures;
 
     shared_ptr<PhysicalDevice> m_physicalDevice;
     AVPixelFormats m_supportedPixelFormats;
+
+    std::mutex m_createOrGetDeviceMutex;
+
+    function<void()> m_unsetFiltersOnOtherQueueFamiliyFn;
+    std::atomic_uint32_t m_filtersOnOtherQueueFamiliy = {0};
 
     QWindow *m_testWin = nullptr;
 };
@@ -111,10 +127,24 @@ QVulkanInstance *Instance::qVulkanInstance()
 {
     return m_qVulkanInstance;
 }
+PFN_vkGetInstanceProcAddr Instance::getVkGetInstanceProcAddr()
+{
+     return m_vkGetInstanceProcAddr;
+}
 
 shared_ptr<PhysicalDevice> Instance::physicalDevice() const
 {
     return m_physicalDevice;
+}
+
+const vk::PhysicalDeviceFeatures2 &Instance::enabledDeviceFeatures() const
+{
+    return m_enabledDeviceFeatures;
+}
+
+bool Instance::hasFiltersOnOtherQueueFamiliy() const
+{
+    return (m_filtersOnOtherQueueFamiliy > 0);
 }
 
 }

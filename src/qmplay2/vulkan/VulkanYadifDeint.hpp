@@ -56,6 +56,7 @@ private:
         shared_ptr<Sampler> sampler;
         shared_ptr<ComputePipeline> computes[3][2];
         shared_ptr<CommandBuffer> commandBuffer;
+        shared_ptr<function<void()>> filtersOnOtherQueueFamiliy;
     } m;
 };
 

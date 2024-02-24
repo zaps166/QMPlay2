@@ -474,10 +474,6 @@ static QtMessageHandler g_defaultMsgHandler = nullptr;
 static QMutex g_messageHandlerMutex;
 static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &message)
 {
-#ifdef USE_VULKAN
-    if (type == QtWarningMsg && context.category && qstrcmp(context.category, "default") == 0 && message.startsWith("failed to load vulkan", Qt::CaseInsensitive))
-        return;
-#endif
     bool qmplay2Log = false;
     if (QCoreApplication::instance())
     {

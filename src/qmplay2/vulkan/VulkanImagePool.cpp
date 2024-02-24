@@ -290,7 +290,7 @@ shared_ptr<Image> ImagePool::takeCommon(Config &config)
             );
         }
     }
-    catch (const vk::SystemError &e)
+    catch (const vk::Error &e)
     {
         Q_UNUSED(e)
     }

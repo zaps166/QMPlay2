@@ -29,6 +29,7 @@
 
 namespace QmVk {
 class Device;
+class Queue;
 class CommandBuffer;
 class Image;
 class ImagePool;
@@ -77,6 +78,10 @@ protected:
     Frame getNewFrame(const Frame &other);
 
 #ifdef USE_VULKAN
+    std::shared_ptr<QmVk::Queue> getVulkanComputeQueue(
+        const std::shared_ptr<QmVk::Device> &device
+    );
+
     std::shared_ptr<QmVk::Image> vulkanImageFromFrame(
         Frame &frame,
         const std::shared_ptr<QmVk::Device> &device = nullptr,

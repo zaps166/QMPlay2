@@ -414,18 +414,9 @@ void Window::onMatrixChange()
 
 void Window::initResources() try
 {
-    m.device = m_instance->device();
-    if (m.device && *m.device->physicalDevice() != *m_physicalDevice)
-    {
-        m_instance->resetDevice(m.device);
-        m.device.reset();
-    }
-    if (!m.device)
-    {
-        m.device = m_instance->createDevice(m_physicalDevice);
-    }
+    m.device = m_instance->createOrGetDevice(m_physicalDevice);
 
-    m.queue = m.device->queue();
+    m.queue = m.device->firstQueue();
 
     m.vertexShaderModule = ShaderModule::create(
         m.device,
@@ -587,6 +578,9 @@ void Window::render()
                 renderOSD();
 
             m.commandBuffer->endRenderPass();
+
+            if (m.videoPipeline && m_instance->hasFiltersOnOtherQueueFamiliy())
+                m.videoPipeline->finalizeObjects(m.commandBuffer, false, true);
 
             m.queueLocker = m.queue->lock();
             m.commandBuffer->endSubmitAndWait(false, [&] {

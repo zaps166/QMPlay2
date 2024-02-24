@@ -20,6 +20,7 @@
 
 #include "../../qmvk/PhysicalDevice.hpp"
 #include "../../qmvk/Device.hpp"
+#include "../../qmvk/Queue.hpp"
 #include "../../qmvk/ComputePipeline.hpp"
 #include "../../qmvk/CommandBuffer.hpp"
 #include "../../qmvk/ShaderModule.hpp"
@@ -284,7 +285,9 @@ bool YadifDeint::ensureResources()
             }
         }
 
-        m.commandBuffer = CommandBuffer::create(m.device->queue(min(1u, m.device->numQueues() - 1u)));
+        m.commandBuffer = CommandBuffer::create(getVulkanComputeQueue(m.device));
+        if (m.commandBuffer->queue()->queueFamilyIndex() != m.device->queueFamilyIndex(0))
+            m.filtersOnOtherQueueFamiliy = m_instance->setFiltersOnOtherQueueFamiliy();
     }
     catch (const vk::SystemError &e)
     {
