@@ -33,8 +33,10 @@
     #include <QLabel>
 #endif
 #include <QCoreApplication>
-#include <QSysInfo>
 #include <QDir>
+#ifdef Q_OS_WIN32
+#   include <QSysInfo>
+#endif
 
 #ifdef UPDATER
 Updater::Updater(QWidget *parent) :
@@ -123,28 +125,21 @@ void Updater::infoFinished()
 
         QString osName;
 #ifdef Q_OS_WIN
-        if (QSysInfo::windowsVersion() != QSysInfo::WV_XP && QSysInfo::windowsVersion() != QSysInfo::WV_2003)
+        if (QSysInfo::WordSize == 32)
         {
-            if (QSysInfo::WordSize == 32)
+            using IsWow64ProcessProc = BOOL(WINAPI *)(HANDLE, BOOL *);
+            if (auto IsWow64Process = (IsWow64ProcessProc)GetProcAddress(GetModuleHandleA("kernel32"), "IsWow64Process"))
             {
-                using IsWow64ProcessProc = BOOL(WINAPI *)(HANDLE, BOOL *);
-                if (auto IsWow64Process = (IsWow64ProcessProc)GetProcAddress(GetModuleHandleA("kernel32"), "IsWow64Process"))
-                {
-                    BOOL bIsWow64 = FALSE;
-                    if (IsWow64Process(GetCurrentProcess(), &bIsWow64) && bIsWow64)
-                        osName = "Win64";
-                }
-                if (osName.isEmpty())
-                    osName = "WinNew32";
+                BOOL bIsWow64 = FALSE;
+                if (IsWow64Process(GetCurrentProcess(), &bIsWow64) && bIsWow64)
+                    osName = "Win64";
             }
-            else
-            {
-                osName = "Win64";
-            }
+            if (osName.isEmpty())
+                osName = "WinNew32";
         }
         else
         {
-            osName = "Win32";
+            osName = "Win64";
         }
 #endif
 

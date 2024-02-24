@@ -50,6 +50,9 @@ extern "C"
 
 #include <QGuiApplication>
 #include <QComboBox>
+#ifdef Q_OS_WIN
+#   include <QOperatingSystemVersion>
+#endif
 
 FFmpeg::FFmpeg() :
     Module("FFmpeg"),
@@ -73,9 +76,9 @@ FFmpeg::FFmpeg() :
 #if defined(QMPlay2_DXVA2) || defined(QMPlay2_D3D11VA)
     dxIcon = QIcon(":/DXVA2.svgz");
     if (QMPlay2Core.isVulkanRenderer())
-        d3d11vaSupported = (QSysInfo::windowsVersion() >= QSysInfo::WV_6_2);
+        d3d11vaSupported = (QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows8);
     else
-        dxva2Supported = (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0);
+        dxva2Supported = true;
 #endif
 #ifdef QMPlay2_VTB
     vtbIcon = QIcon(":/VAAPI.svgz");

@@ -36,11 +36,13 @@
 #ifdef Q_OS_MACOS
     #include <QProcess>
 #endif
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     #include <QWinThumbnailToolButton>
     #include <QWinThumbnailToolBar>
     #include <QWinTaskbarProgress>
     #include <QWinTaskbarButton>
+#endif
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
     #include <dwmapi.h>
 #endif
 #ifdef Q_OS_ANDROID
@@ -687,7 +689,7 @@ void MainWidget::playStateChanged(bool b)
         menuBar->player->togglePlay->setIcon(QMPlay2Core.getIconFromTheme("media-playback-start"));
         menuBar->player->togglePlay->setText(tr("&Play"));
     }
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if (m_taskBarProgress)
         m_taskBarProgress->setPaused(!b);
 #endif
@@ -1431,7 +1433,7 @@ void MainWidget::browseSubsFile()
 void MainWidget::setSeekSMaximum(int max)
 {
     seekS->setMaximum(qMax(0, max * 10));
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if (m_taskBarProgress)
     {
         m_taskBarProgress->setMaximum(seekS->maximum() / 10);
@@ -1468,7 +1470,7 @@ void MainWidget::updatePos(double pos)
             currPos = intPos;
         }
         seekS->setValue(pos * 10.0);
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         if (m_taskBarProgress)
             m_taskBarProgress->setValue(pos);
 #endif
@@ -1748,12 +1750,11 @@ void MainWidget::addChooseNextStreamKeyShortcuts()
     QMPlay2GUI.shortcutHandler->appendAction(nextSubsStream, "KeyBindings/NextSubsStream", "Ctrl+2");
 }
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void MainWidget::setWindowsTaskBarFeatures()
 {
     if (QSysInfo::windowsVersion() < QSysInfo::WV_6_1)
         return;
-
 
     m_taskbarButton = new QWinTaskbarButton(this);
     m_taskbarButton->setWindow(windowHandle());
@@ -1814,6 +1815,8 @@ void MainWidget::setWindowsTaskBarFeatures()
     m_thumbnailToolBar->addButton(toggleMute);
     m_thumbnailToolBar->addButton(settings);
 }
+#endif
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
 void MainWidget::setTitleBarStyle()
 {
     if (auto winId = reinterpret_cast<HWND>(window()->internalWinId()))
@@ -2042,7 +2045,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
 
     playC.stop(true);
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_taskBarProgress = nullptr;
     delete m_taskbarButton;
     delete m_thumbnailToolBar;
@@ -2065,8 +2068,10 @@ void MainWidget::showEvent(QShowEvent *)
 #endif
             showMaximized();
         doRestoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"), QMPlay2Core.getSettings().getBool("MainWidget/IsCompactView"));
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         setWindowsTaskBarFeatures();
+#endif
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
         setTitleBarStyle();
 #endif
         wasShow = true;
@@ -2091,7 +2096,7 @@ void MainWidget::changeEvent(QEvent *e)
         if (isFullScreen() || isMaximized())
             videoDock->scheduleEnterEventWorkaround();
     }
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
     else if (e->type() == QEvent::PaletteChange)
     {
         setTitleBarStyle();

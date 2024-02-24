@@ -57,6 +57,9 @@
 #include <QSpinBox>
 #include <QBuffer>
 #include <QLabel>
+#ifdef Q_OS_WIN
+#   include <QOperatingSystemVersion>
+#endif
 
 #include <KeyBindingsDialog.hpp>
 #include <Appearance.hpp>
@@ -846,16 +849,11 @@ void SettingsWidget::createRendererSettings()
         auto bypassCompositor = createBypassCompositor();
 
 #ifdef Q_OS_WIN
-        if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
-        {
-            bypassCompositor->setToolTip(tr("This can improve performance. Some video drivers can crash when enabled."));
-        }
-        else
-#endif
+        bypassCompositor->setToolTip(tr("This can improve performance. Some video drivers can crash when enabled."));
+#else
         if (QGuiApplication::platformName() != "xcb")
-        {
             bypassCompositor->setEnabled(false);
-        }
+#endif
 
         glOnWindow->setToolTip(tr(
             "Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. "
@@ -866,10 +864,7 @@ void SettingsWidget::createRendererSettings()
                 this, [=](bool checked) {
             vsync->setEnabled(!checked);
 #ifdef Q_OS_WIN
-            if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
-            {
-                bypassCompositor->setEnabled(!checked);
-            }
+            bypassCompositor->setEnabled(!checked);
 #endif
         });
 
@@ -954,7 +949,7 @@ void SettingsWidget::createRendererSettings()
 
 #ifdef Q_OS_WIN
             bypassCompositor->setEnabled(!noExclusiveFullScreenDevIDs->contains(devices->itemData(idx).toByteArray()));
-            hdr->setVisible(QSysInfo::windowsVersion() >= QSysInfo::WV_10_0);
+            hdr->setVisible(QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows10);
 #else
             hdr->setVisible(false);
 #endif
@@ -1010,16 +1005,11 @@ void SettingsWidget::createRendererSettings()
         ));
 
 #ifdef Q_OS_WIN
-        if (QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
-        {
-            bypassCompositor->setToolTip(tr("Allow for exclusive fullscreen. This can improve performance."));
-        }
-        else
-#endif
+        bypassCompositor->setToolTip(tr("Allow for exclusive fullscreen. This can improve performance."));
+#else
         if (QGuiApplication::platformName() != "xcb")
-        {
             bypassCompositor->setEnabled(false);
-        }
+#endif
 
         vsync->setCheckState(settings->getWithBounds("Vulkan/VSync", Qt::Unchecked, Qt::Checked));
         gpuDeint->setChecked(settings->getBool("Vulkan/AlwaysGPUDeint"));

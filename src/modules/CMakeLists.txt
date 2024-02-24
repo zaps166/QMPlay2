@@ -70,7 +70,9 @@ add_subdirectory(Subtitles)
 add_subdirectory(QPainter)
 
 if(WIN32)
-    add_subdirectory(DirectX)
+    if(NOT BUILD_WITH_QT6)
+        add_subdirectory(DirectX)
+    endif()
     add_subdirectory(FileAssociation)
 endif()
 

@@ -35,7 +35,11 @@ public:
     bool inhibited = false;
 
 private:
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    bool nativeEventFilter(const QByteArray &, void *m, qintptr *) override
+#else
     bool nativeEventFilter(const QByteArray &, void *m, long *) override
+#endif
     {
         return inhibitScreenSaver((MSG *)m, inhibited);
     }

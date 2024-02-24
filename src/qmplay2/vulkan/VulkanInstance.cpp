@@ -660,7 +660,7 @@ void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalD
 #if defined(Q_OS_WIN)
     for (DWORD devIdx = 0;; ++devIdx)
     {
-        DISPLAY_DEVICE displayDevice = {};
+        DISPLAY_DEVICEA displayDevice = {};
         displayDevice.cb = sizeof(displayDevice);
         if (!EnumDisplayDevicesA(nullptr, devIdx, &displayDevice, 0))
             break;

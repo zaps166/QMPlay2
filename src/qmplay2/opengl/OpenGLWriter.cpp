@@ -25,9 +25,6 @@
 #include <Frame.hpp>
 
 #include <QGuiApplication>
-#ifdef Q_OS_WIN
-#   include <QSysInfo>
-#endif
 
 using namespace std;
 
@@ -61,7 +58,7 @@ OpenGLWriter::OpenGLWriter()
     set();
 
 #ifdef Q_OS_WIN
-    if (!QMPlay2Core.isGlOnWindow() && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+    if (!m_useRtt)
         m_drawable->setWindowsBypassCompositor(m_bypassCompositor);
 #endif
 }
@@ -88,7 +85,7 @@ bool OpenGLWriter::set()
             m_drawable->setX11BypassCompositor(m_bypassCompositor);
         }
 #ifdef Q_OS_WIN
-        else if (!QMPlay2Core.isGlOnWindow() && QSysInfo::windowsVersion() >= QSysInfo::WV_6_0)
+        else if (!m_useRtt)
         {
             doReset = true;
         }

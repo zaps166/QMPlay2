@@ -34,6 +34,9 @@
 #include <QPainter>
 #include <QLibrary>
 #include <QWidget>
+#ifdef Q_OS_WIN
+#   include <QOperatingSystemVersion>
+#endif
 
 /* OpenGL|ES 2.0 doesn't have those definitions */
 #ifndef GL_MAP_WRITE_BIT
@@ -186,7 +189,7 @@ void OpenGLCommon::initialize(const std::shared_ptr<OpenGLHWInterop> &hwInterop)
 #ifdef Q_OS_WIN
 void OpenGLCommon::setWindowsBypassCompositor(bool bypassCompositor)
 {
-    if (!bypassCompositor && QSysInfo::windowsVersion() <= QSysInfo::WV_6_1) // Windows 7 and Vista can disable DWM composition, so check it
+    if (!bypassCompositor && QOperatingSystemVersion::current() <= QOperatingSystemVersion::Windows7) // Windows 7 and Vista can disable DWM composition, so check it
     {
         using DwmIsCompositionEnabledProc = HRESULT (WINAPI *)(BOOL *pfEnabled);
         if (auto DwmIsCompositionEnabled = (DwmIsCompositionEnabledProc)GetProcAddress(GetModuleHandleA("dwmapi.dll"), "DwmIsCompositionEnabled"))
