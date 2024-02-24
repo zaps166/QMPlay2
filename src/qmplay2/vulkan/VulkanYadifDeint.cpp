@@ -101,6 +101,8 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
 
     if (m_internalQueue.count() >= 3) try
     {
+        Q_ASSERT(!m_secondFrame);
+
         if (!ensureResources())
         {
             clearBuffer();
@@ -122,67 +124,88 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
             return false;
         }
 
-        auto destFrame = m_vkImagePool->takeOptimalToFrame(
-            currFrame,
-            Frame::convert2PlaneTo3Plane(currFrame.pixelFormat())
-        );
-        if (destFrame.isEmpty())
-        {
-            clearBuffer();
-            return false;
-        }
-        destFrame.setNoInterlaced();
-
-        auto destImage = vulkanImageFromFrame(destFrame);
-
-        const uint32_t srcNumPlanes = currImage->numPlanes();
-        const bool tff = isTopFieldFirst(currFrame);
+        vector<Frame> syncFrames;
+        if (m_vkHwInterop)
+            syncFrames = {prevFrame, currFrame, nextFrame};
 
         vk::SubmitInfo submitInfo;
         HWInterop::SyncDataPtr syncData;
-        if (m_vkHwInterop)
-            syncData = m_vkHwInterop->sync({prevFrame, currFrame, nextFrame}, &submitInfo);
 
-        m.commandBuffer->resetAndBegin();
-        for (auto &&copyFn : copyFns)
+        for (int f = 0; f < 2; ++f)
         {
-            if (copyFn)
-                copyFn(m.commandBuffer);
-        }
-        for (uint32_t p = 0; p < 3; ++p)
-        {
-            auto yadifPushConstants = m.computes[p]->pushConstants<YadifPushConstants>();
-            yadifPushConstants->parity = m_secondFrame == tff;
-            yadifPushConstants->filterParity = yadifPushConstants->parity ^ int(tff);
-
-            m.computes[p]->setCustomSpecializationData({
-                m_spatialCheck,
-                srcNumPlanes,
-                (srcNumPlanes == 3) ? p  : ((p != 0) ? 1u : 0u),
-                (srcNumPlanes == 3) ? 0u : ((p == 2) ? 1u : 0u),
-                p
-            });
-            m.computes[p]->setMemoryObjects({
-                {prevImage, m.sampler},
-                {currImage, m.sampler},
-                {nextImage, m.sampler},
-                {destImage, MemoryObjectDescr::Access::Write},
-            });
-            m.computes[p]->prepare();
-
-            m.computes[p]->recordCommands(
-                m.commandBuffer,
-                m.computes[p]->groupCount(destImage->size(p))
+            auto destFrame = m_vkImagePool->takeOptimalToFrame(
+                currFrame,
+                Frame::convert2PlaneTo3Plane(currFrame.pixelFormat())
             );
+            if (destFrame.isEmpty())
+            {
+                clearBuffer();
+                return false;
+            }
+            destFrame.setNoInterlaced();
+
+            auto destImage = vulkanImageFromFrame(destFrame);
+
+            const uint32_t srcNumPlanes = currImage->numPlanes();
+            const bool tff = isTopFieldFirst(currFrame);
+
+            if (m_vkHwInterop && f == 0)
+                syncData = m_vkHwInterop->sync(syncFrames, &submitInfo);
+
+            if (f == 0)
+            {
+                m.commandBuffer->resetAndBegin();
+                for (auto &&copyFn : copyFns)
+                {
+                    if (copyFn)
+                        copyFn(m.commandBuffer);
+                }
+            }
+
+            for (uint32_t p = 0; p < 3; ++p)
+            {
+                auto yadifPushConstants = m.computes[p][f]->pushConstants<YadifPushConstants>();
+                yadifPushConstants->parity = m_secondFrame == tff;
+                yadifPushConstants->filterParity = yadifPushConstants->parity ^ int(tff);
+
+                m.computes[p][f]->setCustomSpecializationData({
+                    m_spatialCheck,
+                    srcNumPlanes,
+                    (srcNumPlanes == 3) ? p  : ((p != 0) ? 1u : 0u),
+                    (srcNumPlanes == 3) ? 0u : ((p == 2) ? 1u : 0u),
+                    p
+                });
+                m.computes[p][f]->setMemoryObjects({
+                    {prevImage, m.sampler},
+                    {currImage, m.sampler},
+                    {nextImage, m.sampler},
+                    {destImage, MemoryObjectDescr::Access::Write},
+                });
+                m.computes[p][f]->prepare();
+
+                m.computes[p][f]->recordCommands(
+                    m.commandBuffer,
+                    m.computes[p][f]->groupCount(destImage->size(p))
+                );
+            }
+
+            const bool lastIteration = (f == 1 || !(m_deintFlags & DoubleFramerate));
+
+            if (lastIteration)
+            {
+                m.commandBuffer->endSubmitAndWait(move(submitInfo));
+            }
+
+            if (m_deintFlags & DoubleFramerate)
+                deinterlaceDoublerCommon(destFrame);
+            else
+                m_internalQueue.removeFirst();
+
+            framesQueue.enqueue(destFrame);
+
+            if (lastIteration)
+                break;
         }
-        m.commandBuffer->endSubmitAndWait(move(submitInfo));
-
-        if (m_deintFlags & DoubleFramerate)
-            deinterlaceDoublerCommon(destFrame);
-        else
-            m_internalQueue.removeFirst();
-
-        framesQueue.enqueue(destFrame);
     }
     catch (const vk::SystemError &e)
     {
@@ -231,27 +254,33 @@ bool YadifDeint::ensureResources()
         );
 
         const auto vendorID = m.device->physicalDevice()->properties().vendorID;
+        const int nf = (m_deintFlags & DoubleFramerate) ? 2 : 1;
 
-        for (auto &&compute : m.computes)
+        for (auto &&computeF : m.computes)
         {
-            compute = ComputePipeline::create(
-                m.device,
-                yadifShaderModuele,
-                sizeof(YadifPushConstants)
-            );
-
-            switch (vendorID)
+            for (int f = 0; f < nf; ++f)
             {
-                case 0x8086: // Intel
-                    if (!compute->setLocalWorkgroupSize(vk::Extent2D(16, 32)))
-                        compute->setLocalWorkgroupSize(vk::Extent2D(16, 16));
-                    break;
-                case 0x1002: // AMD
-                    compute->setLocalWorkgroupSize(vk::Extent2D(64, 8));
-                    break;
-                case 0x10de: // NVIDIA
-                    compute->setLocalWorkgroupSize(vk::Extent2D(128, 8));
-                    break;
+                auto &&compute = computeF[f];
+
+                compute = ComputePipeline::create(
+                    m.device,
+                    yadifShaderModuele,
+                    sizeof(YadifPushConstants)
+                );
+
+                switch (vendorID)
+                {
+                    case 0x8086: // Intel
+                        if (!compute->setLocalWorkgroupSize(vk::Extent2D(16, 32)))
+                            compute->setLocalWorkgroupSize(vk::Extent2D(16, 16));
+                        break;
+                    case 0x1002: // AMD
+                        compute->setLocalWorkgroupSize(vk::Extent2D(64, 8));
+                        break;
+                    case 0x10de: // NVIDIA
+                        compute->setLocalWorkgroupSize(vk::Extent2D(128, 8));
+                        break;
+                }
             }
         }
 

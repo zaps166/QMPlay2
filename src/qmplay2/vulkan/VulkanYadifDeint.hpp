@@ -54,7 +54,7 @@ private:
     {
         shared_ptr<Device> device;
         shared_ptr<Sampler> sampler;
-        shared_ptr<ComputePipeline> computes[3];
+        shared_ptr<ComputePipeline> computes[3][2];
         shared_ptr<CommandBuffer> commandBuffer;
     } m;
 };
