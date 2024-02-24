@@ -306,6 +306,9 @@ bool Frame::isHW() const
         case AV_PIX_FMT_VAAPI:
         case AV_PIX_FMT_VIDEOTOOLBOX:
         case AV_PIX_FMT_D3D11:
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 29, 100)
+        case AV_PIX_FMT_VULKAN:
+#endif
             return true;
     }
     return m_isCustomHW;

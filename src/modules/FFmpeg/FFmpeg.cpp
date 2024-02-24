@@ -19,6 +19,9 @@
 #include <FFmpeg.hpp>
 #include <FFDemux.hpp>
 #include <FFDecSW.hpp>
+#ifdef QMPlay2_VKVIDEO
+#   include <FFDecVkVideo.hpp>
+#endif
 #ifdef QMPlay2_VAAPI
     #include <FFDecVAAPI.hpp>
 #endif
@@ -54,6 +57,11 @@ FFmpeg::FFmpeg() :
 {
     m_icon = QIcon(":/FFmpeg.svgz");
 
+#ifdef QMPlay2_VKVIDEO
+    vkVideoIcon = QIcon(":/VkVideo.svgz");
+    if (QMPlay2Core.isVulkanRenderer())
+        vkVideoSupported = true;
+#endif
 #ifdef QMPlay2_VDPAU
     vdpauIcon = QIcon(":/VDPAU.svgz");
     if (!QMPlay2Core.isVulkanRenderer() && !QGuiApplication::platformName().contains("wayland"))
@@ -76,6 +84,9 @@ FFmpeg::FFmpeg() :
     init("DemuxerEnabled", true);
     init("ReconnectStreammes", false);
     init("DecoderEnabled", true);
+#ifdef QMPlay2_VKVIDEO
+    init("DecoderVkVideoEnabled", true);
+#endif
 #ifdef QMPlay2_VDPAU
     init("DecoderVDPAUEnabled", true);
     init("VDPAUDeintMethod", 1);
@@ -169,6 +180,10 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
         modulesInfo += Info(DemuxerName, DEMUXER, demuxIcon);
     if (showDisabled || getBool("DecoderEnabled"))
         modulesInfo += Info(DecoderName, DECODER, m_icon);
+#ifdef QMPlay2_VKVIDEO
+    if (showDisabled || (vkVideoSupported && getBool("DecoderVkVideoEnabled")))
+        modulesInfo += Info(DecoderVkVideoName, DECODER, vkVideoIcon);
+#endif
 #ifdef QMPlay2_VDPAU
     if (showDisabled || (getBool("DecoderVDPAUEnabled") && vdpauSupported))
     {
@@ -204,6 +219,10 @@ void *FFmpeg::createInstance(const QString &name)
         return new FFDemux(*this);
     else if (name == DecoderName && getBool("DecoderEnabled"))
         return new FFDecSW(*this);
+#ifdef QMPlay2_VKVIDEO
+    else if (name == DecoderVkVideoName && vkVideoSupported && getBool("DecoderVkVideoEnabled"))
+        return new FFDecVkVideo(*this);
+#endif
 #ifdef QMPlay2_VDPAU
     else if (name == DecoderVDPAUName && getBool("DecoderVDPAUEnabled") && vdpauSupported)
         return new FFDecVDPAU(*this);
@@ -231,7 +250,7 @@ void *FFmpeg::createInstance(const QString &name)
 
 FFmpeg::SettingsWidget *FFmpeg::getSettingsWidget()
 {
-    return new ModuleSettingsWidget(*this, dxva2Supported, d3d11vaSupported, vdpauSupported);
+    return new ModuleSettingsWidget(*this, vkVideoSupported, dxva2Supported, d3d11vaSupported, vdpauSupported);
 }
 
 void FFmpeg::videoDeintSave()
@@ -265,7 +284,7 @@ QMPLAY2_EXPORT_MODULE(FFmpeg)
 #include <QSpinBox>
 #include <QLabel>
 
-ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool dxva2, bool d3d11va, bool vdpau)
+ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dxva2, bool d3d11va, bool vdpau)
     : Module::SettingsWidget(module)
 {
     demuxerB = new QGroupBox(tr("Demuxer"));
@@ -280,6 +299,16 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool dxva2, bool d3d1
     decoderB->setChecked(sets().getBool("DecoderEnabled"));
 
     const auto copyVideoText = tr("Copy decoded video to CPU memory (slow)");
+
+#ifdef QMPlay2_VKVIDEO
+    if (vkVideo)
+    {
+        decoderVKVIDEO = new QCheckBox(tr("Decoder") + " VkVideo - " + tr("hardware decoding"));
+        decoderVKVIDEO->setChecked(sets().getBool("DecoderVkVideoEnabled"));
+    }
+#else
+    Q_UNUSED(vkVideo)
+#endif
 
 #ifdef QMPlay2_VDPAU
     if (vdpau)
@@ -405,6 +434,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool dxva2, bool d3d1
 
     QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(demuxerB);
+#ifdef QMPlay2_VKVIDEO
+    if (decoderVKVIDEO)
+        layout->addWidget(decoderVKVIDEO);
+#endif
 #ifdef QMPlay2_VDPAU
     if (decoderVDPAUB)
         layout->addWidget(decoderVDPAUB);
@@ -450,6 +483,10 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("Threads", threadsB->value());
     sets().set("LowresValue", lowresB->currentIndex());
     sets().set("ThreadTypeSlice", thrTypeB->currentIndex());
+#ifdef QMPlay2_VKVIDEO
+    if (decoderVKVIDEO)
+        sets().set("DecoderVkVideoEnabled", decoderVKVIDEO->isChecked());
+#endif
 #ifdef QMPlay2_VDPAU
     if (decoderVDPAUB)
         sets().set("DecoderVDPAUEnabled", decoderVDPAUB->isChecked());

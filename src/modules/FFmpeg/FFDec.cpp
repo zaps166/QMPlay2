@@ -124,6 +124,10 @@ int FFDec::decodeStep(bool &frameFinished)
         bytesConsumed = packet->size;
         sendOk = true;
     }
+    else if (sendErr == AVERROR_EXTERNAL)
+    {
+        m_libError = true;
+    }
 
     for (;;)
     {

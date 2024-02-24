@@ -51,9 +51,15 @@ if(USE_FFMPEG_AVDEVICE)
     list(APPEND FFmpeg_LIBS ${LIBAVDEVICE_LIBRARIES})
 endif()
 
-if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_D3D11VA OR USE_FFMPEG_VTB) # Common HWAccel
+if(USE_FFMPEG_VKVIDEO OR USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_D3D11VA OR USE_FFMPEG_VTB) # Common HWAccel
     list(APPEND FFmpeg_HDR FFDecHWAccel.hpp)
     list(APPEND FFmpeg_SRC FFDecHWAccel.cpp)
+
+    if(USE_FFMPEG_VKVIDEO) # VkVideo
+        add_definitions(-DQMPlay2_VKVIDEO)
+        list(APPEND FFmpeg_HDR FFDecVkVideo.hpp VkVideoVulkan.hpp)
+        list(APPEND FFmpeg_SRC FFDecVkVideo.cpp VkVideoVulkan.cpp)
+    endif()
 
     if(USE_FFMPEG_VAAPI) # VA-API
         add_definitions(-DQMPlay2_VAAPI)

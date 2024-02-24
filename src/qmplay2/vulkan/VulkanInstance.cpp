@@ -452,6 +452,22 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     physicalDeviceExtensions.push_back(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
 
+    if (!AbstractInstance::isVk10())
+    {
+        // Required for Vulkan video decoding
+        physicalDeviceExtensions.push_back(VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
+        physicalDeviceExtensions.push_back(VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME);
+        physicalDeviceExtensions.push_back(VK_KHR_VIDEO_QUEUE_EXTENSION_NAME);
+        physicalDeviceExtensions.push_back(VK_KHR_VIDEO_DECODE_QUEUE_EXTENSION_NAME);
+        physicalDeviceExtensions.push_back(VK_KHR_VIDEO_DECODE_H264_EXTENSION_NAME);
+        physicalDeviceExtensions.push_back(VK_KHR_VIDEO_DECODE_H265_EXTENSION_NAME);
+        physicalDeviceExtensions.push_back(VK_KHR_VIDEO_DECODE_AV1_EXTENSION_NAME);
+#if 0
+        // Preferred when FFmpeg does a host-copy after decoding
+        physicalDeviceExtensions.push_back(VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME);
+#endif
+    }
+
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     physicalDeviceExtensions.push_back(VK_KHR_WIN32_KEYED_MUTEX_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME);
@@ -464,13 +480,41 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     physicalDeviceExtensions.push_back(VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME);
 #endif
 
-    m_enabledDeviceFeatures.features.shaderStorageImageWriteWithoutFormat = physicalDevice->getFeatures().shaderStorageImageWriteWithoutFormat;
+    m_sycf.samplerYcbcrConversion = false;
+    m_tsf.timelineSemaphore = false;
+    m_s2f.synchronization2 = false;
+    if (!AbstractInstance::isVk10() || checkExtension(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
+    {
+        vk::PhysicalDeviceFeatures2 features2;
+        tie(features2, m_sycf, m_tsf, m_s2f) = physicalDevice->getFeatures2KHR<
+            vk::PhysicalDeviceFeatures2,
+            vk::PhysicalDeviceSamplerYcbcrConversionFeatures,
+            vk::PhysicalDeviceTimelineSemaphoreFeatures,
+            vk::PhysicalDeviceSynchronization2Features
+        >().get<
+            vk::PhysicalDeviceFeatures2,
+            vk::PhysicalDeviceSamplerYcbcrConversionFeatures,
+            vk::PhysicalDeviceTimelineSemaphoreFeatures,
+            vk::PhysicalDeviceSynchronization2Features
+        >();
+        m_enabledDeviceFeatures.features.shaderStorageImageWriteWithoutFormat = features2.features.shaderStorageImageWriteWithoutFormat;
+    }
+    else
+    {
+        m_enabledDeviceFeatures.features.shaderStorageImageWriteWithoutFormat = physicalDevice->getFeatures().shaderStorageImageWriteWithoutFormat;
+    }
+    m_enabledDeviceFeatures.pNext = &m_sycf;
+    m_sycf.pNext = &m_tsf;
+    m_tsf.pNext = &m_s2f;
+    m_s2f.pNext = nullptr;
 
     // Don't change the order here, it's used in e.g. VideoFilters.cpp
     const auto cq = physicalDevice->getQueuesFamily(vk::QueueFlagBits::eCompute);
+    const auto dq = physicalDevice->getQueuesFamily(vk::QueueFlagBits::eVideoDecodeKHR);
     auto queues = physicalDevice->getQueuesFamily(s_queueFlags, false, false, true);
-    queues.reserve(queues.size() + cq.size());
+    queues.reserve(queues.size() + cq.size() + dq.size());
     queues.insert(queues.end(), cq.begin(), cq.end());
+    queues.insert(queues.end(), dq.begin(), dq.end());
 
     return AbstractInstance::createDevice(
         physicalDevice,

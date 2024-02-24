@@ -19,6 +19,7 @@
 #pragma once
 
 #define DecoderName "FFmpeg Decoder"
+#define DecoderVkVideoName "FFmpeg Vulkan Decoder"
 #define DecoderVAAPIName "FFmpeg VA-API Decoder"
 #define DecoderVDPAUName "FFmpeg VDPAU Decoder"
 #define DecoderDXVA2Name "FFmpeg DXVA2 Decoder"
@@ -27,6 +28,7 @@
 #define DemuxerName "FFmpeg"
 #define VAAPIWriterName "VA-API"
 #define VDPAUWriterName "VDPAU"
+#define VkVideoWriterName "VkVideo"
 #define FFReaderName "FFmpeg Reader"
 
 #ifdef FIND_HWACCEL_DRIVERS_PATH

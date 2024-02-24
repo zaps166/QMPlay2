@@ -90,14 +90,14 @@ If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you sh
 
 ## Hardware acceleration
 
-QMPlay2 supports hardware video decoding: CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), D3D11VA (Vulkan, Windows 8 and higher) VDPAU/VA-API (X11 for VDPAU, Linux/BSD only) and VideoToolBox (macOS only).
+QMPlay2 supports hardware video decoding: Vulkan Video, CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), D3D11VA (Vulkan, Windows 8 and higher) VDPAU/VA-API (X11 for VDPAU, Linux/BSD only) and VideoToolBox (macOS only).
 Hardware acceleration is disabled by default, but you can enable it in "Settings->Playback settings":
 - move hardware accelerated decoder on decoders list to the top,
 - apply settings.
 
 ### Hardware acceleration important information:
 - CUVID, DXVA2, VDPAU and VA-API use OpenGL video output, so OpenGL features are available, but CPU filters won't work.
-- CUVID. D3D11VA and VA-API use Vulkan video output, so Vulkan features are available, but CPU filters won't work.
+- VkVideo, CUVID, D3D11VA and VA-API use Vulkan video output, so Vulkan features are available, but CPU filters won't work.
 - DXVA2 requires "WGL_NV_DX_interop" extension.
 - DXVA2 and VDPAU don't work with Vulkan.
 - VDPAU, VA-API, CUVID and DXVA2 have its own deinterlacing filters. Their settings are available in "Settings->Video filters".
@@ -239,6 +239,7 @@ CMake options (option - default value: description):
     - `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
     - `SET_INSTALL_RPATH` - non-Windows only, `ON` on macOS, `OFF` anywhere else: sets RPATH after installation.
     - `USE_FFMPEG` - ON: enable/disable FFmpeg module.
+    - `USE_FFMPEG_VKVIDEO`: autodetect: enabled if Vulkan is enabled and FFmpeg version is >= 6.1.
     - `USE_FFMPEG_VAAPI`: autodetect: enabled if libva, libva-drm, and egl exist.
     - `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exists.
     - `USE_FFMPEG_AVDEVICE` - autodetect on Linux, `OFF` on non-Linux OS: it allows to use e.g. V4L2 devices.

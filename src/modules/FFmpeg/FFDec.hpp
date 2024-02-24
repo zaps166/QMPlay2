@@ -71,6 +71,8 @@ protected:
     QList<AVFrame *> m_frames;
     AVRational m_timeBase;
 
+    bool m_libError = false;
+
     AVPixelFormats m_supportedPixelFormats;
 
 #ifdef USE_VULKAN

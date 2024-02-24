@@ -41,6 +41,9 @@ private:
     /**/
 
     QIcon demuxIcon;
+#ifdef QMPlay2_VKVIDEO
+    QIcon vkVideoIcon;
+#endif
 #ifdef QMPlay2_VDPAU
     QIcon vdpauIcon;
     QComboBox *m_vdpauDeintMethodB = nullptr;
@@ -56,6 +59,7 @@ private:
     QIcon vtbIcon;
 #endif
 
+    bool vkVideoSupported = false;
     bool dxva2Supported = false;
     bool d3d11vaSupported = false;
     bool vdpauSupported = false;
@@ -76,7 +80,7 @@ class ModuleSettingsWidget final : public Module::SettingsWidget
     Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
 #endif
 public:
-    ModuleSettingsWidget(Module &module, bool dxva2, bool d3d11va, bool vdpau);
+    ModuleSettingsWidget(Module &module, bool vkVideo, bool dxva2, bool d3d11va, bool vdpau);
 #ifdef QMPlay2_VDPAU
 private:
     void setVDPAU();
@@ -90,6 +94,9 @@ private:
     QGroupBox *hurryUpB;
     QCheckBox *skipFramesB, *forceSkipFramesB;
     QGroupBox *decoderB;
+#ifdef QMPlay2_VKVIDEO
+    QCheckBox *decoderVKVIDEO = nullptr;
+#endif
 #ifdef QMPlay2_VDPAU
     QGroupBox *decoderVDPAUB = nullptr;
     QCheckBox *noisereductionVDPAUB = nullptr;

@@ -108,6 +108,9 @@ private:
 
     vk::UniqueDebugUtilsMessengerEXT m_debugUtilsMessanger;
 
+    vk::PhysicalDeviceSamplerYcbcrConversionFeatures m_sycf;
+    vk::PhysicalDeviceTimelineSemaphoreFeatures m_tsf;
+    vk::PhysicalDeviceSynchronization2Features m_s2f;
     vk::PhysicalDeviceFeatures2 m_enabledDeviceFeatures;
 
     shared_ptr<PhysicalDevice> m_physicalDevice;
