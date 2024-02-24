@@ -12,7 +12,7 @@ else()
     endforeach()
 endif()
 
-find_package(${QT_PREFIX}LinguistTools REQUIRED)
+find_package(${QT_PREFIX} REQUIRED COMPONENTS LinguistTools)
 if(BUILD_WITH_QT6)
     qt6_add_translation(QM_FILES ${QMPLAY2_TSS})
 else()
