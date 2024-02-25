@@ -322,7 +322,7 @@ void LastFM::loginFinished()
     {
         const bool wrongLoginOrPassword = (loginReply->error() == NetworkReply::Error::Connection403);
         if (!dontShowLoginError || wrongLoginOrPassword)
-            QMPlay2Core.logError(tr("LastFM login error.") + (wrongLoginOrPassword ? (" " + tr("Check login and password!")) : QString()));
+            QMPlay2Core.logError("LastFM login error." + (wrongLoginOrPassword ? (" " + "Check login and password!") : QString()));
         if (wrongLoginOrPassword)
             clear();
         else
@@ -341,7 +341,7 @@ void LastFM::loginFinished()
             if (end_idx > -1)
             {
                 session_key = reply.mid(idx, end_idx - idx);
-                QMPlay2Core.log(tr("Logged in to LastFM!"), InfoLog);
+                QMPlay2Core.log("Logged in to LastFM!", InfoLog);
                 if (!scrobbleQueue.isEmpty() && !updateTim.isActive())
                     updateTim.start(scrobbleSec * 1000);
                 dontShowLoginError = false;

@@ -221,7 +221,7 @@ bool PortAudioWriter::processParams(bool *paramsCorrected)
         close();
         if (!openStream())
         {
-            QMPlay2Core.logError("PortAudio :: " + tr("Cannot open audio output stream"));
+            QMPlay2Core.logError("PortAudio :: Cannot open audio output stream");
             m_err = true;
         }
     }
@@ -437,7 +437,7 @@ bool PortAudioWriter::writeStream(const QByteArray &arr)
 void PortAudioWriter::playbackError()
 {
     if (!m_dontShowError)
-        QMPlay2Core.logError("PortAudio :: " + tr("Playback error"));
+        QMPlay2Core.logError("PortAudio :: Playback error");
     m_err = true;
 }
 

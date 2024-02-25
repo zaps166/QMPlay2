@@ -119,7 +119,7 @@ bool PipeWireWriter::processParams(bool *)
 
     if (m_err)
     {
-        QMPlay2Core.logError("PipeWire :: " + tr("Cannot open audio output stream"));
+        QMPlay2Core.logError("PipeWire :: Cannot open audio output stream");
     }
 
     return readyWrite();

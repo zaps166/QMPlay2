@@ -477,7 +477,7 @@ void VDPAU::applyVideoMixerFeatures()
         m_sharpness / 100.0f
     );
     if (m_sharpness != 0 && !sharpness)
-        QMPlay2Core.log(tr("Unsupported image sharpness filter"), ErrorLog | LogOnce);
+        QMPlay2Core.log("Unsupported image sharpness filter", ErrorLog | LogOnce);
 
     const bool temporalDeint = setVideoMixerFeature(
         m_deintMethod == 1,
@@ -496,11 +496,11 @@ void VDPAU::applyVideoMixerFeatures()
     );
 
     if (m_deintMethod == 1 && !temporalDeint)
-        QMPlay2Core.log(tr("Unsupported deinterlacing algorithm") + " - Temporal", ErrorLog | LogOnce);
+        QMPlay2Core.log("Unsupported deinterlacing algorithm - Temporal", ErrorLog | LogOnce);
     if (m_deintMethod == 2 && !temploralSpatialDeint)
-        QMPlay2Core.log(tr("Unsupported deinterlacing algorithm") + " - Temporal-spatial", ErrorLog | LogOnce);
+        QMPlay2Core.log("Unsupported deinterlacing algorithm - Temporal-spatial", ErrorLog | LogOnce);
     if (m_nrEnabled && !nr)
-        QMPlay2Core.log(tr("Unsupported noise reduction filter"), ErrorLog | LogOnce);
+        QMPlay2Core.log("Unsupported noise reduction filter", ErrorLog | LogOnce);
 }
 
 bool VDPAU::setVideoMixerFeature(VdpBool enabled, VdpVideoMixerFeature feature, VdpVideoMixerAttribute attribute, float value)
