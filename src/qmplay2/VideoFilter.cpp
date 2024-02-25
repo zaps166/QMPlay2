@@ -23,6 +23,7 @@
 #ifdef USE_VULKAN
 #   include <QMPlay2Core.hpp>
 
+#   include "../qmvk/PhysicalDevice.hpp"
 #   include "../qmvk/Device.hpp"
 #   include "../qmvk/Image.hpp"
 
@@ -155,11 +156,21 @@ Frame VideoFilter::getNewFrame(const Frame &other)
 std::shared_ptr<QmVk::Queue> VideoFilter::getVulkanComputeQueue(
     const std::shared_ptr<QmVk::Device> &device)
 {
-    // Queue family at logical index 1 should be compute-only (if exists)
-    const uint32_t logicalIdx = std::min(1u, device->numQueueFamilies() - 1u);
-    const uint32_t queueFamilyIndex = device->queueFamilyIndex(logicalIdx);
-    const uint32_t index = device->numQueues(queueFamilyIndex) - 1u;
-    return device->queue(queueFamilyIndex, index);
+    const uint32_t numQueueFamilies = device->numQueueFamilies();
+    uint32_t queueFamilyIndex = ~0u;
+    uint32_t numQueues = 0;
+    for (uint32_t i = 0; i < numQueueFamilies; ++i)
+    {
+        const uint32_t queueFamilyIndexIt = device->queueFamilyIndex(i);
+        const uint32_t numQueuesIt = device->numQueues(queueFamilyIndexIt);
+        const auto &props = device->physicalDevice()->getQueueProps(queueFamilyIndexIt);
+        if ((props.flags & vk::QueueFlagBits::eCompute) && (numQueues == 0 || (numQueues == 1 && numQueuesIt > 1)))
+        {
+            queueFamilyIndex = queueFamilyIndexIt;
+            numQueues = numQueuesIt;
+        }
+    }
+    return device->queue(queueFamilyIndex, numQueues - 1u);
 }
 
 std::shared_ptr<QmVk::Image> VideoFilter::vulkanImageFromFrame(

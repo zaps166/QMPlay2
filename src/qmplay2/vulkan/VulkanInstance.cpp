@@ -508,7 +508,6 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     m_tsf.pNext = &m_s2f;
     m_s2f.pNext = nullptr;
 
-    // Don't change the order here, it's used in e.g. VideoFilters.cpp
     const auto cq = physicalDevice->getQueuesFamily(vk::QueueFlagBits::eCompute);
     const auto dq = physicalDevice->getQueuesFamily(vk::QueueFlagBits::eVideoDecodeKHR);
     auto queues = physicalDevice->getQueuesFamily(s_queueFlags, false, false, true);
