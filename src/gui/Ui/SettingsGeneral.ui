@@ -198,26 +198,6 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
-             <item>
-              <property name="text">
-               <string notr="true">.ppm</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string notr="true">.bmp</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string notr="true">.png</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string notr="true">.webp</string>
-              </property>
-             </item>
             </widget>
            </item>
            <item>

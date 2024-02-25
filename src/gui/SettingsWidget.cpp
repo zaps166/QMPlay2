@@ -36,6 +36,7 @@
 #include <QStackedWidget>
 #include <QStandardPaths>
 #include <QStyleFactory>
+#include <QImageWriter>
 #include <QRadioButton>
 #include <QActionGroup>
 #include <QApplication>
@@ -306,6 +307,9 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         QWidget *generalSettingsWidget = new QWidget;
         generalSettingsPage = new Ui::GeneralSettings;
         generalSettingsPage->setupUi(generalSettingsWidget);
+
+        for (const auto &fmt : QImageWriter::supportedImageFormats())
+            generalSettingsPage->screenshotFormatB->addItem("." + fmt);
 
         appendColon(generalSettingsPage->langL);
         appendColon(generalSettingsPage->styleL);
