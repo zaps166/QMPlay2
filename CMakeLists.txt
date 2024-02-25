@@ -20,16 +20,6 @@ if(NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "None")
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-if(ANDROID)
-    if(ANDROID_ABI STREQUAL "armeabi-v7a")
-        set(ANDROID_EXTRA_LIBS_DIR "${CMAKE_SYSROOT}/usr/lib/arm-linux-androideabi")
-    endif()
-    set(ANDROID_EXTRA_LIBS
-        "${ANDROID_EXTRA_LIBS_DIR}/libavcodec.so,${ANDROID_EXTRA_LIBS_DIR}/libavformat.so,${ANDROID_EXTRA_LIBS_DIR}/libavutil.so,${ANDROID_EXTRA_LIBS_DIR}/libswresample.so,${ANDROID_EXTRA_LIBS_DIR}/libswscale.so,${ANDROID_EXTRA_LIBS_DIR}/libssl_1_1.so,${ANDROID_EXTRA_LIBS_DIR}/libcrypto_1_1.so"
-    )
-    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/gui/Android/manifest")
-endif()
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/src/cmake/Modules")
 
 include(FeatureSummary)
@@ -453,9 +443,6 @@ if(USE_MEDIABROWSER)
 endif()
 
 find_package(${QT_PREFIX}Svg REQUIRED)
-if(ANDROID)
-    find_package(Qt5AndroidExtras REQUIRED)
-endif()
 
 if(USE_VULKAN)
     set(Vulkan_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/src/qmplay2/vulkan/headers/include")

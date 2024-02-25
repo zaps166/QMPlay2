@@ -19,14 +19,14 @@
 #include <OpenSLESWriter.hpp>
 
 #ifdef Q_OS_ANDROID
-    #include <QAndroidJniEnvironment>
+    #include <QJniEnvironment>
     static int getNativeOutputSampleRate()
     {
         enum AudioManager
         {
             STREAM_MUSIC = 3
         };
-        QAndroidJniEnvironment jniEnv;
+        QJniEnvironment jniEnv;
         jclass clazz = jniEnv->FindClass("android/media/AudioTrack");
         jmethodID method = jniEnv->GetStaticMethodID(clazz, "getNativeOutputSampleRate", "(I)I");
         return jniEnv->CallStaticIntMethod(clazz, method, STREAM_MUSIC);

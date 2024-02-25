@@ -45,9 +45,6 @@
 #if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
     #include <dwmapi.h>
 #endif
-#ifdef Q_OS_ANDROID
-    #include <QtAndroid>
-#endif
 #include <qevent.h>
 
 /* QMPlay2 gui */
@@ -449,13 +446,6 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
             tabBar->setChangeCurrentOnDrag(true);
         }
     }
-
-#ifdef Q_OS_ANDROID
-    QtAndroid::requestPermissionsSync({
-        "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE",
-    });
-#endif
 
     playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
@@ -1187,7 +1177,7 @@ void MainWidget::toggleFullScreen()
         dockWidgetState = saveState();
 #endif // Q_OS_ANDROID
 
-#if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
+#if !defined Q_OS_MACOS
         menuBar->hide();
 #endif
         statusBar->hide();
@@ -1286,7 +1276,9 @@ void MainWidget::toggleFullScreen()
             if (QDockWidget *dw = QMPlay2Ext->getDockWidget())
                 dw->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
 
-#if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
+#if defined(Q_OS_ANDROID)
+        menuBar->setVisible(true);
+#elif !defined Q_OS_MACOS
         menuBar->setVisible(!hideMenuAct->isChecked());
 #endif
         statusBar->show();

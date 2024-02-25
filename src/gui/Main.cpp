@@ -51,6 +51,9 @@
 #if defined(CHECK_FOR_EGL) || defined(Q_OS_MACOS)
     #include <QSurfaceFormat>
 #endif
+#ifdef Q_OS_ANDROID
+    #include <QtCore/private/qandroidextras_p.h>
+#endif
 
 #include <clocale>
 #include <csignal>
@@ -613,9 +616,6 @@ static void checkForEGL()
 }
 #endif
 
-#ifdef Q_OS_ANDROID
-Q_DECL_EXPORT
-#endif
 int main(int argc, char *argv[])
 {
     signal(SIGINT, signal_handler);
@@ -629,6 +629,10 @@ int main(int argc, char *argv[])
     signal(SIGTERM, signal_handler);
     atexit(exitProcedure);
 
+#ifdef Q_OS_ANDROID
+    qputenv("QT_ANDROID_ENABLE_RIGHT_MOUSE_FROM_LONG_PRESS", "1");
+    qputenv("QT_ANDROID_MINIMUM_MOUSE_DOUBLE_CLICK_DISTANCE", "1000"); // Otherwise double-tap doesn't work in Qt6
+#endif
     qputenv("QT_QPA_UPDATE_IDLE_TIME", "0");
 
 #ifdef Q_OS_HAIKU
@@ -637,6 +641,9 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_ANDROID
     QGuiApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
+    QGuiApplication::setAttribute(Qt::AA_DontUseNativeMenuBar); // Doesn't work in Qt6 (bug)
+    QtAndroidPrivate::requestPermission("android.permission.READ_EXTERNAL_STORAGE").result();
+    QtAndroidPrivate::requestPermission("android.permission.WRITE_EXTERNAL_STORAGE").result();
 #endif
 
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);

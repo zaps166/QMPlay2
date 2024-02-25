@@ -244,7 +244,7 @@ void OpenGLCommon::initializeGL()
 {
     initializeOpenGLFunctions();
 
-#if !defined(QT_OPENGL_ES_2)
+#if !defined(QT_OPENGL_ES_2) && !defined(QT_FEATURE_opengles2)
     if (hasPbo && !m_glInstance->hasMapBufferRange)
     {
         Q_ASSERT(m_glInstance->hasMapBuffer);
@@ -468,7 +468,7 @@ void OpenGLCommon::paintGL()
                     quint8 *dst = nullptr;
                     if (m_glInstance->hasMapBufferRange)
                         dst = (quint8 *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, w * h * bytesMultiplier, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-#if !defined(QT_OPENGL_ES_2)
+#if !defined(QT_OPENGL_ES_2) && !defined(QT_FEATURE_opengles2)
                     else
                         dst = (quint8 *)m_gl15.glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
 #endif
@@ -637,7 +637,7 @@ void OpenGLCommon::paintGL()
                 quint8 *dst = nullptr;
                 if (m_glInstance->hasMapBufferRange)
                     dst = (quint8 *)glMapBufferRange(GL_PIXEL_UNPACK_BUFFER, 0, dataSize, GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-#if !defined(QT_OPENGL_ES_2)
+#if !defined(QT_OPENGL_ES_2) && !defined(QT_FEATURE_opengles2)
                 else
                     dst = (quint8 *)m_gl15.glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
 #endif

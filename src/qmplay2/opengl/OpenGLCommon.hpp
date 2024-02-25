@@ -26,7 +26,9 @@
 #include <QMPlay2OSD.hpp>
 
 #include <QOpenGLShaderProgram>
-#include <QOpenGLFunctions_1_5>
+#if !defined(QT_OPENGL_ES_2) && !defined(QT_FEATURE_opengles2)
+#   include <QOpenGLFunctions_1_5>
+#endif
 #include <QOpenGLExtraFunctions>
 
 #include <QCoreApplication>
@@ -83,7 +85,7 @@ protected:
 
     void contextAboutToBeDestroyed();
 
-#if !defined(QT_OPENGL_ES_2)
+#if !defined(QT_OPENGL_ES_2) && !defined(QT_FEATURE_opengles2)
     QOpenGLFunctions_1_5 m_gl15;
 #endif
 

@@ -1,25 +1,24 @@
 #include <ScreenSaver.hpp>
 
-#include <QAndroidJniObject>
 #include <QCoreApplication>
-#include <QtAndroid>
+#include <QJniObject>
 
 class ScreenSaverPriv
 {
 public:
     inline ScreenSaverPriv()
     {
-        QAndroidJniObject activity = QtAndroid::androidActivity();
+        QJniObject activity = QNativeInterface::QAndroidApplication::context();
         if (activity.isValid())
         {
-            QAndroidJniObject serviceName = QAndroidJniObject::getStaticObjectField<jstring>("android/content/Context", "POWER_SERVICE");
+            QJniObject serviceName = QJniObject::getStaticObjectField<jstring>("android/content/Context", "POWER_SERVICE");
             if (serviceName.isValid())
             {
-                QAndroidJniObject powerMgr = activity.callObjectMethod("getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;", serviceName.object<jobject>());
+                QJniObject powerMgr = activity.callObjectMethod("getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;", serviceName.object<jobject>());
                 if (powerMgr.isValid())
                 {
-                    jint levelAndFlags = QAndroidJniObject::getStaticField<jint>("android/os/PowerManager", "SCREEN_BRIGHT_WAKE_LOCK");
-                    QAndroidJniObject tag = QAndroidJniObject::fromString(QCoreApplication::applicationName());
+                    jint levelAndFlags = QJniObject::getStaticField<jint>("android/os/PowerManager", "SCREEN_BRIGHT_WAKE_LOCK");
+                    QJniObject tag = QJniObject::fromString(QCoreApplication::applicationName());
                     m_wakeLock = powerMgr.callObjectMethod("newWakeLock", "(ILjava/lang/String;)Landroid/os/PowerManager$WakeLock;", levelAndFlags,tag.object<jstring>());
                 }
             }
@@ -43,7 +42,7 @@ public:
     }
 
 private:
-    QAndroidJniObject m_wakeLock;
+    QJniObject m_wakeLock;
 };
 
 /**/

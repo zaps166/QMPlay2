@@ -198,11 +198,15 @@ if(USE_VULKAN)
 
     set(VULKAN_SHADER_QRC_FILE_TMP "${VULKAN_SHADER_QRC_FILE}.tmp")
 
+    if(ANDROID)
+        set(VULKAN_SHADER_QRC_THRESHOLD " threshold=\"100\"") # Otherwise doesn't link with zstd in 6.6.2
+    endif()
+
     foreach(SHADER_COMPILED_FILE ${QMVK_SHADER_COMPILED_FILES})
         get_filename_component(SHADER_COMPILED_FILE_NAME ${SHADER_COMPILED_FILE} NAME)
         set(SHADER_QRC_CONTENT
             ${SHADER_QRC_CONTENT}
-            "  <file\ alias=\"${SHADER_COMPILED_FILE_NAME}\">${SHADER_COMPILED_FILE}</file>\n"
+            "  <file\ alias=\"${SHADER_COMPILED_FILE_NAME}\"${VULKAN_SHADER_QRC_THRESHOLD}>${SHADER_COMPILED_FILE}</file>\n"
         )
     endforeach()
     file(WRITE ${VULKAN_SHADER_QRC_FILE_TMP}
@@ -379,11 +383,9 @@ if(BUILD_WITH_QT6)
 endif()
 
 if(ANDROID)
-    # Android libs must be public, because androiddeployqt copies them
     target_link_libraries(${PROJECT_NAME}
         PUBLIC
-        Qt5::AndroidExtras
-        ${QML}
+        Qt6::CorePrivate
     )
 elseif(USE_VULKAN AND NOT WIN32)
     target_link_libraries(${PROJECT_NAME}

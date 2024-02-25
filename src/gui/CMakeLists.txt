@@ -199,12 +199,22 @@ if(NOT ANDROID)
         ${GUI_FILES}
     )
 else()
-    add_library(${PROJECT_NAME} SHARED
+    qt_add_executable(${PROJECT_NAME}
         ${GUI_FILES}
     )
+    if(ANDROID_ABI STREQUAL "armeabi-v7a")
+        set(ANDROID_EXTRA_LIBS_DIR "${CMAKE_SYSROOT}/usr/lib/arm-linux-androideabi")
+    endif()
+    set(ANDROID_OPENSSL_DIR "${CMAKE_SYSROOT}/../../../../../../../android_openssl/ssl_1.1/${ANDROID_ABI}")
+    set(ANDROID_QMPLAY2_MODULES "${CMAKE_BINARY_DIR}/src/modules")
+    set_target_properties(${PROJECT_NAME} PROPERTIES QT_ANDROID_EXTRA_LIBS
+        "${ANDROID_QMPLAY2_MODULES}/AudioFilters/libAudioFilters.so,${ANDROID_QMPLAY2_MODULES}/Extensions/libExtensions.so,${ANDROID_QMPLAY2_MODULES}/FFmpeg/libFFmpeg.so,${ANDROID_QMPLAY2_MODULES}/Inputs/libInputs.so,${ANDROID_QMPLAY2_MODULES}/Modplug/libModplug.so,${ANDROID_QMPLAY2_MODULES}/Notify/libNotify.so,${ANDROID_QMPLAY2_MODULES}/OpenSLES/libOpenSLES-QMPlay2.so,${ANDROID_QMPLAY2_MODULES}/Playlists/libPlaylists.so,${ANDROID_QMPLAY2_MODULES}/QPainter/libQPainter.so,${ANDROID_QMPLAY2_MODULES}/Subtitles/libSubtitles.so,${ANDROID_QMPLAY2_MODULES}/VideoFilters/libVideoFilters.so,${ANDROID_QMPLAY2_MODULES}/Visualizations/libVisualizations.so,${ANDROID_EXTRA_LIBS_DIR}/libavcodec.so,${ANDROID_EXTRA_LIBS_DIR}/libavformat.so,${ANDROID_EXTRA_LIBS_DIR}/libavutil.so,${ANDROID_EXTRA_LIBS_DIR}/libswresample.so,${ANDROID_EXTRA_LIBS_DIR}/libswscale.so,${ANDROID_OPENSSL_DIR}/libssl_1_1.so,${ANDROID_OPENSSL_DIR}/libcrypto_1_1.so"
+    )
+    set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/gui/Android/manifest")
 endif()
 
 target_link_libraries(${PROJECT_NAME}
+    PRIVATE
     libqmplay2
 )
 
@@ -219,23 +229,23 @@ endif()
 if(WIN32)
     set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Custom libraries for GUI")
     if (NOT BUILD_WITH_QT6)
-        target_link_libraries(${PROJECT_NAME} Qt5::WinExtras)
+        target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::WinExtras)
     endif()
-    target_link_libraries(${PROJECT_NAME} winmm)
+    target_link_libraries(${PROJECT_NAME} PRIVATE winmm)
     if (${QT_PREFIX}Core_VERSION VERSION_LESS 6.4.0)
-        target_link_libraries(${PROJECT_NAME} dwmapi)
+        target_link_libraries(${PROJECT_NAME} PRIVATE dwmapi)
     endif()
 elseif(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")
-    target_link_libraries(${PROJECT_NAME} ${APPKIT_LIBRARY} ${IOKIT_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${APPKIT_LIBRARY} ${IOKIT_LIBRARY})
 endif()
 if(USE_TAGLIB AND (NOT WIN32 OR CMAKE_HOST_WIN32))
-    target_link_libraries(${PROJECT_NAME} ${TAGLIB_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${TAGLIB_LIBRARIES})
 endif()
 if(WIN32 AND CUSTOM_GUI_LIBRARIES)
     separate_arguments(CUSTOM_GUI_LIBRARIES)
-    target_link_libraries(${PROJECT_NAME} ${CUSTOM_GUI_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${CUSTOM_GUI_LIBRARIES})
 endif()
 
 if(WIN32)
@@ -282,7 +292,7 @@ elseif(APPLE)
         file(WRITE \"${MAC_BUNDLE_PATH}/Contents/Resources/qt.conf\")
         fixup_bundle(${MAC_BUNDLE_PATH} \"\${QMPLAY2_MODULES_AND_QT_PLUGINS}\" \"\${DIRS}\")
     ")
-else()
+elseif(NOT ANDROID)
     # executable
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
