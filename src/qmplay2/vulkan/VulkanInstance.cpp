@@ -452,7 +452,7 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     physicalDeviceExtensions.push_back(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
 
-    if (!AbstractInstance::isVk10())
+    if (!AbstractInstance::isVk10() && !physicalDevice->isVk10())
     {
         // Required for Vulkan video decoding
         physicalDeviceExtensions.push_back(VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
