@@ -48,11 +48,9 @@ extern "C"
 #endif
 }
 
+#include <QOperatingSystemVersion>
 #include <QGuiApplication>
 #include <QComboBox>
-#ifdef Q_OS_WIN
-#   include <QOperatingSystemVersion>
-#endif
 
 FFmpeg::FFmpeg() :
     Module("FFmpeg"),
@@ -88,7 +86,15 @@ FFmpeg::FFmpeg() :
     init("ReconnectStreammes", false);
     init("DecoderEnabled", true);
 #ifdef QMPlay2_VKVIDEO
-    init("DecoderVkVideoEnabled", true);
+    switch (QOperatingSystemVersion::currentType())
+    {
+        case QOperatingSystemVersion::Windows:
+            init("DecoderVkVideoEnabled", QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows10);
+            break;
+        default:
+            init("DecoderVkVideoEnabled", true);
+            break;
+    }
 #endif
 #ifdef QMPlay2_VDPAU
     init("DecoderVDPAUEnabled", true);
