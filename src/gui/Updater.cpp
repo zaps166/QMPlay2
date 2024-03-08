@@ -35,6 +35,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #ifdef Q_OS_WIN32
+#   include <QOperatingSystemVersion>
 #   include <QSysInfo>
 #endif
 
@@ -125,21 +126,24 @@ void Updater::infoFinished()
 
         QString osName;
 #ifdef Q_OS_WIN
+        if (QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows10)
+            osName = "Win10_64";
+        else
+            osName = "Win64";
         if (QSysInfo::WordSize == 32)
         {
+            bool detected64 = false;
+
             using IsWow64ProcessProc = BOOL(WINAPI *)(HANDLE, BOOL *);
             if (auto IsWow64Process = (IsWow64ProcessProc)GetProcAddress(GetModuleHandleA("kernel32"), "IsWow64Process"))
             {
                 BOOL bIsWow64 = FALSE;
                 if (IsWow64Process(GetCurrentProcess(), &bIsWow64) && bIsWow64)
-                    osName = "Win64";
+                    detected64 = true;
             }
-            if (osName.isEmpty())
+
+            if (!detected64)
                 osName = "WinNew32";
-        }
-        else
-        {
-            osName = "Win64";
         }
 #endif
 
