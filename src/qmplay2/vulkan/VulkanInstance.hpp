@@ -119,7 +119,7 @@ private:
     std::mutex m_createOrGetDeviceMutex;
 
     function<void()> m_unsetFiltersOnOtherQueueFamiliyFn;
-    std::atomic_uint32_t m_filtersOnOtherQueueFamiliy = {0};
+    std::atomic<uint32_t> m_filtersOnOtherQueueFamiliy = {0};
 
     QWindow *m_testWin = nullptr;
 };
