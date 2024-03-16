@@ -103,7 +103,6 @@ public:
     }
     void stop()
     {
-        br = true;
         {
             QMutexLocker locker(&mutex);
             br = true;
