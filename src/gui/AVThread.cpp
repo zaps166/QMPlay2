@@ -102,5 +102,4 @@ void AVThread::terminate()
     QThread::terminate();
     wait(1000);
     emit QMPlay2Core.statusBarMessage(tr("A/V thread has been incorrectly terminated!"), 2000);
-    deleteLater();
 }
