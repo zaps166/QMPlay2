@@ -574,7 +574,7 @@
     </message>
     <message>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>onbekend</translation>
     </message>
 </context>
 <context>
@@ -1028,7 +1028,7 @@
     </message>
     <message>
         <source>Subtitles and tags encoding</source>
-        <translation type="unfinished"></translation>
+        <translation>Ondertiteling- en tagencodering</translation>
     </message>
 </context>
 <context>
@@ -1867,7 +1867,7 @@
     </message>
     <message>
         <source>Allow HDR content for VP9 codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Hdr-inhoud afspelen met vp9-codec</translation>
     </message>
 </context>
 <context>
@@ -2382,15 +2382,15 @@
     </message>
     <message>
         <source>Network buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation>Bufferduur</translation>
     </message>
     <message>
         <source>Live stream buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation>Livestream-bufferduur</translation>
     </message>
     <message>
         <source>Remember playback position for each playlist entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Afspeelpositie per item onthouden</translation>
     </message>
 </context>
 <context>
@@ -2497,11 +2497,11 @@
     </message>
     <message>
         <source>&amp;Continue playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Afspelen &amp;hervatten</translation>
     </message>
     <message>
         <source>Continue playing from the last position</source>
-        <translation type="unfinished"></translation>
+        <translation>Afspelen vanaf recentste positie</translation>
     </message>
 </context>
 <context>
@@ -2798,11 +2798,11 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Type the station name and press Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Voer een stationsnaam in en druk op enter</translation>
     </message>
     <message>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
-        <translation type="unfinished"></translation>
+        <translation>Kies een ‘%1’ uit de keuzelijst</translation>
     </message>
 </context>
 <context>
@@ -2825,7 +2825,7 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Clicks</source>
-        <translation type="unfinished"></translation>
+        <translation>Aantal kliks</translation>
     </message>
 </context>
 <context>
@@ -3195,15 +3195,15 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hdr10-video&apos;s afspelen in hdr-modus (experimenteel)</translation>
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation type="unfinished"></translation>
+        <translation>Afbeeldingen met lage kwaliteit schalen</translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Handig voor retro-apparaten. Kan ook worden gebruikn in combinatie met Vulkan-softwarerendering om het cpu-gebruik te verlagen.</translation>
     </message>
 </context>
 <context>
