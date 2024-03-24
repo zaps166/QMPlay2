@@ -38,14 +38,6 @@ Table of Contents
 #### Easy installation on openSUSE
 - Don't mix FFmpeg from different repositories!
 - Run the following commands:
-##### openSUSE Leap 15.3
-```
-sudo zypper ar https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_15.3 Packman
-sudo zypper ar http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.3
-sudo zypper dup --allow-vendor-change --from "Packman"
-sudo zypper dup --allow-vendor-change --from http://download.opensuse.org/repositories/multimedia:/apps/openSUSE_Leap_15.3
-sudo zypper in QMPlay2
-```
 ##### openSUSE Tumbleweed
 ```
 sudo zypper ar https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed Packman
