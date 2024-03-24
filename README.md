@@ -170,7 +170,7 @@ Don't forget to update submodules: `git submodule update --init`.
 
 ### CMake requirements
 
-For CMake build be sure that you have CMake 3.9 or higher.
+For CMake build be sure that you have CMake 3.12 or higher.
 
 ### You need devel packages:
 
