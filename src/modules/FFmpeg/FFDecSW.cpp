@@ -164,7 +164,8 @@ int FFDecSW::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
 
         if (frameFinished)
         {
-            const int samples_with_channels = frame->nb_samples * codec_ctx->channels;
+            const int codecChannels = codec_ctx->ch_layout.nb_channels;
+            const int samples_with_channels = frame->nb_samples * codecChannels;
             const int decoded_size = samples_with_channels * sizeof(float);
             decoded.resize(decoded_size);
             float *decoded_data = (float *)decoded.data();
@@ -203,35 +204,35 @@ int FFDecSW::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
                 {
                     uint8_t **data = (uint8_t **)frame->extended_data;
                     for (int i = 0; i < frame->nb_samples; ++i)
-                        for (int ch = 0; ch < codec_ctx->channels; ++ch)
+                        for (int ch = 0; ch < codecChannels; ++ch)
                             *decoded_data++ = (data[ch][i] - 0x7F) / 128.0f;
                 } break;
                 case AV_SAMPLE_FMT_S16P:
                 {
                     int16_t **data = (int16_t **)frame->extended_data;
                     for (int i = 0; i < frame->nb_samples; ++i)
-                        for (int ch = 0; ch < codec_ctx->channels; ++ch)
+                        for (int ch = 0; ch < codecChannels; ++ch)
                             *decoded_data++ = data[ch][i] / 32768.0f;
                 } break;
                 case AV_SAMPLE_FMT_S32P:
                 {
                     int32_t **data = (int32_t **)frame->extended_data;
                     for (int i = 0; i < frame->nb_samples; ++i)
-                        for (int ch = 0; ch < codec_ctx->channels; ++ch)
+                        for (int ch = 0; ch < codecChannels; ++ch)
                             *decoded_data++ = data[ch][i] / 2147483648.0f;
                 } break;
                 case AV_SAMPLE_FMT_FLTP:
                 {
                     float **data = (float **)frame->extended_data;
                     for (int i = 0; i < frame->nb_samples; ++i)
-                        for (int ch = 0; ch < codec_ctx->channels; ++ch)
+                        for (int ch = 0; ch < codecChannels; ++ch)
                             *decoded_data++ = data[ch][i];
                 } break;
                 case AV_SAMPLE_FMT_DBLP:
                 {
                     double **data = (double **)frame->extended_data;
                     for (int i = 0; i < frame->nb_samples; ++i)
-                        for (int ch = 0; ch < codec_ctx->channels; ++ch)
+                        for (int ch = 0; ch < codecChannels; ++ch)
                             *decoded_data++ = data[ch][i];
                 } break;
                 /**/
@@ -240,7 +241,7 @@ int FFDecSW::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
                     decoded.clear();
                     break;
             }
-            channels = codec_ctx->channels;
+            channels = codecChannels;
             sampleRate = codec_ctx->sample_rate;
         }
     }

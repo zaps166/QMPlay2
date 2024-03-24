@@ -1117,12 +1117,12 @@ void DemuxerThr::emitInfo()
                 audioStreams += "<li><b>" + tr("sample rate") + ":</b> " + QString::number(streamInfo->params->sample_rate) + " Hz</li>";
 
                 QString channels;
-                if (streamInfo->params->channels == 1)
+                if (streamInfo->params->ch_layout.nb_channels == 1)
                     channels = tr("mono");
-                else if (streamInfo->params->channels == 2)
+                else if (streamInfo->params->ch_layout.nb_channels == 2)
                     channels = tr("stereo");
                 else
-                    channels = QString::number(streamInfo->params->channels);
+                    channels = QString::number(streamInfo->params->ch_layout.nb_channels);
                 audioStreams += "<li><b>" + tr("channels") + ":</b> " + channels + "</li>";
 
                 if (!bitrateStr.isEmpty())

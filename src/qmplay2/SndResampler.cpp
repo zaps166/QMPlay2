@@ -93,20 +93,23 @@ bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate,
         m_dstSamplerate /= speed;
     }
 
-    const int srcChnLayout = av_get_default_channel_layout(m_srcChannels);
-    const int dstChnLayout = av_get_default_channel_layout(m_dstChannels);
-    if (!m_srcSamplerate || !m_dstSamplerate || !srcChnLayout || !dstChnLayout)
+    if (m_srcSamplerate <= 0 || m_dstSamplerate <= 0 || m_srcChannels <= 0 || m_dstChannels <= 0)
         return false;
+
+    AVChannelLayout srcChnLayout;
+    AVChannelLayout dstChnLayout;
+    av_channel_layout_default(&srcChnLayout, srcChannels);
+    av_channel_layout_default(&dstChnLayout, dstChannels);
 
     if (m_sndConvertCtx)
         swr_close(m_sndConvertCtx);
 
-    m_sndConvertCtx = swr_alloc_set_opts(
-        m_sndConvertCtx,
-        dstChnLayout,
+    swr_alloc_set_opts2(
+        &m_sndConvertCtx,
+        &dstChnLayout,
         m_keepPitch ? AV_SAMPLE_FMT_FLTP : AV_SAMPLE_FMT_FLT,
         m_dstSamplerate,
-        srcChnLayout,
+        &srcChnLayout,
         AV_SAMPLE_FMT_FLT,
         m_srcSamplerate,
         0,

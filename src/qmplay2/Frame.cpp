@@ -59,11 +59,9 @@ AVPixelFormat Frame::convert3PlaneTo2Plane(AVPixelFormat fmt)
         case AV_PIX_FMT_YUV422P10:
             return AV_PIX_FMT_NV20; // Is it OK?
 
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(56, 31, 100)
         case AV_PIX_FMT_YUV444P:
         case AV_PIX_FMT_YUVJ444P:
             return AV_PIX_FMT_NV24;
-#endif
 
         default:
             break;
@@ -88,10 +86,8 @@ AVPixelFormat Frame::convert2PlaneTo3Plane(AVPixelFormat fmt)
         case AV_PIX_FMT_NV20:
             return AV_PIX_FMT_YUV422P10;
 
-#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(56, 31, 100)
         case AV_PIX_FMT_NV24:
             return AV_PIX_FMT_YUV444P;
-#endif
 
         default:
             break;
@@ -702,8 +698,7 @@ void Frame::copyAVFrameInfo(const AVFrame *other)
     m_frame->format = other->format;
     m_frame->width = other->width;
     m_frame->height = other->height;
-    m_frame->channels = other->channels;
-    m_frame->channel_layout = other->channel_layout;
+    m_frame->ch_layout = other->ch_layout;
     m_frame->nb_samples = other->nb_samples;
 
     av_frame_copy_props(m_frame, other);
