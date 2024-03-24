@@ -36,11 +36,12 @@
 #ifdef Q_OS_MACOS
     #include <QProcess>
 #endif
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    #include <QWinThumbnailToolButton>
-    #include <QWinThumbnailToolBar>
-    #include <QWinTaskbarProgress>
-    #include <QWinTaskbarButton>
+#if defined(Q_OS_WIN)
+    #include <QOperatingSystemVersion>
+    #include <QtWinExtras/qwinthumbnailtoolbutton.h>
+    #include <QtWinExtras/qwinthumbnailtoolbar.h>
+    #include <QtWinExtras/qwintaskbarprogress.h>
+    #include <QtWinExtras/qwintaskbarbutton.h>
 #endif
 #if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
     #include <dwmapi.h>
@@ -679,7 +680,7 @@ void MainWidget::playStateChanged(bool b)
         menuBar->player->togglePlay->setIcon(QMPlay2Core.getIconFromTheme("media-playback-start"));
         menuBar->player->togglePlay->setText(tr("&Play"));
     }
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(Q_OS_WIN)
     if (m_taskBarProgress)
         m_taskBarProgress->setPaused(!b);
 #endif
@@ -1425,7 +1426,7 @@ void MainWidget::browseSubsFile()
 void MainWidget::setSeekSMaximum(int max)
 {
     seekS->setMaximum(qMax(0, max * 10));
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(Q_OS_WIN)
     if (m_taskBarProgress)
     {
         m_taskBarProgress->setMaximum(seekS->maximum() / 10);
@@ -1462,7 +1463,7 @@ void MainWidget::updatePos(double pos)
             currPos = intPos;
         }
         seekS->setValue(pos * 10.0);
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(Q_OS_WIN)
         if (m_taskBarProgress)
             m_taskBarProgress->setValue(pos);
 #endif
@@ -1742,10 +1743,10 @@ void MainWidget::addChooseNextStreamKeyShortcuts()
     QMPlay2GUI.shortcutHandler->appendAction(nextSubsStream, "KeyBindings/NextSubsStream", "Ctrl+2");
 }
 
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(Q_OS_WIN)
 void MainWidget::setWindowsTaskBarFeatures()
 {
-    if (QSysInfo::windowsVersion() < QSysInfo::WV_6_1)
+    if (QOperatingSystemVersion::current() < QOperatingSystemVersion::Windows7)
         return;
 
     m_taskbarButton = new QWinTaskbarButton(this);
@@ -2037,7 +2038,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
 
     playC.stop(true);
 
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(Q_OS_WIN)
     m_taskBarProgress = nullptr;
     delete m_taskbarButton;
     delete m_thumbnailToolBar;
@@ -2060,7 +2061,7 @@ void MainWidget::showEvent(QShowEvent *)
 #endif
             showMaximized();
         doRestoreState(QMPlay2Core.getSettings().getByteArray("MainWidget/DockWidgetState"), QMPlay2Core.getSettings().getBool("MainWidget/IsCompactView"));
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(Q_OS_WIN)
         setWindowsTaskBarFeatures();
 #endif
 #if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 4, 0)

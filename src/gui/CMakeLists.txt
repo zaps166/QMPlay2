@@ -151,6 +151,20 @@ if(WIN32)
         Windows/ScreenSaver.cpp
         Windows/PanGestureEventFilter.cpp
     )
+    if(BUILD_WITH_QT6)
+        list(APPEND GUI_SRC
+            "Windows/qt/QtWinExtras/qwinevent.cpp"
+            "Windows/qt/QtWinExtras/qwineventfilter.cpp"
+            "Windows/qt/QtWinExtras/qwinfunctions.cpp"
+            "Windows/qt/QtWinExtras/qwintaskbarbutton.cpp"
+            "Windows/qt/QtWinExtras/qwintaskbarprogress.cpp"
+            "Windows/qt/QtWinExtras/qwinthumbnailtoolbar.cpp"
+            "Windows/qt/QtWinExtras/qwinthumbnailtoolbutton.cpp"
+            "Windows/qt/QtWinExtras/windowsguidsdefs.cpp"
+        )
+        include_directories("Windows/qt")
+        add_definitions(-DQT_BUILD_WINEXTRAS_LIB)
+    endif()
 elseif(APPLE)
     set(MACOSX_BUNDLE_BUNDLE_VERSION "1")
     set(MACOSX_BUNDLE_ICON_FILE "QMPlay2.icns")
@@ -232,9 +246,7 @@ if(WIN32)
         target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::WinExtras)
     endif()
     target_link_libraries(${PROJECT_NAME} PRIVATE winmm)
-    if (${QT_PREFIX}Core_VERSION VERSION_LESS 6.4.0)
-        target_link_libraries(${PROJECT_NAME} PRIVATE dwmapi)
-    endif()
+    target_link_libraries(${PROJECT_NAME} PRIVATE dwmapi)
 elseif(APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/macOS/BundleInfo.plist.in")

@@ -38,7 +38,7 @@ class PlaylistDock;
 class SettingsWidget;
 class QMPlay2Extensions;
 
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(Q_OS_WIN)
     class QWinTaskbarProgress;
     class QWinTaskbarButton;
     class QWinThumbnailToolBar;
@@ -137,7 +137,7 @@ private:
 
     void addChooseNextStreamKeyShortcuts();
 
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(Q_OS_WIN)
     void setWindowsTaskBarFeatures();
 #endif
 #if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
@@ -201,7 +201,7 @@ private:
     Updater updater;
 #endif
 
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(Q_OS_WIN)
     QWinTaskbarProgress *m_taskBarProgress = nullptr;
     QWinTaskbarButton *m_taskbarButton = nullptr;
     QWinThumbnailToolBar *m_thumbnailToolBar = nullptr;
