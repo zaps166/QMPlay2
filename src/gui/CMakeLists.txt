@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.13)
 project(QMPlay2)
 
 if(WIN32 AND NOT BUILD_WITH_QT6)
