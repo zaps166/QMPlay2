@@ -646,7 +646,9 @@ int main(int argc, char *argv[])
     QtAndroidPrivate::requestPermission("android.permission.WRITE_EXTERNAL_STORAGE").result();
 #endif
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 #ifndef USE_OPENGL
     QGuiApplication::setAttribute(Qt::AA_ForceRasterWidgets);
 #endif
@@ -772,7 +774,9 @@ int main(int argc, char *argv[])
     qRegisterMetaType<AVRational>("AVRational");
     qRegisterMetaType<Demuxer *>("Demuxer*");
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
     QApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 
     QDir::setCurrent(QCoreApplication::applicationDirPath()); //Is it really needed?
