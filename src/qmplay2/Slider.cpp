@@ -111,7 +111,7 @@ void Slider::mousePressEvent(QMouseEvent *e)
             else if (sliderAbsoluteSetButtons & Qt::MiddleButton)
                 sliderAbsoluteSetButton = Qt::MiddleButton;
 
-            QMouseEvent ev(e->type(), e->pos(), sliderAbsoluteSetButton, sliderAbsoluteSetButtons, e->modifiers());
+            QMouseEvent ev(e->type(), e->pos(), e->globalPos(), sliderAbsoluteSetButton, sliderAbsoluteSetButtons, e->modifiers());
             QSlider::mousePressEvent(&ev);
             e->setAccepted(ev.isAccepted());
 
