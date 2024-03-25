@@ -51,16 +51,6 @@ pkg_check_modules(LIBSWSCALE REQUIRED libswscale>=6.7.100)
 pkg_check_modules(LIBAVUTIL REQUIRED libavutil>=57.28.100)
 pkg_check_modules(LIBSWRESAMPLE REQUIRED libswresample>=4.7.100)
 
-# Add FFmpeg link directories here, because it must be global.
-# "target_link_directories" is supported since CMake 3.13, but QMPlay2 supports CMake 3.12.
-link_directories(
-    ${LIBAVFORMAT_LIBRARY_DIRS}
-    ${LIBAVCODEC_LIBRARY_DIRS}
-    ${LIBSWSCALE_LIBRARY_DIRS}
-    ${LIBAVUTIL_LIBRARY_DIRS}
-    ${LIBSWRESAMPLE_LIBRARY_DIRS}
-)
-
 set(CMAKE_LINK_DEPENDS_NO_SHARED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 if(BUILD_WITH_QT6)

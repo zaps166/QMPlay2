@@ -325,6 +325,15 @@ target_include_directories(
     ${LIBAVUTIL_INCLUDE_DIRS}
     ${LIBSWRESAMPLE_INCLUDE_DIRS}
 )
+target_link_directories(
+    ${PROJECT_NAME}
+    PUBLIC
+    ${LIBAVFORMAT_LIBRARY_DIRS}
+    ${LIBAVCODEC_LIBRARY_DIRS}
+    ${LIBSWSCALE_LIBRARY_DIRS}
+    ${LIBAVUTIL_LIBRARY_DIRS}
+    ${LIBSWRESAMPLE_LIBRARY_DIRS}
+)
 
 if(APPLE)
     target_link_libraries(${PROJECT_NAME}
