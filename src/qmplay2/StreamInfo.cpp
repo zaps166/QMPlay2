@@ -80,7 +80,7 @@ StreamInfo::StreamInfo(quint32 sampleRateArg, quint8 channelsArg)
 {
     params->codec_type = AVMEDIA_TYPE_AUDIO;
     params->sample_rate = sampleRateArg;
-    params->ch_layout.nb_channels = channelsArg;
+    params->CODECPAR_NB_CHANNELS = channelsArg;
 }
 StreamInfo::~StreamInfo()
 {

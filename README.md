@@ -181,7 +181,7 @@ For CMake build be sure that you have CMake 3.13 or higher.
     - Qt5Qml - for MediaBrowser,
     - Qt5WinExtras - for Windows,
     - Qt6Core5Compat - for Qt6,
-- FFmpeg >= 5.1:
+- FFmpeg >= 4.0:
     - libavformat - requires OpenSSL or GnuTLS for https support,
     - libavcodec - for FFmpeg module only,
     - libswscale,

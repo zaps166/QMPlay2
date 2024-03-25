@@ -1131,7 +1131,7 @@ void PlayClass::audioParamsUpdated(quint8 channels, quint32 sampleRate)
     {
         StreamInfo *streamInfo = demuxThr->demuxer->streamsInfo().at(audioStream);
         streamInfo->params->sample_rate = sampleRate;
-        streamInfo->params->ch_layout.nb_channels = channels;
+        streamInfo->params->CODECPAR_NB_CHANNELS = channels;
         demuxThr->emitInfo();
     }
     if (aThr)
@@ -1450,7 +1450,7 @@ void PlayClass::load(Demuxer *demuxer)
             {
                 aThr->setDec(dec);
 
-                if (!setAudioParams(streams[audioStream]->params->ch_layout.nb_channels, streams[audioStream]->params->sample_rate))
+                if (!setAudioParams(streams[audioStream]->params->CODECPAR_NB_CHANNELS, streams[audioStream]->params->sample_rate))
                     dec = nullptr;
 
                 else if (reload)

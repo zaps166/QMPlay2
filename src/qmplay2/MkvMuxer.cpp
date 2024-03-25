@@ -86,7 +86,11 @@ MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsIn
                     stream->disposition |= AV_DISPOSITION_DEFAULT;
                 break;
             case AVMEDIA_TYPE_AUDIO:
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(57, 28, 100)
                 stream->codecpar->ch_layout = streamInfo->params->ch_layout;
+#else
+                stream->codecpar->channels = streamInfo->params->channels;
+#endif
                 stream->codecpar->sample_rate = streamInfo->params->sample_rate;
                 stream->codecpar->block_align = streamInfo->params->block_align;
                 stream->codecpar->format = streamInfo->params->format;

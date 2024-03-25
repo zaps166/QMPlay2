@@ -56,7 +56,9 @@ YadifDeint::YadifDeint(const shared_ptr<HWInterop> &hwInterop)
             AV_PIX_FMT_P016,
             AV_PIX_FMT_NV16,
             AV_PIX_FMT_NV20,
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(56, 31, 100)
             AV_PIX_FMT_NV24,
+#endif
     };
     if (m_instance->supportedPixelFormats().contains(AV_PIX_FMT_YUV420P10))
     {

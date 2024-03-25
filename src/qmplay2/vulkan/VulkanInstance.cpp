@@ -163,7 +163,9 @@ vk::Format Instance::fromFFmpegPixelFormat(int avPixFmt)
         case AV_PIX_FMT_GRAY9:
         case AV_PIX_FMT_GRAY10:
         case AV_PIX_FMT_GRAY12:
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(56, 22, 100)
         case AV_PIX_FMT_GRAY14:
+#endif
         case AV_PIX_FMT_GRAY16:
             return vk::Format::eR16Unorm;
 
@@ -769,7 +771,9 @@ void Instance::fillSupportedFormats()
             AV_PIX_FMT_GRAY9,
             AV_PIX_FMT_GRAY10,
             AV_PIX_FMT_GRAY12,
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(56, 22, 100)
             AV_PIX_FMT_GRAY14,
+#endif
             AV_PIX_FMT_GRAY16,
 
             AV_PIX_FMT_P010,

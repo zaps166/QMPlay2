@@ -29,6 +29,12 @@ extern "C" {
     #include <libavcodec/avcodec.h>
 }
 
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(57, 28, 100)
+#   define CODECPAR_NB_CHANNELS ch_layout.nb_channels
+#else
+#   define CODECPAR_NB_CHANNELS channels
+#endif
+
 using QMPlay2Tag = QPair<QString, QString>;
 
 enum QMPlay2Tags

@@ -96,13 +96,13 @@ bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate,
     if (m_srcSamplerate <= 0 || m_dstSamplerate <= 0 || m_srcChannels <= 0 || m_dstChannels <= 0)
         return false;
 
-    AVChannelLayout srcChnLayout;
-    AVChannelLayout dstChnLayout;
-    av_channel_layout_default(&srcChnLayout, srcChannels);
-    av_channel_layout_default(&dstChnLayout, dstChannels);
-
     if (m_sndConvertCtx)
         swr_close(m_sndConvertCtx);
+
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(57, 28, 100)
+    AVChannelLayout srcChnLayout, dstChnLayout;
+    av_channel_layout_default(&srcChnLayout, srcChannels);
+    av_channel_layout_default(&dstChnLayout, dstChannels);
 
     swr_alloc_set_opts2(
         &m_sndConvertCtx,
@@ -115,6 +115,29 @@ bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate,
         0,
         nullptr
     );
+#else
+    const int64_t srcChnLayout = av_get_default_channel_layout(m_srcChannels);
+    const int64_t dstChnLayout = av_get_default_channel_layout(m_dstChannels);
+
+    if (srcChnLayout == 0 || dstChnLayout == 0)
+    {
+        destroy();
+        return false;
+    }
+
+    m_sndConvertCtx = swr_alloc_set_opts(
+        m_sndConvertCtx,
+        dstChnLayout,
+        m_keepPitch ? AV_SAMPLE_FMT_FLTP : AV_SAMPLE_FMT_FLT,
+        m_dstSamplerate,
+        srcChnLayout,
+        AV_SAMPLE_FMT_FLT,
+        m_srcSamplerate,
+        0,
+        nullptr
+    );
+#endif
+
     if (!m_sndConvertCtx)
     {
         destroy();

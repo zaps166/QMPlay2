@@ -42,8 +42,12 @@ using namespace std;
 
 extern "C"
 {
-    #include <libavcodec/avcodec.h>
     #include <libavcodec/version.h>
+#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 91, 100)
+    #include <libavcodec/bsf.h>
+#else
+    #include <libavcodec/avcodec.h>
+#endif
     #include <libavutil/pixdesc.h>
     #include <libswscale/swscale.h>
 }

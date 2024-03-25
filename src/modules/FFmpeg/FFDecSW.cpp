@@ -164,7 +164,7 @@ int FFDecSW::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
 
         if (frameFinished)
         {
-            const int codecChannels = codec_ctx->ch_layout.nb_channels;
+            const int codecChannels = codec_ctx->CODECPAR_NB_CHANNELS;
             const int samples_with_channels = frame->nb_samples * codecChannels;
             const int decoded_size = samples_with_channels * sizeof(float);
             decoded.resize(decoded_size);
