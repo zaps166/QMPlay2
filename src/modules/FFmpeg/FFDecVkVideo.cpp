@@ -212,7 +212,7 @@ bool FFDecVkVideo::open(StreamInfo &streamInfo)
             break;
 #if 0 // TODO: Enable when will be supported in FFmpeg and drivers
         case AV_CODEC_ID_AV1:
-            if (!physicalDevice->checkExtension(VK_KHR_VIDEO_DECODE_AV1_EXTENSION_NAME))
+            if (!m_physicalDevice->checkExtension(VK_KHR_VIDEO_DECODE_AV1_EXTENSION_NAME))
                 return false;
             if (!(getVideoCodecOperations() & vk::VideoCodecOperationFlagBitsKHR::eDecodeAv1))
                 return false;
