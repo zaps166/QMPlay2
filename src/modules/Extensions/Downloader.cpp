@@ -451,7 +451,16 @@ void DownloadItemW::startConversion()
     maybeAddAbsolutePath(convertCommand);
 
     qDebug() << "Starting conversion:" << convertCommand.toUtf8().constData();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    auto args = QProcess::splitCommand(convertCommand);
+    if (!args.isEmpty())
+    {
+        const QString program = args.takeFirst();
+        m_convertProcess->start(program, args);
+    }
+#else
     m_convertProcess->start(convertCommand);
+#endif
 }
 void DownloadItemW::deleteConvertProcess()
 {
