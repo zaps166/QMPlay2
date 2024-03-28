@@ -229,7 +229,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("UnpauseWhenSeeking", false);
     QMPSettings.init("RestoreAVSState", false);
     QMPSettings.init("DisableSubtitlesAtStartup", false);
-    QMPSettings.init("StoreUrlPos", false);
+    QMPSettings.init("StoreUrlPos", true);
     QMPSettings.init("StoreARatioAndZoom", false);
     QMPSettings.init("SavePos", false);
     QMPSettings.init("KeepZoom", false);
