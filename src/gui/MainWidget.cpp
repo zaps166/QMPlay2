@@ -158,7 +158,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     isCompactView = wasShow = fullScreen = seekSFocus = false;
 
     if (QMPlay2GUI.pipe)
-        connect(QMPlay2GUI.pipe, SIGNAL(newConnection(IPCSocket *)), this, SLOT(newConnection(IPCSocket *)));
+        connect(QMPlay2GUI.pipe.get(), SIGNAL(newConnection(IPCSocket *)), this, SLOT(newConnection(IPCSocket *)));
 
     Settings &settings = QMPlay2Core.getSettings();
 
@@ -1989,7 +1989,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
     emit QMPlay2Core.waitCursor();
 
     if (QMPlay2GUI.pipe)
-        disconnect(QMPlay2GUI.pipe, SIGNAL(newConnection(IPCSocket *)), this, SLOT(newConnection(IPCSocket *)));
+        disconnect(QMPlay2GUI.pipe.get(), SIGNAL(newConnection(IPCSocket *)), this, SLOT(newConnection(IPCSocket *)));
 
     if (wasShow)
     {

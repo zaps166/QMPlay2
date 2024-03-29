@@ -76,7 +76,7 @@ public:
 
     MenuBar *menuBar;
     QWidget *mainW;
-    IPCServer *pipe;
+    std::unique_ptr<IPCServer> pipe;
     ScreenSaver *screenSaver;
     VideoAdjustmentW *videoAdjustment;
     ShortcutHandler *shortcutHandler;

@@ -695,6 +695,22 @@ int main(int argc, char *argv[])
     QString cmdLineProfile = parser->value("profile");
     delete parser;
 
+    bool createPpipeInvoked = false;
+
+    auto createPipe = [&] {
+        Q_ASSERT(!qmplay2Gui.pipe);
+
+        createPpipeInvoked = true;
+
+        qmplay2Gui.pipe = std::make_unique<IPCServer>(qmplay2Gui.getPipe());
+        if (!qmplay2Gui.pipe->listen())
+        {
+            qmplay2Gui.pipe.reset();
+            return false;
+        }
+        return true;
+    };
+
     if (!help)
     {
         bool useSocket = true;
@@ -709,7 +725,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        if (useSocket)
+        if (!createPipe() && useSocket)
         {
             IPCSocket socket(qmplay2Gui.getPipe());
             if (socket.open(IPCSocket::WriteOnly))
@@ -723,6 +739,7 @@ int main(int argc, char *argv[])
             {
                 QFile::remove(qmplay2Gui.getPipe());
                 arguments.append({"noplay", QString()});
+                createPpipeInvoked = false;
             }
 #endif
         }
@@ -862,17 +879,8 @@ int main(int argc, char *argv[])
                 QMessageBox::warning(nullptr, QString(), QObject::tr("QtSvg icon engine plugin doesn't exist.\nQMPlay2 will not scale up icons!"));
         }
 
-        qmplay2Gui.pipe = new IPCServer(qmplay2Gui.getPipe());
-        if
-        (
-#ifdef Q_OS_WIN
-            WaitNamedPipeW((const wchar_t *)qmplay2Gui.getPipe().utf16(), NMPWAIT_USE_DEFAULT_WAIT) ||
-#endif
-            !qmplay2Gui.pipe->listen()
-        )
+        if ((createPpipeInvoked && !qmplay2Gui.pipe) || (!createPpipeInvoked && !createPipe()))
         {
-            delete qmplay2Gui.pipe;
-            qmplay2Gui.pipe = nullptr;
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
             if (settings.getBool("AllowOnlyOneInstance"))
             {
@@ -965,7 +973,8 @@ int main(int argc, char *argv[])
         if (qmplay2Gui.noAutoPlay)
             arguments.append({"noplay", QString()});
 
-        delete qmplay2Gui.pipe;
+        qmplay2Gui.pipe.reset();
+        createPpipeInvoked = false;
     } while (qmplay2Gui.restartApp);
 
     qmplay2Gui.deleteIcons();

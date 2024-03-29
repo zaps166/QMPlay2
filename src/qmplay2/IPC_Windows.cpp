@@ -78,6 +78,7 @@ public:
     EventNotifier *eventNotifier;
     OVERLAPPED *ov;
     HANDLE hPipe;
+    bool first;
 };
 
 class IPCSocketPriv : public PipeData
@@ -90,6 +91,7 @@ public:
         this->eventNotifier = eventNotifier;
         this->ov = ov;
         this->hPipe = hPipe;
+        this->first = false;
     }
 
     QString fileName;
@@ -106,6 +108,7 @@ public:
         eventNotifier = NULL;
         ov = NULL;
         hPipe = INVALID_HANDLE_VALUE;
+        first = true;
     }
 
     QString fileName;
@@ -154,7 +157,7 @@ bool IPCSocket::open(QIODevice::OpenMode mode)
             m_priv->hPipe = CreateFileW((const wchar_t *)m_priv->fileName.utf16(), GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
             if (m_priv->hPipe != INVALID_HANDLE_VALUE)
                 break;
-            if (GetLastError() != ERROR_PIPE_BUSY || !WaitNamedPipeW((const wchar_t *)m_priv->fileName.utf16(), 1000))
+            if (GetLastError() != ERROR_PIPE_BUSY || !WaitNamedPipeW((const wchar_t *)m_priv->fileName.utf16(), NMPWAIT_WAIT_FOREVER))
                 break;
         }
     }
@@ -271,7 +274,7 @@ bool IPCServer::listen()
     m_priv->hPipe = CreateNamedPipeW
     (
         (const wchar_t *)m_priv->fileName.utf16(),
-        PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED,
+        PIPE_ACCESS_INBOUND | FILE_FLAG_OVERLAPPED | (m_priv->first ? FILE_FLAG_FIRST_PIPE_INSTANCE : 0),
         PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_WAIT,
         PIPE_UNLIMITED_INSTANCES,
         0,
@@ -281,6 +284,7 @@ bool IPCServer::listen()
     );
     if (m_priv->hPipe != INVALID_HANDLE_VALUE)
     {
+        m_priv->first = false;
         m_priv->ov = new OVERLAPPED();
         m_priv->ov->hEvent = CreateEvent(NULL, true, true, NULL);
         if (m_priv->ov->hEvent != NULL && connectToNewClient(m_priv->hPipe, m_priv->ov))
