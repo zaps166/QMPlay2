@@ -575,10 +575,13 @@ void MainWidget::processParam(const QString &param, const QString &data)
     else if (param == "show")
     {
         if (!isVisible())
-            toggleVisibility();
-        if (isMinimized())
         {
-            showNormal();
+            toggleVisibility();
+        }
+        else
+        {
+            if (isMinimized())
+                showNormal();
             activateWindow();
             raise();
         }
