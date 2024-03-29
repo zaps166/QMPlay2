@@ -55,6 +55,10 @@
     #include <QtCore/private/qandroidextras_p.h>
 #endif
 
+#ifdef Q_OS_WIN
+# include <lmcons.h>
+#endif
+
 #include <clocale>
 #include <csignal>
 #include <ctime>
@@ -73,7 +77,14 @@ QMPlay2GUIClass &QMPlay2GUIClass::instance()
 QString QMPlay2GUIClass::getPipe()
 {
 #if defined Q_OS_WIN
-    return "\\\\.\\pipe\\QMPlay2";
+    QString userNameSuffix;
+
+    wchar_t userName[UNLEN + 1];
+    DWORD bufferSize = UNLEN + 1;
+    if (GetUserNameW(userName, &bufferSize) && bufferSize > 1)
+        userNameSuffix = QStringLiteral(".") + QString::fromWCharArray(userName, bufferSize - 1);
+
+    return QStringLiteral("\\\\.\\pipe\\QMPlay2") + userNameSuffix;
 #elif defined Q_OS_MACOS
     return "/tmp/QMPlay2." + QString(getenv("USER"));
 #else
