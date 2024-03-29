@@ -236,6 +236,9 @@ AddThr::AddThr(PlaylistWidget &pLW) :
     pLW(pLW),
     inProgress(false)
 {
+    connect(this, &QThread::finished, this, [this] {
+        running = false;
+    });
     connect(this, SIGNAL(finished()), this, SLOT(finished()));
 }
 
@@ -278,6 +281,7 @@ void AddThr::setData(const QStringList &_urls, const QStringList &_existingEntri
             playlistMenu()->stopLoading->setVisible(true);
             inProgress = true;
         }
+        running = true;
         start();
     }
     else
@@ -817,7 +821,7 @@ QList <QTreeWidgetItem * > PlaylistWidget::getChildren(CHILDREN children, const 
 
 bool PlaylistWidget::canModify(bool all) const
 {
-    if (addThr.isRunning())
+    if (addThr.running)
         return false;
     if (all)
     {

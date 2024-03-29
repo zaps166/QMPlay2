@@ -114,6 +114,8 @@ private:
     IOController<> ioCtrl;
     QTreeWidgetItem *firstItem, *lastItem;
     bool inProgress;
+public:
+    bool running = false;
 private slots:
     void finished();
 signals:
