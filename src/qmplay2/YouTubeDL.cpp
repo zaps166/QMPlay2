@@ -481,7 +481,7 @@ void YouTubeDL::startProcess(QStringList args)
                 program = pythonCmd;
             }
 #ifdef Q_OS_MACOS
-            else if (QFileInfo("/usr/local/bin/" + pythonCmd).isExecutable())
+            else if (QFileInfo(QString("/usr/local/bin/" + pythonCmd)).isExecutable())
             {
                 args.prepend(program);
                 program = "/usr/local/bin/" + pythonCmd;
