@@ -295,7 +295,7 @@ bool YouTubeDL::prepare()
             return false;
     }
 
-    if (!QFileInfo(m_ytDlPath).exists())
+    if (!QFileInfo::exists(m_ytDlPath))
     {
         if (!download())
         {

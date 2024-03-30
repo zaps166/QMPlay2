@@ -151,7 +151,7 @@ QString Functions::Url(QString url, const QString &pth)
             url.prepend(addPth);
         }
 #ifndef Q_OS_WIN
-        if (hasBackslash && !QFileInfo(url).exists())
+        if (hasBackslash && !QFileInfo::exists(url))
             url.replace("\\", "/");
 #endif
         url.prepend("file://");
