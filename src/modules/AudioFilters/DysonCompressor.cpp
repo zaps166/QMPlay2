@@ -47,6 +47,8 @@
 
 #include <DysonCompressor.hpp>
 
+#include <QVarLengthArray>
+
 #include <cmath>
 
 #define MAXLEVEL 1.0 //default: 0.9
@@ -221,7 +223,7 @@ double DysonCompressor::filter(QByteArray &data, bool flush)
                     lastrgain = gain;
             }
 
-            float sampled[channels];
+            QVarLengthArray<float, 8> sampled(channels);
             for (int c = 0; c < channels; ++c)
                 sampled[c] = samplesdelayed.at(c).at(ndelayptr);
 
@@ -253,7 +255,7 @@ double DysonCompressor::filter(QByteArray &data, bool flush)
 
             float ngain = MAXLEVEL;
 
-            double newsample[channels];
+            QVarLengthArray<double, 8> newsample(channels);
             for (int c = 0; c < channels; ++c)
             {
                 newsample[c] = sampled[c] * npeakgain;
