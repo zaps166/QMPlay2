@@ -1818,10 +1818,6 @@
         <translation>Бажана якість</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (slow)</source>
-        <translation>Копіювати декодоване відео в пам&apos;ять процесора (повільно)</translation>
-    </message>
-    <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
         <translation>Декодувати без копіювання для чіпів Intel (експериментально)</translation>
     </message>

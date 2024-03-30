@@ -1825,10 +1825,6 @@
         <translation>Tercih edilen kalite</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (slow)</source>
-        <translation>Kodu çözülmüş videoyu CPU belleğine kopyala (yavaş)</translation>
-    </message>
-    <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
         <translatorcomment>Zero-copy için yerleşik bir çeviri henüz yok.</translatorcomment>
         <translation>Intel donanımında sıfır-kopya kod çözme (deneysel)</translation>

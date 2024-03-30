@@ -307,8 +307,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     decoderB->setCheckable(true);
     decoderB->setChecked(sets().getBool("DecoderEnabled"));
 
-    const auto copyVideoText = tr("Copy decoded video to CPU memory (slow)");
-
 #ifdef QMPlay2_VKVIDEO
     if (vkVideo)
     {

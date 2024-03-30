@@ -1818,10 +1818,6 @@
         <translation>偏好畫質</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (slow)</source>
-        <translation>複製已解碼視訊至 CPU 記憶體（緩慢）</translation>
-    </message>
-    <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
         <translation>在英特爾硬體上使用零複製解碼（實驗性）</translation>
     </message>

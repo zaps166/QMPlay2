@@ -1818,10 +1818,6 @@
         <translation>Uprednostňovaná kvalita</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (slow)</source>
-        <translation>Kopírovať dekódované video do pamäte CPU (pomalé)</translation>
-    </message>
-    <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
         <translation>Zero-copy dekódovanie na Intel hardvéri (experimentálne)</translation>
     </message>

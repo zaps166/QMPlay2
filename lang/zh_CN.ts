@@ -1818,10 +1818,6 @@
         <translation>首选质量</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (slow)</source>
-        <translation>复制解码视频到 CPU 存储（缓慢）</translation>
-    </message>
-    <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
         <translation>在英特尔硬件上使用零复制解码（实验）</translation>
     </message>

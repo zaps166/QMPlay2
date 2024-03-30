@@ -1595,10 +1595,6 @@
         <translation>Decodificador de software</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (slow)</source>
-        <translation>Copiar vídeo decodificado para a memória da CPU (lento)</translation>
-    </message>
-    <message>
         <source>Decoder</source>
         <translation>Decodificador</translation>
     </message>

@@ -1818,10 +1818,6 @@
         <translation>Preferowana jakość</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (slow)</source>
-        <translation>Kopiuj obraz do pamięci CPU (powolne)</translation>
-    </message>
-    <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
         <translation>Dekodowanie bez kopii dla układów Intel (eksperymentalne)</translation>
     </message>

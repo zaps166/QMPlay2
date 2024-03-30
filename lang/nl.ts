@@ -1590,10 +1590,6 @@
         <translation>Softwarematige decodering</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (slow)</source>
-        <translation>Gedecodeerde video&apos;s kopiëren naar cpu-geheugen (langzaam)</translation>
-    </message>
-    <message>
         <source>Decoder</source>
         <translation>Decodering</translation>
     </message>

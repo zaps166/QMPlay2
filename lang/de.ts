@@ -1817,10 +1817,6 @@
         <translation>Bevorzugte Qualität</translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (slow)</source>
-        <translation>Kopiere dekodiertes Video in den CPU-Speicher (langsam)</translation>
-    </message>
-    <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
         <translation>Zero-Copy-Decodierung auf Intel-Hardware (experimentell)</translation>
     </message>

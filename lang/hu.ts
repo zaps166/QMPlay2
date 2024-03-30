@@ -1818,10 +1818,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Copy decoded video to CPU memory (slow)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
