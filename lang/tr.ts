@@ -575,7 +575,7 @@
     </message>
     <message>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>bilinmeyen</translation>
     </message>
 </context>
 <context>
@@ -1029,7 +1029,7 @@
     </message>
     <message>
         <source>Subtitles and tags encoding</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt yazı ve etiket kodlama</translation>
     </message>
 </context>
 <context>
@@ -1847,7 +1847,7 @@
     </message>
     <message>
         <source>Only in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Yalnızca tam ekranda</translation>
     </message>
     <message>
         <source>FPS</source>
@@ -1855,23 +1855,23 @@
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Kare hızını iki katına çıkarmak için asgari video FPS</translation>
     </message>
     <message>
         <source>Maximum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Kare hızını iki katına çıkarmak için azami video FPS</translation>
     </message>
     <message>
         <source>Minimum:</source>
-        <translation type="unfinished"></translation>
+        <translation>Asgari:</translation>
     </message>
     <message>
         <source>Maximum:</source>
-        <translation type="unfinished"></translation>
+        <translation>Azami:</translation>
     </message>
     <message>
         <source>Allow HDR content for VP9 codec</source>
-        <translation type="unfinished"></translation>
+        <translation>VP9 kodlayıcı bileşeni için HDR içeriğe izin ver</translation>
     </message>
 </context>
 <context>
@@ -2387,15 +2387,15 @@
     </message>
     <message>
         <source>Network buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation>Ağ tampon uzunluğu</translation>
     </message>
     <message>
         <source>Live stream buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation>Canlı akış tampon uzunluğu</translation>
     </message>
     <message>
         <source>Remember playback position for each playlist entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Her oynatma listesi girdisi için oynatma konumunu hatırla</translation>
     </message>
 </context>
 <context>
@@ -2504,11 +2504,11 @@
     </message>
     <message>
         <source>&amp;Continue playback</source>
-        <translation type="unfinished"></translation>
+        <translation>Oynatmayı &amp;Sürdür</translation>
     </message>
     <message>
         <source>Continue playing from the last position</source>
-        <translation type="unfinished"></translation>
+        <translation>Son konumdan oynatmayı sürdür</translation>
     </message>
 </context>
 <context>
@@ -2806,11 +2806,11 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Type the station name and press Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>İstasyon adını yazıp Enter tuşuna basın</translation>
     </message>
     <message>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
-        <translation type="unfinished"></translation>
+        <translation>Açılır listeden &quot;%1&quot; seçin</translation>
     </message>
 </context>
 <context>
@@ -2833,7 +2833,7 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Clicks</source>
-        <translation type="unfinished"></translation>
+        <translation>Tıklamalar</translation>
     </message>
 </context>
 <context>
@@ -3211,15 +3211,15 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>HDR10 videolarını HDR kipinde görüntülemeyi dene (deneysel)</translation>
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation type="unfinished"></translation>
+        <translation>Düşük kaliteli görüntü ölçekleme (en yakın komşu)</translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Retro ölçekleme için kullanışlıdır. İşlemci ek yükünü azaltmak için yazılım Vulkan gerçeklemesi için de kullanılabilir.</translation>
     </message>
 </context>
 <context>
@@ -3480,7 +3480,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kare hızını iki katına çıkarır. FreeSync aralığına girmek için kullanışlıdır. Bu süzgeç donanım hızlandırmalı videolarla çalışır.</translation>
     </message>
 </context>
 <context>
@@ -3609,7 +3609,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Screenshot saved as: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ekran görüntüsü kaydedildi: %1</translation>
     </message>
 </context>
 <context>
