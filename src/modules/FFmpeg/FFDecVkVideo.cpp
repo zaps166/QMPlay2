@@ -210,7 +210,7 @@ bool FFDecVkVideo::open(StreamInfo &streamInfo)
             if (!(getVideoCodecOperations() & vk::VideoCodecOperationFlagBitsKHR::eDecodeH265))
                 return false;
             break;
-#if 0 // TODO: Enable when will be supported in FFmpeg and drivers
+#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(61, 2, 100)
         case AV_CODEC_ID_AV1:
             if (!m_physicalDevice->checkExtension(VK_KHR_VIDEO_DECODE_AV1_EXTENSION_NAME))
                 return false;
