@@ -344,7 +344,7 @@ bool AudioCDDemux::freedb_query(cddb_disc_t *&cddb_disc)
 #ifdef Q_OS_WIN
     bool hasHomeEnv = getenv("HOME");
     if (!hasHomeEnv)
-        putenv("HOME=" + QDir::homePath().toLocal8Bit());
+        putenv(QByteArray("HOME=" + QDir::homePath().toLocal8Bit()).constData());
 #endif
     cddb_conn_t *cddb = cddb_new();
 #ifdef Q_OS_WIN

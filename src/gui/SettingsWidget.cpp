@@ -309,7 +309,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         generalSettingsPage->setupUi(generalSettingsWidget);
 
         for (const auto &fmt : QImageWriter::supportedImageFormats())
-            generalSettingsPage->screenshotFormatB->addItem("." + fmt);
+            generalSettingsPage->screenshotFormatB->addItem(QString("." + fmt));
 
         appendColon(generalSettingsPage->langL);
         appendColon(generalSettingsPage->styleL);

@@ -119,7 +119,7 @@ void LastFM::login()
     static const QString getSessionURL = audioScrobbler2URL + QString("/?method=auth.getmobilesession&username=%1&authToken=%2&api_key=%3&api_sig=%4");
     if (!loginReply && !user.isEmpty() && md5pass.length() == 32)
     {
-        const QString auth_token = QCryptographicHash::hash(user.toUtf8() + md5pass.toUtf8(), QCryptographicHash::Md5).toHex();
+        const QString auth_token = QCryptographicHash::hash(QByteArray(user.toUtf8() + md5pass.toUtf8()), QCryptographicHash::Md5).toHex();
         const QString api_sig = QCryptographicHash::hash(QString("api_key%1authToken%2methodauth.getmobilesessionusername%3%4").arg(api_key, auth_token, user, secret).toUtf8(), QCryptographicHash::Md5).toHex();
         loginReply = net.start(getSessionURL.arg(user, auth_token, api_key, api_sig));
         connect(loginReply, SIGNAL(finished()), this, SLOT(loginFinished()));

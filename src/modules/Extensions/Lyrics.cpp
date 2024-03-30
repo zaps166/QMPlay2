@@ -222,7 +222,7 @@ void Lyrics::finished(NetworkReply *reply)
     else if (reply == m_tekstowoLyricsReply)
     {
         const auto getLyrics = [data](const QString &type)->QString {
-            int idx1 = data.indexOf("class=\"" + type.toLatin1() + "\"");
+            int idx1 = data.indexOf(QByteArray("class=\"" + type.toLatin1() + "\""));
             if (idx1 > -1)
             {
                 idx1 = data.indexOf("</h2>", idx1);

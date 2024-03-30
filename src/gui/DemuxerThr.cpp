@@ -53,7 +53,7 @@ static QString getWriterName(AVThread *avThr)
 
 static QString getCoverFile(const QString &title, const QString &artist, const QString &album)
 {
-    return QMPlay2Core.getSettingsDir() + "Covers/" + QCryptographicHash::hash((album.isEmpty() ? title.toUtf8() : album.toUtf8()) + artist.toUtf8(), QCryptographicHash::Md5).toHex();
+    return QMPlay2Core.getSettingsDir() + "Covers/" + QCryptographicHash::hash(QByteArray((album.isEmpty() ? title.toUtf8() : album.toUtf8()) + artist.toUtf8()), QCryptographicHash::Md5).toHex();
 }
 
 class BufferInfo

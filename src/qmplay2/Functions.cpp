@@ -839,7 +839,7 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool de
         av_dict_set(&options, "user_agent", userAgent, 0);
 
         if (!cookies.isEmpty())
-            av_dict_set(&options, "headers", "Cookie: " + cookies + "\r\n", 0);
+            av_dict_set(&options, "headers", QByteArray("Cookie: " + cookies + "\r\n").constData(), 0);
         if (!rawHeaders.isEmpty())
             av_dict_set(&options, "headers", rawHeaders, 0);
 

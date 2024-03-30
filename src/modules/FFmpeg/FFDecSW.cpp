@@ -607,7 +607,7 @@ void FFDecSW::setPixelFormat()
             }
         }
 
-        QMPlay2Core.logInfo("Converting to pixel format: " + desiredPixFmtName);
+        QMPlay2Core.logInfo(QString("Converting to pixel format: " + desiredPixFmtName));
         break;
     }
 }
