@@ -2386,7 +2386,7 @@
     </message>
     <message>
         <source>Remember playback position for each playlist entry</source>
-        <translation>Пам'ятати позицію відтворення для кожного запису зі списку</translation>
+        <translation>Пам&apos;ятати позицію відтворення для кожного запису зі списку</translation>
     </message>
 </context>
 <context>
