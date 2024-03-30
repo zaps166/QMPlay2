@@ -195,7 +195,7 @@ void ImagePool::put(const shared_ptr<Image> &image)
     vector<shared_ptr<Image>> imagesToClear; // Declare before "lock_guard"
     lock_guard<mutex> locker(m_mutex);
     imagesToClear = takeImagesToClear(config);
-    images.push_back(move(image));
+    images.push_back(image);
 }
 
 template<typename TFrame>
