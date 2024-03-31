@@ -111,22 +111,22 @@ private:
             m_error = NetworkReply::Error::UnsupportedScheme;
         else
         {
-            AVDictionary *options = nullptr;
-            const QByteArray url = Functions::prepareFFmpegUrl(m_url, options, true, m_rawHeaders.isEmpty(), m_rawHeaders.isEmpty(), false, m_customUserAgent).toUtf8();
-            av_dict_set(&options, "seekable", "0", 0);
-            if (!m_postData.isNull())
-            {
-                av_dict_set(&options, "method", "POST", 0);
-                if (!m_postData.isEmpty())
-                    av_dict_set(&options, "post_data", m_postData.toHex(), 0);
-            }
-            if (!m_rawHeaders.isEmpty())
-                av_dict_set(&options, "headers", m_rawHeaders, 0);
-
             AVIOInterruptCB interruptCB = {(int(*)(void*))::interruptCB, m_status};
 
             do
             {
+                AVDictionary *options = nullptr;
+                const QByteArray url = Functions::prepareFFmpegUrl(m_url, options, true, m_rawHeaders.isEmpty(), m_rawHeaders.isEmpty(), false, m_customUserAgent).toUtf8();
+                av_dict_set(&options, "seekable", "0", 0);
+                if (!m_postData.isNull())
+                {
+                    av_dict_set(&options, "method", "POST", 0);
+                    if (!m_postData.isEmpty())
+                        av_dict_set(&options, "post_data", m_postData.toHex(), 0);
+                }
+                if (!m_rawHeaders.isEmpty())
+                    av_dict_set(&options, "headers", m_rawHeaders, 0);
+
                 const int ret = avio_open2(&m_ctx, url, AVIO_FLAG_READ | AVIO_FLAG_DIRECT, &interruptCB, &options);
                 if (ret >= 0)
                 {
