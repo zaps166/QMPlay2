@@ -225,7 +225,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("WheelSeek", true);
     QMPSettings.init("LeftMouseTogglePlay", 0);
     QMPSettings.init("MiddleMouseToggleFullscreen", false);
-    QMPSettings.init("AccurateSeek", Qt::PartiallyChecked);
+    QMPSettings.init("AccurateSeek", Qt::Checked);
     QMPSettings.init("UnpauseWhenSeeking", false);
     QMPSettings.init("RestoreAVSState", false);
     QMPSettings.init("DisableSubtitlesAtStartup", false);
