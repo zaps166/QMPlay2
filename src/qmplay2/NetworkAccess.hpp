@@ -91,6 +91,9 @@ class QMPLAY2SHAREDLIB_EXPORT NetworkAccess : public QObject
     Q_OBJECT
 
 public:
+    static constexpr int s_defaultRetryInterval = 20;
+
+public:
     static const char *const UrlEncoded;
 
     NetworkAccess(QObject *parent = nullptr);
@@ -98,7 +101,7 @@ public:
 
     void setCustomUserAgent(const QString &customUserAgent);
     void setMaxDownloadSize(const int maxSize);
-    void setRetries(const int retries);
+    void setRetries(const int retries, const int retryInterval = s_defaultRetryInterval); // retryInterval is in 1/10 sec units
 
     int getRetries() const;
 

@@ -40,9 +40,9 @@ static int interruptCB(bool *m_status)
 
 /**/
 
-static bool doSleep(bool &aborted)
+static bool doSleep(bool &aborted, int retryInterval)
 {
-    for (int i = 0; i < 20 && !aborted; ++i)
+    for (int i = 0; i < retryInterval && !aborted; ++i)
         Functions::s_wait(0.1);
     return !aborted;
 }
@@ -54,6 +54,7 @@ struct NetworkAccessParams
     QByteArray customUserAgent;
     int maxSize = INT_MAX;
     int retries = 1;
+    int retryInterval = NetworkAccess::s_defaultRetryInterval;
 };
 
 /**/
@@ -69,6 +70,7 @@ public:
         m_customUserAgent(params.customUserAgent),
         m_maxSize(params.maxSize),
         m_retries(params.retries),
+        m_retryInterval(params.retryInterval),
         m_ctx(nullptr),
         m_error(NetworkReply::Error::Ok),
         m_aborted(false),
@@ -85,6 +87,7 @@ public:
 
     const int m_maxSize;
     int m_retries;
+    int m_retryInterval;
 
     AVIOContext *m_ctx;
     QByteArray m_cookies;
@@ -158,7 +161,7 @@ private:
                         continue; // Continue if connection error
                 }
                 break;
-            } while (--m_retries > 0 && doSleep(m_aborted));
+            } while (--m_retries > 0 && doSleep(m_aborted, m_retryInterval));
 
             if (m_error == NetworkReply::Error::Ok)
             {
@@ -338,10 +341,13 @@ void NetworkAccess::setMaxDownloadSize(const int maxSize)
 {
     m_params->maxSize = maxSize;
 }
-void NetworkAccess::setRetries(const int retries)
+void NetworkAccess::setRetries(const int retries, const int retryInterval)
 {
     if (retries > 0 && retries <= 10)
+    {
         m_params->retries = retries;
+        m_params->retryInterval = retryInterval;
+    }
 }
 
 int NetworkAccess::getRetries() const
