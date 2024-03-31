@@ -65,6 +65,8 @@ Radio::Radio(Module &module) :
 
     m_loadIconsTimer->setInterval(10);
 
+    m_net->setRetries(g_nRetries, g_retryInterval);
+
     ui->setupUi(this);
 
     ui->addMyRadioStationButton->setIcon(QMPlay2Core.getIconFromTheme("list-add"));

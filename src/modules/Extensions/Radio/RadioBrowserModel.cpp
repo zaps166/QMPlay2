@@ -52,6 +52,7 @@ RadioBrowserModel::RadioBrowserModel(QWidget *widget) :
     m_sortColumnIdx(0),
     m_sortOrder(Qt::AscendingOrder)
 {
+    m_net->setRetries(g_nRetries, g_retryInterval);
     connect(m_net, SIGNAL(finished(NetworkReply *)), this, SLOT(replyFinished(NetworkReply *)));
 }
 RadioBrowserModel::~RadioBrowserModel()
