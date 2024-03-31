@@ -490,8 +490,7 @@ void Radio::radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &p
     const QString uuid = m_radioBrowserModel->getUUID(index);
 
     // Increase clickcount
-    auto reply = m_net->start(QString("%1/url/%2").arg(g_radioBrowserBaseApiUrl, uuid));
-    connect(reply, &NetworkReply::finished, reply, &NetworkReply::deleteLater);
+    m_net->start(QString("%1/url/%2").arg(g_radioBrowserBaseApiUrl, uuid));
 
     QMPlay2Core.addNameForUrl(url, title);
     emit QMPlay2Core.processParam(param, url);
