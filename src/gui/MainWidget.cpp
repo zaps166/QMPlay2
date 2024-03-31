@@ -272,6 +272,8 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     mainTB->addAction(menuBar->player->next);
     mainTB->addAction(menuBar->window->toggleFullScreen);
 
+    mainTB->addAction(menuBar->player->continuePlayback);
+
     seekS = new Slider;
     seekS->setMaximum(0);
     seekS->setWheelStep(settings.getInt("ShortSeek"));
@@ -282,8 +284,6 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     vLine->setFrameShape(QFrame::VLine);
     vLine->setFrameShadow(QFrame::Sunken);
     mainTB->addWidget(vLine);
-
-    mainTB->addAction(menuBar->player->continuePlayback);
 
     mainTB->addAction(menuBar->player->toggleMute);
 
@@ -359,11 +359,11 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
         menuBar->playback->videoFilters->spherical->setChecked(spherical);
     });
     connect(&playC, &PlayClass::continuePos, this, [this](double pos, bool canSetVar) {
-        const bool visible = (pos > 0.0);
+        const bool enabled = (pos > 0.0);
         menuBar->player->continuePlayback->setProperty("Pos", pos);
-        menuBar->player->continuePlayback->setVisible(visible);
+        menuBar->player->continuePlayback->setEnabled(enabled);
         if (canSetVar)
-            playC.setDontResetContinuePlayback(visible);
+            playC.setDontResetContinuePlayback(enabled);
     });
     /**/
 
@@ -1005,6 +1005,8 @@ void MainWidget::createMenuBar()
     else
         menuBar->options->trayVisible->setVisible(false);
 
+    setContinuePlaybackVisibility();
+
     setMenuBar(menuBar);
 
 #ifndef Q_OS_MACOS
@@ -1384,6 +1386,12 @@ void MainWidget::showSettings(const QString &moduleName)
         if (windowFlags() & Qt::WindowStaysOnTopHint)
             settingsW->setWindowFlag(Qt::WindowStaysOnTopHint);
         settingsW->show();
+        connect(settingsW, &SettingsWidget::settingsChanged, this, [this](int page, bool forceRestart, bool initFilters) {
+            Q_UNUSED(forceRestart);
+            Q_UNUSED(initFilters);
+            if (page == 2)
+                setContinuePlaybackVisibility();
+        });
         connect(settingsW, SIGNAL(settingsChanged(int, bool, bool)), &playC, SLOT(settingsChanged(int, bool, bool)));
         connect(settingsW, SIGNAL(setWheelStep(int)), seekS, SLOT(setWheelStep(int)));
         connect(settingsW, SIGNAL(setVolMax(int)), volW, SLOT(setMaximumVolume(int)));
@@ -1747,6 +1755,11 @@ void MainWidget::addChooseNextStreamKeyShortcuts()
     });
     addAction(nextSubsStream);
     QMPlay2GUI.shortcutHandler->appendAction(nextSubsStream, "KeyBindings/NextSubsStream", "Ctrl+2");
+}
+
+void MainWidget::setContinuePlaybackVisibility()
+{
+    menuBar->player->continuePlayback->setVisible(QMPlay2Core.getSettings().getBool("StoreUrlPos"));
 }
 
 #if defined(Q_OS_WIN)

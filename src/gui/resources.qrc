@@ -8,6 +8,8 @@
         <file alias="media-skip-forward.svgz">Icons/media-skip-forward.svgz</file>
         <file alias="media-playback-pause.svgz">Icons/media-playback-pause.svgz</file>
 
+        <file alias="go-next.svgz">Icons/go-next.svgz</file>
+
         <file alias="folder-orange.svgz">Icons/folder-orange.svgz</file>
         <file alias="folder.svgz">Icons/folder.svgz</file>
         <file alias="folder-new.svgz">Icons/folder-new.svgz</file>

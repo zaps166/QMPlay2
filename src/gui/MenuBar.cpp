@@ -253,7 +253,7 @@ MenuBar::Player::Player(MenuBar *parent) :
     newAction(Player::tr("Reset image &settings"), this, reset, false, QIcon(), false);
 
     addSeparator();
-    newAction(Player::tr("&Continue playback"), this, continuePlayback, false, QIcon(), false);
+    newAction(Player::tr("&Continue playback"), this, continuePlayback, false, QMPlay2Core.getIconFromTheme("go-next"), false);
 
     addSeparator();
     newAction(Player::tr("Volume &up"), this, volUp, true, QIcon(), false);
@@ -261,7 +261,7 @@ MenuBar::Player::Player(MenuBar *parent) :
     newAction(Player::tr("&Mute"), this, toggleMute, false, QMPlay2Core.getIconFromTheme("audio-volume-high"), true);
 
     continuePlayback->setToolTip(tr("Continue playing from the last position"));
-    continuePlayback->setVisible(false);
+    continuePlayback->setEnabled(false);
 
     if (!QMPlay2GUI.pipe)
         detach = nullptr;

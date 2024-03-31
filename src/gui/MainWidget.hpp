@@ -144,6 +144,8 @@ private:
     void setTitleBarStyle();
 #endif
 
+    void setContinuePlaybackVisibility();
+
     void keyPressEvent(QKeyEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
     void leaveEvent(QEvent *) override;
