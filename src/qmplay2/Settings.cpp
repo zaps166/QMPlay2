@@ -44,14 +44,18 @@ void Settings::init(const QString &key, const QVariant &val)
     if (foundInToRemove)
         toRemove.erase(it);
 }
-bool Settings::contains(const QString &key) const
+bool Settings::contains(const QString &key, bool checkGroups) const
 {
     QMutexLocker mL(&mutex);
     if (cache.contains(key))
         return true;
     if (toRemove.contains(key))
         return false;
-    return QSettings::contains(key);
+    if (QSettings::contains(key))
+        return true;
+    if (checkGroups)
+        return QSettings::childGroups().contains(key);
+    return false;
 }
 void Settings::set(const QString &key, const QVariant &val)
 {

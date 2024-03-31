@@ -1312,10 +1312,9 @@ void DemuxerThr::stopVADec()
     playC.stopVDec();
     playC.stopADec();
 
-    const QString key = "UrlPos/" + playC.getUrl();
-    auto &settings = QMPlay2Core.getSettings();
+    const QString key = playC.getUrl().toUtf8().toBase64(QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals);
     const double pos = playC.getPos();
-    bool store = !err && !unknownLength && demuxer && settings.getBool("StoreUrlPos");
+    bool store = !err && !unknownLength && demuxer && QMPlay2Core.getSettings().getBool("StoreUrlPos");
     if (store)
     {
         const double length = demuxer->length();
@@ -1323,16 +1322,16 @@ void DemuxerThr::stopVADec()
         if (length < 480.0 || percent < 1.0 || percent > 99.0)
         {
             if (!playC.dontResetContinuePlayback)
-                settings.remove(key);
+                QMPlay2Core.getUrlPosSets().remove(key);
         }
         else
         {
-            settings.set(key, pos);
+            QMPlay2Core.getUrlPosSets().set(key, pos);
         }
     }
     else
     {
-        settings.remove(key);
+        QMPlay2Core.getUrlPosSets().remove(key);
     }
 
     stopVAMutex.unlock();

@@ -871,6 +871,8 @@ int main(int argc, char *argv[])
             settings.set("VolumeR", vol);
             settings.remove("Volume");
         }
+        if (settings.contains("UrlPos", true))
+            settings.remove("UrlPos");
 
         qmplay2Gui.loadIcons();
         {

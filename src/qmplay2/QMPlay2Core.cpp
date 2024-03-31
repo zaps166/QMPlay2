@@ -301,6 +301,7 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
     }
 
     settings = new Settings("QMPlay2");
+    m_urlPosSets = new Settings("UrlPos");
 
     translator = new QTranslator;
     qtTranslator = new QTranslator;
@@ -432,6 +433,7 @@ void QMPlay2CoreClass::quit()
     delete qtTranslator;
     delete translator;
     delete settings;
+    delete m_urlPosSets;
     if (m_gpuInstance)
     {
         m_gpuInstance->prepareDestroy();

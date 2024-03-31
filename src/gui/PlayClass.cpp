@@ -170,7 +170,7 @@ void PlayClass::play(const QString &_url)
             demuxThr->start();
 
             if (QMPlay2Core.getSettings().getBool("StoreUrlPos"))
-                emit continuePos(QMPlay2Core.getSettings().getDouble("UrlPos/" + url), true);
+                emit continuePos(QMPlay2Core.getUrlPosSets().getDouble(url.toUtf8().toBase64(QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals)), true);
         }
     }
     else

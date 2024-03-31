@@ -36,7 +36,7 @@ public:
 
     void init(const QString &key, const QVariant &val);
     void set(const QString &key, const QVariant &val);
-    bool contains(const QString &key) const;
+    bool contains(const QString &key, bool checkGroups = false) const;
     void remove(const QString &key);
 
     template<typename T>

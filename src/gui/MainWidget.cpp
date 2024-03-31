@@ -470,7 +470,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
         {
             playC.setDoSilenceOnStart();
             playlistDock->start();
-            if (!settings.getBool("StoreUrlPos") || QMPlay2Core.getSettings().getDouble("UrlPos/" + url) <= 0.0)
+            if (!settings.getBool("StoreUrlPos") || QMPlay2Core.getUrlPosSets().getDouble(url.toUtf8().toBase64(QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals)) <= 0.0)
             {
                 const double pos = settings.getDouble("Pos", 0.0);
                 if (pos > 0.0)

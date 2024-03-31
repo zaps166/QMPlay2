@@ -113,6 +113,10 @@ public:
     {
         return *settings;
     }
+    inline Settings &getUrlPosSets() const
+    {
+        return *m_urlPosSets;
+    }
 
     qreal getVideoDevicePixelRatio() const;
 
@@ -242,6 +246,7 @@ protected:
 
     QIcon *qmplay2Icon;
     Settings *settings;
+    Settings *m_urlPosSets = nullptr;
 
 private:
     static QMPlay2CoreClass *qmplay2Core;
