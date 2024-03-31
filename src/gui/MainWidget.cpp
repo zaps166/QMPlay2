@@ -358,9 +358,12 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
         menuBar->playback->videoFilters->vFlip->setChecked(vFlip);
         menuBar->playback->videoFilters->spherical->setChecked(spherical);
     });
-    connect(&playC, &PlayClass::continuePos, this, [this](double pos) {
+    connect(&playC, &PlayClass::continuePos, this, [this](double pos, bool canSetVar) {
+        const bool visible = (pos > 0.0);
         menuBar->player->continuePlayback->setProperty("Pos", pos);
-        menuBar->player->continuePlayback->setVisible(pos > 0.0);
+        menuBar->player->continuePlayback->setVisible(visible);
+        if (canSetVar)
+            playC.setDontResetContinuePlayback(visible);
     });
     /**/
 
@@ -945,7 +948,7 @@ void MainWidget::createMenuBar()
         if (pos > 0.0)
             playC.seek(pos);
         else
-            emit playC.continuePos(0.0);
+            emit playC.continuePos(0.0, true);
     });
     connect(menuBar->player->volUp, SIGNAL(triggered()), this, SLOT(volUpDown()));
     connect(menuBar->player->volDown, SIGNAL(triggered()), this, SLOT(volUpDown()));

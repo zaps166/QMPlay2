@@ -1321,12 +1321,19 @@ void DemuxerThr::stopVADec()
         const double length = demuxer->length();
         const double percent = pos * 100.0 / length;
         if (length < 480.0 || percent < 1.0 || percent > 99.0)
-            store = false;
+        {
+            if (!playC.dontResetContinuePlayback)
+                settings.remove(key);
+        }
+        else
+        {
+            settings.set(key, pos);
+        }
     }
-    if (store)
-        settings.set(key, pos);
     else
+    {
         settings.remove(key);
+    }
 
     stopVAMutex.unlock();
 

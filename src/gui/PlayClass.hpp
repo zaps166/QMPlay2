@@ -96,6 +96,11 @@ public:
 
     void setKeepAudioPitch(bool keep);
 
+    inline void setDontResetContinuePlayback(bool val)
+    {
+        dontResetContinuePlayback = val;
+    }
+
 private:
     inline bool hasVideoStream();
     inline bool hasAudioStream();
@@ -139,7 +144,7 @@ private:
     PacketBuffer aPackets, vPackets, sPackets;
 
     double frame_last_pts, frame_last_delay, audio_current_pts, audio_last_delay;
-    bool doSilenceOnStart, canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError, videoDecErrorLoad, pauseAfterFirstFrame = false, keepAudioPitch = false;
+    bool doSilenceOnStart, canUpdatePos, paused, waitForData, flushVideo, flushAudio, muted, reload, nextFrameB, endOfStream, ignorePlaybackError, videoDecErrorLoad, pauseAfterFirstFrame = false, keepAudioPitch = false, dontResetContinuePlayback = false;
     double seekTo, lastSeekTo, restartSeekTo, seekA, seekB, videoSeekPos, audioSeekPos;
     double vol[2], replayGain, zoom, pos, skipAudioFrame, videoSync, speed, subtitlesSync, subtitlesScale;
     int flip;
@@ -242,5 +247,5 @@ signals:
     void videoNotStarted();
     void uncheckSuspend();
     void setVideoCheckState(bool rotate90, bool hFlip, bool vFlip, bool spherical);
-    void continuePos(double pos);
+    void continuePos(double pos, bool canSetVar);
 };
