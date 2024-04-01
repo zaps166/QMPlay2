@@ -435,11 +435,6 @@ bool Instance::isPhysicalDeviceGpu() const
     return false;
 }
 
-AVPixelFormats Instance::supportedPixelFormats() const
-{
-    return m_supportedPixelFormats;
-}
-
 shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &physicalDevice)
 {
     auto physicalDeviceExtensions = requiredPhysicalDeviceExtenstions();

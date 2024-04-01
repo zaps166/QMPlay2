@@ -79,7 +79,7 @@ public:
 
     bool isPhysicalDeviceGpu() const;
 
-    AVPixelFormats supportedPixelFormats() const;
+    inline AVPixelFormats supportedPixelFormats() const;
 
     shared_ptr<Device> createDevice(const shared_ptr<PhysicalDevice> &physicalDevice);
     shared_ptr<Device> createOrGetDevice(const shared_ptr<PhysicalDevice> &physicalDevice);
@@ -140,6 +140,10 @@ shared_ptr<PhysicalDevice> Instance::physicalDevice() const
     return m_physicalDevice;
 }
 
+AVPixelFormats Instance::supportedPixelFormats() const
+{
+    return m_supportedPixelFormats;
+}
 const vk::PhysicalDeviceFeatures2 &Instance::enabledDeviceFeatures() const
 {
     return m_enabledDeviceFeatures;
