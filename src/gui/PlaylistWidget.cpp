@@ -1109,7 +1109,7 @@ void PlaylistWidget::mouseMoveEvent(QMouseEvent *e)
                 pix = Functions::getPixmapFromIcon(*QMPlay2GUI.mediaIcon, iconSize(), this);
             drag->setPixmap(pix);
 
-            drag->exec(Qt::CopyAction | Qt::MoveAction | Qt::LinkAction, Qt::CopyAction);
+            drag->exec(Qt::CopyAction | Qt::LinkAction, Qt::CopyAction);
         }
     }
     else if (canModify(false) && !hasHiddenItems)
