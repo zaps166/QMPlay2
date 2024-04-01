@@ -62,11 +62,11 @@ static inline void check(const quint8 *const curr,
         }
     }
 }
-template<bool isNotEdge>
+template<bool isNotEdge, bool spatialCheck>
 static inline void filterLine(quint8 *dest, const void *const destEnd,
                               const quint8 *__restrict__ prev, const quint8 *__restrict__ curr, const quint8 *__restrict__ next,
                               const qptrdiff prefs, const qptrdiff mrefs,
-                              const int spatialCheck, const bool filterParity)
+                              const bool filterParity)
 {
     const quint8 *prev2 = filterParity ? prev : curr;
     const quint8 *next2 = filterParity ? curr : next;
@@ -144,44 +144,78 @@ static void filterSlice(const int plane, const int parity, const int tff, const 
             const int prefs = (y + 1) < h ? refs : -refs;
             const int mrefs = y ? -refs : refs;
 
-            const int doSpatialCheck = (y == 1 || y + 2 == h) ? false : spatialCheck;
-
-            filterLine<false>
-            (
-                dest,
-                dest + 3,
-                prev,
-                curr,
-                next,
-                prefs,
-                mrefs,
-                doSpatialCheck,
-                filterParity
-            );
-            filterLine<true>
-            (
-                dest  + 3,
-                dest  + w - 3,
-                prev  + 3,
-                curr  + 3,
-                next  + 3,
-                prefs,
-                mrefs,
-                doSpatialCheck,
-                filterParity
-            );
-            filterLine<false>
-            (
-                dest  + w - 3,
-                dest  + w,
-                prev  + w - 3,
-                curr  + w - 3,
-                next  + w - 3,
-                prefs,
-                mrefs,
-                doSpatialCheck,
-                filterParity
-            );
+            if (spatialCheck && y != 1 && y + 2 != h)
+            {
+                filterLine<false, true>
+                (
+                    dest,
+                    dest + 3,
+                    prev,
+                    curr,
+                    next,
+                    prefs,
+                    mrefs,
+                    filterParity
+                );
+                filterLine<true, true>
+                (
+                    dest  + 3,
+                    dest  + w - 3,
+                    prev  + 3,
+                    curr  + 3,
+                    next  + 3,
+                    prefs,
+                    mrefs,
+                    filterParity
+                );
+                filterLine<false, true>
+                (
+                    dest  + w - 3,
+                    dest  + w,
+                    prev  + w - 3,
+                    curr  + w - 3,
+                    next  + w - 3,
+                    prefs,
+                    mrefs,
+                    filterParity
+                );
+            }
+            else
+            {
+                filterLine<false, false>
+                (
+                    dest,
+                    dest + 3,
+                    prev,
+                    curr,
+                    next,
+                    prefs,
+                    mrefs,
+                    filterParity
+                );
+                filterLine<true, false>
+                (
+                    dest  + 3,
+                    dest  + w - 3,
+                    prev  + 3,
+                    curr  + 3,
+                    next  + 3,
+                    prefs,
+                    mrefs,
+                    filterParity
+                );
+                filterLine<false, false>
+                (
+                    dest  + w - 3,
+                    dest  + w,
+                    prev  + w - 3,
+                    curr  + w - 3,
+                    next  + w - 3,
+                    prefs,
+                    mrefs,
+                    filterParity
+                );
+            }
         }
         else
         {
