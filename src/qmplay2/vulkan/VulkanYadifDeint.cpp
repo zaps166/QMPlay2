@@ -60,7 +60,7 @@ YadifDeint::YadifDeint(const shared_ptr<HWInterop> &hwInterop)
             AV_PIX_FMT_NV24,
 #endif
     };
-    if (m_instance->supportedPixelFormats().contains(AV_PIX_FMT_YUV420P10))
+    if (m_instance->hasStorage16bit() && m_instance->supportedPixelFormats().contains(AV_PIX_FMT_YUV420P10))
     {
         m_supportedPixelFormats += {
             AV_PIX_FMT_YUV420P9,

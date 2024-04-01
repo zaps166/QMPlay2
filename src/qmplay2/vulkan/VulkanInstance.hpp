@@ -47,6 +47,8 @@ public: // Helpers
 
     static QByteArray getPhysicalDeviceID(const vk::PhysicalDeviceProperties &properties);
 
+    static bool hasStorageImage(const shared_ptr<PhysicalDevice> &physicalDevice, vk::Format fmt);
+
     static bool checkFiltersSupported(const shared_ptr<PhysicalDevice> &physicalDevice);
 
 public:
@@ -80,6 +82,7 @@ public:
     bool isPhysicalDeviceGpu() const;
 
     inline AVPixelFormats supportedPixelFormats() const;
+    bool hasStorage16bit() const;
 
     shared_ptr<Device> createDevice(const shared_ptr<PhysicalDevice> &physicalDevice);
     shared_ptr<Device> createOrGetDevice(const shared_ptr<PhysicalDevice> &physicalDevice);
@@ -144,6 +147,7 @@ AVPixelFormats Instance::supportedPixelFormats() const
 {
     return m_supportedPixelFormats;
 }
+
 const vk::PhysicalDeviceFeatures2 &Instance::enabledDeviceFeatures() const
 {
     return m_enabledDeviceFeatures;

@@ -247,6 +247,16 @@ QByteArray Instance::getPhysicalDeviceID(const vk::PhysicalDeviceProperties &pro
     return QString("%1:%2").arg(properties.vendorID).arg(properties.deviceID).toLatin1().toBase64();
 }
 
+bool Instance::hasStorageImage(const shared_ptr<PhysicalDevice> &physicalDevice, vk::Format fmt)
+{
+    return Image::checkImageFormat(
+        physicalDevice,
+        fmt,
+        false,
+        vk::FormatFeatureFlagBits::eStorageImage
+    );
+}
+
 bool Instance::checkFiltersSupported(const shared_ptr<PhysicalDevice> &physicalDevice)
 {
     if (!physicalDevice)
@@ -255,7 +265,7 @@ bool Instance::checkFiltersSupported(const shared_ptr<PhysicalDevice> &physicalD
     if (!physicalDevice->isGpu() || !physicalDevice->getFeatures().shaderStorageImageWriteWithoutFormat)
         return false;
 
-    return true;
+    return hasStorageImage(physicalDevice, vk::Format::eR8Unorm) && hasStorageImage(physicalDevice, vk::Format::eR8G8Unorm);
 }
 
 shared_ptr<Instance> Instance::create(bool doObtainPhysicalDevice)
@@ -435,6 +445,11 @@ bool Instance::isPhysicalDeviceGpu() const
     return false;
 }
 
+bool Instance::hasStorage16bit() const
+{
+    return hasStorageImage(m_physicalDevice, vk::Format::eR16Unorm) && hasStorageImage(m_physicalDevice, vk::Format::eR16G16Unorm);
+}
+
 shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &physicalDevice)
 {
     auto physicalDeviceExtensions = requiredPhysicalDeviceExtenstions();
@@ -602,7 +617,7 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
         const auto &fmtProps = physicalDevice->getFormatPropertiesCached(format);
         if (img)
         {
-            constexpr auto flags = vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage | vk::FormatFeatureFlagBits::eSampledImageFilterLinear;
+            constexpr auto flags = vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eSampledImageFilterLinear;
             if ((fmtProps.optimalTilingFeatures & flags) != flags)
                 errors.push_back(QString::fromStdString("Missing optimal tiling sampled or storage image for format: " + vk::to_string(format)));
         }
@@ -738,7 +753,7 @@ void Instance::fillSupportedFormats()
             m_physicalDevice,
             format,
             false,
-            vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eStorageImage | vk::FormatFeatureFlagBits::eSampledImageFilterLinear
+            vk::FormatFeatureFlagBits::eSampledImage | vk::FormatFeatureFlagBits::eSampledImageFilterLinear
         );
     };
 
