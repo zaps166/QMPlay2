@@ -1,3 +1,15 @@
+Changes in QMPlay2 24.04.02:
+    - improve restoring playback position feature and make it enabled by default,
+    - remove possibility to move files from playlist using middle mouse button,
+    - minor RadioBrowser improvement for some server errors,
+    - fix executing FFmpeg process in downloader on Qt6,
+    - fix opening multiple files in QMPlay2 on Windows,
+    - set accurate seeking enabled but default,
+    - minor Vulkan fixes for old hardware,
+    - set Ctrl+Q as default close key,
+    - full Qt6 support on Windows,
+    - other minor fixes,
+
 Changes in QMPlay2 24.03.16:
     - set dark title bar on Windows if QMPlay2 theme is dark,
     - support reading lyrics meta-data from ID3v2 tags,
