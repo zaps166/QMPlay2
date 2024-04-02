@@ -309,125 +309,123 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
 {
     if (reply->hasError())
     {
-        emit connectionError();
-    }
-    else
-    {
         if (reply == m_replySearch)
+            emit connectionError();
+    }
+    else if (reply == m_replySearch)
+    {
+        const QJsonDocument json = QJsonDocument::fromJson(reply->readAll());
+        if (json.isArray())
         {
-            const QJsonDocument json = QJsonDocument::fromJson(reply->readAll());
-            if (json.isArray())
+            const QJsonArray arrayItems = json.array();
+            beginInsertRows(QModelIndex(), m_rows.size(), m_rows.size() + arrayItems.size() - 1);
+            m_rowsToDisplay.clear();
+
+            const QPixmap radioIcon = QIcon(":/radio.svgz").pixmap(elementHeight(), elementHeight());
+
+            for (const QJsonValue item : arrayItems)
             {
-                const QJsonArray arrayItems = json.array();
-                beginInsertRows(QModelIndex(), m_rows.size(), m_rows.size() + arrayItems.size() - 1);
-                m_rowsToDisplay.clear();
+                if (!item.isObject())
+                    continue;
 
-                const QPixmap radioIcon = QIcon(":/radio.svgz").pixmap(elementHeight(), elementHeight());
-
-                for (const QJsonValue item : arrayItems)
+                QString streamInfo = item["codec"].toString();
+                if (!streamInfo.isEmpty())
                 {
-                    if (!item.isObject())
-                        continue;
-
-                    QString streamInfo = item["codec"].toString();
-                    if (!streamInfo.isEmpty())
+                    if (streamInfo.compare("unknown", Qt::CaseInsensitive) == 0)
                     {
-                        if (streamInfo.compare("unknown", Qt::CaseInsensitive) == 0)
-                        {
-                            if (item["hls"].toString() != "0")
-                                streamInfo = "HLS";
-                            else
-                                streamInfo.clear();
-                        }
+                        if (item["hls"].toString() != "0")
+                            streamInfo = "HLS";
                         else
-                        {
-                            const int bitrate = item["bitrate"].toInt();
-                            if (bitrate > 0)
-                                streamInfo += QString("\n%1 kbps").arg(bitrate);
-                        }
-                    }
-
-                    QString country = item["country"].toString();
-                    if (!country.isEmpty())
-                    {
-                        const QString state = item["state"].toString();
-                        if (!state.isEmpty() && country.compare(state, Qt::CaseInsensitive) != 0)
-                            country += "\n" + state;
-                    }
-
-                    const QStringList tagsList = item["tags"].toString().split(',');
-                    QString tags;
-                    for (const QString &tagArr : tagsList)
-                    {
-                        QString tag = tagArr;
-                        if (!tag.isEmpty())
-                        {
-                            tag[0] = tag.at(0).toUpper();
-                            if (!tags.isEmpty())
-                                tags += ", ";
-                            tags += tag;
-                        }
-                    }
-
-                    const qint32 clickcount = item["clickcount"].toDouble();
-
-                    m_rows.append(std::shared_ptr<Column>(new Column {
-                        item["url"].toString(),
-                        item["homepage"].toString(),
-                        item["stationuuid"].toString(),
-
-                        item["favicon"].toString(),
-                        nullptr,
-                        radioIcon,
-                        false,
-
-                        item["name"].toString(),
-                        streamInfo,
-                        country,
-                        tags,
-                        clickcount
-                    }));
-                }
-                m_rowsToDisplay = m_rows;
-                sort(m_sortColumnIdx, m_sortOrder);
-                endInsertRows();
-                emit radiosAdded();
-            }
-        }
-        else
-        {
-            QPixmap *icon = nullptr;
-            for (int r = 0; r < m_rows.size(); ++r)
-            {
-                Column *column = m_rows.at(r).get();
-                if (column->iconReply == reply)
-                {
-                    if (!icon)
-                    {
-                        const QImage image = QImage::fromData(reply->readAll());
-                        if (!image.isNull())
-                        {
-                            const int s = elementHeight();
-                            const qreal dpr = m_widget->devicePixelRatioF();
-
-                            column->icon = QPixmap(s * dpr, s * dpr);
-                            column->icon.setDevicePixelRatio(dpr);
-                            column->icon.fill(Qt::transparent);
-
-                            column->hasIcon = true;
-
-                            QPainter painter(&column->icon);
-                            Functions::drawPixmap(painter, QPixmap::fromImage(image), m_widget, Qt::SmoothTransformation, Qt::KeepAspectRatio, {s, s});
-
-                            icon = &column->icon;
-                        }
+                            streamInfo.clear();
                     }
                     else
                     {
-                        column->icon = *icon;
+                        const int bitrate = item["bitrate"].toInt();
+                        if (bitrate > 0)
+                            streamInfo += QString("\n%1 kbps").arg(bitrate);
                     }
-                    emit dataChanged(QModelIndex(), QModelIndex());
                 }
+
+                QString country = item["country"].toString();
+                if (!country.isEmpty())
+                {
+                    const QString state = item["state"].toString();
+                    if (!state.isEmpty() && country.compare(state, Qt::CaseInsensitive) != 0)
+                        country += "\n" + state;
+                }
+
+                const QStringList tagsList = item["tags"].toString().split(',');
+                QString tags;
+                for (const QString &tagArr : tagsList)
+                {
+                    QString tag = tagArr;
+                    if (!tag.isEmpty())
+                    {
+                        tag[0] = tag.at(0).toUpper();
+                        if (!tags.isEmpty())
+                            tags += ", ";
+                        tags += tag;
+                    }
+                }
+
+                const qint32 clickcount = item["clickcount"].toDouble();
+
+                m_rows.append(std::shared_ptr<Column>(new Column {
+                    item["url"].toString(),
+                    item["homepage"].toString(),
+                    item["stationuuid"].toString(),
+
+                    item["favicon"].toString(),
+                    nullptr,
+                    radioIcon,
+                    false,
+
+                    item["name"].toString(),
+                    streamInfo,
+                    country,
+                    tags,
+                    clickcount
+                }));
+            }
+            m_rowsToDisplay = m_rows;
+            sort(m_sortColumnIdx, m_sortOrder);
+            endInsertRows();
+            emit radiosAdded();
+        }
+    }
+    else
+    {
+        QPixmap *icon = nullptr;
+        for (int r = 0; r < m_rows.size(); ++r)
+        {
+            Column *column = m_rows.at(r).get();
+            if (column->iconReply == reply)
+            {
+                if (!icon)
+                {
+                    const QImage image = QImage::fromData(reply->readAll());
+                    if (!image.isNull())
+                    {
+                        const int s = elementHeight();
+                        const qreal dpr = m_widget->devicePixelRatioF();
+
+                        column->icon = QPixmap(s * dpr, s * dpr);
+                        column->icon.setDevicePixelRatio(dpr);
+                        column->icon.fill(Qt::transparent);
+
+                        column->hasIcon = true;
+
+                        QPainter painter(&column->icon);
+                        Functions::drawPixmap(painter, QPixmap::fromImage(image), m_widget, Qt::SmoothTransformation, Qt::KeepAspectRatio, {s, s});
+
+                        icon = &column->icon;
+                    }
+                }
+                else
+                {
+                    column->icon = *icon;
+                }
+                emit dataChanged(QModelIndex(), QModelIndex());
             }
         }
     }
