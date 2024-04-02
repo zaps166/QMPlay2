@@ -2800,6 +2800,10 @@ QMPlay2 не масштабуватиме іконки!</translation>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
         <translation>Виберіть &quot;%1&quot; зі спадного списку</translation>
     </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Помилка підключення</translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

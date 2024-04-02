@@ -2800,6 +2800,10 @@ QMPlay2 nie będzie skalować ikon!</translation>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
         <translation>Wybierz &quot;%1&quot; z listy rozwijanej</translation>
     </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Błąd połączenia</translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

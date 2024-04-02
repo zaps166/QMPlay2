@@ -307,7 +307,11 @@ void RadioBrowserModel::setFiltrText(const QString &text)
 
 void RadioBrowserModel::replyFinished(NetworkReply *reply)
 {
-    if (!reply->hasError())
+    if (reply->hasError())
+    {
+        emit connectionError();
+    }
+    else
     {
         if (reply == m_replySearch)
         {

@@ -99,6 +99,7 @@ Radio::Radio(Module &module) :
     connect(m_dw, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
     connect(m_radioBrowserModel, SIGNAL(radiosAdded()), m_loadIconsTimer, SLOT(start()));
     connect(m_radioBrowserModel, SIGNAL(searchFinished()), this, SLOT(searchFinished()));
+    connect(m_radioBrowserModel, &RadioBrowserModel::connectionError, this, &Radio::connectionError);
     connect(ui->radioView->verticalScrollBar(), SIGNAL(valueChanged(int)), m_loadIconsTimer, SLOT(start()));
     connect(m_loadIconsTimer, SIGNAL(timeout()), this, SLOT(loadIcons()));
     connect(ui->filterEdit, SIGNAL(textEdited(QString)), m_radioBrowserModel, SLOT(setFiltrText(QString)));
@@ -250,10 +251,18 @@ void Radio::loadIcons()
 
 void Radio::replyFinished(NetworkReply *reply)
 {
-    if (!reply->hasError())
+    const int idx = m_searchInfo.key({{}, reply}, -1);
+    if (idx > -1)
     {
-        const int idx = m_searchInfo.key({{}, reply}, -1);
-        if (idx > -1)
+        if (reply->hasError())
+        {
+            if (!m_errorDisplayed)
+            {
+                connectionError();
+                m_errorDisplayed = true;
+            }
+        }
+        else
         {
             const QJsonDocument json = QJsonDocument::fromJson(reply->readAll());
             if (json.isArray())
@@ -628,6 +637,11 @@ void Radio::play(const QString &url, const QString &name)
 {
     QMPlay2Core.addNameForUrl(url, name);
     emit QMPlay2Core.processParam("open", url);
+}
+
+void Radio::connectionError()
+{
+    emit QMPlay2Core.sendMessage(tr("Connection error"), RadioName, 3);
 }
 
 bool Radio::eventFilter(QObject *watched, QEvent *event)

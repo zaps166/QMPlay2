@@ -2802,6 +2802,10 @@ QMPlay2はアイコンを拡大しません！</translation>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">接続エラー</translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

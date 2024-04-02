@@ -2800,6 +2800,10 @@ QMPlay2 将不会放大图标！</translation>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
         <translation>从下拉列表选择一个 &quot;%1&quot;</translation>
     </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">连接错误</translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

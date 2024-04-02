@@ -2811,6 +2811,10 @@ QMPlay2 will not scale up icons!</source>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Erro de conexão</translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

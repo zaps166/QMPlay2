@@ -2800,6 +2800,10 @@ Pictogrammen worden niet vergroot.</translation>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
         <translation>Kies een ‘%1’ uit de keuzelijst</translation>
     </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Verbindingsfout</translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

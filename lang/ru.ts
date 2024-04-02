@@ -2800,6 +2800,10 @@ QMPlay2 не будет отображать значки!</translation>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Connection error</source>
+        <translation type="unfinished">Ошибка соединения</translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

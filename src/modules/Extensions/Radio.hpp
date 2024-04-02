@@ -93,6 +93,8 @@ private:
 
     void play(const QString &url, const QString &name);
 
+    void connectionError();
+
 private:
     bool eventFilter(QObject *watched, QEvent *event) override;
 
@@ -106,6 +108,7 @@ private:
     bool m_loadCurrentCountry = false;
     bool m_storeMyRadios = false;
     bool m_recreateTrayMenu = true;
+    bool m_errorDisplayed = false;
     DockWidget *m_dw;
     QMenu *m_menu = nullptr;
 

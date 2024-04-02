@@ -72,6 +72,7 @@ private slots:
 signals:
     void radiosAdded();
     void searchFinished();
+    void connectionError();
 
 private:
     const QWidget *const m_widget;
