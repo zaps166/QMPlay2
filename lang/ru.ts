@@ -2802,7 +2802,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Ошибка соединения</translation>
+        <translation>Ошибка соединения</translation>
     </message>
 </context>
 <context>

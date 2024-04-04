@@ -2802,7 +2802,7 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Csatlakozási hiba</translation>
+        <translation>Csatlakozási hiba</translation>
     </message>
 </context>
 <context>

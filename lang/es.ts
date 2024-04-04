@@ -2802,7 +2802,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Error de conexión</translation>
+        <translation>Error de conexión</translation>
     </message>
 </context>
 <context>

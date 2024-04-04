@@ -2801,7 +2801,7 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Verbindungsfehler</translation>
+        <translation>Verbindungsfehler</translation>
     </message>
 </context>
 <context>

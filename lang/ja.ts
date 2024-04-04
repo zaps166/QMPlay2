@@ -2804,7 +2804,7 @@ QMPlay2はアイコンを拡大しません！</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">接続エラー</translation>
+        <translation>接続エラー</translation>
     </message>
 </context>
 <context>

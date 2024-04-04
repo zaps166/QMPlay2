@@ -2802,7 +2802,7 @@ QMPlay2 將不會放大圖示！</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">連線錯誤</translation>
+        <translation>連線錯誤</translation>
     </message>
 </context>
 <context>

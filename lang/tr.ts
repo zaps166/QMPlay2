@@ -2814,7 +2814,7 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Bağlantı hatası</translation>
+        <translation>Bağlantı hatası</translation>
     </message>
 </context>
 <context>

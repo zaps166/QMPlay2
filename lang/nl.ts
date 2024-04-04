@@ -2802,7 +2802,7 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Verbindingsfout</translation>
+        <translation>Verbindingsfout</translation>
     </message>
 </context>
 <context>
