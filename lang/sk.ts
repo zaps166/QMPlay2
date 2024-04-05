@@ -2802,7 +2802,7 @@ QMPlay2 nebude zväčšovať ikony!</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Chyba spojenia</translation>
+        <translation>Chyba spojenia</translation>
     </message>
 </context>
 <context>

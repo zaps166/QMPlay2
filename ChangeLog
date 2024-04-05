@@ -4,7 +4,7 @@ Changes in QMPlay2 24.04.02:
     - minor RadioBrowser improvement for some server errors,
     - fix executing FFmpeg process in downloader on Qt6,
     - fix opening multiple files in QMPlay2 on Windows,
-    - set accurate seeking enabled but default,
+    - set accurate seeking enabled by default,
     - minor Vulkan fixes for old hardware,
     - set Ctrl+Q as default close key,
     - full Qt6 support on Windows,

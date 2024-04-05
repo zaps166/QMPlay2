@@ -2802,7 +2802,7 @@ QMPlay2 не масштабуватиме іконки!</translation>
     </message>
     <message>
         <source>Connection error</source>
-        <translation type="unfinished">Помилка підключення</translation>
+        <translation>Помилка підключення</translation>
     </message>
 </context>
 <context>
