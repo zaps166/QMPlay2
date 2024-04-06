@@ -45,7 +45,7 @@
     #include <powrprof.h>
 #elif defined Q_OS_MACOS
     #include <QOperatingSystemVersion>
-#elif !defined Q_OS_ANDROID && !defined Q_OS_HAIKU
+#elif !defined Q_OS_ANDROID && !defined Q_OS_HAIKU && defined DBUS_PM
     #include <QDBusConnection>
     #include <QDBusInterface>
 #endif
