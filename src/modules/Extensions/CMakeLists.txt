@@ -19,7 +19,6 @@ if(USE_MPRIS2)
     list(APPEND Extensions_HDR MPRIS2.hpp)
     list(APPEND Extensions_SRC MPRIS2.cpp)
     add_definitions(-DUSE_MPRIS2)
-    set(DBUS ${QT_PREFIX}::DBus)
 endif()
 
 if(USE_LASTFM)
@@ -84,7 +83,6 @@ if(USE_PCH)
 endif()
 
 target_link_libraries(${PROJECT_NAME}
-    ${DBUS}
     ${QML}
     libqmplay2
 )

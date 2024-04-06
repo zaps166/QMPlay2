@@ -149,8 +149,8 @@ if(NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
     option(USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications" ON)
     add_feature_info("Freedesktop notifications" USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications")
 
-    option(USE_DBUS_SUSPEND "Use D-Bus suspend" ON)
-    add_feature_info("D-Bus suspend" USE_DBUS_SUSPEND "Use D-Bus suspend")
+    option(USE_DBUS_PM "Use D-Bus power management" ON)
+    add_feature_info("Use D-Bus power management" USE_DBUS_PM "Use D-Bus power management")
 endif()
 
 option(USE_LIBASS "Build with libass support" ON)
@@ -430,7 +430,7 @@ if(NOT WIN32 AND NOT APPLE)
     set(SOLID_ACTIONS_INSTALL_PATH ${SOLID_ACTIONS_DEFAULT} CACHE STRING "The destination path for the Solid actions (\"None\" to disable)")
 endif()
 
-if(USE_FREEDESKTOP_NOTIFICATIONS OR USE_MPRIS2 OR USE_DBUS_SUSPEND)
+if(USE_FREEDESKTOP_NOTIFICATIONS OR USE_DBUS_PM OR USE_MPRIS2)
     find_package(${QT_PREFIX}DBus REQUIRED)
 endif()
 

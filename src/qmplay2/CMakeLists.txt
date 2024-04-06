@@ -245,11 +245,7 @@ elseif(APPLE)
     add_definitions(-DNOTIFIES_MACOS)
 endif()
 
-if(USE_DBUS_SUSPEND)
-    add_definitions(-DDBUS_SUSPEND)
-endif()
-
-if(USE_FREEDESKTOP_NOTIFICATIONS OR USE_DBUS_SUSPEND)
+if(USE_FREEDESKTOP_NOTIFICATIONS OR USE_DBUS_PM OR USE_MPRIS2)
     set(DBUS ${QT_PREFIX}::DBus)
 endif()
 
@@ -366,6 +362,13 @@ else()
     endif()
 endif()
 
+if(USE_DBUS_PM)
+    target_compile_definitions(${PROJECT_NAME}
+        PUBLIC
+        DBUS_PM
+    )
+endif()
+
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
     ${QT_PREFIX}::Core
@@ -379,8 +382,8 @@ target_link_libraries(${PROJECT_NAME}
     ${LIBSWRESAMPLE_LIBRARIES}
     ${OPENGL_LIBS}
     ${QMVK}
-    PRIVATE
     ${DBUS}
+    PRIVATE
     ${QML}
     ${LIBQMPLAY2_LIBS}
 )

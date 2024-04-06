@@ -60,7 +60,7 @@ extern "C"
     #include <libavutil/log.h>
 }
 
-#if defined DBUS_SUSPEND
+#if defined DBUS_PM
 class DBusSuspend
 {
 public:
@@ -446,7 +446,7 @@ bool QMPlay2CoreClass::canSuspend()
 #if defined Q_OS_WIN || defined Q_OS_MACOS
     m_suspend = 1;
     return true;
-#elif defined DBUS_SUSPEND
+#elif defined DBUS_PM
     auto connection = QDBusConnection::systemBus();
     if (DBusSuspend(connection, "login1").canSuspend())
     {
@@ -470,7 +470,7 @@ void QMPlay2CoreClass::suspend()
     SetSuspendState(false, false, false);
 #elif defined Q_OS_MACOS
     Q_UNUSED(system("pmset sleepnow > /dev/null 2>&1 &"));
-#elif defined DBUS_SUSPEND
+#elif defined DBUS_PM
     auto connection = QDBusConnection::systemBus();
     switch (m_suspend)
     {
