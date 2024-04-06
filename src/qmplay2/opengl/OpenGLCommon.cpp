@@ -301,7 +301,7 @@ void OpenGLCommon::initializeGL()
     }
     else
     {
-        QMPlay2Core.logError(tr("Shader compile/link error"));
+        QMPlay2Core.logError("Shader compile/link error");
         isOK = false;
         return;
     }
@@ -318,7 +318,7 @@ void OpenGLCommon::initializeGL()
     }
     else
     {
-        QMPlay2Core.logError(tr("Shader compile/link error"));
+        QMPlay2Core.logError("Shader compile/link error");
         isOK = false;
         return;
     }
@@ -391,7 +391,7 @@ void OpenGLCommon::paintGL()
                     setTextureParameters(target, texture, GL_LINEAR);
                 });
                 if (hwAccelInitError)
-                    QMPlay2Core.logError("OpenGL 2 :: " + tr("Can't init %1") .arg(m_hwInterop->name()));
+                    QMPlay2Core.logError("OpenGL 2 :: Can't init " + m_hwInterop->name());
 
                 if (numPlanes == 1)
                     m_hwInterop->setVideoAdjustment(videoAdjustment);
@@ -443,7 +443,7 @@ void OpenGLCommon::paintGL()
                 }
                 else if (m_hwInterop->hasError())
                 {
-                    QMPlay2Core.logError("OpenGL 2 :: " + m_hwInterop->name() + " " + tr("texture map error"));
+                    QMPlay2Core.logError("OpenGL 2 :: " + m_hwInterop->name() + " texture map error");
                 }
             }
             if (!imageReady && !hasImage)
