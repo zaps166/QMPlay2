@@ -1216,7 +1216,6 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
     const auto title = hasTitle ? o["title"].toString() : QString();
 
     const bool audioOnly = (param.compare("audio", Qt::CaseInsensitive) == 0);
-    const bool isLive = o["is_live"].toBool();
 
     QStringList urls;
     QStringList exts;
@@ -1262,21 +1261,19 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         }
     };
 
-    if (isLive)
+    appendUrl(audioItags);
+    if (!audioOnly)
+        appendUrl(videoItags);
+
+    if (urls.count() != 1 + (audioOnly ? 0 : 1))
+    {
+        urls.clear();
+        exts.clear();
+    }
+
+    if (urls.isEmpty())
     {
         appendUrl(hlsItags);
-    }
-    else
-    {
-        appendUrl(audioItags);
-        if (!audioOnly)
-            appendUrl(videoItags);
-
-        if (urls.count() != 1 + (audioOnly ? 0 : 1))
-        {
-            urls.clear();
-            exts.clear();
-        }
     }
 
     if (urls.isEmpty())
