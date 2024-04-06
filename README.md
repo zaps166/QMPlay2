@@ -195,7 +195,7 @@ For CMake build be sure that you have CMake 3.13 or higher.
 
 #### For modules (some of them can be automatically disabled if not found):
 - FFmpeg (necessary module): libva (VA-API) and libvdpau (VDPAU, X11 only),
-- Chiptune: libgme (kode54 version is recommended) and libsidplayfp,
+- Chiptune: libgme and libsidplayfp,
 - DirectX (Windows only): DirectDraw SDK (included in mingw-w64),
 - AudioCD: libcdio and libcddb,
 - ALSA (Linux only): libasound,
