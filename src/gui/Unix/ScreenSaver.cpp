@@ -18,24 +18,36 @@
 
 #include <ScreenSaver.hpp>
 
-#if defined(Q_OS_UNIX) && !defined(Q_OS_MACOS) && !defined(Q_OS_ANDROID)
-
 #include <QGuiApplication>
 #include <QLibrary>
+
+#ifdef DBUS_PM
+# include <QDBusConnection>
+# include <QDBusInterface>
+#endif
 
 class ScreenSaverPriv : public QObject
 {
 public:
-    inline ScreenSaverPriv() :
+    virtual bool load() = 0;
+
+    virtual void inhibit() = 0;
+    virtual void unInhibit() = 0;
+};
+
+class ScreenSaverPrivX11 final : public ScreenSaverPriv
+{
+public:
+    ScreenSaverPrivX11() :
         m_disp(nullptr)
     {}
-    inline ~ScreenSaverPriv()
+    ~ScreenSaverPrivX11() override
     {
         if (m_disp)
             XCloseDisplayFunc(m_disp);
     }
 
-    inline void load()
+    bool load() override
     {
         QLibrary libX11("libX11.so.6");
         if (libX11.load())
@@ -45,26 +57,27 @@ public:
             XFlushFunc = (XFlushType)libX11.resolve("XFlush");
             XCloseDisplayFunc = (XCloseDisplayType)libX11.resolve("XCloseDisplay");
             if (XOpenDisplayFunc && XForceScreenSaverFunc && XFlushFunc && XCloseDisplayFunc)
+            {
                 m_disp = XOpenDisplayFunc(nullptr);
+                if (m_disp)
+                    return true;
+            }
         }
-    }
-    inline bool isLoaded() const
-    {
-        return (bool)m_disp;
+        return false;
     }
 
-    inline void inhibit()
+    void inhibit() override
     {
         timerEvent(nullptr);
         m_timerID = startTimer(30000);
     }
-    inline void unInhibit()
+    void unInhibit() override
     {
         killTimer(m_timerID);
     }
 
 private:
-    void timerEvent(QTimerEvent *) override final
+    void timerEvent(QTimerEvent *) override
     {
         XForceScreenSaverFunc(m_disp, 0);
         XFlushFunc(m_disp);
@@ -82,17 +95,71 @@ private:
     using XCloseDisplayType = int (*)(void *display);
     XCloseDisplayType XCloseDisplayFunc;
 
-    void *m_disp;
-    int m_timerID;
+    void *m_disp = nullptr;
+    int m_timerID = 0;
 };
+
+#ifdef DBUS_PM
+class ScreenSaverPrivDBus final : public ScreenSaverPriv
+{
+public:
+    ScreenSaverPrivDBus()
+        : m_iface("org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver", "org.freedesktop.ScreenSaver")
+    {}
+    ~ScreenSaverPrivDBus() override
+    {
+    }
+
+    bool load() override
+    {
+        return !m_iface.lastError().isValid();
+    }
+
+    void inhibit() override
+    {
+        bool ok = false;
+        quint32 cookie = m_iface.call("Inhibit", QCoreApplication::applicationName(), "Playback").arguments().value(0).toUInt(&ok);
+        if (ok)
+            m_cookie = cookie;
+    }
+    void unInhibit() override
+    {
+        if (Q_UNLIKELY(m_cookie == 0))
+            return;
+
+        m_iface.call("UnInhibit", m_cookie);
+        m_cookie = 0;
+    }
+
+private:
+    QDBusInterface m_iface;
+    quint32 m_cookie = 0;
+};
+#endif
 
 /**/
 
-ScreenSaver::ScreenSaver() :
-    m_priv(new ScreenSaverPriv)
+ScreenSaver::ScreenSaver()
+    : m_priv(nullptr)
 {
-    if (QGuiApplication::platformName() == "xcb")
-        m_priv->load();
+#ifdef DBUS_PM
+    m_priv = new ScreenSaverPrivDBus;
+    if (m_priv->load())
+        return;
+
+    delete m_priv;
+    m_priv = nullptr;
+#endif
+
+    if (QGuiApplication::platformName() != "xcb")
+        return;
+
+    m_priv = new ScreenSaverPrivX11;
+    if (m_priv->load())
+        return;
+
+    delete m_priv;
+    m_priv = nullptr;
 }
 ScreenSaver::~ScreenSaver()
 {
@@ -101,28 +168,11 @@ ScreenSaver::~ScreenSaver()
 
 void ScreenSaver::inhibit(int context)
 {
-    if (inhibitHelper(context) && m_priv->isLoaded())
+    if (m_priv && inhibitHelper(context))
         m_priv->inhibit();
 }
 void ScreenSaver::unInhibit(int context)
 {
-    if (unInhibitHelper(context) && m_priv->isLoaded())
+    if (m_priv && unInhibitHelper(context))
         m_priv->unInhibit();
 }
-
-#else
-
-ScreenSaver::ScreenSaver() :
-    m_priv(nullptr)
-{
-    Q_UNUSED(m_priv)
-}
-ScreenSaver::~ScreenSaver()
-{}
-
-void ScreenSaver::inhibit(int)
-{}
-void ScreenSaver::unInhibit(int)
-{}
-
-#endif
