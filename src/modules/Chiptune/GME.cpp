@@ -243,7 +243,7 @@ bool GME::open(const QString &_url, bool tracksOnly)
 
 QString GME::getTitle(gme_info_t *info, int track) const
 {
-    const QString title  = info->song;
+    const QString title  = *info->song ? info->song : info->game;
     const QString author = info->author;
     QString ret;
     if (!author.isEmpty() && !title.isEmpty())
