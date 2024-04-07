@@ -336,7 +336,7 @@ MediaBrowser::MediaBrowser(Module &module) :
     m_net(this)
 {
     m_dW = new DockWidget;
-    connect(m_dW, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
+    connect(m_dW, SIGNAL(dockVisibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
     m_dW->setWindowTitle(MediaBrowserName);
     m_dW->setObjectName(MediaBrowserName);
     m_dW->setWidget(this);

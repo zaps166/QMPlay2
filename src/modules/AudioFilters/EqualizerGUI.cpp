@@ -176,13 +176,13 @@ EqualizerGUI::EqualizerGUI(Module &module) :
     enabledB->setChecked(sets().getBool("Equalizer"));
     connect(enabledB, SIGNAL(clicked(bool)), this, SLOT(enabled(bool)));
 
-    connect(dw, SIGNAL(visibilityChanged(bool)), enabledB, SLOT(setEnabled(bool)));
-    connect(dw, SIGNAL(visibilityChanged(bool)), presetsB, SLOT(setEnabled(bool)));
-    connect(dw, SIGNAL(visibilityChanged(bool)), showSettingsB, SLOT(setEnabled(bool)));
-    connect(dw, SIGNAL(visibilityChanged(bool)), maxB, SLOT(setEnabled(bool)));
-    connect(dw, SIGNAL(visibilityChanged(bool)), resetB, SLOT(setEnabled(bool)));
-    connect(dw, SIGNAL(visibilityChanged(bool)), minB, SLOT(setEnabled(bool)));
-    connect(dw, SIGNAL(visibilityChanged(bool)), slidersA, SLOT(setEnabled(bool)));
+    connect(dw, SIGNAL(dockVisibilityChanged(bool)), enabledB, SLOT(setEnabled(bool)));
+    connect(dw, SIGNAL(dockVisibilityChanged(bool)), presetsB, SLOT(setEnabled(bool)));
+    connect(dw, SIGNAL(dockVisibilityChanged(bool)), showSettingsB, SLOT(setEnabled(bool)));
+    connect(dw, SIGNAL(dockVisibilityChanged(bool)), maxB, SLOT(setEnabled(bool)));
+    connect(dw, SIGNAL(dockVisibilityChanged(bool)), resetB, SLOT(setEnabled(bool)));
+    connect(dw, SIGNAL(dockVisibilityChanged(bool)), minB, SLOT(setEnabled(bool)));
+    connect(dw, SIGNAL(dockVisibilityChanged(bool)), slidersA, SLOT(setEnabled(bool)));
 
     connect(&QMPlay2Core, SIGNAL(wallpaperChanged(bool, double)), this, SLOT(wallpaperChanged(bool, double)));
 }

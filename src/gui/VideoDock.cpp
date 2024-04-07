@@ -87,7 +87,7 @@ VideoDock::VideoDock() :
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popup(const QPoint &)));
     connect(&iDW, SIGNAL(resized(int, int)), this, SLOT(resizedIDW(int, int)));
     connect(&iDW, SIGNAL(hasCoverImage(bool)), this, SLOT(hasCoverImage(bool)));
-    connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
+    connect(this, SIGNAL(dockVisibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
     connect(&QMPlay2Core, &QMPlay2CoreClass::dockVideo, this, [this](QWidget *w) {
         iDW.setWidget(w);
         mouseMoveEvent(nullptr);

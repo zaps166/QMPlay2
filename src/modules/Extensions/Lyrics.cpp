@@ -57,7 +57,7 @@ Lyrics::Lyrics(Module &module) :
     connect(&m_net, SIGNAL(finished(NetworkReply *)), this, SLOT(finished(NetworkReply *)));
 
     m_dW = new DockWidget;
-    connect(m_dW, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
+    connect(m_dW, SIGNAL(dockVisibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
     m_dW->setWindowTitle(tr("Lyrics"));
     m_dW->setObjectName(LyricsName);
     m_dW->setWidget(this);

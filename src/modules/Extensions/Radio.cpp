@@ -96,7 +96,7 @@ Radio::Radio(Module &module) :
     m_radioBrowserMenu->addSeparator();
     connect(m_radioBrowserMenu->addAction(tr("Open radio website")), SIGNAL(triggered(bool)), this, SLOT(radioBrowserOpenHomePage()));
 
-    connect(m_dw, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
+    connect(m_dw, SIGNAL(dockVisibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
     connect(m_radioBrowserModel, SIGNAL(radiosAdded()), m_loadIconsTimer, SLOT(start()));
     connect(m_radioBrowserModel, SIGNAL(searchFinished()), this, SLOT(searchFinished()));
     connect(m_radioBrowserModel, &RadioBrowserModel::connectionError, this, &Radio::connectionError);

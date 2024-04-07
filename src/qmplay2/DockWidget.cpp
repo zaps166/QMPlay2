@@ -18,6 +18,8 @@
 
 #include <DockWidget.hpp>
 
+#include <QTimer>
+
 class EmptyW final : public QWidget
 {
     QSize sizeHint() const override
@@ -30,7 +32,24 @@ class EmptyW final : public QWidget
 
 DockWidget::DockWidget()
     : m_emptyW(new EmptyW)
-{}
+    , m_visibilityTimer(new QTimer(this))
+{
+    m_visibilityTimer->setSingleShot(true);
+    m_visibilityTimer->setInterval(0);
+    connect(m_visibilityTimer, &QTimer::timeout, this, [this] {
+        if (m_lastVisible != m_visible)
+        {
+            emit dockVisibilityChanged(m_visible);
+            m_lastVisible = m_visible;
+        }
+    });
+
+    connect(this, &QDockWidget::visibilityChanged, this, [this](bool visible) {
+        m_visible = visible;
+        if (!m_visibilityTimer->isActive())
+            m_visibilityTimer->start();
+    });
+}
 DockWidget::~DockWidget()
 {
     delete m_emptyW;

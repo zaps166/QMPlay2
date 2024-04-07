@@ -258,7 +258,7 @@ YouTube::YouTube(Module &module) :
     videoIcon = QIcon(":/video.svgz");
 
     dw = new DockWidget;
-    connect(dw, SIGNAL(visibilityChanged(bool)), this, SLOT(setEnabled(bool)));
+    connect(dw, SIGNAL(dockVisibilityChanged(bool)), this, SLOT(setEnabled(bool)));
     dw->setWindowTitle("YouTube");
     dw->setObjectName(YouTubeName);
     dw->setWidget(this);

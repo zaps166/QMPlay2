@@ -22,6 +22,8 @@
 
 #include <QDockWidget>
 
+class QTimer;
+
 class QMPLAY2SHAREDLIB_EXPORT DockWidget : public QDockWidget
 {
     Q_OBJECT
@@ -33,8 +35,14 @@ public:
     void setTitleBarVisible(bool v);
     void setGlobalTitleBarVisible(bool v);
 
+signals:
+    void dockVisibilityChanged(bool visible);
+
 private:
     QWidget *const m_emptyW;
+    QTimer *const m_visibilityTimer;
     bool m_titleBarVisible = true;
     bool m_globalTitleBarVisible = true;
+    bool m_visible = false;
+    int m_lastVisible = -1;
 };

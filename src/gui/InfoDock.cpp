@@ -93,7 +93,7 @@ InfoDock::InfoDock()
 
     clear();
 
-    connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
+    connect(this, SIGNAL(dockVisibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
 
     auto setInfoEditStyleSheet = [this] {
         infoE->document()->setDefaultStyleSheet("a {color: " + infoE->palette().text().color().name() + "; text-decoration: none;}");

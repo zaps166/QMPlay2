@@ -57,7 +57,7 @@ VisWidget::VisWidget()
     setMouseTracking(true);
 
     connect(&tim, SIGNAL(timeout()), this, SLOT(updateVisualization()));
-    connect(dw, SIGNAL(visibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
+    connect(dw, SIGNAL(dockVisibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
     connect(&QMPlay2Core, SIGNAL(wallpaperChanged(bool, double)), this, SLOT(wallpaperChanged(bool, double)));
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
 }
