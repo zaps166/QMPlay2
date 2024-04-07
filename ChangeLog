@@ -1,3 +1,13 @@
+Changes in QMPlay2 24.04.07:
+    - fix wrong path separator on Windows after accepting file properties,
+    - fix file properties crash on Windows distribution (taglib bug),
+    - add hotkeys for playlist and info dock visibility,
+    - inhibit screensaver through D-Bus interface,
+    - don't show vizualizations by default,
+    - change hide menu hotkey to Shift+M,
+    - lock widgets by default,
+    - other minor fixes,
+
 Changes in QMPlay2 24.04.02:
     - improve restoring playback position feature and make it enabled by default,
     - remove possibility to move files from playlist using middle mouse button,
