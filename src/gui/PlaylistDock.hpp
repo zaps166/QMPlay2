@@ -51,6 +51,10 @@ public:
     {
         return (QWidget *)findE;
     }
+
+private:
+    void showEvent(QShowEvent *e) override;
+
 private:
     void expandTree(QTreeWidgetItem *);
 

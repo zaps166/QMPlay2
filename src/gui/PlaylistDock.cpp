@@ -174,6 +174,13 @@ void PlaylistDock::scrollToCurrectItem()
     list->scrollToItem(list->currentItem());
 }
 
+void PlaylistDock::showEvent(QShowEvent *e)
+{
+    DockWidget::showEvent(e);
+    if (qobject_cast<QAction *>(sender()))
+        raise();
+}
+
 void PlaylistDock::expandTree(QTreeWidgetItem *i)
 {
     while (i)
