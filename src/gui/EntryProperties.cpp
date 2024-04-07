@@ -244,7 +244,9 @@ void EntryProperties::accept()
         const QString scheme = Functions::getUrlScheme(url);
         if (addrB->currentPrefixType() == AddressBox::DIRECT && (scheme.isEmpty() || scheme.length() == 1 /*Drive letter in Windows*/))
             url.prepend("file://");
-        if (!url.startsWith("file://") && !nameE->text().simplified().isEmpty())
+        if (url.startsWith("file://"))
+            url = QDir::fromNativeSeparators(url);
+        else if (!nameE->text().simplified().isEmpty())
             tWI->setText(0, nameE->text());
         tWI->setData(0, Qt::UserRole, url);
 #ifdef QMPlay2_TagEditor
