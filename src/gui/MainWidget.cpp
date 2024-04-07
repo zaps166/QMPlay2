@@ -1107,14 +1107,12 @@ void MainWidget::toggleCompactView()
     {
         dockWidgetState = saveState();
 
-        hideAllExtensions();
+        hideDockWidgetsAndDisableFeatures();
 
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
         menuBar->hide();
 #endif
         mainTB->hide();
-        infoDock->hide();
-        playlistDock->hide();
         statusBar->hide();
         videoDock->show();
 
@@ -1131,6 +1129,8 @@ void MainWidget::toggleCompactView()
 
         restoreState(dockWidgetState);
         dockWidgetState.clear();
+
+        restoreDockWidgetFeatures();
 
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
         menuBar->setVisible(!hideMenuAct->isChecked());
@@ -1199,21 +1199,7 @@ void MainWidget::toggleFullScreen()
         tb_movable = mainTB->isMovable();
         mainTB->setMovable(false);
 
-        infoDock->hide();
-        infoDock->setFeatures(DockWidget::NoDockWidgetFeatures);
-
-        playlistDock->hide();
-        playlistDock->setFeatures(DockWidget::NoDockWidgetFeatures);
-
-        addDockWidget(Qt::RightDockWidgetArea, videoDock);
-        for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
-            if (DockWidget *dw = QMPlay2Ext->getDockWidget())
-            {
-                if (dw->isVisible())
-                    visibleQMPlay2Extensions += QMPlay2Ext;
-                dw->hide();
-                dw->setFeatures(DockWidget::NoDockWidgetFeatures);
-            }
+        hideDockWidgetsAndDisableFeatures();
 
         videoDock->fullScreen(true);
         videoDock->show();
@@ -1282,11 +1268,7 @@ void MainWidget::toggleFullScreen()
         if (!visible) //jeżeli okno było wcześniej ukryte, to ma je znowu ukryć
             toggleVisibility();
 
-        infoDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-        playlistDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-        for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
-            if (QDockWidget *dw = QMPlay2Ext->getDockWidget())
-                dw->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+        restoreDockWidgetFeatures();
 
 #if defined(Q_OS_ANDROID)
         menuBar->setVisible(true);
@@ -1301,8 +1283,6 @@ void MainWidget::toggleFullScreen()
             toggleCompactView();
 
         playlistDock->scrollToCurrectItem();
-
-        visibleQMPlay2Extensions.clear();
 
         QMPlay2GUI.screenSaver->unInhibit(1);
 
@@ -1681,8 +1661,44 @@ QMenu *MainWidget::createPopupMenu()
         popupMenu->addAction(lockWidgetsAct);
     }
     for (QAction *act : popupMenu->actions())
-        act->setEnabled(isVisible() && !fullScreen && !isCompactView);
+    {
+        if (act->parentWidget() == mainTB)
+        {
+            act->setEnabled(isVisible() && !fullScreen && !isCompactView);
+            break;
+        }
+    }
     return popupMenu;
+}
+
+void MainWidget::hideDockWidgetsAndDisableFeatures()
+{
+    infoDock->hide();
+    infoDock->setFeatures(DockWidget::NoDockWidgetFeatures);
+
+    playlistDock->hide();
+    playlistDock->setFeatures(DockWidget::NoDockWidgetFeatures);
+
+    addDockWidget(Qt::RightDockWidgetArea, videoDock);
+    for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+    {
+        if (DockWidget *dw = QMPlay2Ext->getDockWidget())
+        {
+            if (dw->isVisible())
+                visibleQMPlay2Extensions += QMPlay2Ext;
+            dw->hide();
+            dw->setFeatures(DockWidget::NoDockWidgetFeatures);
+        }
+    }
+}
+void MainWidget::restoreDockWidgetFeatures()
+{
+    infoDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+    playlistDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+    for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
+        if (QDockWidget *dw = QMPlay2Ext->getDockWidget())
+            dw->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+    visibleQMPlay2Extensions.clear();
 }
 
 void MainWidget::showToolBar(bool showTB)

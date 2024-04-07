@@ -128,6 +128,9 @@ private:
 
     QMenu *createPopupMenu() override;
 
+    void hideDockWidgetsAndDisableFeatures();
+    void restoreDockWidgetFeatures();
+
     void showToolBar(bool);
     void hideDocks();
 
