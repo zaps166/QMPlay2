@@ -287,6 +287,27 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     volW = new VolWidget(settings.getInt("MaxVol"));
     mainTB->addWidget(volW);
 
+    if (auto menu = QMainWindow::createPopupMenu())
+    {
+        auto shortcuts = QMPlay2GUI.shortcutHandler;
+        for (QAction *act : menu->actions())
+        {
+            auto actParent = act->parent();
+            act->setAutoRepeat(false);
+            if (actParent == playlistDock)
+            {
+                shortcuts->appendAction(act, "KeyBindings/Widgets-playlistDock", "Shift+P");
+                addAction(act);
+            }
+            else if (actParent == infoDock)
+            {
+                shortcuts->appendAction(act, "KeyBindings/Widgets-infoDock", "Shift+I");
+                addAction(act);
+            }
+        }
+        menu->deleteLater();
+    }
+
     /**/
 
     Appearance::init();
