@@ -560,7 +560,7 @@ void MenuBar::setKeyShortcuts()
 
 
     if (widgets->hideMenuAct)
-        shortcuts->appendAction(widgets->hideMenuAct, "KeyBindings/Widgets-hideMenu", "Ctrl+Alt+M");
+        shortcuts->appendAction(widgets->hideMenuAct, "KeyBindings/Widgets-hideMenu", "Shift+M");
     shortcuts->appendAction(widgets->lockWidgetsAct, "KeyBindings/Widgets-lockWidgets", "Shift+L");
 
 
