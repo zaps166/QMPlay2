@@ -494,7 +494,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
                 double urlPos = 0.0;
                 if (settings.getBool("StoreUrlPos"))
                     urlPos = QMPlay2Core.getUrlPosSets().getDouble(url.toUtf8().toBase64(QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals));
-                if (urlPos <= 0.0 || abs(urlPos - pos) <= 0.75)
+                if (urlPos <= 0.0 || qAbs(urlPos - pos) <= 0.75)
                     seek(pos);
             }
         }
