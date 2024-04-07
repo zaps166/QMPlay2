@@ -227,12 +227,13 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
             else if (QMPlay2Ext->canConvertAddress())
             {
                 tabifyDockWidget(playlistDock, dw);
+                dw->setVisible(true);
             }
             else
             {
                 tabifyDockWidget(videoDock, dw);
+                dw->setVisible(true);
             }
-            dw->setVisible(true);
         }
     }
 #else //On Android tabify docks (usually screen is too small)
