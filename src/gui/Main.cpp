@@ -18,9 +18,6 @@
 
 #include <Main.hpp>
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-# include <EventFilterWorkarounds.hpp>
-#endif
 #include <PanGestureEventFilter.hpp>
 #include <ScreenSaver.hpp>
 #include <MainWidget.hpp>
@@ -813,9 +810,6 @@ int main(int argc, char *argv[])
     {
         qmplay2Gui.screenSaver = g_screenSaver = new ScreenSaver;
         QApplication::setQuitOnLastWindowClosed(false);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        qApp->installEventFilter(new EventFilterWorkarounds(qApp));
-#endif
         PanGestureEventFilter::install();
 #ifdef Q_OS_WIN
         auto font = QGuiApplication::font();

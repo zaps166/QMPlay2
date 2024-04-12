@@ -64,11 +64,6 @@ set(GUI_SRC
     KeyBindingsDialog.cpp
 )
 
-if (NOT BUILD_WITH_QT6)
-    list(APPEND GUI_HDR EventFilterWorkarounds.hpp)
-    list(APPEND GUI_SRC EventFilterWorkarounds.cpp)
-endif()
-
 set(GUI_FORMS # *.ui files
     Ui/SettingsGeneral.ui
     Ui/SettingsPlayback.ui
