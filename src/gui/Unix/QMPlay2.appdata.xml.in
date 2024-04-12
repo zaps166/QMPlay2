@@ -12,6 +12,8 @@
     </description>
     <url type="homepage">https://github.com/zaps166/QMPlay2</url>
     <url type="bugtracker">https://github.com/zaps166/QMPlay2/issues</url>
+    <url type="vcs-browser">https://github.com/zaps166/QMPlay2</url>
+    <url type="translate">https://github.com/zaps166/QMPlay2/tree/master/lang</url>
     <content_rating type="oars-1.1"/>
     <releases>
         <release version="@QMPLAY2_VERSION@" date="@QMPLAY2_DATE@"/>
