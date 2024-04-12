@@ -20,6 +20,8 @@
     <developer_name>Błażej Szczygieł</developer_name>
     <launchable type="desktop-id">io.github.zaps166.QMPlay2.desktop</launchable>
     <screenshots>
-        <screenshot type="default">https://raw.githubusercontent.com/zaps166/GitHubCommonContents/master/Screenshots/QMPlay2.png</screenshot>
+        <screenshot type="default">
+            <image>https://raw.githubusercontent.com/zaps166/GitHubCommonContents/master/Screenshots/QMPlay2.png</image>
+        </screenshot>
     </screenshots>
 </component>
