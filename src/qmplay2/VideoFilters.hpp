@@ -35,12 +35,7 @@ class QMPLAY2SHAREDLIB_EXPORT VideoFilters
     Q_DISABLE_COPY(VideoFilters)
     friend class VideoFiltersThr;
 public:
-    static void init();
-
-    static inline void averageTwoLines(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize)
-    {
-        averageTwoLinesPtr(dest, src1, src2, linesize);
-    }
+    static void averageTwoLines(quint8 *__restrict__ dest, const quint8 *__restrict__ src1, const quint8 *__restrict__ src2, int linesize);
 
     VideoFilters();
     ~VideoFilters();
@@ -60,8 +55,6 @@ public:
 
     bool readyRead();
 private:
-    static void (*averageTwoLinesPtr)(quint8 *, const quint8 *, const quint8 *, int);
-
     QQueue<Frame> outputQueue;
     QVector<std::shared_ptr<VideoFilter>> filters;
     VideoFiltersThr &filtersThr;

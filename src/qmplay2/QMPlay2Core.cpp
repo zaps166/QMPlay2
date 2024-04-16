@@ -410,8 +410,6 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
         }
     }
 
-    VideoFilters::init();
-
     connect(this, SIGNAL(restoreCursor()), this, SLOT(restoreCursorSlot()));
     connect(this, SIGNAL(waitCursor()), this, SLOT(waitCursorSlot()));
     connect(this, SIGNAL(busyCursor()), this, SLOT(busyCursorSlot()));

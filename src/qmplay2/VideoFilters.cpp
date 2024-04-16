@@ -20,68 +20,6 @@
 
 #include <Frame.hpp>
 #include <Module.hpp>
-#include <CPU.hpp>
-
-#include <libavutil/cpu.h>
-
-#ifdef QMPLAY2_CPU_X86
-#ifdef QMPLAY2_CPU_X86_32 //Every x86-64 CPU has SSE2, so MMXEXT is unused there
-static void averageTwoLines_MMXEXT(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize)
-{
-    const int remaining = linesize % 8;
-    quint8 *dest_end = dest + linesize - remaining;
-    while (dest < dest_end)
-    {
-        asm volatile
-        (
-            "movq  %1,    %%mm0\n\t"
-            "movq  %2,    %%mm1\n\t"
-            "pavgb %%mm1, %%mm0\n\t"
-            "movq  %%mm0, %0\n\t"
-            :"=m"(*dest)
-            : "m"(*src1), "m"(*src2)
-        );
-        dest += 8;
-        src1 += 8;
-        src2 += 8;
-    }
-    asm volatile ("emms");
-    dest_end += remaining;
-    while (dest < dest_end)
-        *dest++ = (*(src1++) + *(src2++)) >> 1;
-}
-#endif // QMPLAY2_CPU_X86_32
-static void averageTwoLines_SSE2(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize)
-{
-    const int remaining = linesize % 16;
-    quint8 *dest_end = dest + linesize - remaining;
-    while (dest < dest_end)
-    {
-        asm volatile
-        (
-            "movdqu %1,     %%xmm0\n\t"
-            "movdqu %2,     %%xmm1\n\t"
-            "pavgb  %%xmm1, %%xmm0\n\t"
-            "movdqu %%xmm0, %0\n\t"
-            :"=m"(*dest)
-            : "m"(*src1), "m"(*src2)
-        );
-        dest += 16;
-        src1 += 16;
-        src2 += 16;
-    }
-    dest_end += remaining;
-    while (dest < dest_end)
-        *dest++ = (*(src1++) + *(src2++)) >> 1;
-}
-#endif // QMPLAY2_CPU_X86
-static void averageTwoLines_C(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize)
-{
-    for (int i = 0; i < linesize; ++i)
-        dest[i] = (src1[i] + src2[i]) >> 1;
-}
-
-void (*VideoFilters::averageTwoLinesPtr)(quint8 *dest, const quint8 *src1, const quint8 *src2, int linesize);
 
 class VideoFiltersThr final : public QThread
 {
@@ -193,18 +131,10 @@ private:
 
 /**/
 
-void VideoFilters::init()
+void VideoFilters::averageTwoLines(quint8 *__restrict__ dest, const quint8 *__restrict__ src1, const quint8 *__restrict__ src2, int linesize)
 {
-    averageTwoLinesPtr = averageTwoLines_C;
-#ifdef QMPLAY2_CPU_X86
-    const int cpuFlags = QMPlay2CoreClass::getCPUFlags();
-    if (cpuFlags & AV_CPU_FLAG_SSE2)
-        averageTwoLinesPtr = averageTwoLines_SSE2;
-#ifdef QMPLAY2_CPU_X86_32
-    else if (cpuFlags & AV_CPU_FLAG_MMXEXT)
-        averageTwoLinesPtr = averageTwoLines_MMXEXT;
-#endif // QMPLAY2_CPU_X86_32
-#endif // QMPLAY2_CPU_X86
+    for (int i = 0; i < linesize; ++i)
+        dest[i] = (src1[i] + src2[i] + 1) >> 1; // This generates "pavgb" instruction on x86
 }
 
 VideoFilters::VideoFilters() :
