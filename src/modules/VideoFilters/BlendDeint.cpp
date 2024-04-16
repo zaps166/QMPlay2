@@ -34,6 +34,14 @@ bool BlendDeint::filter(QQueue<Frame> &framesQueue)
     {
         Frame videoFrame = m_internalQueue.dequeue();
         videoFrame.setNoInterlaced();
+#ifdef USE_VULKAN
+        if (videoFrame.vulkanImage())
+        {
+            auto newFrame = getNewFrame(videoFrame);
+            videoFrame.copyData(newFrame.dataArr(), newFrame.linesize());
+            videoFrame = std::move(newFrame);
+        }
+#endif
         for (int p = 0; p < 3; ++p)
         {
             const int linesize = videoFrame.linesize(p);
