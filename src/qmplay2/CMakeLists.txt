@@ -39,7 +39,6 @@ set(QMPLAY2_HDR
     PacketBuffer.hpp
     NetworkAccess.hpp
     IPC.hpp
-    CPU.hpp
     Version.hpp
     VideoAdjustment.hpp
     Notifies.hpp

@@ -22,7 +22,6 @@
 #include <Functions.hpp>
 #include <LineEdit.hpp>
 #include <Playlist.hpp>
-#include <CPU.hpp>
 
 #include <QStringListModel>
 #include <QDesktopServices>
