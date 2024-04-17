@@ -263,7 +263,7 @@ CMake options (option - default value: description):
     - `USE_YOUTUBE` - `ON`: enable/disable YouTube module.
     - `USE_ASAN` - `OFF`: enable/disable address sanitizer.
     - `USE_UBSAN` - `OFF`: enable/disable undefined behavior sanitizer.
-    - `USE_LINK_TIME_OPTIMIZATION` - `OFF`: enable/disable Link Time Optimization for release builds.
+    - `CMAKE_INTERPROCEDURAL_OPTIMIZATION` - `OFF`: enable/disable link-time code generation (LTO).
     - `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
     - `USE_UPDATES` - `ON`: enable/disable software updates.
     - `FIND_HWACCEL_DRIVERS_PATH` - `OFF`: Find drivers path for hwaccel, useful for universal package.

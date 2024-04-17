@@ -71,6 +71,8 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
     add_feature_info(PCH USE_PCH "Use precompiled headers")
 endif()
 
+option(CMAKE_INTERPROCEDURAL_OPTIMIZATION "Enable link-time code generation" OFF)
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(DEFAULT_ALSA ON)
     set(DEFAULT_PORTAUDIO OFF)
@@ -342,9 +344,6 @@ endif()
 add_feature_info("Git version" QMPLAY2_GIT_HEAD "Append Git HEAD to QMPlay2 version")
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang") # GCC or Clang
-    option(USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds" OFF)
-    add_feature_info("Link Time Optimization" USE_LINK_TIME_OPTIMIZATION "Enable link time optimization for release builds")
-
     option(USE_ASAN "Use Address Sanitizer" OFF)
     add_feature_info("Address Sanitizer" USE_ASAN "Use Address Sanitizer")
 
@@ -382,11 +381,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
 
     if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15.0.0")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unqualified-std-cast-call")
-    endif()
-
-    if(USE_LINK_TIME_OPTIMIZATION)
-        set(CMAKE_CXX_FLAGS_RELEASE    "-flto ${CMAKE_CXX_FLAGS_RELEASE}")
-        set(CMAKE_CXX_FLAGS_MINSIZEREL "-flto ${CMAKE_CXX_FLAGS_RELEASE}")
     endif()
 
     if(CMAKE_MODULE_LINKER_FLAGS)
