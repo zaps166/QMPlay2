@@ -230,6 +230,9 @@ endif()
 libqmplay2_set_target_params()
 
 if(USE_PCH)
+    if(APPLE)
+        set_source_files_properties(macOS/QMPlay2MacExtensions.mm PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+    endif()
     target_precompile_headers(${PROJECT_NAME} PRIVATE
         ${GUI_HDR}
         ${GUI_FORM_HDR}

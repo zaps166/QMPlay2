@@ -36,6 +36,9 @@ add_library(${PROJECT_NAME} MODULE
 )
 
 if(USE_PCH)
+    if(APPLE)
+        set_source_files_properties(3rdparty/CoreAudio/AudioDevice.mm PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+    endif()
     target_precompile_headers(${PROJECT_NAME}
         PRIVATE
         ${PortAudio_HDR}
