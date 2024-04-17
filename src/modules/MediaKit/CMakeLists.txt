@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.13)
 project(MediaKit)
 
 set(MediaKit_HDR
@@ -19,13 +19,17 @@ set(MediaKit_RESOURCES
     icon.qrc
 )
 
-include_directories(../../qmplay2/headers)
-
 add_library(${PROJECT_NAME} MODULE
     ${MediaKit_HDR}
     ${MediaKit_SRC}
     ${MediaKit_RESOURCES}
 )
+
+if(USE_PCH)
+    target_precompile_headers(${PROJECT_NAME} PRIVATE
+        ${MediaKit_HDR}
+    )
+endif()
 
 target_link_libraries(${PROJECT_NAME}
     be
