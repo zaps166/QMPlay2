@@ -72,6 +72,7 @@ if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
 endif()
 
 option(CMAKE_INTERPROCEDURAL_OPTIMIZATION "Enable link-time code generation" OFF)
+add_feature_info("Interprocedural optimization" CMAKE_INTERPROCEDURAL_OPTIMIZATION "Enable link-time code generation")
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(DEFAULT_ALSA ON)
