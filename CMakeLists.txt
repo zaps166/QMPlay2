@@ -60,6 +60,7 @@ else()
 endif()
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOMOC_COMPILER_PREDEFINES OFF)
 
 if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16.0")
     option(USE_PCH "Use precompiled headers" OFF)
