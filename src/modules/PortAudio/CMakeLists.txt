@@ -42,9 +42,7 @@ if(USE_PCH)
     )
 endif()
 
-target_link_libraries(${PROJECT_NAME}
-    libqmplay2
-)
+libqmplay2_set_target_params()
 
 if(WIN32)
     target_compile_definitions(${PROJECT_NAME} PRIVATE -DINITGUID)
@@ -52,14 +50,14 @@ if(WIN32)
 endif()
 
 if(NOT WIN32 OR CMAKE_HOST_WIN32)
-    target_link_libraries(${PROJECT_NAME} ${LIBPORTAUDIO_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBPORTAUDIO_LIBRARIES})
 endif()
 
 if(WIN32 AND CUSTOM_PORTAUDIO_LIBRARIES)
     separate_arguments(CUSTOM_PORTAUDIO_LIBRARIES)
-    target_link_libraries(${PROJECT_NAME} ${CUSTOM_PORTAUDIO_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${CUSTOM_PORTAUDIO_LIBRARIES})
 elseif(APPLE)
-    target_link_libraries(${PROJECT_NAME} "-framework CoreAudio -framework Foundation")
+    target_link_libraries(${PROJECT_NAME} PRIVATE "-framework CoreAudio -framework Foundation")
 endif()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

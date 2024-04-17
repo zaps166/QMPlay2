@@ -29,9 +29,10 @@ add_library(${PROJECT_NAME} MODULE
 )
 
 target_link_libraries(${PROJECT_NAME}
+    PRIVATE
     ${LIB_X11_XV_LIBRARIES}
-    libqmplay2
 )
+libqmplay2_set_target_params()
 
 if(USE_PCH)
     target_precompile_headers(${PROJECT_NAME}

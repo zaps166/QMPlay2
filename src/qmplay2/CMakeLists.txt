@@ -139,8 +139,6 @@ if(USE_OPENGL)
 endif()
 
 if(USE_VULKAN)
-    set(QMVK QmVk)
-
     set(QMPLAY2_VULKAN_HDR
         vulkan/VulkanBufferPool.hpp
         vulkan/VulkanHWInterop.hpp
@@ -380,12 +378,32 @@ target_link_libraries(${PROJECT_NAME}
     ${LIBAVUTIL_LIBRARIES}
     ${LIBSWRESAMPLE_LIBRARIES}
     ${OPENGL_LIBS}
-    ${QMVK}
     ${DBUS}
     PRIVATE
     ${QML}
     ${LIBQMPLAY2_LIBS}
 )
+if(USE_VULKAN)
+    if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.15.0")
+        target_link_libraries(${PROJECT_NAME}
+            PRIVATE
+            $<FILTER:$<TARGET_OBJECTS:QmVk>,EXCLUDE,.*\\.[gp]ch>
+        )
+    else()
+        target_link_libraries(${PROJECT_NAME}
+            PRIVATE
+            $<TARGET_OBJECTS:QmVk>
+        )
+    endif()
+    target_compile_definitions(${PROJECT_NAME}
+        PUBLIC
+        $<TARGET_PROPERTY:QmVk,INTERFACE_COMPILE_DEFINITIONS>
+    )
+    target_include_directories(${PROJECT_NAME}
+        PUBLIC
+        $<TARGET_PROPERTY:QmVk,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+endif()
 if(BUILD_WITH_QT6)
     target_link_libraries(${PROJECT_NAME}
         PUBLIC
@@ -404,3 +422,23 @@ elseif(USE_VULKAN AND NOT WIN32)
         dl
     )
 endif()
+
+macro(libqmplay2_set_target_params)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        $<TARGET_PROPERTY:libqmplay2,INTERFACE_LINK_LIBRARIES>
+        $<TARGET_LINKER_FILE:libqmplay2>
+    )
+    target_link_directories(${PROJECT_NAME}
+        PRIVATE
+        $<TARGET_PROPERTY:libqmplay2,INTERFACE_LINK_DIRECTORIES>
+    )
+    target_include_directories(${PROJECT_NAME}
+        PRIVATE
+        $<TARGET_PROPERTY:libqmplay2,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE
+        $<TARGET_PROPERTY:libqmplay2,INTERFACE_COMPILE_DEFINITIONS>
+    )
+endmacro()

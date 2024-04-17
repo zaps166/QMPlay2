@@ -29,6 +29,7 @@ if(USE_PCH)
 endif()
 
 target_link_libraries(${PROJECT_NAME}
-    libqmplay2
+    PRIVATE
     OpenSLES
 )
+libqmplay2_set_target_params()

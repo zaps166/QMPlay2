@@ -39,12 +39,10 @@ if(USE_PCH)
     )
 endif()
 
-target_link_libraries(${PROJECT_NAME}
-    libqmplay2
-)
+libqmplay2_set_target_params()
 
 if(WIN32 AND USE_OPENGL)
-    target_link_libraries(${PROJECT_NAME} opengl32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE opengl32)
 endif()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

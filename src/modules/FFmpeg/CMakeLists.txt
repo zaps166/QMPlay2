@@ -142,8 +142,9 @@ if(USE_PCH)
 endif()
 
 target_link_libraries(${PROJECT_NAME}
+    PRIVATE
     ${FFmpeg_LIBS}
-    libqmplay2
 )
+libqmplay2_set_target_params()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

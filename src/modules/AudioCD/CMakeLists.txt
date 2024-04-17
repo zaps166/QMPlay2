@@ -32,21 +32,19 @@ if(USE_PCH)
     )
 endif()
 
-target_link_libraries(${PROJECT_NAME}
-    libqmplay2
-)
+libqmplay2_set_target_params()
 
 if(WIN32)
     set(CUSTOM_AUDIOCD_LIBRARIES "" CACHE STRING "Custom libraries for AudioCD")
 endif()
 
 if(NOT WIN32 OR CMAKE_HOST_WIN32)
-    target_link_libraries(${PROJECT_NAME} ${LIBCD_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBCD_LIBRARIES})
 endif()
 
 if(WIN32 AND CUSTOM_AUDIOCD_LIBRARIES)
     separate_arguments(CUSTOM_AUDIOCD_LIBRARIES)
-    target_link_libraries(${PROJECT_NAME} ${CUSTOM_AUDIOCD_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${CUSTOM_AUDIOCD_LIBRARIES})
 endif()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

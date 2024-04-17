@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.13)
 project(QMPlay2)
 
+if (NOT ${CMAKE_GENERATOR} MATCHES "Ninja")
+    message(FATAL_ERROR "Unsupported generator ${CMAKE_GENERATOR}. Ninja is the only supported generator.")
+endif()
+
 if(WIN32)
     set(CUSTOM_INCLUDE_DIR "" CACHE STRING "Custom include directory")
     set(CUSTOM_LINK_DIR "" CACHE STRING "Custom link directory")

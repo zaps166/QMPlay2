@@ -29,10 +29,11 @@ if(USE_PCH)
 endif()
 
 target_link_libraries(${PROJECT_NAME}
-    libqmplay2
+    PRIVATE
     gdi32
     ddraw
     dxguid
 )
+libqmplay2_set_target_params()
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})
