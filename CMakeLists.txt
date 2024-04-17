@@ -370,10 +370,6 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
     endif()
 
     if(NOT CMAKE_BUILD_TYPE MATCHES "Deb")
-        if(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS)
-            # remove '-rdynamic' for Release build
-            string(REPLACE "-rdynamic" "" CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS ${CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS})
-        endif()
         set(CMAKE_CXX_FLAGS "-Wno-deprecated-declarations ${CMAKE_CXX_FLAGS}") # disable deprecated declarations warnings for Release build
     endif()
     # enable warnings
