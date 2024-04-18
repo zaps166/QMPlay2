@@ -1670,10 +1670,6 @@
         <translation>Використання програми через інтерфейс MPRIS2</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>Шумоприглушення</translation>
-    </message>
-    <message>
         <source>Slider count in sound equalizer</source>
         <translation>Кількість повзунків в еквалайзері звуку</translation>
     </message>
@@ -3439,21 +3435,6 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot open video filters</source>
         <translation>Неможливо відкрити відеофільтри</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>Непідтримуваний фільтр чіткості зображення</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>Непідтримуваний алгоритм усунення черезрядковості</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation>Непідтримуваний фільтр шумоприглушення</translation>
     </message>
 </context>
 <context>

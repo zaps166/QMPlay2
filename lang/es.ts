@@ -1558,10 +1558,6 @@
         <translation>Saltar algunos fotogramas</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>Reducción de ruido</translation>
-    </message>
-    <message>
         <source>Add entry to the drives context menu</source>
         <translation>Añadir de entrada al menú contextual de unidades</translation>
     </message>
@@ -3435,21 +3431,6 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot open video filters</source>
         <translation>No se pudo abrir los filtros de vídeo</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>Filtro de nitidez de imagen no soportado</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>Algoritmo de desentrelazado no soportado</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -160,8 +160,6 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT QMatrix4x4 getColorPrimariesTo709Matrix(const QVector2D &wp, std::array<QVector2D, 3> &primaries);
     QMPLAY2SHAREDLIB_EXPORT QMatrix4x4 getColorPrimariesTo709Matrix(AVColorPrimaries colorPrimaries);
 
-    QMPLAY2SHAREDLIB_EXPORT bool isX11EGL();
-
     QMPLAY2SHAREDLIB_EXPORT bool compareText(const QString &a, const QString &b);
 
     QMPLAY2SHAREDLIB_EXPORT bool hasTouchScreen();

@@ -1586,10 +1586,6 @@
         <translation>hardveres dekódolás</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>Zajcsökkentés</translation>
-    </message>
-    <message>
         <source>Hurry up</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3435,21 +3431,6 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot open video filters</source>
         <translation>Nem sikerült a videoszűrők megnyitása</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>Nem támogatott élességi szűrő</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>Nem támogatott váltottsorosság-megszüntetési algoritmus</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

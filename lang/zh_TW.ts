@@ -1666,10 +1666,6 @@
         <translation>回聲環繞</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>降低雜訊</translation>
-    </message>
-    <message>
         <source>Use the program via MPRIS2 interface</source>
         <translation>透過 MPRIS2 介面來使用程式</translation>
     </message>
@@ -3439,21 +3435,6 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot open video filters</source>
         <translation>無法開啟視訊濾鏡</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>不支援的圖像銳利化濾鏡</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>不支援的去交錯演算法</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation>不支援的雜訊抑制濾鏡</translation>
     </message>
 </context>
 <context>

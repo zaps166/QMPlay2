@@ -44,7 +44,7 @@ if(USE_FFMPEG_AVDEVICE)
     list(APPEND FFmpeg_LIBS ${LIBAVDEVICE_LIBRARIES})
 endif()
 
-if(USE_FFMPEG_VKVIDEO OR USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_D3D11VA OR USE_FFMPEG_VTB) # Common HWAccel
+if(USE_FFMPEG_VKVIDEO OR USE_FFMPEG_VAAPI OR USE_FFMPEG_DXVA2 OR USE_FFMPEG_D3D11VA OR USE_FFMPEG_VTB) # Common HWAccel
     list(APPEND FFmpeg_HDR FFDecHWAccel.hpp)
     list(APPEND FFmpeg_SRC FFDecHWAccel.cpp)
 
@@ -76,21 +76,7 @@ if(USE_FFMPEG_VKVIDEO OR USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU OR USE_FFMPEG_DXVA
         list(APPEND FFmpeg_LIBS ${LBVA_LIBRARIES})
     endif()
 
-    if(USE_FFMPEG_VDPAU) # VDPAU
-        add_definitions(-DQMPlay2_VDPAU)
-        list(APPEND FFmpeg_HDR FFDecVDPAU.hpp VDPAU.hpp)
-        list(APPEND FFmpeg_SRC FFDecVDPAU.cpp VDPAU.cpp)
-        if(USE_OPENGL)
-            list(APPEND FFmpeg_HDR VDPAUOpenGL.hpp)
-            list(APPEND FFmpeg_SRC VDPAUOpenGL.cpp)
-        endif()
-        pkg_check_modules(LIBVDPAU REQUIRED vdpau)
-        include_directories(${LIBVDPAU_INCLUDE_DIRS})
-        link_directories(${LIBVDPAU_LIBRARY_DIRS})
-        list(APPEND FFmpeg_LIBS ${LIBVDPAU_LIBRARIES})
-    endif()
-
-    if (FIND_HWACCEL_DRIVERS_PATH AND (USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU))
+    if (FIND_HWACCEL_DRIVERS_PATH AND USE_FFMPEG_VAAPI)
         add_definitions(-DFIND_HWACCEL_DRIVERS_PATH)
     endif()
 

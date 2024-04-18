@@ -1666,10 +1666,6 @@
         <translation>Эхо объёмного звучания</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>Шумоподавление</translation>
-    </message>
-    <message>
         <source>Use the program via MPRIS2 interface</source>
         <translation>Использование программы через интерфейс MPRIS2</translation>
     </message>
@@ -3439,21 +3435,6 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot open video filters</source>
         <translation>Не удаётся открыть видеофильтры</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>Неподдерживаемый фильтр резкости изображения</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>Неподдерживаемый алгоритм устранения чересстрочности</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation>Неподдерживаемый фильтр подавления шума</translation>
     </message>
 </context>
 <context>

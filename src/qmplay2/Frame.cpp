@@ -302,7 +302,6 @@ bool Frame::isHW() const
     switch (m_frame->format)
     {
         case AV_PIX_FMT_DXVA2_VLD:
-        case AV_PIX_FMT_VDPAU:
         case AV_PIX_FMT_VAAPI:
         case AV_PIX_FMT_VIDEOTOOLBOX:
         case AV_PIX_FMT_D3D11:

@@ -1603,10 +1603,6 @@
         <translation>decodificador de hardware</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>Redução de ruído</translation>
-    </message>
-    <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
         <translation>Decodificação zero-copy em hardware intel (experimental)</translation>
     </message>
@@ -3445,21 +3441,6 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot open video filters</source>
         <translation>Não foi possível abrir os filtros de vídeo</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

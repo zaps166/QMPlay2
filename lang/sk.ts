@@ -1670,10 +1670,6 @@
         <translation>Použiť program prostredníctvom rozhrania MPRIS2</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>Redukcia šumu</translation>
-    </message>
-    <message>
         <source>Slider count in sound equalizer</source>
         <translation>Počet posuvníkov zvukového ekvalizéra</translation>
     </message>
@@ -3437,21 +3433,6 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot open video filters</source>
         <translation>Nedajú sa otvoriť filtre videa</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>Nepodporovaný filter ostrosti obrázka</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>Nepodporovaný algoritmus odstraňovania prekladania</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation>Nepodporovaný filter redukcie šumu</translation>
     </message>
 </context>
 <context>

@@ -44,10 +44,6 @@ private:
 #ifdef QMPlay2_VKVIDEO
     QIcon vkVideoIcon;
 #endif
-#ifdef QMPlay2_VDPAU
-    QIcon vdpauIcon;
-    QComboBox *m_vdpauDeintMethodB = nullptr;
-#endif
 #ifdef QMPlay2_VAAPI
     QIcon vaapiIcon;
     QComboBox *m_vaapiDeintMethodB = nullptr;
@@ -62,7 +58,6 @@ private:
     bool vkVideoSupported = false;
     bool dxva2Supported = false;
     bool d3d11vaSupported = false;
-    bool vdpauSupported = false;
 };
 
 /**/
@@ -74,18 +69,9 @@ class Slider;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {
-#ifdef QMPlay2_VDPAU
-    Q_OBJECT
-#else
     Q_DECLARE_TR_FUNCTIONS(ModuleSettingsWidget)
-#endif
 public:
-    ModuleSettingsWidget(Module &module, bool vkVideo, bool dxva2, bool d3d11va, bool vdpau);
-#ifdef QMPlay2_VDPAU
-private:
-    void setVDPAU();
-    void checkEnables();
-#endif
+    ModuleSettingsWidget(Module &module, bool vkVideo, bool dxva2, bool d3d11va);
 private:
     void saveSettings() override;
 
@@ -96,11 +82,6 @@ private:
     QGroupBox *decoderB;
 #ifdef QMPlay2_VKVIDEO
     QCheckBox *decoderVKVIDEO = nullptr;
-#endif
-#ifdef QMPlay2_VDPAU
-    QGroupBox *decoderVDPAUB = nullptr;
-    QCheckBox *noisereductionVDPAUB = nullptr;
-    Slider *noisereductionLvlVDPAUS = nullptr;
 #endif
 #ifdef QMPlay2_VAAPI
     QCheckBox *decoderVAAPIEB;

@@ -241,12 +241,6 @@ endif()
 option(USE_FFMPEG_VAAPI "Build VAAPI acceleration into FFmpeg" ${LIBS_VAAPI_FOUND})
 add_feature_info(VAAPI USE_FFMPEG_VAAPI "Build VAAPI acceleration into FFmpeg")
 
-if(NOT DEFINED USE_FFMPEG_VDPAU)
-    pkg_check_modules(LIBS_VDPAU vdpau x11)
-endif()
-option(USE_FFMPEG_VDPAU "Build VDPAU acceleration into FFmpeg" ${LIBS_VDPAU_FOUND})
-add_feature_info(VDPAU USE_FFMPEG_VDPAU "Build VDPAU acceleration into FFmpeg")
-
 if(WIN32)
     option(USE_FFMPEG_DXVA2 "Build DXVA2 acceleration into FFmpeg" ON)
     add_feature_info(DXVA2 USE_FFMPEG_DXVA2 "Build DXVA2 acceleration into FFmpeg")
@@ -320,7 +314,7 @@ add_feature_info(Notifications USE_NOTIFY "Build additional notifications module
 
 set(LANGUAGES "All" CACHE STRING "A space-seperated list of translations to compile into QMPlay2 or \"All\"")
 
-if(USE_FFMPEG_VAAPI OR USE_FFMPEG_VDPAU)
+if(USE_FFMPEG_VAAPI)
     option(FIND_HWACCEL_DRIVERS_PATH "Find drivers path for hwaccel, useful for universal package" OFF)
     add_feature_info(FindHwaccelDrivers FIND_HWACCEL_DRIVERS_PATH "Find drivers path for hwaccel")
 endif()

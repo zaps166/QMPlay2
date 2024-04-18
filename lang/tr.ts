@@ -1676,10 +1676,6 @@
         <translation>Programı MPRIS2 arayüzü üzerinden kullan</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>Gürültü azaltma</translation>
-    </message>
-    <message>
         <source>Slider count in sound equalizer</source>
         <translation>Ses dengeleyicideki kaydırıcı sayısı</translation>
     </message>
@@ -3459,21 +3455,6 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <message>
         <source>Cannot open video filters</source>
         <translation>Video filtreleri açılamıyor</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>Desteklenmeyen görüntü keskinliği filtresi</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>Desteklenmeyen taramasızlaştırma algoritması</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation>Desteklenmeyen gürültü azaltma filtresi</translation>
     </message>
 </context>
 <context>

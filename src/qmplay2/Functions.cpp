@@ -1114,12 +1114,6 @@ QMatrix4x4 Functions::getColorPrimariesTo709Matrix(AVColorPrimaries colorPrimari
     return getColorPrimariesTo709Matrix(wp, primaries);
 }
 
-bool Functions::isX11EGL()
-{
-    static bool isEGL = (QString(qgetenv("QT_XCB_GL_INTEGRATION")).compare("xcb_egl", Qt::CaseInsensitive) == 0);
-    return isEGL;
-}
-
 bool Functions::compareText(const QString &a, const QString &b)
 {
     QRegularExpression rx(R"(\d+)");

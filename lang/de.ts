@@ -1665,10 +1665,6 @@
         <translation>Echo-Surround-Sound</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>Rauschunterdrückung</translation>
-    </message>
-    <message>
         <source>Use the program via MPRIS2 interface</source>
         <translation>Über das Programm MPRIS2</translation>
     </message>
@@ -3438,21 +3434,6 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
     <message>
         <source>Cannot open video filters</source>
         <translation>Kann den Videofilter nicht öffnen</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>Nicht unterstützter Schärfefilter</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>Nicht unterstützter Deinterlacing-Algorithmus</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation>Nicht unterstützter Rauschunterdrückungsfilter</translation>
     </message>
 </context>
 <context>

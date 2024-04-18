@@ -1559,10 +1559,6 @@
         <translation>いくつかのフレームをスキップする</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>ノイズ除去</translation>
-    </message>
-    <message>
         <source>Add entry to the drives context menu</source>
         <translation>ドライブのコンテキストメニューにエントリを追加する</translation>
     </message>
@@ -3439,21 +3435,6 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot open video filters</source>
         <translation>ビデオフィルターを開くことができません</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>画像シャープ化フィルターをサポートしていません</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>インターレース解除アルゴリズムをサポートしていません</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation>ノイズ除去フィルターをサポートしていません</translation>
     </message>
 </context>
 <context>

@@ -82,19 +82,19 @@ If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you sh
 
 ## Hardware acceleration
 
-QMPlay2 supports hardware video decoding: Vulkan Video, CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), D3D11VA (Vulkan, Windows 8 and higher) VDPAU/VA-API (X11 for VDPAU, Linux/BSD only) and VideoToolBox (macOS only).
+QMPlay2 supports hardware video decoding: Vulkan Video, CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), D3D11VA (Vulkan, Windows 8 and higher) VA-API (Linux/BSD only) and VideoToolBox (macOS only).
 Hardware acceleration is disabled by default, but you can enable it in "Settings->Playback settings":
 - move hardware accelerated decoder on decoders list to the top,
 - apply settings.
 
 ### Hardware acceleration important information:
-- CUVID, DXVA2, VDPAU and VA-API use OpenGL video output, so OpenGL features are available, but CPU filters won't work.
+- CUVID, DXVA2 and VA-API use OpenGL video output, so OpenGL features are available, but CPU filters won't work.
 - VkVideo, CUVID, D3D11VA and VA-API use Vulkan video output, so Vulkan features are available, but CPU filters won't work.
 - DXVA2 requires "WGL_NV_DX_interop" extension.
-- DXVA2 and VDPAU don't work with Vulkan.
-- VDPAU, VA-API, CUVID and DXVA2 have its own deinterlacing filters. Their settings are available in "Settings->Video filters".
+- DXVA2 doesn't work with Vulkan.
+- VA-API, CUVID and DXVA2 have its own deinterlacing filters. Their settings are available in "Settings->Video filters".
 - VA-API on Vulkan uses its own deinterlacing filter only on Intel drivers.
-- H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VDPAU and VA-API.
+- H.264 lossless movies (CRF 0 or QP 0) might not be properly decoded via VA-API.
 - VideoToolBox doesn't support deinterlacing.
 
 ### VA-API + OpenGL information:
@@ -194,7 +194,7 @@ For CMake build be sure that you have CMake 3.13 or higher.
 - libass - for OSD and non-graphical subtitles.
 
 #### For modules (some of them can be automatically disabled if not found):
-- FFmpeg (necessary module): libva (VA-API) and libvdpau (VDPAU, X11 only),
+- FFmpeg (necessary module): libva (VA-API),
 - Chiptune: libgme and libsidplayfp,
 - DirectX (Windows only): DirectDraw SDK (included in mingw-w64),
 - AudioCD: libcdio and libcddb,
@@ -233,7 +233,6 @@ CMake options (option - default value: description):
     - `USE_FFMPEG` - ON: enable/disable FFmpeg module.
     - `USE_FFMPEG_VKVIDEO`: autodetect: enabled if Vulkan is enabled and FFmpeg version is >= 6.1.
     - `USE_FFMPEG_VAAPI`: autodetect: enabled if libva, libva-drm, and egl exist.
-    - `USE_FFMPEG_VDPAU`: autodetect: enabled on X11 if libvdpau exists.
     - `USE_FFMPEG_AVDEVICE` - autodetect on Linux, `OFF` on non-Linux OS: it allows to use e.g. V4L2 devices.
     - `USE_INPUTS` - ON: enable/disable Inputs module.
     - `USE_MODPLUG` - ON: enable/disable Modplug module.

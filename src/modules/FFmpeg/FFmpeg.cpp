@@ -25,9 +25,6 @@
 #ifdef QMPlay2_VAAPI
     #include <FFDecVAAPI.hpp>
 #endif
-#ifdef QMPlay2_VDPAU
-    #include <FFDecVDPAU.hpp>
-#endif
 #ifdef QMPlay2_DXVA2
     #include <FFDecDXVA2.hpp>
 #endif
@@ -63,11 +60,6 @@ FFmpeg::FFmpeg() :
     if (QMPlay2Core.isVulkanRenderer())
         vkVideoSupported = true;
 #endif
-#ifdef QMPlay2_VDPAU
-    vdpauIcon = QIcon(":/VDPAU.svgz");
-    if (!QMPlay2Core.isVulkanRenderer() && !QGuiApplication::platformName().contains("wayland"))
-        vdpauSupported = true;
-#endif
 #ifdef QMPlay2_VAAPI
     vaapiIcon = QIcon(":/VAAPI.svgz");
 #endif
@@ -96,14 +88,6 @@ FFmpeg::FFmpeg() :
             break;
     }
 #endif
-#ifdef QMPlay2_VDPAU
-    init("DecoderVDPAUEnabled", true);
-    init("VDPAUDeintMethod", 1);
-    if (getUInt("VDPAUDeintMethod") > 2)
-        set("VDPAUDeintMethod", 1);
-    init("VDPAUNoiseReductionEnabled", false);
-    init("VDPAUNoiseReductionLvl", 0.0);
-#endif
 #ifdef QMPlay2_VAAPI
     init("DecoderVAAPIEnabled", true);
     init("VAAPIDeintMethod", 1);
@@ -129,22 +113,8 @@ FFmpeg::FFmpeg() :
 
 #if defined(USE_OPENGL)
 
-#   if defined(QMPlay2_VDPAU) || defined(QMPlay2_VAAPI)
+#   if defined(QMPlay2_VAAPI)
     const QVariant self = QVariant::fromValue((void *)this);
-#   endif
-
-#   if defined(QMPlay2_VDPAU)
-    if (vdpauSupported)
-    {
-        m_vdpauDeintMethodB = new QComboBox;
-        m_vdpauDeintMethodB->addItems({tr("None"), "Temporal", "Temporal-spatial"});
-        m_vdpauDeintMethodB->setCurrentIndex(getInt("VDPAUDeintMethod"));
-        if (m_vdpauDeintMethodB->currentIndex() < 0)
-            m_vdpauDeintMethodB->setCurrentIndex(1);
-        m_vdpauDeintMethodB->setProperty("text", QString(tr("Deinterlacing method") + " (VDPAU): "));
-        m_vdpauDeintMethodB->setProperty("module", self);
-        QMPlay2Core.addVideoDeintMethod(m_vdpauDeintMethodB);
-    }
 #   endif
 
 #   if defined(QMPlay2_VAAPI)
@@ -174,9 +144,6 @@ FFmpeg::FFmpeg() :
 }
 FFmpeg::~FFmpeg()
 {
-#ifdef QMPlay2_VDPAU
-    delete m_vdpauDeintMethodB;
-#endif
 #ifdef QMPlay2_VAAPI
     delete m_vaapiDeintMethodB;
 #endif
@@ -192,13 +159,6 @@ QList<FFmpeg::Info> FFmpeg::getModulesInfo(const bool showDisabled) const
 #ifdef QMPlay2_VKVIDEO
     if (showDisabled || (vkVideoSupported && getBool("DecoderVkVideoEnabled")))
         modulesInfo += Info(DecoderVkVideoName, DECODER, vkVideoIcon);
-#endif
-#ifdef QMPlay2_VDPAU
-    if (showDisabled || (getBool("DecoderVDPAUEnabled") && vdpauSupported))
-    {
-        modulesInfo += Info(DecoderVDPAUName, DECODER, vdpauIcon);
-        modulesInfo += Info(VDPAUWriterName, WRITER | VIDEOHWFILTER, vdpauIcon);
-    }
 #endif
 #ifdef QMPlay2_VAAPI
     if (showDisabled || getBool("DecoderVAAPIEnabled"))
@@ -232,10 +192,6 @@ void *FFmpeg::createInstance(const QString &name)
     else if (name == DecoderVkVideoName && vkVideoSupported && getBool("DecoderVkVideoEnabled"))
         return new FFDecVkVideo(*this);
 #endif
-#ifdef QMPlay2_VDPAU
-    else if (name == DecoderVDPAUName && getBool("DecoderVDPAUEnabled") && vdpauSupported)
-        return new FFDecVDPAU(*this);
-#endif
 #ifdef QMPlay2_VAAPI
     else if (name == DecoderVAAPIName && getBool("DecoderVAAPIEnabled"))
         return new FFDecVAAPI(*this);
@@ -259,18 +215,11 @@ void *FFmpeg::createInstance(const QString &name)
 
 FFmpeg::SettingsWidget *FFmpeg::getSettingsWidget()
 {
-    return new ModuleSettingsWidget(*this, vkVideoSupported, dxva2Supported, d3d11vaSupported, vdpauSupported);
+    return new ModuleSettingsWidget(*this, vkVideoSupported, dxva2Supported, d3d11vaSupported);
 }
 
 void FFmpeg::videoDeintSave()
 {
-#ifdef QMPlay2_VDPAU
-    if (m_vdpauDeintMethodB)
-    {
-        set("VDPAUDeintMethod", m_vdpauDeintMethodB->currentIndex());
-        setInstance<FFDecVDPAU>();
-    }
-#endif
 #if defined(QMPlay2_VAAPI)
     if (m_vaapiDeintMethodB)
     {
@@ -293,7 +242,7 @@ QMPLAY2_EXPORT_MODULE(FFmpeg)
 #include <QSpinBox>
 #include <QLabel>
 
-ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dxva2, bool d3d11va, bool vdpau)
+ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dxva2, bool d3d11va)
     : Module::SettingsWidget(module)
 {
     demuxerB = new QGroupBox(tr("Demuxer"));
@@ -315,37 +264,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     }
 #else
     Q_UNUSED(vkVideo)
-#endif
-
-#ifdef QMPlay2_VDPAU
-    if (vdpau)
-    {
-        decoderVDPAUB = new QGroupBox(tr("Decoder") + " VDPAU - " + tr("hardware decoding"));
-        decoderVDPAUB->setCheckable(true);
-        decoderVDPAUB->setChecked(sets().getBool("DecoderVDPAUEnabled"));
-
-        noisereductionVDPAUB = new QCheckBox(tr("Noise reduction"));
-        noisereductionVDPAUB->setChecked(sets().getBool("VDPAUNoiseReductionEnabled"));
-        connect(noisereductionVDPAUB, &QCheckBox::clicked,
-                this, [this] {
-            checkEnables();
-            setVDPAU();
-        });
-        noisereductionLvlVDPAUS = new Slider;
-        noisereductionLvlVDPAUS->setRange(0, 50);
-        noisereductionLvlVDPAUS->setTickInterval(50);
-        noisereductionLvlVDPAUS->setTickPosition(QSlider::TicksBelow);
-        noisereductionLvlVDPAUS->setValue(sets().getDouble("VDPAUNoiseReductionLvl") * 50);
-        connect(noisereductionLvlVDPAUS, &Slider::valueChanged,
-                this, &ModuleSettingsWidget::setVDPAU);
-
-        checkEnables();
-
-        QFormLayout *vdpauLayout = new QFormLayout(decoderVDPAUB);
-        vdpauLayout->addRow(noisereductionVDPAUB, noisereductionLvlVDPAUS);
-    }
-#else
-    Q_UNUSED(vdpau)
 #endif
 
 #ifdef QMPlay2_VAAPI
@@ -445,10 +363,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     if (decoderVKVIDEO)
         layout->addWidget(decoderVKVIDEO);
 #endif
-#ifdef QMPlay2_VDPAU
-    if (decoderVDPAUB)
-        layout->addWidget(decoderVDPAUB);
-#endif
 #ifdef QMPlay2_VAAPI
     layout->addWidget(decoderVAAPIEB);
 #endif
@@ -466,19 +380,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     layout->addWidget(decoderB);
 }
 
-#ifdef QMPlay2_VDPAU
-void ModuleSettingsWidget::setVDPAU()
-{
-    sets().set("VDPAUNoiseReductionEnabled", noisereductionVDPAUB->isChecked());
-    sets().set("VDPAUNoiseReductionLvl", noisereductionLvlVDPAUS->value() / 50.0);
-    SetInstance<FFDecVDPAU>();
-}
-void ModuleSettingsWidget::checkEnables()
-{
-    noisereductionLvlVDPAUS->setEnabled(noisereductionVDPAUB->isEnabled() && noisereductionVDPAUB->isChecked());
-}
-#endif
-
 void ModuleSettingsWidget::saveSettings()
 {
     sets().set("DemuxerEnabled", demuxerB->isChecked());
@@ -493,10 +394,6 @@ void ModuleSettingsWidget::saveSettings()
 #ifdef QMPlay2_VKVIDEO
     if (decoderVKVIDEO)
         sets().set("DecoderVkVideoEnabled", decoderVKVIDEO->isChecked());
-#endif
-#ifdef QMPlay2_VDPAU
-    if (decoderVDPAUB)
-        sets().set("DecoderVDPAUEnabled", decoderVDPAUB->isChecked());
 #endif
 #ifdef QMPlay2_VAAPI
     sets().set("DecoderVAAPIEnabled", decoderVAAPIEB->isChecked());

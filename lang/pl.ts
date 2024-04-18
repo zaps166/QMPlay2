@@ -1670,10 +1670,6 @@
         <translation>Obsługa programu przez interfejs MPRIS2</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>Redukcja szumu</translation>
-    </message>
-    <message>
         <source>Slider count in sound equalizer</source>
         <translation>Liczba suwaków w korektorze dźwięku</translation>
     </message>
@@ -3439,21 +3435,6 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     <message>
         <source>Cannot open video filters</source>
         <translation>Nie można otworzyć filtrów obrazu</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>Nieobsługiwany filtr ostrości obrazu</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>Nieobsługiwany algorytm usuwania przeplotu</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation>Nieobsługiwany filtr redukcji szumów</translation>
     </message>
 </context>
 <context>

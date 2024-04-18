@@ -1598,10 +1598,6 @@
         <translation>Hardwarematige decodering</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>Ruisonderdrukking</translation>
-    </message>
-    <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
         <translation>Zero-copydecodering op Intel-hardware (experimenteel)</translation>
     </message>
@@ -3439,21 +3435,6 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     <message>
         <source>Cannot open video filters</source>
         <translation>De videofilters kunnen niet worden geopend</translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>Niet-ondersteund verscherpingsfilter</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>Niet-ondersteund interliniëringsalgoritme</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
-        <translation>Niet-ondersteund ruisonderdrukkingsfilter</translation>
     </message>
 </context>
 <context>

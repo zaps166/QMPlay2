@@ -1663,10 +1663,6 @@
         <translation>Echo multicanal</translation>
     </message>
     <message>
-        <source>Noise reduction</source>
-        <translation>Réduction du bruit</translation>
-    </message>
-    <message>
         <source>Use the program via MPRIS2 interface</source>
         <translation>Utilise le programme via l&apos;interface MPRIS2</translation>
     </message>
@@ -3429,21 +3425,6 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Cannot open video filters</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>VDPAU</name>
-    <message>
-        <source>Unsupported image sharpness filter</source>
-        <translation>Filtre de résolution d&apos;image non supporté</translation>
-    </message>
-    <message>
-        <source>Unsupported deinterlacing algorithm</source>
-        <translation>Algorithme de désentrelacement non supporté</translation>
-    </message>
-    <message>
-        <source>Unsupported noise reduction filter</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
