@@ -265,7 +265,7 @@ CMake options (option - default value: description):
     - `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
     - `USE_UPDATES` - `ON`: enable/disable software updates.
     - `FIND_HWACCEL_DRIVERS_PATH` - `OFF`: Find drivers path for hwaccel, useful for universal package.
-    - `BUILD_WITH_QT6` - `OFF`: Build with Qt6.
+    - `BUILD_WITH_QT6` - autodetect: Build with Qt6.
 
 Using other Qt installation of CMake:
 - `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
