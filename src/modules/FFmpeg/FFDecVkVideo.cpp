@@ -210,14 +210,19 @@ bool FFDecVkVideo::open(StreamInfo &streamInfo)
             if (!(getVideoCodecOperations() & vk::VideoCodecOperationFlagBitsKHR::eDecodeH265))
                 return false;
             break;
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(61, 2, 100)
         case AV_CODEC_ID_AV1:
-            if (!m_physicalDevice->checkExtension(VK_KHR_VIDEO_DECODE_AV1_EXTENSION_NAME))
+            if (avcodec_version() >= AV_VERSION_INT(61, 2, 100))
+            {
+                if (!m_physicalDevice->checkExtension(VK_KHR_VIDEO_DECODE_AV1_EXTENSION_NAME))
+                    return false;
+                if (!(getVideoCodecOperations() & vk::VideoCodecOperationFlagBitsKHR::eDecodeAv1))
+                    return false;
+            }
+            else
+            {
                 return false;
-            if (!(getVideoCodecOperations() & vk::VideoCodecOperationFlagBitsKHR::eDecodeAv1))
-                return false;
+            }
             break;
-#endif
         default:
             return false;
     }
