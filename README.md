@@ -82,7 +82,7 @@ If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you sh
 
 ## Hardware acceleration
 
-QMPlay2 supports hardware video decoding: Vulkan Video, CUVID (NVIDIA only), DXVA2 (Windows Vista and higher), D3D11VA (Vulkan, Windows 8 and higher) VA-API (Linux/BSD only) and VideoToolBox (macOS only).
+QMPlay2 supports hardware video decoding: Vulkan Video, CUVID (NVIDIA only), DXVA2 (Windows), D3D11VA (Vulkan, Windows) VA-API (Linux/BSD only) and VideoToolBox (macOS only).
 Hardware acceleration is disabled by default, but you can enable it in "Settings->Playback settings":
 - move hardware accelerated decoder on decoders list to the top,
 - apply settings.
@@ -114,7 +114,7 @@ Of course you can adjust other deinterlacing settings in case of hardware accele
 
 Vulkan renderer has Yadif deinterlacing filter which is used by default for CPU decoded videos. You can change this behavior in Vulkan renderer settings. Moreover, Yadif Vulkan filter is used for hardware-decoded videos.
 
-Chroma plane if pixel format is not YUV420 when XVideo or DirectDraw is used as video output may not be properly deinterlaced.
+Chroma plane if pixel format is not YUV420 when XVideo is used as video output may not be properly deinterlaced.
 
 ## Hidden features
 
@@ -179,7 +179,7 @@ For CMake build be sure that you have CMake 3.13 or higher.
     - Qt5DBus - Linux/BSD only,
     - Qt5Svg - for SVG icons,
     - Qt5Qml - for MediaBrowser,
-    - Qt5WinExtras - for Windows,
+    - Qt5WinExtras - for Windows (Qt5 only),
     - Qt6Core5Compat - for Qt6,
 - FFmpeg >= 4.0:
     - libavformat - requires OpenSSL or GnuTLS for https support,
@@ -196,7 +196,6 @@ For CMake build be sure that you have CMake 3.13 or higher.
 #### For modules (some of them can be automatically disabled if not found):
 - FFmpeg (necessary module): libva (VA-API),
 - Chiptune: libgme and libsidplayfp,
-- DirectX (Windows only): DirectDraw SDK (included in mingw-w64),
 - AudioCD: libcdio and libcddb,
 - ALSA (Linux only): libasound,
 - PipeWire - libpipewire,
