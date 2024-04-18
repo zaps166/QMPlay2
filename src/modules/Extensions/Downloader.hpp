@@ -101,13 +101,7 @@ private:
 
 class DownloadListW final : public QTreeWidget
 {
-    friend class Downloader;
 public:
-    inline QString getDownloadsDirPath()
-    {
-        return downloadsDirPath;
-    }
-private:
     QString downloadsDirPath;
 };
 

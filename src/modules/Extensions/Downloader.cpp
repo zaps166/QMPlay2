@@ -608,7 +608,7 @@ void DownloaderThread::run()
         QString filePath;
         quint16 num = 0;
         do
-            filePath = downloadLW->getDownloadsDirPath() + (num ? (QString::number(num) + "_") : QString()) + Functions::cleanFileName(name);
+            filePath = downloadLW->downloadsDirPath + (num ? (QString::number(num) + "_") : QString()) + Functions::cleanFileName(name);
         while (QFile::exists(filePath) && ++num < 0xFFFF);
         if (num == 0xFFFF)
             filePath.clear();
