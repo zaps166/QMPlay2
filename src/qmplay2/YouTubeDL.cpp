@@ -36,11 +36,7 @@
 
 constexpr const char *g_name = "YouTubeDL";
 static bool g_mustUpdate = true;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 static QRecursiveMutex g_mutex;
-#else
-static QMutex g_mutex(QMutex::Recursive);
-#endif
 
 static inline QString getYtDlpFileName()
 {
@@ -200,7 +196,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
         }
         else
         {
-            result = result.constFirst().split('\n', QT_SKIP_EMPTY_PARTS);
+            result = result.constFirst().split('\n', Qt::SkipEmptyParts);
 
             // Verify if URLs has printable characters, because sometimes we
             // can get binary garbage at output (especially on Openload).

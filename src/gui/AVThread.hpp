@@ -70,10 +70,6 @@ protected:
 
     volatile bool br = false, br2 = false;
     bool waiting = false;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     QRecursiveMutex mutex;
-#else
-    QMutex mutex;
-#endif
     QMutex updateMutex;
 };

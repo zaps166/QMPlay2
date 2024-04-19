@@ -638,7 +638,7 @@ QStringList Functions::getUrlsFromMimeData(const QMimeData *mimeData, const bool
     }
     else if (mimeData->hasText())
     {
-        urls = mimeData->text().remove('\r').split('\n', QT_SKIP_EMPTY_PARTS);
+        urls = mimeData->text().remove('\r').split('\n', Qt::SkipEmptyParts);
     }
     if (checkExtensionsForUrl)
     {

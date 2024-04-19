@@ -23,11 +23,7 @@
 
 namespace cu {
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 static QRecursiveMutex mutex;
-#else
-static QMutex mutex(QMutex::Recursive);
-#endif
 
 cuInitType init = nullptr;
 cuDeviceGetType deviceGet = nullptr;

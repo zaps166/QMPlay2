@@ -898,7 +898,7 @@ void VideoThr::screenshot(Frame videoFrame)
         quint16 num = 0;
         for (const QString &f : QDir(dir).entryList({"QMPlay2_snapshot_?????" + ext}, QDir::Files, QDir::Name))
         {
-            const quint16 n = QStringView(f).mid(13, 5)MAYBE_TO_STRING.toUShort();
+            const quint16 n = QStringView(f).mid(13, 5).toUShort();
             if (n > num)
                 num = n;
         }

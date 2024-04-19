@@ -570,7 +570,7 @@ void MainWidget::focusChanged(QWidget *old, QWidget *now)
 void MainWidget::processParam(const QString &param, const QString &data)
 {
     auto getItemsToPlay = [&] {
-        auto items = data.split('\n', QT_SKIP_EMPTY_PARTS);
+        auto items = data.split('\n', Qt::SkipEmptyParts);
         for (auto &&item : items)
             item = Functions::maybeExtensionAddress(item);
         return items;
@@ -1624,7 +1624,7 @@ void MainWidget::setStreamsMenu(const QStringList &videoStreams, const QStringLi
                 connect(action, &QAction::triggered,
                         this, [this, data = std::move(lines[1])] {
                     if (data.startsWith("seek"))
-                        seek(QStringView(data).mid(4)MAYBE_TO_STRING.toDouble());
+                        seek(QStringView(data).mid(4).toDouble());
                     else
                         playC.chStream(data);
                 });

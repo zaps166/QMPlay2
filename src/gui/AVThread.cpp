@@ -26,9 +26,6 @@
 
 AVThread::AVThread(PlayClass &playC)
     : playC(playC)
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-    , mutex(QMutex::Recursive)
-#endif
 {
     connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     mutex.lock();

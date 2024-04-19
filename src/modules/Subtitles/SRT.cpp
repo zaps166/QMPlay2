@@ -33,7 +33,7 @@ bool SRT::toASS(const QByteArray &srt, LibASS *ass, double)
     bool ok = false;
     const char *scanfFmt = (srt.left(11 /* Including BOM */).contains("WEBVTT")) ? "%d:%d:%d.%d" : "%d:%d:%d,%d";
 
-    for (const QString &entry : QString(QString("\n\n") + srt).remove('\r').split(QRegularExpression("\n\n+(\\d+\n)?"), QT_SKIP_EMPTY_PARTS))
+    for (const QString &entry : QString(QString("\n\n") + srt).remove('\r').split(QRegularExpression("\n\n+(\\d+\n)?"), Qt::SkipEmptyParts))
     {
         int idx = entry.indexOf('\n');
         if (idx > -1)

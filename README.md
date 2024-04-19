@@ -175,7 +175,7 @@ For CMake build be sure that you have CMake 3.13 or higher.
 ### You need devel packages:
 
 #### Necessary:
-- Qt5 >= 5.10:
+- Qt5 >= 5.15.2:
     - Qt5DBus - Linux/BSD only,
     - Qt5Svg - for SVG icons,
     - Qt5Qml - for MediaBrowser,

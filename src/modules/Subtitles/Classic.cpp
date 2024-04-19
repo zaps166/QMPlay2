@@ -107,7 +107,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
 
     QList<SubWithoutEnd> subsWithoutEnd;
 
-    for (const QString &line : QString(txt).remove('\r').split('\n', QT_SKIP_EMPTY_PARTS))
+    for (const QString &line : QString(txt).remove('\r').split('\n', Qt::SkipEmptyParts))
     {
         double start = 0.0, duration = 0.0;
         QString sub;
@@ -166,7 +166,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
                 if (use_mDVD_FPS && (s == 0 || s == 1))
                 {
                     use_mDVD_FPS = false;
-                    const double newFPS = QStringView(sub).left(qMin(6, sub.size()))MAYBE_TO_STRING.toDouble();
+                    const double newFPS = QStringView(sub).left(qMin(6, sub.size())).toDouble();
                     if (newFPS > 0.0 && newFPS < 100.0)
                     {
                         fps = newFPS;

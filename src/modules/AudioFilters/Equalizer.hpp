@@ -56,11 +56,7 @@ private:
     bool m_hasParameters = false;
     bool m_enabled = false;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     mutable QRecursiveMutex m_mutex;
-#else
-    mutable QMutex m_mutex;
-#endif
     FFT m_fftIn;
     FFT m_fftOut;
     FFT::Complex *m_complex = nullptr;

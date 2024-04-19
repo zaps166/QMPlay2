@@ -275,14 +275,14 @@ void PlayClass::seek(double pos, bool allowAccurate)
 void PlayClass::chStream(const QString &s)
 {
     if (s.startsWith("audio"))
-        chosenAudioStream = QStringView(s).right(s.length() - 5)MAYBE_TO_STRING.toInt();
+        chosenAudioStream = QStringView(s).right(s.length() - 5).toInt();
     else if (s.startsWith("video"))
-        chosenVideoStream = QStringView(s).right(s.length() - 5)MAYBE_TO_STRING.toInt();
+        chosenVideoStream = QStringView(s).right(s.length() - 5).toInt();
     else if (s.startsWith("subtitles"))
-        chosenSubtitlesStream = QStringView(s).right(s.length() - 9)MAYBE_TO_STRING.toInt();
+        chosenSubtitlesStream = QStringView(s).right(s.length() - 9).toInt();
     else if (s.startsWith("fileSubs"))
     {
-        int idx = QStringView(s).right(s.length() - 8)MAYBE_TO_STRING.toInt();
+        int idx = QStringView(s).right(s.length() - 8).toInt();
         if (fileSubsList.count() > idx)
             loadSubsFile(fileSubsList[idx]);
     }
