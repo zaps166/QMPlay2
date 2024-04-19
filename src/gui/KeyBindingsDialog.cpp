@@ -49,8 +49,8 @@ KeyBindingsDialog::KeyBindingsDialog(QWidget *p) :
     layout->addWidget(buttons);
     layout->setContentsMargins(3, 3, 3, 3);
 
-    if (QWidget *w = parentWidget())
-        resize(600, w->height() * 9 / 10);
+    if (Q_LIKELY(p))
+        resize(qMin(p->width(), 600), p->height() * 9 / 10);
 }
 
 void KeyBindingsDialog::clicked(QAbstractButton *button)

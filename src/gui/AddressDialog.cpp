@@ -46,7 +46,11 @@ AddressDialog::AddressDialog(QWidget *p)
     layout->setContentsMargins(3, 3, 3, 3);
 
     addrB.setFocus();
-    resize(625, 0);
+    if (Q_LIKELY(p))
+    {
+        const auto w = p->window();
+        resize(qMin(w->width(), 625), 0);
+    }
 }
 AddressDialog::~AddressDialog()
 {

@@ -137,11 +137,15 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
     layout.setSpacing(3);
     layout.setContentsMargins(3, 3, 3, 3);
 
+    if (Q_LIKELY(p))
+    {
+        const auto w = p->window();
 #ifdef QMPlay2_TagEditor
-    resize(625, tagEditor ? 470 : 0);
+        resize(qMin(w->width(), 625), tagEditor ? 470 : 0);
 #else
-    resize(625, 0);
+        resize(qMin(w->width(), 625), 0);
 #endif
+    }
 
     accepted = exec() == QDialog::Accepted;
 }
