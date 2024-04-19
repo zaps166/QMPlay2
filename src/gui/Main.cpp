@@ -648,10 +648,7 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef Q_OS_ANDROID
-    QGuiApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
     QGuiApplication::setAttribute(Qt::AA_DontUseNativeMenuBar); // Doesn't work in Qt6 (bug)
-    QtAndroidPrivate::requestPermission("android.permission.READ_EXTERNAL_STORAGE").result();
-    QtAndroidPrivate::requestPermission("android.permission.WRITE_EXTERNAL_STORAGE").result();
 #endif
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)

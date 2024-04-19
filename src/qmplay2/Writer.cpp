@@ -22,6 +22,9 @@
 
 #include <QSaveFile>
 #include <QBuffer>
+#ifdef Q_OS_ANDROID
+#   include <QFile>
+#endif
 
 #include <memory>
 
@@ -63,7 +66,13 @@ class QMPlay2FileWriter : public IODeviceWriter
 
     bool open() override final
     {
-        m_io.reset(new QSaveFile(getUrl().mid(7)));
+        const auto url = getUrl();
+#ifdef Q_OS_ANDROID
+        if (url.startsWith("content"))
+            m_io.reset(new QFile(url));
+        else
+#endif
+            m_io.reset(new QSaveFile(url.mid(7)));
         return IODeviceWriter::open();
     }
 };
@@ -105,6 +114,10 @@ Writer *Writer::create(const QString &url, const QStringList &modNames)
     {
         if (scheme == "file")
             writer = new QMPlay2FileWriter;
+#ifdef Q_OS_ANDROID
+        else if (scheme == "content")
+            writer = new QMPlay2FileWriter;
+#endif
         else if (scheme == "QMPlay2")
             writer = new QMPlay2ResourceWriter;
         if (writer)

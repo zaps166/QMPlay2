@@ -36,6 +36,9 @@ struct AVStream;
 struct AVPacket;
 class OggHelper;
 class Packet;
+#ifdef Q_OS_ANDROID
+class QFile;
+#endif
 
 class FormatContext
 {
@@ -104,4 +107,8 @@ private:
     bool stillImage;
 
     double lengthToPlay;
+
+#ifdef Q_OS_ANDROID
+    std::unique_ptr<QFile> m_file;
+#endif
 };

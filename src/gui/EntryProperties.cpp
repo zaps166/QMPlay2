@@ -79,7 +79,11 @@ EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, 
         nameE->selectAll();
 
         catalogCB = new QCheckBox(tr("Synchronize with file or directory"));
+#ifdef Q_OS_ANDROID
+        catalogCB->setEnabled(false);
+#else
         catalogCB->setChecked(!pthE->text().isEmpty());
+#endif
         connect(catalogCB, SIGNAL(stateChanged(int)), this, SLOT(setDirPthEEnabled(int)));
 
         browseDirB = new QToolButton;

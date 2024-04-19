@@ -906,8 +906,9 @@ void Downloader::init()
     }
     else if (downloadLW->downloadsDirPath != defDownloadPath)
     {
-        const QFileInfo dir(downloadLW->downloadsDirPath);
-#ifndef Q_OS_WIN
+        Q_ASSERT(downloadLW->downloadsDirPath.endsWith("/"));
+        const QFileInfo dir(downloadLW->downloadsDirPath.left(downloadLW->downloadsDirPath.size() - 1));
+#if !defined(Q_OS_WIN) && !defined(Q_OS_ANDROID)
         if (!dir.isDir() || !dir.isWritable())
 #else
         if (!dir.isDir())
@@ -1124,7 +1125,7 @@ bool Downloader::modifyConvertAction(QAction *action, bool addRemoveButton)
 void Downloader::setDownloadsDir()
 {
     QFileInfo dir(QFileDialog::getExistingDirectory(this, tr("Choose directory for downloaded files"), downloadLW->downloadsDirPath));
-#ifndef Q_OS_WIN
+#if !defined(Q_OS_WIN) && !defined(Q_OS_ANDROID)
     if (dir.isDir() && dir.isWritable())
 #else
     if (dir.isDir())

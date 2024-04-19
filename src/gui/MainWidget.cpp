@@ -1654,6 +1654,10 @@ void MainWidget::savePlistHelper(const QString &title, const QString &fPth, bool
         return;
     QString selectedFilter;
     QString plistFile = QFileDialog::getSaveFileName(this, title, fPth, filter, &selectedFilter);
+#ifdef Q_OS_ANDROID
+    if (selectedFilter.isEmpty())
+        selectedFilter = QFileInfo(plistFile).suffix();
+#endif
     if (!selectedFilter.isEmpty())
     {
         selectedFilter = "." + selectedFilter.mid(0, selectedFilter.indexOf(' ')).toLower();

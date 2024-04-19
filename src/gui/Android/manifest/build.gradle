@@ -57,7 +57,7 @@ android {
     defaultConfig {
         resConfig "en"
         minSdkVersion qtMinSdkVersion
-        targetSdkVersion 31 // 33 (default for Qt 6.6) ignores READ_EXTERNAL_STORAGE / WRITE_EXTERNAL_STORAGE (https://developer.android.com/reference/android/Manifest.permission)
+        targetSdkVersion qtTargetSdkVersion
         ndk.abiFilters = qtTargetAbiList.split(",")
     }
 }

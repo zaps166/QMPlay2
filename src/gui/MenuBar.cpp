@@ -669,6 +669,10 @@ void MenuBar::setKeyShortcuts()
 #ifdef UPDATER
     shortcuts->appendAction(help->updates, "KeyBindings/Help-updates", "F12");
 #endif
+
+#ifdef Q_OS_ANDROID
+    playlist->add->dir->setEnabled(false);
+#endif
 }
 
 void MenuBar::changeProfile()

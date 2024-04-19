@@ -25,6 +25,10 @@
 #include <Settings.hpp>
 #include <Packet.hpp>
 
+#ifdef Q_OS_ANDROID
+#   include <QFile>
+#endif
+
 #include <limits>
 
 extern "C"
@@ -35,6 +39,42 @@ extern "C"
     #include <libavutil/display.h>
     #include <libavutil/pixdesc.h>
 }
+
+#ifdef Q_OS_ANDROID
+static int readPacketQFile(void *opaque, uint8_t *buf, int bufSize)
+{
+    auto &f = *static_cast<QFile *>(opaque);
+    const int64_t bread =f.read(reinterpret_cast<char *>(buf), bufSize);
+    if (bread == 0)
+        return AVERROR_EOF;
+    return bread;
+}
+static int64_t seekQFile(void *opaque, int64_t offset, int whence)
+{
+    auto &f = *static_cast<QFile *>(opaque);
+    switch (whence)
+    {
+        case SEEK_SET:
+            if (!f.seek(offset))
+                return -1;
+            break;
+        case SEEK_CUR:
+            if (offset != 0)
+            {
+                if (!f.seek(f.pos() + offset))
+                    return -1;
+            }
+            break;
+        case SEEK_END:
+            if (!f.seek(f.size() - offset))
+                return -1;
+            break;
+        case AVSEEK_SIZE:
+            return f.size();
+    }
+    return f.pos();
+}
+#endif
 
 static void matroska_fix_ass_packet(AVRational stream_timebase, AVPacket *pkt)
 {
@@ -696,7 +736,15 @@ bool FormatContext::open(const QString &_url, const QString &param)
 
     AVInputFormat *inputFmt = nullptr;
     if (scheme == "file")
+    {
         isLocal = true;
+    }
+#ifdef Q_OS_ANDROID
+    else if (scheme == "content")
+    {
+        isLocal = true;
+    }
+#endif
     else
     {
         if (scheme != "rtsp")
@@ -720,6 +768,15 @@ bool FormatContext::open(const QString &_url, const QString &param)
     formatCtx = avformat_alloc_context();
     formatCtx->interrupt_callback.callback = (int(*)(void *))interruptCB;
     formatCtx->interrupt_callback.opaque = &abortCtx->isAborted;
+
+#ifdef Q_OS_ANDROID
+    if (isLocal)
+    {
+        m_file = std::make_unique<QFile>(url);
+        m_file->open(QFile::ReadOnly);
+        formatCtx->pb = avio_alloc_context(nullptr, 0, false, m_file.get(), readPacketQFile, nullptr, seekQFile);
+    }
+#endif
 
     if (oggOffset >= 0)
     {

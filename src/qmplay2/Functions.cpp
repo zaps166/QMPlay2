@@ -207,6 +207,10 @@ QString Functions::fileName(QString f, bool extension)
     if (f == "file:///")
         return "/";
 #endif
+#ifdef Q_OS_ANDROID
+    if (!extension && f.startsWith("content://"))
+        return QFileInfo(f).completeBaseName();
+#endif
     while (f.endsWith("/"))
         f.chop(1);
     const QString n = f.right(f.length() - f.lastIndexOf('/') - 1);

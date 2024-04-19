@@ -78,7 +78,13 @@ class QMPlay2FileReader : public IODeviceReader
 
     bool open() override final
     {
-        m_io.reset(new QFile(getUrl().mid(7)));
+        const auto url = getUrl();
+#ifdef Q_OS_ANDROID
+        if (url.startsWith("content"))
+            m_io.reset(new QFile(url));
+        else
+#endif
+            m_io.reset(new QFile(url.mid(7)));
         return IODeviceReader::open();
     }
 };
@@ -117,6 +123,10 @@ bool Reader::create(const QString &url, IOController<Reader> &reader, const QStr
     {
         if (scheme == "file")
             reader.assign(new QMPlay2FileReader);
+#ifdef Q_OS_ANDROID
+        else if (scheme == "content")
+            reader.assign(new QMPlay2FileReader);
+#endif
         else if (scheme == "QMPlay2")
             reader.assign(new QMPlay2ResourceReader);
         if (reader)
