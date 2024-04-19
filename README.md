@@ -179,7 +179,6 @@ For CMake build be sure that you have CMake 3.13 or higher.
     - Qt5DBus - Linux/BSD only,
     - Qt5Svg - for SVG icons,
     - Qt5Qml - for MediaBrowser,
-    - Qt5WinExtras - for Windows (Qt5 only),
     - Qt6Core5Compat - for Qt6,
 - FFmpeg >= 4.0:
     - libavformat - requires OpenSSL or GnuTLS for https support,
