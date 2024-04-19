@@ -208,18 +208,17 @@ For CMake build be sure that you have CMake 3.16 or higher.
 
 - Common packages:
 ```
-$ sudo pacman -S cmake make gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp qt5-base qt5-tools
+$ sudo pacman -S cmake ninja gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp qt6-base qt6-tools qt6-5compat qt6-svg qt6-declarative pipewire
 ```
 
 ### Running the compilation for Linux/BSD using CMake:
 
 - Install all needed packages and dependencies (in devel version) using package manager or compile it from sources.
 - You can use `cmake-gui` for graphical configuration. Otherwise follow the instructions below:
-    - create a "build" directory and go to it: `mkdir build && cd build`,
-    - run CMake (also you can run with arguments which you want): `cmake ..`,
+    - run CMake (also you can run with arguments which you want): `cmake -GNinja -B build -S .`,
     - check the summary - which features are enabled - you can set/force them manually,
-    - if CMake finishes without errors, run: `make -j8` (replace 8 with numbers of CPU threads),
-    - if compiling finishes without errors, install it: `sudo make -j8 install`.
+    - if CMake finishes without errors, run: `ninja -C build`,
+    - if compiling finishes without errors, install it: `sudo ninja -C build install`.
 
 CMake options (option - default value: description):
 - CMake options and the default settings:
@@ -267,36 +266,32 @@ CMake options (option - default value: description):
     - `BUILD_WITH_QT6` - autodetect: Build with Qt6.
 
 Using other Qt installation of CMake:
-- `Qt5Widgets_DIR`: path to the Qt5Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Widgets`).
-- `Qt5DBus_DIR`: path to the Qt5DBus cmake directory (e.g. `~/qtbase/lib/cmake/Qt5DBus`).
-- `Qt5LinguistTools_DIR`: path to the Qt5LinguistTools cmake directory (e.g. `~/qtbase/lib/cmake/Qt5LinguistTools`).
-- `Qt5Svg_DIR`: path to the Qt5Svg cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Svg`).
-- `Qt5Qml_DIR`: path to the Qt5Qml cmake directory (e.g. `~/qtbase/lib/cmake/Qt5Qml`).
+- `Qt6Widgets_DIR`: path to the Qt6Widgets cmake directory (e.g. `~/qtbase/lib/cmake/Qt6Widgets`).
+- `Qt6DBus_DIR`: path to the Qt6DBus cmake directory (e.g. `~/qtbase/lib/cmake/Qt66Bus`).
+- `Qt6LinguistTools_DIR`: path to the Qt6LinguistTools cmake directory (e.g. `~/qtbase/lib/cmake/Qt6LinguistTools`).
+- `Qt6Svg_DIR`: path to the Qt6Svg cmake directory (e.g. `~/qtbase/lib/cmake/Qt6Svg`).
+- `Qt6Qml_DIR`: path to the Qt6Qml cmake directory (e.g. `~/qtbase/lib/cmake/Qt6Qml`).
 
 Every CMake option must be prepended with `-D` and new value is set after `=`.
 
-You can strip binaries during installation to save disk space: `sudo make -j8 install/strip`.
+You can strip binaries during installation to save disk space: `sudo ninja -C build install/strip`.
 
 Example commands (execute it in QMPlay2 directory with source code):
 
 - Simple installation (rely on autodetection, `strip` reduces size, but it makes debugging unavailable):
 
 ```sh
-$ mkdir build
-$ cd build
-$ cmake .. -DCMAKE_INSTALL_PREFIX=/usr
-$ make -j8
-$ sudo make -j8 install/strip
+$ cmake -GNinja -B build -S . -DCMAKE_INSTALL_PREFIX=/usr
+$ ninja -C build
+$ sudo ninja -C build install/strip
 ```
 
 - Use manually-specified install prefix, disable SID, use Polish language only and use manually-specified Solid actions path:
 
 ```sh
-$ mkdir build
-$ cd build
-$ cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DUSE_CHIPTUNE_SID=OFF -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
-$ make -j8
-$ sudo make -j8 install
+$ cmake -GNinja -B build -S . -DCMAKE_INSTALL_PREFIX=/usr -DUSE_CHIPTUNE_SID=OFF -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
+$ ninja -C build
+$ sudo ninja -C build install
 ```
 
 - Update icon theme, mime and desktop database (replace `/usr/share/` by your install prefix path):
@@ -307,23 +302,23 @@ $ sudo update-mime-database /usr/share/mime
 $ sudo gtk-update-icon-cache /usr/share/icons/hicolor
 ```
 
-- Uninstallation (in `build` directory):
+- Uninstallation:
 
 ```sh
-$ sudo make uninstall
+$ sudo ninja -C build uninstall
 ```
 
 #### macOS:
 
 - Install [Brew](http://brew.sh) and developer command line tools.
-- Download and install Qt5 for macOS (ignore errors about missing XCode if any).
+- Download and install Qt6 for macOS (ignore errors about missing XCode if any).
 - Download and install CMake for macOS:
  - create symlink for `cmake` CLI (from Bundle) to `/usr/local/bin`.
 - Install `pkg-config` and all dependencies from Brew.
  - you can also compile them manually (especially `libass`, `ffmpeg` (w/o most encoders), `fribidi` (w/o `glib`) and `libsidplayfp`).
 - Set missing directories for dependencies (QtCreator or CMake GUI are recommended):
  - set install prefix e.g. to Desktop directory (for Bundle),
- - install via `make install` - this creates a Bundle.
+ - install via `ninja install` - this creates a Bundle.
 
 #### Windows (cross-compilation):
 
