@@ -414,12 +414,7 @@ if(BUILD_WITH_QT6)
     )
 endif()
 
-if(ANDROID)
-    target_link_libraries(${PROJECT_NAME}
-        PUBLIC
-        Qt6::CorePrivate
-    )
-elseif(USE_VULKAN AND NOT WIN32)
+if(USE_VULKAN AND NOT WIN32 AND NOT ANDROID)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
         dl

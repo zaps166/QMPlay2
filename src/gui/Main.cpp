@@ -48,9 +48,6 @@
 #if defined(CHECK_FOR_EGL) || defined(Q_OS_MACOS)
     #include <QSurfaceFormat>
 #endif
-#ifdef Q_OS_ANDROID
-    #include <QtCore/private/qandroidextras_p.h>
-#endif
 
 #ifdef Q_OS_WIN
 # include <lmcons.h>
