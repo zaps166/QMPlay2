@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.16)
 project(libqmplay2)
 
 set(QMPLAY2_HDR
@@ -387,17 +387,10 @@ target_link_libraries(${PROJECT_NAME}
     ${LIBQMPLAY2_LIBS}
 )
 if(USE_VULKAN)
-    if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.15.0")
-        target_link_libraries(${PROJECT_NAME}
-            PRIVATE
-            $<FILTER:$<TARGET_OBJECTS:QmVk>,EXCLUDE,.*\\.[gp]ch>
-        )
-    else()
-        target_link_libraries(${PROJECT_NAME}
-            PRIVATE
-            $<TARGET_OBJECTS:QmVk>
-        )
-    endif()
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        $<FILTER:$<TARGET_OBJECTS:QmVk>,EXCLUDE,.*\\.[gp]ch>
+    )
     target_compile_definitions(${PROJECT_NAME}
         PUBLIC
         $<TARGET_PROPERTY:QmVk,INTERFACE_COMPILE_DEFINITIONS>

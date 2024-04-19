@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.16)
 project(OpenSLES-QMPlay2)
 
 set(OpenSLES_HDR
