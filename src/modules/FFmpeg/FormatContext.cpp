@@ -261,7 +261,7 @@ FormatContext::~FormatContext()
         av_packet_free(&packet);
     }
     delete oggHelper;
-    for (StreamInfo *streamInfo : qAsConst(streamsInfo))
+    for (StreamInfo *streamInfo : std::as_const(streamsInfo))
         delete streamInfo;
 }
 
@@ -954,7 +954,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
                 {
                     if (firstAudioIdx > -1)
                     {
-                        for (auto &&streamInfo : qAsConst(streamsInfo))
+                        for (auto &&streamInfo : std::as_const(streamsInfo))
                         {
                             if (streamInfo->params->codec_type == AVMEDIA_TYPE_AUDIO)
                                 streamInfo->is_default = false;
@@ -987,7 +987,7 @@ void FormatContext::setStreamOffset(double offset)
 void FormatContext::selectStreams(const QSet<int> &selectedStreams)
 {
     m_allDiscarded = true;
-    for (AVStream *stream : qAsConst(streams))
+    for (AVStream *stream : std::as_const(streams))
     {
         if (stream->codecpar->codec_type == AVMEDIA_TYPE_DATA || stream->codecpar->codec_type == AVMEDIA_TYPE_ATTACHMENT)
         {

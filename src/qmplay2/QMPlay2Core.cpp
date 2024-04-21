@@ -347,7 +347,7 @@ void QMPlay2CoreClass::init(bool loadModulesAndGpu, bool modulesInSubdirs, const
         }
 
         QStringList pluginsName;
-        for (const QFileInfo &fInfo : qAsConst(pluginsList))
+        for (const QFileInfo &fInfo : std::as_const(pluginsList))
         {
             if (QLibrary::isLibrary(fInfo.filePath()))
             {
@@ -418,7 +418,7 @@ void QMPlay2CoreClass::quit()
 {
     if (settingsDir.isEmpty())
         return;
-    for (Module *pluginInstance : qAsConst(pluginsInstance))
+    for (Module *pluginInstance : std::as_const(pluginsInstance))
         delete pluginInstance;
     pluginsInstance.clear();
     videoFilters.clear();

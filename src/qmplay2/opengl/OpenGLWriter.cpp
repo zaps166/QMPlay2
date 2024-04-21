@@ -278,7 +278,7 @@ void OpenGLWriter::addAdditionalParam(const QString &key)
 
 void OpenGLWriter::initialize(const shared_ptr<OpenGLHWInterop> &hwInterop)
 {
-    for (auto &&additionalParam : qAsConst(m_additionalParams))
+    for (auto &&additionalParam : std::as_const(m_additionalParams))
         removeParam(additionalParam);
     m_additionalParams.clear();
 
@@ -289,7 +289,7 @@ void OpenGLWriter::initialize(const shared_ptr<OpenGLHWInterop> &hwInterop)
     bool hasBrightness = false, hasContrast = false, hasSharpness = false;
     if (!m_drawable->videoAdjustmentKeys.isEmpty())
     {
-        for (const QString &key : qAsConst(m_drawable->videoAdjustmentKeys))
+        for (const QString &key : std::as_const(m_drawable->videoAdjustmentKeys))
         {
             if (key == "Brightness")
                 hasBrightness = true;

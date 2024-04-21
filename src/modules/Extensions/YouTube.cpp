@@ -1306,7 +1306,7 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         if (subtitlesForLang.isEmpty())
             subtitlesForLang = subtitles[QMPlay2Core.getLanguage()].toArray();
 
-        for (auto &&subtitlesFmtVal : qAsConst(subtitlesForLang))
+        for (auto &&subtitlesFmtVal : std::as_const(subtitlesForLang))
         {
             const auto subtitlesFmt = subtitlesFmtVal.toObject();
             if (subtitlesFmt.isEmpty())
@@ -1338,12 +1338,12 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
     else
     {
         QString url = "FFmpeg://{";
-        for (auto &&urlPart : qAsConst(urls))
+        for (auto &&urlPart : std::as_const(urls))
             url += "[" + urlPart + "]";
         url += "}";
 
         QString ext;
-        for (auto &&extPart : qAsConst(exts))
+        for (auto &&extPart : std::as_const(exts))
             ext += "[" + extPart + "]";
 
         result += url;

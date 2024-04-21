@@ -32,7 +32,7 @@ void QMPlay2Extensions::openExtensions()
                 if (QMPlay2Ext)
                     guiExtensionsList.append(QMPlay2Ext);
             }
-    for (QMPlay2Extensions *QMPlay2Ext : qAsConst(guiExtensionsList))
+    for (QMPlay2Extensions *QMPlay2Ext : std::as_const(guiExtensionsList))
         QMPlay2Ext->init();
 }
 

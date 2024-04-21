@@ -125,7 +125,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
         else
         {
             *streamUrl = "FFmpeg://{";
-            for (const QString &tmpUrl : qAsConst(ytdlStdout))
+            for (const QString &tmpUrl : std::as_const(ytdlStdout))
                 *streamUrl += "[" + tmpUrl + "]";
             *streamUrl += "}";
         }
@@ -135,7 +135,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
     if (extension)
     {
         QStringList extensions;
-        for (const QString &tmpUrl : qAsConst(ytdlStdout))
+        for (const QString &tmpUrl : std::as_const(ytdlStdout))
         {
             if (tmpUrl.contains("mp4"))
                 extensions += ".mp4";
@@ -152,7 +152,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
         }
         if (extensions.count() == 1)
             *extension = extensions.at(0);
-        else for (const QString &tmpExt : qAsConst(extensions))
+        else for (const QString &tmpExt : std::as_const(extensions))
             *extension += "[" + tmpExt + "]";
     }
 }
@@ -200,7 +200,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 
             // Verify if URLs has printable characters, because sometimes we
             // can get binary garbage at output (especially on Openload).
-            for (const QString &line : qAsConst(result))
+            for (const QString &line : std::as_const(result))
             {
                 if (line.startsWith("http"))
                 {

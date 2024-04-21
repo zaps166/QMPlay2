@@ -523,7 +523,7 @@ void FFDecSW::setPixelFormat()
 
     const QByteArray srcPixFmtName = srcPixDesc->name;
 
-    for (const AVPixelFormat pixFmt : qAsConst(m_supportedPixelFormats))
+    for (const AVPixelFormat pixFmt : std::as_const(m_supportedPixelFormats))
     {
         if (!sws_isSupportedOutput(pixFmt))
             continue;

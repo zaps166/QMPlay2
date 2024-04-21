@@ -1154,7 +1154,7 @@ void DemuxerThr::emitInfo()
         ++i;
     }
     i = 0;
-    for (const QString &fName : qAsConst(playC.fileSubsList))
+    for (const QString &fName : std::as_const(playC.fileSubsList))
         addSubtitleStream(fName == playC.fileSubs, subtitlesStreams, i++, ++subtitlesStreamCount, "fileSubs", QString(), Functions::fileName(fName), subtitlesStreamsMenu);
 
     if (!videoStreams.isEmpty())

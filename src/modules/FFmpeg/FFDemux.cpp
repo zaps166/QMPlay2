@@ -35,7 +35,7 @@ FFDemux::FFDemux(Module &module) :
 FFDemux::~FFDemux()
 {
     streams_info.clear();
-    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (const FormatContext *fmtCtx : std::as_const(formatContexts))
         delete fmtCtx;
 }
 
@@ -56,7 +56,7 @@ bool FFDemux::set()
 bool FFDemux::metadataChanged() const
 {
     bool isMetadataChanged = false;
-    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (const FormatContext *fmtCtx : std::as_const(formatContexts))
         isMetadataChanged |= fmtCtx->metadataChanged();
     return isMetadataChanged;
 }
@@ -64,7 +64,7 @@ bool FFDemux::metadataChanged() const
 bool FFDemux::isStillImage() const
 {
     bool stillImage = true;
-    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (const FormatContext *fmtCtx : std::as_const(formatContexts))
         stillImage &= fmtCtx->isStillImage();
     return stillImage;
 }
@@ -85,7 +85,7 @@ QList<ChapterInfo> FFDemux::getChapters() const
 QString FFDemux::name() const
 {
     QString name;
-    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (const FormatContext *fmtCtx : std::as_const(formatContexts))
     {
         const QString fmtCtxName = fmtCtx->name();
         if (!name.contains(fmtCtxName))
@@ -115,7 +115,7 @@ bool FFDemux::getReplayGain(bool album, float &gain_db, float &peak) const
 qint64 FFDemux::size() const
 {
     qint64 bytes = -1;
-    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (const FormatContext *fmtCtx : std::as_const(formatContexts))
     {
         const qint64 s = fmtCtx->size();
         if (s < 0)
@@ -127,14 +127,14 @@ qint64 FFDemux::size() const
 double FFDemux::length() const
 {
     double length = -1.0;
-    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (const FormatContext *fmtCtx : std::as_const(formatContexts))
         length = qMax(length, fmtCtx->length());
     return length;
 }
 int FFDemux::bitrate() const
 {
     int bitrate = 0;
-    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (const FormatContext *fmtCtx : std::as_const(formatContexts))
         bitrate += fmtCtx->bitrate();
     return bitrate;
 }
@@ -147,7 +147,7 @@ QByteArray FFDemux::image(bool forceCopy) const
 
 bool FFDemux::localStream() const
 {
-    for (const FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (const FormatContext *fmtCtx : std::as_const(formatContexts))
         if (!fmtCtx->isLocal)
             return false;
     return true;
@@ -157,7 +157,7 @@ void FFDemux::selectStreams(const QSet<int> &selectedStreams)
 {
     bool first = true;
     int baseIdx = 0;
-    for (FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (FormatContext *fmtCtx : std::as_const(formatContexts))
     {
         if (first)
         {
@@ -180,7 +180,7 @@ void FFDemux::selectStreams(const QSet<int> &selectedStreams)
 bool FFDemux::seek(double pos, bool backward)
 {
     bool seeked = false;
-    for (FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (FormatContext *fmtCtx : std::as_const(formatContexts))
     {
         if (fmtCtx->seek(pos, backward))
             seeked |= true;
@@ -230,13 +230,13 @@ bool FFDemux::read(Packet &encoded, int &idx)
 }
 void FFDemux::pause()
 {
-    for (FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (FormatContext *fmtCtx : std::as_const(formatContexts))
         fmtCtx->pause();
 }
 void FFDemux::abort()
 {
     QMutexLocker mL(&mutex);
-    for (FormatContext *fmtCtx : qAsConst(formatContexts))
+    for (FormatContext *fmtCtx : std::as_const(formatContexts))
         fmtCtx->abort();
     abortFetchTracks = true;
 }

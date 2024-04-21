@@ -562,7 +562,7 @@ void VideoThr::run()
         }
         else if (playC.ass)
         {
-            for (auto &&sPacket : qAsConst(sPackets))
+            for (auto &&sPacket : std::as_const(sPackets))
             {
                 if (sDec && m_decodeToAss)
                 {

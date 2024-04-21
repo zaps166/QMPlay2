@@ -58,16 +58,16 @@ AudioThr::~AudioThr()
 
 void AudioThr::stop(bool terminate)
 {
-    for (QMPlay2Extensions *vis : qAsConst(visualizations))
+    for (QMPlay2Extensions *vis : std::as_const(visualizations))
         vis->visState(false);
-    for (AudioFilter *filter : qAsConst(filters))
+    for (AudioFilter *filter : std::as_const(filters))
         delete filter;
     playC.audioSeekPos = -1;
     AVThread::stop(terminate);
 }
 void AudioThr::clearVisualizations()
 {
-    for (QMPlay2Extensions *vis : qAsConst(visualizations))
+    for (QMPlay2Extensions *vis : std::as_const(visualizations))
         vis->clearSoundData();
 }
 
@@ -111,9 +111,9 @@ bool AudioThr::setParams(uchar realChn, uint realSRate, uchar chn, uint sRate, b
             sample_rate = realSample_rate;
         }
 
-        for (QMPlay2Extensions *vis : qAsConst(visualizations))
+        for (QMPlay2Extensions *vis : std::as_const(visualizations))
             vis->visState(true, currentChannels(), currentSampleRate());
-        for (AudioFilter *filter : qAsConst(filters))
+        for (AudioFilter *filter : std::as_const(filters))
             filter->setAudioParameters(currentChannels(), currentSampleRate());
 
         return true;
@@ -188,7 +188,7 @@ void AudioThr::run()
             bool hasBufferedSamplesInResampler = false;
             if (playC.endOfStream && !hasAPackets)
             {
-                for (AudioFilter *filter : qAsConst(filters))
+                for (AudioFilter *filter : std::as_const(filters))
                 {
                     if (filter->bufferedSamples())
                     {
@@ -290,7 +290,7 @@ void AudioThr::run()
             }
 
             delay = writer->getParam("delay").toDouble() + sndResampler.getDelay();
-            for (AudioFilter *filter : qAsConst(filters))
+            for (AudioFilter *filter : std::as_const(filters))
             {
                 if (flushAudio)
                     filter->clearBuffers();
@@ -383,7 +383,7 @@ void AudioThr::run()
                             data[i] *= vol[i & 1];
                     }
 
-                    for (QMPlay2Extensions *vis : qAsConst(visualizations))
+                    for (QMPlay2Extensions *vis : std::as_const(visualizations))
                         vis->sendSoundData(decodedChunk);
 
                     QByteArray dataToWrite;
@@ -469,6 +469,6 @@ inline uint AudioThr::currentSampleRate() const
 
 void AudioThr::pauseVis(bool b)
 {
-    for (QMPlay2Extensions *vis : qAsConst(visualizations))
+    for (QMPlay2Extensions *vis : std::as_const(visualizations))
         vis->visState(!b, currentChannels(), currentSampleRate());
 }

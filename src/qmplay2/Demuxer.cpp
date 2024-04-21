@@ -69,7 +69,7 @@ bool Demuxer::create(const QString &url, IOController<Demuxer> &demuxer, FetchTr
 
 Demuxer::~Demuxer()
 {
-    for (StreamInfo *streamInfo : qAsConst(streams_info))
+    for (StreamInfo *streamInfo : std::as_const(streams_info))
         delete streamInfo;
 }
 

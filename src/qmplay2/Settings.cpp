@@ -83,7 +83,7 @@ QVariant Settings::get(const QString &key, const QVariant &def) const
 
 void Settings::flushCache()
 {
-    for (const QString &key : qAsConst(toRemove))
+    for (const QString &key : std::as_const(toRemove))
         QSettings::remove(key);
     toRemove.clear();
 

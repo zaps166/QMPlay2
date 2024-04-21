@@ -634,7 +634,7 @@ vector<unique_lock<mutex>> Window::prepareOSD(bool &changed)
     vector<unique_lock<mutex>> lockers;
     lockers.reserve(m_osd.size());
 
-    for (auto &&osd : qAsConst(m_osd))
+    for (auto &&osd : std::as_const(m_osd))
     {
         lockers.push_back(osd->lock());
 
@@ -696,7 +696,7 @@ void Window::renderOSD()
 
     vector<const QMPlay2OSD::Image *> osdImages;
 
-    for (auto &&osd : qAsConst(m_osd))
+    for (auto &&osd : std::as_const(m_osd))
     {
         osd->iterate([&](const QMPlay2OSD::Image &image) {
             if (image.dataBufferView->buffer()->device() != m.device)

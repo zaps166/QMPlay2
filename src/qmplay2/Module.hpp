@@ -124,7 +124,7 @@ template<typename T>
 void Module::setInstance()
 {
     QMutexLocker locker(&mutex);
-    for (ModuleCommon *mc : qAsConst(instances))
+    for (ModuleCommon *mc : std::as_const(instances))
     {
         T *t = dynamic_cast<T *>(mc);
         if (t)

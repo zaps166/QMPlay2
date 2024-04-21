@@ -64,7 +64,7 @@ DXVA2OpenGL::~DXVA2OpenGL()
     {
         for (int i = 0; i < s_numRenderTargets; ++i)
         {
-            for (auto &&renderTarget : qAsConst(m_renderTargets[i].surfaces))
+            for (auto &&renderTarget : std::as_const(m_renderTargets[i].surfaces))
                 renderTarget->Release();
         }
     }
@@ -339,7 +339,7 @@ bool DXVA2OpenGL::checkCodec(const QByteArray &codecName, bool b10)
 
         for (UINT i = 0; i < count; ++i)
         {
-            for (const GUID *guid : qAsConst(neededCodecGUIDs))
+            for (const GUID *guid : std::as_const(neededCodecGUIDs))
             {
                 if (IsEqualGUID(codecGUIDs[i], *guid))
                 {

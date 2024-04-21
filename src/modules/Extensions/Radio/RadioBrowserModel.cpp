@@ -62,7 +62,7 @@ RadioBrowserModel::~RadioBrowserModel()
 
 void RadioBrowserModel::clear()
 {
-    for (const std::shared_ptr<Column> &column : qAsConst(m_rows))
+    for (const std::shared_ptr<Column> &column : std::as_const(m_rows))
         delete column->iconReply;
     delete m_replySearch;
 
@@ -88,7 +88,7 @@ void RadioBrowserModel::loadIcons(const int first, const int last)
         if (!column->iconReply && !column->iconUrl.isEmpty())
         {
             column->iconReply = m_net->start(column->iconUrl);
-            for (const std::shared_ptr<Column> &c : qAsConst(m_rows))
+            for (const std::shared_ptr<Column> &c : std::as_const(m_rows))
             {
                 if (c.get() == column)
                     continue;
@@ -296,7 +296,7 @@ void RadioBrowserModel::setFiltrText(const QString &text)
     else
     {
         m_rowsToDisplay.clear();
-        for (const std::shared_ptr<Column> &column : qAsConst(m_rows))
+        for (const std::shared_ptr<Column> &column : std::as_const(m_rows))
         {
             if (column->name.contains(text, Qt::CaseInsensitive))
                 m_rowsToDisplay.append(column);

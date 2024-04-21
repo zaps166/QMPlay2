@@ -640,7 +640,7 @@ bool Instance::isCompatibleDevice(const shared_ptr<PhysicalDevice> &physicalDevi
     QString errorString = "Vulkan :: Discarding \"";
     errorString += properties.deviceName.data();
     errorString += "\", because:";
-    for (auto &&error : qAsConst(errors))
+    for (auto &&error : std::as_const(errors))
         errorString += "\n   - " + error;
     qDebug().noquote() << errorString;
 

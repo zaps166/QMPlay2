@@ -251,7 +251,7 @@ bool Classic::toASS(const QByteArray &txt, LibASS *ass, double fps)
         }
 
         initOnce(ok, ass);
-        for (const SubWithoutEnd &sub : qAsConst(subsWithoutEnd))
+        for (const SubWithoutEnd &sub : std::as_const(subsWithoutEnd))
             ass->addASSEvent(Functions::convertToASS(sub.sub), sub.start, sub.duration);
     }
 
