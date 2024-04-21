@@ -388,7 +388,7 @@ bool YouTubeDL::update()
 
     // Mutex must be locked here
 
-    qDebug() << "\"youtube-dl\" updates will be checked";
+    qDebug() << "\"yt-dlp\" updates will be checked";
     QMPlay2Core.setWorking(true);
 
     ensureExecutable();
