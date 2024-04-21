@@ -148,8 +148,6 @@ namespace Functions
 
     QMPLAY2SHAREDLIB_EXPORT bool wrapMouse(QWidget *widget, QPoint &mousePos, int margin = 0);
 
-    QMPLAY2SHAREDLIB_EXPORT QByteArray decryptAes256Cbc(const QByteArray &password, const QByteArray &salt, const QByteArray &ciphered);
-
     QMPLAY2SHAREDLIB_EXPORT QByteArray textWithFallbackEncoding(const QByteArray &data);
 
     QMPLAY2SHAREDLIB_EXPORT QMatrix4x4 getYUVtoRGBmatrix(AVColorSpace colorSpace);

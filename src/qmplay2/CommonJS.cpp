@@ -139,11 +139,6 @@ QByteArray CommonJS::fromHex(const QByteArray &data)
     return QByteArray::fromHex(data);
 }
 
-QByteArray CommonJS::decryptAes256Cbc(const QByteArray &password, const QByteArray &salt, const QByteArray &ciphered)
-{
-    return Functions::decryptAes256Cbc(password, salt, ciphered);
-}
-
 QVariantMap CommonJS::youTubeDlFixUrl(const QString &url, const int ioControllerId, const bool nameAvail, const bool extensionAvail, const bool errorAvail)
 {
     if (auto ioCtrl = getIOController(ioControllerId))
