@@ -45,7 +45,7 @@ void FFCommon::setDriversPath(const QString &dirName, const QByteArray &envVar)
                     continue;
 
                 const auto path = entry.mid(5);
-                if (path.contains("/lib" + wordSizeStr))
+                if (path.contains(QByteArray("/lib" + wordSizeStr)))
                     dirsWithWordSize.append(path);
                 else if (path.contains("/lib/") || path.endsWith("/lib"))
                     dirs.append(path);
