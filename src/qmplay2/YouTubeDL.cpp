@@ -189,7 +189,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
 
     if (isOk)
     {
-        result = QStringList(m_process.readAllStandardOutput());
+        result = QStringList(QString::fromLocal8Bit(m_process.readAllStandardOutput()));
         if (rawOutput)
         {
             result += m_process.readAllStandardError();
