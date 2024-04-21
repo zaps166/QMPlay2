@@ -979,7 +979,7 @@ QMatrix4x4 Functions::getColorPrimariesTo709Matrix(const QVector2D &wp, array<QV
             Yr,   Yg,   Yb,   0.0f,
             Zr,   Zg,   Zb,   0.0f,
             0.0f, 0.0f, 0.0f, 1.0f
-        ).inverted() * wpXyz;
+        ).inverted().map(wpXyz);
 
         return QMatrix4x4(
             S[0] * Xr, S[1] * Xg, S[2] * Xb, 0.0f,
