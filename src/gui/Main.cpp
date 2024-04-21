@@ -370,10 +370,9 @@ static inline void exitProcedure()
 
 #ifndef Q_OS_WIN
     #include <csetjmp>
-    static jmp_buf env;
-    static bool qAppOK;
-    static bool canDeleteApp = true;
+    static jmp_buf g_env;
 #endif
+static bool g_qAppOK = false;
 
 static inline void forceKill()
 {
@@ -417,13 +416,12 @@ static void signal_handler(int s)
             break;
         case SIGABRT:
 #ifndef Q_OS_WIN
-            if (!qAppOK && g_useGui)
+            if (!g_qAppOK && qApp)
             {
-                canDeleteApp = g_useGui = false;
-                longjmp(env, 1);
+                longjmp(g_env, 1);
             }
 #endif
-            QMPlay2Core.log("QMPlay2 has been aborted (SIGABRT)", ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
+            QMPlay2Core.log("QMPlay2 has been aborted (SIGABRT)", ErrorLog | AddTimeToLog | (g_qAppOK ? SaveLog : DontShowInGUI));
             callDefaultSignalHandler(s);
             break;
         case SIGILL:
@@ -443,7 +441,7 @@ static void signal_handler(int s)
     }
     if (crashSignal)
     {
-        QMPlay2Core.log(QString("QMPlay2 crashed (%1)").arg(crashSignal), ErrorLog | AddTimeToLog | (qApp ? SaveLog : DontShowInGUI));
+        QMPlay2Core.log(QString("QMPlay2 crashed (%1)").arg(crashSignal), ErrorLog | AddTimeToLog | (g_qAppOK ? SaveLog : DontShowInGUI));
         callDefaultSignalHandler(s);
     }
 }
@@ -661,16 +659,24 @@ int main(int argc, char *argv[])
 #endif
 
 #ifndef Q_OS_WIN
-    if (!setjmp(env))
+    if (!setjmp(g_env))
 #endif
-    new QApplication(argc, argv);
+    {
+        new QApplication(argc, argv);
+    }
 #ifndef Q_OS_WIN
-    qAppOK = true;
+    else
+    {
+        new QCoreApplication(argc, argv);
+        g_useGui = false;
+    }
 #endif
     QCoreApplication::setApplicationName("QMPlay2");
 
     QMPlay2GUIClass &qmplay2Gui = QMPlay2GUI; //Create "QMPlay2GUI" instance
     g_defaultMsgHandler = qInstallMessageHandler(messageHandler);
+
+    g_qAppOK = true;
 
     QCommandLineParser *parser = createCmdParser(false);
     parser->setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
@@ -731,10 +737,7 @@ int main(int argc, char *argv[])
 
         if (!g_useGui)
         {
-#ifndef Q_OS_WIN
-            if (canDeleteApp)
-#endif
-                delete qApp;
+            delete qApp;
             return 0;
         }
     }
@@ -968,12 +971,7 @@ int main(int argc, char *argv[])
 #endif
 
     exitProcedure();
-
-#ifndef Q_OS_WIN
-    if (canDeleteApp)
-#endif
-        delete qApp;
-
+    delete qApp;
 #ifdef Q_OS_HAIKU
     kill(::getpid(), SIGKILL); // FIXME
 #endif
