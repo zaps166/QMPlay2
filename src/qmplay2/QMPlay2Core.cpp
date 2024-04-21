@@ -228,7 +228,7 @@ bool QMPlay2CoreClass::isGlOnWindowForced()
 }
 #endif
 
-void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName)
+void QMPlay2CoreClass::init(bool loadModulesAndGpu, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName)
 {
     if (!settingsDir.isEmpty())
         return;
@@ -317,15 +317,15 @@ void QMPlay2CoreClass::init(bool loadModules, bool modulesInSubdirs, const QStri
     av_log_set_callback(avQMPlay2LogHandler);
     avformat_network_init();
 
-#if defined(USE_VULKAN) && !defined(Q_OS_ANDROID)
-    settings->init("Renderer", "vulkan");
-#elif defined(USE_OPENGL)
-    settings->init("Renderer", "opengl");
-#endif
-    m_gpuInstance = GPUInstance::create();
-
-    if (loadModules)
+    if (loadModulesAndGpu)
     {
+#if defined(USE_VULKAN) && !defined(Q_OS_ANDROID)
+        settings->init("Renderer", "vulkan");
+#elif defined(USE_OPENGL)
+        settings->init("Renderer", "opengl");
+#endif
+        m_gpuInstance = GPUInstance::create();
+
         QFileInfoList pluginsList;
         QDir(settingsDir).mkdir("Modules");
         pluginsList += QDir(settingsDir + "Modules/").entryInfoList(QDir::Files);

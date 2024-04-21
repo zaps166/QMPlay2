@@ -79,7 +79,7 @@ public:
     static bool isGlOnWindowForced();
 #endif
 
-    void init(bool loadModules, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName);
+    void init(bool loadModulesAndGpu, bool modulesInSubdirs, const QString &libPath, const QString &sharePath, const QString &profileName);
     void quit();
 
     bool canSuspend();
