@@ -307,7 +307,10 @@ if(NOT WIN32)
     execute_process(
         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/version
         OUTPUT_VARIABLE QMPLAY2_VERSION
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    string(REPLACE "." "-" QMPLAY2_DATE ${QMPLAY2_VERSION})
+    string(PREPEND QMPLAY2_DATE "20")
 endif()
 
 option(USE_GIT_VERSION "Append Git HEAD to QMPlay2 version (if exists)" ON)
