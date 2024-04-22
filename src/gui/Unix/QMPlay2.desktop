@@ -5,6 +5,7 @@ Name=QMPlay2
 Comment=Watching movies and listening to music
 Comment[pl]=Oglądanie filmów oraz słuchanie muzyki
 Comment[ru]=Просмотр фильмов и прослушивание музыки
+Comment[tr]=Film izleyin ve müzik dinleyin
 StartupNotify=false
 StartupWMClass=QMPlay2
 Type=Application
