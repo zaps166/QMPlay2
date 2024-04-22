@@ -53,10 +53,11 @@ bool FFDecHWAccel::hasHWAccel(const char *hwaccelName)
 
 AVCodec *FFDecHWAccel::init(StreamInfo &streamInfo)
 {
-    if (streamInfo.codec_name == "libdav1d")
+    const QByteArray codecName = avcodec_get_name(streamInfo.params->codec_id);
+    if (streamInfo.codec_name != codecName)
     {
         streamInfo.codec_name_backup = streamInfo.codec_name;
-        streamInfo.codec_name = "av1";
+        streamInfo.codec_name = codecName;
     }
     return FFDec::init(streamInfo);
 }
