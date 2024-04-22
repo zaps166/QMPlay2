@@ -39,14 +39,14 @@ Table of Contents
 - Don't mix FFmpeg from different repositories!
 - Run the following commands:
 ##### openSUSE Tumbleweed
-```
+```sh
 sudo zypper ar https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed Packman
 sudo zypper dup --allow-vendor-change --from "Packman"
 sudo zypper in QMPlay2
 ```
 #### Easy installation on Fedora
 - Run the following commands:
-```
+```sh
 sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 sudo dnf groupupdate core
 sudo dnf update
@@ -207,8 +207,8 @@ For CMake build be sure that you have CMake 3.16 or higher.
 ##### Arch Linux / Manjaro Linux dependencies
 
 - Common packages:
-```
-$ sudo pacman -S cmake ninja gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp qt6-base qt6-tools qt6-5compat qt6-svg qt6-declarative pipewire
+```sh
+sudo pacman -S cmake ninja gcc pkg-config ffmpeg libass libva libxv alsa-lib libcdio taglib libcddb libpulse libgme libsidplayfp qt6-base qt6-tools qt6-5compat qt6-svg qt6-declarative pipewire
 ```
 
 ### Running the compilation for Linux/BSD using CMake:
@@ -281,31 +281,31 @@ Example commands (execute it in QMPlay2 directory with source code):
 - Simple installation (rely on autodetection, `strip` reduces size, but it makes debugging unavailable):
 
 ```sh
-$ cmake -GNinja -B build -S . -DCMAKE_INSTALL_PREFIX=/usr
-$ ninja -C build
-$ sudo ninja -C build install/strip
+cmake -GNinja -B build -S . -DCMAKE_INSTALL_PREFIX=/usr
+ninja -C build
+sudo ninja -C build install/strip
 ```
 
 - Use manually-specified install prefix, disable SID, use Polish language only and use manually-specified Solid actions path:
 
 ```sh
-$ cmake -GNinja -B build -S . -DCMAKE_INSTALL_PREFIX=/usr -DUSE_CHIPTUNE_SID=OFF -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
-$ ninja -C build
-$ sudo ninja -C build install
+cmake -GNinja -B build -S . -DCMAKE_INSTALL_PREFIX=/usr -DUSE_CHIPTUNE_SID=OFF -DLANGUAGES="pl" -DSOLID_ACTIONS_INSTALL_PATH="/usr/share/solid/actions"
+ninja -C build
+sudo ninja -C build install
 ```
 
 - Update icon theme, mime and desktop database (replace `/usr/share/` by your install prefix path):
 
 ```sh
-$ sudo update-desktop-database
-$ sudo update-mime-database /usr/share/mime
-$ sudo gtk-update-icon-cache /usr/share/icons/hicolor
+sudo update-desktop-database
+sudo update-mime-database /usr/share/mime
+sudo gtk-update-icon-cache /usr/share/icons/hicolor
 ```
 
 - Uninstallation:
 
 ```sh
-$ sudo ninja -C build uninstall
+sudo ninja -C build uninstall
 ```
 
 #### macOS:
