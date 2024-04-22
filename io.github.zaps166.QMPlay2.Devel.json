@@ -166,6 +166,10 @@
     {
       "name": "qmplay2",
       "buildsystem": "cmake-ninja",
+      "post-install": [
+        "install -D -m 0644 src/gui/Unix/QMPlay2_enqueue.desktop /app/share/applications/io.github.zaps166.QMPlay2.enqueue.desktop",
+        "sed -i 's,^Icon=QMPlay2$,Icon=io.github.zaps166.QMPlay2,g' /app/share/applications/io.github.zaps166.QMPlay2.enqueue.desktop"
+      ],
       "config-opts": [
         "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
       ],

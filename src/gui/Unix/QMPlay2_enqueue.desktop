@@ -4,6 +4,7 @@ Icon=QMPlay2
 Name=Enqueue in QMPlay2
 Name[pl]=Kolejkuj w QMPlay2
 Name[ru]=Добавить в очередь QMPlay2
+Name[tr]=QMPlay2 Kuyruğuna Ekle
 StartupNotify=false
 Type=Application
 Categories=Qt;AudioVideo;Player;Audio;Video;
