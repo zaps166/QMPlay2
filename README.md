@@ -168,6 +168,24 @@ Additionally In Linux/BSD you can associate keys with commands:
 
 Don't forget to update submodules: `git submodule update --init`.
 
+### Build for Flatpak
+
+Install flatpak builder:
+```sh
+flatpak install org.flatpak.Builder
+```
+
+Build QMPlay2:
+```sh
+flatpak run org.flatpak.Builder build/flatpak --force-clean --ccache --user --install io.github.zaps166.QMPlay2.Devel.json
+```
+
+Optionally you can install FFmpeg with all codecs and VA-API driver for Intel GPUs:
+```sh
+flatpak install ffmpeg-full
+flatpak install org.freedesktop.Platform.VAAPI.Intel
+```
+
 ### CMake requirements
 
 For CMake build be sure that you have CMake 3.16 or higher.
