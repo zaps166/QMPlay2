@@ -182,7 +182,7 @@ flatpak run org.flatpak.Builder build/flatpak --force-clean --ccache --user --in
 
 Optionally you can install FFmpeg with all codecs and VA-API driver for Intel GPUs:
 ```sh
-flatpak install ffmpeg-full
+flatpak install org.freedesktop.Platform.ffmpeg-full
 flatpak install org.freedesktop.Platform.VAAPI.Intel
 ```
 
