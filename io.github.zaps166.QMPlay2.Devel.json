@@ -30,7 +30,13 @@
     "--filesystem=/media",
     "--filesystem=/mnt",
     "--filesystem=/run/media",
-    "--system-talk-name=org.freedesktop.UDisks2"
+    "--system-talk-name=org.freedesktop.UDisks2",
+    "--system-talk-name=org.freedesktop.login1",
+    "--system-talk-name=org.freedesktop.ConsoleKit",
+    "--talk-name=org.freedesktop.ScreenSaver",
+    "--talk-name=org.freedesktop.Notifications",
+    "--own-name=org.mpris.MediaPlayer2.QMPlay2",
+    "--own-name=org.mpris.MediaPlayer2.QMPlay2.*"
   ],
   "cleanup": [
     "/bin/cd*",
