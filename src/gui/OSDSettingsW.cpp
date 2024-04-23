@@ -59,8 +59,6 @@ OSDSettingsW::OSDSettingsW(const QString &prefix) :
     ui(new Ui::OSDSettings),
     prefix(prefix)
 {
-    setAutoFillBackground(true);
-
     ui->setupUi(this);
     appendColon(children());
 
