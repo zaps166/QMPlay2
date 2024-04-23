@@ -59,7 +59,12 @@ OSDSettingsW::OSDSettingsW(const QString &prefix) :
     ui(new Ui::OSDSettings),
     prefix(prefix)
 {
-    ui->setupUi(this);
+    setWidgetResizable(true);
+    setFrameShape(QFrame::NoFrame);
+
+    auto widget = new QWidget;
+
+    ui->setupUi(widget);
     appendColon(children());
 
     // Alignment GroupBox
@@ -73,6 +78,8 @@ OSDSettingsW::OSDSettingsW(const QString &prefix) :
     readSettings();
 
     setDisabled(LibASS::isDummy());
+
+    setWidget(widget);
 }
 OSDSettingsW::~OSDSettingsW()
 {
