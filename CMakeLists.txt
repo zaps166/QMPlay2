@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(QMPlay2)
+project(QMPlay2 LANGUAGES CXX OBJCXX)
 
 if (NOT ${CMAKE_GENERATOR} MATCHES "Ninja")
     message(FATAL_ERROR "Unsupported generator ${CMAKE_GENERATOR}. Ninja is the only supported generator.")
