@@ -718,12 +718,8 @@ QByteArray OpenGLCommon::readShader(const QString &fileName, bool pure)
             shader = "precision highp float;\n";
         shader.append("#line 1\n");
     }
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     const auto data = res.uncompressedData();
     shader.append(data.constData(), data.size());
-#else
-    shader.append((const char *)res.data(), res.size());
-#endif
     return shader;
 }
 
