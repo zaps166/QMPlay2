@@ -24,6 +24,7 @@
 #include <Packet.hpp>
 #include <Reader.hpp>
 
+#include <QSet>
 #include <QMenu>
 #include <QTimer>
 #include <QLabel>
@@ -647,7 +648,38 @@ void DownloaderThread::run()
             QString filePath = getFilePath();
             if (!filePath.isEmpty())
             {
-                const QList<StreamInfo *> streamsInfo = demuxer->streamsInfo();
+                QList<StreamInfo *> streamsInfo = demuxer->streamsInfo();
+
+                // Download only first default video stream
+                QSet<int> selectedStreams;
+                bool videoStreamAdded = false;
+                int i = 0;
+                selectedStreams.reserve(streamsInfo.count());
+                for (auto it = streamsInfo.begin(); it != streamsInfo.end();)
+                {
+                    const auto streamInfo = *it;
+                    if (streamInfo->params->codec_type == AVMEDIA_TYPE_VIDEO)
+                    {
+                        if (!videoStreamAdded && streamInfo->is_default)
+                        {
+                            selectedStreams.insert(i);
+                            videoStreamAdded = true;
+                            ++it;
+                        }
+                        else
+                        {
+                            it = streamsInfo.erase(it);
+                        }
+                    }
+                    else
+                    {
+                        selectedStreams.insert(i);
+                        ++it;
+                    }
+                    ++i;
+                }
+                demuxer->selectStreams(selectedStreams);
+
                 MkvMuxer muxer(filePath, streamsInfo);
                 if (muxer.isOk())
                 {
