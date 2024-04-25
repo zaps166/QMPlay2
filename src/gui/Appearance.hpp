@@ -19,6 +19,7 @@
 #pragma once
 
 #include <QDialog>
+#include <QHash>
 
 class QDialogButtonBox;
 class QAbstractButton;
@@ -44,8 +45,8 @@ private slots:
     void deleteScheme();
     void chooseWallpaper();
     void buttonBoxClicked(QAbstractButton *b);
-    void showReadOnlyWarning();
 private:
+    void showReadOnlyWarning();
     void saveScheme(QSettings &colorScheme);
     void reloadSchemes();
     void loadCurrentPalette();
@@ -60,7 +61,8 @@ private:
     QPushButton *newB, *saveB, *deleteB;
 
     QGroupBox *useColorsB;
-    ColorButton *buttonC, *windowC, *shadowC, *highlightC, *baseC, *textC, *highlightedTextC, *sliderButtonC;
+    QHash<QPalette::ColorRole, ColorButton *> m_colorButtons;
+    ColorButton *m_colorSliderButton, *m_colorSliderHighlight;
 
     QGroupBox *useWallpaperB;
     WallpaperW *wallpaperW;

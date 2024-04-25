@@ -28,10 +28,12 @@
 #include <QDoubleSpinBox>
 #include <QApplication>
 #include <QInputDialog>
+#include <QScrollArea>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QGridLayout>
 #include <QFormLayout>
+#include <QMetaEnum>
 #include <QGroupBox>
 #include <QSettings>
 #include <QComboBox>
@@ -40,6 +42,8 @@
 #include <QStyle>
 #include <QLabel>
 #include <QFile>
+
+#include <map>
 
 class WallpaperW : public QWidget
 {
@@ -68,42 +72,110 @@ private:
 
 /**/
 
-#define DEFAULT_ALPHA  0.3
-#define DEFAULT_GRAD1  0xFF000000
-#define DEFAULT_GRAD2  0xFF333366
-#define DEFAULT_QMPTXT 0xFFFFFFFF
+constexpr auto DEFAULT_ALPHA  = 0.3;
+constexpr auto DEFAULT_GRAD1  = 0xFF000000;
+constexpr auto DEFAULT_GRAD2  = 0xFF333366;
+constexpr auto DEFAULT_QMPTXT = 0xFFFFFFFF;
 
-static const QString QMPlay2ColorExtension = ".QMPlay2Color";
+static const auto QMPlay2ColorExtension = QStringLiteral(".QMPlay2Color");
 static QPalette systemPalette;
 static QString colorsDir;
 
+template<bool sort = false, typename Fn>
+static void iterateRoles(Fn &&fn)
+{
+    const auto colorRoles = QMetaEnum::fromType<QPalette::ColorRole>();
+    const int colorRolesCount = colorRoles.keyCount();
+    auto filterFn = [](auto role) {
+        return role != QPalette::WindowText
+            && role != QPalette::BrightText
+            && role != QPalette::ButtonText
+            && role != QPalette::LinkVisited
+            && role != QPalette::NoRole
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+            && role != QPalette::Accent
+#endif
+            && role != QPalette::NColorRoles
+        ;
+    };
+    if constexpr (sort)
+    {
+        std::map<QByteArray, QPalette::ColorRole> names;
+        for (int i = 0; i < colorRolesCount; ++i)
+        {
+            const auto role = static_cast<QPalette::ColorRole>(colorRoles.value(i));
+            if (filterFn(role))
+            {
+                const char *name = colorRoles.key(i);
+                const int nameLen = qstrlen(name);
+
+                QByteArray newName;
+                newName.reserve(nameLen + 2);
+
+                for (int i = 0; i < nameLen; ++i)
+                {
+                    if (i > 0 && QChar::isUpper(name[i]))
+                    {
+                        newName += ' ';
+                        newName += QChar::toLower(name[i]);
+                    }
+                    else
+                    {
+                        newName += name[i];
+                    }
+                }
+
+                names[newName] = role;
+            }
+        }
+        for (auto &&[name, role] : names)
+        {
+            fn(role, name.constData());
+        }
+    }
+    else for (int i = 0; i < colorRolesCount; ++i)
+    {
+        const auto role = static_cast<QPalette::ColorRole>(colorRoles.value(i));
+        if (filterFn(role))
+            fn(role, colorRoles.key(i));
+    }
+}
+static QColor baseToAlternateBase(QColor color)
+{
+    int r, g, b, a;
+    color.getRgb(&r, &g, &b, &a);
+    if (color.lightnessF() >= 0.5)
+    {
+        r -= 8;
+        g -= 8;
+        b -= 8;
+    }
+    else
+    {
+        r += 8;
+        g += 8;
+        b += 8;
+    }
+    r = qBound(0, r, 255);
+    g = qBound(0, g, 255);
+    b = qBound(0, b, 255);
+    color.setRgb(r, g, b, a);
+    return color;
+}
 static void setBrush(QPalette &pal, QPalette::ColorRole colorRole, QColor color, double alpha = 1.0)
 {
     color.setAlphaF(alpha);
-    if (colorRole == QPalette::AlternateBase)
-    {
-        int r, g, b, a;
-        color.getRgb(&r, &g, &b, &a);
-        if (color.lightnessF() >= 0.5)
-        {
-            r -= 8;
-            g -= 8;
-            b -= 8;
-        }
-        else
-        {
-            r += 8;
-            g += 8;
-            b += 8;
-        }
-        r = qBound(0, r, 255);
-        g = qBound(0, g, 255);
-        b = qBound(0, b, 255);
-        color.setRgb(r, g, b, a);
-    }
     pal.setBrush(QPalette::Active, colorRole, color);
-    pal.setBrush(QPalette::Inactive, colorRole, colorRole == QPalette::Highlight ? color.lighter(120) : color);
+    pal.setBrush(QPalette::Inactive, colorRole, color);
     pal.setBrush(QPalette::Disabled, colorRole, color.darker(140));
+}
+static void applyAlpha(QPalette &pal, double alpha)
+{
+    setBrush(pal, QPalette::Button, pal.color(QPalette::Button), alpha);
+    setBrush(pal, QPalette::Base, pal.color(QPalette::Base), alpha);
+    setBrush(pal, QPalette::AlternateBase, pal.color(QPalette::AlternateBase), alpha);
+    setBrush(pal, QPalette::Shadow, pal.color(QPalette::Shadow), alpha);
+    setBrush(pal, QPalette::Highlight, pal.color(QPalette::Highlight), alpha);
 }
 static QPixmap getWallpaper(const QByteArray &base64Pixmap)
 {
@@ -152,30 +224,30 @@ void Appearance::init()
             QPalette pal = systemPalette, sliderButton_pal = systemPalette;
             if (colorScheme.value("Colors/Use").toBool())
             {
-                if (colorScheme.contains("Colors/Button"))
-                    setBrush(pal, QPalette::Button, colorScheme.value("Colors/Button").toUInt());
-                if (colorScheme.contains("Colors/Window"))
-                    setBrush(pal, QPalette::Window, colorScheme.value("Colors/Window").toUInt());
-                if (colorScheme.contains("Colors/Shadow"))
-                    setBrush(pal, QPalette::Shadow, colorScheme.value("Colors/Shadow").toUInt());
-                if (colorScheme.contains("Colors/Highlight"))
-                    setBrush(pal, QPalette::Highlight, colorScheme.value("Colors/Highlight").toUInt());
-                if (colorScheme.contains("Colors/Base"))
-                {
-                    setBrush(pal, QPalette::Base, colorScheme.value("Colors/Base").toUInt());
-                    setBrush(pal, QPalette::AlternateBase, colorScheme.value("Colors/Base").toUInt());
-                }
-                if (colorScheme.contains("Colors/Text"))
-                {
-                    setBrush(pal, QPalette::Text, colorScheme.value("Colors/Text").toUInt());
-                    setBrush(pal, QPalette::WindowText, colorScheme.value("Colors/Text").toUInt());
-                    setBrush(pal, QPalette::ButtonText, colorScheme.value("Colors/Text").toUInt());
-                }
-                if (colorScheme.contains("Colors/HighlightedText"))
-                    setBrush(pal, QPalette::HighlightedText, colorScheme.value("Colors/HighlightedText").toUInt());
+                iterateRoles([&](QPalette::ColorRole role, const char *name) {
+                    const QString settingsKey = QStringLiteral("Colors/") + name;
+                    const auto color = colorScheme.value(settingsKey).toUInt();
+                    if (colorScheme.contains(settingsKey))
+                    {
+                        setBrush(pal, role, color);
+                        if (role == QPalette::Text)
+                        {
+                            setBrush(pal, QPalette::WindowText, color);
+                            setBrush(pal, QPalette::ButtonText, color);
+                        }
+                    }
+                    else if (role == QPalette::AlternateBase)
+                    {
+                        // Backward compatibility
+                        if (colorScheme.contains("Colors/Base"))
+                            setBrush(pal, QPalette::AlternateBase, baseToAlternateBase(colorScheme.value("Colors/Base").toUInt()));
+                    }
+                });
                 sliderButton_pal = pal;
                 if (colorScheme.contains("Colors/SliderButton"))
                     setBrush(sliderButton_pal, QPalette::Button, colorScheme.value("Colors/SliderButton").toUInt());
+                if (colorScheme.contains("Colors/SliderHighlight"))
+                    setBrush(sliderButton_pal, QPalette::Highlight, colorScheme.value("Colors/SliderHighlight").toUInt());
                 mustApplyPalette = true;
             }
 
@@ -189,11 +261,7 @@ void Appearance::init()
                     if (colorScheme.contains("Wallpaper/Alpha"))
                     {
                         alpha = colorScheme.value("Wallpaper/Alpha").toDouble();
-                        setBrush(mainW_pal, QPalette::Button, mainW_pal.brush(QPalette::Button).color(), alpha);
-                        setBrush(mainW_pal, QPalette::Base, mainW_pal.brush(QPalette::Base).color(), alpha);
-                        setBrush(mainW_pal, QPalette::AlternateBase, mainW_pal.brush(QPalette::AlternateBase).color(), alpha);
-                        setBrush(mainW_pal, QPalette::Shadow, mainW_pal.brush(QPalette::Shadow).color(), alpha);
-                        setBrush(mainW_pal, QPalette::Highlight, mainW_pal.brush(QPalette::Highlight).color(), alpha);
+                        applyAlpha(mainW_pal, alpha);
                     }
                     mainW_pal.setBrush(QPalette::Window, wallpaper);
 
@@ -247,18 +315,29 @@ Appearance::Appearance(QWidget *p) :
 
 
     useColorsB = new QGroupBox(tr("Use custom colors"));
+    useColorsB->setMinimumWidth(250);
     useColorsB->setCheckable(true);
 
-    QFormLayout *formLayout = new QFormLayout(useColorsB);
-    formLayout->addRow(tr("Buttons color") + ":", buttonC = new ColorButton);
-    formLayout->addRow(tr("Window color") + ":", windowC = new ColorButton);
-    formLayout->addRow(tr("Border color") + ":", shadowC = new ColorButton);
-    formLayout->addRow(tr("Highlight color") + ":", highlightC = new ColorButton);
-    formLayout->addRow(tr("Base color") + ":", baseC = new ColorButton);
-    formLayout->addRow(tr("Text color") + ":", textC = new ColorButton);
-    formLayout->addRow(tr("Highlighted text color") + ":", highlightedTextC = new ColorButton);
-    formLayout->addRow(tr("Slider button color") + ":", sliderButtonC = new ColorButton);
+    auto formWidget = new QWidget;
+    QFormLayout *formLayout = new QFormLayout(formWidget);
+    iterateRoles<true>([&](QPalette::ColorRole role, const char *name) {
+        auto button = new ColorButton;
+        formLayout->addRow(QStringLiteral("%1 color:").arg(name), button);
+        connect(button, &ColorButton::colorChanged, this, &Appearance::showReadOnlyWarning);
+        m_colorButtons[role] = button;
+    });
+    formLayout->addRow(tr("Slider button color") + ":", m_colorSliderButton = new ColorButton);
+    formLayout->addRow(tr("Slider highlight color") + ":", m_colorSliderHighlight = new ColorButton);
+    connect(m_colorSliderButton, &ColorButton::colorChanged, this, &Appearance::showReadOnlyWarning);
+    connect(m_colorSliderHighlight, &ColorButton::colorChanged, this, &Appearance::showReadOnlyWarning);
     formLayout->setContentsMargins(3, 3, 3, 3);
+
+    auto colorsScroll = new QScrollArea;
+    colorsScroll->setWidgetResizable(true);
+    colorsScroll->setWidget(formWidget);
+
+    auto colorsLayout = new QGridLayout(useColorsB);
+    colorsLayout->addWidget(colorsScroll);
 
 
     gradientB = new QGroupBox(tr("Gradient in the video window"));
@@ -312,17 +391,9 @@ Appearance::Appearance(QWidget *p) :
         loadCurrentPalette();
 
 
-    connect(buttonC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
-    connect(windowC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
-    connect(shadowC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
-    connect(highlightC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
-    connect(baseC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
-    connect(textC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
-    connect(highlightedTextC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
-    connect(sliderButtonC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
-    connect(grad1C, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
-    connect(grad2C, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
-    connect(qmpTxtC, SIGNAL(colorChanged()), this, SLOT(showReadOnlyWarning()));
+    connect(grad1C, &ColorButton::colorChanged, this, &Appearance::showReadOnlyWarning);
+    connect(grad2C, &ColorButton::colorChanged, this, &Appearance::showReadOnlyWarning);
+    connect(qmpTxtC, &ColorButton::colorChanged, this, &Appearance::showReadOnlyWarning);
 }
 
 void Appearance::schemesIndexChanged(int idx)
@@ -346,22 +417,28 @@ void Appearance::schemesIndexChanged(int idx)
             useColorsB->setChecked(colorScheme.value("Colors/Use", useColorsB->isChecked()).toBool());
             if (colorScheme.value("Colors/Use").toBool())
             {
-                if (colorScheme.contains("Colors/Button"))
-                    buttonC->setColor(colorScheme.value("Colors/Button").toUInt());
-                if (colorScheme.contains("Colors/Window"))
-                    windowC->setColor(colorScheme.value("Colors/Window").toUInt());
-                if (colorScheme.contains("Colors/Shadow"))
-                    shadowC->setColor(colorScheme.value("Colors/Shadow").toUInt());
-                if (colorScheme.contains("Colors/Highlight"))
-                    highlightC->setColor(colorScheme.value("Colors/Highlight").toUInt());
-                if (colorScheme.contains("Colors/Base"))
-                    baseC->setColor(colorScheme.value("Colors/Base").toUInt());
-                if (colorScheme.contains("Colors/Text"))
-                    textC->setColor(colorScheme.value("Colors/Text").toUInt());
-                if (colorScheme.contains("Colors/HighlightedText"))
-                    highlightedTextC->setColor(colorScheme.value("Colors/HighlightedText").toUInt());
+                iterateRoles([&](QPalette::ColorRole role, const char *name) {
+                    const QString settingsKey = QStringLiteral("Colors/") + name;
+                    if (colorScheme.contains(settingsKey))
+                    {
+                        m_colorButtons.value(role)->setColor(colorScheme.value(settingsKey).toUInt());
+                    }
+                    else if (role == QPalette::AlternateBase)
+                    {
+                        // Backward compatibility
+                        const QString settingsKey2 = QStringLiteral("Colors/Base");
+                        if (colorScheme.contains(settingsKey2))
+                        {
+                            m_colorButtons.value(role)->setColor(baseToAlternateBase(colorScheme.value(settingsKey2).toUInt()));
+                        }
+                    }
+                });
                 if (colorScheme.contains("Colors/SliderButton"))
-                    sliderButtonC->setColor(colorScheme.value("Colors/SliderButton").toUInt());
+                    m_colorSliderButton->setColor(colorScheme.value("Colors/SliderButton").toUInt());
+                if (colorScheme.contains("Colors/SliderHighlight"))
+                    m_colorSliderHighlight->setColor(colorScheme.value("Colors/SliderHighlight").toUInt());
+                else if (colorScheme.contains("Colors/Highlight")) // Backward compatibility
+                    m_colorSliderHighlight->setColor(colorScheme.value("Colors/Highlight").toUInt());
             }
 
             useWallpaperB->setChecked(colorScheme.value("Wallpaper/Use", useWallpaperB->isChecked()).toBool());
@@ -480,14 +557,12 @@ void Appearance::saveScheme(QSettings &colorScheme)
     colorScheme.setValue("Colors/Use", useColorsB->isChecked());
     if (useColorsB->isChecked())
     {
-        colorScheme.setValue("Colors/Button", buttonC->getColor().rgb());
-        colorScheme.setValue("Colors/Window", windowC->getColor().rgb());
-        colorScheme.setValue("Colors/Shadow", shadowC->getColor().rgb());
-        colorScheme.setValue("Colors/Highlight", highlightC->getColor().rgb());
-        colorScheme.setValue("Colors/Base", baseC->getColor().rgb());
-        colorScheme.setValue("Colors/Text", textC->getColor().rgb());
-        colorScheme.setValue("Colors/HighlightedText", highlightedTextC->getColor().rgb());
-        colorScheme.setValue("Colors/SliderButton", sliderButtonC->getColor().rgb());
+        iterateRoles([&](QPalette::ColorRole role, const char *name) {
+            const QString settingsKey = QStringLiteral("Colors/") + name;
+            colorScheme.setValue(settingsKey, m_colorButtons.value(role)->getColor().rgb());
+        });
+        colorScheme.setValue("Colors/SliderButton", m_colorSliderButton->getColor().rgb());
+        colorScheme.setValue("Colors/SliderHighlight", m_colorSliderHighlight->getColor().rgb());
     }
 
     colorScheme.remove("Wallpaper");
@@ -539,14 +614,11 @@ void Appearance::loadCurrentPalette()
     qmpTxtC->setColor(QMPlay2GUI.qmpTxt);
 
     useColorsB->setChecked(currentPalette != systemPalette);
-    buttonC->setColor(currentPalette.brush(QPalette::Button).color());
-    windowC->setColor(currentPalette.brush(QPalette::Window).color());
-    shadowC->setColor(currentPalette.brush(QPalette::Shadow).color());
-    highlightC->setColor(currentPalette.brush(QPalette::Highlight).color());
-    baseC->setColor(currentPalette.brush(QPalette::Base).color());
-    textC->setColor(currentPalette.brush(QPalette::Text).color());
-    highlightedTextC->setColor(currentPalette.brush(QPalette::HighlightedText).color());
-    sliderButtonC->setColor(sliderPalette.brush(QPalette::Button).color());
+    iterateRoles([&](QPalette::ColorRole role, const char *name) {
+        Q_UNUSED(name)
+        m_colorButtons.value(role)->setColor(currentPalette.brush(role).color());
+    });
+    m_colorSliderButton->setColor(sliderPalette.brush(QPalette::Button).color());
 
     QPixmap wallpaper = mainW_pal.brush(QPalette::Window).texture();
     useWallpaperB->setChecked(!wallpaper.isNull());
@@ -563,14 +635,12 @@ void Appearance::loadDefaultPalette()
     qmpTxtC->setColor(DEFAULT_QMPTXT);
 
     useColorsB->setChecked(false);
-    buttonC->setColor(systemPalette.brush(QPalette::Button).color());
-    windowC->setColor(systemPalette.brush(QPalette::Window).color());
-    shadowC->setColor(systemPalette.brush(QPalette::Shadow).color());
-    highlightC->setColor(systemPalette.brush(QPalette::Highlight).color());
-    baseC->setColor(systemPalette.brush(QPalette::Base).color());
-    textC->setColor(systemPalette.brush(QPalette::Text).color());
-    highlightedTextC->setColor(systemPalette.brush(QPalette::HighlightedText).color());
-    sliderButtonC->setColor(systemPalette.brush(QPalette::Button).color());
+    iterateRoles([&](QPalette::ColorRole role, const char *name) {
+        Q_UNUSED(name)
+        m_colorButtons.value(role)->setColor(systemPalette.brush(role).color());
+    });
+    m_colorSliderButton->setColor(systemPalette.brush(QPalette::Button).color());
+    m_colorSliderHighlight->setColor(systemPalette.brush(QPalette::Highlight).color());
 
     useWallpaperB->setChecked(false);
     alphaB->setValue(DEFAULT_ALPHA);
@@ -588,21 +658,28 @@ void Appearance::apply()
 
     QPalette pal, sliderButton_pal;
     if (!useColorsB->isChecked())
+    {
         pal = sliderButton_pal = systemPalette;
+    }
     else
     {
-        setBrush(pal, QPalette::Button, buttonC->getColor());
-        setBrush(pal, QPalette::Window, windowC->getColor());
-        setBrush(pal, QPalette::Shadow, shadowC->getColor());
-        setBrush(pal, QPalette::Highlight, highlightC->getColor());
-        setBrush(pal, QPalette::Base, baseC->getColor());
-        setBrush(pal, QPalette::AlternateBase, baseC->getColor());
-        setBrush(pal, QPalette::Text, textC->getColor());
-        setBrush(pal, QPalette::WindowText, textC->getColor());
-        setBrush(pal, QPalette::ButtonText, textC->getColor());
-        setBrush(pal, QPalette::HighlightedText, highlightedTextC->getColor());
+        iterateRoles([&](QPalette::ColorRole role, const char *name) {
+            Q_UNUSED(name)
+            const auto color = m_colorButtons.value(role)->getColor();
+            setBrush(pal, role, color);
+            switch (role)
+            {
+                case QPalette::Text:
+                    setBrush(pal, QPalette::WindowText, color);
+                    setBrush(pal, QPalette::ButtonText, color);
+                    break;
+                default:
+                    break;
+            }
+        });
         sliderButton_pal = pal;
-        setBrush(sliderButton_pal, QPalette::Button, sliderButtonC->getColor());
+        setBrush(sliderButton_pal, QPalette::Button, m_colorSliderButton->getColor());
+        setBrush(sliderButton_pal, QPalette::Highlight, m_colorSliderHighlight->getColor());
     }
 
     QPalette mainW_pal = pal;
@@ -613,11 +690,7 @@ void Appearance::apply()
         if (!pixmap.isNull())
         {
             mainW_pal.setBrush(QPalette::Window, pixmap);
-            setBrush(mainW_pal, QPalette::Button, buttonC->getColor(), alphaB->value());
-            setBrush(mainW_pal, QPalette::Base, baseC->getColor(), alphaB->value());
-            setBrush(mainW_pal, QPalette::AlternateBase, baseC->getColor(), alphaB->value());
-            setBrush(mainW_pal, QPalette::Shadow, shadowC->getColor(), alphaB->value());
-            setBrush(mainW_pal, QPalette::Highlight, highlightC->getColor(), alphaB->value());
+            applyAlpha(mainW_pal, alphaB->value());
             hasWallpaper = true;
         }
     }
