@@ -31,8 +31,14 @@ ColorButton::ColorButton(QWidget *parent) :
 
 void ColorButton::setColor(const QColor &color)
 {
-    setToolTip(QString("#%1").arg(color.rgba(), 8, 16).replace(' ', '0').toUpper());
     m_color = color;
+    m_color.setAlpha(255);
+    setToolTip(QString("#%1%2%3")
+               .arg(m_color.red(), 2, 16, QChar('0'))
+               .arg(m_color.green(), 2, 16, QChar('0'))
+               .arg(m_color.blue(), 2, 16, QChar('0'))
+               .toUpper()
+    );
     update();
 }
 
