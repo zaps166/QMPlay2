@@ -169,10 +169,6 @@
         <translation>カスタムカラーをしようする</translation>
     </message>
     <message>
-        <source>Highlighted text color</source>
-        <translation>ハイライトされたテキスト</translation>
-    </message>
-    <message>
         <source>The color on the top and bottom</source>
         <translation>上下の色</translation>
     </message>
@@ -189,10 +185,6 @@
         <translation>保存</translation>
     </message>
     <message>
-        <source>Window color</source>
-        <translation>ウィンドウの色</translation>
-    </message>
-    <message>
         <source>Appearance settings</source>
         <translation>外観の設定</translation>
     </message>
@@ -201,16 +193,8 @@
         <translation>メインウィンドウの壁紙</translation>
     </message>
     <message>
-        <source>Border color</source>
-        <translation>ボーダーの色</translation>
-    </message>
-    <message>
         <source>Do you want to remove</source>
         <translation>削除しますか</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>ハイライトの色</translation>
     </message>
     <message>
         <source>Removing</source>
@@ -233,10 +217,6 @@
         <translation>デフォルトの配色</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>ボタンの色</translation>
-    </message>
-    <message>
         <source>Color in the middle</source>
         <translation>中央の色</translation>
     </message>
@@ -245,16 +225,16 @@
         <translation>スライダーのボタンの色</translation>
     </message>
     <message>
-        <source>Base color</source>
-        <translation>ベースの色</translation>
-    </message>
-    <message>
         <source>Volatile settings</source>
         <translation>揮発性の設定</translation>
     </message>
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
         <translation>書き込み禁止ファイルです。再起動すると設定が失われます。新しい配色を作成することを検討してください!</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

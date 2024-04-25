@@ -157,32 +157,8 @@
         <translation>Использовать пользовательский цвет</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>Цвет кнопок</translation>
-    </message>
-    <message>
-        <source>Window color</source>
-        <translation>Цвет окна</translation>
-    </message>
-    <message>
-        <source>Border color</source>
-        <translation>Цвет кромок</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>Цвет подсветки</translation>
-    </message>
-    <message>
-        <source>Base color</source>
-        <translation>Основной цвет</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>Цвет текста</translation>
-    </message>
-    <message>
-        <source>Highlighted text color</source>
-        <translation>Цвет подсвечиваемого текста</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -255,6 +231,10 @@
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
         <translation>недоступна для записи, настройки будут утеряны после перезагрузки. Рассмотрите возможность создания новой цветовой схемы!</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

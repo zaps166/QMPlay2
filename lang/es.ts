@@ -169,10 +169,6 @@
         <translation>Usar colores personalizados</translation>
     </message>
     <message>
-        <source>Highlighted text color</source>
-        <translation>Color del texto resaltado</translation>
-    </message>
-    <message>
         <source>The color on the top and bottom</source>
         <translation>El color en la parte superior e inferior</translation>
     </message>
@@ -189,10 +185,6 @@
         <translation>Guardar</translation>
     </message>
     <message>
-        <source>Window color</source>
-        <translation>Color de la ventana</translation>
-    </message>
-    <message>
         <source>Appearance settings</source>
         <translation>Ajustes de aspecto</translation>
     </message>
@@ -201,16 +193,8 @@
         <translation>Fondo en la ventana principal</translation>
     </message>
     <message>
-        <source>Border color</source>
-        <translation>Color de borde</translation>
-    </message>
-    <message>
         <source>Do you want to remove</source>
         <translation>¿Quiere eliminar</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>Color de resaltado</translation>
     </message>
     <message>
         <source>Removing</source>
@@ -233,10 +217,6 @@
         <translation>Esquema de color Predeterminado</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>Color de los botones</translation>
-    </message>
-    <message>
         <source>Color in the middle</source>
         <translation>Color en el centro</translation>
     </message>
@@ -245,16 +225,16 @@
         <translation>Color de control deslizante</translation>
     </message>
     <message>
-        <source>Base color</source>
-        <translation>Color base</translation>
-    </message>
-    <message>
         <source>Volatile settings</source>
         <translation>Ajustes temporales</translation>
     </message>
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
         <translation>no permite escribir, la configuración se perderá tras reiniciar. ¡Considere crear un nuevo esquema de colores!</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

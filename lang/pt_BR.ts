@@ -157,32 +157,8 @@
         <translation>Usar cores customizadas</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>Cor dos botões</translation>
-    </message>
-    <message>
-        <source>Window color</source>
-        <translation>Cor da janela</translation>
-    </message>
-    <message>
-        <source>Border color</source>
-        <translation>Cor da borda</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>Cor do destaque</translation>
-    </message>
-    <message>
-        <source>Base color</source>
-        <translation>Cor base</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>Cor do texto</translation>
-    </message>
-    <message>
-        <source>Highlighted text color</source>
-        <translation>Cor do texto destacado</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -255,6 +231,10 @@
     <message>
         <source>Default color scheme</source>
         <translation>Esquema de cores padrão</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

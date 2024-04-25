@@ -157,32 +157,8 @@
         <translation>Benutzerdefinierte Farben benutzen</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>Farbtaste</translation>
-    </message>
-    <message>
-        <source>Window color</source>
-        <translation>Fensterfarbe</translation>
-    </message>
-    <message>
-        <source>Border color</source>
-        <translation>Randfarbe</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>Farbe wählen</translation>
-    </message>
-    <message>
-        <source>Base color</source>
-        <translation>Innenfarbe kontrollieren</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>Textfarbe</translation>
-    </message>
-    <message>
-        <source>Highlighted text color</source>
-        <translation>Hervorgehobene Textfarbe</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -255,6 +231,10 @@
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
         <translation>Ist nicht beschreibbar, Einstellungen gehen nach Neustart verloren. Erwägen Sie, ein neues Farbschema zu erstellen!</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

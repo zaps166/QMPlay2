@@ -210,32 +210,8 @@
         <translation>Şeffaflık</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>Düğme rengi</translation>
-    </message>
-    <message>
-        <source>Window color</source>
-        <translation>Pencere rengi</translation>
-    </message>
-    <message>
-        <source>Border color</source>
-        <translation>Kenarlık rengi</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>Vurgu rengi</translation>
-    </message>
-    <message>
-        <source>Base color</source>
-        <translation>Ana renk</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>Metin rengi</translation>
-    </message>
-    <message>
-        <source>Highlighted text color</source>
-        <translation>Vurgulanan metin rengi</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -256,6 +232,10 @@
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
         <translation>yazılabilir değil, yeniden başlatmanın ardından ayarlar yitecek. Yeni bir renk şeması oluşturmayı düşünün!</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

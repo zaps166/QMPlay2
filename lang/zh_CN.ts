@@ -157,32 +157,8 @@
         <translation>使用自定义色彩</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>按钮颜色</translation>
-    </message>
-    <message>
-        <source>Window color</source>
-        <translation>窗口颜色</translation>
-    </message>
-    <message>
-        <source>Border color</source>
-        <translation>边框颜色</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>高亮颜色</translation>
-    </message>
-    <message>
-        <source>Base color</source>
-        <translation>底色</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>文本颜色</translation>
-    </message>
-    <message>
-        <source>Highlighted text color</source>
-        <translation>高亮文本颜色</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -255,6 +231,10 @@
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
         <translation>无法写入，设置将会在重新启动后丢失。请考虑创建一个新色彩方案！</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

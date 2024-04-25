@@ -209,32 +209,8 @@
         <translation>Przezroczystość</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>Kolor przycisków</translation>
-    </message>
-    <message>
-        <source>Window color</source>
-        <translation>Kolor okna</translation>
-    </message>
-    <message>
-        <source>Border color</source>
-        <translation>Kolor obramowania</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>Kolor podświetlenia</translation>
-    </message>
-    <message>
-        <source>Base color</source>
-        <translation>Kolor wnętrza kontrolek</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>Kolor tekstu</translation>
-    </message>
-    <message>
-        <source>Highlighted text color</source>
-        <translation>Kolor zaznaczonego tekstu</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -255,6 +231,10 @@
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
         <translation>nie jest zapisywalny, ustawienia będą utracone po restarcie. Rozważ utworzenie nowego schematu kolorów!</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation>Kolor wypełnienia suwaka</translation>
     </message>
 </context>
 <context>

@@ -209,32 +209,8 @@
         <translation>Priesvitnosť</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>Farba tlačidiel</translation>
-    </message>
-    <message>
-        <source>Window color</source>
-        <translation>Farba okien</translation>
-    </message>
-    <message>
-        <source>Border color</source>
-        <translation>Farba orámovania</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>Farba zvýraznenia</translation>
-    </message>
-    <message>
-        <source>Base color</source>
-        <translation>Základná farba</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>Farba textu</translation>
-    </message>
-    <message>
-        <source>Highlighted text color</source>
-        <translation>Farba označeného textu</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -255,6 +231,10 @@
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
         <translation>nie je zapisovateľný, nastavenia sa po reštarte stratia. Zvážte vytvorenie novej farebnej schémy!</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

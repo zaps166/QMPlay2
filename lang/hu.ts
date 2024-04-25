@@ -157,32 +157,8 @@
         <translation>Saját színek használata</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>Gombok színe</translation>
-    </message>
-    <message>
-        <source>Window color</source>
-        <translation>Ablak színe</translation>
-    </message>
-    <message>
-        <source>Border color</source>
-        <translation>Keret színe</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>Kiemelés színe</translation>
-    </message>
-    <message>
-        <source>Base color</source>
-        <translation>Alap szín</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>Szöveg színe</translation>
-    </message>
-    <message>
-        <source>Highlighted text color</source>
-        <translation>Kiemelt szöveg színe</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -255,6 +231,10 @@
     <message>
         <source>Default color scheme</source>
         <translation>Alapértelmezett színséma</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -157,32 +157,8 @@
         <translation>Utiliser des couleurs personnalisées</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>Couleur des boutons</translation>
-    </message>
-    <message>
-        <source>Window color</source>
-        <translation>Couleur de la fenêtre</translation>
-    </message>
-    <message>
-        <source>Border color</source>
-        <translation>Couleur de la bordure</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>Couleur de surlignage</translation>
-    </message>
-    <message>
-        <source>Base color</source>
-        <translation>Couleur de base</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>Couleur du texte</translation>
-    </message>
-    <message>
-        <source>Highlighted text color</source>
-        <translation>Couleur du texte surligné</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -254,6 +230,10 @@
     </message>
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

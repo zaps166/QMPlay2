@@ -157,32 +157,8 @@
         <translation>Eigen kleuren gebruiken</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>Knopkleur</translation>
-    </message>
-    <message>
-        <source>Window color</source>
-        <translation>Vensterkleur</translation>
-    </message>
-    <message>
-        <source>Border color</source>
-        <translation>Randkleur</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>Markeerkleur</translation>
-    </message>
-    <message>
-        <source>Base color</source>
-        <translation>Basiskleur</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>Tekstkleur</translation>
-    </message>
-    <message>
-        <source>Highlighted text color</source>
-        <translation>Kleur van gemarkeerde tekst</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -255,6 +231,10 @@
     <message>
         <source>Default color scheme</source>
         <translation>Standaardthema</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

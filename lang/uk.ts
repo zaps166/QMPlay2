@@ -209,32 +209,8 @@
         <translation>Прозорість</translation>
     </message>
     <message>
-        <source>Buttons color</source>
-        <translation>Колір кнопок</translation>
-    </message>
-    <message>
-        <source>Window color</source>
-        <translation>Колір вікна</translation>
-    </message>
-    <message>
-        <source>Border color</source>
-        <translation>Колір рамок</translation>
-    </message>
-    <message>
-        <source>Highlight color</source>
-        <translation>Колір виділення</translation>
-    </message>
-    <message>
-        <source>Base color</source>
-        <translation>Основний колір</translation>
-    </message>
-    <message>
         <source>Text color</source>
         <translation>Колір тексту</translation>
-    </message>
-    <message>
-        <source>Highlighted text color</source>
-        <translation>Колір виділеного тексту</translation>
     </message>
     <message>
         <source>Slider button color</source>
@@ -255,6 +231,10 @@
     <message>
         <source>is not writable, settings will be lost after restart. Consider creating a new color scheme!</source>
         <translation>недоступний для запису, параметри будуть втрачені після перезавантаження. Створіть нову колірну схему!</translation>
+    </message>
+    <message>
+        <source>Slider highlight color</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
