@@ -234,7 +234,7 @@
     </message>
     <message>
         <source>Slider highlight color</source>
-        <translation type="unfinished"></translation>
+        <translation>進度條強調色彩</translation>
     </message>
 </context>
 <context>

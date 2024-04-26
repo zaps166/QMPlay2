@@ -234,7 +234,7 @@
     </message>
     <message>
         <source>Slider highlight color</source>
-        <translation type="unfinished"></translation>
+        <translation>滑块高亮颜色</translation>
     </message>
 </context>
 <context>
