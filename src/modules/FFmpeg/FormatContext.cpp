@@ -236,14 +236,14 @@ private:
 
 /**/
 
-FormatContext::FormatContext(bool reconnectStreamed) :
+FormatContext::FormatContext(bool reconnectNetwork) :
     isError(false),
     currPos(0.0),
     abortCtx(new AbortContext),
     formatCtx(nullptr),
     packet(nullptr),
     oggHelper(nullptr),
-    reconnectStreamed(reconnectStreamed),
+    m_reconnectNetwork(reconnectNetwork),
     isPaused(false), fixMkvAss(false),
     isMetadataChanged(false),
     lastTime(0.0),
@@ -761,8 +761,13 @@ bool FormatContext::open(const QString &_url, const QString &param)
     if (!inputFmt)
     {
         url = Functions::prepareFFmpegUrl(_url, options, false);
-        if (!isLocal && reconnectStreamed)
+        if (!isLocal && m_reconnectNetwork)
+        {
+            av_dict_set(&options, "reconnect", "1", 0);
             av_dict_set(&options, "reconnect_streamed", "1", 0);
+            av_dict_set(&options, "reconnect_on_network_error", "1", 0);
+            av_dict_set(&options, "reconnect_delay_max", "7", 0);
+        }
     }
 
     formatCtx = avformat_alloc_context();

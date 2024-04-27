@@ -70,5 +70,5 @@ private:
     QMutex mutex;
 
     bool abortFetchTracks;
-    bool reconnectStreamed;
+    bool m_reconnectNetwork;
 };

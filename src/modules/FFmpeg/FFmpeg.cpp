@@ -75,7 +75,7 @@ FFmpeg::FFmpeg() :
 #endif
 
     init("DemuxerEnabled", true);
-    init("ReconnectStreammes", false);
+    init("ReconnectNetwork", true);
     init("DecoderEnabled", true);
 #ifdef QMPlay2_VKVIDEO
     switch (QOperatingSystemVersion::currentType())
@@ -249,8 +249,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     demuxerB->setCheckable(true);
     demuxerB->setChecked(sets().getBool("DemuxerEnabled"));
 
-    reconnectStreamedB = new QCheckBox(tr("Try to automatically reconnect live streams on error"));
-    reconnectStreamedB->setChecked(sets().getBool("ReconnectStreamed"));
+    reconnectNetworkB = new QCheckBox(tr("Try to automatically reconnect network connections"));
+    reconnectNetworkB->setChecked(sets().getBool("ReconnectNetwork"));
 
     decoderB = new QGroupBox(tr("Software decoder"));
     decoderB->setCheckable(true);
@@ -345,7 +345,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     }
 
     QFormLayout *demuxerLayout = new QFormLayout(demuxerB);
-    demuxerLayout->addRow(nullptr, reconnectStreamedB);
+    demuxerLayout->addRow(nullptr, reconnectNetworkB);
 
     QFormLayout *decoderLayout = new QFormLayout(decoderB);
     decoderLayout->addRow(tr("Number of threads used to decode video") + ": ", threadsB);
@@ -383,7 +383,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
 void ModuleSettingsWidget::saveSettings()
 {
     sets().set("DemuxerEnabled", demuxerB->isChecked());
-    sets().set("ReconnectStreamed", reconnectStreamedB->isChecked());
+    sets().set("ReconnectNetwork", reconnectNetworkB->isChecked());
     sets().set("DecoderEnabled", decoderB->isChecked());
     sets().set("HurryUP", hurryUpB ->isChecked());
     sets().set("SkipFrames", skipFramesB->isChecked());

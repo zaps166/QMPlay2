@@ -28,7 +28,7 @@
 
 FFDemux::FFDemux(Module &module) :
     abortFetchTracks(false),
-    reconnectStreamed(false)
+    m_reconnectNetwork(false)
 {
     SetModule(module);
 }
@@ -43,10 +43,10 @@ bool FFDemux::set()
 {
     bool restartPlayback = false;
 
-    const bool tmpReconnectStreamed = sets().getBool("ReconnectStreamed");
-    if (tmpReconnectStreamed != reconnectStreamed)
+    const bool tmpReconnectNetwork = sets().getBool("ReconnectNetwork");
+    if (tmpReconnectNetwork != m_reconnectNetwork)
     {
-        reconnectStreamed = tmpReconnectStreamed;
+        m_reconnectNetwork = tmpReconnectNetwork;
         restartPlayback = true;
     }
 
@@ -509,7 +509,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 
 void FFDemux::addFormatContext(QString url, const QString &param)
 {
-    FormatContext *fmtCtx = new FormatContext(reconnectStreamed);
+    FormatContext *fmtCtx = new FormatContext(m_reconnectNetwork);
     {
         QMutexLocker mL(&mutex);
         formatContexts.append(fmtCtx);

@@ -76,7 +76,7 @@ private:
     void saveSettings() override;
 
     QGroupBox *demuxerB;
-    QCheckBox *reconnectStreamedB;
+    QCheckBox *reconnectNetworkB;
     QGroupBox *hurryUpB;
     QCheckBox *skipFramesB, *forceSkipFramesB;
     QGroupBox *decoderB;
