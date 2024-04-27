@@ -345,14 +345,11 @@ void PlaylistDock::next(bool playingError)
         }
         else
         {
-            int entryFlags = PlaylistWidget::getFlags(lastPlaying);
+            const int entryFlags = PlaylistWidget::getFlags(lastPlaying);
             if (entryFlags & Playlist::Entry::StopAfter)
             {
-                //Remove "StopAfter" flag and stop playback.
-                entryFlags &= ~Playlist::Entry::StopAfter;
-                PlaylistWidget::setEntryFont(lastPlaying, entryFlags);
-                lastPlaying->setData(0, Qt::UserRole + 1, entryFlags);
                 //"tWI" is nullptr here, so playback will stop.
+                Q_ASSERT(!tWI);
             }
             else
             {
