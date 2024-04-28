@@ -478,7 +478,7 @@
     </message>
     <message>
         <source>artist</source>
-        <translation>artysta</translation>
+        <translation>wykonawca</translation>
     </message>
     <message>
         <source>loaded from file</source>
@@ -3259,7 +3259,7 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     </message>
     <message>
         <source>Artist</source>
-        <translation>Artysta</translation>
+        <translation>Wykonawca</translation>
     </message>
     <message>
         <source>Album</source>
@@ -3317,7 +3317,7 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     </message>
     <message>
         <source>Artist</source>
-        <translation>Artysta</translation>
+        <translation>Wykonawca</translation>
     </message>
     <message>
         <source>Album</source>
