@@ -1758,10 +1758,6 @@
         <translation>Dodatkowe powiadomienia</translation>
     </message>
     <message>
-        <source>Try to automatically reconnect live streams on error</source>
-        <translation>Spróbuj automatycznie wznowić połączenie dla strumieni na żywo w przypadku błędu</translation>
-    </message>
-    <message>
         <source>Decode MPEG4 videos</source>
         <translation>Dekoduj filmy MPEG4</translation>
     </message>
@@ -1840,6 +1836,10 @@
     <message>
         <source>Allow HDR content for VP9 codec</source>
         <translation>Zazwalaj na zawartość HDR dla kodeka VP9</translation>
+    </message>
+    <message>
+        <source>Try to automatically reconnect network connections</source>
+        <translation>Spróbuj automatycznie wznowić połączenia sieciowe</translation>
     </message>
 </context>
 <context>
@@ -2363,6 +2363,30 @@
     <message>
         <source>Remember playback position for each playlist entry</source>
         <translation>Zapamiętaj pozycję odtwarzania dla każdego wpisu listy odtwarzania</translation>
+    </message>
+    <message>
+        <source>Desired video stream quality:</source>
+        <translation>Żądana jakość strumienia wideo:</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>Domyślna</translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

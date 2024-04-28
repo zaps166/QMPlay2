@@ -1562,10 +1562,6 @@
         <translation>Demuxer</translation>
     </message>
     <message>
-        <source>Try to automatically reconnect live streams on error</source>
-        <translation>Automatisch opnieuw verbinden met livestreams na foutmelding</translation>
-    </message>
-    <message>
         <source>Software decoder</source>
         <translation>Softwarematige decodering</translation>
     </message>
@@ -1840,6 +1836,10 @@
     <message>
         <source>Allow HDR content for VP9 codec</source>
         <translation>Hdr-inhoud afspelen met vp9-codec</translation>
+    </message>
+    <message>
+        <source>Try to automatically reconnect network connections</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2363,6 +2363,30 @@
     <message>
         <source>Remember playback position for each playlist entry</source>
         <translation>Afspeelpositie per item onthouden</translation>
+    </message>
+    <message>
+        <source>Desired video stream quality:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">Standaard</translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

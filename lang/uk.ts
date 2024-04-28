@@ -1758,10 +1758,6 @@
         <translation>Додаткові сповіщення</translation>
     </message>
     <message>
-        <source>Try to automatically reconnect live streams on error</source>
-        <translation>Намагатися автоматично відновити з&apos;єднання потоків при помилці</translation>
-    </message>
-    <message>
         <source>Decode MPEG4 videos</source>
         <translation>Декодування відео MPEG4</translation>
     </message>
@@ -1840,6 +1836,10 @@
     <message>
         <source>Allow HDR content for VP9 codec</source>
         <translation>Дозволити вміст HDR для кодека VP9</translation>
+    </message>
+    <message>
+        <source>Try to automatically reconnect network connections</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2363,6 +2363,30 @@
     <message>
         <source>Remember playback position for each playlist entry</source>
         <translation>Пам&apos;ятати позицію відтворення для кожного запису зі списку</translation>
+    </message>
+    <message>
+        <source>Desired video stream quality:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">За замовчуванням</translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

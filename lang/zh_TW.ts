@@ -1758,10 +1758,6 @@
         <translation>額外的通知項</translation>
     </message>
     <message>
-        <source>Try to automatically reconnect live streams on error</source>
-        <translation>自動地在發生錯誤時嘗試重新連線直播串流</translation>
-    </message>
-    <message>
         <source>Decode MPEG4 videos</source>
         <translation>解碼 MPEG4 影片</translation>
     </message>
@@ -1840,6 +1836,10 @@
     <message>
         <source>Allow HDR content for VP9 codec</source>
         <translation>允許 VP9 編解碼器使用 HDR 內容</translation>
+    </message>
+    <message>
+        <source>Try to automatically reconnect network connections</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2363,6 +2363,30 @@
     <message>
         <source>Remember playback position for each playlist entry</source>
         <translation>記住每個播放列表項目的播放位置</translation>
+    </message>
+    <message>
+        <source>Desired video stream quality:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">預設</translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

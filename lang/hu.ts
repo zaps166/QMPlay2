@@ -1550,10 +1550,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Try to automatically reconnect live streams on error</source>
-        <translation>Automatikus újracsatlakozási próbálkozás élő adásokhoz hiba esetén</translation>
-    </message>
-    <message>
         <source>Software decoder</source>
         <translation>Szoftveres dekódoló</translation>
     </message>
@@ -1839,6 +1835,10 @@
     </message>
     <message>
         <source>Allow HDR content for VP9 codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Try to automatically reconnect network connections</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2362,6 +2362,30 @@
     </message>
     <message>
         <source>Remember playback position for each playlist entry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Desired video stream quality:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished">Alapértelmezett</translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>4K</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
