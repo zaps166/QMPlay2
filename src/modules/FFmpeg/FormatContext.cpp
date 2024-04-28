@@ -368,14 +368,7 @@ QList<QMPlay2Tag> FormatContext::tags() const
     }
     if (isStreamed && !(value = getTag(formatCtx->metadata, "StreamTitle", false)).isEmpty())
     {
-        int idx = value.indexOf(" - ");
-        if (idx < 0)
-            tagList += {QString::number(QMPLAY2_TAG_TITLE), value};
-        else
-        {
-            tagList += {QString::number(QMPLAY2_TAG_TITLE), value.mid(idx + 3)};
-            tagList += {QString::number(QMPLAY2_TAG_ARTIST), value.mid(0, idx)};
-        }
+        tagList += {QString::number(QMPLAY2_TAG_TITLE), value};
     }
     else if (AVDictionary *dict = getMetadata())
     {
