@@ -53,7 +53,7 @@ AddressBox::AddressBox(Qt::Orientation o, QString url, const QString &choice)
 
     const int pBIdx = pB.findText(choice);
 
-    if (url.isNull() && pBIdx < 2)
+    if (url.isNull())
     {
         const auto text = QGuiApplication::clipboard()->text();
         if (text.contains("://") && text.indexOf("://") == text.indexOf(":") && QUrl(text).isValid())
