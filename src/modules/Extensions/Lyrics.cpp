@@ -94,6 +94,7 @@ void Lyrics::updatePlaying(bool play, const QString &title, const QString &artis
     m_title.clear();
     m_artist.clear();
     m_name.clear();
+    m_titleArtistFromDash = false;
     clear();
 
     if (play)
@@ -108,8 +109,21 @@ void Lyrics::updatePlaying(bool play, const QString &title, const QString &artis
             return;
         }
 
-        m_title  = simplifyString(title);
-        m_artist = simplifyString(artist);
+        m_title  = title;
+        m_artist = artist;
+        if (!m_title.isEmpty() && m_artist.isEmpty())
+        {
+            const int idx = m_title.indexOf(QStringLiteral(" - "));
+            if (idx > 0)
+            {
+                m_artist = m_title.mid(0, idx);
+                m_title = m_title.mid(idx + 3);
+                m_titleArtistFromDash = true;
+            }
+        }
+        m_title = simplifyString(m_title);
+        m_artist = simplifyString(m_artist);
+
         search();
     }
 }
@@ -202,6 +216,13 @@ void Lyrics::finished(NetworkReply *reply)
 
             if (guesses.empty())
             {
+                if (m_titleArtistFromDash)
+                {
+                    std::swap(m_title, m_artist);
+                    m_titleArtistFromDash = false;
+                    search();
+                    return;
+                }
                 lyricsNotFound();
             }
             else

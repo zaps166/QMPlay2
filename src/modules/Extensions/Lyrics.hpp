@@ -55,6 +55,7 @@ private:
     NetworkAccess m_net;
 
     QString m_title, m_artist, m_name;
+    bool m_titleArtistFromDash = false;
 
     QPointer<NetworkReply> m_tekstowoSearchReply;
     QPointer<NetworkReply> m_tekstowoLyricsReply;
