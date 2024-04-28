@@ -54,7 +54,6 @@ private:
 
     NetworkAccess m_net;
 
-    QString m_realTitle, m_realArtist;
     QString m_title, m_artist, m_name;
 
     QPointer<NetworkReply> m_tekstowoSearchReply;

@@ -91,8 +91,6 @@ void Lyrics::updatePlaying(bool play, const QString &title, const QString &artis
         m_tekstowoSearchReply->deleteLater();
     if (m_tekstowoLyricsReply)
         m_tekstowoLyricsReply->deleteLater();
-    m_realTitle.clear();
-    m_realArtist.clear();
     m_title.clear();
     m_artist.clear();
     m_name.clear();
@@ -110,8 +108,6 @@ void Lyrics::updatePlaying(bool play, const QString &title, const QString &artis
             return;
         }
 
-        m_realTitle = title;
-        m_realArtist = artist;
         m_title  = simplifyString(title);
         m_artist = simplifyString(artist);
         search();
