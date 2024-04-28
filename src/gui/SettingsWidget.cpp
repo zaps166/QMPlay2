@@ -483,6 +483,19 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
     createRendererSettings();
 
     {
+        auto getDesiredVideoHeightIndex = [&] {
+            const int desiredVideoHeight = QMPSettings.getInt("DesiredVideoHeight");
+            if (desiredVideoHeight <= 0)
+                return 0;
+            if (desiredVideoHeight < 720)
+                return 1;
+            if (desiredVideoHeight < 1080)
+                return 2;
+            if (desiredVideoHeight < 2160)
+                return 3;
+            return 4;
+        };
+
         QWidget *playbackSettingsWidget = new QWidget;
         playbackSettingsPage = new Ui::PlaybackSettings;
         playbackSettingsPage->setupUi(playbackSettingsWidget);
@@ -513,6 +526,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         playbackSettingsPage->bufferNetworkB->setValue(QMPSettings.getDouble("AVBufferTimeNetwork"));
         playbackSettingsPage->backwardBufferNetworkB->setCurrentIndex(QMPSettings.getUInt("BackwardBuffer"));
         playbackSettingsPage->bufferLiveB->setValue(QMPSettings.getDouble("AVBufferTimeNetworkLive"));
+        playbackSettingsPage->desiredVideoHeightB->setCurrentIndex(getDesiredVideoHeightIndex());
         playbackSettingsPage->playIfBufferedB->setValue(QMPSettings.getDouble("PlayIfBuffered"));
         playbackSettingsPage->maxVolB->setValue(QMPSettings.getInt("MaxVol"));
 
@@ -1247,6 +1261,22 @@ void SettingsWidget::apply()
         }
         case 2:
         {
+            auto getDesiredVideoHeight = [this] {
+                switch (playbackSettingsPage->desiredVideoHeightB->currentIndex())
+                {
+                    case 1:
+                        return 480;
+                    case 2:
+                        return 720;
+                    case 3:
+                        return 1080;
+                    case 4:
+                        return 2160;
+                    default:
+                        return 0;
+                }
+            };
+
             QMPSettings.set("ShortSeek", playbackSettingsPage->shortSeekB->value());
             QMPSettings.set("LongSeek", playbackSettingsPage->longSeekB->value());
             QMPSettings.set("AVBufferLocal", playbackSettingsPage->bufferLocalB->value());
@@ -1254,6 +1284,7 @@ void SettingsWidget::apply()
             QMPSettings.set("BackwardBuffer", playbackSettingsPage->backwardBufferNetworkB->currentIndex());
             QMPSettings.set("AVBufferTimeNetworkLive", playbackSettingsPage->bufferLiveB->value());
             QMPSettings.set("PlayIfBuffered", playbackSettingsPage->playIfBufferedB->value());
+            QMPSettings.set("DesiredVideoHeight", getDesiredVideoHeight());
             QMPSettings.set("ForceSamplerate", playbackSettingsPage->forceSamplerate->isChecked());
             QMPSettings.set("Samplerate", playbackSettingsPage->samplerateB->value());
             QMPSettings.set("MaxVol", playbackSettingsPage->maxVolB->value());

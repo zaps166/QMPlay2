@@ -367,14 +367,52 @@
            </property>
           </widget>
          </item>
+
          <item row="7" column="0">
+          <widget class="QLabel" name="desiredVideoHeightL">
+           <property name="text">
+            <string>Desired video stream quality:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QComboBox" name="desiredVideoHeightB">
+           <item>
+            <property name="text">
+             <string>Default</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>SD</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>HD</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Full HD</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>4K</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+
+         <item row="8" column="0">
           <widget class="QLabel" name="maxVolL">
            <property name="text">
             <string>Maximum volume</string>
            </property>
           </widget>
          </item>
-         <item row="7" column="1">
+         <item row="8" column="1">
           <widget class="QSpinBox" name="maxVolB">
            <property name="suffix">
             <string notr="true"> %</string>
@@ -390,14 +428,14 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="0">
+         <item row="9" column="0">
           <widget class="QCheckBox" name="forceSamplerate">
            <property name="text">
             <string>Force samplerate</string>
            </property>
           </widget>
          </item>
-         <item row="8" column="1">
+         <item row="9" column="1">
           <widget class="QSpinBox" name="samplerateB">
            <property name="minimum">
             <number>4000</number>
@@ -407,7 +445,7 @@
            </property>
           </widget>
          </item>
-         <item row="9" column="0">
+         <item row="10" column="0">
           <widget class="QCheckBox" name="forceChannels">
            <property name="text">
             <string>Force channels conversion</string>
@@ -417,7 +455,7 @@
            </property>
           </widget>
          </item>
-         <item row="9" column="1">
+         <item row="10" column="1">
           <widget class="QSpinBox" name="channelsB">
            <property name="minimum">
             <number>1</number>
@@ -427,7 +465,7 @@
            </property>
           </widget>
          </item>
-         <item row="10" column="0" colspan="2">
+         <item row="11" column="0" colspan="2">
           <widget class="QCheckBox" name="resamplerFirst">
            <property name="text">
             <string>Use audio resampler and channel conversion before filters and visualizations</string>

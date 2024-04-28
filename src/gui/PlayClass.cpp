@@ -1269,13 +1269,46 @@ static Decoder *loadStream(
     }
     else
     {
+        const int desiredVideoHeight = (type == AVMEDIA_TYPE_VIDEO)
+            ? QMPlay2Core.getSettings().getInt("DesiredVideoHeight") * 6 / 5
+            : 0
+        ;
         int defaultStream = -1, chosenLangStream = -1;
+        int minVideoHeight = 0, minVideoHeightStream = -1, desiredVideoHeightStream = -1;
         for (int i = 0; i < streams.count(); ++i)
         {
-            if (streams[i]->params->codec_type == type)
+            const auto params = streams[i]->params;
+            if (params->codec_type == type)
             {
                 if (defaultStream < 0 && streams[i]->is_default)
                     defaultStream = i;
+                if (desiredVideoHeight > 0)
+                {
+                    // Find desired video height with highest bitrate
+                    if (params->height <= desiredVideoHeight)
+                    {
+                        if (desiredVideoHeightStream == -1)
+                        {
+                            desiredVideoHeightStream = i;
+                        }
+                        else
+                        {
+                            const auto desiredStreamParams = streams[desiredVideoHeightStream]->params;
+                            if (desiredStreamParams->height <= params->height
+                                    && (desiredStreamParams->height != params->height
+                                        || params->bit_rate <= 0
+                                        || params->bit_rate > desiredStreamParams->bit_rate))
+                            {
+                                desiredVideoHeightStream = i;
+                            }
+                        }
+                    }
+                    if (minVideoHeight == 0 || params->height < minVideoHeight)
+                    {
+                        minVideoHeight = params->height;
+                        minVideoHeightStream = i;
+                    }
+                }
                 if (!lang.isEmpty() && chosenLangStream < 0)
                 {
                     for (const QMPlay2Tag &tag : std::as_const(streams[i]->other_info))
@@ -1290,6 +1323,10 @@ static Decoder *loadStream(
                 }
             }
         }
+        if (desiredVideoHeightStream != -1)
+            defaultStream = desiredVideoHeightStream;
+        else if (minVideoHeightStream > -1)
+            defaultStream = minVideoHeightStream;
         if (chosenLangStream > -1)
             defaultStream = chosenLangStream;
         for (int i = 0; i < streams.count(); ++i)
