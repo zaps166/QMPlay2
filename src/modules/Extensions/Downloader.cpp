@@ -25,6 +25,7 @@
 #include <Reader.hpp>
 
 #include <QSet>
+#include <QHash>
 #include <QMenu>
 #include <QTimer>
 #include <QLabel>
@@ -652,17 +653,23 @@ void DownloaderThread::run()
 
                 // Download only first default video stream
                 QSet<int> selectedStreams;
+                QHash<int, int> selectedStreamsMap;
                 bool videoStreamAdded = false;
                 int i = 0;
                 selectedStreams.reserve(streamsInfo.count());
+                selectedStreamsMap.reserve(streamsInfo.count());
                 for (auto it = streamsInfo.begin(); it != streamsInfo.end();)
                 {
                     const auto streamInfo = *it;
+                    auto insertStream = [&] {
+                        selectedStreamsMap[i] = selectedStreams.size();
+                        selectedStreams.insert(i);
+                    };
                     if (streamInfo->params->codec_type == AVMEDIA_TYPE_VIDEO)
                     {
                         if (!videoStreamAdded && streamInfo->is_default)
                         {
-                            selectedStreams.insert(i);
+                            insertStream();
                             videoStreamAdded = true;
                             ++it;
                         }
@@ -673,7 +680,7 @@ void DownloaderThread::run()
                     }
                     else
                     {
-                        selectedStreams.insert(i);
+                        insertStream();
                         ++it;
                     }
                     ++i;
@@ -698,6 +705,7 @@ void DownloaderThread::run()
                         int idx = -1;
                         if (!demuxer->read(packet, idx))
                             break;
+                        idx = selectedStreamsMap.value(idx, -1);
                         if (idx < 0 || idx >= streamsInfo.count())
                             continue;
 
