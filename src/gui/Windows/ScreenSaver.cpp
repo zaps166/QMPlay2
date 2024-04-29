@@ -19,6 +19,7 @@
 #include <ScreenSaver.hpp>
 
 #include <QCoreApplication>
+#include <QTimer>
 
 #include <windows.h>
 
@@ -33,6 +34,7 @@ class ScreenSaverPriv : public QAbstractNativeEventFilter
 {
 public:
     bool inhibited = false;
+    QTimer timer;
 
 private:
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -51,6 +53,12 @@ ScreenSaver::ScreenSaver() :
     m_priv(new ScreenSaverPriv)
 {
     qApp->installNativeEventFilter(m_priv);
+
+    m_priv->timer.setInterval(30 * 1000);
+    m_priv->timer.setSingleShot(true);
+    QObject::connect(&m_priv->timer, &QTimer::timeout, [this] {
+        m_priv->inhibited = false;
+    });
 }
 ScreenSaver::~ScreenSaver()
 {
@@ -60,10 +68,16 @@ ScreenSaver::~ScreenSaver()
 void ScreenSaver::inhibit(int context)
 {
     if (inhibitHelper(context))
+    {
+        m_priv->timer.stop();
         m_priv->inhibited = true;
+    }
 }
 void ScreenSaver::unInhibit(int context)
 {
     if (unInhibitHelper(context))
-        m_priv->inhibited = false;
+    {
+        if (Q_LIKELY(!m_priv->timer.isActive()))
+            m_priv->timer.start();
+    }
 }
