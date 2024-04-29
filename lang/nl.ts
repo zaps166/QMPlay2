@@ -1838,7 +1838,7 @@
         <translation>Hdr-inhoud afspelen met vp9-codec</translation>
     </message>
     <message>
-        <source>Try to automatically reconnect network connections</source>
+        <source>Try to automatically reconnect the network connection</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2370,7 +2370,7 @@
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Standaard</translation>
+        <translation>Standaard</translation>
     </message>
     <message>
         <source>SD</source>
