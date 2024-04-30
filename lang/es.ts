@@ -1838,7 +1838,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Try to automatically reconnect network connections</source>
+        <source>Try to automatically reconnect the network connection</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

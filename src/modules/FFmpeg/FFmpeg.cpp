@@ -249,7 +249,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     demuxerB->setCheckable(true);
     demuxerB->setChecked(sets().getBool("DemuxerEnabled"));
 
-    reconnectNetworkB = new QCheckBox(tr("Try to automatically reconnect network connections"));
+    reconnectNetworkB = new QCheckBox(tr("Try to automatically reconnect the network connection"));
     reconnectNetworkB->setChecked(sets().getBool("ReconnectNetwork"));
 
     decoderB = new QGroupBox(tr("Software decoder"));

@@ -809,7 +809,7 @@
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
-        <translation>指定頻率: %1 赫茲</translation>
+        <translation>指定頻率：%1 赫茲</translation>
     </message>
 </context>
 <context>
@@ -1838,8 +1838,8 @@
         <translation>允許 VP9 編解碼器使用 HDR 內容</translation>
     </message>
     <message>
-        <source>Try to automatically reconnect network connections</source>
-        <translation type="unfinished"></translation>
+        <source>Try to automatically reconnect the network connection</source>
+        <translation>嘗試自動重新連線網路</translation>
     </message>
 </context>
 <context>
@@ -1861,7 +1861,7 @@
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
-        <translation>音量: %1%</translation>
+        <translation>音量：%1%</translation>
     </message>
     <message>
         <source>Volume changed</source>
@@ -2366,27 +2366,27 @@
     </message>
     <message>
         <source>Desired video stream quality:</source>
-        <translation type="unfinished"></translation>
+        <translation>預期視訊串流品質：</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">預設</translation>
+        <translation>預設</translation>
     </message>
     <message>
         <source>SD</source>
-        <translation type="unfinished"></translation>
+        <translation>標準畫質</translation>
     </message>
     <message>
         <source>HD</source>
-        <translation type="unfinished"></translation>
+        <translation>高畫質</translation>
     </message>
     <message>
         <source>Full HD</source>
-        <translation type="unfinished"></translation>
+        <translation>全高畫質</translation>
     </message>
     <message>
         <source>4K</source>
-        <translation type="unfinished"></translation>
+        <translation>4K</translation>
     </message>
 </context>
 <context>
@@ -3427,7 +3427,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>New QMPlay2 version: %1</source>
-        <translation>新的 QMPlay2 版本: %1</translation>
+        <translation>新的 QMPlay2 版本：%1</translation>
     </message>
 </context>
 <context>

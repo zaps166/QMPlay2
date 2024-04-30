@@ -1838,7 +1838,7 @@
         <translation>Zazwalaj na zawartość HDR dla kodeka VP9</translation>
     </message>
     <message>
-        <source>Try to automatically reconnect network connections</source>
+        <source>Try to automatically reconnect the network connection</source>
         <translation>Spróbuj automatycznie wznowić połączenia sieciowe</translation>
     </message>
 </context>

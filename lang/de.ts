@@ -1837,7 +1837,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Try to automatically reconnect network connections</source>
+        <source>Try to automatically reconnect the network connection</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2369,7 +2369,7 @@
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">Standard</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <source>SD</source>

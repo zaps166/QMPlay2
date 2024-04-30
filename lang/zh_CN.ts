@@ -1838,8 +1838,8 @@
         <translation>允许 VP9 编解码器使用 HDR 内容</translation>
     </message>
     <message>
-        <source>Try to automatically reconnect network connections</source>
-        <translation type="unfinished"></translation>
+        <source>Try to automatically reconnect the network connection</source>
+        <translation>尝试自动重连网络</translation>
     </message>
 </context>
 <context>
@@ -1861,7 +1861,7 @@
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
-        <translation>音量: %1%</translation>
+        <translation>音量：%1%</translation>
     </message>
     <message>
         <source>Volume changed</source>
@@ -2366,27 +2366,27 @@
     </message>
     <message>
         <source>Desired video stream quality:</source>
-        <translation type="unfinished"></translation>
+        <translation>预期视频流质量：</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished">默认</translation>
+        <translation>默认</translation>
     </message>
     <message>
         <source>SD</source>
-        <translation type="unfinished"></translation>
+        <translation>标清</translation>
     </message>
     <message>
         <source>HD</source>
-        <translation type="unfinished"></translation>
+        <translation>高清</translation>
     </message>
     <message>
         <source>Full HD</source>
-        <translation type="unfinished"></translation>
+        <translation>全高清</translation>
     </message>
     <message>
         <source>4K</source>
-        <translation type="unfinished"></translation>
+        <translation>4K</translation>
     </message>
 </context>
 <context>
