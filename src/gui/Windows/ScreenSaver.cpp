@@ -18,33 +18,12 @@
 
 #include <ScreenSaver.hpp>
 
-#include <QCoreApplication>
-#include <QTimer>
-
 #include <windows.h>
 
-static inline bool inhibitScreenSaver(MSG *msg, const bool inhibited)
-{
-    return (inhibited && msg->message == WM_SYSCOMMAND && ((msg->wParam & 0xFFF0) == SC_SCREENSAVE || (msg->wParam & 0xFFF0) == SC_MONITORPOWER));
-}
-
-#include <QAbstractNativeEventFilter>
-
-class ScreenSaverPriv : public QAbstractNativeEventFilter
+class ScreenSaverPriv
 {
 public:
-    bool inhibited = false;
-    QTimer timer;
-
-private:
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    bool nativeEventFilter(const QByteArray &, void *m, qintptr *) override
-#else
-    bool nativeEventFilter(const QByteArray &, void *m, long *) override
-#endif
-    {
-        return inhibitScreenSaver((MSG *)m, inhibited);
-    }
+    HANDLE handle;
 };
 
 /**/
@@ -52,32 +31,32 @@ private:
 ScreenSaver::ScreenSaver() :
     m_priv(new ScreenSaverPriv)
 {
-    qApp->installNativeEventFilter(m_priv);
-
-    m_priv->timer.setInterval(30 * 1000);
-    m_priv->timer.setSingleShot(true);
-    QObject::connect(&m_priv->timer, &QTimer::timeout, [this] {
-        m_priv->inhibited = false;
-    });
+    REASON_CONTEXT reason = {};
+    reason.Version = POWER_REQUEST_CONTEXT_VERSION;
+    reason.Flags = POWER_REQUEST_CONTEXT_SIMPLE_STRING;
+    reason.Reason.SimpleReasonString = const_cast<LPWSTR>(L"Playback");
+    m_priv->handle = PowerCreateRequest(&reason);
 }
 ScreenSaver::~ScreenSaver()
 {
+    if (m_priv->handle != INVALID_HANDLE_VALUE)
+        CloseHandle(m_priv->handle);
     delete m_priv;
 }
 
 void ScreenSaver::inhibit(int context)
 {
-    if (inhibitHelper(context))
+    if (m_priv->handle != INVALID_HANDLE_VALUE && inhibitHelper(context))
     {
-        m_priv->timer.stop();
-        m_priv->inhibited = true;
+        PowerSetRequest(m_priv->handle, PowerRequestDisplayRequired);
+        PowerSetRequest(m_priv->handle, PowerRequestSystemRequired);
     }
 }
 void ScreenSaver::unInhibit(int context)
 {
-    if (unInhibitHelper(context))
+    if (m_priv->handle != INVALID_HANDLE_VALUE && unInhibitHelper(context))
     {
-        if (Q_LIKELY(!m_priv->timer.isActive()))
-            m_priv->timer.start();
+        PowerClearRequest(m_priv->handle, PowerRequestDisplayRequired);
+        PowerClearRequest(m_priv->handle, PowerRequestSystemRequired);
     }
 }
