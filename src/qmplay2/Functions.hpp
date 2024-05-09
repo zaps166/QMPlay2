@@ -135,6 +135,7 @@ namespace Functions
 
     QMPLAY2SHAREDLIB_EXPORT bool splitPrefixAndUrlIfHasPluginPrefix(const QString &entireUrl, QString *addressPrefixName, QString *url, QString *param = nullptr);
     QMPLAY2SHAREDLIB_EXPORT void getDataIfHasPluginPrefix(const QString &entireUrl, QString *url = nullptr, QString *name = nullptr, QIcon *icon = nullptr, IOController<> *ioCtrl = nullptr, const DemuxersInfo &demuxersInfo = DemuxersInfo());
+    QMPLAY2SHAREDLIB_EXPORT bool isResourcePlaylist(const QString &url);
 
     QMPLAY2SHAREDLIB_EXPORT QByteArray getUserAgent(bool withMozilla = true);
     QMPLAY2SHAREDLIB_EXPORT QString prepareFFmpegUrl(QString url, AVDictionary *&options, bool defUserAgentWithMozilla = true, bool setCookies = true, bool setRawHeaders = true, bool icy = true, const QByteArray &userAgentArg = QByteArray());

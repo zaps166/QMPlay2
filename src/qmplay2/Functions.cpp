@@ -719,6 +719,10 @@ void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url,
         }
     }
 }
+bool Functions::isResourcePlaylist(const QString &url)
+{
+    return url.startsWith("QMPlay2://") && url.endsWith(".pls") && (url.indexOf("/", 10) > 0);
+}
 
 void Functions::hFlip(quint8 *data, int linesize, int height, int width)
 {

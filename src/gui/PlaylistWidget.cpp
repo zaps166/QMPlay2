@@ -465,7 +465,17 @@ bool AddThr::add(const QStringList &urls, QTreeWidgetItem *parent, const Functio
                 entry.url = url;
 
                 if (!pLW.dontUpdateAfterAdd) //Don't try to get the real address from extension plugin in this case (no needed for tracks)
+                {
                     Functions::getDataIfHasPluginPrefix(url, &url, &entry.name, nullptr, &ioCtrl, demuxersInfo);
+                    if (Functions::isResourcePlaylist(url))
+                    {
+                        if (add({url}, parent, demuxersInfo, existingEntries, loadList))
+                            added = true;
+                        if (loadList)
+                            break;
+                        continue;
+                    }
+                }
                 IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
                 Demuxer::FetchTracks fetchTracks(pLW.dontUpdateAfterAdd);
                 if (Demuxer::create(url, demuxer, &fetchTracks))

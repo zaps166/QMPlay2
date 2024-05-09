@@ -55,7 +55,7 @@ public:
 signals:
     /// Signals when related items are requested for an item.
     /** Is listened to by YouTube::fetchRelated(). */
-    void requestRelated(const QString contentId);
+    void requestRelated(const QString &contentId);
 
 private:
     void playOrEnqueue(const QString &param, QTreeWidgetItem *tWI, const QString &addrParam = QString());
@@ -124,14 +124,13 @@ private slots:
     /** Creates a network request for related items. The reply is handled by handleRelatedReply(). */
     void fetchRelated(const QString &contentId);
 
-    /// Handles reply for request sent by fetchRelated().
-    void handleRelatedReply(QByteArray replyData);
-
     void netFinished(NetworkReply *reply);
 
     void searchMenu();
 
 private:
+    void prepareSearch();
+
     void setItags(int qualityIdx);
 
     void deleteReplies();
@@ -140,14 +139,9 @@ private:
     QByteArray getContinuationJson();
 
     void setAutocomplete(const QByteArray &data);
-    void setSearchResults(const QJsonObject &jsonObj, bool isContinuation);
-
-    /// Writes list of related items into YT browser widget.
-    void setRelatedResults(const QJsonObject &jsonObj, bool isContinuation);
+    void setSearchResults(const QJsonObject &jsonObj, bool isContinuation, bool isRelatedResults);
 
     QStringList getYouTubeVideo(const QString &param, const QString &url, IOController<YouTubeDL> &youTubeDL);
-
-    void preparePlaylist(const QByteArray &data, QTreeWidgetItem *tWI);
 
     QJsonDocument getYtInitialData(const QByteArray &data);
 

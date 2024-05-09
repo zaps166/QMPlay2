@@ -188,14 +188,12 @@ void MediaBrowserResults::QMPlay2Action(const QString &action, const QList<QTree
             emit QMPlay2Core.processParam(action, m_mediaBrowser->getQMPlay2Url(getStringFromItem(items[0])));
         else
         {
-            QMPlay2CoreClass::GroupEntries entries;
+            PlaylistEntries entries;
             for (QTreeWidgetItem *tWI : items)
                 entries += {tWI->text(0), m_mediaBrowser->getQMPlay2Url(getStringFromItem(tWI))};
-            if (!entries.isEmpty())
-            {
-                const bool enqueue = (action == "enqueue");
-                QMPlay2Core.loadPlaylistGroup(m_mediaBrowser->name() + "/" + m_currentName, entries, enqueue);
-            }
+            const auto resourceName = QMPlay2Core.writePlaylistResource(m_mediaBrowser->name() + "/" + m_currentName, entries);
+            if (!resourceName.isEmpty())
+                emit QMPlay2Core.processParam(action, resourceName);
         }
     }
 }

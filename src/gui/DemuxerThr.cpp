@@ -341,6 +341,8 @@ void DemuxerThr::checkReadyWrite(AVThread *avThr)
 
 void DemuxerThr::run()
 {
+    const auto origUrl = url;
+
     emit playC.chText(tr("Opening"));
     emit playC.setCurrentPlaying();
 
@@ -349,6 +351,14 @@ void DemuxerThr::run()
     emit QMPlay2Core.restoreCursor();
     if (ioCtrl.isAborted())
         return end();
+
+    if (Functions::isResourcePlaylist(url))
+    {
+        end();
+        emit QMPlay2Core.processParam("remove", origUrl);
+        emit QMPlay2Core.processParam("open", url);
+        return;
+    }
 
     if (!Demuxer::create(url, demuxer) || demuxer.isAborted())
     {

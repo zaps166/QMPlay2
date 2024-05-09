@@ -677,20 +677,19 @@ QString QMPlay2CoreClass::getDescriptionForUrl(const QString &url)
     return getDataFromHash(url, descriptionsForUrl);
 }
 
-void QMPlay2CoreClass::loadPlaylistGroup(const QString &name, const QMPlay2CoreClass::GroupEntries &entries, bool enqueue)
+QString QMPlay2CoreClass::writePlaylistResource(const QString &name, const PlaylistEntries &playlistEntries)
 {
-    if (!entries.isEmpty())
+    if (playlistEntries.isEmpty())
+        return QString();
+
+    const QString resourceName = "QMPlay2://" + name + ".pls";
+    if (Playlist::write(playlistEntries, resourceName))
     {
-        const QString resourceName = "QMPlay2://" + name + ".pls";
-        Playlist::Entries playlistEntries;
-        for (const auto &entry : entries)
-            playlistEntries += {entry.first, entry.second};
-        if (Playlist::write(playlistEntries, resourceName))
-        {
-            modResource(resourceName, true);
-            emit processParam(enqueue ? "enqueue" : "open", resourceName);
-        }
+        modResource(resourceName, true);
+        return resourceName;
     }
+
+    return QString();
 }
 
 QString QMPlay2CoreClass::rendererName() const

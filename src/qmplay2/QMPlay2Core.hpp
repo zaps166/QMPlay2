@@ -19,6 +19,7 @@
 #pragma once
 
 #include <QMPlay2Lib.hpp>
+#include <PlaylistEntry.hpp>
 
 #include <QAtomicInt>
 #include <QObject>
@@ -59,8 +60,6 @@ public:
     };
 
 public:
-    using GroupEntries = QVector<QPair<QString, QString>>;
-
     static inline QMPlay2CoreClass &instance()
     {
         return *qmplay2Core;
@@ -211,7 +210,7 @@ public:
     void addDescriptionForUrl(const QString &url, const QString &description, const bool removeAfterUse = true);
     QString getDescriptionForUrl(const QString &url);
 
-    void loadPlaylistGroup(const QString &name, const GroupEntries &entries, bool enqueue = false);
+    QString writePlaylistResource(const QString &name, const PlaylistEntries &playlistEntries);
 
     QString rendererName() const;
     Renderer renderer() const;
