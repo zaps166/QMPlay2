@@ -36,6 +36,15 @@
 #include <QMessageBox>
 #include <QRandomGenerator>
 
+static bool urlMatchesWithItem(QTreeWidgetItem *item, const QString &url)
+{
+    QString itemUrl = item->data(0, Qt::UserRole).toString();
+    bool urlMatches = (itemUrl == url);
+    if (!urlMatches && Functions::splitPrefixAndUrlIfHasPluginPrefix(itemUrl, nullptr, &itemUrl, nullptr))
+        urlMatches = (itemUrl == url); //E.g. for chiptunes without group
+    return urlMatches;
+}
+
 PlaylistDock::PlaylistDock() :
     repeatMode(RepeatNormal),
     lastPlaying(nullptr)
@@ -147,11 +156,7 @@ void PlaylistDock::addAndPlay(const QString &_url)
     const QString url = Functions::Url(_url);
     for (QTreeWidgetItem *item : items)
     {
-        QString itemUrl = item->data(0, Qt::UserRole).toString();
-        bool urlMatches = (itemUrl == url);
-        if (!urlMatches && Functions::splitPrefixAndUrlIfHasPluginPrefix(itemUrl, nullptr, &itemUrl, nullptr))
-            urlMatches = (itemUrl == url); //E.g. for chiptunes without group
-        if (urlMatches)
+        if (urlMatchesWithItem(item, url))
         {
             playAfterAdd = true;
             if (list->isGroup(item))
@@ -241,12 +246,43 @@ void PlaylistDock::doGroupSync(bool quick, QTreeWidgetItem *tWI, bool quickRecur
     }
 }
 
-void PlaylistDock::deleteTreeWidgetItem(QTreeWidgetItem *tWI)
+bool PlaylistDock::maybeDeleteTreeWidgetItem(QTreeWidgetItem *tWI)
 {
+    if (PlaylistWidget::getFlags(tWI) & Playlist::Entry::Locked)
+        return false;
     randomPlayedItems.removeOne(tWI);
     if (lastPlaying == tWI)
         lastPlaying = nullptr;
     delete tWI;
+    return true;
+}
+
+QTreeWidgetItem *PlaylistDock::initializeItemsDelete()
+{
+    QTreeWidgetItem *par = nullptr;
+    if (auto currentItem = list->currentItem())
+        par = currentItem->parent();
+    list->setItemsResizeToContents(false);
+    return par;
+}
+void PlaylistDock::finalizeItemsDelete(QTreeWidgetItem *par, bool deleted)
+{
+    if (deleted)
+    {
+        list->refresh();
+        if (auto currentItem = list->currentItem())
+            par = currentItem;
+        else if (!list->getChildren().contains(par))
+            par = nullptr;
+        if (!par)
+            par = list->topLevelItem(0);
+        list->setCurrentItem(par);
+    }
+    list->setItemsResizeToContents(true);
+    if (deleted)
+    {
+        list->processItems();
+    }
 }
 
 void PlaylistDock::itemDoubleClicked(QTreeWidgetItem *tWI)
@@ -497,23 +533,14 @@ void PlaylistDock::delEntries()
     const QList<QTreeWidgetItem *> selectedItems = list->selectedItems();
     if (!selectedItems.isEmpty())
     {
-        QTreeWidgetItem *par = list->currentItem() ? list->currentItem()->parent() : nullptr;
-        list->setItemsResizeToContents(false);
+        QTreeWidgetItem *par = initializeItemsDelete();
+        bool deleted = false;
         for (QTreeWidgetItem *tWI : selectedItems)
         {
-            if (!(PlaylistWidget::getFlags(tWI) & Playlist::Entry::Locked))
-                deleteTreeWidgetItem(tWI);
+            if (maybeDeleteTreeWidgetItem(tWI))
+                deleted = true;
         }
-        list->refresh();
-        if (list->currentItem())
-            par = list->currentItem();
-        else if (!list->getChildren().contains(par))
-            par = nullptr;
-        if (!par)
-            par = list->topLevelItem(0);
-        list->setCurrentItem(par);
-        list->setItemsResizeToContents(true);
-        list->processItems();
+        finalizeItemsDelete(par, deleted);
     }
 }
 void PlaylistDock::delNonGroupEntries(bool force)
@@ -522,15 +549,14 @@ void PlaylistDock::delNonGroupEntries(bool force)
         return;
     if (force || QMessageBox::question(this, tr("Playlist"), tr("Are you sure you want to delete ungrouped entries?"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
     {
-        list->setItemsResizeToContents(false);
+        QTreeWidgetItem *par = initializeItemsDelete();
+        bool deleted = false;
         for (QTreeWidgetItem *tWI : list->topLevelNonGroupsItems())
         {
-            if (!(PlaylistWidget::getFlags(tWI) & Playlist::Entry::Locked))
-                deleteTreeWidgetItem(tWI);
+            if (maybeDeleteTreeWidgetItem(tWI))
+                deleted = true;
         }
-        list->refresh();
-        list->setItemsResizeToContents(true);
-        list->processItems();
+        finalizeItemsDelete(par, deleted);
     }
 }
 void PlaylistDock::clear()

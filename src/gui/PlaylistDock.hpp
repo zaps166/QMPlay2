@@ -64,7 +64,10 @@ private:
 
     void doGroupSync(bool quick, QTreeWidgetItem *tWI, bool quickRecursive = true);
 
-    void deleteTreeWidgetItem(QTreeWidgetItem *tWI);
+    bool maybeDeleteTreeWidgetItem(QTreeWidgetItem *tWI);
+
+    QTreeWidgetItem *initializeItemsDelete();
+    void finalizeItemsDelete(QTreeWidgetItem *par, bool deleted);
 
     QWidget mainW;
     PlaylistWidget *list;
