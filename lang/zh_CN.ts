@@ -1099,7 +1099,7 @@
     </message>
     <message>
         <source>Remove specified &lt;url&gt; from playlist.</source>
-        <translation type="unfinished"></translation>
+        <translation>从播放列表移除指定&lt;网址&gt;。</translation>
     </message>
 </context>
 <context>
