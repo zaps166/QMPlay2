@@ -1097,6 +1097,10 @@
         <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
         <translation>Відкриває нову копію QMPlay2 і відтворює вказану &lt;url&gt;.</translation>
     </message>
+    <message>
+        <source>Remove specified &lt;url&gt; from playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InfoDock</name>

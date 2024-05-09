@@ -1098,6 +1098,10 @@
         <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
         <translation>Yeni QMPlay2 örneği aç ve belirtilen &lt;url&gt; adresini oynat.</translation>
     </message>
+    <message>
+        <source>Remove specified &lt;url&gt; from playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InfoDock</name>

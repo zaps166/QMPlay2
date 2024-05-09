@@ -1097,6 +1097,10 @@
         <source>About &amp;Qt</source>
         <translation>Over &amp;Qt</translation>
     </message>
+    <message>
+        <source>Remove specified &lt;url&gt; from playlist.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InfoDock</name>
