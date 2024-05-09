@@ -592,6 +592,13 @@ void MainWidget::processParam(const QString &param, const QString &data)
         else
             playlistDock->add(Functions::maybeExtensionAddress(data));
     }
+    else if (param == "remove")
+    {
+        if (data.contains('\n'))
+            playlistDock->remove(getItemsToPlay());
+        else
+            playlistDock->remove(Functions::maybeExtensionAddress(data));
+    }
     else if (param == "play")
         playlistDock->start();
     else if (param == "toggle")

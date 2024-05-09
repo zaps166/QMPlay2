@@ -45,6 +45,9 @@ public:
     void add(const QString &);
     void addAndPlay(const QString &);
 
+    void remove(const QString &url);
+    void remove(const QStringList &urls);
+
     void scrollToCurrectItem();
 
     inline QWidget *findEdit() const

@@ -175,6 +175,36 @@ void PlaylistDock::addAndPlay(const QString &_url)
     addAndPlay(QStringList{_url});
 }
 
+void PlaylistDock::remove(const QString &url)
+{
+    if (!url.isEmpty())
+        remove(QStringList{url});
+}
+void PlaylistDock::remove(const QStringList &urls)
+{
+    if (!list->canModify())
+        return;
+    QTreeWidgetItem *par = initializeItemsDelete();
+    bool deleted = false;
+    auto items = list->getChildren(PlaylistWidget::ALL_CHILDREN);
+    for (auto &&url : urls)
+    {
+        for (auto it = items.begin(); it != items.end();)
+        {
+            if (urlMatchesWithItem(*it, url) && maybeDeleteTreeWidgetItem(*it))
+            {
+                it = items.erase(it);
+                deleted = true;
+            }
+            else
+            {
+                ++it;
+            }
+        }
+    }
+    finalizeItemsDelete(par, deleted);
+}
+
 void PlaylistDock::scrollToCurrectItem()
 {
     list->scrollToItem(list->currentItem());
@@ -595,7 +625,7 @@ void PlaylistDock::renameGroup()
 void PlaylistDock::entryProperties()
 {
     bool sync, accepted;
-    EntryProperties eP(this, list->currentItem(), sync, accepted);
+    EntryProperties eP(this, list, sync, accepted);
     if (accepted)
     {
         if (sync)

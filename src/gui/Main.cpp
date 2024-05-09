@@ -261,6 +261,7 @@ static QCommandLineParser *createCmdParser(bool descriptions)
         QT_TRANSLATE_NOOP("Help", "Play previous entry on playlist."),
         QT_TRANSLATE_NOOP("Help", "Terminate the application."),
         QT_TRANSLATE_NOOP("Help", "Display this help."),
+        QT_TRANSLATE_NOOP("Help", "Remove specified <url> from playlist."),
     };
 
     const auto maybeGetTranslatedText = [&](const char *text) {
@@ -275,6 +276,7 @@ static QCommandLineParser *createCmdParser(bool descriptions)
         {"open", maybeGetTranslatedText(translations[0]), "url"},
         {"opennew", maybeGetTranslatedText(translations[1]), "url"},
         {"enqueue", maybeGetTranslatedText(translations[2]), "url"},
+        {"remove", maybeGetTranslatedText(translations[17]), "url"},
         {"profile", maybeGetTranslatedText(translations[3]), "profile name"},
         {"noplay", maybeGetTranslatedText(translations[4])},
         {"toggle", maybeGetTranslatedText(translations[5])},

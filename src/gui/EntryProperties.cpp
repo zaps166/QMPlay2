@@ -38,11 +38,13 @@
 #include <QLabel>
 #include <QUrl>
 
-EntryProperties::EntryProperties(QWidget *p, QTreeWidgetItem *_tWI, bool &sync, bool &accepted) :
-    QDialog(p), sync(sync)
+EntryProperties::EntryProperties(QWidget *p, QTreeWidget *treeWidget, bool &sync, bool &accepted)
+    : QDialog(p)
+    , m_treeWidget(treeWidget)
+    , sync(sync)
 {
     sync = false;
-    tWI = _tWI;
+    tWI = m_treeWidget->currentItem();
     if (!tWI)
         return;
 
@@ -215,6 +217,11 @@ void EntryProperties::openUrl()
 }
 void EntryProperties::accept()
 {
+    if (m_treeWidget->currentItem() != tWI)
+    {
+        QDialog::reject();
+        return;
+    }
     if (catalogCB)
     {
         if (catalogCB->isChecked())
@@ -266,7 +273,7 @@ void EntryProperties::accept()
 }
 void EntryProperties::reject()
 {
-    if (PlaylistWidget::isGroup(tWI) && tWI->text(0).isEmpty())
+    if (m_treeWidget->currentItem() == tWI && PlaylistWidget::isGroup(tWI) && tWI->text(0).isEmpty())
         delete tWI;
     QDialog::reject();
 }

@@ -21,6 +21,7 @@
 #include <QDialog>
 
 class QTreeWidgetItem;
+class QTreeWidget;
 class QToolButton;
 class AddressBox;
 class QLineEdit;
@@ -34,8 +35,9 @@ class EntryProperties final : public QDialog
 {
     Q_OBJECT
 public:
-    EntryProperties(QWidget *, QTreeWidgetItem *, bool &, bool &);
+    EntryProperties(QWidget *, QTreeWidget *, bool &, bool &);
 private:
+    QTreeWidget *const m_treeWidget;
     QTreeWidgetItem *tWI;
     QLineEdit *nameE, *pthE;
 #ifdef QMPlay2_TagEditor
