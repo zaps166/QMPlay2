@@ -124,6 +124,7 @@ bool PlaylistDock::save(const QString &_url, bool saveCurrentGroup)
 
 void PlaylistDock::add(const QStringList &urls)
 {
+    list->dontUpdateAfterAdd = false;
     list->add(urls);
 }
 void PlaylistDock::addAndPlay(const QStringList &urls)
