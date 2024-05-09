@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <PlaylistEntry.hpp>
 #include <IOController.hpp>
 #include <QMPlay2Lib.hpp>
 
@@ -27,28 +28,8 @@
 class QMPLAY2SHAREDLIB_EXPORT Playlist
 {
 public:
-    class Entry
-    {
-    public:
-        enum Flags
-        {
-            Selected = 0x1,
-            Skip = 0x2,
-            StopAfter = 0x4,
-            Locked = 0x8,
-            AlwaysSync = 0x10,
-        };
-
-        Entry() = default;
-        inline Entry(const QString &name, const QString &url) :
-            name(name), url(url)
-        {}
-
-        QString name, url;
-        double length = -1.0;
-        qint32 flags = 0, queue = 0, GID = 0, parent = 0;
-    };
-    using Entries = QVector<Entry>;
+    using Entry = PlaylistEntry;
+    using Entries = PlaylistEntries;
 
     enum OpenMode
     {

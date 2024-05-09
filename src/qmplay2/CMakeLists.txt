@@ -50,6 +50,7 @@ set(QMPLAY2_HDR
     HWDecContext.hpp
     GPUInstance.hpp
     FFT.hpp
+    PlaylistEntry.hpp
 )
 
 set(QMPLAY2_SRC
