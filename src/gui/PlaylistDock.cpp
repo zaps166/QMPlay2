@@ -609,11 +609,22 @@ void PlaylistDock::copy()
     }
     QApplication::clipboard()->setMimeData(mimeData);
 }
-void PlaylistDock::paste()
+void PlaylistDock::paste(bool play)
 {
     const QMimeData *mimeData = QApplication::clipboard()->mimeData();
     if (Functions::chkMimeData(mimeData))
-        list->add(Functions::getUrlsFromMimeData(mimeData), list->selectedItems().count() ? list->currentItem() : nullptr);
+    {
+        const auto urls = Functions::getUrlsFromMimeData(mimeData);
+        if (play)
+        {
+            addAndPlay(urls);
+        }
+        else
+        {
+            list->dontUpdateAfterAdd = false;
+            list->add(urls, list->selectedItems().count() ? list->currentItem() : nullptr);
+        }
+    }
 }
 void PlaylistDock::renameGroup()
 {

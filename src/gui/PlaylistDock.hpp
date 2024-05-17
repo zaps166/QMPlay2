@@ -102,7 +102,9 @@ public slots:
     void delNonGroupEntries(bool force = false);
     void clear();
     void copy();
-    void paste();
+public:
+    void paste(bool play);
+public slots:
     void renameGroup();
     void entryProperties();
     void timeSort1();

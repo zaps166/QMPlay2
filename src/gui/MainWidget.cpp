@@ -912,7 +912,12 @@ void MainWidget::createMenuBar()
     connect(menuBar->playlist->delNonGroupEntries, SIGNAL(triggered()), playlistDock, SLOT(delNonGroupEntries()));
     connect(menuBar->playlist->clear, SIGNAL(triggered()), playlistDock, SLOT(clear()));
     connect(menuBar->playlist->copy, SIGNAL(triggered()), playlistDock, SLOT(copy()));
-    connect(menuBar->playlist->paste, SIGNAL(triggered()), playlistDock, SLOT(paste()));
+    connect(menuBar->playlist->paste, &QAction::triggered, playlistDock, [this] {
+        playlistDock->paste(false);
+    });
+    connect(menuBar->playlist->pasteAndPlay, &QAction::triggered, playlistDock, [this] {
+        playlistDock->paste(true);
+    });
     connect(menuBar->playlist->find, SIGNAL(triggered()), playlistDock->findEdit(), SLOT(setFocus()));
     connect(menuBar->playlist->sort->timeSort1, SIGNAL(triggered()), playlistDock, SLOT(timeSort1()));
     connect(menuBar->playlist->sort->timeSort2, SIGNAL(triggered()), playlistDock, SLOT(timeSort2()));

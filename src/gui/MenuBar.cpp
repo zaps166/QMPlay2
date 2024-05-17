@@ -170,6 +170,7 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
     addSeparator();
     newAction(Playlist::tr("&Copy"), this, copy, false, QMPlay2Core.getIconFromTheme("edit-copy"), false);
     newAction(Playlist::tr("&Paste"), this, paste, false, QMPlay2Core.getIconFromTheme("edit-paste"), false);
+    newAction(Playlist::tr("Pas&te and play"), this, pasteAndPlay, false, QMPlay2Core.getIconFromTheme("edit-paste"), false);
     addSeparator();
 
     extensions = new QMenu(Playlist::tr("&Extensions"), this);
@@ -575,6 +576,7 @@ void MenuBar::setKeyShortcuts()
     shortcuts->appendAction(playlist->clear, "KeyBindings/Playlist-clear", "Shift+Del");
     shortcuts->appendAction(playlist->copy, "KeyBindings/Playlist-copy", "Ctrl+C");
     shortcuts->appendAction(playlist->paste, "KeyBindings/Playlist-paste", "Ctrl+V");
+    shortcuts->appendAction(playlist->pasteAndPlay, "KeyBindings/Playlist-paste-and-play", "Ctrl+Shift+V");
     shortcuts->appendAction(playlist->newGroup, "KeyBindings/Playlist-newGroup", "F7");
     shortcuts->appendAction(playlist->renameGroup, "KeyBindings/Playlist-renameGroup", "F2");
     shortcuts->appendAction(playlist->find, "KeyBindings/Playlist-find", "Ctrl+F");
