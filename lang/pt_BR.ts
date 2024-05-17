@@ -2606,6 +2606,10 @@
         <source>&amp;Properties</source>
         <translation>&amp;Propriedades</translation>
     </message>
+    <message>
+        <source>Pas&amp;te and play</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>

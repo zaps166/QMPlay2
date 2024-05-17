@@ -2594,6 +2594,10 @@
         <source>&amp;Always sync</source>
         <translation>Z&amp;awsze synchronizuj</translation>
     </message>
+    <message>
+        <source>Pas&amp;te and play</source>
+        <translation>Wkle&amp;j i odtwarzaj</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
