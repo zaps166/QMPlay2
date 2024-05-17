@@ -616,7 +616,10 @@ void AddThr::finished()
     pLW.refresh();
     pLW.setItemsResizeToContents(true);
     if (firstItem && ((pLW.selectAfterAdd && pLW.currentItem() != firstItem && pLW.currentItem() == lastItem) || !pLW.currentItem()))
+    {
+        pLW.clearSelection();
         pLW.setCurrentItem(firstItem);
+    }
     pLW.selectAfterAdd = false;
     pLW.setAnimated(true);
     pLW.processItems();
