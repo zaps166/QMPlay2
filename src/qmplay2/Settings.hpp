@@ -25,6 +25,8 @@
 #include <QMap>
 #include <QSet>
 
+#include <functional>
+
 class QMPLAY2SHAREDLIB_EXPORT Settings : protected QSettings
 {
     using SettingsMap = QMap<QString, QVariant>;
@@ -34,6 +36,7 @@ public:
 
     void flush();
 
+    void init(const QString &key, const std::function<QVariant()> &valFn);
     void init(const QString &key, const QVariant &val);
     void set(const QString &key, const QVariant &val);
     bool contains(const QString &key, bool checkGroups = false) const;

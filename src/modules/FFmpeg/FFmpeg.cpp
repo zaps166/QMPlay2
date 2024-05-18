@@ -107,8 +107,8 @@ FFmpeg::FFmpeg() :
     init("HurryUP", true);
     init("SkipFrames", true);
     init("ForceSkipFrames", false);
-    init("Threads", 0);
-    init("LowresValue", 0);
+    init("Threads", static_cast<int>(0));
+    init("LowresValue", static_cast<int>(0));
     init("ThreadTypeSlice", false);
 
 #if defined(USE_OPENGL)

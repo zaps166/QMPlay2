@@ -56,7 +56,7 @@ Inputs::Inputs() :
         set("PCM/format", 2);
     init("PCM/chn", 2);
     init("PCM/srate", 44100);
-    init("PCM/offset", 0);
+    init("PCM/offset", static_cast<int>(0));
     init("PCM/BE", false);
     init("Rayman2", true);
 }

@@ -60,7 +60,7 @@ Extensions::Extensions() :
 #ifdef USE_YOUTUBE
     init("YouTube/ShowUserName", false);
     init("YouTube/Subtitles", true);
-    init("YouTube/SortBy", 0);
+    init("YouTube/SortBy", static_cast<int>(0));
 #endif
 
 #ifdef USE_LASTFM

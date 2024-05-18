@@ -34,15 +34,22 @@ void Settings::flush()
     sync();
 }
 
-void Settings::init(const QString &key, const QVariant &val)
+void Settings::init(const QString &key, const std::function<QVariant()> &valFn)
 {
+    Q_ASSERT(valFn);
     QMutexLocker mL(&mutex);
     const auto it = toRemove.find(key);
     const bool foundInToRemove = (it != toRemove.end());
     if (!cache.contains(key) && (foundInToRemove || !QSettings::contains(key)))
-        cache[key] = val;
+        cache[key] = valFn();
     if (foundInToRemove)
         toRemove.erase(it);
+}
+void Settings::init(const QString &key, const QVariant &val)
+{
+    init(key, [&] {
+        return val;
+    });
 }
 bool Settings::contains(const QString &key, bool checkGroups) const
 {

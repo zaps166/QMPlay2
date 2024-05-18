@@ -141,7 +141,7 @@ void SettingsWidget::InitSettings()
 
     QMPSettings.init("AudioLanguage", QString());
     QMPSettings.init("SubtitlesLanguage", QString());
-    QMPSettings.init("screenshotPth", QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).value(0, QDir::homePath()));
+    QMPSettings.init("screenshotPth", []{return QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).value(0, QDir::homePath());});
 #ifdef Q_OS_WIN
     QMPSettings.init("screenshotFormat", ".bmp");
 #else
@@ -159,8 +159,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("AutoOpenVideoWindow", true);
     QMPSettings.init("AutoRestoreMainWindowOnVideo", true);
 #ifdef UPDATES
-    if (!QMPSettings.contains("AutoUpdates"))
-        QMPSettings.init("AutoUpdates", !QFile::exists(QMPlay2Core.getShareDir() + "noautoupdates"));
+    QMPSettings.init("AutoUpdates", []{return !QFile::exists(QMPlay2Core.getShareDir() + "noautoupdates");});
 #endif
     QMPSettings.init("MainWidget/TabPositionNorth", false);
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
@@ -223,7 +222,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("ShowBufferedTimeOnSlider", true);
     QMPSettings.init("WheelAction", true);
     QMPSettings.init("WheelSeek", true);
-    QMPSettings.init("LeftMouseTogglePlay", 0);
+    QMPSettings.init("LeftMouseTogglePlay", static_cast<int>(0));
     QMPSettings.init("MiddleMouseToggleFullscreen", false);
     QMPSettings.init("AccurateSeek", Qt::Checked);
     QMPSettings.init("UnpauseWhenSeeking", false);
