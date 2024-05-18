@@ -615,14 +615,6 @@
         <translation>Téléchargeur</translation>
     </message>
     <message>
-        <source>Download directory</source>
-        <translation>Dossier de téléchargement</translation>
-    </message>
-    <message>
-        <source>Choose directory for downloaded files</source>
-        <translation>Choisir le dossier pour les fichiers téléchargés</translation>
-    </message>
-    <message>
         <source>Clear completed downloads</source>
         <translation>Nettoyer les téléchargements terminés</translation>
     </message>
@@ -633,10 +625,6 @@
     <message>
         <source>Download</source>
         <translation>Télécharger</translation>
-    </message>
-    <message>
-        <source>Cannot change downloading files directory</source>
-        <translation>Impossible de changer le dossier de téléchargement du fichier</translation>
     </message>
     <message>
         <source>Enter address</source>
@@ -1005,6 +993,10 @@
     </message>
     <message>
         <source>Subtitles and tags encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output file path:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2500,6 +2492,10 @@
         <source>Continue playing from the last position</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3202,6 +3198,10 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot change the directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

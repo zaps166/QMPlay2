@@ -615,14 +615,6 @@
         <translation>下载器</translation>
     </message>
     <message>
-        <source>Download directory</source>
-        <translation>下载目录</translation>
-    </message>
-    <message>
-        <source>Choose directory for downloaded files</source>
-        <translation>选择下载文件目录</translation>
-    </message>
-    <message>
         <source>Clear completed downloads</source>
         <translation>清除已完成的下载</translation>
     </message>
@@ -633,10 +625,6 @@
     <message>
         <source>Download</source>
         <translation>下载</translation>
-    </message>
-    <message>
-        <source>Cannot change downloading files directory</source>
-        <translation>无法更改正在下载的文件目录</translation>
     </message>
     <message>
         <source>Enter address</source>
@@ -1009,6 +997,10 @@
     <message>
         <source>Subtitles and tags encoding</source>
         <translation>字幕和标签编码</translation>
+    </message>
+    <message>
+        <source>Output file path:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2503,6 +2495,10 @@
         <source>Continue playing from the last position</source>
         <translation>继续从最后位置播放</translation>
     </message>
+    <message>
+        <source>&amp;Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3212,6 +3208,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
         <translation>有助于复古缩放。也可用于软件 Vulkan 实现以降低 CPU 开销。</translation>
+    </message>
+    <message>
+        <source>Cannot change the directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

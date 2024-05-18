@@ -615,14 +615,6 @@
         <translation>Pobieranie plików z Internetu</translation>
     </message>
     <message>
-        <source>Download directory</source>
-        <translation>Katalog pobierania</translation>
-    </message>
-    <message>
-        <source>Choose directory for downloaded files</source>
-        <translation>Wybierz katalog dla pobieranych plików</translation>
-    </message>
-    <message>
         <source>Clear completed downloads</source>
         <translation>Wyczyść zakończone pobierania</translation>
     </message>
@@ -633,10 +625,6 @@
     <message>
         <source>Download</source>
         <translation>Pobierz</translation>
-    </message>
-    <message>
-        <source>Cannot change downloading files directory</source>
-        <translation>Nie udało się zmienić katalogu dla pobieranych plików</translation>
     </message>
     <message>
         <source>Enter address</source>
@@ -1009,6 +997,10 @@
     <message>
         <source>Subtitles and tags encoding</source>
         <translation>Kodowanie napisów i tagów</translation>
+    </message>
+    <message>
+        <source>Output file path:</source>
+        <translation>Ścieżka pliku wyjściowego:</translation>
     </message>
 </context>
 <context>
@@ -2503,6 +2495,10 @@
         <source>Continue playing from the last position</source>
         <translation>Kontynuuj odtwarzanie od ostatniej pozycji</translation>
     </message>
+    <message>
+        <source>&amp;Recording</source>
+        <translation>Nagr&amp;ywanie</translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3212,6 +3208,10 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
         <translation>Przydatne do skalowania retro. Może być również używane do programowej implementacji Vulkan w celu obniżenia obciążenia procesora.</translation>
+    </message>
+    <message>
+        <source>Cannot change the directory</source>
+        <translation>Nie udało się zmienić katalogu</translation>
     </message>
 </context>
 <context>

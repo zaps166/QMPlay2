@@ -619,14 +619,6 @@
         <translation>&amp;Toevoegen</translation>
     </message>
     <message>
-        <source>Download directory</source>
-        <translation>Downloadmap</translation>
-    </message>
-    <message>
-        <source>Choose directory for downloaded files</source>
-        <translation>Kies een downloadmap</translation>
-    </message>
-    <message>
         <source>Clear completed downloads</source>
         <translation>Afgeronde downloads wissen</translation>
     </message>
@@ -687,10 +679,6 @@
     <message>
         <source>Preset name already exists!</source>
         <translation>Deze naam is al in gebruik.</translation>
-    </message>
-    <message>
-        <source>Cannot change downloading files directory</source>
-        <translation>De downloadmap kan niet worden aangepast</translation>
     </message>
     <message>
         <source>Enter address</source>
@@ -1009,6 +997,10 @@
     <message>
         <source>Subtitles and tags encoding</source>
         <translation>Ondertiteling- en tagencodering</translation>
+    </message>
+    <message>
+        <source>Output file path:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2503,6 +2495,10 @@
         <source>Continue playing from the last position</source>
         <translation>Afspelen vanaf recentste positie</translation>
     </message>
+    <message>
+        <source>&amp;Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3212,6 +3208,10 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
         <translation>Handig voor retro-apparaten. Kan ook worden gebruikn in combinatie met Vulkan-softwarerendering om het cpu-gebruik te verlagen.</translation>
+    </message>
+    <message>
+        <source>Cannot change the directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

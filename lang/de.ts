@@ -615,14 +615,6 @@
         <translation>Downloads</translation>
     </message>
     <message>
-        <source>Download directory</source>
-        <translation>Downloadverzeichnis</translation>
-    </message>
-    <message>
-        <source>Choose directory for downloaded files</source>
-        <translation>Downloadverzeichnis wählen</translation>
-    </message>
-    <message>
         <source>Clear completed downloads</source>
         <translation>Alle Downloads löschen</translation>
     </message>
@@ -633,10 +625,6 @@
     <message>
         <source>Download</source>
         <translation>Download</translation>
-    </message>
-    <message>
-        <source>Cannot change downloading files directory</source>
-        <translation>Downloadverzeichnis konnte nicht geändert werden</translation>
     </message>
     <message>
         <source>Enter address</source>
@@ -1007,6 +995,10 @@
     </message>
     <message>
         <source>Subtitles and tags encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output file path:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2502,6 +2494,10 @@
         <source>Continue playing from the last position</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3210,6 +3206,10 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot change the directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -616,14 +616,6 @@
         <translation>İndirici</translation>
     </message>
     <message>
-        <source>Download directory</source>
-        <translation>İndirme dizini</translation>
-    </message>
-    <message>
-        <source>Choose directory for downloaded files</source>
-        <translation>Dosyaların indirileceği dizini seçin</translation>
-    </message>
-    <message>
         <source>Clear completed downloads</source>
         <translation>Tamamlanan indirmeleri temizle</translation>
     </message>
@@ -634,10 +626,6 @@
     <message>
         <source>Download</source>
         <translation>İndir</translation>
-    </message>
-    <message>
-        <source>Cannot change downloading files directory</source>
-        <translation>İndirilen dosyaların dizini değiştirilemez</translation>
     </message>
     <message>
         <source>Enter address</source>
@@ -1010,6 +998,10 @@
     <message>
         <source>Subtitles and tags encoding</source>
         <translation>Alt yazı ve etiket kodlama</translation>
+    </message>
+    <message>
+        <source>Output file path:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2514,6 +2506,10 @@
         <source>Continue playing from the last position</source>
         <translation>Son konumdan oynatmayı sürdür</translation>
     </message>
+    <message>
+        <source>&amp;Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3232,6 +3228,10 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
         <translation>Retro ölçekleme için kullanışlıdır. İşlemci ek yükünü azaltmak için yazılım Vulkan gerçeklemesi için de kullanılabilir.</translation>
+    </message>
+    <message>
+        <source>Cannot change the directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

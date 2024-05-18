@@ -615,14 +615,6 @@
         <translation>ダウンローダー</translation>
     </message>
     <message>
-        <source>Download directory</source>
-        <translation>ダウンロードディレクトリ</translation>
-    </message>
-    <message>
-        <source>Choose directory for downloaded files</source>
-        <translation>ダウンロードされたファイルが保存されるディレクトリを選択してください</translation>
-    </message>
-    <message>
         <source>Clear completed downloads</source>
         <translation>完了したダウンロードをクリアする</translation>
     </message>
@@ -633,10 +625,6 @@
     <message>
         <source>Download</source>
         <translation>ダウンロード</translation>
-    </message>
-    <message>
-        <source>Cannot change downloading files directory</source>
-        <translation>ダウンロードファイルディレクトリを変更できません</translation>
     </message>
     <message>
         <source>Enter address</source>
@@ -1009,6 +997,10 @@
     </message>
     <message>
         <source>Subtitles and tags encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output file path:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2505,6 +2497,10 @@
         <source>Continue playing from the last position</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3211,6 +3207,10 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot change the directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
