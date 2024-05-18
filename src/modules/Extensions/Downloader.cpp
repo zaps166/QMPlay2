@@ -25,6 +25,7 @@
 #include <Reader.hpp>
 
 #include <QSet>
+#include <QDir>
 #include <QHash>
 #include <QMenu>
 #include <QTimer>
@@ -34,8 +35,8 @@
 #include <QWindow>
 #include <QProcess>
 #include <QMimeData>
+#include <QFileInfo>
 #include <QClipboard>
-#include <QFileDialog>
 #include <QTreeWidget>
 #include <QToolButton>
 #include <QGridLayout>
@@ -47,7 +48,6 @@
 #include <QProgressBar>
 #include <QApplication>
 #include <QElapsedTimer>
-#include <QStandardPaths>
 #include <QLoggingCategory>
 #include <QDialogButtonBox>
 
@@ -898,13 +898,6 @@ void Downloader::init()
     connect(m_convertsMenu->addAction(tr("&Add")), &QAction::triggered, this, &Downloader::addConvertPreset);
     m_convertsMenu->addSeparator();
 
-    setDownloadsDirB = new QToolButton;
-    setDownloadsDirB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
-    setDownloadsDirB->setText(tr("Download directory"));
-    setDownloadsDirB->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    setDownloadsDirB->setToolTip(tr("Choose directory for downloaded files"));
-    connect(setDownloadsDirB, SIGNAL(clicked()), this, SLOT(setDownloadsDir()));
-
     clearFinishedB = new QToolButton;
     clearFinishedB->setIcon(QMPlay2Core.getIconFromTheme("archive-remove"));
     clearFinishedB->setToolTip(tr("Clear completed downloads"));
@@ -924,36 +917,14 @@ void Downloader::init()
     layout = new QGridLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(downloadLW, 0, 0, 1, 6);
-    layout->addWidget(setDownloadsDirB, 1, 0, 1, 1);
     layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 1, 1, 1, 1);
     layout->addWidget(clearFinishedB, 1, 2, 1, 1);
     layout->addWidget(addUrlB, 1, 3, 1, 1);
     layout->addItem(new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Minimum), 1, 4, 1, 1);
     layout->addWidget(m_convertsPresetsB, 1, 5, 1, 1);
 
-    QString defDownloadPath = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).value(0, QDir::homePath()) + "/";
-#ifdef Q_OS_WIN
-    defDownloadPath.replace('\\', '/');
-#endif
-    downloadLW->downloadsDirPath = Functions::cleanPath(m_sets.getString("DownloadsDirPath"));
-    if (downloadLW->downloadsDirPath == "/")
-    {
-        downloadLW->downloadsDirPath = defDownloadPath;
-    }
-    else if (downloadLW->downloadsDirPath != defDownloadPath)
-    {
-        Q_ASSERT(downloadLW->downloadsDirPath.endsWith("/"));
-        const QFileInfo dir(downloadLW->downloadsDirPath.left(downloadLW->downloadsDirPath.size() - 1));
-#if !defined(Q_OS_WIN) && !defined(Q_OS_ANDROID)
-        if (!dir.isDir() || !dir.isWritable())
-#else
-        if (!dir.isDir())
-#endif
-        {
-            downloadLW->downloadsDirPath = defDownloadPath;
-            m_sets.set("DownloadsDirPath", defDownloadPath);
-        }
-    }
+    downloadLW->downloadsDirPath = Functions::cleanPath(QMPlay2Core.getSettings().getString("OutputFilePath"));
+    Q_ASSERT(downloadLW->downloadsDirPath.endsWith("/"));
 
     // Compatibility
     {
@@ -1158,21 +1129,6 @@ bool Downloader::modifyConvertAction(QAction *action, bool addRemoveButton)
     return false;
 }
 
-void Downloader::setDownloadsDir()
-{
-    QFileInfo dir(QFileDialog::getExistingDirectory(this, tr("Choose directory for downloaded files"), downloadLW->downloadsDirPath));
-#if !defined(Q_OS_WIN) && !defined(Q_OS_ANDROID)
-    if (dir.isDir() && dir.isWritable())
-#else
-    if (dir.isDir())
-#endif
-    {
-        downloadLW->downloadsDirPath = Functions::cleanPath(dir.filePath());
-        m_sets.set("DownloadsDirPath", downloadLW->downloadsDirPath);
-    }
-    else if (dir.filePath() != QString())
-        QMessageBox::warning(this, DownloaderName, tr("Cannot change downloading files directory"));
-}
 void Downloader::clearFinished()
 {
     const QList<QTreeWidgetItem *> items = downloadLW->findItems(QString(), Qt::MatchContains);

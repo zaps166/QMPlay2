@@ -58,6 +58,8 @@ private:
 
     void restartApp();
 
+    QString chooseDir(const QString &currPth);
+
     inline QString getSelectedProfile();
 
     void showEvent(QShowEvent *) override;
@@ -92,6 +94,9 @@ private slots:
     void openModuleSettings(QListWidgetItem *);
     void moveModule();
     void chooseScreenshotDir();
+private:
+    void chooseOutputFileDir();
+private slots:
     void setAppearance();
     void setKeyBindings();
     void clearCoversCache();

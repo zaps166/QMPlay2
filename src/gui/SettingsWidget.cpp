@@ -132,6 +132,15 @@ void SettingsWidget::InitSettings()
 {
     Settings &QMPSettings = QMPlay2Core.getSettings();
 
+    auto getInitialOutpuitFilePath = [] {
+        QString outputFilePath = Settings("Downloader").getString("DownloadsDirPath");
+        while (outputFilePath.endsWith("/"))
+            outputFilePath.chop(1);
+        if (outputFilePath.isEmpty())
+            outputFilePath = QStandardPaths::standardLocations(QStandardPaths::DownloadLocation).value(0, QDir::homePath());
+        return outputFilePath;
+    };
+
     QTextCodec *codec = QTextCodec::codecForLocale();
     QMPSettings.init("FallbackSubtitlesEncoding", codec ? codec->name().constData() : "System");
 
@@ -142,6 +151,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("AudioLanguage", QString());
     QMPSettings.init("SubtitlesLanguage", QString());
     QMPSettings.init("screenshotPth", []{return QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).value(0, QDir::homePath());});
+    QMPSettings.init("OutputFilePath", getInitialOutpuitFilePath);
 #ifdef Q_OS_WIN
     QMPSettings.init("screenshotFormat", ".bmp");
 #else
@@ -381,6 +391,10 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         generalSettingsPage->screenshotFormatB->setCurrentIndex(generalSettingsPage->screenshotFormatB->findText(QMPSettings.getString("screenshotFormat")));
         generalSettingsPage->screenshotB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
         connect(generalSettingsPage->screenshotB, SIGNAL(clicked()), this, SLOT(chooseScreenshotDir()));
+
+        generalSettingsPage->outputFileE->setText(QMPSettings.getString("OutputFilePath"));
+        generalSettingsPage->outputFileB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
+        connect(generalSettingsPage->outputFileB, &QAbstractButton::clicked, this, &SettingsWidget::chooseOutputFileDir);
 
         connect(generalSettingsPage->setAppearanceB, SIGNAL(clicked()), this, SLOT(setAppearance()));
         connect(generalSettingsPage->setKeyBindingsB, SIGNAL(clicked()), this, SLOT(setKeyBindings()));
@@ -1137,6 +1151,25 @@ void SettingsWidget::restartApp()
     QMPlay2GUI.mainW->close();
 }
 
+QString SettingsWidget::chooseDir(const QString &currPth)
+{
+    const QString dir = QFileDialog::getExistingDirectory(this, tr("Choose directory"), currPth);
+    if (!dir.isEmpty())
+    {
+        const QFileInfo dirInfo(dir);
+#if !defined(Q_OS_WIN) && !defined(Q_OS_ANDROID)
+        if (dirInfo.isDir() && dirInfo.isWritable())
+#else
+        if (dirInfo.isDir())
+#endif
+        {
+            return dir;
+        }
+    }
+    QMessageBox::warning(this, QString(), tr("Cannot change the directory"));
+    return QString();
+}
+
 inline QString SettingsWidget::getSelectedProfile()
 {
     return !generalSettingsPage->profileB->currentIndex() ? "/" : generalSettingsPage->profileB->currentText();
@@ -1200,6 +1233,7 @@ void SettingsWidget::apply()
             QMPSettings.set("SubtitlesLanguage", generalSettingsPage->subsLangB->currentIndex() > 0 ? generalSettingsPage->subsLangB->currentText() : QString());
             QMPSettings.set("screenshotPth", generalSettingsPage->screenshotE->text());
             QMPSettings.set("screenshotFormat", generalSettingsPage->screenshotFormatB->currentText());
+            QMPSettings.set("OutputFilePath", generalSettingsPage->outputFileE->text());
             QMPSettings.set("ShowCovers", generalSettingsPage->showCoversGB->isChecked());
             QMPSettings.set("BlurCovers", generalSettingsPage->blurCoversB->isChecked());
             QMPSettings.set("ShowDirCovers", generalSettingsPage->showDirCoversB->isChecked());
@@ -1484,9 +1518,15 @@ void SettingsWidget::moveModule()
 }
 void SettingsWidget::chooseScreenshotDir()
 {
-    const QString dir = QFileDialog::getExistingDirectory(this, tr("Choose directory"), generalSettingsPage->screenshotE->text());
+    const QString dir = chooseDir(generalSettingsPage->screenshotE->text());
     if (!dir.isEmpty())
         generalSettingsPage->screenshotE->setText(dir);
+}
+void SettingsWidget::chooseOutputFileDir()
+{
+    const QString dir = chooseDir(generalSettingsPage->outputFileE->text());
+    if (!dir.isEmpty())
+        generalSettingsPage->outputFileE->setText(dir);
 }
 void SettingsWidget::setAppearance()
 {

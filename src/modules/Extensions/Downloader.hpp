@@ -159,7 +159,6 @@ private:
     bool modifyConvertAction(QAction *action, bool addRemoveButton = true);
 
 private slots:
-    void setDownloadsDir();
     void clearFinished();
     void addUrl();
     void download();
@@ -172,7 +171,7 @@ private:
 
     QGridLayout *layout;
     DownloadListW *downloadLW;
-    QToolButton *setDownloadsDirB, *clearFinishedB, *addUrlB;
+    QToolButton *clearFinishedB, *addUrlB;
 
     QToolButton *m_convertsPresetsB;
     QMenu *m_convertsMenu;
