@@ -890,21 +890,9 @@ void VideoThr::screenshot(Frame videoFrame)
     Functions::splitPrefixAndUrlIfHasPluginPrefix(realUrl, nullptr, &realUrl);
     QString screenshotName;
     if (realUrl.startsWith("file://"))
-    {
-        screenshotName = Functions::fileName(realUrl) + "_QMPlay2_snapshot_" + Functions::timeToStr(videoFrame.ts(), false, true).replace(":", ".");
-    }
+        screenshotName = Functions::fileName(realUrl) + "_QMPlay2_snap_" + Functions::timeToStr(videoFrame.ts(), false, true).replace(":", ".") + ext;
     else
-    {
-        quint16 num = 0;
-        for (const QString &f : QDir(dir).entryList({"QMPlay2_snapshot_?????" + ext}, QDir::Files, QDir::Name))
-        {
-            const quint16 n = QStringView(f).mid(13, 5).toUShort();
-            if (n > num)
-                num = n;
-        }
-        screenshotName = "QMPlay2_snap_" + QString("%1").arg(++num, 5, 10, QChar('0'));
-    }
-    screenshotName += ext;
+        screenshotName = Functions::getSeqFile(dir, ext, "snap");
     if (img.save(dir + "/" + screenshotName))
         playC.messageAndOSD(tr("Screenshot saved as: %1").arg(screenshotName));
 }

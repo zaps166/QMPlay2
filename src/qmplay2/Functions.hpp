@@ -164,4 +164,6 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT bool hasTouchScreen();
 
     QMPLAY2SHAREDLIB_EXPORT QString getBitrateStr(const int64_t bitRate);
+
+    QMPLAY2SHAREDLIB_EXPORT QString getSeqFile(const QString &dir, const QString &ext, const QString &frag);
 }

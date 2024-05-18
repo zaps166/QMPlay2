@@ -1103,3 +1103,15 @@ QString Functions::getBitrateStr(const int64_t bitRate)
         return QString("%1 kbps").arg(qRound64(bitRate / 1000.0));
     return QString("%1 Mbps").arg(bitRate / 1000000.0, 0, 'f', 3);
 }
+
+QString Functions::getSeqFile(const QString &dir, const QString &ext, const QString &frag)
+{
+    quint16 num = 0;
+    for (const QString &f : QDir(dir).entryList({QString("QMPlay2_%1_?????%2").arg(frag, ext)}, QDir::Files, QDir::Name))
+    {
+        const quint16 n = QStringView(f).mid(8 + frag.size() + 1, 5).toUShort();
+        if (n > num)
+            num = n;
+    }
+    return QString("QMPlay2_%1_%2%3").arg(frag).arg(++num, 5, 10, QChar('0')).arg(ext);
+}
