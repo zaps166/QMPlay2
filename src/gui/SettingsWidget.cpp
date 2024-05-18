@@ -1165,8 +1165,8 @@ QString SettingsWidget::chooseDir(const QString &currPth)
         {
             return dir;
         }
+        QMessageBox::warning(this, QString(), tr("Cannot change the directory"));
     }
-    QMessageBox::warning(this, QString(), tr("Cannot change the directory"));
     return QString();
 }
 
