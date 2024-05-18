@@ -96,7 +96,7 @@ AVBufferRef *Packet::getBufferRef() const
 }
 uint8_t *Packet::data() const
 {
-    return m_packet->data;;
+    return m_packet->data;
 }
 
 double Packet::duration() const
