@@ -34,12 +34,12 @@ class QMPLAY2SHAREDLIB_EXPORT MkvMuxer
     MkvMuxer &operator =(const MkvMuxer &) = delete;
 
 public:
-    MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo);
+    MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo, bool streamRecording = false);
     ~MkvMuxer();
 
     bool isOk() const;
 
-    bool write(Packet &packet, const int idx);
+    bool write(const Packet &packet, const int idx);
 
 private:
     Priv &p;

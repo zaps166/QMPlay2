@@ -7,6 +7,7 @@
         <file alias="media-skip-backward.svgz">Icons/media-skip-backward.svgz</file>
         <file alias="media-skip-forward.svgz">Icons/media-skip-forward.svgz</file>
         <file alias="media-playback-pause.svgz">Icons/media-playback-pause.svgz</file>
+        <file alias="media-record.svgz">Icons/media-record.svgz</file>
 
         <file alias="go-next.svgz">Icons/go-next.svgz</file>
 

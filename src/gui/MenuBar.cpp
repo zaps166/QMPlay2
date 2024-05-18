@@ -225,8 +225,12 @@ MenuBar::Player::Player(MenuBar *parent) :
     newAction(Player::tr("&Stop"), this, stop, false, QMPlay2Core.getIconFromTheme("media-playback-stop"), false);
     newAction(Player::tr("&Next"), this, next, true, QMPlay2Core.getIconFromTheme("media-skip-forward"), false);
     newAction(Player::tr("&Previous"), this, prev, true, QMPlay2Core.getIconFromTheme("media-skip-backward"), false);
+    newAction(Player::tr("&Recording"), this, rec, true, QMPlay2Core.getIconFromTheme("media-record"),  true);
     newAction(Player::tr("Previous &frame"), this, prevFrame, true, QIcon(), false);
     newAction(Player::tr("Next &frame"), this, nextFrame, true, QIcon(), false);
+
+    rec->setEnabled(false);
+
     addSeparator();
 
     repeat = new Repeat(this);
@@ -603,6 +607,7 @@ void MenuBar::setKeyShortcuts()
     shortcuts->appendAction(player->stop, "KeyBindings/Player-stop", "V");
     shortcuts->appendAction(player->next, "KeyBindings/Player-next", "B");
     shortcuts->appendAction(player->prev, "KeyBindings/Player-prev", "Z");
+    shortcuts->appendAction(player->rec, "KeyBindings/Player-recording", "Shift+C");
     shortcuts->appendAction(player->prevFrame, "KeyBindings/Player-prevFrame", ",");
     shortcuts->appendAction(player->nextFrame, "KeyBindings/Player-nextFrame", ".");
     shortcuts->appendAction(player->abRepeat, "KeyBindings/Player-abRepeat", "Ctrl+-");

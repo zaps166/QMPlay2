@@ -22,16 +22,22 @@
 
 #include <QMutex>
 
+#include <functional>
 #include <deque>
 
 class QMPLAY2SHAREDLIB_EXPORT PacketBuffer : private std::deque<Packet>
 {
+    using IterateCallback = std::function<void(const Packet &)>;
+
     static double s_backwardTime;
+
 public:
     static void setBackwardTime(double time)
     {
         s_backwardTime = time;
     }
+
+    void iterate(const IterateCallback &cb);
 
     bool seekTo(double seekPos, bool backward);
     void clear(); //Thread-safe

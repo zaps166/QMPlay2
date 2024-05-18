@@ -22,7 +22,8 @@
 #include <Packet.hpp>
 
 #include <QLoggingCategory>
-#include <QMap>
+
+#include <unordered_map>
 
 Q_LOGGING_CATEGORY(mux, "MkvMuxer")
 
@@ -38,20 +39,29 @@ extern "C"
 
 using namespace std;
 
+struct StreamData
+{
+    double firstDts = qQNaN();
+    int64_t lastDts = AV_NOPTS_VALUE;
+};
+
 struct MkvMuxer::Priv
 {
     AVFormatContext *ctx = nullptr;
     AVPacket *pkt = nullptr;
-    QMap<int, int64_t> lastDts;
+    bool streamRecording = false;
+    unordered_map<int, StreamData> streamData;
 };
 
-MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo)
+MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo, bool streamRecording)
     : p(*new Priv)
 {
+    p.streamRecording = streamRecording;
     if (avformat_alloc_output_context2(&p.ctx, nullptr, "matroska", nullptr) < 0)
         return;
     if (avio_open(&p.ctx->pb, fileName.toUtf8(), AVIO_FLAG_WRITE) < 0)
         return;
+    bool isRawVideo = false;
     for (StreamInfo *streamInfo : streamsInfo)
     {
         const AVCodec *codec = avcodec_find_decoder_by_name(streamInfo->codec_name);
@@ -66,6 +76,11 @@ MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsIn
 
         stream->codecpar->codec_type = streamInfo->params->codec_type;
         stream->codecpar->codec_id = codec->id;
+        if (codec->id == AV_CODEC_ID_RAWVIDEO)
+        {
+            stream->codecpar->codec_tag = streamInfo->params->codec_tag;
+            isRawVideo = true;
+        }
 
         if (streamInfo->params->extradata_size > 0)
         {
@@ -101,7 +116,10 @@ MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsIn
 
         // TODO: Metadata
     }
-    if (avformat_write_header(p.ctx, nullptr) < 0)
+    AVDictionary *options = nullptr;
+    if (isRawVideo)
+        av_dict_set(&options, "allow_raw_vfw", "1", 0);
+    if (avformat_write_header(p.ctx, &options) < 0)
         return;
     p.pkt = av_packet_alloc();
 }
@@ -129,15 +147,33 @@ bool MkvMuxer::isOk() const
     return static_cast<bool>(p.pkt);
 }
 
-bool MkvMuxer::write(Packet &packet, const int idx)
+bool MkvMuxer::write(const Packet &packet, const int idx)
 {
     const double timeBase = av_q2d(p.ctx->streams[idx]->time_base);
 
+    auto &streamData = p.streamData[idx];
+
+    double tsSubtract = 0.0;
+    if (p.streamRecording)
+    {
+        if (qIsNaN(streamData.firstDts))
+        {
+            if (packet.hasKeyFrame() && packet.hasDts())
+                streamData.firstDts = packet.dts();
+        }
+        tsSubtract = streamData.firstDts;
+        if (qIsNaN(tsSubtract))
+        {
+            qCDebug(mux) << "Skipping first packet, because it is not key frame or doesn't have valid dts" << idx;
+            return true; // Skip packet if we can't start with key frame with valid DTS
+        }
+    }
+
     p.pkt->duration = round(packet.duration() / timeBase);
     if (packet.hasDts())
-        p.pkt->dts = round(packet.dts() / timeBase);
+        p.pkt->dts = round((packet.dts() - tsSubtract) / timeBase);
     if (packet.hasPts())
-        p.pkt->pts = round(packet.pts() / timeBase);
+        p.pkt->pts = round((packet.pts() - tsSubtract) / timeBase);
     p.pkt->flags = packet.hasKeyFrame() ? AV_PKT_FLAG_KEY : 0;
     p.pkt->buf = packet.getBufferRef();
     p.pkt->data = packet.data();
@@ -145,19 +181,17 @@ bool MkvMuxer::write(Packet &packet, const int idx)
     p.pkt->stream_index = idx;
 
     bool dtsOk = false;
-    auto it = p.lastDts.find(idx);
-    if (it == p.lastDts.end())
+    if (streamData.lastDts == AV_NOPTS_VALUE)
     {
         if (p.pkt->dts != AV_NOPTS_VALUE)
         {
-            p.lastDts[idx] = p.pkt->dts;
+            streamData.lastDts = p.pkt->dts;
             dtsOk = true;
         }
     }
     else
     {
-        const auto lastDts = it.value();
-        if (p.pkt->dts != AV_NOPTS_VALUE && p.pkt->dts >= lastDts)
+        if (p.pkt->dts != AV_NOPTS_VALUE && p.pkt->dts >= streamData.lastDts)
             dtsOk = true;
     }
     if (!dtsOk)

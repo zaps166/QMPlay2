@@ -101,6 +101,8 @@ public:
         dontResetContinuePlayback = val;
     }
 
+    void setRecording(bool checked);
+
 private:
     inline bool hasVideoStream();
     inline bool hasAudioStream();
@@ -248,4 +250,6 @@ signals:
     void uncheckSuspend();
     void setVideoCheckState(bool rotate90, bool hFlip, bool vFlip, bool spherical);
     void continuePos(double pos, bool canSetVar);
+    void allowRecording(bool allow);
+    void recording(bool status);
 };

@@ -20,7 +20,46 @@
 
 #include <cmath>
 
+#include <QDebug>
+
 double PacketBuffer::s_backwardTime;
+
+void PacketBuffer::iterate(const IterateCallback &cb)
+{
+    lock();
+
+    const int count = packetsCount();
+
+    int startPos = m_pos;
+    if (startPos >= count)
+    {
+        unlock();
+        return;
+    }
+
+    for (int i = startPos; i >= 0; --i) // Find nearest keyframe (backwards)
+    {
+        auto &packet = atPos(i);
+        if (packet.hasKeyFrame())
+        {
+            startPos = i;
+            break;
+        }
+    }
+
+    // Iterate packets starting when found keyframe
+    bool hasKeyframe = false;
+    for (int i = startPos; i < count; ++i)
+    {
+        auto &packet = atPos(i);
+        if (!hasKeyframe && packet.hasKeyFrame())
+            hasKeyframe = true;
+        if (hasKeyframe)
+            cb(packet);
+    }
+
+    unlock();
+}
 
 bool PacketBuffer::seekTo(double seekPos, bool backward)
 {

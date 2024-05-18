@@ -114,6 +114,16 @@ void PlayClass::play(const QString &_url)
             demuxThr->updateBufferedSeconds = QMPlay2Core.getSettings().getBool("ShowBufferedTimeOnSlider");
 
             connect(demuxThr, SIGNAL(load(Demuxer *)), this, SLOT(load(Demuxer *)));
+            connect(demuxThr, &DemuxerThr::allowRecording, this, &PlayClass::allowRecording);
+            connect(demuxThr, &DemuxerThr::recording, this, [this](bool status, bool error, const QString &fileName) {
+                if (error)
+                    messageAndOSD("Recording error");
+                else if (status)
+                    messageAndOSD("Recording started: " + fileName);
+                else
+                    messageAndOSD("Recording stopped");
+                emit recording(status && !error);
+            });
             connect(demuxThr, SIGNAL(finished()), this, SLOT(demuxThrFinished()));
 
             if (!QMPlay2Core.getSettings().getBool("KeepZoom"))
@@ -433,6 +443,20 @@ void PlayClass::setKeepAudioPitch(bool keep)
     else
         messageAndOSD(tr("Don't keep audio pitch during playback speed change"));
     QMPlay2Core.getSettings().set("KeepAudioPitch", keepAudioPitch);
+}
+
+void PlayClass::setRecording(bool checked)
+{
+    if (!demuxThr)
+    {
+        emit recording(false);
+        return;
+    }
+
+    if (checked)
+        demuxThr->startRecording();
+    else
+        demuxThr->stopRecording();
 }
 
 inline bool PlayClass::hasVideoStream()

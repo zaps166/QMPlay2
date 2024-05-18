@@ -28,6 +28,7 @@
 
 class BufferInfo;
 class PlayClass;
+class MkvMuxer;
 class AVThread;
 class Demuxer;
 class BasicIO;
@@ -65,7 +66,13 @@ private:
 
     void checkReadyWrite(AVThread *avThr);
 
+    void startRecording();
+    void stopRecording();
+
     void run() override;
+
+    void startRecordingInternal(QHash<int, int> &recStreamsMap);
+    void stopRecordingInternal(QHash<int, int> &recStreamsMap);
 
     inline void ensureTrueUpdateBuffered();
     inline bool canUpdateBuffered() const;
@@ -100,11 +107,15 @@ private:
     IOController<Demuxer> demuxer;
     QString title, artist, album;
     double playIfBuffered, time, updateBufferedTime;
+    std::unique_ptr<MkvMuxer> m_recMuxer;
+    bool m_recording = false;
 private slots:
     void stopVADec();
     void updateCover(const QString &title, const QString &artist, const QString &album, const QByteArray &cover);
 signals:
     void load(Demuxer *);
+    void allowRecording(bool allow);
+    void recording(bool status, bool error, const QString &fileName = QString());
 };
 
 /**/

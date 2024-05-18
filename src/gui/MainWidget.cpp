@@ -383,6 +383,14 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
         if (canSetVar)
             playC.setDontResetContinuePlayback(enabled);
     });
+    connect(&playC, &PlayClass::allowRecording, this, [this](bool allow) {
+        menuBar->player->rec->setEnabled(allow);
+    });
+    connect(&playC, &PlayClass::recording, this, [this](bool status) {
+        QSignalBlocker blocker(menuBar->player->rec);
+        menuBar->player->rec->setChecked(status);
+    });
+
     /**/
 
     if (settings.getBool("MainWidget/TabPositionNorth"))
@@ -935,6 +943,7 @@ void MainWidget::createMenuBar()
     connect(menuBar->player->stop, SIGNAL(triggered()), &playC, SLOT(stop()));
     connect(menuBar->player->next, SIGNAL(triggered()), playlistDock, SLOT(next()));
     connect(menuBar->player->prev, SIGNAL(triggered()), playlistDock, SLOT(prev()));
+    connect(menuBar->player->rec, &QAction::triggered, &playC, &PlayClass::setRecording);
     connect(menuBar->player->prevFrame, SIGNAL(triggered()), &playC, SLOT(prevFrame()));
     connect(menuBar->player->nextFrame, SIGNAL(triggered()), &playC, SLOT(nextFrame()));
     for (QAction *act : menuBar->player->repeat->actions())

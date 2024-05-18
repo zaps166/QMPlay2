@@ -24,6 +24,7 @@
 #include <Main.hpp>
 
 #include <Functions.hpp>
+#include <MkvMuxer.hpp>
 #include <SubsDec.hpp>
 #include <Demuxer.hpp>
 #include <Decoder.hpp>
@@ -227,6 +228,9 @@ void DemuxerThr::seek(bool doDemuxerSeek)
             playC.sPackets.unlock();
         }
 
+        if (doDemuxerSeek)
+            stopRecording();
+
         // Workaround: subtract 1 second for stepping backwards - sometimes FFmpeg doesn't seek to
         // key frame (why?) or PTS is higher than DTS. This also doesn't resolve all rare issues.
         if (doDemuxerSeek && demuxer->seek(playC.seekTo - (stepBackwards ? 1.0 : 0.0), backward))
@@ -337,6 +341,18 @@ void DemuxerThr::checkReadyWrite(AVThread *avThr)
         err |= !avThr->writer->readyWrite();
         avThr->updateUnlock();
     }
+}
+
+void DemuxerThr::startRecording()
+{
+    if (isDemuxerReady())
+        m_recording = true;
+    else if (!m_recording)
+        emit recording(false, true);
+}
+void DemuxerThr::stopRecording()
+{
+    m_recording = false;
 }
 
 void DemuxerThr::run()
@@ -513,6 +529,11 @@ void DemuxerThr::run()
     bool firstWaitForData = true;
     bool canWaitForData = true;
 
+    QHash<int, int> recStreamsMap;
+
+    if (unknownLength)
+        emit allowRecording(true);
+
     while (!demuxer.isAborted())
     {
         {
@@ -521,6 +542,11 @@ void DemuxerThr::run()
             if (playC.seekTo == SEEK_REPEAT)
                 break; //Repeat seek failed - break.
         }
+
+        if (m_recording && !m_recMuxer)
+            startRecordingInternal(recStreamsMap);
+        else if (!m_recording && m_recMuxer)
+            stopRecordingInternal(recStreamsMap);
 
         AVThread *aThr = (AVThread *)playC.aThr, *vThr = (AVThread *)playC.vThr;
 
@@ -678,6 +704,12 @@ void DemuxerThr::run()
             if (streamIdx < 0 || playC.seekTo == SEEK_STREAM_RELOAD)
                 continue;
 
+            if (int recStreamIdx = recStreamsMap.value(streamIdx, -1); recStreamIdx > -1)
+            {
+                Q_ASSERT(m_recMuxer);
+                m_recMuxer->write(packet, recStreamIdx);
+            }
+
             if (streamIdx == playC.audioStream)
                 playC.aPackets.put(packet);
             else if (streamIdx == playC.videoStream)
@@ -712,10 +744,67 @@ void DemuxerThr::run()
         }
     }
 
+    if (m_recMuxer)
+        stopRecordingInternal(recStreamsMap);
+
+    emit allowRecording(false);
+
     emit QMPlay2Core.updatePlaying(false, title, artist, album, round(demuxer->length()), false, updatePlayingName);
 
     playC.endOfStream = playC.canUpdatePos = false; //to musi tu być!
     end();
+}
+
+void DemuxerThr::startRecordingInternal(QHash<int, int> &recStreamsMap)
+{
+    QList<StreamInfo *> recStreamsInfo;
+    Q_ASSERT(recStreamsMap.isEmpty());
+    Q_ASSERT(m_recording);
+    Q_ASSERT(!m_recMuxer);
+    auto pushStream = [&](int streamIdx) {
+        if (streamIdx > -1)
+        {
+            recStreamsMap[streamIdx] = recStreamsInfo.size();
+            recStreamsInfo.push_back(demuxer->streamsInfo().at(streamIdx));
+        }
+    };
+    pushStream(playC.videoStream);
+    pushStream(playC.audioStream);
+    pushStream(playC.subtitlesStream);
+
+    const auto dir = QMPlay2Core.getSettings().getString("OutputFilePath");
+    const auto fileName = Functions::getSeqFile(dir, ".mkv", "rec");
+    m_recMuxer = std::make_unique<MkvMuxer>(dir + "/" + fileName, recStreamsInfo, true);
+    if (m_recMuxer->isOk())
+    {
+        emit recording(true, false, fileName);
+        auto writePackets = [&](PacketBuffer &packets, int packetsStreamIdx) {
+            if (int recStreamIdx = recStreamsMap.value(packetsStreamIdx, -1); recStreamIdx > -1)
+            {
+                packets.iterate([&](const Packet &packet) {
+                    m_recMuxer->write(packet, recStreamIdx);
+                });
+            }
+        };
+        writePackets(playC.vPackets, playC.videoStream);
+        writePackets(playC.aPackets, playC.audioStream);
+        writePackets(playC.sPackets, playC.subtitlesStream);
+    }
+    else
+    {
+        m_recording = false;
+        m_recMuxer.reset();
+        recStreamsMap.clear();
+        emit recording(false, true);
+    }
+}
+void DemuxerThr::stopRecordingInternal(QHash<int, int> &recStreamsMap)
+{
+    Q_ASSERT(m_recMuxer);
+    m_recording = false;
+    m_recMuxer.reset();
+    recStreamsMap.clear();
+    emit recording(false, false);
 }
 
 inline void DemuxerThr::ensureTrueUpdateBuffered()
