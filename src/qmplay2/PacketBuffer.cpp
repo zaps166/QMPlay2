@@ -28,19 +28,19 @@ bool PacketBuffer::seekTo(double seekPos, bool backward)
     if (count == 0)
         return false;
 
-    const bool findBackwards = (m_pos > 0 && seekPos < at(m_pos - 1).ts());
+    const bool findBackwards = (m_pos > 0 && seekPos < atPos(m_pos - 1).ts());
 
-    if (findBackwards && at(0).ts() > seekPos)
+    if (findBackwards && atPos(0).ts() > seekPos)
     {
-        if (floor(at(0).ts()) > seekPos)
+        if (floor(atPos(0).ts()) > seekPos)
             return false; // No packets for backward seek
-        seekPos = at(0).ts();
+        seekPos = atPos(0).ts();
     }
-    else if (!findBackwards && at(count - 1).ts() < seekPos)
+    else if (!findBackwards && atPos(count - 1).ts() < seekPos)
     {
-        if (ceil(at(count - 1).ts()) < seekPos)
+        if (ceil(atPos(count - 1).ts()) < seekPos)
             return false; // No packets for forward seek
-        seekPos = at(count - 1).ts();
+        seekPos = atPos(count - 1).ts();
     }
 
     double durationToChange = 0.0;
@@ -53,7 +53,7 @@ bool PacketBuffer::seekTo(double seekPos, bool backward)
         {
             for (int i = currPos; i < count; ++i)
             {
-                const Packet &pkt = at(i);
+                const Packet &pkt = atPos(i);
                 if (pkt.ts() >= seekPos && (!keyFrame || pkt.hasKeyFrame()))
                 {
                     tmpPos = i;
@@ -68,7 +68,7 @@ bool PacketBuffer::seekTo(double seekPos, bool backward)
         }
         else for (int i = currPos - 1; i >= 0; --i)
         {
-            const Packet &pkt = at(i);
+            const Packet &pkt = atPos(i);
             durationToChange -= pkt.duration();
             sizeToChange -= pkt.size();
             if (pkt.ts() <= seekPos && (!keyFrame || pkt.hasKeyFrame()))
@@ -82,7 +82,7 @@ bool PacketBuffer::seekTo(double seekPos, bool backward)
 
     if (doSeek(m_pos, !findBackwards, false))
     {
-        if (at(tmpPos).hasKeyFrame() || doSeek(tmpPos, !backward, true))
+        if (atPos(tmpPos).hasKeyFrame() || doSeek(tmpPos, !backward, true))
         {
             m_remainingDuration -= durationToChange;
             m_backwardDuration += durationToChange;
@@ -118,7 +118,7 @@ void PacketBuffer::put(const Packet &packet)
 }
 Packet PacketBuffer::fetch()
 {
-    const Packet &packet = at(m_pos++);
+    const Packet &packet = atPos(m_pos++);
     m_remainingDuration -= packet.duration();
     m_backwardDuration += packet.duration();
     m_remainingBytes -= packet.size();
@@ -136,4 +136,9 @@ void PacketBuffer::clearBackwards()
         erase(begin());
         --m_pos;
     }
+}
+
+inline Packet &PacketBuffer::atPos(size_type idx)
+{
+    return operator[](idx);
 }

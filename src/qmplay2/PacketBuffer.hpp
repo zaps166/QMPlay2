@@ -98,6 +98,10 @@ public:
     {
         m_mutex.unlock();
     }
+
+private:
+    inline Packet &atPos(size_type idx);
+
 private:
     double m_remainingDuration = 0.0, m_backwardDuration = 0.0;
     qint64 m_remainingBytes = 0, m_backwardBytes = 0;
