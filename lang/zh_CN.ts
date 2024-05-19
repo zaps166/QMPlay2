@@ -797,7 +797,7 @@
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
-        <translation>指定频率: %1 赫兹</translation>
+        <translation>指定频率：%1 赫兹</translation>
     </message>
 </context>
 <context>
@@ -2132,15 +2132,15 @@
     </message>
     <message>
         <source>Recording error</source>
-        <translation type="unfinished"></translation>
+        <translation>录音错误</translation>
     </message>
     <message>
         <source>Recording started: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>录音已开始：%1</translation>
     </message>
     <message>
         <source>Recording stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>录音已停止</translation>
     </message>
 </context>
 <context>
@@ -3459,7 +3459,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>New QMPlay2 version: %1</source>
-        <translation>新 QMPlay2 版本: %1</translation>
+        <translation>新 QMPlay2 版本：%1</translation>
     </message>
 </context>
 <context>

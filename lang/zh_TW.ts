@@ -2132,15 +2132,15 @@
     </message>
     <message>
         <source>Recording error</source>
-        <translation type="unfinished"></translation>
+        <translation>錄音錯誤</translation>
     </message>
     <message>
         <source>Recording started: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>錄音已開始：%1</translation>
     </message>
     <message>
         <source>Recording stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>錄音已停止</translation>
     </message>
 </context>
 <context>
