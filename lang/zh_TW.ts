@@ -2531,14 +2531,6 @@
         <translation>儲存列表(&amp;L)</translation>
     </message>
     <message>
-        <source>&amp;Remove selected entries</source>
-        <translation>移除已選擇項目(&amp;R)</translation>
-    </message>
-    <message>
-        <source>Remove entries &amp;without groups</source>
-        <translation>移除沒有分組的項目(&amp;W)</translation>
-    </message>
-    <message>
         <source>&amp;Clear list</source>
         <translation>清除列表(&amp;C)</translation>
     </message>
@@ -2606,6 +2598,18 @@
         <source>Pas&amp;te and play</source>
         <translation>貼上並播放(&amp;T)</translation>
     </message>
+    <message>
+        <source>&amp;Remove from list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from &amp;disk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear &amp;ungroupped entries</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -2632,6 +2636,14 @@
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
         <translation>您確定要刪除未分組項目嗎？</translation>
+    </message>
+    <message>
+        <source>Failed to delete one or more selected entries.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

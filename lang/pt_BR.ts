@@ -2559,14 +2559,6 @@
         <translation>Sempre sincroniz&amp;ar</translation>
     </message>
     <message>
-        <source>&amp;Remove selected entries</source>
-        <translation>&amp;Remover itens selecionados</translation>
-    </message>
-    <message>
-        <source>Remove entries &amp;without groups</source>
-        <translation>&amp;Remover itens sem grupos</translation>
-    </message>
-    <message>
         <source>&amp;Clear list</source>
         <translation>&amp;Limpar lista</translation>
     </message>
@@ -2618,6 +2610,18 @@
         <source>Pas&amp;te and play</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Remove from list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from &amp;disk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear &amp;ungroupped entries</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -2644,6 +2648,14 @@
     <message>
         <source>Visible entries</source>
         <translation>Itens visíveis</translation>
+    </message>
+    <message>
+        <source>Failed to delete one or more selected entries.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -2531,14 +2531,6 @@
         <translation>Zapisz p&amp;laylistę</translation>
     </message>
     <message>
-        <source>&amp;Remove selected entries</source>
-        <translation>&amp;Usuń zaznaczone wpisy</translation>
-    </message>
-    <message>
-        <source>Remove entries &amp;without groups</source>
-        <translation>Usuń &amp;wpisy bez grupy</translation>
-    </message>
-    <message>
         <source>&amp;Clear list</source>
         <translation>Wy&amp;czyść listę</translation>
     </message>
@@ -2606,6 +2598,18 @@
         <source>Pas&amp;te and play</source>
         <translation>Wkle&amp;j i odtwarzaj</translation>
     </message>
+    <message>
+        <source>&amp;Remove from list</source>
+        <translation>&amp;Usuń z listy</translation>
+    </message>
+    <message>
+        <source>Remove from &amp;disk</source>
+        <translation>Usuń z &amp;dysku</translation>
+    </message>
+    <message>
+        <source>Clear &amp;ungroupped entries</source>
+        <translation>Usuń niepogrupowane &amp;wpisy</translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -2632,6 +2636,14 @@
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
         <translation>Czy na pewno chcesz usunąć niepogrupowane wpisy?</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
+        <translation>Czy na pewno chcesz usunąć wybrane wpisy z dysku? Nielokalne wpisy zostaną usunięte tylko z listy.</translation>
+    </message>
+    <message>
+        <source>Failed to delete one or more selected entries.</source>
+        <translation>Nie udało się usunąć jednego lub więcej wybranych wpisów.</translation>
     </message>
 </context>
 <context>

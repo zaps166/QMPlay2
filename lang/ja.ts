@@ -2573,20 +2573,12 @@
         <translation>名前の変更(&amp;R)</translation>
     </message>
     <message>
-        <source>Remove entries &amp;without groups</source>
-        <translation>グループのないエントリを削除する(&amp;W)</translation>
-    </message>
-    <message>
         <source>&amp;Properties</source>
         <translation>プロパティ(&amp;P)</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
         <translation>コピー(&amp;C)</translation>
-    </message>
-    <message>
-        <source>&amp;Remove selected entries</source>
-        <translation>選択したエントリーを削除する(&amp;R)</translation>
     </message>
     <message>
         <source>Load &amp;list</source>
@@ -2606,6 +2598,18 @@
     </message>
     <message>
         <source>Pas&amp;te and play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Remove from list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from &amp;disk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear &amp;ungroupped entries</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2634,6 +2638,14 @@
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
         <translation>グループ化されていないエントリーを削除しますか?</translation>
+    </message>
+    <message>
+        <source>Failed to delete one or more selected entries.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

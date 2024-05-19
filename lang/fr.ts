@@ -2528,14 +2528,6 @@
         <translation>Enregistrer &amp;le liste</translation>
     </message>
     <message>
-        <source>&amp;Remove selected entries</source>
-        <translation>Efface&amp;r les entrées sélectionnées</translation>
-    </message>
-    <message>
-        <source>Remove entries &amp;without groups</source>
-        <translation>&amp;Supprimer les entrées sans groupe</translation>
-    </message>
-    <message>
         <source>&amp;Clear list</source>
         <translation>Effa&amp;cer la liste</translation>
     </message>
@@ -2603,6 +2595,18 @@
         <source>Pas&amp;te and play</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Remove from list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove from &amp;disk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear &amp;ungroupped entries</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlaylistDock</name>
@@ -2629,6 +2633,14 @@
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
         <translation>Êtes vous sûr de vouloir effacer les entrées non groupées?</translation>
+    </message>
+    <message>
+        <source>Failed to delete one or more selected entries.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
