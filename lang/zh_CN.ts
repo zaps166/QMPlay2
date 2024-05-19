@@ -2600,15 +2600,15 @@
     </message>
     <message>
         <source>&amp;Remove from list</source>
-        <translation type="unfinished"></translation>
+        <translation>从列表移除(&amp;R)</translation>
     </message>
     <message>
         <source>Remove from &amp;disk</source>
-        <translation type="unfinished"></translation>
+        <translation>从磁盘移除(&amp;D)</translation>
     </message>
     <message>
-        <source>Clear &amp;ungroupped entries</source>
-        <translation type="unfinished"></translation>
+        <source>Clear &amp;ungrouped entries</source>
+        <translation>清除未分组项目(&amp;U)</translation>
     </message>
 </context>
 <context>
@@ -2639,11 +2639,11 @@
     </message>
     <message>
         <source>Failed to delete one or more selected entries.</source>
-        <translation type="unfinished"></translation>
+        <translation>未能删除一个或多个所选项目。</translation>
     </message>
     <message>
         <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>您确定要从磁盘删除所选项目吗？非本地项目将仅从列表移除。</translation>
     </message>
 </context>
 <context>
@@ -3077,7 +3077,7 @@ QMPlay2 将不会放大图标！</translation>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
-        <translation>您要删除 &quot;youtube-dl&quot; 软件吗？</translation>
+        <translation>您要移除 &quot;youtube-dl&quot; 软件吗？</translation>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
@@ -3556,15 +3556,15 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Negative</source>
-        <translation type="unfinished"></translation>
+        <translation>底片</translation>
     </message>
     <message>
         <source>Disable negative</source>
-        <translation type="unfinished"></translation>
+        <translation>禁用底片</translation>
     </message>
     <message>
         <source>Enable negative</source>
-        <translation type="unfinished"></translation>
+        <translation>启用底片</translation>
     </message>
 </context>
 <context>

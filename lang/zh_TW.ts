@@ -2600,15 +2600,15 @@
     </message>
     <message>
         <source>&amp;Remove from list</source>
-        <translation type="unfinished"></translation>
+        <translation>从列表移除(&amp;R)</translation>
     </message>
     <message>
         <source>Remove from &amp;disk</source>
-        <translation type="unfinished"></translation>
+        <translation>从磁碟移除(&amp;D)</translation>
     </message>
     <message>
-        <source>Clear &amp;ungroupped entries</source>
-        <translation type="unfinished"></translation>
+        <source>Clear &amp;ungrouped entries</source>
+        <translation>清除非群組項目(&amp;U)</translation>
     </message>
 </context>
 <context>
@@ -2635,15 +2635,15 @@
     </message>
     <message>
         <source>Are you sure you want to delete ungrouped entries?</source>
-        <translation>您確定要刪除未分組項目嗎？</translation>
+        <translation>您確定要刪除非群組項目嗎？</translation>
     </message>
     <message>
         <source>Failed to delete one or more selected entries.</source>
-        <translation type="unfinished"></translation>
+        <translation>未能刪除一個或多個所選項目。</translation>
     </message>
     <message>
         <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>您確定要从磁碟刪除所選項目吗？非本機項目將僅從列表移除。</translation>
     </message>
 </context>
 <context>
@@ -3556,15 +3556,15 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Negative</source>
-        <translation type="unfinished"></translation>
+        <translation>底片</translation>
     </message>
     <message>
         <source>Disable negative</source>
-        <translation type="unfinished"></translation>
+        <translation>關閉底片</translation>
     </message>
     <message>
         <source>Enable negative</source>
-        <translation type="unfinished"></translation>
+        <translation>啟用底片</translation>
     </message>
 </context>
 <context>

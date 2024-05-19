@@ -2606,7 +2606,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Clear &amp;ungroupped entries</source>
+        <source>Clear &amp;ungrouped entries</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

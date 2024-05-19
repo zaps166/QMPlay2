@@ -2607,7 +2607,7 @@
         <translation>Usuń z &amp;dysku</translation>
     </message>
     <message>
-        <source>Clear &amp;ungroupped entries</source>
+        <source>Clear &amp;ungrouped entries</source>
         <translation>Usuń niepogrupowane &amp;wpisy</translation>
     </message>
 </context>
