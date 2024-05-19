@@ -166,7 +166,7 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
     addSeparator();
     newAction(Playlist::tr("&Remove from list"), this, delEntries, true, QMPlay2Core.getIconFromTheme("list-remove"), false);
     newAction(Playlist::tr("Remove from &disk"), this, delEntriesFromDisk, true, QMPlay2Core.getIconFromTheme("list-remove"), false);
-    newAction(Playlist::tr("Clear &ungroupped entries"), this, delNonGroupEntries, false, QMPlay2Core.getIconFromTheme("list-remove"), false);
+    newAction(Playlist::tr("Clear &ungrouped entries"), this, delNonGroupEntries, false, QMPlay2Core.getIconFromTheme("list-remove"), false);
     newAction(Playlist::tr("&Clear list"), this, clear, false, QMPlay2Core.getIconFromTheme("archive-remove"), false);
     addSeparator();
     newAction(Playlist::tr("&Copy"), this, copy, false, QMPlay2Core.getIconFromTheme("edit-copy"), false);
