@@ -775,6 +775,45 @@ void DemuxerThr::startRecordingInternal(QHash<int, int> &recStreamsMap)
     QString ext("mkv");
     QString fmt("matroska");
 
+    if (recStreamsInfo.size() == 1)
+    {
+        switch (recStreamsInfo.at(0)->params->codec_id)
+        {
+            case AV_CODEC_ID_MP3:
+                ext = fmt = "mp3";
+                break;
+            case AV_CODEC_ID_AAC:
+                ext = "aac";
+                fmt = "adts";
+                break;
+            case AV_CODEC_ID_AC3:
+                ext = fmt = "ac3";
+                break;
+            case AV_CODEC_ID_VORBIS:
+                ext = fmt = "ogg";
+                break;
+            case AV_CODEC_ID_OPUS:
+                ext = "opus";
+                fmt  = "ogg";
+                break;
+            default:
+                break;
+        }
+    }
+    else if (recStreamsInfo.size() == 2)
+    {
+        const QSet<AVCodecID> codecIDs {
+            recStreamsInfo.at(0)->params->codec_id,
+            recStreamsInfo.at(1)->params->codec_id,
+        };
+        if ((codecIDs.contains(AV_CODEC_ID_AAC) || codecIDs.contains(AV_CODEC_ID_MP3) || codecIDs.contains(AV_CODEC_ID_AC3))
+                && (codecIDs.contains(AV_CODEC_ID_H264) || codecIDs.contains(AV_CODEC_ID_HEVC)))
+        {
+            ext = "ts";
+            fmt = "mpegts";
+        }
+    }
+
     const auto dir = QMPlay2Core.getSettings().getString("OutputFilePath");
     const auto fileName = Functions::getSeqFile(dir, "." + ext, "rec");
     m_recMuxer = std::make_unique<StreamMuxer>(dir + "/" + fileName, recStreamsInfo, fmt, true);
