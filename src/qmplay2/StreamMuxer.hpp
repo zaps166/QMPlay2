@@ -26,16 +26,16 @@ struct AVFormatContext;
 class StreamInfo;
 class Packet;
 
-class QMPLAY2SHAREDLIB_EXPORT MkvMuxer
+class QMPLAY2SHAREDLIB_EXPORT StreamMuxer
 {
     struct Priv;
 
-    MkvMuxer(const MkvMuxer &) = delete;
-    MkvMuxer &operator =(const MkvMuxer &) = delete;
+    StreamMuxer(const StreamMuxer &) = delete;
+    StreamMuxer &operator =(const StreamMuxer &) = delete;
 
 public:
-    MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo, bool streamRecording = false);
-    ~MkvMuxer();
+    StreamMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo, const QString &format = "matroska", bool streamRecording = false);
+    ~StreamMuxer();
 
     bool isOk() const;
 

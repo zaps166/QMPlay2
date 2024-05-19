@@ -24,7 +24,7 @@
 #include <Main.hpp>
 
 #include <Functions.hpp>
-#include <MkvMuxer.hpp>
+#include <StreamMuxer.hpp>
 #include <SubsDec.hpp>
 #include <Demuxer.hpp>
 #include <Decoder.hpp>
@@ -772,9 +772,12 @@ void DemuxerThr::startRecordingInternal(QHash<int, int> &recStreamsMap)
     pushStream(playC.audioStream);
     pushStream(playC.subtitlesStream);
 
+    QString ext("mkv");
+    QString fmt("matroska");
+
     const auto dir = QMPlay2Core.getSettings().getString("OutputFilePath");
-    const auto fileName = Functions::getSeqFile(dir, ".mkv", "rec");
-    m_recMuxer = std::make_unique<MkvMuxer>(dir + "/" + fileName, recStreamsInfo, true);
+    const auto fileName = Functions::getSeqFile(dir, "." + ext, "rec");
+    m_recMuxer = std::make_unique<StreamMuxer>(dir + "/" + fileName, recStreamsInfo, fmt, true);
     if (m_recMuxer->isOk())
     {
         emit recording(true, false, fileName);

@@ -43,7 +43,7 @@ set(QMPLAY2_HDR
     VideoAdjustment.hpp
     Notifies.hpp
     NotifiesTray.hpp
-    MkvMuxer.hpp
+    StreamMuxer.hpp
     Sphere.hpp
     X11BypassCompositor.hpp
     VideoOutputCommon.hpp
@@ -89,7 +89,7 @@ set(QMPLAY2_SRC
     Version.cpp
     Notifies.cpp
     NotifiesTray.cpp
-    MkvMuxer.cpp
+    StreamMuxer.cpp
     Sphere.cpp
     X11BypassCompositor.cpp
     VideoOutputCommon.cpp

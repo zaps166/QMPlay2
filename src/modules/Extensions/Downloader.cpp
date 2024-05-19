@@ -19,7 +19,7 @@
 #include <Downloader.hpp>
 
 #include <Functions.hpp>
-#include <MkvMuxer.hpp>
+#include <StreamMuxer.hpp>
 #include <Demuxer.hpp>
 #include <Packet.hpp>
 #include <Reader.hpp>
@@ -687,7 +687,7 @@ void DownloaderThread::run()
                 }
                 demuxer->selectStreams(selectedStreams);
 
-                MkvMuxer muxer(filePath, streamsInfo);
+                StreamMuxer muxer(filePath, streamsInfo);
                 if (muxer.isOk())
                 {
                     const double length = demuxer->length();

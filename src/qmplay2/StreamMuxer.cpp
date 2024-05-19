@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <MkvMuxer.hpp>
+#include <StreamMuxer.hpp>
 
 #include <StreamInfo.hpp>
 #include <Packet.hpp>
@@ -25,7 +25,7 @@
 
 #include <unordered_map>
 
-Q_LOGGING_CATEGORY(mux, "MkvMuxer")
+Q_LOGGING_CATEGORY(mux, "StreamMuxer")
 
 extern "C"
 {
@@ -45,7 +45,7 @@ struct StreamData
     int64_t lastDts = AV_NOPTS_VALUE;
 };
 
-struct MkvMuxer::Priv
+struct StreamMuxer::Priv
 {
     AVFormatContext *ctx = nullptr;
     AVPacket *pkt = nullptr;
@@ -53,11 +53,11 @@ struct MkvMuxer::Priv
     unordered_map<int, StreamData> streamData;
 };
 
-MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo, bool streamRecording)
+StreamMuxer::StreamMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo, const QString &format, bool streamRecording)
     : p(*new Priv)
 {
     p.streamRecording = streamRecording;
-    if (avformat_alloc_output_context2(&p.ctx, nullptr, "matroska", nullptr) < 0)
+    if (avformat_alloc_output_context2(&p.ctx, nullptr, format.toLatin1().constData(), nullptr) < 0)
         return;
     if (avio_open(&p.ctx->pb, fileName.toUtf8(), AVIO_FLAG_WRITE) < 0)
         return;
@@ -123,7 +123,7 @@ MkvMuxer::MkvMuxer(const QString &fileName, const QList<StreamInfo *> &streamsIn
         return;
     p.pkt = av_packet_alloc();
 }
-MkvMuxer::~MkvMuxer()
+StreamMuxer::~StreamMuxer()
 {
     if (p.ctx)
     {
@@ -142,12 +142,12 @@ MkvMuxer::~MkvMuxer()
     }
 }
 
-bool MkvMuxer::isOk() const
+bool StreamMuxer::isOk() const
 {
     return static_cast<bool>(p.pkt);
 }
 
-bool MkvMuxer::write(const Packet &packet, const int idx)
+bool StreamMuxer::write(const Packet &packet, const int idx)
 {
     const double timeBase = av_q2d(p.ctx->streams[idx]->time_base);
 

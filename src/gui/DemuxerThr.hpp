@@ -28,7 +28,7 @@
 
 class BufferInfo;
 class PlayClass;
-class MkvMuxer;
+class StreamMuxer;
 class AVThread;
 class Demuxer;
 class BasicIO;
@@ -107,7 +107,7 @@ private:
     IOController<Demuxer> demuxer;
     QString title, artist, album;
     double playIfBuffered, time, updateBufferedTime;
-    std::unique_ptr<MkvMuxer> m_recMuxer;
+    std::unique_ptr<StreamMuxer> m_recMuxer;
     bool m_recording = false;
 private slots:
     void stopVADec();
