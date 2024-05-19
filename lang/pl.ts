@@ -2130,6 +2130,18 @@
         <source>Don&apos;t keep audio pitch during playback speed change</source>
         <translation>Nie zachowuj wysokości dźwięku przy różnych prędkościach odtwarzania</translation>
     </message>
+    <message>
+        <source>Recording error</source>
+        <translation>Błąd nagrywania</translation>
+    </message>
+    <message>
+        <source>Recording started: %1</source>
+        <translation>Nagrywanie rozpoczęte: %1</translation>
+    </message>
+    <message>
+        <source>Recording stopped</source>
+        <translation>Nagrywanie zatrzymane</translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>

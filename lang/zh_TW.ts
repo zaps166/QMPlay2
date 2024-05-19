@@ -2130,6 +2130,18 @@
         <source>Don&apos;t keep audio pitch during playback speed change</source>
         <translation>播放速度改變时不保持音訊音調</translation>
     </message>
+    <message>
+        <source>Recording error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recording started: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recording stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>

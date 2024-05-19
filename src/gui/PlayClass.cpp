@@ -117,11 +117,11 @@ void PlayClass::play(const QString &_url)
             connect(demuxThr, &DemuxerThr::allowRecording, this, &PlayClass::allowRecording);
             connect(demuxThr, &DemuxerThr::recording, this, [this](bool status, bool error, const QString &fileName) {
                 if (error)
-                    messageAndOSD("Recording error");
+                    messageAndOSD(tr("Recording error"));
                 else if (status)
-                    messageAndOSD("Recording started: " + fileName);
+                    messageAndOSD(tr("Recording started: %1").arg(fileName));
                 else
-                    messageAndOSD("Recording stopped");
+                    messageAndOSD(tr("Recording stopped"));
                 emit recording(status && !error);
             });
             connect(demuxThr, SIGNAL(finished()), this, SLOT(demuxThrFinished()));
