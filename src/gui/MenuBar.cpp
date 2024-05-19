@@ -682,6 +682,7 @@ void MenuBar::setKeyShortcuts()
 #ifdef Q_OS_ANDROID
     playlist->delEntriesFromDisk->setVisible(false);
     playlist->add->dir->setVisible(false);
+    player->rec->setVisible(false);
 #endif
 }
 
