@@ -796,6 +796,11 @@ void DemuxerThr::startRecordingInternal(QHash<int, int> &recStreamsMap)
                 ext = "opus";
                 fmt  = "ogg";
                 break;
+            case AV_CODEC_ID_H264:
+            case AV_CODEC_ID_HEVC:
+                ext = "ts";
+                fmt = "mpegts";
+                break;
             default:
                 break;
         }
