@@ -84,6 +84,7 @@ struct VideoPipelineSpecializationData
     vk::Bool32 useBrightnessContrast;
     vk::Bool32 useHueSaturation;
     vk::Bool32 useSharpness;
+    vk::Bool32 negative;
     int trc;
 };
 
@@ -281,6 +282,7 @@ void Window::setParams(
     float hue,
     float saturation,
     float sharpness,
+    bool negative,
     AVColorPrimaries colorPrimaries,
     AVColorTransferCharacteristic colorTrc)
 {
@@ -298,6 +300,8 @@ void Window::setParams(
     m_imgSize = imgSize;
     m_flip = flip;
     m_rotate90 = rotate90;
+
+    m_negative = negative;
 
     if (
         !qFuzzyCompare(m_brightness, brightness) ||
@@ -318,6 +322,7 @@ void Window::setParams(
     specializationData->useBrightnessContrast = (!qFuzzyIsNull(brightness) || !qFuzzyCompare(contrast, 1.0f));
     specializationData->useHueSaturation = (!qFuzzyIsNull(hue) || !qFuzzyCompare(saturation, 1.0f));
     specializationData->useSharpness = !qFuzzyIsNull(sharpness);
+    specializationData->negative = m_negative;
 
     if (setSphericalView(sphericalView) || (!m_sphericalView && flipRotateChanged))
         resetVerticesBuffer();

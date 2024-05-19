@@ -36,6 +36,7 @@ enum CONTROLS
     SATURATION,
     HUE,
     SHARPNESS,
+    NEGATIVE,
 
     CONTROLS_COUNT
 };
@@ -44,7 +45,8 @@ constexpr const char *g_controlsNames[CONTROLS_COUNT] = {
     QT_TRANSLATE_NOOP("VideoAdjustmentW", "Contrast"),
     QT_TRANSLATE_NOOP("VideoAdjustmentW", "Saturation"),
     QT_TRANSLATE_NOOP("VideoAdjustmentW", "Hue"),
-    QT_TRANSLATE_NOOP("VideoAdjustmentW", "Sharpness")
+    QT_TRANSLATE_NOOP("VideoAdjustmentW", "Sharpness"),
+    QT_TRANSLATE_NOOP("VideoAdjustmentW", "Negative"),
 };
 constexpr int g_step = 5;
 
@@ -65,8 +67,16 @@ VideoAdjustmentW::VideoAdjustmentW()
         Slider *slider = new Slider;
         slider->setTickPosition(QSlider::TicksBelow);
         slider->setMinimumWidth(50);
-        slider->setTickInterval(25);
-        slider->setRange(-100, 100);
+        if (i == NEGATIVE)
+        {
+            slider->setTickInterval(1);
+            slider->setRange(0, 1);
+        }
+        else
+        {
+            slider->setTickInterval(25);
+            slider->setRange(-100, 100);
+        }
         slider->setWheelStep(1);
         slider->setValue(0);
         connect(slider, &Slider::valueChanged, this, [=](int v) {
@@ -159,6 +169,9 @@ void VideoAdjustmentW::setKeyShortcuts()
 
     appendAction(m_actions[SHARPNESS][0], tr("Sharpness down"), "sharpnessDown", "7");
     appendAction(m_actions[SHARPNESS][1], tr("Sharpness up"), "sharpnessUp", "9");
+
+    appendAction(m_actions[NEGATIVE][0], tr("Disable negative"), "negativeDisable", QString());
+    appendAction(m_actions[NEGATIVE][1], tr("Enable negative"), "negativeEnable", QString());
 
     appendAction(m_resetAction, QString(), "reset", "0");
 }

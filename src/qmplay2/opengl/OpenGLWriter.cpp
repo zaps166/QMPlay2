@@ -115,7 +115,8 @@ bool OpenGLWriter::processParams(bool *)
         (qint16)getParam("Contrast").toInt(),
         (qint16)getParam("Saturation").toInt(),
         (qint16)getParam("Hue").toInt(),
-        (qint16)getParam("Sharpness").toInt()
+        (qint16)getParam("Sharpness").toInt(),
+        getParam("Negative").toBool(),
     };
 
     const int verticesIdx = rotate90 * 4 + flip;
@@ -312,4 +313,6 @@ void OpenGLWriter::initialize(const shared_ptr<OpenGLHWInterop> &hwInterop)
         addAdditionalParam("Contrast");
     if (!hasSharpness && m_drawable->m_gl3)
         addAdditionalParam("Sharpness");
+    if (m_drawable->m_gl3)
+        addAdditionalParam("Negative");
 }

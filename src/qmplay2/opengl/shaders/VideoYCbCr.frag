@@ -23,6 +23,7 @@ uniform float uBitsMultiplier;
 uniform int uTrc;
 uniform mat3 uColorPrimariesMatrix;
 uniform float uMaxLuminance;
+uniform int uNegative;
 uniform sampler uY;
 #ifdef NV12
     uniform sampler uCbCr;
@@ -98,6 +99,10 @@ void main()
     else if (uTrc == AVCOL_TRC_SMPTE2084)
     {
         colorspace_trc_smpte2084(rgb, uColorPrimariesMatrix, uMaxLuminance);
+    }
+    if (uNegative != 0)
+    {
+        rgb = 1.0 - rgb;
     }
 #endif
 

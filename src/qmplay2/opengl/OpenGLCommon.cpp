@@ -576,6 +576,8 @@ void OpenGLCommon::paintGL()
             shaderProgramVideo->setUniformValue("uTrc", 0);
         }
 
+        shaderProgramVideo->setUniformValue("uNegative", static_cast<int>(videoAdjustment.negative));
+
         shaderProgramVideo->setUniformValue("uTextureSize", m_textureSize);
 
         doReset = !resetDone;

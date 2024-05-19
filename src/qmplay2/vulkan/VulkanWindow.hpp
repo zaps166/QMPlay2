@@ -83,6 +83,7 @@ public:
         float hue,
         float saturation,
         float sharpness,
+        bool negative,
         AVColorPrimaries colorPrimaries,
         AVColorTransferCharacteristic colorTrc
     );
@@ -250,6 +251,7 @@ private:
     float m_hue = 0.0f;
     float m_saturation = 1.0f;
     float m_sharpness = 0.0f;
+    bool m_negative = false;
 
     vk::Format m_format = vk::Format::eUndefined;
     Frame m_frame;

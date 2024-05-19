@@ -7,6 +7,7 @@ uniform sampler2D uRGB;
 uniform int uTrc;
 uniform mat3 uColorPrimariesMatrix;
 uniform float uMaxLuminance;
+uniform int uNegative;
 
 #ifdef GL3
 vec4 getRGBAtOffset(float x, float y)
@@ -44,6 +45,10 @@ void main()
     else if (uTrc == AVCOL_TRC_SMPTE2084)
     {
         colorspace_trc_smpte2084(RGB.rgb, uColorPrimariesMatrix, uMaxLuminance);
+    }
+    if (uNegative != 0)
+    {
+        RGB = 1.0 - RGB;
     }
 #endif
     gl_FragColor = clamp((RGB - 0.5) * contrast + 0.5, 0.0, 1.0) + brightness;

@@ -14,7 +14,8 @@ layout(constant_id =  9) const bool useBicubic = false;
 layout(constant_id = 10) const bool useBrightnessContrast = false;
 layout(constant_id = 11) const bool useHueSaturation = false;
 layout(constant_id = 12) const bool useSharpness = false;
-layout(constant_id = 13) const int trc = 0;
+layout(constant_id = 13) const bool negative = false;
+layout(constant_id = 14) const int trc = 0;
 
 layout(location = 0) in vec2 inTextureCoord;
 layout(location = 0) out vec4 outColor;
@@ -213,6 +214,11 @@ void main()
     else if (trc == AVCOL_TRC_SMPTE2084)
     {
         colorspace_trc_smpte2084(value, colorPrimariesMatrix, maxLuminance);
+    }
+
+    if (negative)
+    {
+        value = 1.0 - value;
     }
 
     if (useBrightnessContrast)

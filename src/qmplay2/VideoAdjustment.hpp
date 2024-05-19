@@ -28,6 +28,7 @@ public:
     inline void unset()
     {
         brightness = contrast = saturation = hue = sharpness = (qint16)0x8000;
+        negative = false;
     }
 
     inline void zero()
@@ -41,4 +42,5 @@ public:
     }
 
     qint16 brightness, contrast, saturation, hue, sharpness;
+    bool negative;
 };

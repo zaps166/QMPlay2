@@ -42,6 +42,7 @@ Writer::Writer()
     addParam("Sharpness");
     addParam("ColorPrimaries");
     addParam("ColorTrc");
+    addParam("Negative");
 
     set();
 }
@@ -120,6 +121,7 @@ bool Writer::processParams(bool *paramsCorrected)
         getParam("Hue").toInt() / 200.0f,
         (getParam("Saturation").toInt() + 100.0f) / 100.0f,
         sharpness,
+        getParam("Negative").toBool(),
         static_cast<AVColorPrimaries>(getParam("ColorPrimaries").toInt()),
         static_cast<AVColorTransferCharacteristic>(getParam("ColorTrc").toInt())
     );
