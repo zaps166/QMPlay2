@@ -555,22 +555,51 @@ void PlaylistDock::newGroup()
     list->setCurrentItem(list->newGroup());
     entryProperties();
 }
-
-void PlaylistDock::delEntries()
+void PlaylistDock::delEntries(bool fromDisk)
 {
     if (!isVisible() || !list->canModify()) //jeżeli jest np. drag and drop to nie wolno usuwać
         return;
     const QList<QTreeWidgetItem *> selectedItems = list->selectedItems();
-    if (!selectedItems.isEmpty())
+    if (selectedItems.isEmpty())
+        return;
+
+    if (fromDisk &&
+            QMessageBox::question(
+                this,
+                tr("Playlist"),
+                tr("Are you sure you want to delete selected entries from disk? "
+                   "Non-local entries will only be removed from the list."),
+                QMessageBox::Yes,
+                QMessageBox::No) == QMessageBox::No) {
+        return;
+    }
+
+    QTreeWidgetItem *par = initializeItemsDelete();
+    bool deleted = false;
+    bool diskDeleteFailed = false;
+    for (QTreeWidgetItem *tWI : selectedItems)
     {
-        QTreeWidgetItem *par = initializeItemsDelete();
-        bool deleted = false;
-        for (QTreeWidgetItem *tWI : selectedItems)
+        bool canDeleteTWI = true;
+        if (fromDisk && !(PlaylistWidget::getFlags(tWI) & Playlist::Entry::Locked))
         {
-            if (maybeDeleteTreeWidgetItem(tWI))
-                deleted = true;
+            if (const QString url = getUrl(tWI); url.startsWith("file://"))
+            {
+                canDeleteTWI = QFile::moveToTrash(url.mid(7));
+                if (!canDeleteTWI)
+                    diskDeleteFailed = true;
+            }
         }
-        finalizeItemsDelete(par, deleted);
+        if (canDeleteTWI && maybeDeleteTreeWidgetItem(tWI))
+        {
+            deleted = true;
+        }
+    }
+    finalizeItemsDelete(par, deleted);
+
+    if (diskDeleteFailed)
+    {
+        Q_ASSERT(fromDisk);
+        QMessageBox::warning(this, tr("Playlist"), tr("Failed to delete one or more selected entries."));
     }
 }
 void PlaylistDock::delNonGroupEntries(bool force)

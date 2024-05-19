@@ -98,7 +98,7 @@ public slots:
     void clearCurrentPlaying();
     void setCurrentPlaying();
     void newGroup();
-    void delEntries();
+    void delEntries(bool fromDisk);
     void delNonGroupEntries(bool force = false);
     void clear();
     void copy();

@@ -72,7 +72,7 @@ public:
         Add *add;
         QMenu *extensions;
         Sort *sort;
-        QAction *stopLoading, *sync, *quickSync, *loadPlist, *savePlist, *saveGroup, *lock, *alwaysSync, *delEntries, *delNonGroupEntries, *clear, *copy, *paste, *pasteAndPlay, *newGroup, *renameGroup, *find, *collapseAll, *expandAll, *goToPlayback, *queue, *skip, *stopAfter, *entryProperties;
+        QAction *stopLoading, *sync, *quickSync, *loadPlist, *savePlist, *saveGroup, *lock, *alwaysSync, *delEntries, *delEntriesFromDisk, *delNonGroupEntries, *clear, *copy, *paste, *pasteAndPlay, *newGroup, *renameGroup, *find, *collapseAll, *expandAll, *goToPlayback, *queue, *skip, *stopAfter, *entryProperties;
     };
 
     class Player : public QMenu

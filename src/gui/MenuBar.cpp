@@ -164,8 +164,9 @@ MenuBar::Playlist::Playlist(MenuBar *parent) :
     newAction(QString(), this, lock, false, QIcon(), false);
     newAction(Playlist::tr("&Always sync"), this, alwaysSync, false, QIcon(), true);
     addSeparator();
-    newAction(Playlist::tr("&Remove selected entries"), this, delEntries, true, QMPlay2Core.getIconFromTheme("list-remove"), false);
-    newAction(Playlist::tr("Remove entries &without groups"), this, delNonGroupEntries, false, QMPlay2Core.getIconFromTheme("list-remove"), false);
+    newAction(Playlist::tr("&Remove from list"), this, delEntries, true, QMPlay2Core.getIconFromTheme("list-remove"), false);
+    newAction(Playlist::tr("Remove from &disk"), this, delEntriesFromDisk, true, QMPlay2Core.getIconFromTheme("list-remove"), false);
+    newAction(Playlist::tr("Clear &ungroupped entries"), this, delNonGroupEntries, false, QMPlay2Core.getIconFromTheme("list-remove"), false);
     newAction(Playlist::tr("&Clear list"), this, clear, false, QMPlay2Core.getIconFromTheme("archive-remove"), false);
     addSeparator();
     newAction(Playlist::tr("&Copy"), this, copy, false, QMPlay2Core.getIconFromTheme("edit-copy"), false);
@@ -576,6 +577,7 @@ void MenuBar::setKeyShortcuts()
     shortcuts->appendAction(playlist->savePlist, "KeyBindings/Playlist-savePlist", "Ctrl+S");
     shortcuts->appendAction(playlist->saveGroup, "KeyBindings/Playlist-saveGroup", "Ctrl+Shift+S");
     shortcuts->appendAction(playlist->delEntries, "KeyBindings/Playlist-delEntries", "Del");
+    shortcuts->appendAction(playlist->delEntriesFromDisk, "KeyBindings/Playlist-delEntriesFromDisk", "Alt+Del");
     shortcuts->appendAction(playlist->delNonGroupEntries, "KeyBindings/Playlist-delNonGroupEntries", "Ctrl+Del");
     shortcuts->appendAction(playlist->clear, "KeyBindings/Playlist-clear", "Shift+Del");
     shortcuts->appendAction(playlist->copy, "KeyBindings/Playlist-copy", "Ctrl+C");
