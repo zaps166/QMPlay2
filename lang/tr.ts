@@ -3562,6 +3562,18 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
         <source>Contrast up</source>
         <translation>Karşıtlığı artır</translation>
     </message>
+    <message>
+        <source>Negative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable negative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable negative</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VideoDock</name>

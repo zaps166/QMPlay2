@@ -3542,6 +3542,18 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
         <source>Contrast up</source>
         <translation>Zwiększ kontrast</translation>
     </message>
+    <message>
+        <source>Negative</source>
+        <translation>Negatyw</translation>
+    </message>
+    <message>
+        <source>Disable negative</source>
+        <translation>Wyłącz negatyw</translation>
+    </message>
+    <message>
+        <source>Enable negative</source>
+        <translation>Załącz negatyw</translation>
+    </message>
 </context>
 <context>
     <name>VideoDock</name>

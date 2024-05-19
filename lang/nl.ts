@@ -3542,6 +3542,18 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
         <source>Sharpness up</source>
         <translation>Meer verscherping</translation>
     </message>
+    <message>
+        <source>Negative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable negative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable negative</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VideoDock</name>

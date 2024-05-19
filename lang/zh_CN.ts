@@ -3542,6 +3542,18 @@ Partially checked only if the content has less channels than the specified value
         <source>Contrast up</source>
         <translation>增加对比度</translation>
     </message>
+    <message>
+        <source>Negative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable negative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable negative</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VideoDock</name>

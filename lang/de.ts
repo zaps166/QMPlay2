@@ -3541,6 +3541,18 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
         <source>Contrast up</source>
         <translation>Kontrast erhöhen</translation>
     </message>
+    <message>
+        <source>Negative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable negative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable negative</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VideoDock</name>
