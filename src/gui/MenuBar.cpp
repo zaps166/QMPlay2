@@ -680,7 +680,8 @@ void MenuBar::setKeyShortcuts()
 #endif
 
 #ifdef Q_OS_ANDROID
-    playlist->add->dir->setEnabled(false);
+    playlist->delEntriesFromDisk->setVisible(false);
+    playlist->add->dir->setVisible(false);
 #endif
 }
 
