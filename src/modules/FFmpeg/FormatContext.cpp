@@ -768,7 +768,7 @@ bool FormatContext::open(const QString &_url, const QString &param)
     formatCtx->interrupt_callback.opaque = &abortCtx->isAborted;
 
 #ifdef Q_OS_ANDROID
-    if (isLocal)
+    if (isLocal && oggOffset < 0)
     {
         m_file = std::make_unique<QFile>(url);
         m_file->open(QFile::ReadOnly);
