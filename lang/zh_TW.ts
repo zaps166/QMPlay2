@@ -1000,7 +1000,7 @@
     </message>
     <message>
         <source>Output file path:</source>
-        <translation type="unfinished"></translation>
+        <translation>輸出檔案路徑：</translation>
     </message>
 </context>
 <context>
@@ -2497,7 +2497,7 @@
     </message>
     <message>
         <source>&amp;Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>錄音(&amp;R)</translation>
     </message>
 </context>
 <context>
@@ -2592,7 +2592,7 @@
     </message>
     <message>
         <source>Pas&amp;te and play</source>
-        <translation type="unfinished"></translation>
+        <translation>貼上並播放(&amp;T)</translation>
     </message>
 </context>
 <context>
@@ -3211,7 +3211,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Cannot change the directory</source>
-        <translation type="unfinished"></translation>
+        <translation>無法變更目錄</translation>
     </message>
 </context>
 <context>
