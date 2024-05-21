@@ -343,8 +343,14 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         }
         generalSettingsPage->langBox->model()->sort(0);
 
-        generalSettingsPage->styleBox->addItems(QStyleFactory::keys());
-        idx = generalSettingsPage->styleBox->findText(QApplication::style()->objectName(), Qt::MatchFixedString);
+        const auto currStyle = QApplication::style()->objectName();
+        auto styles = QStyleFactory::keys();
+#ifdef Q_OS_WIN
+        if (QOperatingSystemVersion::current() < QOperatingSystemVersion::Windows11 && currStyle != "windows11")
+            styles.removeOne("windows11");
+#endif
+        generalSettingsPage->styleBox->addItems(styles);
+        idx = generalSettingsPage->styleBox->findText(currStyle, Qt::MatchFixedString);
         if (idx > -1 && idx < generalSettingsPage->styleBox->count())
             generalSettingsPage->styleBox->setCurrentIndex(idx);
         connect(generalSettingsPage->styleBox, SIGNAL(currentIndexChanged(int)), this, SLOT(chStyle()));
