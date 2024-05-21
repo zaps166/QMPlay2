@@ -31,6 +31,7 @@
 #include <IPC.hpp>
 
 #include <QCommandLineParser>
+#include <QVersionNumber>
 #include <QApplication>
 #include <QImageReader>
 #include <QTreeWidget>
@@ -149,12 +150,19 @@ void QMPlay2GUIClass::loadIcons()
 {
     deleteIcons();
 
-    // QtSvg doesn't support effects. This workaround generates drop shadow effect similar to
-    // drop shadow in SVG file. Remove / modify this workaround if QMPlay2 SVG icon changes!
-    const QSize size(128, 128);
-    const QPixmap pixmap = QIcon(":/QMPlay2.svgz").pixmap(size);
-    const qreal sizeRatio = (((qreal)pixmap.size().width()  / (qreal)size.width()) + ((qreal)pixmap.size().height() / (qreal)size.height())) / 2.0;
-    qmplay2Icon = new QIcon(Functions::applyDropShadow(pixmap, 10.0 * sizeRatio, QPointF(3.0 * sizeRatio, 3.0 * sizeRatio), QColor(0, 0, 0, 127)));
+    if (QVersionNumber::fromString(qVersion()) >= QVersionNumber(6, 7, 0))
+    {
+        qmplay2Icon = new QIcon(":/QMPlay2.svgz");
+    }
+    else
+    {
+        // QtSvg doesn't support effects. This workaround generates drop shadow effect similar to
+        // drop shadow in SVG file. Remove / modify this workaround if QMPlay2 SVG icon changes!
+        const QSize size(128, 128);
+        const QPixmap pixmap = QIcon(":/QMPlay2.svgz").pixmap(size);
+        const qreal sizeRatio = (((qreal)pixmap.size().width()  / (qreal)size.width()) + ((qreal)pixmap.size().height() / (qreal)size.height())) / 2.0;
+        qmplay2Icon = new QIcon(Functions::applyDropShadow(pixmap, 10.0 * sizeRatio, QPointF(3.0 * sizeRatio, 3.0 * sizeRatio), QColor(0, 0, 0, 127)));
+    }
 
     groupIcon = new QIcon(getIconFromTheme("folder-orange"));
     mediaIcon = new QIcon(getIconFromTheme("applications-multimedia"));
