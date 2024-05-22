@@ -797,12 +797,27 @@ bool FormatContext::open(const QString &_url, const QString &param)
     if (!formatCtx || disabledDemuxers.contains(name()))
         return false;
 
+    auto isAvif = [&] {
+        if (formatCtx->nb_streams != 1 || !name().contains("mp4"))
+            return false;
+
+        AVStream *stream = formatCtx->streams[0];
+        if (stream->codecpar->codec_id != AV_CODEC_ID_AV1 || stream->nb_frames != 1)
+            return false;
+        if (stream->time_base.num != 1 || stream->time_base.den != 1)
+            return false;
+        if (stream->avg_frame_rate.num != 1 || stream->avg_frame_rate.den != 1)
+            return false;
+
+        return true;
+    };
+
     if (name() == "sdp")
     {
         isLocal = false;
         formatCtx->flags |= AVFMT_FLAG_NOBUFFER;
     }
-    else if (name().startsWith("image2") || name().endsWith("_pipe"))
+    else if (name().startsWith("image2") || name().endsWith("_pipe") || isAvif())
     {
         if (!settings.getBool("StillImages"))
             return false;
