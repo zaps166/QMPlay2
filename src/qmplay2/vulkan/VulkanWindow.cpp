@@ -649,6 +649,9 @@ vector<unique_lock<mutex>> Window::prepareOSD(bool &changed)
         m_osdIDs.insert(id);
     }
 
+    if (!changed && m_osdIDs.size() != osdIDs.size())
+        changed = true;
+
     return lockers;
 }
 
