@@ -377,7 +377,7 @@ bool Frame::isPlannar() const
 bool Frame::isRGB() const
 {
     if (m_pixelFmtDescriptor)
-        return (m_pixelFmtDescriptor->flags & AV_PIX_FMT_FLAG_RGB);
+        return (m_pixelFmtDescriptor->flags & AV_PIX_FMT_FLAG_RGB) || (m_frame->colorspace == AVCOL_SPC_RGB);
     return false;
 }
 
