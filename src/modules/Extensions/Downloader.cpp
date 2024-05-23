@@ -910,11 +910,15 @@ void Downloader::init()
     addUrlB->setToolTip(tr("Enter the address for download"));
     connect(addUrlB, SIGNAL(clicked()), this, SLOT(addUrl()));
 
+#ifndef Q_OS_ANDROID
     m_convertsPresetsB = new QToolButton;
     m_convertsPresetsB->setIcon(QMPlay2Core.getIconFromTheme("list-add"));
     m_convertsPresetsB->setToolTip(tr("Add, modify, or remove conversion presets"));
     m_convertsPresetsB->setPopupMode(QToolButton::InstantPopup);
     m_convertsPresetsB->setMenu(m_convertsMenu);
+#else
+    m_convertsPresetsB = nullptr;
+#endif
 
     layout = new QGridLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -922,8 +926,10 @@ void Downloader::init()
     layout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum), 1, 1, 1, 1);
     layout->addWidget(clearFinishedB, 1, 2, 1, 1);
     layout->addWidget(addUrlB, 1, 3, 1, 1);
+#ifndef Q_OS_ANDROID
     layout->addItem(new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Minimum), 1, 4, 1, 1);
     layout->addWidget(m_convertsPresetsB, 1, 5, 1, 1);
+#endif
 
     // Compatibility
     {
@@ -950,6 +956,7 @@ void Downloader::init()
     }
     // Presets
     {
+#ifndef Q_OS_ANDROID
         const auto createPreset = [this](const QString &name, const QString &data) {
             QAction *act = m_convertsMenu->addAction(name);
             act->setData(data);
@@ -979,6 +986,7 @@ void Downloader::init()
             createPreset("MP3 224k", g_defaultMp3ConvertCommand);
             createPreset("OGG container", "ffmpeg -i <input/> -vn -sn -c:a copy -f ogg -y <output>%f.ogg</output>");
         }
+#endif
     }
 }
 
