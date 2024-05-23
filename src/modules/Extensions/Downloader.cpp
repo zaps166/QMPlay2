@@ -635,27 +635,12 @@ void DownloaderThread::run()
         QMPlay2Core.setWorking(true);
         if (Demuxer::create(newUrl, demuxer) && !demuxer.isAborted())
         {
-            if (name.isEmpty())
-                name = demuxer->title();
-            if (name.isEmpty())
-            {
-                name = Functions::fileName(newUrl);
-                int idx = name.indexOf("?");
-                if (idx > -1)
-                    name.remove(idx, name.size() - idx);
-            }
-            if (!name.endsWith(".mkv", Qt::CaseInsensitive))
-                name += ".mkv";
-            emit listSig(NAME);
+            QList<StreamInfo *> streamsInfo = demuxer->streamsInfo();
+            QHash<int, int> selectedStreamsMap;
 
-            QString filePath = getFilePath();
-            if (!filePath.isEmpty())
+            // Download only first default video stream
             {
-                QList<StreamInfo *> streamsInfo = demuxer->streamsInfo();
-
-                // Download only first default video stream
                 QSet<int> selectedStreams;
-                QHash<int, int> selectedStreamsMap;
                 bool hasDefaultVideoStream = false;
                 bool videoStreamAdded = false;
                 int i = 0;
@@ -697,8 +682,27 @@ void DownloaderThread::run()
                     ++i;
                 }
                 demuxer->selectStreams(selectedStreams);
+            }
 
-                StreamMuxer muxer(filePath, streamsInfo);
+            const auto [ext, fmt] = Functions::determineExtFmt(streamsInfo);
+
+            if (name.isEmpty())
+                name = demuxer->title();
+            if (name.isEmpty())
+            {
+                name = Functions::fileName(newUrl);
+                int idx = name.indexOf("?");
+                if (idx > -1)
+                    name.remove(idx, name.size() - idx);
+            }
+            if (!name.endsWith("." + ext, Qt::CaseInsensitive))
+                name += "." + ext;
+            emit listSig(NAME);
+
+            QString filePath = getFilePath();
+            if (!filePath.isEmpty())
+            {
+                StreamMuxer muxer(filePath, streamsInfo, fmt);
                 if (muxer.isOk())
                 {
                     const double length = demuxer->length();

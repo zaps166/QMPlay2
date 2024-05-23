@@ -34,7 +34,7 @@ class QMPLAY2SHAREDLIB_EXPORT StreamMuxer
     StreamMuxer &operator =(const StreamMuxer &) = delete;
 
 public:
-    StreamMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo, const QString &format = "matroska", bool streamRecording = false);
+    StreamMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo, const QString &format, bool streamRecording = false);
     ~StreamMuxer();
 
     bool isOk() const;
