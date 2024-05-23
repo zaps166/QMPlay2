@@ -603,10 +603,12 @@ void DownloaderThread::run()
             }
 
     const auto getFilePath = [&]()->QString {
+        const auto downloadsDirPath = Functions::cleanPath(QMPlay2Core.getSettings().getString("OutputFilePath"));
         QString filePath;
         quint16 num = 0;
+        Q_ASSERT(downloadsDirPath.endsWith("/"));
         do
-            filePath = downloadLW->downloadsDirPath + (num ? (QString::number(num) + "_") : QString()) + Functions::cleanFileName(name);
+            filePath = downloadsDirPath + (num ? (QString::number(num) + "_") : QString()) + Functions::cleanFileName(name);
         while (QFile::exists(filePath) && ++num < 0xFFFF);
         if (num == 0xFFFF)
             filePath.clear();
@@ -922,9 +924,6 @@ void Downloader::init()
     layout->addWidget(addUrlB, 1, 3, 1, 1);
     layout->addItem(new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Minimum), 1, 4, 1, 1);
     layout->addWidget(m_convertsPresetsB, 1, 5, 1, 1);
-
-    downloadLW->downloadsDirPath = Functions::cleanPath(QMPlay2Core.getSettings().getString("OutputFilePath"));
-    Q_ASSERT(downloadLW->downloadsDirPath.endsWith("/"));
 
     // Compatibility
     {

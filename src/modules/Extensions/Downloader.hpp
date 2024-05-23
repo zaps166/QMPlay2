@@ -101,8 +101,6 @@ private:
 
 class DownloadListW final : public QTreeWidget
 {
-public:
-    QString downloadsDirPath;
 };
 
 /**/
