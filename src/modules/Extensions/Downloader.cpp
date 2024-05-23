@@ -629,7 +629,7 @@ void DownloaderThread::run()
 
     const bool isFFmpeg = newUrl.startsWith("FFmpeg://");
     const bool isHLS = (!isFFmpeg && (newUrl.endsWith(".m3u8", Qt::CaseInsensitive) || newUrl.contains(".m3u8?", Qt::CaseInsensitive)));
-    if (isFFmpeg || isHLS)
+    if (isFFmpeg || isHLS || !prefix.isEmpty())
     {
         IOController<Demuxer> &demuxer = ioCtrl.toRef<Demuxer>();
         QMPlay2Core.setWorking(true);
