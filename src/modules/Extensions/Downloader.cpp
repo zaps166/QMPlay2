@@ -656,10 +656,19 @@ void DownloaderThread::run()
                 // Download only first default video stream
                 QSet<int> selectedStreams;
                 QHash<int, int> selectedStreamsMap;
+                bool hasDefaultVideoStream = false;
                 bool videoStreamAdded = false;
                 int i = 0;
                 selectedStreams.reserve(streamsInfo.count());
                 selectedStreamsMap.reserve(streamsInfo.count());
+                for (auto &&streamInfo : std::as_const(streamsInfo))
+                {
+                    if (streamInfo->params->codec_type == AVMEDIA_TYPE_VIDEO && streamInfo->is_default)
+                    {
+                        hasDefaultVideoStream = true;
+                        break;
+                    }
+                }
                 for (auto it = streamsInfo.begin(); it != streamsInfo.end();)
                 {
                     const auto streamInfo = *it;
@@ -669,7 +678,7 @@ void DownloaderThread::run()
                     };
                     if (streamInfo->params->codec_type == AVMEDIA_TYPE_VIDEO)
                     {
-                        if (!videoStreamAdded && streamInfo->is_default)
+                        if (!videoStreamAdded && (!hasDefaultVideoStream || streamInfo->is_default))
                         {
                             insertStream();
                             videoStreamAdded = true;
