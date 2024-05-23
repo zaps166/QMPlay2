@@ -23,6 +23,7 @@
 #include <Frame.hpp>
 #include <Version.hpp>
 #include <Reader.hpp>
+#include <StreamInfo.hpp>
 
 #include <QGraphicsDropShadowEffect>
 #include <QGraphicsBlurEffect>
@@ -1114,4 +1115,56 @@ QString Functions::getSeqFile(const QString &dir, const QString &ext, const QStr
             num = n;
     }
     return QString("QMPlay2_%1_%2%3").arg(frag).arg(++num, 5, 10, QChar('0')).arg(ext);
+}
+
+std::pair<QString, QString> Functions::determineExtFmt(const QList<StreamInfo *> &streamsInfo)
+{
+    QString ext("mkv");
+    QString fmt("matroska");
+
+    if (streamsInfo.size() == 1)
+    {
+        switch (streamsInfo.at(0)->params->codec_id)
+        {
+            case AV_CODEC_ID_MP3:
+                ext = fmt = "mp3";
+                break;
+            case AV_CODEC_ID_AAC:
+                ext = "aac";
+                fmt = "adts";
+                break;
+            case AV_CODEC_ID_AC3:
+                ext = fmt = "ac3";
+                break;
+            case AV_CODEC_ID_VORBIS:
+                ext = fmt = "ogg";
+                break;
+            case AV_CODEC_ID_OPUS:
+                ext = "opus";
+                fmt  = "ogg";
+                break;
+            case AV_CODEC_ID_H264:
+            case AV_CODEC_ID_HEVC:
+                ext = "ts";
+                fmt = "mpegts";
+                break;
+            default:
+                break;
+        }
+    }
+    else if (streamsInfo.size() == 2)
+    {
+        const QSet<AVCodecID> codecIDs {
+            streamsInfo.at(0)->params->codec_id,
+            streamsInfo.at(1)->params->codec_id,
+        };
+        if ((codecIDs.contains(AV_CODEC_ID_AAC) || codecIDs.contains(AV_CODEC_ID_MP3) || codecIDs.contains(AV_CODEC_ID_AC3))
+                && (codecIDs.contains(AV_CODEC_ID_H264) || codecIDs.contains(AV_CODEC_ID_HEVC)))
+        {
+            ext = "ts";
+            fmt = "mpegts";
+        }
+    }
+
+    return {ext, fmt};
 }

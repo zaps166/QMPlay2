@@ -37,6 +37,7 @@ extern "C" {
 struct AVDictionary;
 
 class QHeaderView;
+class StreamInfo;
 class QMimeData;
 class QPainter;
 class QPixmap;
@@ -166,4 +167,6 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT QString getBitrateStr(const int64_t bitRate);
 
     QMPLAY2SHAREDLIB_EXPORT QString getSeqFile(const QString &dir, const QString &ext, const QString &frag);
+
+    QMPLAY2SHAREDLIB_EXPORT std::pair<QString, QString> determineExtFmt(const QList<StreamInfo *> &streamsInfo);
 }
