@@ -345,7 +345,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 
         const auto currStyle = QApplication::style()->objectName();
         auto styles = QStyleFactory::keys();
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         if (QOperatingSystemVersion::current() < QOperatingSystemVersion::Windows11 && currStyle != "windows11")
             styles.removeOne("windows11");
 #endif
