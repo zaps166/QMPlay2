@@ -254,15 +254,7 @@ void Radio::replyFinished(NetworkReply *reply)
     const int idx = m_searchInfo.key({{}, reply}, -1);
     if (idx > -1)
     {
-        if (reply->hasError())
-        {
-            if (!m_errorDisplayed)
-            {
-                connectionError();
-                m_errorDisplayed = true;
-            }
-        }
-        else
+        if (!reply->hasError())
         {
             const QJsonDocument json = QJsonDocument::fromJson(reply->readAll());
             if (json.isArray())

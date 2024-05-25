@@ -108,7 +108,6 @@ private:
     bool m_loadCurrentCountry = false;
     bool m_storeMyRadios = false;
     bool m_recreateTrayMenu = true;
-    bool m_errorDisplayed = false;
     DockWidget *m_dw;
     QMenu *m_menu = nullptr;
 
