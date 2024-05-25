@@ -35,6 +35,7 @@
 #include <Reader.hpp>
 
 #include <QCoreApplication>
+#include <QVarLengthArray>
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QRawFont>
@@ -1272,8 +1273,9 @@ static Decoder *loadStream(
     int &stream,
     const AVMediaType type,
     const QString &lang,
-    const QSet<QString> &blacklist = QSet<QString>(),
-    QString *modNameOutput = nullptr)
+    const QSet<QString> &blacklist,
+    QString *modNameOutput,
+    const QSet<int> &preferredStreams = {})
 {
     QStringList decoders = QMPlay2Core.getModules("decoders", 7);
     const bool decodersListEmpty = decoders.isEmpty();
@@ -1297,15 +1299,34 @@ static Decoder *loadStream(
             ? QMPlay2Core.getSettings().getInt("DesiredVideoHeight") * 6 / 5
             : 0
         ;
-        int defaultStream = -1, chosenLangStream = -1;
-        int minVideoHeight = 0, minVideoHeightStream = -1, desiredVideoHeightStream = -1;
-        for (int i = 0; i < streams.count(); ++i)
+
+        enum class StreamSearch
         {
-            const auto params = streams[i]->params;
-            if (params->codec_type == type)
+            Preferred,
+            All
+        };
+        QVarLengthArray<StreamSearch, 2> modes;
+        if (!preferredStreams.empty())
+            modes.push_back(StreamSearch::Preferred);
+        modes.push_back(StreamSearch::All);
+
+        // First search in preferred streams (if any) which belongs to program. If not found - search in all streams.
+        for (auto mode : modes)
+        {
+            int defaultStream = -1, chosenLangStream = -1;
+            int minVideoHeight = 0, minVideoHeightStream = -1, desiredVideoHeightStream = -1;
+            for (int i = 0; i < streams.count(); ++i)
             {
+                if (mode == StreamSearch::Preferred && !preferredStreams.contains(i))
+                    continue;
+
+                const auto params = streams[i]->params;
+                if (params->codec_type != type)
+                    continue;
+
                 if (defaultStream < 0 && streams[i]->is_default)
                     defaultStream = i;
+
                 if (desiredVideoHeight > 0)
                 {
                     // Find desired video height with highest bitrate
@@ -1333,6 +1354,7 @@ static Decoder *loadStream(
                         minVideoHeightStream = i;
                     }
                 }
+
                 if (!lang.isEmpty() && chosenLangStream < 0)
                 {
                     for (const QMPlay2Tag &tag : std::as_const(streams[i]->other_info))
@@ -1346,26 +1368,35 @@ static Decoder *loadStream(
                     }
                 }
             }
-        }
-        if (desiredVideoHeightStream != -1)
-            defaultStream = desiredVideoHeightStream;
-        else if (minVideoHeightStream > -1)
-            defaultStream = minVideoHeightStream;
-        if (chosenLangStream > -1)
-            defaultStream = chosenLangStream;
-        for (int i = 0; i < streams.count(); ++i)
-        {
-            StreamInfo &streamInfo = *streams[i];
-            if (streamInfo.params->codec_type == type && (defaultStream == -1 || i == defaultStream))
+
+            if (desiredVideoHeightStream != -1)
+                defaultStream = desiredVideoHeightStream;
+            else if (minVideoHeightStream > -1)
+                defaultStream = minVideoHeightStream;
+            if (chosenLangStream > -1)
+                defaultStream = chosenLangStream;
+
+            bool ok = false;
+            for (int i = 0; i < streams.count(); ++i)
             {
-                if (streamInfo.must_decode || !subtitles)
-                    dec = Decoder::create(streamInfo, decoders, modNameOutput);
-                if (dec || subtitles)
+                if (mode == StreamSearch::Preferred && !preferredStreams.contains(i))
+                    continue;
+
+                StreamInfo &streamInfo = *streams[i];
+                if (streamInfo.params->codec_type == type && (defaultStream == -1 || i == defaultStream))
                 {
-                    stream = i;
-                    break;
+                    if (streamInfo.must_decode || !subtitles)
+                        dec = Decoder::create(streamInfo, decoders, modNameOutput);
+                    if (dec || subtitles)
+                    {
+                        stream = i;
+                        ok = true;
+                        break;
+                    }
                 }
             }
+            if (ok)
+                break;
         }
     }
     return dec;
@@ -1373,6 +1404,7 @@ static Decoder *loadStream(
 void PlayClass::load(Demuxer *demuxer)
 {
     const QList<StreamInfo *> streams = demuxer->streamsInfo();
+    QSet<int> preferredStreams;
     Decoder *dec = nullptr;
 
     if (videoStream < 0 || (chosenVideoStream > -1 && chosenVideoStream != videoStream) || videoDecErrorLoad) //load video
@@ -1474,6 +1506,22 @@ void PlayClass::load(Demuxer *demuxer)
                         seekTo = SEEK_STREAM_RELOAD;
                         allowAccurateSeek = true;
                     }
+
+                    // Gather all non-video streams for program which matches to chosen video stream
+                    for (auto &&program : demuxer->getPrograms())
+                    {
+                        auto it = std::find_if(program.streams.constBegin(), program.streams.constEnd(), [&](const QPair<int, AVMediaType> &val) {
+                            return (val.first == videoStream && val.second == AVMEDIA_TYPE_VIDEO);
+                        });
+                        if (it != program.streams.constEnd())
+                        {
+                            for (auto &&[idx, type] : program.streams)
+                            {
+                                if (type != AVMEDIA_TYPE_VIDEO)
+                                    preferredStreams.insert(idx);
+                            }
+                        }
+                    }
                 }
                 vThr->unlock();
             }
@@ -1499,7 +1547,7 @@ void PlayClass::load(Demuxer *demuxer)
         aPackets.clear();
         stopADec(); //lock
         if (audioEnabled)
-            dec = loadStream(streams, chosenAudioStream, audioStream, AVMEDIA_TYPE_AUDIO, chosenAudioLang);
+            dec = loadStream(streams, chosenAudioStream, audioStream, AVMEDIA_TYPE_AUDIO, chosenAudioLang, {}, nullptr, preferredStreams);
         else
             dec = nullptr;
         if (dec)
@@ -1559,7 +1607,7 @@ void PlayClass::load(Demuxer *demuxer)
             else
             {
                 if (subtitlesEnabled)
-                    dec = loadStream(streams, chosenSubtitlesStream, subtitlesStream, AVMEDIA_TYPE_SUBTITLE, chosenSubtitlesLang);
+                    dec = loadStream(streams, chosenSubtitlesStream, subtitlesStream, AVMEDIA_TYPE_SUBTITLE, chosenSubtitlesLang, {}, nullptr, preferredStreams);
                 if (!subtitlesEnabled || (!dec && subtitlesStream > -1 && streams[subtitlesStream]->must_decode))
                 {
                     subtitlesStream = -1;
