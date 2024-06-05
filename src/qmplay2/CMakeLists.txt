@@ -173,7 +173,7 @@ if(USE_VULKAN)
 
     if(USE_GLSLC) # Shaders compilation
         foreach(VULKAN_SHADER ${VULKAN_SHADERS})
-            qmvk_add_shader(${CMAKE_CURRENT_SOURCE_DIR}/${VULKAN_SHADER})
+            qmvk_add_shader(${CMAKE_CURRENT_SOURCE_DIR}/${VULKAN_SHADER} ${VULKAN_SHADERS_INCLUDE})
         endforeach()
 
         add_custom_target( # Needed to display GLSL files in QtCreator
