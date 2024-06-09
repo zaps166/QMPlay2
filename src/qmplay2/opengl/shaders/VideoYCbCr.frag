@@ -100,6 +100,10 @@ void main()
     {
         colorspace_trc_smpte2084(rgb, uColorPrimariesMatrix, uMaxLuminance);
     }
+    else if (uTrc == AVCOL_TRC_ARIB_STD_B67)
+    {
+        colorspace_trc_hlg(rgb, uColorPrimariesMatrix, uMaxLuminance);
+    }
     if (uNegative != 0)
     {
         rgb = 1.0 - rgb;

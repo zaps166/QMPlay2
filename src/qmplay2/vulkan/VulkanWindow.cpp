@@ -127,6 +127,7 @@ static inline bool isTrcSupported(AVColorTransferCharacteristic trc)
     {
         case AVCOL_TRC_BT709:
         case AVCOL_TRC_SMPTE2084:
+        case AVCOL_TRC_ARIB_STD_B67:
             return true;
         default:
             break;

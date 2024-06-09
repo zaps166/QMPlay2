@@ -1,5 +1,6 @@
 const int AVCOL_TRC_BT709 = 1;
 const int AVCOL_TRC_SMPTE2084 = 16;
+const int AVCOL_TRC_ARIB_STD_B67 = 18;
 
 // https://en.wikipedia.org/wiki/Perceptual_quantizer
 vec3 smpte2084(in vec3 E)
@@ -11,6 +12,21 @@ vec3 smpte2084(in vec3 E)
     const float c1 = c3 - c2 + 1.0;
     vec3 E1m2 = pow(E, vec3(1.0 / m2));
     return pow(max(E1m2 - c1, 0.0) / (c2 - c3 * max(E1m2, 1e-6)), vec3(1.0 / m1));
+}
+
+const float ARIB_B67_A = 0.17883277;
+const float ARIB_B67_B = 0.28466892;
+const float ARIB_B67_C = 0.55991073;
+vec3 arib_b67(in vec3 val)
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        if (val[i] <= 0.5)
+            val[i] = (val[i] * val[i]) * (1.0 / 3.0);
+        else
+            val[i] = (exp((val[i] - ARIB_B67_C) / ARIB_B67_A) + ARIB_B67_B) / 12.0;
+    }
+    return val;
 }
 
 // https://64.github.io/tonemapping/
@@ -104,4 +120,15 @@ void colorspace_trc_smpte2084(inout vec3 value, in mat3 colorPrimariesMatrix, in
     value = colorPrimariesMatrix * value;
     value = clamp(value, 0.0, 1.0);
     value = pow(value, vec3(1.0 / 2.4));
+}
+
+void colorspace_trc_hlg(inout vec3 value, in mat3 colorPrimariesMatrix, in float maxLuminance)
+{
+    // TODO: maxLuminance
+    value = arib_b67(value);
+    value = clamp(value, 0.0, 1.0);
+    adobeFilmLikeUncharted2Filmic(value);
+    value = colorPrimariesMatrix * value;
+    value = clamp(value, 0.0, 1.0);
+    value = pow(value, vec3(1.0 / 1.8));
 }

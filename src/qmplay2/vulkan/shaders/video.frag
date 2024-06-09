@@ -215,6 +215,10 @@ void main()
     {
         colorspace_trc_smpte2084(value, colorPrimariesMatrix, maxLuminance);
     }
+    else if (trc == AVCOL_TRC_ARIB_STD_B67)
+    {
+        colorspace_trc_hlg(value, colorPrimariesMatrix, maxLuminance);
+    }
 
     if (negative)
     {

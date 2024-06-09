@@ -565,7 +565,7 @@ void OpenGLCommon::paintGL()
             shaderProgramVideo->setUniformValue("uBitsMultiplier", m_bitsMultiplier);
         }
 
-        if (m_colorPrimaries == AVCOL_PRI_BT2020 && (m_colorTrc == AVCOL_TRC_BT709 || m_colorTrc == AVCOL_TRC_SMPTE2084))
+        if (m_colorPrimaries == AVCOL_PRI_BT2020 && (m_colorTrc == AVCOL_TRC_BT709 || m_colorTrc == AVCOL_TRC_SMPTE2084 || m_colorTrc == AVCOL_TRC_ARIB_STD_B67))
         {
             shaderProgramVideo->setUniformValue("uTrc", m_colorTrc);
             shaderProgramVideo->setUniformValue("uMaxLuminance", m_maxLuminance);
