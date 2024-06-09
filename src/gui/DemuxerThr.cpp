@@ -534,6 +534,13 @@ void DemuxerThr::run()
     if (unknownLength)
         emit allowRecording(true);
 
+    auto handleRecording = [&](bool startAndStop) {
+        if (startAndStop && m_recording && !m_recMuxer)
+            startRecordingInternal(recStreamsMap);
+        else if (!m_recording && m_recMuxer)
+            stopRecordingInternal(recStreamsMap);
+    };
+
     while (!demuxer.isAborted())
     {
         {
@@ -543,10 +550,7 @@ void DemuxerThr::run()
                 break; //Repeat seek failed - break.
         }
 
-        if (m_recording && !m_recMuxer)
-            startRecordingInternal(recStreamsMap);
-        else if (!m_recording && m_recMuxer)
-            stopRecordingInternal(recStreamsMap);
+        handleRecording(true);
 
         AVThread *aThr = (AVThread *)playC.aThr, *vThr = (AVThread *)playC.vThr;
 
@@ -675,7 +679,10 @@ void DemuxerThr::run()
                 if (playC.seekTo == SEEK_STREAM_RELOAD)
                     break;
                 if (!first)
+                {
                     msleep(15);
+                    handleRecording(false);
+                }
                 else
                 {
                     msleep(1);
