@@ -234,7 +234,7 @@
     </message>
     <message>
         <source>Slider highlight color</source>
-        <translation>Колір заливки повзунка&gt;</translation>
+        <translation>Колір заливки повзунка</translation>
     </message>
 </context>
 <context>

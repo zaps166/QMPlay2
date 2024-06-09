@@ -558,7 +558,7 @@
     </message>
     <message>
         <source>Playback and recording</source>
-        <translation type="unfinished"></translation>
+        <translation>回放并录制</translation>
     </message>
 </context>
 <context>
@@ -2136,15 +2136,15 @@
     </message>
     <message>
         <source>Recording error</source>
-        <translation>录音错误</translation>
+        <translation>录制错误</translation>
     </message>
     <message>
         <source>Recording started: %1</source>
-        <translation>录音已开始：%1</translation>
+        <translation>录制已开始：%1</translation>
     </message>
     <message>
         <source>Recording stopped</source>
-        <translation>录音已停止</translation>
+        <translation>录制已停止</translation>
     </message>
 </context>
 <context>
@@ -2513,7 +2513,7 @@
     </message>
     <message>
         <source>&amp;Recording</source>
-        <translation>录音(&amp;R)</translation>
+        <translation>录制(&amp;R)</translation>
     </message>
 </context>
 <context>
