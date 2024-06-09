@@ -234,7 +234,7 @@
     </message>
     <message>
         <source>Slider highlight color</source>
-        <translation type="unfinished"></translation>
+        <translation>Колір заливки повзунка></translation>
     </message>
 </context>
 <context>
@@ -1000,7 +1000,7 @@
     </message>
     <message>
         <source>Output file path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Шлях вихідного файлу:</translation>
     </message>
 </context>
 <context>
@@ -1091,7 +1091,7 @@
     </message>
     <message>
         <source>Remove specified &lt;url&gt; from playlist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Прибрати зазначену &lt;url&gt; зі списку відтворення.</translation>
     </message>
 </context>
 <context>
@@ -1835,7 +1835,7 @@
     </message>
     <message>
         <source>Try to automatically reconnect the network connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Намагатися автоматично відновити підключення до мережі</translation>
     </message>
 </context>
 <context>
@@ -2132,15 +2132,15 @@
     </message>
     <message>
         <source>Recording error</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка запису</translation>
     </message>
     <message>
         <source>Recording started: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Запис розпочато: %1</translation>
     </message>
     <message>
         <source>Recording stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Запис зупинено</translation>
     </message>
 </context>
 <context>
@@ -2374,7 +2374,7 @@
     </message>
     <message>
         <source>Desired video stream quality:</source>
-        <translation type="unfinished"></translation>
+        <translation>Бажана якість відеопотоку:</translation>
     </message>
     <message>
         <source>Default</source>
@@ -2509,7 +2509,7 @@
     </message>
     <message>
         <source>&amp;Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Запис</translation>
     </message>
 </context>
 <context>
@@ -2596,19 +2596,19 @@
     </message>
     <message>
         <source>Pas&amp;te and play</source>
-        <translation type="unfinished"></translation>
+        <translation>Вста&amp;вити і відтворити</translation>
     </message>
     <message>
         <source>&amp;Remove from list</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Прибрати зі списку</translation>
     </message>
     <message>
         <source>Remove from &amp;disk</source>
-        <translation type="unfinished"></translation>
+        <translation>Видалити з &amp;диска</translation>
     </message>
     <message>
         <source>Clear &amp;ungrouped entries</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистити &amp;незгруповані записи</translation>
     </message>
 </context>
 <context>
@@ -2639,11 +2639,11 @@
     </message>
     <message>
         <source>Failed to delete one or more selected entries.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося видалити один або кілька вибраних записів.</translation>
     </message>
     <message>
         <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Справді видалити вибрані записи з диска? Нелокальні записи буде видалено лише зі списку.</translation>
     </message>
 </context>
 <context>
@@ -3235,7 +3235,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Cannot change the directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Неможливо змінити каталог</translation>
     </message>
 </context>
 <context>
@@ -3556,15 +3556,15 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Negative</source>
-        <translation type="unfinished"></translation>
+        <translation>Негатив</translation>
     </message>
     <message>
         <source>Disable negative</source>
-        <translation type="unfinished"></translation>
+        <translation>Вимкнути негатив</translation>
     </message>
     <message>
         <source>Enable negative</source>
-        <translation type="unfinished"></translation>
+        <translation>Увімкнути негатив</translation>
     </message>
 </context>
 <context>
