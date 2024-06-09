@@ -95,6 +95,8 @@ private:
 
     double getFrameDelay() const;
 
+    void changeStatusText();
+
     PlayClass &playC;
 
     QString name, url, updatePlayingName;

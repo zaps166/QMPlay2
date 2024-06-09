@@ -287,7 +287,7 @@ void DemuxerThr::seek(bool doDemuxerSeek)
             }
             else
             {
-                emit playC.chText(tr("Playback"));
+                changeStatusText();
             }
         }
     }
@@ -456,7 +456,7 @@ void DemuxerThr::run()
         updateBufferedSeconds = false;
 
     emit playC.updateLength(round(demuxer->length()));
-    emit playC.chText(tr("Playback"));
+    changeStatusText();
     emit playC.playStateChanged(true);
 
     localStream = demuxer->localStream();
@@ -806,6 +806,7 @@ void DemuxerThr::startRecordingInternal(QHash<int, int> &recStreamsMap)
         recStreamsMap.clear();
         emit recording(false, true);
     }
+    changeStatusText();
 }
 void DemuxerThr::stopRecordingInternal(QHash<int, int> &recStreamsMap)
 {
@@ -814,6 +815,7 @@ void DemuxerThr::stopRecordingInternal(QHash<int, int> &recStreamsMap)
     m_recMuxer.reset();
     recStreamsMap.clear();
     emit recording(false, false);
+    changeStatusText();
 }
 
 inline void DemuxerThr::ensureTrueUpdateBuffered()
@@ -831,7 +833,7 @@ void DemuxerThr::handlePause()
         if (!paused)
         {
             paused = true;
-            emit playC.chText(tr("Paused"));
+            changeStatusText();
             emit playC.playStateChanged(false);
             playC.emptyBufferCond.wakeAll();
         }
@@ -839,7 +841,7 @@ void DemuxerThr::handlePause()
     else if (paused)
     {
         paused = demuxerPaused = false;
-        emit playC.chText(tr("Playback"));
+        changeStatusText();
         emit playC.playStateChanged(true);
         playC.emptyBufferCond.wakeAll();
     }
@@ -1411,6 +1413,18 @@ void DemuxerThr::clearBuffers()
 double DemuxerThr::getFrameDelay() const
 {
     return 1.0 / demuxer->streamsInfo().at(playC.videoStream)->getFPS();
+}
+
+void DemuxerThr::changeStatusText()
+{
+    if (paused)
+    {
+        emit playC.chText(tr("Paused"));
+    }
+    else
+    {
+        emit playC.chText(m_recording ? tr("Playback and recording") : tr("Playback"));
+    }
 }
 
 void DemuxerThr::stopVADec()
