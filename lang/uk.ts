@@ -234,7 +234,7 @@
     </message>
     <message>
         <source>Slider highlight color</source>
-        <translation>Колір заливки повзунка></translation>
+        <translation>Колір заливки повзунка&gt;</translation>
     </message>
 </context>
 <context>
@@ -555,6 +555,10 @@
     <message>
         <source>unknown</source>
         <translation>невідомо</translation>
+    </message>
+    <message>
+        <source>Playback and recording</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

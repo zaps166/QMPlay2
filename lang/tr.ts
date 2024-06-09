@@ -557,6 +557,10 @@
         <source>unknown</source>
         <translation>bilinmeyen</translation>
     </message>
+    <message>
+        <source>Playback and recording</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DownloadItemW</name>

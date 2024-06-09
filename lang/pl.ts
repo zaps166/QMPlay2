@@ -556,6 +556,10 @@
         <source>unknown</source>
         <translation>nieznany</translation>
     </message>
+    <message>
+        <source>Playback and recording</source>
+        <translation>Odtwarzanie i nagrywanie</translation>
+    </message>
 </context>
 <context>
     <name>DownloadItemW</name>
