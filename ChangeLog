@@ -1,3 +1,10 @@
+Changes in QMPlay2 24.06.16:
+    - show less connection errors from Radio Browser,
+    - fix choosing desired video stream,
+    - fix colorspace for ARIB STD-B67,
+    - improve recording status,
+    - update translations,
+
 Changes in QMPlay2 24.05.23:
     - don't try to split title/artist on internet radio stations,
     - fix "blend" and "discard" deinterlacing filters on Vulkan,
