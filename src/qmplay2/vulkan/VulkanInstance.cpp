@@ -290,6 +290,32 @@ void Instance::prepareDestroy()
 
 void Instance::init(bool doObtainPhysicalDevice)
 {
+#ifdef Q_OS_UNIX
+    static bool envVarInitialized = [] {
+        if (qEnvironmentVariableIsSet("QT_VULKAN_LIB"))
+            return true;
+
+        QLibrary lib;
+
+        lib.setFileName("libvulkan.so");
+        if (lib.load())
+        {
+            qputenv("QT_VULKAN_LIB", "libvulkan.so");
+            return true;
+        }
+
+        lib.setFileName("libvulkan.so.1");
+        if (lib.load())
+        {
+            qputenv("QT_VULKAN_LIB", "libvulkan.so.1");
+            return true;
+        }
+
+        return true;
+    }();
+    Q_UNUSED(envVarInitialized);
+#endif
+
     static const auto getInstanceProcAddr = AbstractInstance::loadVulkanLibrary(
         qEnvironmentVariable("QT_VULKAN_LIB").toStdString()
     );
