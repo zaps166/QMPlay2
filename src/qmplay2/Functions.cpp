@@ -1064,10 +1064,10 @@ bool Functions::compareText(const QString &a, const QString &b)
                 }
             }
         }
-        return (newA < newB);
+        return (newA.toLower() < newB.toLower());
     }
 
-    return (a < b);
+    return (a.toLower() < b.toLower());
 }
 
 bool Functions::hasTouchScreen()
