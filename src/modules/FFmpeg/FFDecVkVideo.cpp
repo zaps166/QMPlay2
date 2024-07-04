@@ -185,7 +185,7 @@ bool FFDecVkVideo::open(StreamInfo &streamInfo)
         const auto queueFamilyProps2 = m_physicalDevice->getQueueFamilyProperties2<
             ChainType,
             allocator<ChainType>
-        >(QmVk::AbstractInstance::getDispatchLoaderDynamic());
+        >(m_vkInstance->dld());
 
         const auto decodeQueueFamily = m_physicalDevice->getQueuesFamily(vk::QueueFlagBits::eVideoDecodeKHR, false, true);
         if (decodeQueueFamily.empty())

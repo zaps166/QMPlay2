@@ -587,7 +587,7 @@ void Window::render()
             if (!osdLockers.empty())
                 renderOSD();
 
-            m.commandBuffer->endRenderPass();
+            m.commandBuffer->endRenderPass(m.commandBuffer->dld());
 
             if (m.videoPipeline && m_instance->hasFiltersOnOtherQueueFamiliy())
                 m.videoPipeline->finalizeObjects(m.commandBuffer, false, true);
@@ -670,7 +670,7 @@ void Window::beginRenderPass(uint32_t imageIdx)
         renderPassBeginInfo.pClearValues = &clearValue;
     }
 
-    m.commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline);
+    m.commandBuffer->beginRenderPass(renderPassBeginInfo, vk::SubpassContents::eInline, m.commandBuffer->dld());
 }
 
 void Window::maybeClear(uint32_t imageIdx)
@@ -684,7 +684,7 @@ void Window::maybeClear(uint32_t imageIdx)
 
     vk::ClearRect clearRect(vk::Rect2D(vk::Offset2D(), m.swapChain->size()), 0, 1);
 
-    m.commandBuffer->clearAttachments(clearAttachment, clearRect);
+    m.commandBuffer->clearAttachments(clearAttachment, clearRect, m.commandBuffer->dld());
 
     m.clearedImages.insert(imageIdx);
 }
@@ -850,7 +850,7 @@ bool Window::ensureSurfaceAndRenderPass()
     if (!m.surface)
         return false;
 
-    const auto surfaceFormats = m_physicalDevice->getSurfaceFormatsKHR(m.surface);
+    const auto surfaceFormats = m_physicalDevice->getSurfaceFormatsKHR(m.surface, m_physicalDevice->dld());
     if (surfaceFormats.empty())
         return false;
 
@@ -916,7 +916,7 @@ void Window::ensureSwapChain()
         }
         case Qt::PartiallyChecked:
         {
-            const auto availPresentModes = m_physicalDevice->getSurfacePresentModesKHR(m.surface);
+            const auto availPresentModes = m_physicalDevice->getSurfacePresentModesKHR(m.surface, m_physicalDevice->dld());
             if (find(availPresentModes.begin(), availPresentModes.end(), vk::PresentModeKHR::eMailbox) != availPresentModes.end())
             {
                 presentModes.push_back(vk::PresentModeKHR::eMailbox);
@@ -1093,7 +1093,7 @@ void Window::fillVerticesBuffer()
     auto data = verticesBuffer->map<uint8_t>();
 
     auto bindVertexBuffer = [=] {
-        m.commandBuffer->bindVertexBuffers(0, {*m.verticesBuffer, *m.verticesBuffer}, {0, verticesSize});
+        m.commandBuffer->bindVertexBuffers(0, {*m.verticesBuffer, *m.verticesBuffer}, {0, verticesSize}, m.commandBuffer->dld());
     };
 
     if (!m_sphericalView)
@@ -1152,8 +1152,8 @@ void Window::fillVerticesBuffer()
 
         m.commandBufferDrawFn = [=] {
             bindVertexBuffer();
-            m.commandBuffer->bindIndexBuffer(*m.verticesBuffer, verticesSize + texCoordsSize, vk::IndexType::eUint16);
-            m.commandBuffer->drawIndexed(nIndices, 1, 0, 0, 0);
+            m.commandBuffer->bindIndexBuffer(*m.verticesBuffer, verticesSize + texCoordsSize, vk::IndexType::eUint16, m.commandBuffer->dld());
+            m.commandBuffer->drawIndexed(nIndices, 1, 0, 0, 0, m.commandBuffer->dld());
         };
     }
 
@@ -1479,7 +1479,7 @@ void Window::ensureBicubic()
 
 inline void Window::draw4Vertices()
 {
-    m.commandBuffer->draw(4, 1, 0, 0);
+    m.commandBuffer->draw(4, 1, 0, 0, m.commandBuffer->dld());
 }
 
 void Window::resetSwapChainAndGraphicsPipelines(bool takeOldSwapChain) try
@@ -1499,7 +1499,7 @@ void Window::resetSwapChainAndGraphicsPipelines(bool takeOldSwapChain) try
 
     if (!m.queueLocker.owns_lock())
         m.queueLocker = m.queue->lock();
-    m.queue->waitIdle();
+    m.queue->waitIdle(m.queue->dld());
     m.queueLocker.unlock();
 
     m.commandBuffer->resetStoredData();

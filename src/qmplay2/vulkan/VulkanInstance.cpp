@@ -257,7 +257,7 @@ bool Instance::checkFiltersSupported(const shared_ptr<PhysicalDevice> &physicalD
     if (!physicalDevice)
         return false;
 
-    if (!physicalDevice->isGpu() || !physicalDevice->getFeatures().shaderStorageImageWriteWithoutFormat)
+    if (!physicalDevice->isGpu() || !physicalDevice->getFeatures(physicalDevice->dld()).shaderStorageImageWriteWithoutFormat)
         return false;
 
     return hasStorageImage(physicalDevice, vk::Format::eR8Unorm) && hasStorageImage(physicalDevice, vk::Format::eR8G8Unorm);
@@ -279,7 +279,7 @@ Instance::~Instance()
     delete m_qVulkanInstance;
     m_debugUtilsMessanger.reset();
     if (*this)
-        destroy();
+        destroy(nullptr, dld());
 }
 
 void Instance::prepareDestroy()
@@ -316,13 +316,15 @@ void Instance::init(bool doObtainPhysicalDevice)
     Q_UNUSED(envVarInitialized);
 #endif
 
-    static const auto getInstanceProcAddr = AbstractInstance::loadVulkanLibrary(
-        qEnvironmentVariable("QT_VULKAN_LIB").toStdString()
-    );
-    if (!getInstanceProcAddr)
-        throw vk::InitializationFailedError("Can't resolve \"vkGetInstanceProcAddr\" Vulkan function");
+    static shared_ptr<vk::DynamicLoader> dl;
+    const auto getInstanceProcAddr = dl
+        ? setVulkanLibrary(dl)
+        : loadVulkanLibrary(qEnvironmentVariable("QT_VULKAN_LIB").toStdString())
+    ;
+    if (!dl)
+        dl = getDl();
 
-    AbstractInstance::initDispatchLoaderDynamic(getInstanceProcAddr);
+    initDispatchLoaderDynamic(getInstanceProcAddr);
     fetchAllExtensions();
 
     vector<const char *> layers;
@@ -353,7 +355,7 @@ void Instance::init(bool doObtainPhysicalDevice)
 
     vk::ApplicationInfo appInfo;
     appInfo.pApplicationName = "QMPlay2";
-    appInfo.apiVersion = AbstractInstance::isVk10()
+    appInfo.apiVersion = isVk10()
         ? VK_API_VERSION_1_0
         : VK_API_VERSION_1_1
     ;
@@ -367,8 +369,8 @@ void Instance::init(bool doObtainPhysicalDevice)
     createInfo.enabledExtensionCount = instanceExtensions.size();
     createInfo.ppEnabledExtensionNames = instanceExtensions.data();
 
-    static_cast<vk::Instance &>(*this) = vk::createInstance(createInfo);
-    AbstractInstance::initDispatchLoaderDynamic(getInstanceProcAddr, *this);
+    static_cast<vk::Instance &>(*this) = vk::createInstance(createInfo, nullptr, dld());
+    initDispatchLoaderDynamic(getInstanceProcAddr, *this);
 
     m_extensions.clear();
     m_extensions.reserve(instanceExtensions.size());
@@ -389,7 +391,7 @@ void Instance::init(bool doObtainPhysicalDevice)
             vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance
         ;
         debugUtilsMessagngerCreateInfo.pfnUserCallback = reinterpret_cast<PFN_vkDebugUtilsMessengerCallbackEXT>(debugCallback);
-        m_debugUtilsMessanger = createDebugUtilsMessengerEXTUnique(debugUtilsMessagngerCreateInfo);
+        m_debugUtilsMessanger = createDebugUtilsMessengerEXTUnique(debugUtilsMessagngerCreateInfo, nullptr, dld());
     }
     else
     {
@@ -483,7 +485,7 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     physicalDeviceExtensions.push_back(VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
 
-    if (!AbstractInstance::isVk10() && !physicalDevice->isVk10())
+    if (!isVk10() && !physicalDevice->isVk10())
     {
         // Required for Vulkan video decoding
         physicalDeviceExtensions.push_back(VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
@@ -514,7 +516,7 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     m_sycf.samplerYcbcrConversion = false;
     m_tsf.timelineSemaphore = false;
     m_s2f.synchronization2 = false;
-    if (!AbstractInstance::isVk10() || checkExtension(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
+    if (!isVk10() || checkExtension(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
     {
         vk::PhysicalDeviceFeatures2 features2;
         tie(features2, m_sycf, m_tsf, m_s2f) = physicalDevice->getFeatures2KHR<
@@ -522,7 +524,7 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
             vk::PhysicalDeviceSamplerYcbcrConversionFeatures,
             vk::PhysicalDeviceTimelineSemaphoreFeatures,
             vk::PhysicalDeviceSynchronization2Features
-        >().get<
+        >(dld()).get<
             vk::PhysicalDeviceFeatures2,
             vk::PhysicalDeviceSamplerYcbcrConversionFeatures,
             vk::PhysicalDeviceTimelineSemaphoreFeatures,
@@ -532,7 +534,7 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     }
     else
     {
-        m_enabledDeviceFeatures.features.shaderStorageImageWriteWithoutFormat = physicalDevice->getFeatures().shaderStorageImageWriteWithoutFormat;
+        m_enabledDeviceFeatures.features.shaderStorageImageWriteWithoutFormat = physicalDevice->getFeatures(dld()).shaderStorageImageWriteWithoutFormat;
     }
     m_enabledDeviceFeatures.pNext = &m_sycf;
     m_sycf.pNext = &m_tsf;
