@@ -235,7 +235,7 @@
     </message>
     <message>
         <source>Slider highlight color</source>
-        <translation type="unfinished"></translation>
+        <translation type="Kaydırıcının vurgu rengi"></translation>
     </message>
 </context>
 <context>
@@ -1005,7 +1005,7 @@
     </message>
     <message>
         <source>Output file path:</source>
-        <translation type="unfinished"></translation>
+        <translation type="Çıkış dosyası yolu:"></translation>
     </message>
 </context>
 <context>
@@ -1096,7 +1096,7 @@
     </message>
     <message>
         <source>Remove specified &lt;url&gt; from playlist.</source>
-        <translation type="unfinished"></translation>
+        <translation type="Belirtilen &lt;url&gt; yi listeden kaldır. "></translation>
     </message>
 </context>
 <context>
@@ -1846,8 +1846,8 @@
         <translation>VP9 kodlayıcı bileşeni için HDR içeriğe izin ver</translation>
     </message>
     <message>
-        <source>Try to automatically reconnect the network connection</source>
-        <translation type="unfinished"></translation>
+        <source>Try to automatically reconnect the network connectio</source>
+        <translation type="Ağ bağlantısını otomatik olarak yeniden bağlamayı deneyin"></translation>
     </message>
 </context>
 <context>
@@ -2144,15 +2144,15 @@
     </message>
     <message>
         <source>Recording error</source>
-        <translation type="unfinished"></translation>
+        <translation type="Kayıt hatası"></translation>
     </message>
     <message>
         <source>Recording started: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="Kayıt başladı: %1"></translation>
     </message>
     <message>
         <source>Recording stopped</source>
-        <translation type="unfinished"></translation>
+        <translation type="Kayıt durduruldu"></translation>
     </message>
 </context>
 <context>
@@ -2387,7 +2387,7 @@
     </message>
     <message>
         <source>Desired video stream quality:</source>
-        <translation type="unfinished"></translation>
+        <translation type="İstenilen video akışı kalitesi"></translation>
     </message>
     <message>
         <source>Default</source>
@@ -2524,7 +2524,7 @@
     </message>
     <message>
         <source>&amp;Recording</source>
-        <translation type="unfinished"></translation>
+        <translation type="Kayıt"></translation>
     </message>
 </context>
 <context>
@@ -2611,19 +2611,19 @@
     </message>
     <message>
         <source>Pas&amp;te and play</source>
-        <translation type="unfinished"></translation>
+        <translation type="&amp;Yapıştır ve Oynat"></translation>
     </message>
     <message>
         <source>&amp;Remove from list</source>
-        <translation type="unfinished"></translation>
+        <translation type="&amp;Listeden sil"></translation>
     </message>
     <message>
         <source>Remove from &amp;disk</source>
-        <translation type="unfinished"></translation>
+        <translation type="&amp;Diskten sil"></translation>
     </message>
     <message>
         <source>Clear &amp;ungrouped entries</source>
-        <translation type="unfinished"></translation>
+        <translation type="&amp;Gruplandırılmamış girişleri temizle"></translation>
     </message>
 </context>
 <context>
@@ -2654,11 +2654,11 @@
     </message>
     <message>
         <source>Failed to delete one or more selected entries.</source>
-        <translation type="unfinished"></translation>
+        <translation type="Seçilen bir veya daha fazla giriş silinemedi."></translation>
     </message>
     <message>
         <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
-        <translation type="unfinished"></translation>
+        <translation type="Seçilen girişleri diskten silmek istediğinizden emin misiniz? Yalnız yerel olmayan girişler listeden kaldırılacaktır."></translation>
     </message>
 </context>
 <context>
@@ -3259,7 +3259,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Cannot change the directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="Dizin değiştirilemiyor"></translation>
     </message>
 </context>
 <context>
@@ -3580,15 +3580,15 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Negative</source>
-        <translation type="unfinished"></translation>
+        <translation type="Negatif"></translation>
     </message>
     <message>
         <source>Disable negative</source>
-        <translation type="unfinished"></translation>
+        <translation type="Negatifi devre dışı bırak"></translation>
     </message>
     <message>
         <source>Enable negative</source>
-        <translation type="unfinished"></translation>
+        <translation type="Negatifi etkinleştir"></translation>
     </message>
 </context>
 <context>
