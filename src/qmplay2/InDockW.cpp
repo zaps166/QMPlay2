@@ -63,8 +63,8 @@ void InDockW::setCustomPixmap(const QPixmap &pix)
         const qreal blurRadius = qBound(10.0, sqrt(pix.width() * pix.width() + pix.height() * pix.height()) / 4.0, 300.0);
         blurredTransformation = (blurRadius < 80.0) ? Qt::SmoothTransformation : Qt::FastTransformation;
         customPixmapBlurred = Functions::applyBlur(pix, blurRadius);
-        m_enlargeCovers = QMPlay2Core.getSettings().getBool("EnlargeCovers");
     }
+    m_enlargeCovers = QMPlay2Core.getSettings().getBool("EnlargeCovers");
     emit hasCoverImage(!customPixmap.isNull());
     update();
 }
