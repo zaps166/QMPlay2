@@ -559,7 +559,7 @@
     </message>
     <message>
         <source>Playback and recording</source>
-        <translation type="unfinished"></translation>
+        <translation type="Oynatma ve kayıt"></translation>
     </message>
 </context>
 <context>
