@@ -235,7 +235,7 @@
     </message>
     <message>
         <source>Slider highlight color</source>
-        <translation type="Kaydırıcının vurgu rengi"></translation>
+        <translation>Kaydırıcının vurgu rengi</translation>
     </message>
 </context>
 <context>
@@ -559,7 +559,7 @@
     </message>
     <message>
         <source>Playback and recording</source>
-        <translation type="Oynatma ve kayıt"></translation>
+        <translation>Oynatma ve kayıt</translation>
     </message>
 </context>
 <context>
@@ -1005,7 +1005,7 @@
     </message>
     <message>
         <source>Output file path:</source>
-        <translation type="Çıkış dosyası yolu:"></translation>
+        <translation>Çıkış dosyası yolu:</translation>
     </message>
 </context>
 <context>
@@ -1096,7 +1096,7 @@
     </message>
     <message>
         <source>Remove specified &lt;url&gt; from playlist.</source>
-        <translation type="Belirtilen &lt;url&gt; yi listeden kaldır. "></translation>
+        <translation>Belirtilen &lt;url&gt; yi listeden kaldır.</translation>
     </message>
 </context>
 <context>
@@ -1846,8 +1846,8 @@
         <translation>VP9 kodlayıcı bileşeni için HDR içeriğe izin ver</translation>
     </message>
     <message>
-        <source>Try to automatically reconnect the network connectio</source>
-        <translation type="Ağ bağlantısını otomatik olarak yeniden bağlamayı deneyin"></translation>
+        <source>Try to automatically reconnect the network connection</source>
+        <translation>Ağ bağlantısını otomatik olarak yeniden bağlamayı deneyin</translation>
     </message>
 </context>
 <context>
@@ -2144,15 +2144,15 @@
     </message>
     <message>
         <source>Recording error</source>
-        <translation type="Kayıt hatası"></translation>
+        <translation>Kayıt hatası</translation>
     </message>
     <message>
         <source>Recording started: %1</source>
-        <translation type="Kayıt başladı: %1"></translation>
+        <translation>Kayıt başladı: %1</translation>
     </message>
     <message>
         <source>Recording stopped</source>
-        <translation type="Kayıt durduruldu"></translation>
+        <translation>Kayıt durduruldu</translation>
     </message>
 </context>
 <context>
@@ -2387,7 +2387,7 @@
     </message>
     <message>
         <source>Desired video stream quality:</source>
-        <translation type="İstenilen video akışı kalitesi"></translation>
+        <translation>İstenilen video akışı kalitesi:</translation>
     </message>
     <message>
         <source>Default</source>
@@ -2524,7 +2524,7 @@
     </message>
     <message>
         <source>&amp;Recording</source>
-        <translation type="Kayıt"></translation>
+        <translation>&amp;Kayıt</translation>
     </message>
 </context>
 <context>
@@ -2611,19 +2611,19 @@
     </message>
     <message>
         <source>Pas&amp;te and play</source>
-        <translation type="&amp;Yapıştır ve Oynat"></translation>
+        <translation>&amp;Yapıştır ve Oynat</translation>
     </message>
     <message>
         <source>&amp;Remove from list</source>
-        <translation type="&amp;Listeden sil"></translation>
+        <translation>&amp;Listeden sil</translation>
     </message>
     <message>
         <source>Remove from &amp;disk</source>
-        <translation type="&amp;Diskten sil"></translation>
+        <translation>&amp;Diskten sil</translation>
     </message>
     <message>
         <source>Clear &amp;ungrouped entries</source>
-        <translation type="&amp;Gruplandırılmamış girişleri temizle"></translation>
+        <translation>&amp;Gruplandırılmamış girişleri temizle</translation>
     </message>
 </context>
 <context>
@@ -2654,11 +2654,11 @@
     </message>
     <message>
         <source>Failed to delete one or more selected entries.</source>
-        <translation type="Seçilen bir veya daha fazla giriş silinemedi."></translation>
+        <translation>Seçilen bir veya daha fazla giriş silinemedi.</translation>
     </message>
     <message>
         <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
-        <translation type="Seçilen girişleri diskten silmek istediğinizden emin misiniz? Yalnız yerel olmayan girişler listeden kaldırılacaktır."></translation>
+        <translation>Seçilen girişleri diskten silmek istediğinizden emin misiniz? Yalnız yerel olmayan girişler listeden kaldırılacaktır.</translation>
     </message>
 </context>
 <context>
@@ -3259,7 +3259,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Cannot change the directory</source>
-        <translation type="Dizin değiştirilemiyor"></translation>
+        <translation>Dizin değiştirilemiyor</translation>
     </message>
 </context>
 <context>
@@ -3580,15 +3580,15 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Negative</source>
-        <translation type="Negatif"></translation>
+        <translation>Negatif</translation>
     </message>
     <message>
         <source>Disable negative</source>
-        <translation type="Negatifi devre dışı bırak"></translation>
+        <translation>Negatifi devre dışı bırak</translation>
     </message>
     <message>
         <source>Enable negative</source>
-        <translation type="Negatifi etkinleştir"></translation>
+        <translation>Negatifi etkinleştir</translation>
     </message>
 </context>
 <context>
