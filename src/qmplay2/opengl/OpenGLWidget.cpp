@@ -63,8 +63,7 @@ void OpenGLWidget::initializeGL()
 }
 void OpenGLWidget::paintGL()
 {
-    if (m_glInstance->isGLES)
-        glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
     OpenGLCommon::paintGL();
 }
 
