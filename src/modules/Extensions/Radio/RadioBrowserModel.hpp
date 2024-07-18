@@ -24,7 +24,7 @@
 
 #include <memory>
 
-constexpr const char *g_radioBrowserBaseApiUrl = "http://all.api.radio-browser.info/json";
+constexpr const char *g_radioBrowserBaseApiUrl = "http://de1.api.radio-browser.info/json";
 constexpr int g_nRetries = 10;
 constexpr int g_retryInterval = 3;
 
