@@ -122,6 +122,7 @@ public:
     QIcon getIconFromTheme(const QString &iconName, const QIcon &fallback = QIcon());
 
     Q_SIGNAL void wallpaperChanged(bool hasWallpaper, double alpha);
+    Q_SIGNAL void wallpaperChanged(const QPixmap &wallpaper);
 
     Q_SIGNAL void dockVideo(QWidget *w);
 

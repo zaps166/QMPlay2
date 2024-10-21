@@ -58,7 +58,7 @@ VisWidget::VisWidget()
 
     connect(&tim, SIGNAL(timeout()), this, SLOT(updateVisualization()));
     connect(dw, SIGNAL(dockVisibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
-    connect(&QMPlay2Core, SIGNAL(wallpaperChanged(bool, double)), this, SLOT(wallpaperChanged(bool, double)));
+    connect(&QMPlay2Core, qOverload<const QPixmap &>(&QMPlay2CoreClass::wallpaperChanged), this, &VisWidget::wallpaperChanged);
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenu(const QPoint &)));
 }
 
@@ -125,8 +125,20 @@ void VisWidget::paintEvent(QPaintEvent *)
         return;
 #endif
     QPainter p(this);
-    if (testAttribute(Qt::WA_OpaquePaintEvent))
+    QWidget *tlw = nullptr;
+    auto getTlw = [&] {
+        if (!tlw)
+            tlw = window();
+        return tlw;
+    };
+    if (m_wallpaper.isNull() || getTlw() == parentWidget())
+    {
         p.fillRect(rect(), Qt::black);
+    }
+    else
+    {
+        p.drawPixmap(rect(), m_wallpaper, QRect(mapTo(getTlw(), pos()), size()));
+    }
     paint(p);
 }
 void VisWidget::changeEvent(QEvent *event)
@@ -157,13 +169,9 @@ bool VisWidget::eventFilter(QObject *watched, QEvent *event)
     return QWidget::eventFilter(watched, event);
 }
 
-void VisWidget::wallpaperChanged(bool hasWallpaper, double alpha)
+void VisWidget::wallpaperChanged(const QPixmap &wallpaper)
 {
-    QColor c = Qt::black;
-    if (hasWallpaper)
-        c.setAlphaF(alpha);
-    setAttribute(Qt::WA_OpaquePaintEvent, !hasWallpaper);
-    setPalette(c);
+    m_wallpaper = wallpaper;
 }
 void VisWidget::contextMenu(const QPoint &point)
 {

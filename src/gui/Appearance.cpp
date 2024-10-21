@@ -177,6 +177,20 @@ static void applyAlpha(QPalette &pal, double alpha)
     setBrush(pal, QPalette::Shadow, pal.color(QPalette::Shadow), alpha);
     setBrush(pal, QPalette::Highlight, pal.color(QPalette::Highlight), alpha);
 }
+static QPixmap applyAlphaToPixmap(QPixmap &wallpaper, double alpha)
+{
+    if (qFuzzyCompare(alpha, 1.0))
+    {
+        wallpaper = QPixmap();
+    }
+    else if (alpha < 1.0)
+    {
+        QPainter p(&wallpaper);
+        p.setOpacity(alpha);
+        p.fillRect(QRect(QPoint(), wallpaper.size()), Qt::black);
+    }
+    return wallpaper;
+}
 static QPixmap getWallpaper(const QByteArray &base64Pixmap)
 {
     QByteArray wallpaper_data = QByteArray::fromBase64(base64Pixmap);
@@ -266,6 +280,8 @@ void Appearance::init()
                     mainW_pal.setBrush(QPalette::Window, wallpaper);
 
                     emit QMPlay2Core.wallpaperChanged(true, alpha);
+                    applyAlphaToPixmap(wallpaper, alpha);
+                    emit QMPlay2Core.wallpaperChanged(wallpaper);
                     mustApplyPalette = true;
                 }
             }
@@ -684,9 +700,10 @@ void Appearance::apply()
 
     QPalette mainW_pal = pal;
     bool hasWallpaper = false;
+    QPixmap pixmap;
     if (useWallpaperB->isChecked())
     {
-        QPixmap pixmap = wallpaperW->getPixmap();
+        pixmap = wallpaperW->getPixmap();
         if (!pixmap.isNull())
         {
             mainW_pal.setBrush(QPalette::Window, pixmap);
@@ -695,6 +712,8 @@ void Appearance::apply()
         }
     }
     emit QMPlay2Core.wallpaperChanged(hasWallpaper, alphaB->value());
+    applyAlphaToPixmap(pixmap, alphaB->value());
+    emit QMPlay2Core.wallpaperChanged(pixmap);
 
     applyPalette(pal, sliderButton_pal, mainW_pal);
 

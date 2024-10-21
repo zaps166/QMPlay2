@@ -64,8 +64,10 @@ private:
     bool m_pendingUpdate = false;
 #endif
     bool dockWidgetVisible = false;
+
+    QPixmap m_wallpaper;
 private slots:
-    void wallpaperChanged(bool hasWallpaper, double alpha);
+    void wallpaperChanged(const QPixmap &wallpaper);
     void contextMenu(const QPoint &point);
     void visibilityChanged(bool v);
     void updateVisualization();
