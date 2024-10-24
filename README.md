@@ -128,7 +128,7 @@ Go to "Options->Modules settings" and click "Extensions" on the list. Find "Last
 
 ### Control files
 
-Empty files in `share` directory (on Windows it is a directory with `QMPlay2.exe`):
+Empty files in `share` directory (on Windows it is a directory with `CACHIPlay2.exe`):
 - `portable` - runs CACHIPlay2 in portable mode (settings are stored in applications directory),
 - `noautoupdates` - disables auto-updates at first run.
 
@@ -278,7 +278,7 @@ CMake options (option - default value: description):
     - `USE_ASAN` - `OFF`: enable/disable address sanitizer.
     - `USE_UBSAN` - `OFF`: enable/disable undefined behavior sanitizer.
     - `CMAKE_INTERPROCEDURAL_OPTIMIZATION` - `OFF`: enable/disable link-time code generation (LTO).
-    - `USE_GIT_VERSION` - `ON`: append Git HEAD to QMPlay2 version (if exists).
+    - `USE_GIT_VERSION` - `ON`: append Git HEAD to CACHIPlay2 version (if exists).
     - `USE_UPDATES` - `ON`: enable/disable software updates.
     - `FIND_HWACCEL_DRIVERS_PATH` - `OFF`: Find drivers path for hwaccel, useful for universal package.
     - `BUILD_WITH_QT6` - autodetect: Build with Qt6.
