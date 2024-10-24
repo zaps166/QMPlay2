@@ -1,9 +1,9 @@
-QMPlay2 - Qt Media Player 2
+CACHIPlay2 - Qt Media Player 2
 ===========================
 
-![Screenshot](https://raw.githubusercontent.com/zaps166/GitHubCommonContents/master/Screenshots/QMPlay2.webp)
+![Screenshot](https://raw.githubusercontent.com/zaps166/GitHubCommonContents/master/Screenshots/CACHIPlay2.webp)
 
-QMPlay2 is a video and audio player. It can play all formats supported by FFmpeg, libmodplug (including J2B and SFX). It also supports Audio CD, raw files, Rayman 2 music and chiptunes. It contains YouTube and MyFreeMP3 browser.
+CACHIPlay2 is a video and audio player. It can play all formats supported by FFmpeg, libmodplug (including J2B and SFX). It also supports Audio CD, raw files, Rayman 2 music and chiptunes. It contains YouTube and MyFreeMP3 browser.
 
 Table of Contents
 =================
@@ -24,7 +24,7 @@ Table of Contents
 
 #### Easy installation on Windows
 
-- [Download](https://github.com/zaps166/QMPlay2/releases/latest) the Windows installer.
+- [Download](https://github.com/zaps166/CACHIPlay2/releases/latest) the Windows installer.
 
 #### Easy installation on Linux (AppImage)
 
@@ -42,7 +42,7 @@ Table of Contents
 ```sh
 sudo zypper ar https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Tumbleweed Packman
 sudo zypper dup --allow-vendor-change --from "Packman"
-sudo zypper in QMPlay2
+sudo zypper in CACHIPlay2
 ```
 #### Easy installation on Fedora
 - Run the following commands:
@@ -52,19 +52,19 @@ sudo dnf groupupdate core
 sudo dnf update
 sudo dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
 sudo dnf groupupdate sound-and-video
-sudo dnf install qmplay2
+sudo dnf install CACHIplay2
 ```
 
 #### Easy installation on Gentoo Linux
 
-- Run the following command: `emerge --ask media-video/qmplay2`
+- Run the following command: `emerge --ask media-video/cachiplay2`
 
 ## YouTube
 
 You can change the default audio and video quality of YouTube contents. Click on the "Settings" icon on the left of the search bar, change the order of audio and/or video quality priorities and apply changes.
-If the chosen quality can't be found on YouTube content, QMPlay2 will try using the next entry on the quality list.
+If the chosen quality can't be found on YouTube content, CACHIPlay2 will try using the next entry on the quality list.
 
-YouTube videos don't work without external "yt-dlp" software, so QMPlay2 will download it automatically. You can remove downloaded "yt-dlp" from settings.
+YouTube videos don't work without external "yt-dlp" software, so CACHIPlay2 will download it automatically. You can remove downloaded "yt-dlp" from settings.
 
 #### Windows
 
@@ -73,7 +73,7 @@ YouTube videos don't work without external "yt-dlp" software, so QMPlay2 will do
 
 ## Spherical view
 
-QMPlay2 supports spherical view on OpenGL and Vulkan video outputs. You can watch e.g. YouTube spherical videos by pressing "Ctrl+3". You can also enable it from the menu: "Playback->Video filters->Spherical view".
+CACHIPlay2 supports spherical view on OpenGL and Vulkan video outputs. You can watch e.g. YouTube spherical videos by pressing "Ctrl+3". You can also enable it from the menu: "Playback->Video filters->Spherical view".
 
 ## ALSA
 
@@ -82,7 +82,7 @@ If you are using your own ALSA configuration `asound.conf` or `.asoundrc` you sh
 
 ## Hardware acceleration
 
-QMPlay2 supports hardware video decoding: Vulkan Video, CUVID (NVIDIA only), DXVA2 (Windows), D3D11VA (Vulkan, Windows) VA-API (Linux/BSD only) and VideoToolBox (macOS only).
+CACHIPlay2 supports hardware video decoding: Vulkan Video, CUVID (NVIDIA only), DXVA2 (Windows), D3D11VA (Vulkan, Windows) VA-API (Linux/BSD only) and VideoToolBox (macOS only).
 Hardware acceleration is disabled by default, but you can enable it in "Settings->Playback settings":
 - move hardware accelerated decoder on decoders list to the top,
 - apply settings.
@@ -99,7 +99,7 @@ Hardware acceleration is disabled by default, but you can enable it in "Settings
 
 ### VA-API + OpenGL information:
 
-VA-API + OpenGL uses EGL for OpenGL context creation. On X11 QMPlay2 tries to detect if EGL can be used, but the detection can fail. In this case you can try do it manually: `export QT_XCB_GL_INTEGRATION=xcb_glx` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally. In case of multiple GPUs installed in system VA-API requires to use the same device as OpenGL. QMPlay2 detects it automatically, but if the detection fails, try to do it manually, e.g.: `export QMPLAY2_EGL_CARD_FILE_PATH=/dev/dri/card1` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally.
+VA-API + OpenGL uses EGL for OpenGL context creation. On X11 CACHIPlay2 tries to detect if EGL can be used, but the detection can fail. In this case you can try do it manually: `export QT_XCB_GL_INTEGRATION=xcb_glx` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally. In case of multiple GPUs installed in system VA-API requires to use the same device as OpenGL. CACHIPlay2 detects it automatically, but if the detection fails, try to do it manually, e.g.: `export QMPLAY2_EGL_CARD_FILE_PATH=/dev/dri/card1` and run QMPlay2 from command line. If everything is working properly, you can export this variable globally.
 
 ## Deinterlacing
 
@@ -129,7 +129,7 @@ Go to "Options->Modules settings" and click "Extensions" on the list. Find "Last
 ### Control files
 
 Empty files in `share` directory (on Windows it is a directory with `QMPlay2.exe`):
-- `portable` - runs QMPlay2 in portable mode (settings are stored in applications directory),
+- `portable` - runs CACHIPlay2 in portable mode (settings are stored in applications directory),
 - `noautoupdates` - disables auto-updates at first run.
 
 ### Still images
@@ -138,31 +138,31 @@ Go to "Options->settings" and check "Read and display still images".
 
 ### Custom user agent
 
-You can specify a `CustomUserAgent` in `QMPlay2.ini` file in `General` section.
+You can specify a `CustomUserAgent` in `CACHIPlay2.ini` file in `General` section.
 
 ### Disable yt-dlp update
 
-Set `SkipYtDlpUpdate` to `true` in `QMPlay2.ini` file in `General` section.
+Set `SkipYtDlpUpdate` to `true` in `CACHIPlay2.ini` file in `General` section.
 
 ### Disable covers cache
 
-Set `NoCoversCache` to `true` in `QMPlay2.ini` file in `General` section.
+Set `NoCoversCache` to `true` in `CACHIPlay2.ini` file in `General` section.
 
 ### Single instance
 
-You can force single instance for QMPlay2: set "Allow only one instance" in "Settings->General settings".
+You can force single instance for CACHIPlay2: set "Allow only one instance" in "Settings->General settings".
 
 ## Multimedia keys
 
 Multimedia keys should work automatically (on Linux/BSD it might depend on your configuration).
 
 Additionally In Linux/BSD you can associate keys with commands:
-- using QMPlay2 binary, see: `QMPlay2 -h`,
+- using CACHIPlay2 binary, see: `QMPlay2 -h`,
 - using MPRIS2:
-    - Toggle play/pause: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause`.
-    - Next: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next`
-    - Prev: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous`
-    - Stop: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.QMPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop`
+    - Toggle play/pause: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.CACHIPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause`.
+    - Next: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.CACHIPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next`
+    - Prev: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.CACHIPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous`
+    - Stop: `dbus-send --print-reply --dest=org.mpris.MediaPlayer2.CACHIPlay2 /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Stop`
 
 ## Installation from sources
 
@@ -242,7 +242,7 @@ CMake options (option - default value: description):
 - CMake options and the default settings:
     - `CMAKE_INSTALL_PREFIX` - mostly it is `/usr/local`: installation directory.
     - `CMAKE_BUILD_TYPE` - `Release`.
-    - `LANGUAGES` - `All` - a space-separated list of translations to compile into QMPlay2.
+    - `LANGUAGES` - `All` - a space-separated list of translations to compile into CACHI NOPlay2.
     - `SOLID_ACTIONS_INSTALL_PATH` - Linux/BSD only, autodetect: you can specify the path manually.
     - `SET_INSTALL_RPATH` - non-Windows only, `ON` on macOS, `OFF` anywhere else: sets RPATH after installation.
     - `USE_FFMPEG` - ON: enable/disable FFmpeg module.
@@ -294,7 +294,7 @@ Every CMake option must be prepended with `-D` and new value is set after `=`.
 
 You can strip binaries during installation to save disk space: `sudo ninja -C build install/strip`.
 
-Example commands (execute it in QMPlay2 directory with source code):
+Example commands (execute it in CACHIPlay2 directory with source code):
 
 - Simple installation (rely on autodetection, `strip` reduces size, but it makes debugging unavailable):
 
@@ -346,12 +346,12 @@ sudo ninja -C build uninstall
 
 ##### Other information for Windows
 
-- You can compile QMPlay2 on Windows host, but you must prepare toolchain for your own (also with CMake advanced options for libraries and paths):
- - `CMAKE_LIBRARY_PATH` - where to find QMPlay2 dependency libraries,
- - `CMAKE_INCLUDE_PATH`- where to find QMPlay2 dependency includes,
+- You can compile CACHIPlay2 on Windows host, but you must prepare toolchain for your own (also with CMake advanced options for libraries and paths):
+ - `CMAKE_LIBRARY_PATH` - where to find CACHIPlay2 dependency libraries,
+ - `CMAKE_INCLUDE_PATH`- where to find CACHIPlay2 dependency includes,
  - `CUSTOM_*_LIBRARIES` - additional custom libraries for linker (useful for static linking),
 - I use my own PKGBUILDs for many MinGW libraries.
-- Visual Studio can't compile QMPlay2.
+- Visual Studio can't compile CACHIPlay2.
 
 ## Building package RPM, DEB or any other
 
@@ -359,5 +359,5 @@ You can look at [Arch Linux PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tre
 
 ## Other information
 
-- QMPlay2 contains modified libmodplug sources which are used by Modplug module.
-- QMPlay2 uses Concept icons created by Alexey Varfolomeev.
+- CACHIPlay2 contains modified libmodplug sources which are used by Modplug module.
+- CACHIPlay2 uses Concept icons created by Alexey Varfolomeev.
