@@ -76,7 +76,7 @@ bool LastFM::set()
     return true;
 }
 
-void LastFM::getAlbumCover(const QString &title, const QString &artist, const QString &album, bool titleAsAlbum)
+void LastFM::getAlbumCover(const QString &title, const QString &artist, const QString &album, const QString &origTitle, bool titleAsAlbum)
 {
     /*
      * Get cover for artist and album.
@@ -110,6 +110,7 @@ void LastFM::getAlbumCover(const QString &title, const QString &artist, const QS
             titleAsAlbum ? QString() : album
         });
         coverReply->setProperty("titleAsAlbum", titleAsAlbum);
+        coverReply->setProperty("origTitle", origTitle);
         connect(coverReply, SIGNAL(finished()), this, SLOT(albumFinished()));
     }
 }
@@ -217,12 +218,23 @@ void LastFM::clear()
     dontShowLoginError = false;
 }
 
-void LastFM::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName)
+void LastFM::updatePlaying(bool play, QString title, QString artist, const QString &album, int length, bool needCover, const QString &fileName)
 {
     Q_UNUSED(fileName)
+    QString origTitle;
+    if (!title.isEmpty() && artist.isEmpty())
+    {
+        const int idx = title.indexOf(QStringLiteral(" - "));
+        if (idx > 0)
+        {
+            origTitle = title;
+            artist = title.mid(0, idx);
+            title = title.mid(idx + 3);
+        }
+    }
     if (!artist.isEmpty() && (!title.isEmpty() || !album.isEmpty()))
     {
-        if (!user.isEmpty() && !md5pass.isEmpty())
+        if (!user.isEmpty() && !md5pass.isEmpty() && origTitle.isEmpty())
         {
             const time_t currTime = time(nullptr);
             const Scrobble scrobble = {
@@ -252,7 +264,7 @@ void LastFM::updatePlaying(bool play, const QString &title, const QString &artis
                 login();
         }
         if (downloadCovers && needCover)
-            getAlbumCover(title, artist, album);
+            getAlbumCover(title, artist, album, origTitle);
     }
 }
 
@@ -260,6 +272,7 @@ void LastFM::albumFinished()
 {
     const bool isCoverImage = !coverReply->url().contains("api_key");
     const bool titleAsAlbum = coverReply->property("titleAsAlbum").toBool();
+    const QString origTitle = coverReply->property("origTitle").toString();
     const QStringList taa = coverReply->property("taa").toStringList();
     bool coverNotFound = false;
     if (coverReply->hasError())
@@ -290,6 +303,7 @@ void LastFM::albumFinished()
                         coverReply->deleteLater();
                         coverReply = net.start(imgUrl);
                         coverReply->setProperty("taa", taa);
+                        coverReply->setProperty("origTitle", origTitle);
                         connect(coverReply, SIGNAL(finished()), this, SLOT(albumFinished()));
                         return;
                     }
@@ -298,18 +312,24 @@ void LastFM::albumFinished()
             coverNotFound = true;
         }
     }
-    if (coverNotFound && !titleAsAlbum)
+    if (coverNotFound && !origTitle.isEmpty())
+    {
+        // Swap title and artist and set "origTitle" to empty (non-null) to not enter into else-if
+        getAlbumCover(taa[1], taa[0], QString(), QStringLiteral(""), false); //This also will delete the old "coverReply"
+        return;
+    }
+    else if (coverNotFound && !titleAsAlbum && origTitle.isNull())
     {
         if (taa[2].isEmpty())
         {
              //Can't find the track, try find the album with track name
-            getAlbumCover(QString(), taa[1], taa[0], true); //This also will delete the old "coverReply"
+            getAlbumCover(QString(), taa[1], taa[0], QString(), true); //This also will delete the old "coverReply"
             return;
         }
         else if (!taa[0].isEmpty() && !taa[1].isEmpty() && !taa[2].isEmpty())
         {
              //Can't find the album, try find the track
-            getAlbumCover(taa[0], taa[1], QString()); //This also will delete the old "coverReply"
+            getAlbumCover(taa[0], taa[1], QString(), QString()); //This also will delete the old "coverReply"
             return;
         }
     }

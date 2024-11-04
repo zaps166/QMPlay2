@@ -119,7 +119,7 @@ void DemuxerThr::loadImage()
                     }
                 }
             }
-            if (img.isNull() && !artist.isEmpty() && (!title.isEmpty() || !album.isEmpty())) //Ładowanie okładki z cache
+            if (img.isNull() && (!artist.isEmpty() || title.contains(QStringLiteral(" - "))) && (!title.isEmpty() || !album.isEmpty())) //Ładowanie okładki z cache
             {
                 QString coverPath = getCoverFile(title, artist, album);
                 if (!title.isEmpty() && !album.isEmpty() && !QFile::exists(coverPath)) //Try to load cover for title if album cover doesn't exist
@@ -1466,7 +1466,15 @@ void DemuxerThr::updateCover(const QString &title, const QString &artist, const 
     const QImage coverImg = QImage::fromData(cover);
     if (!coverImg.isNull())
     {
-        if (this->title == title && this->artist == artist && (this->album == album || (album.isEmpty() && !title.isEmpty())))
+        const bool bothInTitle =
+               !title.isEmpty()
+            && !artist.isEmpty()
+            && this->artist.isEmpty()
+            && this->title.contains(QStringLiteral(" - "))
+            && this->title.contains(title)
+            && this->title.contains(artist)
+        ;
+        if ((bothInTitle || (this->title == title && this->artist == artist)) && (this->album == album || (album.isEmpty() && !title.isEmpty())))
             emit playC.updateImage(coverImg);
 
         static bool useCoversCache = !QMPlay2Core.getSettings().getBool("NoCoversCache");
@@ -1475,7 +1483,7 @@ void DemuxerThr::updateCover(const QString &title, const QString &artist, const 
 
         QDir dir(QMPlay2Core.getSettingsDir());
         dir.mkdir("Covers");
-        QFile f(getCoverFile(title, artist, album));
+        QFile f(bothInTitle ? getCoverFile(this->title, QString(), album) : getCoverFile(title, artist, album));
         if (f.open(QFile::WriteOnly))
         {
             f.write(cover);

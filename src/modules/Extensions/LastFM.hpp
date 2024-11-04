@@ -51,7 +51,7 @@ public:
 private:
     bool set() override;
 
-    void getAlbumCover(const QString &title, const QString &artist, const QString &album, bool titleAsAlbum = false);
+    void getAlbumCover(const QString &title, const QString &artist, const QString &album, const QString &origTitle, bool titleAsAlbum = false);
 
     Q_SLOT void login();
     void logout(bool canClear = true);
@@ -60,7 +60,7 @@ private:
 
     void clear();
 private slots:
-    void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName);
+    void updatePlaying(bool play, QString title, QString artist, const QString &album, int length, bool needCover, const QString &fileName);
 
     void albumFinished();
     void loginFinished();
