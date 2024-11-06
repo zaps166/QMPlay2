@@ -352,16 +352,20 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
             };
             entry.url = url;
             entry.GID = 1;
+            bool hasFile = false;
             for (QByteArray &line : data)
             {
                 line = line.trimmed();
+                if (line.isEmpty())
+                    continue;
+
                 if (track < 0)
                 {
                     if (line.startsWith("TITLE "))
                         title = line;
                     else if (line.startsWith("PERFORMER "))
                         performer = line;
-                    else if (line.startsWith("FILE "))
+                    else if (line.startsWith("FILE ") && !line.endsWith(" BINARY"))
                     {
                         const int idx = line.lastIndexOf('"');
                         if (idx > -1)
@@ -391,6 +395,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
                                     }
                                 }
                                 audioUrl.prepend("file://");
+                                hasFile = true;
                             }
                         }
                     }
@@ -400,6 +405,10 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
                     // QMPlay2 supports CUE files which uses only single audio file
                     return {};
                 }
+
+                if (!hasFile)
+                    continue;
+
                 if (line.startsWith("TRACK "))
                 {
                     if (entries.isEmpty() && audioUrl.isEmpty())
