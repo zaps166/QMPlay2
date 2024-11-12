@@ -90,16 +90,18 @@ void FFTSpectrumW::paint(QPainter &p)
         const float *spectrum = spectrumData.constData();
         for (int x = 0; x < size; ++x)
         {
+            auto &lastDataX = lastData[x];
+
             /* Bars */
-            setValue(lastData[x].first, spectrum[x], realInterval * 2.0);
-            p.fillRect(t.mapRect(QRectF(x, 1.0 - lastData[x].first, 1.0,lastData[x].first)), gradientLut[x]);
+            setValue(lastDataX.first, spectrum[x], realInterval * 2.0);
+            p.fillRect(t.mapRect(QRectF(x, 1.0 - lastDataX.first, 1.0, lastDataX.first)), gradientLut[x]);
 
             /* Horizontal lines over bars */
-            setValue(lastData[x].second, spectrum[x], realInterval * 0.5);
+            setValue(lastDataX.second, spectrum[x], realInterval * 0.5);
             p.setPen(gradientLut[x]);
-            p.drawLine(t.map(QLineF(x, 1.0 - lastData[x].second.first, x + 1.0, 1.0 - lastData[x].second.first)));
+            p.drawLine(t.map(QLineF(x, 1.0 - lastDataX.second.first, x + 1.0, 1.0 - lastDataX.second.first)));
 
-            canStop &= (lastData[x].second.first == spectrum[x]);
+            canStop &= (lastDataX.second.first == spectrum[x]);
         }
     }
 
