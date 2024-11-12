@@ -1781,10 +1781,6 @@
         <translation>Benutzername in Suchergebnissen anzeigen</translation>
     </message>
     <message>
-        <source>Linear scale</source>
-        <translation>Lineare Skalierung</translation>
-    </message>
-    <message>
         <source>Preferred quality</source>
         <translation>Bevorzugte Qualität</translation>
     </message>
@@ -1838,6 +1834,22 @@
     </message>
     <message>
         <source>Try to automatically reconnect the network connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 kHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear volume scale in FFT spectrum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limit frequency in FFT spectrum</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

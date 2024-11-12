@@ -1782,10 +1782,6 @@
         <translation>Pokazuj nazwę użytkownika w wynikach wyszukiwania</translation>
     </message>
     <message>
-        <source>Linear scale</source>
-        <translation>Skala liniowa</translation>
-    </message>
-    <message>
         <source>Preferred quality</source>
         <translation>Preferowana jakość</translation>
     </message>
@@ -1840,6 +1836,22 @@
     <message>
         <source>Try to automatically reconnect the network connection</source>
         <translation>Spróbuj automatycznie wznowić połączenia sieciowe</translation>
+    </message>
+    <message>
+        <source>%1 kHz</source>
+        <translation>%1 kHz</translation>
+    </message>
+    <message>
+        <source>No limit</source>
+        <translation>Bez limitu</translation>
+    </message>
+    <message>
+        <source>Linear volume scale in FFT spectrum</source>
+        <translation>Liniowa skala głośności dla widma FFT</translation>
+    </message>
+    <message>
+        <source>Limit frequency in FFT spectrum</source>
+        <translation>Limituj częstotliwość dla widma FFT</translation>
     </message>
 </context>
 <context>

@@ -1784,10 +1784,6 @@
         <translation>検索結果にユーザー名を表示する</translation>
     </message>
     <message>
-        <source>Linear scale</source>
-        <translation>リニアスケール</translation>
-    </message>
-    <message>
         <source>Preferred quality</source>
         <translation>解像度</translation>
     </message>
@@ -1841,6 +1837,22 @@
     </message>
     <message>
         <source>Try to automatically reconnect the network connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 kHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear volume scale in FFT spectrum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limit frequency in FFT spectrum</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

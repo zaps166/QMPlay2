@@ -1782,10 +1782,6 @@
         <translation>Показувати ім&apos;я користувача в результатах пошуку</translation>
     </message>
     <message>
-        <source>Linear scale</source>
-        <translation>Лінійна шкала</translation>
-    </message>
-    <message>
         <source>Preferred quality</source>
         <translation>Бажана якість</translation>
     </message>
@@ -1840,6 +1836,22 @@
     <message>
         <source>Try to automatically reconnect the network connection</source>
         <translation>Намагатися автоматично відновити підключення до мережі</translation>
+    </message>
+    <message>
+        <source>%1 kHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear volume scale in FFT spectrum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limit frequency in FFT spectrum</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1789,10 +1789,6 @@
         <translation>Arama sonuçlarında kullanıcı adını göster</translation>
     </message>
     <message>
-        <source>Linear scale</source>
-        <translation>Doğrusal ölçek</translation>
-    </message>
-    <message>
         <source>Preferred quality</source>
         <translation>Tercih edilen kalite</translation>
     </message>
@@ -1848,6 +1844,22 @@
     <message>
         <source>Try to automatically reconnect the network connection</source>
         <translation>Ağ bağlantısını otomatik olarak yeniden bağlamayı deneyin</translation>
+    </message>
+    <message>
+        <source>%1 kHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear volume scale in FFT spectrum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limit frequency in FFT spectrum</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -126,7 +126,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
         layout->addRow(tr("Refresh time") + ": ", refTimeB);
     layout->addRow(tr("Displayed sound length") + ": ", sndLenB);
     layout->addRow(tr("FFT spectrum size") + ": ", fftSizeB);
-    layout->addRow(tr("Limit frequency to 20 kHz in FFT spectrum"), m_fftLimitFreqB);
+    layout->addRow(tr("Limit frequency in FFT spectrum"), m_fftLimitFreqB);
     layout->addRow(m_fftLinearScaleB);
 
     if (refTimeB)

@@ -651,14 +651,6 @@
         <translation>التحويل المعد مسبقا</translation>
     </message>
     <message>
-        <source>Command line to execute after download.
-&lt;input/&gt; - specifies downloaded file.
-&lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
-        <translation>تنفيذ سطر الأوامر بعد التنزيل.
-&lt;input/&gt; - تحديد الملف المُنزل.
-&lt;output&gt;%f.mp3&lt;/output&gt; - الملف المحول سوف يكون بامتداد &quot;mp3&quot;.</translation>
-    </message>
-    <message>
         <source>Remove</source>
         <translation>إزالة</translation>
     </message>
@@ -685,6 +677,13 @@
     <message>
         <source>Preset name already exists!</source>
         <translation>اسم الإعداد المسبق موجود بالفعل!</translation>
+    </message>
+    <message>
+        <source>Command line to execute after download.
+
+&lt;input/&gt; - specifies downloaded file.
+&lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1780,10 +1779,6 @@
         <translation>إظهار اسم المستخدم في نتائج البحث</translation>
     </message>
     <message>
-        <source>Linear scale</source>
-        <translation>مقياس خطي</translation>
-    </message>
-    <message>
         <source>Preferred quality</source>
         <translation>الدقة المفضلة</translation>
     </message>
@@ -1838,6 +1833,22 @@
     <message>
         <source>Try to automatically reconnect the network connection</source>
         <translation>محاولة إعادة إتصال الشبكة تلقائيا</translation>
+    </message>
+    <message>
+        <source>%1 kHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear volume scale in FFT spectrum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limit frequency in FFT spectrum</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

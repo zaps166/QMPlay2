@@ -1782,10 +1782,6 @@
         <translation>在搜尋結果中顯示使用者名稱</translation>
     </message>
     <message>
-        <source>Linear scale</source>
-        <translation>線性縮放</translation>
-    </message>
-    <message>
         <source>Preferred quality</source>
         <translation>偏好畫質</translation>
     </message>
@@ -1840,6 +1836,22 @@
     <message>
         <source>Try to automatically reconnect the network connection</source>
         <translation>嘗試自動重新連線網路</translation>
+    </message>
+    <message>
+        <source>%1 kHz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No limit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear volume scale in FFT spectrum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Limit frequency in FFT spectrum</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
