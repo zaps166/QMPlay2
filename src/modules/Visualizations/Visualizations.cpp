@@ -32,6 +32,7 @@ Visualizations::Visualizations() :
     init("RefreshTime", ms);
     init("SimpleVis/SoundLength", ms);
     init("FFTSpectrum/Size", 8);
+    init("FFTSpectrum/LimitFreq", 20000);
 }
 
 QList<Visualizations::Info> Visualizations::getModulesInfo(const bool) const
@@ -61,6 +62,7 @@ QMPLAY2_EXPORT_MODULE(Visualizations)
 
 #include <QFormLayout>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QSpinBox>
 #include <QLabel>
 
@@ -85,6 +87,37 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     fftSizeB->setPrefix("2^");
     fftSizeB->setValue(sets().getInt("FFTSpectrum/Size"));
 
+    const auto freqStr = tr("%1 kHz");
+    m_fftLimitFreqB = new QComboBox;
+    m_fftLimitFreqB->addItems({
+        tr("No limit"),
+        freqStr.arg(20),
+        freqStr.arg(22),
+    });
+    m_fftLimitFreqB->setItemData(0, int(0));
+    m_fftLimitFreqB->setItemData(1, 20000);
+    m_fftLimitFreqB->setItemData(2, 22000);
+    switch (int freq = sets().getInt("FFTSpectrum/LimitFreq"))
+    {
+        case 20000:
+            m_fftLimitFreqB->setCurrentIndex(1);
+            break;
+        case 22000:
+            m_fftLimitFreqB->setCurrentIndex(2);
+            break;
+        default:
+            if (freq > 0)
+            {
+                m_fftLimitFreqB->addItem(freqStr.arg(freq / 1000.0));
+                m_fftLimitFreqB->setCurrentIndex(3);
+            }
+            else
+            {
+                m_fftLimitFreqB->setCurrentIndex(0);
+            }
+            break;
+    }
+
     m_fftLinearScaleB = new QCheckBox(tr("Linear volume scale in FFT spectrum"));
     m_fftLinearScaleB->setChecked(sets().getBool("FFTSpectrum/LinearScale"));
 
@@ -93,6 +126,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
         layout->addRow(tr("Refresh time") + ": ", refTimeB);
     layout->addRow(tr("Displayed sound length") + ": ", sndLenB);
     layout->addRow(tr("FFT spectrum size") + ": ", fftSizeB);
+    layout->addRow(tr("Limit frequency to 20 kHz in FFT spectrum"), m_fftLimitFreqB);
     layout->addRow(m_fftLinearScaleB);
 
     if (refTimeB)
@@ -106,4 +140,5 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("SimpleVis/SoundLength", sndLenB->value());
     sets().set("FFTSpectrum/Size", fftSizeB->value());
     sets().set("FFTSpectrum/LinearScale", m_fftLinearScaleB->isChecked());
+    sets().set("FFTSpectrum/LimitFreq", m_fftLimitFreqB->currentData().toInt());
 }

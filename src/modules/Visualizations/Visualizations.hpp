@@ -36,6 +36,7 @@ private:
 #include <QCoreApplication>
 
 class QCheckBox;
+class QComboBox;
 class QSpinBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
@@ -47,5 +48,6 @@ private:
     void saveSettings() override;
 
     QSpinBox *refTimeB = nullptr, *sndLenB, *fftSizeB;
+    QComboBox *m_fftLimitFreqB;
     QCheckBox *m_fftLinearScaleB;
 };

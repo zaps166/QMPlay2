@@ -45,6 +45,7 @@ private:
     QVector<QPair<qreal, QPair<qreal, double>>> lastData;
     uchar chn;
     uint srate;
+    int m_limitFreq = 0;
     int interval, fftSize;
     FFTSpectrum &fftSpectrum;
     QLinearGradient linearGrad;

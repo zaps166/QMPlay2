@@ -65,17 +65,26 @@ void FFTSpectrumW::paint(QPainter &p)
 {
     bool canStop = true;
 
-    const int size = spectrumData.size();
+    auto getLimitedSize = [this](int limitFreq) {
+        const int size = spectrumData.size();
+        return qBound(1, qRound(size * 2.0 * limitFreq / srate), size);
+    };
+
+    int size = spectrumData.size();
+    if (m_limitFreq > 0 && size > 0 && Q_LIKELY(srate > 0))
+    {
+        size = getLimitedSize(m_limitFreq);
+    }
     if (size)
     {
         QTransform t;
-        t.scale((width() - 1.0) / size, height() - 1.0);
+        t.scale(width() / static_cast<qreal>(size), height());
 
         if (mGradientImg.width() != size || linearGrad.finalStop().x() != size)
         {
             mGradientImg = QImage(size, 1, QImage::Format_RGB32);
 
-            linearGrad.setFinalStop(size, 0.0);
+            linearGrad.setFinalStop(getLimitedSize(20000), 0.0);
 
             QPainter gp(&mGradientImg);
             gp.setPen(QPen(linearGrad, 0.0));
@@ -113,8 +122,11 @@ void FFTSpectrumW::mouseMoveEvent(QMouseEvent *e)
 {
     if (srate > 0)
     {
-        const int freq = qRound((e->pos().x() + 0.5) * srate / width() / 2.0);
-        QMPlay2Core.statusBarMessage(tr("Pointed frequency: %1 Hz").arg(freq), 1000);
+        double freq = srate / 2.0;
+        if (m_limitFreq > 0)
+            freq = qMin<double>(freq, m_limitFreq);
+        const int pointedFreq = qRound((e->pos().x() + 0.5) * freq / width());
+        QMPlay2Core.statusBarMessage(tr("Pointed frequency: %1 Hz").arg(pointedFreq), 1000);
     }
     VisWidget::mouseMoveEvent(e);
 }
@@ -180,8 +192,11 @@ bool FFTSpectrum::set()
         w.fftSize = 3;
     w.interval = isGlOnWindow ? 1 : sets().getInt("RefreshTime");
     m_linearScale = sets().getBool("FFTSpectrum/LinearScale");
+    w.m_limitFreq = sets().getInt("FFTSpectrum/LimitFreq");
     if (w.tim.isActive())
         w.start();
+    else
+        w.update();
     return true;
 }
 
