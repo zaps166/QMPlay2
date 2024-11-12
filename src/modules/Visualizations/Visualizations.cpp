@@ -85,7 +85,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     fftSizeB->setPrefix("2^");
     fftSizeB->setValue(sets().getInt("FFTSpectrum/Size"));
 
-    m_fftLinearScaleB = new QCheckBox(tr("Linear scale"));
+    m_fftLinearScaleB = new QCheckBox(tr("Linear volume scale in FFT spectrum"));
     m_fftLinearScaleB->setChecked(sets().getBool("FFTSpectrum/LinearScale"));
 
     QFormLayout *layout = new QFormLayout(this);
