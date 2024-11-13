@@ -1839,19 +1839,19 @@
     </message>
     <message>
         <source>%1 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kHz</translation>
     </message>
     <message>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Sin límite</translation>
     </message>
     <message>
         <source>Linear volume scale in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>Escala de volumen lineal en el espectro FFT</translation>
     </message>
     <message>
         <source>Limit frequency in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>Frecuencia límite en el espectro FFT</translation>
     </message>
 </context>
 <context>
