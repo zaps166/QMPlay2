@@ -1839,19 +1839,19 @@
     </message>
     <message>
         <source>%1 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 千赫兹</translation>
     </message>
     <message>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation>无限制</translation>
     </message>
     <message>
         <source>Linear volume scale in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>FFT 频谱仪线性音量标度</translation>
     </message>
     <message>
         <source>Limit frequency in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>FFT 频谱仪限制频率</translation>
     </message>
 </context>
 <context>

@@ -683,7 +683,10 @@
 
 &lt;input/&gt; - specifies downloaded file.
 &lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
-        <translation type="unfinished"></translation>
+        <translation>تنفيذ سطر الأوامر بعد التنزيل.
+
+&lt;input/&gt; - تحديد الملف المُنزل.
+&lt;output&gt;%f.mp3&lt;/output&gt; - الملف المحول سوف يكون بامتداد &quot;mp3&quot;.</translation>
     </message>
 </context>
 <context>
