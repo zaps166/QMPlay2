@@ -1839,19 +1839,19 @@
     </message>
     <message>
         <source>%1 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 кГц</translation>
     </message>
     <message>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Без ліміту</translation>
     </message>
     <message>
         <source>Linear volume scale in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>Лінійна шкала гучності для спектра ШПФ</translation>
     </message>
     <message>
         <source>Limit frequency in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>Обмеження частоти для спектра ШПФ</translation>
     </message>
 </context>
 <context>
