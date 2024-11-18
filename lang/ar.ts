@@ -797,7 +797,7 @@
     <name>FFTSpectrumW</name>
     <message>
         <source>FFT Spectrum</source>
-        <translation>طيف فورييه السريع</translation>
+        <translation>طيف FFT</translation>
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
@@ -1535,7 +1535,7 @@
     </message>
     <message>
         <source>FFT spectrum size</source>
-        <translation>حجم طيف فورييه السريع</translation>
+        <translation>حجم طيف FFT</translation>
     </message>
     <message>
         <source>Displayed sound length</source>
@@ -1839,19 +1839,19 @@
     </message>
     <message>
         <source>%1 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 كيلوهرتز</translation>
     </message>
     <message>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation>بدون حدود</translation>
     </message>
     <message>
         <source>Linear volume scale in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>مقياس حجم خطي في طيف FFT</translation>
     </message>
     <message>
         <source>Limit frequency in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>تحديد التردد في طيف FFT</translation>
     </message>
 </context>
 <context>
