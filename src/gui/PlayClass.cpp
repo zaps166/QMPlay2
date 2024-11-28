@@ -971,6 +971,7 @@ void PlayClass::biggerSubs()
         messageAndOSD(tr("Subtitles size") + ": " + QString::number(subtitlesScale));
         if (vThr)
         {
+            vThr->setSubtitlesScale(subtitlesScale);
             vThr->updateSubs();
             vThr->processParams();
         }
@@ -987,6 +988,7 @@ void PlayClass::smallerSubs()
         messageAndOSD(tr("Subtitles size") + ": " + QString::number(subtitlesScale));
         if (vThr)
         {
+            vThr->setSubtitlesScale(subtitlesScale);
             vThr->updateSubs();
             vThr->processParams();
         }

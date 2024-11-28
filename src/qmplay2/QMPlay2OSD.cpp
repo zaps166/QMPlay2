@@ -59,6 +59,19 @@ double QMPlay2OSD::leftDuration()
     return m_duration - m_timer.elapsed() / 1000.0;
 }
 
+QRectF QMPlay2OSD::getRect(const Image &image) const
+{
+    if (!m_needsRescale || m_scale == 1.0)
+        return image.rect;
+
+    auto scaledRect = image.rect;
+    scaledRect.moveLeft(scaledRect.x() + scaledRect.width() / 2.0 - scaledRect.width() * m_scale / 2.0);
+    scaledRect.moveTop(scaledRect.y() + scaledRect.height() / 2.0 - scaledRect.height() * m_scale / 2.0);
+    scaledRect.setWidth(scaledRect.width() * m_scale);
+    scaledRect.setHeight(scaledRect.height() * m_scale);
+    return scaledRect;
+}
+
 void QMPlay2OSD::start()
 {
     m_started = true;
@@ -82,6 +95,7 @@ void QMPlay2OSD::clear()
     m_images.clear();
     m_text.clear();
     m_duration = m_pts = -1.0;
+    m_scale = 1.0;
     m_needsRescale = m_started = false;
     m_timer.invalidate();
     m_id = 0;
