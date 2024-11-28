@@ -428,7 +428,7 @@ void LibASS::setASSStyle()
         {
             style.FontName = strdup(settings.getString("Subtitles/FontName").toUtf8().constData());
             style.FontSize = settings.getInt("Subtitles/FontSize");
-            style.Spacing = settings.getDouble("Subtitles/Linespace");
+            style.Spacing = settings.getDouble("Subtitles/Spacing");
             style.ScaleX = style.ScaleY = 1;
             style.Bold = style.Italic = style.Underline = style.StrikeOut = 0;
         }
@@ -596,7 +596,7 @@ void LibASS::readStyle(const QString &prefix, ASS_Style *style)
     style->PrimaryColour = style->SecondaryColour = assColorFromQColor(settings.getColor(prefix + "/TextColor"));
     style->OutlineColour = assColorFromQColor(settings.getColor(prefix + "/OutlineColor"));
     style->BackColour = assColorFromQColor(settings.getColor(prefix + "/ShadowColor"));
-    style->Spacing = settings.getDouble(prefix + "/Linespace");
+    style->Spacing = settings.getDouble(prefix + "/Spacing");
     style->BorderStyle = 1;
     style->Outline = settings.getDouble(prefix + "/Outline");
     style->Shadow = settings.getDouble(prefix + "/Shadow");
