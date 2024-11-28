@@ -95,7 +95,7 @@ private:
     ass_track *ass_sub_track;
     ass_renderer *ass_sub_renderer;
     QList<ass_style *> ass_sub_styles_copy;
-    bool hasASSData, overridePlayRes;
+    bool hasASSData;
     double m_lastPos = qQNaN();
     std::set<int> m_assIDs;
 

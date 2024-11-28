@@ -95,7 +95,7 @@ public:
     {}
 
     QGroupBox *toAssGB;
-    QCheckBox *colorsAndBordersB, *marginsAndAlignmentB, *fontsB, *overridePlayResB;
+    QCheckBox *colorsAndBordersB, *marginsAndAlignmentB, *fontsB;
 };
 class Page5 : public OSDSettingsW
 {
@@ -254,7 +254,6 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("ApplyToASS/ColorsAndBorders", true);
     QMPSettings.init("ApplyToASS/MarginsAndAlignment", false);
     QMPSettings.init("ApplyToASS/FontsAndSpacing", false);
-    QMPSettings.init("ApplyToASS/OverridePlayRes", false);
     QMPSettings.init("ApplyToASS/ApplyToASS", false);
     QMPSettings.init("OSD/Enabled", true);
     OSDSettingsW::init("Subtitles", 20, 0, 15, 15, 15, 7, 1.5, 1.5, QColor(0xFF, 0xA8, 0x58, 0xFF), Qt::black, Qt::black, false);
@@ -690,9 +689,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         page4->fontsB = new QCheckBox(tr("Fonts and spacing"));
         page4->fontsB->setChecked(QMPSettings.getBool("ApplyToASS/FontsAndSpacing"));
 
-        page4->overridePlayResB = new QCheckBox(tr("Use the same size"));
-        page4->overridePlayResB->setChecked(QMPSettings.getBool("ApplyToASS/OverridePlayRes"));
-
         page4->toAssGB = new QGroupBox(tr("Apply for ASS/SSA subtitles"));
         page4->toAssGB->setCheckable(true);
         page4->toAssGB->setChecked(QMPSettings.getBool("ApplyToASS/ApplyToASS"));
@@ -701,7 +697,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         page4ToAssLayout->addWidget(page4->colorsAndBordersB, 0, 0, 1, 1);
         page4ToAssLayout->addWidget(page4->marginsAndAlignmentB, 1, 0, 1, 1);
         page4ToAssLayout->addWidget(page4->fontsB, 0, 1, 1, 1);
-        page4ToAssLayout->addWidget(page4->overridePlayResB, 1, 1, 1, 1);
 
         page4->addWidget(page4->toAssGB);
     }
@@ -1387,7 +1382,6 @@ void SettingsWidget::apply()
             QMPSettings.set("ApplyToASS/ColorsAndBorders", page4->colorsAndBordersB->isChecked());
             QMPSettings.set("ApplyToASS/MarginsAndAlignment", page4->marginsAndAlignmentB->isChecked());
             QMPSettings.set("ApplyToASS/FontsAndSpacing", page4->fontsB->isChecked());
-            QMPSettings.set("ApplyToASS/OverridePlayRes", page4->overridePlayResB->isChecked());
             QMPSettings.set("ApplyToASS/ApplyToASS", page4->toAssGB->isChecked());
             break;
         case 5:
