@@ -1946,6 +1946,10 @@
         <source>Text</source>
         <translation>Текст</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3026,10 +3030,6 @@ QMPlay2 не масштабуватиме іконки!</translation>
     <message>
         <source>Choose directory</source>
         <translation>Вибрати каталог</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>Використовувати той же розмір</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>

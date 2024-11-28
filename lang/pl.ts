@@ -1946,6 +1946,10 @@
         <source>Text</source>
         <translation>Tekst</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation>Pogrubiona</translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3026,10 +3030,6 @@ QMPlay2 nie będzie skalować ikon!</translation>
     <message>
         <source>Choose directory</source>
         <translation>Wybierz katalog</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>Użyj jednakowej wielkości</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>

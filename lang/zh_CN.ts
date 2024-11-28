@@ -1946,6 +1946,10 @@
         <source>Text</source>
         <translation>文本</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3026,10 +3030,6 @@ QMPlay2 将不会放大图标！</translation>
     <message>
         <source>Choose directory</source>
         <translation>选择目录</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>使用相同大小</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>

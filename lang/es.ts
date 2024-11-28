@@ -1946,6 +1946,10 @@
         <source>Text</source>
         <translation>Texto</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3014,10 +3018,6 @@ QMPlay2 will not scale up icons!</source>
     <message>
         <source>Modules</source>
         <translation>Módulos</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>Usar el mismo tamaño</translation>
     </message>
     <message>
         <source>Subtitles</source>

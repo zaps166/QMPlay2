@@ -1945,6 +1945,10 @@
         <source>Text</source>
         <translation>Text</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3025,10 +3029,6 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
     <message>
         <source>Choose directory</source>
         <translation>Verzeichnis wählen</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>Verwende die gleiche Größe</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>

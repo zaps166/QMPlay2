@@ -1951,6 +1951,10 @@
         <source>Text</source>
         <translation>Texto</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3050,10 +3054,6 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Fonts and spacing</source>
         <translation>Fontes e espaçamento</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>Utilizar o mesmo tamanho</translation>
     </message>
     <message>
         <source>Apply for ASS/SSA subtitles</source>

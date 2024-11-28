@@ -1946,6 +1946,10 @@
         <source>Text</source>
         <translation>Szöveg</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3036,10 +3040,6 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <message>
         <source>Fonts and spacing</source>
         <translation>Betűtípus és távolság</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>Ugyanazon méret használata</translation>
     </message>
     <message>
         <source>Apply for ASS/SSA subtitles</source>

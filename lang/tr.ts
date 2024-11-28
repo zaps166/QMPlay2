@@ -1954,6 +1954,10 @@
         <source>Text</source>
         <translation>Metin</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3041,10 +3045,6 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
     <message>
         <source>Choose directory</source>
         <translation>Dizin seç</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>Aynı boyutu kullan</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>

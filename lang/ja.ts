@@ -1948,6 +1948,10 @@
         <source>Text</source>
         <translation>テキスト</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3016,10 +3020,6 @@ QMPlay2はアイコンを拡大しません！</translation>
     <message>
         <source>Modules</source>
         <translation>モジュール</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>同じサイズを使う</translation>
     </message>
     <message>
         <source>Subtitles</source>

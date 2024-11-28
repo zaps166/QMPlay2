@@ -1946,6 +1946,10 @@
         <source>Text</source>
         <translation>Tekst</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3040,10 +3044,6 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
     <message>
         <source>Fonts and spacing</source>
         <translation>Lettertypen en afstand</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>Dezelfde grootte gebruiken</translation>
     </message>
     <message>
         <source>Apply for ASS/SSA subtitles</source>

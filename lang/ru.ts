@@ -1946,6 +1946,10 @@
         <source>Text</source>
         <translation>Текст</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3026,10 +3030,6 @@ QMPlay2 не будет отображать значки!</translation>
     <message>
         <source>Choose directory</source>
         <translation>Выбрать каталог</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>Использовать одинаковый размер</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>

@@ -1946,6 +1946,10 @@
         <source>Text</source>
         <translation>النص</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3026,10 +3030,6 @@ QMPlay2 لن يقوم بتكبير الأيقونات!</translation>
     <message>
         <source>Choose directory</source>
         <translation>اختيار مجلد</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>استخدام نفس الحجم</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>

@@ -1946,6 +1946,10 @@
         <source>Text</source>
         <translation>Text</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -3026,10 +3030,6 @@ QMPlay2 nebude zväčšovať ikony!</translation>
     <message>
         <source>Choose directory</source>
         <translation>Vyberte adresár</translation>
-    </message>
-    <message>
-        <source>Use the same size</source>
-        <translation>Použiť rovnakú veľkosť</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>
