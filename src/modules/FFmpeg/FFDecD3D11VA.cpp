@@ -187,6 +187,9 @@ bool FFDecD3D11VA::open(StreamInfo &streamInfo)
     if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO || !hasHWAccel("d3d11va"))
         return false;
 
+    if (streamInfo.params->codec_id == AV_CODEC_ID_WMV1 || streamInfo.params->codec_id == AV_CODEC_ID_WMV2)
+        return false;
+
     const auto pixFmt = streamInfo.pixelFormat();
     if (pixFmt == AV_PIX_FMT_YUV420P10 && streamInfo.params->codec_id != AV_CODEC_ID_H264)
     {
