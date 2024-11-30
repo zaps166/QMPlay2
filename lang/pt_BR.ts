@@ -1010,6 +1010,26 @@
         <source>Output file path:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -3257,6 +3277,10 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Cannot change the directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose youtube-dl script or executable</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
