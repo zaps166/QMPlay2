@@ -191,6 +191,20 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("Proxy/User", QString());
     QMPSettings.init("Proxy/Password", QString());
 
+#ifdef USE_YOUTUBEDL
+    QMPSettings.init("YtDl/CookiesFromBrowserEnabled", false);
+    QMPSettings.init("YtDl/CookiesFromBrowser", QString());
+# if defined(Q_OS_HAIKU)
+    QMPSettings.init("YtDl/CustomPathEnabled", true);
+    QMPSettings.init("YtDl/CustomPath", "/bin/yt-dlp");
+    QMPSettings.init("YtDl/DontAutoUpdate", true);
+# else
+    QMPSettings.init("YtDl/CustomPathEnabled", false);
+    QMPSettings.init("YtDl/CustomPath", QString());
+    QMPSettings.init("YtDl/DontAutoUpdate", false);
+# endif
+#endif
+
     QMPSettings.init("OpenGL/OnWindow", false);
     QMPSettings.init("OpenGL/VSync", true);
     QMPSettings.init("OpenGL/BypassCompositor", false);
@@ -464,15 +478,47 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         const QIcon viewRefresh = QMPlay2Core.getIconFromTheme("view-refresh");
         generalSettingsPage->clearCoversCache->setIcon(viewRefresh);
         connect(generalSettingsPage->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
-#ifdef USE_YOUTUBEDL
-        generalSettingsPage->removeYtDlB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
-        connect(generalSettingsPage->removeYtDlB, SIGNAL(clicked()), this, SLOT(removeYouTubeDl()));
-#else
-        generalSettingsPage->removeYtDlB->deleteLater();
-        generalSettingsPage->removeYtDlB = nullptr;
-#endif
+
         generalSettingsPage->resetSettingsB->setIcon(viewRefresh);
         connect(generalSettingsPage->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
+
+#ifdef USE_YOUTUBEDL
+        generalSettingsPage->cookiesFromBrowserCB->setChecked(QMPSettings.getBool("YtDl/CookiesFromBrowserEnabled"));
+        generalSettingsPage->cookiesFromBrowserE->setText(QMPSettings.getString("YtDl/CookiesFromBrowser"));
+
+        generalSettingsPage->customYtDlCB->setChecked(QMPSettings.getBool("YtDl/CustomPathEnabled"));
+        generalSettingsPage->customYtDlE->setText(QMPSettings.getString("YtDl/CustomPath"));
+        generalSettingsPage->customYtDlB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
+
+        generalSettingsPage->dontUpdateYtDlCB->setChecked(QMPSettings.getBool("YtDl/DontAutoUpdate"));
+
+        connect(generalSettingsPage->cookiesFromBrowserCB, &QCheckBox::toggled, this, [this](bool checked) {
+            generalSettingsPage->cookiesFromBrowserE->setEnabled(checked);
+        });
+        connect(generalSettingsPage->customYtDlCB, &QCheckBox::toggled, this, [this](bool checked) {
+            generalSettingsPage->customYtDlE->setEnabled(checked);
+            generalSettingsPage->customYtDlB->setEnabled(checked);
+            generalSettingsPage->removeYtDlB->setEnabled(!checked);
+        });
+        connect(generalSettingsPage->customYtDlB, &QToolButton::clicked, this, [this] {
+            auto path = QFileDialog::getOpenFileName(this, tr("Choose youtube-dl script or executable"), generalSettingsPage->customYtDlE->text());
+            if (!path.isEmpty())
+                generalSettingsPage->customYtDlE->setText(path);
+        });
+
+        emit generalSettingsPage->cookiesFromBrowserCB->toggled(generalSettingsPage->cookiesFromBrowserCB->isChecked());
+        emit generalSettingsPage->customYtDlCB->toggled(generalSettingsPage->customYtDlCB->isChecked());
+
+        connect(generalSettingsPage->customYtDlCB, &QCheckBox::toggled, this, [this](bool checked) {
+            generalSettingsPage->dontUpdateYtDlCB->setChecked(checked);
+        });
+
+        generalSettingsPage->removeYtDlB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+        connect(generalSettingsPage->removeYtDlB, &QPushButton::clicked, this, &SettingsWidget::removeYouTubeDl);
+#else
+        generalSettingsPage->ytDlGB->deleteLater();
+        generalSettingsPage->ytDlGB = nullptr;
+#endif
     }
 
     {
@@ -1266,6 +1312,14 @@ void SettingsWidget::apply()
             generalSettingsPage->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
             qobject_cast<QMainWindow *>(QMPlay2GUI.mainW)->setTabPosition(Qt::AllDockWidgetAreas, generalSettingsPage->tabsNorths->isChecked() ? QTabWidget::North : QTabWidget::South);
             applyProxy();
+
+#ifdef USE_YOUTUBEDL
+            QMPSettings.set("YtDl/CookiesFromBrowserEnabled", generalSettingsPage->cookiesFromBrowserCB->isChecked() && !generalSettingsPage->cookiesFromBrowserE->text().simplified().isEmpty());
+            QMPSettings.set("YtDl/CookiesFromBrowser", generalSettingsPage->cookiesFromBrowserE->text());
+            QMPSettings.set("YtDl/CustomPathEnabled", generalSettingsPage->customYtDlCB->isChecked() && !generalSettingsPage->customYtDlE->text().trimmed().isEmpty());
+            QMPSettings.set("YtDl/CustomPath", generalSettingsPage->customYtDlE->text());
+            QMPSettings.set("YtDl/DontAutoUpdate", generalSettingsPage->dontUpdateYtDlCB->isChecked());
+#endif
 
             if (generalSettingsPage->trayNotifiesDefault)
                 Notifies::setNativeFirst(!generalSettingsPage->trayNotifiesDefault->isChecked());
