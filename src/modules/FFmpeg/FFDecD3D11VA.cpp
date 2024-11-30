@@ -187,10 +187,14 @@ bool FFDecD3D11VA::open(StreamInfo &streamInfo)
     if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO || !hasHWAccel("d3d11va"))
         return false;
 
-    if (streamInfo.params->codec_id == AV_CODEC_ID_WMV1
-            || streamInfo.params->codec_id == AV_CODEC_ID_WMV2
-            || streamInfo.params->codec_id == AV_CODEC_ID_WMV3IMAGE
-            || streamInfo.params->codec_id == AV_CODEC_ID_VC1IMAGE)
+    if (streamInfo.params->codec_id != AV_CODEC_ID_H264
+            && streamInfo.params->codec_id != AV_CODEC_ID_HEVC
+            && streamInfo.params->codec_id != AV_CODEC_ID_VP9
+            && streamInfo.params->codec_id != AV_CODEC_ID_AV1
+            && streamInfo.params->codec_id != AV_CODEC_ID_VC1
+            && streamInfo.params->codec_id != AV_CODEC_ID_WMV3
+            && streamInfo.params->codec_id != AV_CODEC_ID_MPEG1VIDEO
+            && streamInfo.params->codec_id != AV_CODEC_ID_MPEG2VIDEO)
     {
         return false;
     }
