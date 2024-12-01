@@ -1008,23 +1008,23 @@
     </message>
     <message>
         <source>youtube-dl settings</source>
-        <translation type="unfinished"></translation>
+        <translation>youtube-dl 设置</translation>
     </message>
     <message>
         <source>Cookies from browser</source>
-        <translation type="unfinished"></translation>
+        <translation>浏览器 Cookies</translation>
     </message>
     <message>
         <source>Custom path</source>
-        <translation type="unfinished"></translation>
+        <translation>自定义路径</translation>
     </message>
     <message>
         <source>Don&apos;t auto-update</source>
-        <translation type="unfinished"></translation>
+        <translation>不自动更新</translation>
     </message>
     <message>
         <source>Please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>请参阅 yt-dlp 文档</translation>
     </message>
 </context>
 <context>
@@ -1871,7 +1871,7 @@
     </message>
     <message>
         <source>Limit frequency in FFT spectrum</source>
-        <translation>FFT 频谱仪限制频率</translation>
+        <translation>限制 FFT 频谱仪频率</translation>
     </message>
 </context>
 <context>
@@ -1968,7 +1968,7 @@
     </message>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>粗体</translation>
     </message>
 </context>
 <context>
@@ -3275,7 +3275,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Choose youtube-dl script or executable</source>
-        <translation type="unfinished"></translation>
+        <translation>选择 youtube-dl 脚本或可执行文件</translation>
     </message>
 </context>
 <context>
