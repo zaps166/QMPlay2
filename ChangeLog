@@ -1,4 +1,4 @@
-Changes in QMPlay2 24.12.xx:
+Changes in QMPlay2 24.12.06:
     - optimize visualizations when wallpaper is used (especially for Qt6),
     - fix issues with some unsupported codecs for DXVA2/D3D11VA,
     - fix loading Vulkan library for some Linux distributions,
