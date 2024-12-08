@@ -1,3 +1,21 @@
+Changes in QMPlay2 24.12.06:
+    - optimize visualizations when wallpaper is used (especially for Qt6),
+    - fix issues with some unsupported codecs for DXVA2/D3D11VA,
+    - fix loading Vulkan library for some Linux distributions,
+    - fix displaying covers for radio stations (regression),
+    - improve applying custom styles for ASS/SSA subtitles,
+    - fix enlarging small covers when blur is disabled,
+    - add displaying frequency limit for FFT spectrum,
+    - fix MediaBrowser download file names on Qt 6.8,
+    - add bold font style for text subtitles,
+    - read CUE files containing binary data,
+    - use white subtitles color as default,
+    - fix playlist sorting for mixed case,
+    - allow to scale bitmap subtitles,
+    - add more YouTubeDL settings,
+    - update translations files,
+    - other minor fixes,
+
 Changes in QMPlay2 24.06.16:
     - show less connection errors from Radio Browser,
     - fix choosing desired video stream,

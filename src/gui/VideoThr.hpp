@@ -70,6 +70,7 @@ public:
     void setFrameSize(int w, int h);
     void setARatio(double aRatio, const AVRational &sar);
     void setZoom();
+    void setSubtitlesScale(double subtitlesScale);
     void setColorInfo(AVColorPrimaries colorPrimaries, AVColorTransferCharacteristic colorTrc);
     void otherReset();
 
@@ -106,6 +107,7 @@ private:
     std::unique_lock<std::mutex> m_subsDisplayLocker;
     VideoFilters filters;
     QMutex filtersMutex;
+    double m_subtitlesScale = 1.0;
 
 #ifdef Q_OS_WIN
     bool m_timerPrecision = false;

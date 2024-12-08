@@ -59,6 +59,13 @@
             </property>
            </widget>
           </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QCheckBox" name="boldCB">
+            <property name="text">
+             <string>Bold</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -130,6 +137,9 @@
             <property name="maximum">
              <double>4.000000000000000</double>
             </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
            </widget>
           </item>
           <item row="1" column="0">
@@ -143,6 +153,9 @@
            <widget class="QDoubleSpinBox" name="shadowB">
             <property name="maximum">
              <double>4.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
             </property>
            </widget>
           </item>
@@ -214,6 +227,20 @@
    <header>ColorButton.hpp</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>fontCB</tabstop>
+  <tabstop>fontSizeB</tabstop>
+  <tabstop>spacingB</tabstop>
+  <tabstop>boldCB</tabstop>
+  <tabstop>leftMarginB</tabstop>
+  <tabstop>rightMarginB</tabstop>
+  <tabstop>vMarginB</tabstop>
+  <tabstop>outlineB</tabstop>
+  <tabstop>shadowB</tabstop>
+  <tabstop>textColorB</tabstop>
+  <tabstop>outlineColorB</tabstop>
+  <tabstop>shadowColorB</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

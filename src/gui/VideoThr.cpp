@@ -192,6 +192,25 @@ void VideoThr::setZoom()
     writer->modParam("Zoom", playC.zoom);
 }
 
+void VideoThr::setSubtitlesScale(double subtitlesScale)
+{
+    playC.subsMutex.lock();
+    m_subtitlesScale = subtitlesScale;
+    if (m_subtitlesBusy)
+    {
+        auto locker = m_subtitlesBusy->lock();
+        if (m_subtitlesBusy->needsRescale())
+            m_subtitlesBusy->setScale(m_subtitlesScale);
+    }
+    if (m_subtitles)
+    {
+        auto locker = m_subtitles->lock();
+        if (m_subtitles->needsRescale())
+            m_subtitles->setScale(m_subtitlesScale);
+    }
+    playC.subsMutex.unlock();
+}
+
 void VideoThr::setColorInfo(AVColorPrimaries colorPrimaries, AVColorTransferCharacteristic colorTrc)
 {
     if (writer->hasParam("ColorPrimaries"))
@@ -592,6 +611,8 @@ void VideoThr::run()
             }
             else if (subsPts >= m_subtitles->pts())
             {
+                if (m_subtitles->needsRescale())
+                    m_subtitles->setScale(m_subtitlesScale);
                 m_subtitles->start();
                 osdList += m_subtitles;
             }

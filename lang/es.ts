@@ -1006,6 +1006,26 @@
         <source>Output file path:</source>
         <translation>Ruta del archivo de salida:</translation>
     </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation>Ajustes de youtube-dl</translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation>Cookies del navegador</translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation>Ruta personalizada</translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation>No actualizar automáticamente</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation>Consulte la documentación de yt-dlp</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1215,7 +1235,7 @@
     </message>
     <message>
         <source>Choose playlist</source>
-        <translation>Elegir la lista de reproducción</translation>
+        <translation>Elegir lista de reproducción</translation>
     </message>
     <message>
         <source>&amp;Hide menu bar</source>
@@ -1945,6 +1965,10 @@
     <message>
         <source>Text</source>
         <translation>Texto</translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3016,10 +3040,6 @@ QMPlay2 will not scale up icons!</source>
         <translation>Módulos</translation>
     </message>
     <message>
-        <source>Use the same size</source>
-        <translation>Usar el mismo tamaño</translation>
-    </message>
-    <message>
         <source>Subtitles</source>
         <translation>Subtítulos</translation>
     </message>
@@ -3045,7 +3065,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Choose directory</source>
-        <translation>Seleccionar directorio</translation>
+        <translation>Elegir directorio</translation>
     </message>
     <message>
         <source>Audio output priority</source>
@@ -3252,6 +3272,10 @@ Parcialmente marcado sólo si el contenido tiene menos canales que el valor espe
     <message>
         <source>Cannot change the directory</source>
         <translation>No se puede cambiar el directorio</translation>
+    </message>
+    <message>
+        <source>Choose youtube-dl script or executable</source>
+        <translation>Elija script youtube-dl o ejecutable</translation>
     </message>
 </context>
 <context>

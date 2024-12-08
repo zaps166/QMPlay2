@@ -703,7 +703,7 @@ void Window::renderOSD()
     vector<MemoryObjectDescrs> osdAvMemoryObjects;
     vector<MemoryObjectDescrs> osdAssMemoryObjects;
 
-    vector<const QMPlay2OSD::Image *> osdImages;
+    vector<pair<const QMPlay2OSD::Image *, const QMPlay2OSD *>> osdImages;
 
     for (auto &&osd : std::as_const(m_osd))
     {
@@ -730,7 +730,7 @@ void Window::renderOSD()
                 });
             }
 
-            osdImages.push_back(&image);
+            osdImages.emplace_back(&image, osd.get());
         });
     }
 
@@ -765,7 +765,7 @@ void Window::renderOSD()
 
     size_t osdAvMemoryObjectsIdx = 0;
     size_t osdAssMemoryObjectsIdx = 0;
-    for (auto &&img : osdImages)
+    for (auto &&[img, osd] : osdImages)
     {
         QVector2D multiplier(Qt::Uninitialized);
         shared_ptr<GraphicsPipeline> osdPipeline;
@@ -775,8 +775,8 @@ void Window::renderOSD()
         if (img->paletteBufferView)
         {
             multiplier = QVector2D(
-                static_cast<float>(m_scaledSize.width())  / static_cast<float>(m_imgSize.width()),
-                static_cast<float>(m_scaledSize.height()) / static_cast<float>(m_imgSize.height())
+                static_cast<double>(m_scaledSize.width())  / static_cast<double>(m_imgSize.width()),
+                static_cast<double>(m_scaledSize.height()) / static_cast<double>(m_imgSize.height())
             );
             osdPipeline = m.osdAvPipeline;
             osdDescriptorPool = m.osdAvDescriptorPool;
@@ -790,18 +790,16 @@ void Window::renderOSD()
             memObjectDescrs = &osdAssMemoryObjects[osdAssMemoryObjectsIdx++];
         }
 
+        const auto imgRect = osd->getRect(*img);
+
         QMatrix4x4 mat;
         mat.translate(
-            (-1.0f - m_osdOffset.x())
-                + (m_subsRect.x() * 2.0f / winSize.width())
-                + (img->rect.x() * 2.0f * multiplier.x() / winSize.width()),
-            (-1.0f - m_osdOffset.y())
-                + (m_subsRect.y() * 2.0f / winSize.height())
-                + (img->rect.y() * 2.0f * multiplier.y() / winSize.height())
+            (-1.0 - m_osdOffset.x()) + (m_subsRect.x() + imgRect.x() * multiplier.x()) * 2.0 / winSize.width(),
+            (-1.0 - m_osdOffset.y()) + (m_subsRect.y() + imgRect.y() * multiplier.y()) * 2.0 / winSize.height()
         );
         mat.scale(
-            img->rect.width()  * 2.0f * multiplier.x() / winSize.width(),
-            img->rect.height() * 2.0f * multiplier.y() / winSize.height()
+            imgRect.width()  * 2.0 * multiplier.x() / winSize.width(),
+            imgRect.height() * 2.0 * multiplier.y() / winSize.height()
         );
 
         auto pushConstants = osdPipeline->pushConstants<OSDPushConstants>();

@@ -116,6 +116,12 @@ public:
         return m_needsRescale;
     }
 
+    inline void setScale(double scale)
+    {
+        m_scale = scale;
+    }
+    QRectF getRect(const Image &image) const;
+
     // Common
 
     // For OSD: start counting of "leftDuration()"
@@ -158,6 +164,7 @@ private:
     QByteArray m_text;
     double m_duration;
     double m_pts;
+    double m_scale;
     bool m_needsRescale;
     bool m_started;
     quint64 m_id;

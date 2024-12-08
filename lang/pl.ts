@@ -1006,6 +1006,26 @@
         <source>Output file path:</source>
         <translation>Ścieżka pliku wyjściowego:</translation>
     </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation>Ustawienia youtube-dl</translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation>Ciasteczka z przeglądarki</translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation>Ścieżka niestandardowa</translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation>Nie aktualizuj automatycznie</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation>Proszę zapoznać się z dokumentacją yt-dlp</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1945,6 +1965,10 @@
     <message>
         <source>Text</source>
         <translation>Tekst</translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>Pogrubiona</translation>
     </message>
 </context>
 <context>
@@ -3028,10 +3052,6 @@ QMPlay2 nie będzie skalować ikon!</translation>
         <translation>Wybierz katalog</translation>
     </message>
     <message>
-        <source>Use the same size</source>
-        <translation>Użyj jednakowej wielkości</translation>
-    </message>
-    <message>
         <source>Confirm settings deletion</source>
         <translation>Potwierdź usunięcie ustawień</translation>
     </message>
@@ -3252,6 +3272,10 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     <message>
         <source>Cannot change the directory</source>
         <translation>Nie udało się zmienić katalogu</translation>
+    </message>
+    <message>
+        <source>Choose youtube-dl script or executable</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

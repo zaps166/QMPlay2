@@ -75,13 +75,6 @@
          </layout>
         </widget>
        </item>
-       <item row="16" column="0">
-        <widget class="QPushButton" name="setKeyBindingsB">
-         <property name="text">
-          <string>Set key bindings</string>
-         </property>
-        </widget>
-       </item>
        <item row="15" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="spacing">
@@ -101,9 +94,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="removeYtDlB">
+          <widget class="QPushButton" name="setKeyBindingsB">
            <property name="text">
-            <string>Remove youtube-dl</string>
+            <string>Set key bindings</string>
            </property>
           </widget>
          </item>
@@ -374,32 +367,6 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="1" rowspan="14">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="17" column="0" colspan="2">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>17</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="11" column="0">
         <widget class="QCheckBox" name="stillImages">
          <property name="text">
@@ -441,6 +408,92 @@
           <string>Don't load playlist files within other files</string>
          </property>
         </widget>
+       </item>
+       <item row="16" column="0">
+        <widget class="QGroupBox" name="ytDlGB">
+         <property name="title">
+          <string>youtube-dl settings</string>
+         </property>
+         <property name="checkable">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="cookiesFromBrowserCB">
+            <property name="text">
+             <string>Cookies from browser</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="customYtDlCB">
+            <property name="text">
+             <string>Custom path</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="customYtDlE"/>
+          </item>
+          <item row="1" column="2">
+           <widget class="QToolButton" name="customYtDlB">
+            <property name="toolTip">
+             <string>Browse</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="dontUpdateYtDlCB">
+            <property name="text">
+             <string>Don't auto-update</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QPushButton" name="removeYtDlB">
+            <property name="text">
+             <string>Remove youtube-dl</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QLineEdit" name="cookiesFromBrowserE">
+            <property name="toolTip">
+             <string>Please refer to yt-dlp documentation</string>
+            </property>
+            <property name="maxLength">
+             <number>16</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1" rowspan="14">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="17" column="0" colspan="2">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>17</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -487,9 +540,15 @@
   <tabstop>proxyHostE</tabstop>
   <tabstop>proxyPortB</tabstop>
   <tabstop>clearCoversCache</tabstop>
-  <tabstop>removeYtDlB</tabstop>
-  <tabstop>resetSettingsB</tabstop>
   <tabstop>setKeyBindingsB</tabstop>
+  <tabstop>resetSettingsB</tabstop>
+  <tabstop>cookiesFromBrowserCB</tabstop>
+  <tabstop>cookiesFromBrowserE</tabstop>
+  <tabstop>customYtDlCB</tabstop>
+  <tabstop>customYtDlE</tabstop>
+  <tabstop>customYtDlB</tabstop>
+  <tabstop>dontUpdateYtDlCB</tabstop>
+  <tabstop>removeYtDlB</tabstop>
  </tabstops>
  <resources/>
  <connections/>

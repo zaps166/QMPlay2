@@ -286,19 +286,19 @@ bool MediaBrowserJS::convertAddress(const QString &prefix,
         if (streamUrl)
         {
             const auto value = map["url"].toString();
-            if (!value.isNull())
+            if (!value.isEmpty())
                 *streamUrl = value;
         }
         if (name)
         {
             const auto value = map["name"].toString();
-            if (!value.isNull())
+            if (!value.isEmpty())
                 *name = value;
         }
         if (extension)
         {
             const auto value = map["extension"].toString();
-            if (!value.isNull())
+            if (!value.isEmpty())
                 *extension = value;
         }
     }

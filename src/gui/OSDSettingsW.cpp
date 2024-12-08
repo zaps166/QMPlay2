@@ -35,12 +35,13 @@ static void appendColon(const QObjectList &objects)
     }
 }
 
-void OSDSettingsW::init(const QString &prefix, int a, int b, int c, int d, int e, int f, double g, double h, const QColor &i, const QColor &j, const QColor &k)
+void OSDSettingsW::init(const QString &prefix, int a, int b, int c, int d, int e, int f, double g, double h, const QColor &i, const QColor &j, const QColor &k, bool l)
 {
     Settings &QMPSettings = QMPlay2Core.getSettings();
     QMPSettings.init(prefix + "/FontName", QGuiApplication::font().family());
     QMPSettings.init(prefix + "/FontSize", a);
     QMPSettings.init(prefix + "/Spacing", b);
+    QMPSettings.init(prefix + "/Bold", l);
     QMPSettings.init(prefix + "/LeftMargin", c);
     QMPSettings.init(prefix + "/RightMargin", d);
     QMPSettings.init(prefix + "/VMargin", e);
@@ -97,6 +98,7 @@ void OSDSettingsW::writeSettings()
     QMPSettings.set(prefix + "/FontName", ui->fontCB->currentText());
     QMPSettings.set(prefix + "/FontSize", ui->fontSizeB->value());
     QMPSettings.set(prefix + "/Spacing", ui->spacingB->value());
+    QMPSettings.set(prefix + "/Bold", ui->boldCB->isChecked());
     QMPSettings.set(prefix + "/LeftMargin", ui->leftMarginB->value());
     QMPSettings.set(prefix + "/RightMargin", ui->rightMarginB->value());
     QMPSettings.set(prefix + "/VMargin", ui->vMarginB->value());
@@ -121,6 +123,7 @@ void OSDSettingsW::readSettings()
         ui->fontCB->setCurrentIndex(idx);
     ui->fontSizeB->setValue(QMPSettings.getInt(prefix + "/FontSize"));
     ui->spacingB->setValue(QMPSettings.getInt(prefix + "/Spacing"));
+    ui->boldCB->setChecked(QMPSettings.getBool(prefix + "/Bold"));
     ui->leftMarginB->setValue(QMPSettings.getInt(prefix + "/LeftMargin"));
     ui->rightMarginB->setValue(QMPSettings.getInt(prefix + "/RightMargin"));
     ui->vMarginB->setValue(QMPSettings.getInt(prefix + "/VMargin"));

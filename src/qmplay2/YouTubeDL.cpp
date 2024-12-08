@@ -32,8 +32,6 @@
 #include <QMutex>
 #include <QFile>
 
-// FIXME: Why Haiku can't use upstream yt-dlp?
-
 constexpr const char *g_name = "YouTubeDL";
 static bool g_mustUpdate = true;
 static QRecursiveMutex g_mutex;
@@ -50,20 +48,35 @@ static inline QString getYtDlpFileName()
     ;
 }
 
+static QString getCustomFilePath()
+{
+    auto &QMPSettings = QMPlay2Core.getSettings();
+    if (QMPSettings.getBool("YtDl/CustomPathEnabled"))
+        return QMPSettings.getString("YtDl/CustomPath").trimmed();
+    return QString();
+}
+
 QString YouTubeDL::getFilePath()
 {
-#ifdef Q_OS_HAIKU
-    return "/bin/" + getYtDlpFileName();
-#else
+    if (auto customPath = getCustomFilePath(); !customPath.isEmpty())
+        return customPath;
     return QMPlay2Core.getSettingsDir() + getYtDlpFileName();
-#endif
 }
 QStringList YouTubeDL::getCommonArgs()
 {
+    auto &QMPSettings = QMPlay2Core.getSettings();
+
     QStringList commonArgs {
         "--no-check-certificate", // Ignore SSL errors
         "--user-agent", Functions::getUserAgent(),
     };
+
+    if (QMPSettings.getBool("YtDl/CookiesFromBrowserEnabled"))
+    {
+        auto cfb = QMPSettings.getString("YtDl/CookiesFromBrowser").simplified();
+        if (!cfb.isEmpty() && !cfb.contains(' '))
+            commonArgs += {"--cookies-from-browser", std::move(cfb)};
+    }
 
     const char *httpProxy = getenv("http_proxy");
     if (httpProxy && *httpProxy)
@@ -278,9 +291,6 @@ void YouTubeDL::abort()
 
 bool YouTubeDL::prepare()
 {
-#ifdef Q_OS_HAIKU
-    return true;
-#endif
 #ifdef Q_OS_ANDROID
     return false;
 #endif
@@ -295,7 +305,6 @@ bool YouTubeDL::prepare()
     {
         if (!download())
         {
-            qCritical() << "Unable to download \"youtube-dl\"";
             g_mutex.unlock();
             return false;
         }
@@ -327,10 +336,13 @@ bool YouTubeDL::prepare()
 
 bool YouTubeDL::download()
 {
-#if defined(Q_OS_HAIKU)
-    return true;
-#endif
     // Mutex must be locked here
+
+    if (!getCustomFilePath().isEmpty())
+    {
+        qInfo() << "\"youtube-dl\" is not downloading to custom path";
+        return false;
+    }
 
     const QString downloadUrl = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/" + getYtDlpFileName();
 
@@ -375,15 +387,13 @@ bool YouTubeDL::download()
         emit QMPlay2Core.sendMessage(tr("\"youtube-dl\" download has failed!"), g_name, 3);
 
     QMPlay2Core.setWorking(false);
+
+    qCritical() << "Unable to download \"youtube-dl\"";
     return false;
 }
 bool YouTubeDL::update()
 {
-#if defined(Q_OS_HAIKU)
-    return true;
-#endif
-
-    if (QMPlay2Core.getSettings().getBool("SkipYtDlpUpdate"))
+    if (QMPlay2Core.getSettings().getBool("YtDl/DontAutoUpdate"))
         return true;
 
     // Mutex must be locked here
@@ -437,7 +447,7 @@ bool YouTubeDL::update()
 
 void YouTubeDL::ensureExecutable()
 {
-#if !defined(Q_OS_WIN) && !defined(Q_OS_HAIKU)
+#if !defined(Q_OS_WIN)
     if (!QFileInfo(m_ytDlPath).isExecutable())
     {
         QFile file(m_ytDlPath);
@@ -448,7 +458,7 @@ void YouTubeDL::ensureExecutable()
 
 bool YouTubeDL::onProcessCantStart()
 {
-    if (!QFile::remove(m_ytDlPath))
+    if (!getCustomFilePath().isEmpty() || !QFile::remove(m_ytDlPath))
     {
         qCritical() << "Can't start \"youtube-dl\" process";
         return false;

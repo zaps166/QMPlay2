@@ -1006,6 +1006,26 @@
         <source>Output file path:</source>
         <translation>輸出檔案路徑：</translation>
     </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation>youtube-dl 設定</translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation>瀏覽器 Cookies</translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation>自訂路徑</translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation>不自動更新</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation>請參閱 yt-dlp 文檔</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1851,7 +1871,7 @@
     </message>
     <message>
         <source>Limit frequency in FFT spectrum</source>
-        <translation>快速傅立葉變換頻譜限制頻率</translation>
+        <translation>限制快速傅立葉變換頻譜頻率</translation>
     </message>
 </context>
 <context>
@@ -1945,6 +1965,10 @@
     <message>
         <source>Text</source>
         <translation>文字</translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>粗體</translation>
     </message>
 </context>
 <context>
@@ -3028,10 +3052,6 @@ QMPlay2 將不會放大圖示！</translation>
         <translation>選擇目錄</translation>
     </message>
     <message>
-        <source>Use the same size</source>
-        <translation>使用相同尺寸</translation>
-    </message>
-    <message>
         <source>Confirm settings deletion</source>
         <translation>確認刪除設定</translation>
     </message>
@@ -3252,6 +3272,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot change the directory</source>
         <translation>無法變更目錄</translation>
+    </message>
+    <message>
+        <source>Choose youtube-dl script or executable</source>
+        <translation>選擇 youtube-dl 指令碼或執行檔</translation>
     </message>
 </context>
 <context>

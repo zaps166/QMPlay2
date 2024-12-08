@@ -558,7 +558,7 @@
     </message>
     <message>
         <source>Playback and recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Відтворення та запис</translation>
     </message>
 </context>
 <context>
@@ -1005,6 +1005,26 @@
     <message>
         <source>Output file path:</source>
         <translation>Шлях вихідного файлу:</translation>
+    </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation>Параметри youtube-dl</translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation>Куки з браузера</translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation>Власний шлях</translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation>Не оновлювати автоматично</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation>Зверніться до документації yt-dlp</translation>
     </message>
 </context>
 <context>
@@ -1946,6 +1966,10 @@
         <source>Text</source>
         <translation>Текст</translation>
     </message>
+    <message>
+        <source>Bold</source>
+        <translation>Жирний</translation>
+    </message>
 </context>
 <context>
     <name>OpenGLCommon</name>
@@ -2398,19 +2422,19 @@
     </message>
     <message>
         <source>SD</source>
-        <translation type="unfinished"></translation>
+        <translation>SD</translation>
     </message>
     <message>
         <source>HD</source>
-        <translation type="unfinished"></translation>
+        <translation>HD</translation>
     </message>
     <message>
         <source>Full HD</source>
-        <translation type="unfinished"></translation>
+        <translation>Full HD</translation>
     </message>
     <message>
         <source>4K</source>
-        <translation type="unfinished"></translation>
+        <translation>4K</translation>
     </message>
 </context>
 <context>
@@ -3028,10 +3052,6 @@ QMPlay2 не масштабуватиме іконки!</translation>
         <translation>Вибрати каталог</translation>
     </message>
     <message>
-        <source>Use the same size</source>
-        <translation>Використовувати той же розмір</translation>
-    </message>
-    <message>
         <source>Confirm settings deletion</source>
         <translation>Підтвердити видалення параметрів</translation>
     </message>
@@ -3252,6 +3272,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot change the directory</source>
         <translation>Неможливо змінити каталог</translation>
+    </message>
+    <message>
+        <source>Choose youtube-dl script or executable</source>
+        <translation>Виберіть скрипт youtube-dl або виконуваний файл</translation>
     </message>
 </context>
 <context>

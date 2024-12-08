@@ -95,7 +95,7 @@ public:
     {}
 
     QGroupBox *toAssGB;
-    QCheckBox *colorsAndBordersB, *marginsAndAlignmentB, *fontsB, *overridePlayResB;
+    QCheckBox *colorsAndBordersB, *marginsAndAlignmentB, *fontsB;
 };
 class Page5 : public OSDSettingsW
 {
@@ -191,6 +191,20 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("Proxy/User", QString());
     QMPSettings.init("Proxy/Password", QString());
 
+#ifdef USE_YOUTUBEDL
+    QMPSettings.init("YtDl/CookiesFromBrowserEnabled", false);
+    QMPSettings.init("YtDl/CookiesFromBrowser", QString());
+# if defined(Q_OS_HAIKU)
+    QMPSettings.init("YtDl/CustomPathEnabled", true);
+    QMPSettings.init("YtDl/CustomPath", "/bin/yt-dlp");
+    QMPSettings.init("YtDl/DontAutoUpdate", true);
+# else
+    QMPSettings.init("YtDl/CustomPathEnabled", false);
+    QMPSettings.init("YtDl/CustomPath", QString());
+    QMPSettings.init("YtDl/DontAutoUpdate", false);
+# endif
+#endif
+
     QMPSettings.init("OpenGL/OnWindow", false);
     QMPSettings.init("OpenGL/VSync", true);
     QMPSettings.init("OpenGL/BypassCompositor", false);
@@ -254,11 +268,10 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("ApplyToASS/ColorsAndBorders", true);
     QMPSettings.init("ApplyToASS/MarginsAndAlignment", false);
     QMPSettings.init("ApplyToASS/FontsAndSpacing", false);
-    QMPSettings.init("ApplyToASS/OverridePlayRes", false);
     QMPSettings.init("ApplyToASS/ApplyToASS", false);
     QMPSettings.init("OSD/Enabled", true);
-    OSDSettingsW::init("Subtitles", 20, 0, 15, 15, 15, 7, 1.5, 1.5, QColor(0xFF, 0xA8, 0x58, 0xFF), Qt::black, Qt::black);
-    OSDSettingsW::init("OSD",       32, 0, 0,  0,  0,  4, 1.5, 1.5, QColor(0xAA, 0xFF, 0x55, 0xFF), Qt::black, Qt::black);
+    OSDSettingsW::init("Subtitles", 20, 0, 15, 15, 15, 7, 1.0, 0.5, QColor(0xFF, 0xFF, 0xFF, 0xFF), Qt::black, Qt::black, false);
+    OSDSettingsW::init("OSD",       32, 0, 0,  0,  0,  4, 1.5, 1.5, QColor(0xAA, 0xFF, 0x55, 0xFF), Qt::black, Qt::black, false);
     DeintSettingsW::init();
     applyProxy();
 }
@@ -465,15 +478,47 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         const QIcon viewRefresh = QMPlay2Core.getIconFromTheme("view-refresh");
         generalSettingsPage->clearCoversCache->setIcon(viewRefresh);
         connect(generalSettingsPage->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
-#ifdef USE_YOUTUBEDL
-        generalSettingsPage->removeYtDlB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
-        connect(generalSettingsPage->removeYtDlB, SIGNAL(clicked()), this, SLOT(removeYouTubeDl()));
-#else
-        generalSettingsPage->removeYtDlB->deleteLater();
-        generalSettingsPage->removeYtDlB = nullptr;
-#endif
+
         generalSettingsPage->resetSettingsB->setIcon(viewRefresh);
         connect(generalSettingsPage->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
+
+#ifdef USE_YOUTUBEDL
+        generalSettingsPage->cookiesFromBrowserCB->setChecked(QMPSettings.getBool("YtDl/CookiesFromBrowserEnabled"));
+        generalSettingsPage->cookiesFromBrowserE->setText(QMPSettings.getString("YtDl/CookiesFromBrowser"));
+
+        generalSettingsPage->customYtDlCB->setChecked(QMPSettings.getBool("YtDl/CustomPathEnabled"));
+        generalSettingsPage->customYtDlE->setText(QMPSettings.getString("YtDl/CustomPath"));
+        generalSettingsPage->customYtDlB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
+
+        generalSettingsPage->dontUpdateYtDlCB->setChecked(QMPSettings.getBool("YtDl/DontAutoUpdate"));
+
+        connect(generalSettingsPage->cookiesFromBrowserCB, &QCheckBox::toggled, this, [this](bool checked) {
+            generalSettingsPage->cookiesFromBrowserE->setEnabled(checked);
+        });
+        connect(generalSettingsPage->customYtDlCB, &QCheckBox::toggled, this, [this](bool checked) {
+            generalSettingsPage->customYtDlE->setEnabled(checked);
+            generalSettingsPage->customYtDlB->setEnabled(checked);
+            generalSettingsPage->removeYtDlB->setEnabled(!checked);
+        });
+        connect(generalSettingsPage->customYtDlB, &QToolButton::clicked, this, [this] {
+            auto path = QFileDialog::getOpenFileName(this, tr("Choose youtube-dl script or executable"), generalSettingsPage->customYtDlE->text());
+            if (!path.isEmpty())
+                generalSettingsPage->customYtDlE->setText(path);
+        });
+
+        emit generalSettingsPage->cookiesFromBrowserCB->toggled(generalSettingsPage->cookiesFromBrowserCB->isChecked());
+        emit generalSettingsPage->customYtDlCB->toggled(generalSettingsPage->customYtDlCB->isChecked());
+
+        connect(generalSettingsPage->customYtDlCB, &QCheckBox::toggled, this, [this](bool checked) {
+            generalSettingsPage->dontUpdateYtDlCB->setChecked(checked);
+        });
+
+        generalSettingsPage->removeYtDlB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+        connect(generalSettingsPage->removeYtDlB, &QPushButton::clicked, this, &SettingsWidget::removeYouTubeDl);
+#else
+        generalSettingsPage->ytDlGB->deleteLater();
+        generalSettingsPage->ytDlGB = nullptr;
+#endif
     }
 
     {
@@ -690,9 +735,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         page4->fontsB = new QCheckBox(tr("Fonts and spacing"));
         page4->fontsB->setChecked(QMPSettings.getBool("ApplyToASS/FontsAndSpacing"));
 
-        page4->overridePlayResB = new QCheckBox(tr("Use the same size"));
-        page4->overridePlayResB->setChecked(QMPSettings.getBool("ApplyToASS/OverridePlayRes"));
-
         page4->toAssGB = new QGroupBox(tr("Apply for ASS/SSA subtitles"));
         page4->toAssGB->setCheckable(true);
         page4->toAssGB->setChecked(QMPSettings.getBool("ApplyToASS/ApplyToASS"));
@@ -701,7 +743,6 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         page4ToAssLayout->addWidget(page4->colorsAndBordersB, 0, 0, 1, 1);
         page4ToAssLayout->addWidget(page4->marginsAndAlignmentB, 1, 0, 1, 1);
         page4ToAssLayout->addWidget(page4->fontsB, 0, 1, 1, 1);
-        page4ToAssLayout->addWidget(page4->overridePlayResB, 1, 1, 1, 1);
 
         page4->addWidget(page4->toAssGB);
     }
@@ -1272,6 +1313,14 @@ void SettingsWidget::apply()
             qobject_cast<QMainWindow *>(QMPlay2GUI.mainW)->setTabPosition(Qt::AllDockWidgetAreas, generalSettingsPage->tabsNorths->isChecked() ? QTabWidget::North : QTabWidget::South);
             applyProxy();
 
+#ifdef USE_YOUTUBEDL
+            QMPSettings.set("YtDl/CookiesFromBrowserEnabled", generalSettingsPage->cookiesFromBrowserCB->isChecked() && !generalSettingsPage->cookiesFromBrowserE->text().simplified().isEmpty());
+            QMPSettings.set("YtDl/CookiesFromBrowser", generalSettingsPage->cookiesFromBrowserE->text());
+            QMPSettings.set("YtDl/CustomPathEnabled", generalSettingsPage->customYtDlCB->isChecked() && !generalSettingsPage->customYtDlE->text().trimmed().isEmpty());
+            QMPSettings.set("YtDl/CustomPath", generalSettingsPage->customYtDlE->text());
+            QMPSettings.set("YtDl/DontAutoUpdate", generalSettingsPage->dontUpdateYtDlCB->isChecked());
+#endif
+
             if (generalSettingsPage->trayNotifiesDefault)
                 Notifies::setNativeFirst(!generalSettingsPage->trayNotifiesDefault->isChecked());
 
@@ -1387,7 +1436,6 @@ void SettingsWidget::apply()
             QMPSettings.set("ApplyToASS/ColorsAndBorders", page4->colorsAndBordersB->isChecked());
             QMPSettings.set("ApplyToASS/MarginsAndAlignment", page4->marginsAndAlignmentB->isChecked());
             QMPSettings.set("ApplyToASS/FontsAndSpacing", page4->fontsB->isChecked());
-            QMPSettings.set("ApplyToASS/OverridePlayRes", page4->overridePlayResB->isChecked());
             QMPSettings.set("ApplyToASS/ApplyToASS", page4->toAssGB->isChecked());
             break;
         case 5:

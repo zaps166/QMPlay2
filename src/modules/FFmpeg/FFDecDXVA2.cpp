@@ -81,6 +81,17 @@ bool FFDecDXVA2::open(StreamInfo &streamInfo)
     if (streamInfo.params->codec_type != AVMEDIA_TYPE_VIDEO || !hasHWAccel("dxva2"))
         return false;
 
+    if (streamInfo.params->codec_id != AV_CODEC_ID_H264
+            && streamInfo.params->codec_id != AV_CODEC_ID_HEVC
+            && streamInfo.params->codec_id != AV_CODEC_ID_VP9
+            && streamInfo.params->codec_id != AV_CODEC_ID_VC1
+            && streamInfo.params->codec_id != AV_CODEC_ID_WMV3
+            && streamInfo.params->codec_id != AV_CODEC_ID_MPEG1VIDEO
+            && streamInfo.params->codec_id != AV_CODEC_ID_MPEG2VIDEO)
+    {
+        return false;
+    }
+
     const auto pixFmt = streamInfo.pixelFormat();
     if (pixFmt == AV_PIX_FMT_YUV420P10)
     {

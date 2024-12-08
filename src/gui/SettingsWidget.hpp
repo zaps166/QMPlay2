@@ -101,7 +101,9 @@ private slots:
     void setKeyBindings();
     void clearCoversCache();
 #ifdef USE_YOUTUBEDL
+private:
     void removeYouTubeDl();
+private slots:
 #endif
     void resetSettings();
     void profileListIndexChanged(int index);

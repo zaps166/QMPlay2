@@ -393,11 +393,12 @@ bool Functions::mustRepaintOSD(const QMPlay2OSDList &osd_list, const OsdIdList &
             osd->iterate([&](const QMPlay2OSD::Image &img) {
                 if (osd->needsRescale())
                 {
+                    const auto imgRect = osd->getRect(img);
                     *bounds |= QRectF(
-                        img.rect.x() * *scaleW,
-                        img.rect.y() * *scaleH,
-                        img.rect.width() * *scaleW,
-                        img.rect.height() * *scaleH
+                        imgRect.x() * *scaleW,
+                        imgRect.y() * *scaleH,
+                        imgRect.width() * *scaleW,
+                        imgRect.height() * *scaleH
                     ).toAlignedRect();
                 }
                 else
@@ -433,7 +434,7 @@ void Functions::paintOSD(bool rgbSwapped, const QMPlay2OSDList &osd_list, const 
             );
             if (osd->needsRescale())
             {
-                painter.drawImage(img.rect, qImg);
+                painter.drawImage(osd->getRect(img), qImg);
             }
             else
             {

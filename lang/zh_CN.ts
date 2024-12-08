@@ -1006,6 +1006,26 @@
         <source>Output file path:</source>
         <translation>输出文件路径：</translation>
     </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation>youtube-dl 设置</translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation>浏览器 Cookies</translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation>自定义路径</translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation>不自动更新</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation>请参阅 yt-dlp 文档</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1851,7 +1871,7 @@
     </message>
     <message>
         <source>Limit frequency in FFT spectrum</source>
-        <translation>FFT 频谱仪限制频率</translation>
+        <translation>限制 FFT 频谱仪频率</translation>
     </message>
 </context>
 <context>
@@ -1945,6 +1965,10 @@
     <message>
         <source>Text</source>
         <translation>文本</translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>粗体</translation>
     </message>
 </context>
 <context>
@@ -3028,10 +3052,6 @@ QMPlay2 将不会放大图标！</translation>
         <translation>选择目录</translation>
     </message>
     <message>
-        <source>Use the same size</source>
-        <translation>使用相同大小</translation>
-    </message>
-    <message>
         <source>Confirm settings deletion</source>
         <translation>确认删除设置</translation>
     </message>
@@ -3252,6 +3272,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Cannot change the directory</source>
         <translation>无法更改目录</translation>
+    </message>
+    <message>
+        <source>Choose youtube-dl script or executable</source>
+        <translation>选择 youtube-dl 脚本或可执行文件</translation>
     </message>
 </context>
 <context>

@@ -31,6 +31,7 @@ extern "C" {
 }
 
 #include <cstring>
+#include <cmath>
 
 using namespace std;
 
@@ -329,7 +330,6 @@ void LibASS::initASS(const QByteArray &ass_data)
     {
         ass_alloc_style(ass_sub_track);
         ass_sub_track->styles[0].ScaleX = ass_sub_track->styles[0].ScaleY = 1;
-        overridePlayRes = true;
         hasASSData = false;
         setASSStyle();
     }
@@ -358,10 +358,9 @@ void LibASS::setASSStyle()
         colorsAndBorders = settings.getBool("ApplyToASS/ColorsAndBorders");
         marginsAndAlignment = settings.getBool("ApplyToASS/MarginsAndAlignment");
         fontsAndSpacing = settings.getBool("ApplyToASS/FontsAndSpacing");
-        overridePlayRes = settings.getBool("ApplyToASS/OverridePlayRes");
     }
     else
-        colorsAndBorders = marginsAndAlignment = fontsAndSpacing = overridePlayRes = false;
+        colorsAndBorders = marginsAndAlignment = fontsAndSpacing = false;
 
     if (!ass_sub_styles_copy.size()) //tworzenie kopii za pierwszym razem
     {
@@ -382,10 +381,13 @@ void LibASS::setASSStyle()
     if (ass_sub_track->n_styles != ass_sub_styles_copy.size())
         return;
 
+    const auto fontRatio = sqrt(ass_sub_track->PlayResX * ass_sub_track->PlayResX + ass_sub_track->PlayResY * ass_sub_track->PlayResY) / sqrt(384 * 384 + 288 * 288);
     for (int i = 0; i < ass_sub_track->n_styles; i++)
     {
         ASS_Style &style = ass_sub_track->styles[i];
         ass_style *style_copy = ass_sub_styles_copy.at(i);
+        if (style_copy->Alignment != 2 || style_copy->Angle != 0)
+            continue; // Don't apply to styles with non standard alignment / angle (e.g. karaoke, rotated texts, etc.)
         if (colorsAndBorders)
         {
             style.PrimaryColour = assColorFromQColor(settings.getColor("Subtitles/TextColor"));
@@ -427,10 +429,11 @@ void LibASS::setASSStyle()
         if (fontsAndSpacing)
         {
             style.FontName = strdup(settings.getString("Subtitles/FontName").toUtf8().constData());
-            style.FontSize = settings.getInt("Subtitles/FontSize");
-            style.Spacing = settings.getDouble("Subtitles/Linespace");
+            style.FontSize = settings.getInt("Subtitles/FontSize") * fontRatio;
+            style.Spacing = settings.getDouble("Subtitles/Spacing");
             style.ScaleX = style.ScaleY = 1;
-            style.Bold = style.Italic = style.Underline = style.StrikeOut = 0;
+            style.Bold = settings.getBool("Subtitles/Bold");
+            style.Italic = style.Underline = style.StrikeOut = 0;
         }
         else
         {
@@ -493,14 +496,6 @@ bool LibASS::getASS(shared_ptr<QMPlay2OSD> &osd, double pos)
     if (qIsNaN(pos))
         return false;
 
-    int playResX = ass_sub_track->PlayResX;
-    int playResY = ass_sub_track->PlayResY;
-    if (overridePlayRes)
-    {
-        ass_sub_track->PlayResX = 384;
-        ass_sub_track->PlayResY = 288;
-    }
-
     double _fontScale = fontScale;
 
     if (_fontScale != 1.0)
@@ -539,12 +534,6 @@ bool LibASS::getASS(shared_ptr<QMPlay2OSD> &osd, double pos)
             style.Shadow  /= _fontScale;
             style.Outline /= _fontScale;
         }
-    }
-
-    if (overridePlayRes)
-    {
-        ass_sub_track->PlayResX = playResX;
-        ass_sub_track->PlayResY = playResY;
     }
 
     if (!img)
@@ -596,7 +585,8 @@ void LibASS::readStyle(const QString &prefix, ASS_Style *style)
     style->PrimaryColour = style->SecondaryColour = assColorFromQColor(settings.getColor(prefix + "/TextColor"));
     style->OutlineColour = assColorFromQColor(settings.getColor(prefix + "/OutlineColor"));
     style->BackColour = assColorFromQColor(settings.getColor(prefix + "/ShadowColor"));
-    style->Spacing = settings.getDouble(prefix + "/Linespace");
+    style->Bold = settings.getBool(prefix + "/Bold");
+    style->Spacing = settings.getDouble(prefix + "/Spacing");
     style->BorderStyle = 1;
     style->Outline = settings.getDouble(prefix + "/Outline");
     style->Shadow = settings.getDouble(prefix + "/Shadow");

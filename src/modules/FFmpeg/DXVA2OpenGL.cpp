@@ -316,7 +316,7 @@ bool DXVA2OpenGL::checkCodec(const QByteArray &codecName, bool b10)
             else
                 neededCodecGUIDs.append(&QMPlay2_DXVA2_ModeVP9_VLD_Profile0);
         }
-        else if (codecName == "vc1")
+        else if (codecName == "vc1" || codecName == "wmv3")
         {
             neededCodecGUIDs.append({
                 &QMPlay2_DXVA2_ModeVC1_D,

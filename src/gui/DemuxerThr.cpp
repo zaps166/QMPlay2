@@ -93,7 +93,10 @@ void DemuxerThr::loadImage()
     if (isDemuxerReady())
     {
         const QByteArray demuxerImage = demuxer->image();
-        QImage img = QImage::fromData(demuxerImage);
+        QImage img = demuxerImage.isEmpty()
+            ? QImage()
+            : QImage::fromData(demuxerImage)
+        ;
         if (!img.isNull())
             emit QMPlay2Core.coverDataFromMediaFile(demuxerImage);
         else
