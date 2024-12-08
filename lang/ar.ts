@@ -1008,23 +1008,23 @@
     </message>
     <message>
         <source>youtube-dl settings</source>
-        <translation type="unfinished"></translation>
+        <translation>إعدادات youtube-dl</translation>
     </message>
     <message>
         <source>Cookies from browser</source>
-        <translation type="unfinished"></translation>
+        <translation>ملفات تعريف الإرتباط من المتصفح</translation>
     </message>
     <message>
         <source>Custom path</source>
-        <translation type="unfinished"></translation>
+        <translation>مسار مخصص</translation>
     </message>
     <message>
         <source>Don&apos;t auto-update</source>
-        <translation type="unfinished"></translation>
+        <translation>إيقاف التحديث التلقائي</translation>
     </message>
     <message>
         <source>Please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>الرجاء الرجوع إلى وثائق yt-dlp</translation>
     </message>
 </context>
 <context>
@@ -1968,7 +1968,7 @@
     </message>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>عريض</translation>
     </message>
 </context>
 <context>
@@ -3211,11 +3211,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>High quality image scaling down</source>
-        <translation>تقليص نطاق صورة عالي الدقة</translation>
+        <translation>تصغير أبعاد صورة عالية الدقة</translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation>توسيع نطاق صورة عالي الدقة</translation>
+        <translation>تكبير أبعاد صورة عالية الدقة</translation>
     </message>
     <message>
         <source>First available device</source>
@@ -3263,11 +3263,11 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation>نطاق صورة منخفض الدقة (أقرب جار)</translation>
+        <translation>أبعاد صورة منخفضة الدقة (أقرب جار)</translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation>مفيد مع الأبعاد الرجعية. يمكن أيضا استخدامه مع وضع Vulkan البرمجي لخفض تكاليف المعالج.</translation>
+        <translation>مفيد مع الأبعاد القديمة. يمكن أيضا استخدامه مع الوضع Vulkan البرمجي لخفض تكاليف المعالج.</translation>
     </message>
     <message>
         <source>Cannot change the directory</source>
@@ -3275,7 +3275,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Choose youtube-dl script or executable</source>
-        <translation type="unfinished"></translation>
+        <translation>اختيار نص برمجي أو ملف youtube-dl تنفيذي</translation>
     </message>
 </context>
 <context>
