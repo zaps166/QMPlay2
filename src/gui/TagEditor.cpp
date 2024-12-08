@@ -96,14 +96,31 @@ static inline Ogg::XiphComment *getXiphComment(File &file)
 #include <QFormLayout>
 #include <QBoxLayout>
 #include <QLineEdit>
+#include <QMimeData>
 #include <QSpinBox>
 #include <QPainter>
+#include <qevent.h>
 #include <QLabel>
 
 PictureW::PictureW(ByteVector &picture) :
     picture(picture)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    setAcceptDrops(true);
+}
+
+bool PictureW::verifyMimeData(const QMimeData *m) const
+{
+    Q_ASSERT(m);
+
+    if (!m->hasUrls())
+        return false;
+
+    const auto urls = m->urls();
+    if (Q_UNLIKELY(urls.isEmpty()))
+        return false;
+
+    return urls[0].isLocalFile();
 }
 
 void PictureW::paintEvent(QPaintEvent *)
@@ -118,6 +135,25 @@ void PictureW::paintEvent(QPaintEvent *)
             Functions::drawPixmap(p, pixmap, this);
         }
     }
+}
+
+void PictureW::dragEnterEvent(QDragEnterEvent *e)
+{
+    if (auto mimeData = e->mimeData())
+    {
+        if (verifyMimeData(mimeData))
+            e->accept();
+    }
+    QWidget::dragEnterEvent(e);
+}
+void PictureW::dropEvent(QDropEvent *e)
+{
+    if (auto mimeData = e->mimeData())
+    {
+        if (verifyMimeData(mimeData))
+            emit loadImage(mimeData->urls().at(0).toLocalFile());
+    }
+    QWidget::dropEvent(e);
 }
 
 /**/
@@ -164,8 +200,12 @@ TagEditor::TagEditor() :
     saveImgB = new QPushButton(tr("Save cover picture"));
     saveImgB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    connect(loadImgB, SIGNAL(clicked()), this, SLOT(loadImage()));
-    connect(saveImgB, SIGNAL(clicked()), this, SLOT(saveImage()));
+    connect(pictureW, &PictureW::loadImage, this, &TagEditor::loadImage);
+
+    connect(loadImgB, &QPushButton::clicked, this, [this] {
+        loadImage(QString());
+    });
+    connect(saveImgB, &QPushButton::clicked, this, &TagEditor::saveImage);
 
     QVBoxLayout *pictureLayout = new QVBoxLayout(pictureB);
     pictureLayout->addWidget(pictureW);
@@ -582,9 +622,12 @@ bool TagEditor::save()
     return false;
 }
 
-void TagEditor::loadImage()
+void TagEditor::loadImage(QString filePath)
 {
-    const QString filePath = QFileDialog::getOpenFileName(this, tr("Loading cover picture"), QMPlay2GUI.getCurrentPth(), tr("Pictures") + " (*.jpg *.jpeg *.png *.gif *.bmp)");
+    if (filePath.isNull())
+    {
+        filePath = QFileDialog::getOpenFileName(this, tr("Loading cover picture"), QMPlay2GUI.getCurrentPth(), tr("Pictures") + " (*.jpg *.jpeg *.png *.gif *.bmp)");
+    }
     if (!filePath.isEmpty())
     {
         QFile f(filePath);

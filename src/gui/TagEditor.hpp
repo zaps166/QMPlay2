@@ -26,16 +26,30 @@ namespace TagLib {
 }
 class QPushButton;
 class QLineEdit;
+class QMimeData;
 class QSpinBox;
 class QLabel;
 
 class PictureW final : public QWidget
 {
+    Q_OBJECT
+
 public:
     PictureW(TagLib::ByteVector &picture);
+
+private:
+    bool verifyMimeData(const QMimeData *m) const;
+
 private:
     void paintEvent(QPaintEvent *) override;
 
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dropEvent(QDropEvent *e) override;
+
+signals:
+    void loadImage(const QString &filePath);
+
+private:
     TagLib::ByteVector &picture;
 };
 
@@ -49,9 +63,11 @@ public:
     bool open(const QString &fileName);
     void clear();
     bool save();
-private slots:
-    void loadImage();
+
+private:
+    void loadImage(QString filePath);
     void saveImage();
+
 private:
     void clearValues();
 
