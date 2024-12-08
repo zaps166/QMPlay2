@@ -501,7 +501,7 @@
        <item row="8" column="0" colspan="2">
         <widget class="QCheckBox" name="savePos">
          <property name="text">
-          <string>Remember playback position</string>
+          <string>Continue last playback when program starts</string>
          </property>
         </widget>
        </item>
@@ -596,6 +596,9 @@
         <widget class="QCheckBox" name="storeUrlPosB">
          <property name="text">
           <string>Remember playback position for each playlist entry</string>
+         </property>
+         <property name="toolTip">
+          <string>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</string>
          </property>
         </widget>
        </item>
