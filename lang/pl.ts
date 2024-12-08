@@ -1026,6 +1026,14 @@
         <source>Please refer to yt-dlp documentation</source>
         <translation>Proszę zapoznać się z dokumentacją yt-dlp</translation>
     </message>
+    <message>
+        <source>Default quality</source>
+        <translation>Domyślna jakość</translation>
+    </message>
+    <message>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation>parametr &quot;-f&quot;, proszę zapoznać się z dokumentacją yt-dlp</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -2297,10 +2305,6 @@
         <translation>Pozostaw współczynnik proporcji między plikami wideo</translation>
     </message>
     <message>
-        <source>Remember playback position</source>
-        <translation>Zapamiętaj pozycję odtwarzania</translation>
-    </message>
-    <message>
         <source>Keep subtitles delay</source>
         <translation>Pozostaw opóźnienie napisów między plikami wideo</translation>
     </message>
@@ -2435,6 +2439,14 @@
     <message>
         <source>4K</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continue last playback when program starts</source>
+        <translation>Kontynuuj ostatnie odtwarzanie po uruchomieniu programu</translation>
+    </message>
+    <message>
+        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
+        <translation>Długość musi wynosić co najmniej 8 minut. Pozycja odtwarzania musi znajdować się w zakresie odtwarzania od 1% do 99%. Możesz kontynuować odtwarzanie, naciskając ikonę obok przycisku pełnego ekranu.</translation>
     </message>
 </context>
 <context>
@@ -3275,7 +3287,7 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     </message>
     <message>
         <source>Choose youtube-dl script or executable</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz skrypt lub plik wykonywalny youtube-dl</translation>
     </message>
 </context>
 <context>

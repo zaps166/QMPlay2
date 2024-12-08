@@ -1026,6 +1026,14 @@
         <source>Please refer to yt-dlp documentation</source>
         <translation>请参阅 yt-dlp 文档</translation>
     </message>
+    <message>
+        <source>Default quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -2289,10 +2297,6 @@
         <translation>保持纵横比</translation>
     </message>
     <message>
-        <source>Remember playback position</source>
-        <translation>记住回放位置</translation>
-    </message>
-    <message>
         <source>Keep subtitles delay</source>
         <translation>保持字幕延时</translation>
     </message>
@@ -2435,6 +2439,14 @@
     <message>
         <source>4K</source>
         <translation>4K</translation>
+    </message>
+    <message>
+        <source>Continue last playback when program starts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
