@@ -442,14 +442,14 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QCheckBox" name="dontUpdateYtDlCB">
             <property name="text">
              <string>Don't auto-update</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
+          <item row="4" column="0">
            <widget class="QPushButton" name="removeYtDlB">
             <property name="text">
              <string>Remove youtube-dl</string>
@@ -460,6 +460,23 @@
            <widget class="QLineEdit" name="cookiesFromBrowserE">
             <property name="toolTip">
              <string>Please refer to yt-dlp documentation</string>
+            </property>
+            <property name="maxLength">
+             <number>16</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="dfltYtDlQualCB">
+            <property name="text">
+             <string>Default quality</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" colspan="2">
+           <widget class="QLineEdit" name="dfltYtDlQualE">
+            <property name="toolTip">
+             <string>"-f" parameter, please refer to yt-dlp documentation</string>
             </property>
             <property name="maxLength">
              <number>16</number>
@@ -547,6 +564,8 @@
   <tabstop>customYtDlCB</tabstop>
   <tabstop>customYtDlE</tabstop>
   <tabstop>customYtDlB</tabstop>
+  <tabstop>dfltYtDlQualCB</tabstop>
+  <tabstop>dfltYtDlQualE</tabstop>
   <tabstop>dontUpdateYtDlCB</tabstop>
   <tabstop>removeYtDlB</tabstop>
  </tabstops>

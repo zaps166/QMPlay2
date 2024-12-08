@@ -203,6 +203,8 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("YtDl/CustomPath", QString());
     QMPSettings.init("YtDl/DontAutoUpdate", false);
 # endif
+    QMPSettings.init("YtDl/DefaultQualityEnabled", false);
+    QMPSettings.init("YtDl/DefaultQuality", QString());
 #endif
 
     QMPSettings.init("OpenGL/OnWindow", false);
@@ -490,6 +492,9 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         generalSettingsPage->customYtDlE->setText(QMPSettings.getString("YtDl/CustomPath"));
         generalSettingsPage->customYtDlB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
 
+        generalSettingsPage->dfltYtDlQualCB->setChecked(QMPSettings.getBool("YtDl/DefaultQualityEnabled"));
+        generalSettingsPage->dfltYtDlQualE->setText(QMPSettings.getString("YtDl/DefaultQuality"));
+
         generalSettingsPage->dontUpdateYtDlCB->setChecked(QMPSettings.getBool("YtDl/DontAutoUpdate"));
 
         connect(generalSettingsPage->cookiesFromBrowserCB, &QCheckBox::toggled, this, [this](bool checked) {
@@ -505,9 +510,13 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
             if (!path.isEmpty())
                 generalSettingsPage->customYtDlE->setText(path);
         });
+        connect(generalSettingsPage->dfltYtDlQualCB, &QCheckBox::toggled, this, [this](bool checked) {
+            generalSettingsPage->dfltYtDlQualE->setEnabled(checked);
+        });
 
         emit generalSettingsPage->cookiesFromBrowserCB->toggled(generalSettingsPage->cookiesFromBrowserCB->isChecked());
         emit generalSettingsPage->customYtDlCB->toggled(generalSettingsPage->customYtDlCB->isChecked());
+        emit generalSettingsPage->dfltYtDlQualCB->toggled(generalSettingsPage->dfltYtDlQualCB->isChecked());
 
         connect(generalSettingsPage->customYtDlCB, &QCheckBox::toggled, this, [this](bool checked) {
             generalSettingsPage->dontUpdateYtDlCB->setChecked(checked);
@@ -1318,6 +1327,8 @@ void SettingsWidget::apply()
             QMPSettings.set("YtDl/CookiesFromBrowser", generalSettingsPage->cookiesFromBrowserE->text());
             QMPSettings.set("YtDl/CustomPathEnabled", generalSettingsPage->customYtDlCB->isChecked() && !generalSettingsPage->customYtDlE->text().trimmed().isEmpty());
             QMPSettings.set("YtDl/CustomPath", generalSettingsPage->customYtDlE->text());
+            QMPSettings.set("YtDl/DefaultQualityEnabled", generalSettingsPage->dfltYtDlQualCB->isChecked() && !generalSettingsPage->dfltYtDlQualE->text().simplified().isEmpty());
+            QMPSettings.set("YtDl/DefaultQuality", generalSettingsPage->dfltYtDlQualE->text());
             QMPSettings.set("YtDl/DontAutoUpdate", generalSettingsPage->dontUpdateYtDlCB->isChecked());
 #endif
 

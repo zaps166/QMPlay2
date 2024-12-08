@@ -123,7 +123,19 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
 
     QStringList paramList {"-e"};
     if (!param.isEmpty())
+    {
         paramList << "-f" << param;
+    }
+    else
+    {
+        auto &QMPSettings = QMPlay2Core.getSettings();
+        if (QMPSettings.getBool("YtDl/DefaultQualityEnabled"))
+        {
+            auto dq = QMPSettings.getString("YtDl/DefaultQuality").simplified();
+            if (!dq.isEmpty())
+                paramList << "-f" << std::move(dq);
+        }
+    }
     QStringList ytdlStdout = exec(url, paramList, err);
     if (ytdlStdout.isEmpty())
         return;
