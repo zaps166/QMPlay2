@@ -1028,11 +1028,11 @@
     </message>
     <message>
         <source>Default quality</source>
-        <translation type="unfinished"></translation>
+        <translation>預設品質</translation>
     </message>
     <message>
         <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;-f&quot; 參數，請參閱 yt-dlp 文檔</translation>
     </message>
 </context>
 <context>
@@ -2442,11 +2442,11 @@
     </message>
     <message>
         <source>Continue last playback when program starts</source>
-        <translation type="unfinished"></translation>
+        <translation>應用程式啟動時繼續从最後位置播放</translation>
     </message>
     <message>
         <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation type="unfinished"></translation>
+        <translation>長度必須至少 8 分鐘。您的播放位置必須在播放範圍的 [1% - 99%]。您可以按全螢幕按鈕旁的圖示繼續播放。</translation>
     </message>
 </context>
 <context>
