@@ -252,6 +252,8 @@ int FFDecSW::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
             ts = frame->best_effort_timestamp * av_q2d(m_timeBase);
         else if (encodedPacket.hasDts() || encodedPacket.hasPts())
             ts = encodedPacket.ts();
+        else if (codec_ctx->codec_id == AV_CODEC_ID_APE && !qIsNaN(m_lastTs))
+            ts = m_lastTs + static_cast<double>(frame->nb_samples) / static_cast<double>(sampleRate);
         else
             ts = qQNaN();
     }
@@ -259,6 +261,8 @@ int FFDecSW::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, doubl
     {
         ts = qQNaN();
     }
+
+    m_lastTs = ts;
 
     return (bytesConsumed <= 0) ? 0 : bytesConsumed;
 }

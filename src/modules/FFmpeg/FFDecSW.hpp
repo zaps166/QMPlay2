@@ -96,6 +96,8 @@ private:
 
     std::deque<Subtitle> m_subtitles;
 
+    double m_lastTs = qQNaN();
+
 #ifdef USE_VULKAN
     std::shared_ptr<QmVk::BufferPool> m_vkBufferPool;
     bool m_disableZeroCopy = false;
