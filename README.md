@@ -140,10 +140,6 @@ Go to "Options->settings" and check "Read and display still images".
 
 You can specify a `CustomUserAgent` in `QMPlay2.ini` file in `General` section.
 
-### Disable yt-dlp update
-
-Set `SkipYtDlpUpdate` to `true` in `QMPlay2.ini` file in `General` section.
-
 ### Disable covers cache
 
 Set `NoCoversCache` to `true` in `QMPlay2.ini` file in `General` section.
