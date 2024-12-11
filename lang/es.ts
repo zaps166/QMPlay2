@@ -2563,6 +2563,10 @@
         <source>&amp;Recording</source>
         <translation>&amp;Grabación</translation>
     </message>
+    <message>
+        <source>Un&amp;mute</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

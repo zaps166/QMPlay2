@@ -2574,6 +2574,10 @@
         <source>&amp;Recording</source>
         <translation>&amp;Kayıt</translation>
     </message>
+    <message>
+        <source>Un&amp;mute</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
