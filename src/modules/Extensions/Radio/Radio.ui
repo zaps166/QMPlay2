@@ -197,7 +197,11 @@
         </widget>
        </item>
        <item>
-        <widget class="LineEdit" name="filterEdit"/>
+        <widget class="LineEdit" name="filterEdit">
+         <property name="placeholderText">
+          <string>Search filter</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
