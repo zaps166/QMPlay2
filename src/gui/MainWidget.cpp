@@ -507,7 +507,13 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
             }
         }
         else
+        {
             playStateChanged(false);
+        }
+    }
+    else
+    {
+        playStateChanged(false);
     }
 
 #ifdef Q_OS_MACOS

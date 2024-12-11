@@ -222,7 +222,7 @@ MenuBar::Playlist::Sort::Sort(QMenu *parent) :
 MenuBar::Player::Player(MenuBar *parent) :
     QMenu(Player::tr("&Player"), parent)
 {
-    newAction(QString(), this,  togglePlay, false, QMPlay2Core.getIconFromTheme("media-playback-start"), false);
+    newAction(QString(), this,  togglePlay, false, QIcon(), false);
     newAction(Player::tr("&Stop"), this, stop, false, QMPlay2Core.getIconFromTheme("media-playback-stop"), false);
     newAction(Player::tr("&Next"), this, next, true, QMPlay2Core.getIconFromTheme("media-skip-forward"), false);
     newAction(Player::tr("&Previous"), this, prev, true, QMPlay2Core.getIconFromTheme("media-skip-backward"), false);
