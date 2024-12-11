@@ -70,7 +70,7 @@ private slots:
     void playStateChanged(bool);
 
     void volUpDown();
-    void toggleMuteIcon();
+    void onMuteIconToggled();
     void actionSeek();
     void switchARatio();
     void resetARatio();

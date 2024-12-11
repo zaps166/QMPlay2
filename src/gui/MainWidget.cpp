@@ -427,6 +427,8 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     volW->setVolume(settings.getInt("VolumeL"), settings.getInt("VolumeR"), true);
     if (settings.getBool("Mute"))
         menuBar->player->toggleMute->trigger();
+    else
+        onMuteIconToggled();
 
     RepeatMode repeatMode = RepeatNormal;
     if (settings.getBool("RestoreRepeatMode"))
@@ -742,9 +744,11 @@ void MainWidget::volUpDown()
     else if (sender() == menuBar->player->volDown)
         volW->changeVolume(-5);
 }
-void MainWidget::toggleMuteIcon()
+void MainWidget::onMuteIconToggled()
 {
-    menuBar->player->toggleMute->setIcon(QMPlay2Core.getIconFromTheme(menuBar->player->toggleMute->isChecked() ? "audio-volume-muted" : "audio-volume-high"));
+    const bool muted = menuBar->player->toggleMute->isChecked();
+    menuBar->player->toggleMute->setIcon(QMPlay2Core.getIconFromTheme(muted ? "audio-volume-muted" : "audio-volume-high"));
+    menuBar->player->toggleMute->setText(muted ? MenuBar::Player::tr("Un&mute") : MenuBar::Player::tr("&Mute"));
 }
 void MainWidget::actionSeek()
 {
@@ -1006,7 +1010,7 @@ void MainWidget::createMenuBar()
     connect(menuBar->player->volUp, SIGNAL(triggered()), this, SLOT(volUpDown()));
     connect(menuBar->player->volDown, SIGNAL(triggered()), this, SLOT(volUpDown()));
     connect(menuBar->player->toggleMute, SIGNAL(triggered()), &playC, SLOT(toggleMute()));
-    connect(menuBar->player->toggleMute, SIGNAL(triggered()), this, SLOT(toggleMuteIcon()));
+    connect(menuBar->player->toggleMute, SIGNAL(triggered()), this, SLOT(onMuteIconToggled()));
     if (menuBar->player->detach)
         connect(menuBar->player->detach, SIGNAL(triggered()), this, SLOT(detachFromPipe()));
     if (menuBar->player->suspend)

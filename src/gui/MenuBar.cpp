@@ -264,7 +264,7 @@ MenuBar::Player::Player(MenuBar *parent) :
     addSeparator();
     newAction(Player::tr("Volume &up"), this, volUp, true, QIcon(), false);
     newAction(Player::tr("Volume &down"), this, volDown, true, QIcon(), false);
-    newAction(Player::tr("&Mute"), this, toggleMute, false, QMPlay2Core.getIconFromTheme("audio-volume-high"), true);
+    newAction(QString(), this, toggleMute, false, QIcon(), true);
 
     continuePlayback->setToolTip(tr("Continue playing from the last position"));
     continuePlayback->setEnabled(false);
