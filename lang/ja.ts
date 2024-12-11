@@ -2890,6 +2890,10 @@ QMPlay2はアイコンを拡大しません！</translation>
         <source>Connection error</source>
         <translation>接続エラー</translation>
     </message>
+    <message>
+        <source>Search filter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

@@ -2888,6 +2888,10 @@ QMPlay2 nie będzie skalować ikon!</translation>
         <source>Connection error</source>
         <translation>Błąd połączenia</translation>
     </message>
+    <message>
+        <source>Search filter</source>
+        <translation>Filtr wyszukiwania</translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

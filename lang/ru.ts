@@ -2888,6 +2888,10 @@ QMPlay2 не будет отображать значки!</translation>
         <source>Connection error</source>
         <translation>Ошибка соединения</translation>
     </message>
+    <message>
+        <source>Search filter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

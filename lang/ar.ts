@@ -2888,6 +2888,10 @@ QMPlay2 لن يقوم بتكبير الأيقونات!</translation>
         <source>Connection error</source>
         <translation>خطأ في الإتصال</translation>
     </message>
+    <message>
+        <source>Search filter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

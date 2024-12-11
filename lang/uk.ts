@@ -2888,6 +2888,10 @@ QMPlay2 не масштабуватиме іконки!</translation>
         <source>Connection error</source>
         <translation>Помилка підключення</translation>
     </message>
+    <message>
+        <source>Search filter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

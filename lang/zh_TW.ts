@@ -2888,6 +2888,10 @@ QMPlay2 將不會放大圖示！</translation>
         <source>Connection error</source>
         <translation>連線錯誤</translation>
     </message>
+    <message>
+        <source>Search filter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

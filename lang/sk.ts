@@ -2888,6 +2888,10 @@ QMPlay2 nebude zväčšovať ikony!</translation>
         <source>Connection error</source>
         <translation>Chyba spojenia</translation>
     </message>
+    <message>
+        <source>Search filter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

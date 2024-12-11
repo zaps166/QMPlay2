@@ -2888,6 +2888,10 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
         <source>Connection error</source>
         <translation>Csatlakozási hiba</translation>
     </message>
+    <message>
+        <source>Search filter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

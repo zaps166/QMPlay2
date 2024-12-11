@@ -2887,6 +2887,10 @@ QMPlay2 wird die Symbole nicht vergrößern!</translation>
         <source>Connection error</source>
         <translation>Verbindungsfehler</translation>
     </message>
+    <message>
+        <source>Search filter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

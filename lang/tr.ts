@@ -2900,6 +2900,10 @@ QMPlay2 simgeleri büyütmeyecek!</translation>
         <source>Connection error</source>
         <translation>Bağlantı hatası</translation>
     </message>
+    <message>
+        <source>Search filter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>

@@ -2888,6 +2888,10 @@ Pictogrammen worden niet vergroot.</translation>
         <source>Connection error</source>
         <translation>Verbindingsfout</translation>
     </message>
+    <message>
+        <source>Search filter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RadioBrowserModel</name>
