@@ -1028,11 +1028,11 @@
     </message>
     <message>
         <source>Default quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Calidad predeterminada</translation>
     </message>
     <message>
         <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Parámetro &quot;-f&quot;, consulte la documentación de yt-dlp</translation>
     </message>
 </context>
 <context>
@@ -2442,11 +2442,11 @@
     </message>
     <message>
         <source>Continue last playback when program starts</source>
-        <translation type="unfinished"></translation>
+        <translation>Continuar la última reproducción al iniciar el programa</translation>
     </message>
     <message>
         <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation type="unfinished"></translation>
+        <translation>La duración debe ser de al menos 8 minutos. Su posición de reproducción debe estar en [1% - 99%] del rango de reproducción. Puedes continuar la reproducción pulsando el icono situado junto al botón de pantalla completa.</translation>
     </message>
 </context>
 <context>
@@ -2565,7 +2565,7 @@
     </message>
     <message>
         <source>Un&amp;mute</source>
-        <translation type="unfinished"></translation>
+        <translation>Desactivar &amp;silencio</translation>
     </message>
 </context>
 <context>
@@ -2890,7 +2890,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Search filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtro de búsqueda</translation>
     </message>
 </context>
 <context>
