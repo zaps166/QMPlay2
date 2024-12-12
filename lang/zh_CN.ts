@@ -2565,7 +2565,7 @@
     </message>
     <message>
         <source>Un&amp;mute</source>
-        <translation type="unfinished"></translation>
+        <translation>取消静音(&amp;M)</translation>
     </message>
 </context>
 <context>
@@ -2890,7 +2890,7 @@ QMPlay2 将不会放大图标！</translation>
     </message>
     <message>
         <source>Search filter</source>
-        <translation type="unfinished"></translation>
+        <translation>搜索过滤</translation>
     </message>
 </context>
 <context>
