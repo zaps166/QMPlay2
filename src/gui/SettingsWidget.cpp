@@ -272,8 +272,8 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("ApplyToASS/FontsAndSpacing", false);
     QMPSettings.init("ApplyToASS/ApplyToASS", false);
     QMPSettings.init("OSD/Enabled", true);
-    OSDSettingsW::init("Subtitles", 20, 0, 15, 15, 15, 7, 1.0, 0.5, QColor(0xFF, 0xFF, 0xFF, 0xFF), Qt::black, Qt::black, false);
-    OSDSettingsW::init("OSD",       32, 0, 0,  0,  0,  4, 1.5, 1.5, QColor(0xAA, 0xFF, 0x55, 0xFF), Qt::black, Qt::black, false);
+    OSDSettingsW::init("Subtitles", 20, 0, 15, 15, 15, 7, 1.0, 0.5, QColor(0xFF, 0xFF, 0xFF, 0xFF), Qt::black, Qt::black, false, false);
+    OSDSettingsW::init("OSD",       32, 0, 0,  0,  0,  4, 1.5, 1.5, QColor(0xAA, 0xFF, 0x55, 0xFF), Qt::black, Qt::black, false, false);
     DeintSettingsW::init();
     applyProxy();
 }

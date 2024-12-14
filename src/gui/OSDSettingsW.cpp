@@ -35,7 +35,7 @@ static void appendColon(const QObjectList &objects)
     }
 }
 
-void OSDSettingsW::init(const QString &prefix, int a, int b, int c, int d, int e, int f, double g, double h, const QColor &i, const QColor &j, const QColor &k, bool l)
+void OSDSettingsW::init(const QString &prefix, int a, int b, int c, int d, int e, int f, double g, double h, const QColor &i, const QColor &j, const QColor &k, bool l, bool m)
 {
     Settings &QMPSettings = QMPlay2Core.getSettings();
     QMPSettings.init(prefix + "/FontName", QGuiApplication::font().family());
@@ -48,9 +48,11 @@ void OSDSettingsW::init(const QString &prefix, int a, int b, int c, int d, int e
     QMPSettings.init(prefix + "/Alignment", f);
     QMPSettings.init(prefix + "/Outline", g);
     QMPSettings.init(prefix + "/Shadow", h);
+    QMPSettings.init(prefix + "/Background", m);
     QMPSettings.init(prefix + "/TextColor", i);
     QMPSettings.init(prefix + "/OutlineColor", j);
     QMPSettings.init(prefix + "/ShadowColor", k);
+    QMPSettings.init(prefix + "/BackgroundColor", QColor(k.red(), k.green(), k.blue(), 0x88));
     const int align = QMPSettings.getInt(prefix + "/Alignment");
     if (align < 0 || align > 8)
         QMPSettings.set(prefix + "/Alignment", f);
@@ -66,6 +68,7 @@ OSDSettingsW::OSDSettingsW(const QString &prefix) :
     auto widget = new QWidget;
 
     ui->setupUi(widget);
+    ui->shadowColorB->setAlphaAllowed(true);
     appendColon(children());
 
     // Alignment GroupBox
@@ -75,6 +78,13 @@ OSDSettingsW::OSDSettingsW(const QString &prefix) :
         alignB[align] = new QRadioButton;
         alignL->addWidget(alignB[align], align / 3, align % 3);
     }
+
+    connect(ui->backgroundCB, &QCheckBox::toggled, this, [this, shadowText = ui->shadowColorL->text()](bool checked) {
+        ui->shadowL->setEnabled(!checked);
+        ui->shadowB->setEnabled(!checked);
+        ui->shadowColorL->setText(checked ? QCoreApplication::translate("OSDSettings", "Background") : shadowText);
+        setShadowColorB();
+    });
 
     readSettings();
 
@@ -110,9 +120,10 @@ void OSDSettingsW::writeSettings()
         }
     QMPSettings.set(prefix + "/Outline", ui->outlineB->value());
     QMPSettings.set(prefix + "/Shadow", ui->shadowB->value());
+    QMPSettings.set(prefix + "/Background", ui->backgroundCB->isChecked());
     QMPSettings.set(prefix + "/TextColor", ui->textColorB->getColor());
     QMPSettings.set(prefix + "/OutlineColor", ui->outlineColorB->getColor());
-    QMPSettings.set(prefix + "/ShadowColor", ui->shadowColorB->getColor());
+    QMPSettings.set(prefix + (ui->backgroundCB->isChecked() ? "/BackgroundColor" : "/ShadowColor"), ui->shadowColorB->getColor());
 }
 
 void OSDSettingsW::readSettings()
@@ -130,7 +141,14 @@ void OSDSettingsW::readSettings()
     alignB[QMPSettings.getInt(prefix + "/Alignment")]->setChecked(true);
     ui->outlineB->setValue(QMPSettings.getDouble(prefix + "/Outline"));
     ui->shadowB->setValue(QMPSettings.getDouble(prefix + "/Shadow"));
+    ui->backgroundCB->setChecked(QMPSettings.getBool(prefix + "/Background"));
     ui->textColorB->setColor(QMPSettings.getColor(prefix + "/TextColor"));
     ui->outlineColorB->setColor(QMPSettings.getColor(prefix + "/OutlineColor"));
-    ui->shadowColorB->setColor(QMPSettings.getColor(prefix + "/ShadowColor"));
+    if (!ui->backgroundCB->isChecked()) // If checked, it's triggered automatically here
+        setShadowColorB();
+}
+
+inline void OSDSettingsW::setShadowColorB()
+{
+    ui->shadowColorB->setColor(QMPlay2Core.getSettings().getColor(prefix + (ui->backgroundCB->isChecked() ? "/BackgroundColor" : "/ShadowColor")));
 }

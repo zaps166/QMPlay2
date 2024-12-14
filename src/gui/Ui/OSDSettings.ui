@@ -125,14 +125,14 @@
           <string>Border</string>
          </property>
          <layout class="QFormLayout" name="formLayout_3">
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="outlineL">
             <property name="text">
              <string>Outline</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="1" column="1">
            <widget class="QDoubleSpinBox" name="outlineB">
             <property name="maximum">
              <double>4.000000000000000</double>
@@ -142,20 +142,27 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="shadowL">
             <property name="text">
              <string>Shadow</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
+          <item row="3" column="1">
            <widget class="QDoubleSpinBox" name="shadowB">
             <property name="maximum">
              <double>4.000000000000000</double>
             </property>
             <property name="singleStep">
              <double>0.100000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QCheckBox" name="backgroundCB">
+            <property name="text">
+             <string>Background</string>
             </property>
            </widget>
           </item>
@@ -235,6 +242,7 @@
   <tabstop>leftMarginB</tabstop>
   <tabstop>rightMarginB</tabstop>
   <tabstop>vMarginB</tabstop>
+  <tabstop>backgroundCB</tabstop>
   <tabstop>outlineB</tabstop>
   <tabstop>shadowB</tabstop>
   <tabstop>textColorB</tabstop>

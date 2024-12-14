@@ -29,7 +29,7 @@ namespace Ui {
 class OSDSettingsW : public QScrollArea
 {
 public:
-    static void init(const QString &, int, int, int, int, int, int, double, double, const QColor &, const QColor &, const QColor &, bool l);
+    static void init(const QString &, int, int, int, int, int, int, double, double, const QColor &, const QColor &, const QColor &, bool l, bool m);
 
     OSDSettingsW(const QString &);
     ~OSDSettingsW();
@@ -37,9 +37,13 @@ public:
     void addWidget(QWidget *w);
 
     void writeSettings();
+
 private:
     void readSettings();
 
+    inline void setShadowColorB();
+
+private:
     QRadioButton *alignB[9];
     Ui::OSDSettings *ui;
     QString prefix;

@@ -390,11 +390,12 @@ void LibASS::setASSStyle()
             continue; // Don't apply to styles with non standard alignment / angle (e.g. karaoke, rotated texts, etc.)
         if (colorsAndBorders)
         {
+            const bool bg = settings.getBool("Subtitles/Background");
             style.PrimaryColour = assColorFromQColor(settings.getColor("Subtitles/TextColor"));
             style.SecondaryColour = assColorFromQColor(settings.getColor("Subtitles/TextColor"), true);
             style.OutlineColour = assColorFromQColor(settings.getColor("Subtitles/OutlineColor"));
-            style.BackColour = assColorFromQColor(settings.getColor("Subtitles/ShadowColor"));
-            style.BorderStyle = 1;
+            style.BackColour = assColorFromQColor(settings.getColor(bg ? "Subtitles/BackgroundColor" : "Subtitles/ShadowColor"));
+            style.BorderStyle = bg ? 4 : 1;
             style.Outline = settings.getDouble("Subtitles/Outline");
             style.Shadow = settings.getDouble("Subtitles/Shadow");
         }
@@ -578,16 +579,17 @@ void LibASS::closeASS()
 
 void LibASS::readStyle(const QString &prefix, ASS_Style *style)
 {
+    const bool bg = settings.getBool(prefix + "/Background");
     if (style->FontName)
         free(style->FontName);
     style->FontName = strdup(settings.getString(prefix + "/FontName").toUtf8().constData());
     style->FontSize = settings.getInt(prefix + "/FontSize");
     style->PrimaryColour = style->SecondaryColour = assColorFromQColor(settings.getColor(prefix + "/TextColor"));
     style->OutlineColour = assColorFromQColor(settings.getColor(prefix + "/OutlineColor"));
-    style->BackColour = assColorFromQColor(settings.getColor(prefix + "/ShadowColor"));
+    style->BackColour = assColorFromQColor(settings.getColor(prefix + (bg ? "/BackgroundColor" : "/ShadowColor")));
     style->Bold = settings.getBool(prefix + "/Bold");
     style->Spacing = settings.getDouble(prefix + "/Spacing");
-    style->BorderStyle = 1;
+    style->BorderStyle = bg ? 4 : 1;
     style->Outline = settings.getDouble(prefix + "/Outline");
     style->Shadow = settings.getDouble(prefix + "/Shadow");
     style->Alignment = toASSAlignment(settings.getInt(prefix + "/Alignment"));
