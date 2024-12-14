@@ -77,6 +77,7 @@ private:
 
     QGroupBox *demuxerB;
     QCheckBox *reconnectNetworkB;
+    QCheckBox *allowExperimentalB;
     QGroupBox *hurryUpB;
     QCheckBox *skipFramesB, *forceSkipFramesB;
     QGroupBox *decoderB;

@@ -76,6 +76,7 @@ FFmpeg::FFmpeg() :
 
     init("DemuxerEnabled", true);
     init("ReconnectNetwork", true);
+    init("AllowExperimental", false);
     init("DecoderEnabled", true);
 #ifdef QMPlay2_VKVIDEO
     switch (QOperatingSystemVersion::currentType())
@@ -252,6 +253,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     reconnectNetworkB = new QCheckBox(tr("Try to automatically reconnect the network connection"));
     reconnectNetworkB->setChecked(sets().getBool("ReconnectNetwork"));
 
+    allowExperimentalB = new QCheckBox(tr("Allow experimental FFmpeg features"));
+    allowExperimentalB->setToolTip(tr("Useful for turning on HLS subtitles"));
+    allowExperimentalB->setChecked(sets().getBool("AllowExperimental"));
+
     decoderB = new QGroupBox(tr("Software decoder"));
     decoderB->setCheckable(true);
     decoderB->setChecked(sets().getBool("DecoderEnabled"));
@@ -346,6 +351,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
 
     QFormLayout *demuxerLayout = new QFormLayout(demuxerB);
     demuxerLayout->addRow(nullptr, reconnectNetworkB);
+    demuxerLayout->addRow(nullptr, allowExperimentalB);
 
     QFormLayout *decoderLayout = new QFormLayout(decoderB);
     decoderLayout->addRow(tr("Number of threads used to decode video") + ": ", threadsB);
@@ -384,6 +390,7 @@ void ModuleSettingsWidget::saveSettings()
 {
     sets().set("DemuxerEnabled", demuxerB->isChecked());
     sets().set("ReconnectNetwork", reconnectNetworkB->isChecked());
+    sets().set("AllowExperimental", allowExperimentalB->isChecked());
     sets().set("DecoderEnabled", decoderB->isChecked());
     sets().set("HurryUP", hurryUpB ->isChecked());
     sets().set("SkipFrames", skipFramesB->isChecked());

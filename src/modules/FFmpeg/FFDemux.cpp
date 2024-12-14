@@ -50,6 +50,13 @@ bool FFDemux::set()
         restartPlayback = true;
     }
 
+    const bool tmpAllowExperimental = sets().getBool("AllowExperimental");
+    if (tmpAllowExperimental != m_allowExperimental)
+    {
+        m_allowExperimental = tmpAllowExperimental;
+        restartPlayback = true;
+    }
+
     return sets().getBool("DemuxerEnabled") && !restartPlayback;
 }
 
@@ -518,7 +525,7 @@ Playlist::Entries FFDemux::fetchTracks(const QString &url, bool &ok)
 
 void FFDemux::addFormatContext(QString url, const QString &param)
 {
-    FormatContext *fmtCtx = new FormatContext(m_reconnectNetwork);
+    FormatContext *fmtCtx = new FormatContext(m_reconnectNetwork, m_allowExperimental);
     {
         QMutexLocker mL(&mutex);
         formatContexts.append(fmtCtx);

@@ -44,7 +44,7 @@ class FormatContext
 {
     Q_DECLARE_TR_FUNCTIONS(FormatContext)
 public:
-    FormatContext(bool reconnectNetwork = false);
+    FormatContext(bool reconnectNetwork = false, bool allowExperimental = false);
     ~FormatContext();
 
     bool metadataChanged() const;
@@ -94,6 +94,7 @@ private:
     OggHelper *oggHelper;
 
     const bool m_reconnectNetwork;
+    const bool m_allowExperimental;
     bool isPaused, fixMkvAss;
     mutable bool isMetadataChanged;
     double lastTime, startTime;

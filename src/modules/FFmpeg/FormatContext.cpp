@@ -236,7 +236,7 @@ private:
 
 /**/
 
-FormatContext::FormatContext(bool reconnectNetwork) :
+FormatContext::FormatContext(bool reconnectNetwork, bool allowExperimental) :
     isError(false),
     currPos(0.0),
     abortCtx(new AbortContext),
@@ -244,6 +244,7 @@ FormatContext::FormatContext(bool reconnectNetwork) :
     packet(nullptr),
     oggHelper(nullptr),
     m_reconnectNetwork(reconnectNetwork),
+    m_allowExperimental(allowExperimental),
     isPaused(false), fixMkvAss(false),
     isMetadataChanged(false),
     lastTime(0.0),
@@ -764,9 +765,8 @@ bool FormatContext::open(const QString &_url, const QString &param)
     }
 
     formatCtx = avformat_alloc_context();
-    if (!isLocal && scheme.startsWith("http") && (url.endsWith(".m3u8") || url.contains(".m3u8?")))
+    if (m_allowExperimental)
     {
-        // Allow WebVTT for HLS
         formatCtx->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
     }
     formatCtx->interrupt_callback.callback = (int(*)(void *))interruptCB;

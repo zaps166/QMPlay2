@@ -71,4 +71,5 @@ private:
 
     bool abortFetchTracks;
     bool m_reconnectNetwork;
+    bool m_allowExperimental = false;
 };
