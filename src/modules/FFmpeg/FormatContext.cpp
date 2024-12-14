@@ -764,6 +764,11 @@ bool FormatContext::open(const QString &_url, const QString &param)
     }
 
     formatCtx = avformat_alloc_context();
+    if (!isLocal && scheme.startsWith("http") && (url.endsWith(".m3u8") || url.contains(".m3u8?")))
+    {
+        // Allow WebVTT for HLS
+        formatCtx->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
+    }
     formatCtx->interrupt_callback.callback = (int(*)(void *))interruptCB;
     formatCtx->interrupt_callback.opaque = &abortCtx->isAborted;
 
