@@ -93,7 +93,7 @@ private:
 
     OggHelper *oggHelper;
 
-    bool m_reconnectNetwork;
+    const bool m_reconnectNetwork;
     bool isPaused, fixMkvAss;
     mutable bool isMetadataChanged;
     double lastTime, startTime;
