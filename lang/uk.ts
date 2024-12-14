@@ -1028,11 +1028,11 @@
     </message>
     <message>
         <source>Default quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Якість за замовчуванням</translation>
     </message>
     <message>
         <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>параметр &quot;-f&quot;, зверніться до документації yt-dlp</translation>
     </message>
 </context>
 <context>
@@ -2442,11 +2442,11 @@
     </message>
     <message>
         <source>Continue last playback when program starts</source>
-        <translation type="unfinished"></translation>
+        <translation>Продовжити останнє відтворення після запуску програми</translation>
     </message>
     <message>
         <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation type="unfinished"></translation>
+        <translation>Тривалість повинна бути не менше 8 хвилин. Позиція відтворення має бути в межах від 1% до 99% діапазону відтворення. Ви можете продовжити відтворення, натиснувши значок поруч із кнопкою на весь екран</translation>
     </message>
 </context>
 <context>
@@ -2565,7 +2565,7 @@
     </message>
     <message>
         <source>Un&amp;mute</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Увімкнути звук</translation>
     </message>
 </context>
 <context>
@@ -2890,7 +2890,7 @@ QMPlay2 не масштабуватиме іконки!</translation>
     </message>
     <message>
         <source>Search filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Пошуковий фільтр</translation>
     </message>
 </context>
 <context>
