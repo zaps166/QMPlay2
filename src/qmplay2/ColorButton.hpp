@@ -28,18 +28,24 @@ class QMPLAY2SHAREDLIB_EXPORT ColorButton final : public QPushButton
 public:
     ColorButton(QWidget *parent = nullptr);
 
+    void setAlphaAllowed(bool alpha);
+
     void setColor(const QColor &color);
     inline QColor getColor() const
     {
         return m_color;
     }
+
 protected:
     void paintEvent(QPaintEvent *) override;
+
 private:
-    QColor m_color;
-    bool m_alphaChannel;
-private slots:
     void openColorDialog();
+
 signals:
     void colorChanged();
+
+private:
+    QColor m_color;
+    bool m_alphaChannel = false;
 };
