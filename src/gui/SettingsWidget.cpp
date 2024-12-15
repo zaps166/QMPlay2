@@ -65,6 +65,7 @@
 #include <KeyBindingsDialog.hpp>
 #include <Appearance.hpp>
 #include <Settings.hpp>
+#include <Version.hpp>
 #include <MenuBar.hpp>
 #include <Module.hpp>
 
@@ -1219,6 +1220,16 @@ QString SettingsWidget::chooseDir(const QString &currPth)
         if (dirInfo.isDir())
 #endif
         {
+            if (Version::isPortable() && dirInfo.isAbsolute())
+            {
+                const auto appDirPath = QCoreApplication::applicationDirPath();
+                if (auto dirRelative = QDir::cleanPath(dir); dirRelative.startsWith(appDirPath))
+                {
+                    dirRelative.remove(0, appDirPath.size());
+                    dirRelative.prepend(".");
+                    return dirRelative;
+                }
+            }
             return dir;
         }
         QMessageBox::warning(this, QString(), tr("Cannot change the directory"));
