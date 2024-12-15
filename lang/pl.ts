@@ -1831,7 +1831,7 @@
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Opóźnienie</translation>
     </message>
     <message>
         <source>Only in full screen</source>
@@ -1880,6 +1880,14 @@
     <message>
         <source>Limit frequency in FFT spectrum</source>
         <translation>Limituj częstotliwość dla widma FFT</translation>
+    </message>
+    <message>
+        <source>Allow experimental FFmpeg features</source>
+        <translation>Zezwalaj na eksperymentalne funkcje FFmpeg</translation>
+    </message>
+    <message>
+        <source>Useful for turning on HLS subtitles</source>
+        <translation>Przydatne do włączenia napisów HLS</translation>
     </message>
 </context>
 <context>
@@ -1977,6 +1985,10 @@
     <message>
         <source>Bold</source>
         <translation>Pogrubiona</translation>
+    </message>
+    <message>
+        <source>Background</source>
+        <translation>Tło</translation>
     </message>
 </context>
 <context>
@@ -2189,6 +2201,18 @@
     <message>
         <source>Recording stopped</source>
         <translation>Nagrywanie zatrzymane</translation>
+    </message>
+    <message>
+        <source>Integer scaling: enabled</source>
+        <translation>Skalowanie całkowite: włączone</translation>
+    </message>
+    <message>
+        <source>Integer scaling: disabled</source>
+        <translation>Skalowanie całkowite: wyłączone</translation>
+    </message>
+    <message>
+        <source>Zoom: %1</source>
+        <translation>Powiększenie: %1</translation>
     </message>
 </context>
 <context>
@@ -2566,6 +2590,10 @@
     <message>
         <source>Un&amp;mute</source>
         <translation>&amp;Wyłącz wyciszenie</translation>
+    </message>
+    <message>
+        <source>&amp;Integer scaling</source>
+        <translation>Ska&amp;lowanie całkowite</translation>
     </message>
 </context>
 <context>

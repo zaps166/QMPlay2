@@ -1881,6 +1881,14 @@
         <source>Limit frequency in FFT spectrum</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Allow experimental FFmpeg features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Useful for turning on HLS subtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -1976,6 +1984,10 @@
     </message>
     <message>
         <source>Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Background</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2188,6 +2200,18 @@
     </message>
     <message>
         <source>Recording stopped</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Integer scaling: enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Integer scaling: disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2565,6 +2589,10 @@
     </message>
     <message>
         <source>Un&amp;mute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Integer scaling</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
