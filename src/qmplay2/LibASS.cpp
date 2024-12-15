@@ -216,11 +216,11 @@ bool LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
     return true;
 }
 
-void LibASS::setWindowSize(int _winW, int _winH)
+void LibASS::setWindowSize(const QSize &winSize)
 {
     const qreal dpr = QMPlay2Core.getVideoDevicePixelRatio();
-    winW = _winW * dpr;
-    winH = _winH * dpr;
+    winW = winSize.width() * dpr;
+    winH = winSize.height() * dpr;
     calcSize();
 }
 void LibASS::setARatio(double _aspect_ratio)
@@ -620,7 +620,7 @@ bool LibASS::addImgs(ass_image *, QMPlay2OSD *)
     return false;
 }
 
-void LibASS::setWindowSize(int, int)
+void LibASS::setWindowSize(const QSize &)
 {}
 void LibASS::setARatio(double)
 {}

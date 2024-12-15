@@ -68,6 +68,12 @@ PlayClass::PlayClass() :
         zoom = 1.0;
     }
 
+    if (QMPlay2Core.getSettings().getBool("IntegerScaling"))
+    {
+        m_integerScaling = true;
+        fixZoomForIntegerScaling();
+    }
+
     speed = subtitlesScale = 1.0;
     flip = 0;
     rotate90 = spherical = false;
@@ -460,6 +466,25 @@ void PlayClass::setRecording(bool checked)
         demuxThr->stopRecording();
 }
 
+void PlayClass::setIntegerScaling(bool integerScaling)
+{
+    m_integerScaling = integerScaling;
+
+    if (m_integerScaling)
+    {
+        fixZoomForIntegerScaling();
+    }
+
+    if (vThr)
+    {
+        applyZoom(false);
+    }
+
+    messageAndOSD(m_integerScaling ? tr("Integer scaling: enabled") : tr("Integer scaling: disabled"));
+
+    QMPlay2Core.getSettings().set("IntegerScaling", m_integerScaling);
+}
+
 inline bool PlayClass::hasVideoStream()
 {
     return vThr && demuxThr && demuxThr->demuxer && videoStream > -1;
@@ -467,6 +492,18 @@ inline bool PlayClass::hasVideoStream()
 inline bool PlayClass::hasAudioStream()
 {
     return aThr && demuxThr && demuxThr->demuxer && audioStream > -1;
+}
+
+double PlayClass::getZoom() const
+{
+    if (!m_integerScaling)
+        return zoom;
+
+    const qreal dpr = QMPlay2Core.getVideoDevicePixelRatio();
+    return zoom * std::max(
+        m_videoSize.width()  / (m_videoWinSize.width()  * dpr),
+        m_videoSize.height() / (m_videoWinSize.height() * dpr)
+    );
 }
 
 void PlayClass::speedMessageAndOSD()
@@ -672,6 +709,49 @@ void PlayClass::loadAssFonts(const QList<StreamInfo *> &streams)
     }
 }
 
+void PlayClass::applyZoom(bool message)
+{
+    Q_ASSERT(vThr);
+    if (ass)
+    {
+        ass->setZoom(getZoom());
+    }
+    if (message)
+    {
+        const auto text = tr("Zoom: %1");
+        if (m_integerScaling && zoom < 1.0)
+        {
+            const auto zoomRational = av_d2q(zoom, 10);
+            messageAndOSD(text.arg(QStringLiteral("%1/%2").arg(zoomRational.num).arg(zoomRational.den)));
+        }
+        else
+        {
+            messageAndOSD(text.arg(zoom));
+        }
+    }
+    vThr->setZoom(getZoom());
+    vThr->processParams();
+}
+
+void PlayClass::fixZoomForIntegerScaling()
+{
+    Q_ASSERT(m_integerScaling);
+    if (zoom != 1.0)
+    {
+        bool inv = false;
+        if (zoom < 1.0)
+        {
+            zoom = 1.0 / zoom;
+            inv = true;
+        }
+        zoom = qRound(zoom);
+        if (inv)
+        {
+            zoom = 1.0 / zoom;
+        }
+    }
+}
+
 inline void PlayClass::emitSetVideoCheckState()
 {
     emit setVideoCheckState(rotate90, flip & Qt::Horizontal, flip & Qt::Vertical, spherical);
@@ -748,11 +828,18 @@ void PlayClass::settingsChanged(int page, bool forceRestart, bool initFilters)
     if (initFilters && vThr && !restarted)
         vThr->initFilters();
 }
-void PlayClass::videoResized(int w, int h)
+void PlayClass::videoResized(const QSize &size)
 {
-    if (ass && (w != videoWinW || h != videoWinH))
+    if (m_videoWinSize == size)
+        return;
+
+    m_videoWinSize = size;
+
+    if (ass)
     {
-        ass->setWindowSize(w, h);
+        ass->setWindowSize(size);
+        if (m_integerScaling)
+            ass->setZoom(getZoom());
         if (QMPlay2Core.getSettings().getBool("OSD/Enabled"))
         {
             osdMutex.lock();
@@ -763,8 +850,12 @@ void PlayClass::videoResized(int w, int h)
         if (vThr)
             vThr->updateSubs();
     }
-    videoWinW = w;
-    videoWinH = h;
+
+    if (m_integerScaling && vThr)
+    {
+        vThr->setZoom(getZoom());
+        vThr->processParams();
+    }
 }
 
 void PlayClass::videoAdjustmentChanged(const QString &osdText)
@@ -824,24 +915,36 @@ void PlayClass::zoomIn()
 {
     if (vThr)
     {
-        zoom += 0.05;
-        if (ass)
-            ass->setZoom(zoom);
-        messageAndOSD("Zoom: " + QString::number(zoom));
-        vThr->setZoom();
-        vThr->processParams();
+        if (m_integerScaling)
+        {
+            if (zoom >= 1.0)
+                zoom += 1.0;
+            else
+                zoom = 1.0 / ((1.0 / zoom) - 1.0);
+        }
+        else
+        {
+            zoom += 0.05;
+        }
+        applyZoom(true);
     }
 }
 void PlayClass::zoomOut()
 {
-    if (vThr && zoom - 0.05 > 0.0)
+    if (vThr && zoom - (m_integerScaling ? 0.2 : 0.05) > 0.0)
     {
-        zoom -= 0.05;
-        if (ass)
-            ass->setZoom(zoom);
-        messageAndOSD("Zoom: " + QString::number(zoom));
-        vThr->setZoom();
-        vThr->processParams();
+        if (m_integerScaling)
+        {
+            if (zoom > 1.0)
+                zoom -= 1.0;
+            else
+                zoom = 1.0 / ((1.0 / zoom) + 1.0);
+        }
+        else
+        {
+            zoom -= 0.05;
+        }
+        applyZoom(true);
     }
 }
 void PlayClass::zoomReset()
@@ -852,9 +955,9 @@ void PlayClass::zoomReset()
         if (vThr)
         {
             if (ass)
-                ass->setZoom(zoom);
+                ass->setZoom(getZoom());
             messageAndOSD("Zoom: " + QString::number(zoom));
-            vThr->setZoom();
+            vThr->setZoom(getZoom());
             vThr->processParams();
         }
     }
@@ -1120,7 +1223,9 @@ void PlayClass::frameSizeUpdated(int w, int h) //jeżeli rozmiar obrazu zmieni s
     }
     if (vThr) //"demuxThr->demuxer" can be closed, but "vThr" can be in waiting state
     {
-        vThr->setFrameSize(w, h);
+        m_videoSize = QSize(w, h);
+
+        vThr->setFrameSize(m_videoSize);
         vThr->initFilters();
         vThr->processParams();
         vThr->updateUnlock();
@@ -1461,10 +1566,12 @@ void PlayClass::load(Demuxer *demuxer)
 
                 vThr->setDec(dec);
 
-                vThr->setFrameSize(streams[videoStream]->params->width, streams[videoStream]->params->height);
+                m_videoSize = QSize(streams[videoStream]->params->width, streams[videoStream]->params->height);
+
+                vThr->setFrameSize(m_videoSize);
                 vThr->setARatio(aspect_ratio, getSAR());
                 vThr->setVideoAdjustment();
-                vThr->setZoom();
+                vThr->setZoom(getZoom());
                 const bool hasSpherical = vThr->setSpherical();
                 const bool hasRotate90 = vThr->setRotate90();
                 vThr->setFlip();
@@ -1495,10 +1602,10 @@ void PlayClass::load(Demuxer *demuxer)
 
                     fps = streams[videoStream]->getFPS();
                     ass = new LibASS(QMPlay2Core.getSettings());
-                    ass->setWindowSize(videoWinW, videoWinH);
+                    ass->setWindowSize(m_videoWinSize);
                     ass->setFontScale(subtitlesScale);
                     ass->setARatio(aspect_ratio);
-                    ass->setZoom(zoom);
+                    ass->setZoom(getZoom());
                     ass->initOSD();
 
                     emit videoStarted(noVideo);

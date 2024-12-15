@@ -319,7 +319,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     connect(infoDock, SIGNAL(chStream(const QString &)), &playC, SLOT(chStream(const QString &)));
     connect(infoDock, SIGNAL(saveCover()), &playC, SLOT(saveCover()));
 
-    connect(videoDock, SIGNAL(resized(int, int)), &playC, SLOT(videoResized(int, int)));
+    connect(videoDock, &VideoDock::resized, &playC, &PlayClass::videoResized);
     connect(videoDock, SIGNAL(itemDropped(const QString &, bool)), this, SLOT(itemDropped(const QString &, bool)));
 
     connect(playlistDock, SIGNAL(play(const QString &)), &playC, SLOT(play(const QString &)));
@@ -971,6 +971,8 @@ void MainWidget::createMenuBar()
     connect(menuBar->player->speedUp, SIGNAL(triggered()), &playC, SLOT(speedUp()));
     connect(menuBar->player->slowDown, SIGNAL(triggered()), &playC, SLOT(slowDown()));
     connect(menuBar->player->setSpeed, SIGNAL(triggered()), &playC, SLOT(setSpeed()));
+    menuBar->player->integerScaling->setChecked(QMPSettings.getBool("IntegerScaling"));
+    connect(menuBar->player->integerScaling, &QAction::triggered, &playC, &PlayClass::setIntegerScaling);
     connect(menuBar->player->zoomIn, SIGNAL(triggered()), &playC, SLOT(zoomIn()));
     connect(menuBar->player->zoomOut, SIGNAL(triggered()), &playC, SLOT(zoomOut()));
     connect(menuBar->player->switchARatio, SIGNAL(triggered()), this, SLOT(switchARatio()));

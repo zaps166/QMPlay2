@@ -170,10 +170,10 @@ void VideoThr::setVideoAdjustment()
 {
     QMPlay2GUI.videoAdjustment->setModuleParam(writer);
 }
-void VideoThr::setFrameSize(int w, int h)
+void VideoThr::setFrameSize(const QSize &size)
 {
-    W = w;
-    H = h;
+    W = size.width();
+    H = size.height();
     writer->modParam("W", W);
     writer->modParam("H", H);
     deleteSubs = deleteOSD = deleteFrame = true;
@@ -186,10 +186,10 @@ void VideoThr::setARatio(double aRatio, const AVRational &sar)
     writer->modParam("AspectRatio", aRatio);
     lastSAR = sar;
 }
-void VideoThr::setZoom()
+void VideoThr::setZoom(double zoom)
 {
     updateSubs();
-    writer->modParam("Zoom", playC.zoom);
+    writer->modParam("Zoom", zoom);
 }
 
 void VideoThr::setSubtitlesScale(double subtitlesScale)

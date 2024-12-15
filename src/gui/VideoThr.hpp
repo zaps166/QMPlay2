@@ -67,9 +67,9 @@ public:
     bool setFlip();
     bool setRotate90();
     void setVideoAdjustment();
-    void setFrameSize(int w, int h);
+    void setFrameSize(const QSize &size);
     void setARatio(double aRatio, const AVRational &sar);
-    void setZoom();
+    void setZoom(double zoom);
     void setSubtitlesScale(double subtitlesScale);
     void setColorInfo(AVColorPrimaries colorPrimaries, AVColorTransferCharacteristic colorTrc);
     void otherReset();

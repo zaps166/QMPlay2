@@ -75,11 +75,10 @@ private:
 private slots:
     void popup(const QPoint &);
     void hideCursor();
-    void resizedIDW(int, int);
     void updateImage(const QImage &);
     void visibilityChanged(bool);
     void hasCoverImage(bool);
 signals:
-    void resized(int, int);
+    void resized(const QSize &size);
     void itemDropped(const QString &, bool);
 };

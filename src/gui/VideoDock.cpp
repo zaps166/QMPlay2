@@ -85,7 +85,7 @@ VideoDock::VideoDock() :
     connect(&hideCursorTim, SIGNAL(timeout()), this, SLOT(hideCursor()));
     connect(&leftButtonPlayTim, SIGNAL(timeout()), QMPlay2GUI.menuBar->player->togglePlay, SLOT(trigger()));
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(popup(const QPoint &)));
-    connect(&iDW, SIGNAL(resized(int, int)), this, SLOT(resizedIDW(int, int)));
+    connect(&iDW, &InDockW::resized, this, &VideoDock::resized);
     connect(&iDW, SIGNAL(hasCoverImage(bool)), this, SLOT(hasCoverImage(bool)));
     connect(this, SIGNAL(dockVisibilityChanged(bool)), this, SLOT(visibilityChanged(bool)));
     connect(&QMPlay2Core, &QMPlay2CoreClass::dockVideo, this, [this](QWidget *w) {
@@ -368,10 +368,6 @@ void VideoDock::hideCursor()
             internalW->setCursor(Qt::BlankCursor);
     }
     pixels = 0;
-}
-void VideoDock::resizedIDW(int w, int h)
-{
-    emit resized(w, h);
 }
 void VideoDock::updateImage(const QImage &img)
 {

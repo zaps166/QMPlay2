@@ -127,8 +127,12 @@ void InDockW::resizeEvent(QResizeEvent *)
         if (w->geometry() != QRect(X, Y, W, H))
         {
             w->setGeometry(X, Y, W, H);
-            emit resized(W, H);
+            emit resized(QSize(W, H));
         }
+    }
+    else
+    {
+        emit resized(size());
     }
 }
 void InDockW::paintEvent(QPaintEvent *)

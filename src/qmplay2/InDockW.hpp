@@ -51,7 +51,7 @@ protected:
     void leaveEvent(QEvent *) override;
     bool event(QEvent *) override;
 signals:
-    void resized(int, int);
+    void resized(const QSize &size);
     void itemDropped(const QString &);
     void hasCoverImage(bool);
 };

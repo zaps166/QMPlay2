@@ -41,6 +41,8 @@ class BufferPool;
 }
 #endif
 
+class QSize;
+
 class QMPLAY2SHAREDLIB_EXPORT LibASS
 {
 public:
@@ -51,7 +53,7 @@ public:
 
     bool addImgs(ass_image *img, QMPlay2OSD *osd);
 
-    void setWindowSize(int, int);
+    void setWindowSize(const QSize &winSize);
     void setARatio(double);
     void setZoom(double);
     void setFontScale(double);

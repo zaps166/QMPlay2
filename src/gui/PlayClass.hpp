@@ -103,9 +103,13 @@ public:
 
     void setRecording(bool checked);
 
+    void setIntegerScaling(bool integerScaling);
+
 private:
     inline bool hasVideoStream();
     inline bool hasAudioStream();
+
+    double getZoom() const;
 
     void speedMessageAndOSD();
 
@@ -132,6 +136,10 @@ private:
     bool setAudioParams(quint8 realChannels, quint32 realSampleRate);
 
     void loadAssFonts(const QList<StreamInfo *> &streams);
+
+    void applyZoom(bool message);
+
+    void fixZoomForIntegerScaling();
 
     inline void emitSetVideoCheckState();
 
@@ -170,17 +178,24 @@ private:
 
     QMutex osdMutex, subsMutex;
     std::shared_ptr<QMPlay2OSD> osd;
-    int videoWinW, videoWinH;
     QStringList fileSubsList;
     QString fileSubs;
+
+    QSize m_videoWinSize;
+    QSize m_videoSize;
+
+    bool m_integerScaling = false;
+
 private slots:
     void suspendWhenFinished(bool b);
     void repeatEntry(bool b);
 
     void saveCover();
     void settingsChanged(int page, bool forceRestart, bool initFilters);
-    void videoResized(int, int);
+public:
+    void videoResized(const QSize &size);
 
+private slots:
     void videoAdjustmentChanged(const QString &osdText);
 
     void setAB();
