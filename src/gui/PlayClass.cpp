@@ -952,14 +952,7 @@ void PlayClass::zoomReset()
     if (zoom != 1.0)
     {
         zoom = 1.0;
-        if (vThr)
-        {
-            if (ass)
-                ass->setZoom(getZoom());
-            messageAndOSD("Zoom: " + QString::number(zoom));
-            vThr->setZoom(getZoom());
-            vThr->processParams();
-        }
+        applyZoom(true);
     }
 }
 void PlayClass::otherReset()
