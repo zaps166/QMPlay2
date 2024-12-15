@@ -1024,7 +1024,7 @@ void Window::ensureVideoPipeline()
     const int vkImgH = vkImage->size().height;
     const int imgH = m_imgSize.height();
 
-    const float subtract = m_frame.hasBorders()
+    const float subtract = (m_nearestScaling || m_frame.hasBorders())
         ? 0.0f
         : 1.0f
     ;
