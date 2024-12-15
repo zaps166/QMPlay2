@@ -1883,11 +1883,11 @@
     </message>
     <message>
         <source>Allow experimental FFmpeg features</source>
-        <translation type="unfinished"></translation>
+        <translation>Дозволити експериментальні можливості FFmpeg</translation>
     </message>
     <message>
         <source>Useful for turning on HLS subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>Корисно для ввімкнення субтитрів HLS</translation>
     </message>
 </context>
 <context>
@@ -1988,7 +1988,7 @@
     </message>
     <message>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Фон</translation>
     </message>
 </context>
 <context>
@@ -2204,15 +2204,15 @@
     </message>
     <message>
         <source>Integer scaling: enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Цілочисельне масштабування: увімкнено</translation>
     </message>
     <message>
         <source>Integer scaling: disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Цілочисельне масштабування: вимкнено</translation>
     </message>
     <message>
         <source>Zoom: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Масштабування: %1</translation>
     </message>
 </context>
 <context>
@@ -2470,7 +2470,7 @@
     </message>
     <message>
         <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation>Тривалість повинна бути не менше 8 хвилин. Позиція відтворення має бути в межах від 1% до 99% діапазону відтворення. Ви можете продовжити відтворення, натиснувши значок поруч із кнопкою на весь екран</translation>
+        <translation>Тривалість повинна бути не менше 8 хвилин. Позиція відтворення має бути в межах від 1% до 99% діапазону відтворення. Ви можете продовжити відтворення, натиснувши значок поруч із кнопкою на весь екран.</translation>
     </message>
 </context>
 <context>
@@ -2593,7 +2593,7 @@
     </message>
     <message>
         <source>&amp;Integer scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>Ці&amp;лочисельне масштабування</translation>
     </message>
 </context>
 <context>
