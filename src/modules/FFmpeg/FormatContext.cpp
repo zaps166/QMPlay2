@@ -1056,6 +1056,11 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
         streamInfo->must_decode = false;
     }
 
+    if (streamInfo->params->codec_id == AV_CODEC_ID_DVB_TELETEXT)
+    {
+        streamInfo->skip_auto_select = true;
+    }
+
     streamInfo->is_default = stream->disposition & AV_DISPOSITION_DEFAULT;
     streamInfo->time_base = stream->time_base;
 

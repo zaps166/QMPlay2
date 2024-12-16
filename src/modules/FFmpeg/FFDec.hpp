@@ -70,6 +70,7 @@ protected:
     AVFrame *frame;
     QList<AVFrame *> m_frames;
     AVRational m_timeBase;
+    AVDictionary *m_options = nullptr;
 
     bool m_libError = false;
 

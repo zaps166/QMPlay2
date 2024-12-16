@@ -111,6 +111,7 @@ FFmpeg::FFmpeg() :
     init("Threads", static_cast<int>(0));
     init("LowresValue", static_cast<int>(0));
     init("ThreadTypeSlice", false);
+    init("TeletextPage", static_cast<int>(0));
 
 #if defined(USE_OPENGL)
 
@@ -349,6 +350,14 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
         sets().set("ThreadTypeSlice", 0);
     }
 
+    if (avcodec_find_decoder(AV_CODEC_ID_DVB_TELETEXT))
+    {
+        m_teletextPageB = new QSpinBox;
+        m_teletextPageB->setRange(99, 899);
+        m_teletextPageB->setSpecialValueText(tr("All"));
+        m_teletextPageB->setValue(sets().getInt("TeletextPage"));
+    }
+
     QFormLayout *demuxerLayout = new QFormLayout(demuxerB);
     demuxerLayout->addRow(nullptr, reconnectNetworkB);
     demuxerLayout->addRow(nullptr, allowExperimentalB);
@@ -357,6 +366,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     decoderLayout->addRow(tr("Number of threads used to decode video") + ": ", threadsB);
     decoderLayout->addRow(tr("Low resolution decoding (only some codecs)") + ": ", lowresB);
     decoderLayout->addRow(tr("Method of multithreaded decoding") + ": ", thrTypeB);
+    if (m_teletextPageB)
+        decoderLayout->addRow(tr("Teletext page: "), m_teletextPageB);
     decoderLayout->addRow(hurryUpB);
 
     connect(skipFramesB, SIGNAL(clicked(bool)), forceSkipFramesB, SLOT(setEnabled(bool)));
@@ -398,6 +409,8 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("Threads", threadsB->value());
     sets().set("LowresValue", lowresB->currentIndex());
     sets().set("ThreadTypeSlice", thrTypeB->currentIndex());
+    if (m_teletextPageB)
+        sets().set("TeletextPage", (m_teletextPageB->value() == m_teletextPageB->minimum()) ? 0 : m_teletextPageB->value());
 #ifdef QMPlay2_VKVIDEO
     if (decoderVKVIDEO)
         sets().set("DecoderVkVideoEnabled", decoderVKVIDEO->isChecked());

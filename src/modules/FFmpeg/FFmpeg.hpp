@@ -99,4 +99,5 @@ private:
 #endif
     QSpinBox *threadsB;
     QComboBox *lowresB, *thrTypeB;
+    QSpinBox *m_teletextPageB = nullptr;
 };

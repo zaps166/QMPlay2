@@ -88,6 +88,7 @@ private:
     int threads, lowres;
     bool respectHurryUP, skipFrames, forceSkipFrames, thread_type_slice;
     int lastFrameW, lastFrameH, lastPixFmt;
+    int m_teletextPage = 0;
     SwsContext *sws_ctx;
 
     const AVPixFmtDescriptor *m_origPixDesc = nullptr;

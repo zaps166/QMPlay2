@@ -120,6 +120,13 @@ bool FFDecSW::set()
         restartPlaying = true;
     }
 
+    int teletextPage = sets().getInt("TeletextPage");
+    if (m_teletextPage != teletextPage)
+    {
+        m_teletextPage = teletextPage;
+        restartPlaying = true;
+    }
+
 #ifdef USE_VULKAN
     m_disableZeroCopy = sets().getBool("DisableZeroCopy");
 #endif
@@ -477,6 +484,9 @@ bool FFDecSW::open(StreamInfo &streamInfo)
     }
     else if (codec_ctx->codec_type == AVMEDIA_TYPE_SUBTITLE)
     {
+        if (codec->id == AV_CODEC_ID_DVB_TELETEXT && m_teletextPage > 0)
+            av_dict_set(&m_options, "txt_page", QByteArray::number(m_teletextPage).constData(), 0);
+
         if (QMPlay2Core.isVulkanRenderer())
             m_vkBufferPool = static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->createBufferPool();
 #endif

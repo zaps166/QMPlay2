@@ -57,6 +57,7 @@ void FFDec::destroyDecoder()
     av_frame_free(&frame);
     av_packet_free(&packet);
     avcodec_free_context(&codec_ctx);
+    av_dict_free(&m_options);
 }
 
 void FFDec::clearFrames()
@@ -81,7 +82,7 @@ AVCodec *FFDec::init(StreamInfo &streamInfo)
 }
 bool FFDec::openCodec(AVCodec *codec)
 {
-    if (avcodec_open2(codec_ctx, codec, nullptr))
+    if (avcodec_open2(codec_ctx, codec, &m_options))
         return false;
     packet = av_packet_alloc();
     switch (codec_ctx->codec_type)

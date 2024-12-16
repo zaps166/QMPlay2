@@ -113,6 +113,7 @@ public:
     bool is_default = true;
     bool must_decode = false;
     bool decode_to_ass = false;
+    bool skip_auto_select = false;
     AVRational time_base = {1, 10000};
 
     // Video only

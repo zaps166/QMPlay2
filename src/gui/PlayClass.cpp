@@ -1424,7 +1424,7 @@ static Decoder *loadStream(
                 if (params->codec_type != type)
                     continue;
 
-                if (defaultStream < 0 && streams[i]->is_default)
+                if (defaultStream < 0 && streams[i]->is_default && !streams[i]->skip_auto_select)
                     defaultStream = i;
 
                 if (desiredVideoHeight > 0)
@@ -1455,7 +1455,7 @@ static Decoder *loadStream(
                     }
                 }
 
-                if (!lang.isEmpty() && chosenLangStream < 0)
+                if (!lang.isEmpty() && chosenLangStream < 0 && !streams[i]->skip_auto_select)
                 {
                     for (const QMPlay2Tag &tag : std::as_const(streams[i]->other_info))
                     {
@@ -1483,7 +1483,7 @@ static Decoder *loadStream(
                     continue;
 
                 StreamInfo &streamInfo = *streams[i];
-                if (streamInfo.params->codec_type == type && (defaultStream == -1 || i == defaultStream))
+                if (streamInfo.params->codec_type == type && ((defaultStream == -1 && !streamInfo.skip_auto_select) || i == defaultStream))
                 {
                     if (streamInfo.must_decode || !subtitles)
                         dec = Decoder::create(streamInfo, decoders, modNameOutput);
