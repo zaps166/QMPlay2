@@ -1883,11 +1883,11 @@
     </message>
     <message>
         <source>Allow experimental FFmpeg features</source>
-        <translation type="unfinished"></translation>
+        <translation>Permitir funciones experimentales de FFmpeg</translation>
     </message>
     <message>
         <source>Useful for turning on HLS subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>Útil para activar los subtítulos HLS</translation>
     </message>
 </context>
 <context>
@@ -1984,11 +1984,11 @@
     </message>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>Negrita</translation>
     </message>
     <message>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Fondo</translation>
     </message>
 </context>
 <context>
@@ -2204,15 +2204,15 @@
     </message>
     <message>
         <source>Integer scaling: enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Escalado de enteros: habilitado</translation>
     </message>
     <message>
         <source>Integer scaling: disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Escalado de enteros: deshabilitado</translation>
     </message>
     <message>
         <source>Zoom: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom: %1</translation>
     </message>
 </context>
 <context>
@@ -2593,7 +2593,7 @@
     </message>
     <message>
         <source>&amp;Integer scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Escalado de enteros</translation>
     </message>
 </context>
 <context>
