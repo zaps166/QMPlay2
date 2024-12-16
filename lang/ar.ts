@@ -1028,11 +1028,11 @@
     </message>
     <message>
         <source>Default quality</source>
-        <translation type="unfinished"></translation>
+        <translation>الجودة الإفتراضية</translation>
     </message>
     <message>
         <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>الخيار &quot;-f&quot;، الرجاء الرجوع إلى وثائق yt-dlp</translation>
     </message>
 </context>
 <context>
@@ -1883,11 +1883,11 @@
     </message>
     <message>
         <source>Allow experimental FFmpeg features</source>
-        <translation type="unfinished"></translation>
+        <translation>السماح بميزات FFmpeg التجريبية</translation>
     </message>
     <message>
         <source>Useful for turning on HLS subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>مفيد عند تفعيل ترجمات HLS</translation>
     </message>
 </context>
 <context>
@@ -1988,7 +1988,7 @@
     </message>
     <message>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>خلفية</translation>
     </message>
 </context>
 <context>
@@ -2204,15 +2204,15 @@
     </message>
     <message>
         <source>Integer scaling: enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>أبعاد بعدد حقيقي: تفعيل</translation>
     </message>
     <message>
         <source>Integer scaling: disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>أبعاد بعدد حقيقي: تعطيل</translation>
     </message>
     <message>
         <source>Zoom: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>تقريب: %1</translation>
     </message>
 </context>
 <context>
@@ -2466,11 +2466,11 @@
     </message>
     <message>
         <source>Continue last playback when program starts</source>
-        <translation type="unfinished"></translation>
+        <translation>إستكمال آخر تشغيل عند بدء البرنامج</translation>
     </message>
     <message>
         <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation type="unfinished"></translation>
+        <translation>الطول يجب أن يكون على الأقل 8 دقائق. موقع التشغيل يجب أن يكون في المجال [1% - 99%]. تستطيع إستكمال التشغيل بالضغط على الزر المحاذي لزر الشاشة الكاملة.</translation>
     </message>
 </context>
 <context>
@@ -2589,11 +2589,11 @@
     </message>
     <message>
         <source>Un&amp;mute</source>
-        <translation type="unfinished"></translation>
+        <translation>كتم</translation>
     </message>
     <message>
         <source>&amp;Integer scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>أبعاد بعدد حقيقي</translation>
     </message>
 </context>
 <context>
@@ -2918,7 +2918,7 @@ QMPlay2 لن يقوم بتكبير الأيقونات!</translation>
     </message>
     <message>
         <source>Search filter</source>
-        <translation type="unfinished"></translation>
+        <translation>مرشح البحث</translation>
     </message>
 </context>
 <context>
