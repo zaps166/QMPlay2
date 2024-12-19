@@ -88,6 +88,10 @@ void AVThread::stop(bool _terminate)
         terminate();
 }
 
+bool AVThread::hasError() const
+{
+    return false;
+}
 bool AVThread::hasDecoderError() const
 {
     return false;

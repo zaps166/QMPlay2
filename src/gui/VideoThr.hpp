@@ -47,6 +47,7 @@ public:
 
     void stop(bool terminate = false) override;
 
+    bool hasError() const override;
     bool hasDecoderError() const override;
 
     AVPixelFormats getSupportedPixelFormats() const;
@@ -95,7 +96,7 @@ private:
     void pause();
 
 private:
-    bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrameOrError, decoderError;
+    bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrameOrError, decoderError, m_error = false;
     AVRational lastSAR;
     int W, H;
     quint32 seq;

@@ -128,6 +128,10 @@ void VideoThr::stop(bool terminate)
     AVThread::stop(terminate);
 }
 
+bool VideoThr::hasError() const
+{
+    return m_error;
+}
 bool VideoThr::hasDecoderError() const
 {
     return decoderError;
@@ -534,10 +538,12 @@ void VideoThr::run()
             {
                 gotFrameOrError = true;
                 err = true;
+                m_error = true;
             }
             else
             {
                 tmp_br += bytes_consumed;
+                m_error = false;
             }
             skipNonKey = false;
         }
@@ -822,6 +828,8 @@ void VideoThr::run()
             Functions::s_wait(0.001);
         }
     }
+
+    m_error = false;
 }
 
 #ifdef Q_OS_WIN

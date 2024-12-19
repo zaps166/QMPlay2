@@ -54,6 +54,7 @@ public:
 
     virtual void stop(bool terminate = false);
 
+    virtual bool hasError() const;
     virtual bool hasDecoderError() const;
 
     Decoder *dec = nullptr;
