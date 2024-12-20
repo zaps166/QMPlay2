@@ -657,11 +657,18 @@ bool FFDecSW::getFromBitmapSubsBuffer(shared_ptr<QMPlay2OSD> &osd, double pos)
             auto scaleRect = [this](const QRect &rect, const QSize &frameSize) {
                 const auto rx = static_cast<qreal>(frameSize.width())  / static_cast<qreal>(codec_ctx->width);
                 const auto ry = static_cast<qreal>(frameSize.height()) / static_cast<qreal>(codec_ctx->height);
+                const auto r = ry / rx;
+                QRectF newRect = rect;
+                if (r < 0.95)
+                {
+                    newRect.setWidth(newRect.width() * r);
+                    newRect.translate(rect.width() / 2.0 - newRect.width() / 2.0, 0.0);
+                }
                 return QRectF(
-                    rect.x() * rx,
-                    rect.y() * ry,
-                    rect.width() * rx,
-                    rect.height() * ry
+                    newRect.x() * rx,
+                    newRect.y() * ry,
+                    newRect.width() * rx,
+                    newRect.height() * ry
                 );
             };
 
