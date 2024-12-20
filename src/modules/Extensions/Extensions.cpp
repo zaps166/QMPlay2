@@ -37,6 +37,9 @@
 #ifdef USE_MEDIABROWSER
     #include <MediaBrowser.hpp>
 #endif
+#ifdef USE_OPENSUBTITLES
+    #include <OpenSubtitles.hpp>
+#endif
 
 #include <QCoreApplication>
 #include <QComboBox>
@@ -55,6 +58,9 @@ Extensions::Extensions() :
 #endif
 #ifdef USE_RADIO
     radio = QIcon(":/radio.svgz");
+#endif
+#ifdef USE_OPENSUBTITLES
+    opensubtitles = QIcon(":/opensubtitles.svgz");
 #endif
 
 #ifdef USE_YOUTUBE
@@ -98,6 +104,9 @@ QList<Extensions::Info> Extensions::getModulesInfo(const bool) const
 #ifdef USE_MPRIS2
     modulesInfo += Info(MPRIS2Name, QMPLAY2EXTENSION);
 #endif
+#ifdef USE_OPENSUBTITLES
+    modulesInfo += Info(OpenSubtitlesName, QMPLAY2EXTENSION, opensubtitles);
+#endif
     return modulesInfo;
 }
 void *Extensions::createInstance(const QString &name)
@@ -127,6 +136,10 @@ void *Extensions::createInstance(const QString &name)
 #ifdef USE_MPRIS2
     else if (name == MPRIS2Name)
         return static_cast<QMPlay2Extensions *>(new MPRIS2(*this));
+#endif
+#ifdef USE_OPENSUBTITLES
+    else if (name == OpenSubtitlesName)
+        return static_cast<QMPlay2Extensions *>(new OpenSubtitles(*this, opensubtitles));
 #endif
     return nullptr;
 }

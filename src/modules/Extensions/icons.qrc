@@ -7,5 +7,6 @@
         <file alias="radio.svgz">radio.svgz</file>
         <file alias="video.svgz">video.svgz</file>
         <file alias="audio.svgz">audio.svgz</file>
+        <file alias="opensubtitles.svgz">opensubtitles.svgz</file>
     </qresource>
 </RCC>

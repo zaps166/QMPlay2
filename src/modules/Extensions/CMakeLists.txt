@@ -62,6 +62,12 @@ if(USE_YOUTUBE)
     add_definitions(-DUSE_YOUTUBE)
 endif()
 
+if(USE_OPENSUBTITLES)
+    list(APPEND Extensions_HDR OpenSubtitles.hpp)
+    list(APPEND Extensions_SRC OpenSubtitles.cpp)
+    add_definitions(-DUSE_OPENSUBTITLES)
+endif()
+
 if(BUILD_WITH_QT6)
     qt6_wrap_ui(Extensions_FORM_HDR ${Extensions_FORMS})
 else()

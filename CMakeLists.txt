@@ -181,6 +181,9 @@ if(USE_EXTENSIONS)
 
     option(USE_YOUTUBE "Build with YouTube support" ON)
     add_feature_info(YouTube USE_YOUTUBE "Build with YouTube support")
+
+    option(USE_OPENSUBTITLES "Build with OpenSubtitles support" ON)
+    add_feature_info(OpenSubtitles USE_OPENSUBTITLES "Build with OpenSubtitles support")
 endif()
 
 if(USE_YOUTUBE OR USE_MEDIABROWSER)

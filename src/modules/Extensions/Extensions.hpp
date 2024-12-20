@@ -40,6 +40,9 @@ private:
 #ifdef USE_LASTFM
     QIcon lastfm;
 #endif
+#ifdef USE_OPENSUBTITLES
+    QIcon opensubtitles;
+#endif
 };
 
 /**/
