@@ -1889,6 +1889,14 @@
         <source>Useful for turning on HLS subtitles</source>
         <translation>Przydatne do włączenia napisów HLS</translation>
     </message>
+    <message>
+        <source>All</source>
+        <translation>Wszystko</translation>
+    </message>
+    <message>
+        <source>Teletext page: </source>
+        <translation>Strona w telegazecie: </translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -2004,6 +2012,53 @@
     <message>
         <source>texture map error</source>
         <translation>błąd mapowania tekstury</translation>
+    </message>
+</context>
+<context>
+    <name>OpenSubtitles</name>
+    <message>
+        <source>Subtitles browser</source>
+        <translation>Przeglądarka napisów</translation>
+    </message>
+    <message>
+        <source>Type the movie name and press enter</source>
+        <translation>Wpisz nazwę filmu i naciśnij enter</translation>
+    </message>
+    <message>
+        <source>Choose subtitles language</source>
+        <translation>Wybierz język napisów</translation>
+    </message>
+    <message>
+        <source>Download in default web browser</source>
+        <translation>Pobierz w domyślnej przeglądarce internetowej</translation>
+    </message>
+    <message>
+        <source>Loading...</source>
+        <translation>Ładowanie...</translation>
+    </message>
+    <message>
+        <source>Movie name</source>
+        <translation>Nazwa filmu</translation>
+    </message>
+    <message>
+        <source>Uploaded</source>
+        <translation>Wysłane</translation>
+    </message>
+    <message>
+        <source>Downloaded</source>
+        <translation>Pobrano</translation>
+    </message>
+    <message>
+        <source>Search on OpenSubtitles</source>
+        <translation>Szukaj w OpenSubtitles</translation>
+    </message>
+    <message>
+        <source>%1 (Season %2)</source>
+        <translation>%1 (Sezon %2)</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Błąd</translation>
     </message>
 </context>
 <context>

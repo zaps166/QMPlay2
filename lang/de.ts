@@ -1888,6 +1888,14 @@
         <source>Useful for turning on HLS subtitles</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Teletext page: </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
@@ -2003,6 +2011,53 @@
     <message>
         <source>texture map error</source>
         <translation>Textur-Map-Fehler</translation>
+    </message>
+</context>
+<context>
+    <name>OpenSubtitles</name>
+    <message>
+        <source>Subtitles browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type the movie name and press enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose subtitles language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download in default web browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loading...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Movie name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uploaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search on OpenSubtitles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (Season %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
