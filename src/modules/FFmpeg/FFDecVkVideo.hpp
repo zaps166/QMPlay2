@@ -36,7 +36,7 @@ class Device;
 class FFMPEG_EXPORT FFDecVkVideo final : public FFDecHWAccel
 {
 public:
-    FFDecVkVideo(Module &);
+    FFDecVkVideo(Module &module, bool hwDownload);
     ~FFDecVkVideo();
 
     bool set() override;
@@ -52,6 +52,7 @@ private:
     void destroyHw();
 
 private:
+    const bool m_hwDownload;
     AVCodec *m_codec = nullptr;
     std::shared_ptr<QmVk::Instance> m_vkInstance;
     std::shared_ptr<QmVk::PhysicalDevice> m_physicalDevice;

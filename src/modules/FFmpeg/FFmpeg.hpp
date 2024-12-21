@@ -55,6 +55,7 @@ private:
     QIcon vtbIcon;
 #endif
 
+    bool vkVideoHwDownload = false;
     bool vkVideoSupported = false;
     bool dxva2Supported = false;
     bool d3d11vaSupported = false;

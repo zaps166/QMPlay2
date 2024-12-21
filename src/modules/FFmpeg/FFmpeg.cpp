@@ -57,7 +57,8 @@ FFmpeg::FFmpeg() :
 
 #ifdef QMPlay2_VKVIDEO
     vkVideoIcon = QIcon(":/VkVideo.svgz");
-    if (QMPlay2Core.isVulkanRenderer())
+    vkVideoHwDownload = (qEnvironmentVariableIntValue("QMPLAY2_VKVIDEO_FORCE_HWDOWNLOAD") != 0);
+    if (vkVideoHwDownload || QMPlay2Core.isVulkanRenderer())
         vkVideoSupported = true;
 #endif
 #ifdef QMPlay2_VAAPI
@@ -192,7 +193,7 @@ void *FFmpeg::createInstance(const QString &name)
         return new FFDecSW(*this);
 #ifdef QMPlay2_VKVIDEO
     else if (name == DecoderVkVideoName && vkVideoSupported && getBool("DecoderVkVideoEnabled"))
-        return new FFDecVkVideo(*this);
+        return new FFDecVkVideo(*this, vkVideoHwDownload);
 #endif
 #ifdef QMPlay2_VAAPI
     else if (name == DecoderVAAPIName && getBool("DecoderVAAPIEnabled"))
