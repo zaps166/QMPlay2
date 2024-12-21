@@ -18,7 +18,6 @@
 
 #include <Settings.hpp>
 
-#include "../../qmvk/PhysicalDevice.hpp"
 #include "../../qmvk/Device.hpp"
 #include "../../qmvk/Queue.hpp"
 #include "../../qmvk/ComputePipeline.hpp"
@@ -258,7 +257,6 @@ bool YadifDeint::ensureResources()
             Instance::readShader("yadif.comp")
         );
 
-        const auto vendorID = m.device->physicalDevice()->properties().vendorID;
         const int nf = (m_deintFlags & DoubleFramerate) ? 2 : 1;
 
         for (auto &&computeF : m.computes)
@@ -273,19 +271,7 @@ bool YadifDeint::ensureResources()
                     sizeof(YadifPushConstants)
                 );
 
-                switch (vendorID)
-                {
-                    case 0x8086: // Intel
-                        if (!compute->setLocalWorkgroupSize(vk::Extent2D(16, 32)))
-                            compute->setLocalWorkgroupSize(vk::Extent2D(16, 16));
-                        break;
-                    case 0x1002: // AMD
-                        compute->setLocalWorkgroupSize(vk::Extent2D(64, 8));
-                        break;
-                    case 0x10de: // NVIDIA
-                        compute->setLocalWorkgroupSize(vk::Extent2D(128, 8));
-                        break;
-                }
+                compute->setLocalWorkgroupSize(vk::Extent2D(64, 1));
             }
         }
 

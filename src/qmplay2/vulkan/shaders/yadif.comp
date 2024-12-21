@@ -43,6 +43,9 @@ bool check(
     if (score < spatialScore)
     {
         spatialScore = score;
+    }
+    if (score < spatialScore)
+    {
         spatialPred = (fetch(curr, mrefs, +j) + fetch(curr, prefs, -j)) / 2.0;
         return true;
     }
@@ -96,7 +99,7 @@ float filterCurr(
 void main()
 {
     float pixel;
-    if ((globalPos.y ^ parity) % 2 != 0)
+    if (((globalPos.y ^ parity) & 1) != 0)
     {
         if (globalPos.y == 0)
         {
