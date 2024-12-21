@@ -12,6 +12,7 @@ layout(push_constant) uniform PushConstants
 {
     int parity;
     int filterParity;
+    int height;
 };
 
 layout(binding = 0) uniform sampler2D prev[srcPlaneCount];
@@ -101,7 +102,7 @@ void main()
         {
             mrefs = prefs;
         }
-        else if (globalPos.y == textureSize(curr[srcPlane], 0).y - 1)
+        else if (globalPos.y == height - 1)
         {
             prefs = mrefs;
         }

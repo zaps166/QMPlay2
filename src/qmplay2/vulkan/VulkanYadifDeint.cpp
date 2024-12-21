@@ -40,6 +40,7 @@ struct alignas(16) YadifPushConstants
 {
     int parity;
     int filterParity;
+    int height;
 };
 
 YadifDeint::YadifDeint(const shared_ptr<HWInterop> &hwInterop)
@@ -168,6 +169,7 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
                 auto yadifPushConstants = m.computes[p][f]->pushConstants<YadifPushConstants>();
                 yadifPushConstants->parity = m_secondFrame == tff;
                 yadifPushConstants->filterParity = yadifPushConstants->parity ^ int(tff);
+                yadifPushConstants->height = destImage->size(p).height;
 
                 m.computes[p][f]->setCustomSpecializationData({
                     m_spatialCheck,
