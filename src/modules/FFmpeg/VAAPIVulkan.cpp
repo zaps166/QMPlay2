@@ -13,7 +13,6 @@
 #include <QDebug>
 
 #include <va/va_drmcommon.h>
-#include <sys/ioctl.h>
 #include <unistd.h>
 
 // libdrm/drm_fourcc.h
@@ -21,32 +20,15 @@
 #define DRM_FORMAT_MOD_INVALID 0x00ffffffffffffffull
 #define DRM_FORMAT_MOD_LINEAR 0ull
 
-// linux/dma-buf.h
-
-struct dma_buf_sync {
-    uint64_t flags;
-};
-
-#define DMA_BUF_SYNC_READ (1 << 0)
-#define DMA_BUF_SYNC_WRITE (2 << 0)
-#define DMA_BUF_SYNC_RW (DMA_BUF_SYNC_READ | DMA_BUF_SYNC_WRITE)
-#define DMA_BUF_SYNC_START (0 << 2)
-#define DMA_BUF_SYNC_END (1 << 2)
-
-#define DMA_BUF_BASE 'b'
-#define DMA_BUF_IOCTL_SYNC _IOW(DMA_BUF_BASE, 0, struct dma_buf_sync)
-
 using namespace QmVk;
 
-struct FDCustomData : public MemoryObjectBase::CustomData
+struct VaCustomData : public MemoryObjectBase::CustomData
 {
-    ~FDCustomData()
-    {
-        for (auto &&fd : fds)
-            ::close(fd);
-    }
+    VaCustomData(VASurfaceID surface)
+        : surface(surface)
+    {}
 
-    vector<int> fds;
+    const VASurfaceID surface;
 };
 
 VAAPIVulkan::VAAPIVulkan()
@@ -211,10 +193,7 @@ void VAAPIVulkan::map(Frame &frame)
                 imageCreateInfoCallback
             );
 
-            auto fdCustomData = make_unique<FDCustomData>();
-            for (auto &&fdDescriptor : fdDescriptors)
-                fdCustomData->fds.push_back(::dup(fdDescriptor.first));
-            vkImage->setCustomData(move(fdCustomData));
+            vkImage->setCustomData(make_unique<VaCustomData>(id));
 
             vkImage->importFD(
                 fdDescriptors,
@@ -274,21 +253,7 @@ HWInterop::SyncDataPtr VAAPIVulkan::sync(const vector<Frame> &frames, vk::Submit
                 continue;
         }
 
-        const auto &fds = image->customData<FDCustomData>()->fds;
-        for (auto &&fd : fds)
-        {
-            const dma_buf_sync sync = {
-                DMA_BUF_SYNC_START | DMA_BUF_SYNC_RW
-            };
-            ioctl(fd, DMA_BUF_IOCTL_SYNC, &sync);
-        }
-        for (auto &&fd : fds)
-        {
-            const dma_buf_sync sync = {
-                DMA_BUF_SYNC_END | DMA_BUF_SYNC_RW
-            };
-            ioctl(fd, DMA_BUF_IOCTL_SYNC, &sync);
-        }
+        vaSyncSurface(m_vaapi->VADisp, image->customData<VaCustomData>()->surface);
     }
 
     return nullptr;
