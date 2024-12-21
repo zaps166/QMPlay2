@@ -165,10 +165,10 @@ int CuvidDec::videoSequence(CUVIDEOFORMAT *format)
         : cudaVideoSurfaceFormat_NV12
     ;
 
-    cuvidDecInfo.ulWidth = format->coded_width;
-    cuvidDecInfo.ulHeight = format->coded_height;
-    cuvidDecInfo.ulTargetWidth = cuvidDecInfo.ulWidth;
-    cuvidDecInfo.ulTargetHeight = cuvidDecInfo.ulHeight;
+    cuvidDecInfo.ulWidth = format->display_area.right;
+    cuvidDecInfo.ulHeight = format->display_area.bottom;
+    cuvidDecInfo.ulTargetWidth = format->coded_width;
+    cuvidDecInfo.ulTargetHeight = format->coded_height;
 
     cuvidDecInfo.target_rect.right = cuvidDecInfo.ulWidth;
     cuvidDecInfo.target_rect.bottom = cuvidDecInfo.ulHeight;
