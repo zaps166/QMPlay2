@@ -2064,6 +2064,10 @@
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>No subtitles found for the specified language</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Options</name>

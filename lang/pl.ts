@@ -2064,6 +2064,10 @@
         <source>Error</source>
         <translation>Błąd</translation>
     </message>
+    <message>
+        <source>No subtitles found for the specified language</source>
+        <translation>Nie znaleziono napisów dla podanego języka</translation>
+    </message>
 </context>
 <context>
     <name>Options</name>
