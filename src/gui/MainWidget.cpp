@@ -786,6 +786,8 @@ void MainWidget::switchARatio()
     const QList<QAction *> actions = menuBar->player->aRatio->choice->actions();
     const int idx = actions.indexOf(checked);
     const int checkNewIdx = (idx == actions.count() - 1) ? 0 : (idx + 1);
+    if (actions[checkNewIdx]->objectName().startsWith("custom:"))
+        actions[checkNewIdx]->setProperty("SkipDialog", true);
     actions[checkNewIdx]->trigger();
 }
 void MainWidget::resetARatio()
@@ -982,13 +984,15 @@ void MainWidget::createMenuBar()
         bool aRatioTriggered = false;
         for (QAction *act : menuBar->player->aRatio->actions())
         {
-            connect(act, SIGNAL(triggered()), &playC, SLOT(aRatio()));
+            connect(act, &QAction::triggered, &playC, &PlayClass::aRatio);
             if (aRatioTriggered)
                 continue;
-            if (act->objectName() == "auto")
+            const auto objectName = act->objectName();
+            if (objectName == "auto")
                 autoARatioAct = act;
-            if (!initialAspectRatio.isEmpty() && act->objectName() == initialAspectRatio)
+            if (!initialAspectRatio.isEmpty() && (objectName.startsWith("custom:") ? objectName.right(objectName.size() - 7) == initialAspectRatio : objectName == initialAspectRatio))
             {
+                act->setProperty("SkipDialog", true);
                 act->trigger();
                 aRatioTriggered = true;
             }

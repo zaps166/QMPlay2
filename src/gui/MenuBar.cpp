@@ -319,6 +319,7 @@ MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
     choice->addAction(newAction("&21:9", this, _21x9, false, QIcon(), true));
     addSeparator();
     choice->addAction(newAction(AspectRatio::tr("D&epends on size"), this, sizeDep, false, QIcon(), true));
+    choice->addAction(newAction(AspectRatio::tr("&Custom"), this, custom, false, QIcon(), true));
     choice->addAction(newAction(AspectRatio::tr("&Disabled"), this, off, false, QIcon(), true));
 
     _auto->setObjectName("auto");
@@ -329,6 +330,7 @@ MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
     _3x2->setObjectName(QString::number(3.0 / 2.0));
     _21x9->setObjectName(QString::number(21.0 / 9.0));
     sizeDep->setObjectName("sizeDep");
+    custom->setObjectName(QStringLiteral("custom:%1").arg(QMPlay2Core.getSettings().getDouble("CustomAspectRatio", 1.0)));
     off->setObjectName("off");
 }
 

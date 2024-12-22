@@ -95,7 +95,7 @@ public:
         public:
             AspectRatio(QMenu *parent);
             QActionGroup *choice;
-            QAction *_auto, *_1x1, *_4x3, *_5x4, *_16x9, *_3x2, *_21x9, *sizeDep, *off;
+            QAction *_auto, *_1x1, *_4x3, *_5x4, *_16x9, *_3x2, *_21x9, *sizeDep, *custom, *off;
         };
 
         void seekActionsEnable(bool e);

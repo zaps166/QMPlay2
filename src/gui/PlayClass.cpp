@@ -965,8 +965,38 @@ void PlayClass::otherReset()
 }
 void PlayClass::aRatio()
 {
-    aRatioName = sender()->objectName();
-    QString msg_txt = tr("Aspect ratio") + ": " + ((QAction *)sender())->text().remove('&');
+    auto sender = qobject_cast<QAction *>(this->sender());
+    Q_ASSERT(sender);
+    bool custom = false;
+    aRatioName = sender->objectName();
+    if (aRatioName.startsWith(QStringLiteral("custom:")))
+    {
+        constexpr double min = 0.5;
+        constexpr double max = 3.0;
+        double value = qBound(min, aRatioName.right(aRatioName.size() - 7).toDouble(), max);
+        if (sender->property("SkipDialog").toBool())
+        {
+            sender->setProperty("SkipDialog", QVariant());
+        }
+        else
+        {
+            bool ok = false;
+            double valueNew = QInputDialog::getDouble(nullptr, tr("Custom aspect ratio"), tr("Set aspect ratio"), value, min, max, 6, &ok, Qt::WindowFlags(), 0.1);
+            if (ok)
+            {
+                value = valueNew;
+                sender->setObjectName(QStringLiteral("custom:%1").arg(value));
+                QMPlay2Core.getSettings().set("CustomAspectRatio", value);
+            }
+        }
+        aRatioName = QString::number(value);
+        custom = true;
+    }
+    QString msg_txt = tr("Aspect ratio") + ": " + sender->text().remove('&');
+    if (custom)
+    {
+        msg_txt += QStringLiteral(" (%1)").arg(aRatioName);
+    }
     if (hasVideoStream())
     {
         const double aspect_ratio = getARatio();

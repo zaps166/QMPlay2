@@ -206,7 +206,9 @@ private slots:
     void zoomOut();
     void zoomReset();
     void otherReset();
+public:
     void aRatio();
+private slots:
     void volume(int, int);
     void toggleMute();
     void slowDownVideo();
