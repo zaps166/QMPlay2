@@ -158,6 +158,8 @@ private:
     void hideEvent(QHideEvent *) override;
     void changeEvent(QEvent *e) override;
 
+    bool event(QEvent *e) override;
+
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 #ifdef Q_OS_MACOS
