@@ -1,3 +1,20 @@
+Changes in QMPlay2 24.12.xx:
+    - use relative paths in portable mode when QMPlay2 portable directory is chosen,
+    - add option for experimental FFmpeg features (useful for HLS subtitles),
+    - fix playback of video which has variable and low FPS,
+    - add drag and drop for cover picture in tag editor,
+    - fix playlist row colors on Windows 11 Dark style,
+    - improve teletext (option to set teletext page),
+    - hardware deinterlacing fixes and optimization,
+    - add option to set subtitles solid background,
+    - add option to set default quality in yt-dlp,
+    - bitmap subtitles aspect ratio fixes,
+    - add OpenSubtitles browser,
+    - translation improvements,
+    - add custom aspect ratio,
+    - add integer scaling,
+    - other minor fixes,
+
 Changes in QMPlay2 24.12.06:
     - optimize visualizations when wallpaper is used (especially for Qt6),
     - fix issues with some unsupported codecs for DXVA2/D3D11VA,
