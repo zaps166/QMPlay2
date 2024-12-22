@@ -183,7 +183,7 @@ static QPixmap applyAlphaToPixmap(QPixmap &wallpaper, double alpha)
     {
         wallpaper = QPixmap();
     }
-    else if (alpha < 1.0)
+    else if (alpha < 1.0 && !wallpaper.isNull())
     {
         QPainter p(&wallpaper);
         p.setOpacity(alpha);
