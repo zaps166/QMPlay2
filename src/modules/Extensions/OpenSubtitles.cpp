@@ -579,6 +579,12 @@ void OpenSubtitles::parseXml(const QByteArray &data, QTreeWidgetItem *parentTwi)
     }
 
     m_results->setSortingEnabled(true);
+
+    if (!parentTwi && m_results->topLevelItemCount() == 0)
+    {
+        auto twi = createTwi();
+        twi->setText(0, tr("No subtitles found for the specified language"));
+    }
 }
 
 void OpenSubtitles::complete()
@@ -662,11 +668,16 @@ void OpenSubtitles::search()
         setBusyCursor(true);
         m_results->setEnabled(false);
         connect(m_searchReply, &NetworkReply::finished, this, [this, searchReply = m_searchReply] {
+            m_results->clear();
             if (!searchReply->hasError())
             {
-                m_results->clear();
                 parseXml(searchReply->readAll());
                 m_results->scrollToTop();
+            }
+            else
+            {
+                auto twi = new QTreeWidgetItem(m_results);
+                twi->setText(0, tr("Error"));
             }
             setBusyCursor(false);
             m_results->setEnabled(true);
