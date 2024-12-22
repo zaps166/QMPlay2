@@ -255,6 +255,10 @@
         <source>D&amp;epends on size</source>
         <translation>Depende del &amp;tamaño</translation>
     </message>
+    <message>
+        <source>&amp;Custom</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AudioCD</name>
@@ -2268,6 +2272,14 @@
     <message>
         <source>Zoom: %1</source>
         <translation>Zoom: %1</translation>
+    </message>
+    <message>
+        <source>Custom aspect ratio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set aspect ratio</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -255,6 +255,10 @@
         <source>D&amp;epends on size</source>
         <translation>Zal&amp;eżne od rozmiaru</translation>
     </message>
+    <message>
+        <source>&amp;Custom</source>
+        <translation>&amp;Niestandardowy</translation>
+    </message>
 </context>
 <context>
     <name>AudioCD</name>
@@ -2268,6 +2272,14 @@
     <message>
         <source>Zoom: %1</source>
         <translation>Powiększenie: %1</translation>
+    </message>
+    <message>
+        <source>Custom aspect ratio</source>
+        <translation>Niestandardowy współczynnik proporcji</translation>
+    </message>
+    <message>
+        <source>Set aspect ratio</source>
+        <translation>Ustaw współczynnik proporcji</translation>
     </message>
 </context>
 <context>
