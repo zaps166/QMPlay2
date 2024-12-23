@@ -257,7 +257,7 @@
     </message>
     <message>
         <source>&amp;Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>مخصص</translation>
     </message>
 </context>
 <context>
@@ -2066,7 +2066,7 @@
     </message>
     <message>
         <source>No subtitles found for the specified language</source>
-        <translation type="unfinished"></translation>
+        <translation>لم يتم العثور على ترجمات للغة المحددة</translation>
     </message>
 </context>
 <context>
@@ -2279,11 +2279,11 @@
     </message>
     <message>
         <source>Custom aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>تخصيص أبعاد الشاشة</translation>
     </message>
     <message>
         <source>Set aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>تعيين أبعاد الشاشة</translation>
     </message>
 </context>
 <context>
