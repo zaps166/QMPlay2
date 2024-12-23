@@ -1,4 +1,4 @@
-Changes in QMPlay2 24.12.xx:
+Changes in QMPlay2 24.12.23:
     - use relative paths in portable mode when QMPlay2 portable directory is chosen,
     - add option for experimental FFmpeg features (useful for HLS subtitles),
     - fix playback of video which has variable and low FPS,
