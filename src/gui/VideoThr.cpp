@@ -672,7 +672,7 @@ void VideoThr::run()
                 playC.chPos(ts);
 
             double delay = ts - playC.frame_last_pts;
-            if (useLastDelay || delay <= 0.0 || (playC.frame_last_pts <= 0.0 && delay > playC.frame_last_delay))
+            if (useLastDelay || delay <= 0.0 || (playC.frame_last_pts <= 0.0 && delay > playC.frame_last_delay) || (delay > 1.0 && delay / playC.frame_last_delay > 10.0))
             {
                 delay = playC.frame_last_delay;
                 useLastDelay = false;
