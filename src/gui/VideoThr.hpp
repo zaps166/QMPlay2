@@ -61,6 +61,8 @@ public:
         deleteOSD = true;
     }
 
+    void setTsDiscontPossible(bool tsDiscontPossible);
+
     void destroySubtitlesDecoder();
     void setSubtitlesDecoder(Decoder *dec, bool decodeToAss);
 
@@ -97,6 +99,7 @@ private:
 
 private:
     bool deleteSubs, syncVtoA, doScreenshot, canWrite, deleteOSD, deleteFrame, gotFrameOrError, decoderError, m_error = false;
+    bool m_tsDisontPossible = false;
     AVRational lastSAR;
     int W, H;
     quint32 seq;

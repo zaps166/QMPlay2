@@ -1063,6 +1063,7 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
 
     streamInfo->is_default = stream->disposition & AV_DISPOSITION_DEFAULT;
     streamInfo->time_base = stream->time_base;
+    streamInfo->ts_discont_possible = (formatCtx->iformat->flags & AVFMT_TS_DISCONT);
 
     if (streamInfo->params->codec_type != AVMEDIA_TYPE_ATTACHMENT)
     {

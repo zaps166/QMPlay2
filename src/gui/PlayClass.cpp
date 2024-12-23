@@ -1588,6 +1588,7 @@ void PlayClass::load(Demuxer *demuxer)
                     emitSetVideoCheckState();
 
                 vThr->setDec(dec);
+                vThr->setTsDiscontPossible(streams[videoStream]->ts_discont_possible);
 
                 m_videoSize = QSize(streams[videoStream]->params->width, streams[videoStream]->params->height);
 

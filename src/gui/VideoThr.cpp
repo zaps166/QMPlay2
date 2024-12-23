@@ -142,6 +142,11 @@ AVPixelFormats VideoThr::getSupportedPixelFormats() const
     return videoWriter()->supportedPixelFormats();
 }
 
+void VideoThr::setTsDiscontPossible(bool tsDiscontPossible)
+{
+    m_tsDisontPossible = tsDiscontPossible;
+}
+
 void VideoThr::destroySubtitlesDecoder()
 {
     deleteSubs = true;
@@ -672,7 +677,7 @@ void VideoThr::run()
                 playC.chPos(ts);
 
             double delay = ts - playC.frame_last_pts;
-            if (useLastDelay || delay <= 0.0 || (playC.frame_last_pts <= 0.0 && delay > playC.frame_last_delay) || (delay > 1.0 && delay / playC.frame_last_delay > 10.0))
+            if (useLastDelay || delay <= 0.0 || (playC.frame_last_pts <= 0.0 && delay > playC.frame_last_delay) || (m_tsDisontPossible && delay > 1.0 && delay / playC.frame_last_delay > 10.0))
             {
                 delay = playC.frame_last_delay;
                 useLastDelay = false;
