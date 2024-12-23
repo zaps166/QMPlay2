@@ -257,7 +257,7 @@
     </message>
     <message>
         <source>&amp;Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>自訂(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -2058,7 +2058,7 @@
     </message>
     <message>
         <source>%1 (Season %2)</source>
-        <translation>%1（第%2季）</translation>
+        <translation>%1（第 %2 季）</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2066,7 +2066,7 @@
     </message>
     <message>
         <source>No subtitles found for the specified language</source>
-        <translation type="unfinished"></translation>
+        <translation>沒有發現指定的語言字幕</translation>
     </message>
 </context>
 <context>
@@ -2279,11 +2279,11 @@
     </message>
     <message>
         <source>Custom aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>自訂畫面比例</translation>
     </message>
     <message>
         <source>Set aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>設定自訂畫面比例</translation>
     </message>
 </context>
 <context>
