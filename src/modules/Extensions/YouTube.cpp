@@ -1075,6 +1075,7 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation, 
             for (const QJsonValue obj : contents)
             {
                 bool radioRenderer = false;
+                bool lockupViewModel = false;
 
                 const auto videoRenderer = obj["videoRenderer"].toObject();
                 const auto playlistRenderer = [&] {
@@ -1083,6 +1084,11 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation, 
                     {
                         r = obj["radioRenderer"].toObject();
                         radioRenderer = !r.isEmpty();
+                    }
+                    if (r.isEmpty())
+                    {
+                        r = obj["lockupViewModel"].toObject();
+                        lockupViewModel = !r.isEmpty();
                     }
                     return r;
                 }();
@@ -1104,7 +1110,30 @@ void YouTube::setSearchResults(const QJsonObject &jsonObj, bool isContinuation, 
 
                     url = YOUTUBE_URL "/watch?v=" + contentId;
                 }
-                else
+                else if (lockupViewModel)
+                {
+                    QString videoId;
+
+                    title = playlistRenderer["metadata"]["lockupMetadataViewModel"]["title"]["content"].toString();
+                    contentId = playlistRenderer["rendererContext"]["commandContext"]["onTap"]["innertubeCommand"]["watchEndpoint"]["playlistId"].toString();
+                    videoId = playlistRenderer["rendererContext"]["commandContext"]["onTap"]["innertubeCommand"]["watchEndpoint"]["videoId"].toString();
+                    if (title.isEmpty() || contentId.isEmpty() || videoId.isEmpty())
+                        continue;
+
+                    const auto thumbnails = playlistRenderer
+                        ["contentImage"]
+                        ["collectionThumbnailViewModel"]
+                        ["primaryThumbnail"]
+                        ["thumbnailViewModel"]
+                        ["image"]
+                        ["sources"].toArray()
+                    ;
+                    if (!thumbnails.isEmpty())
+                        thumbnail = thumbnails[0]["url"].toString();
+
+                    url = YOUTUBE_URL "/watch?v=" + videoId + "&list=" + contentId;
+                }
+                else // XXX: Is is still possible?
                 {
                     QString videoId;
 
