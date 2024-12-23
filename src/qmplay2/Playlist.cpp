@@ -57,9 +57,12 @@ QStringList Playlist::extensions()
 
 Playlist *Playlist::create(const QString &url, OpenMode openMode, QString *name)
 {
-    if (url.startsWith("http") && url.endsWith(".m3u8", Qt::CaseInsensitive))
+    QString urlForValidation;
+    if (!Functions::splitPrefixAndUrlIfHasPluginPrefix(url, nullptr, &urlForValidation))
+        urlForValidation = url;
+    if (urlForValidation.startsWith("http") && urlForValidation.endsWith(".m3u8", Qt::CaseInsensitive))
         return nullptr; // Probably HLS
-    const QString extension = Functions::fileExt(url).toLower();
+    const QString extension = Functions::fileExt(urlForValidation).toLower();
     if (extension.isEmpty())
         return nullptr;
     for (Module *module : QMPlay2Core.getPluginsInstance())

@@ -1215,7 +1215,7 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
             const auto entry = entryVal.toObject();
             entries += {entry["title"].toString(), "YouTube://{" + entry["url"].toString() + "}" + param, entry["duration"].toDouble(-1.0)};
         }
-        const auto resourceName = QMPlay2Core.writePlaylistResource(YouTubeName "/" + title, entries);
+        const auto resourceName = QMPlay2Core.writePlaylistResource("YouTube://" + title, o["webpage_url"].toString(), entries);
         if (!resourceName.isEmpty())
         {
             return {resourceName, ".pls", title, QString()};

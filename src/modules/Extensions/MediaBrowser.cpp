@@ -191,7 +191,7 @@ void MediaBrowserResults::QMPlay2Action(const QString &action, const QList<QTree
             PlaylistEntries entries;
             for (QTreeWidgetItem *tWI : items)
                 entries += {tWI->text(0), m_mediaBrowser->getQMPlay2Url(getStringFromItem(tWI))};
-            const auto resourceName = QMPlay2Core.writePlaylistResource(m_mediaBrowser->name() + "/" + m_currentName, entries);
+            const auto resourceName = QMPlay2Core.writePlaylistResource("MediaBrowser://" + m_mediaBrowser->name() + "/" + m_currentName, QString(), entries);
             if (!resourceName.isEmpty())
                 emit QMPlay2Core.processParam(action, resourceName);
         }

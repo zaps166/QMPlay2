@@ -211,7 +211,7 @@ public:
     void addDescriptionForUrl(const QString &url, const QString &description, const bool removeAfterUse = true);
     QString getDescriptionForUrl(const QString &url);
 
-    QString writePlaylistResource(const QString &name, const PlaylistEntries &playlistEntries);
+    QString writePlaylistResource(const QString &name, const QString &args, const PlaylistEntries &playlistEntries);
 
     QString rendererName() const;
     Renderer renderer() const;

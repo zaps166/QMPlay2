@@ -196,11 +196,13 @@ QString Functions::filePath(const QString &f)
 QString Functions::fileName(QString f, bool extension)
 {
     /* Tylko dla adresów do przekonwertowania */
-    QString real_url;
-    if (splitPrefixAndUrlIfHasPluginPrefix(f, nullptr, &real_url))
+    QString real_url, addressPrefixName;
+    if (splitPrefixAndUrlIfHasPluginPrefix(f, &addressPrefixName, &real_url))
     {
         if (real_url.startsWith("file://"))
             return fileName(real_url, extension);
+        if (!extension && isResourcePlaylist(f))
+            return fileName(QStringLiteral("QMPlay2://") + real_url, false);
         return real_url;
     }
     /**/
@@ -723,7 +725,10 @@ void Functions::getDataIfHasPluginPrefix(const QString &entireUrl, QString *url,
 }
 bool Functions::isResourcePlaylist(const QString &url)
 {
-    return url.startsWith("QMPlay2://") && url.endsWith(".pls") && (url.indexOf("/", 10) > 0);
+    QString realUrl, addressPrefixName;
+    if (!Functions::splitPrefixAndUrlIfHasPluginPrefix(url, &addressPrefixName, &realUrl))
+        return false;
+    return (addressPrefixName == QStringLiteral("QMPlay2")) && realUrl.endsWith(".pls");
 }
 
 void Functions::hFlip(quint8 *data, int linesize, int height, int width)

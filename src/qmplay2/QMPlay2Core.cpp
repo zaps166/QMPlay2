@@ -677,12 +677,12 @@ QString QMPlay2CoreClass::getDescriptionForUrl(const QString &url)
     return getDataFromHash(url, descriptionsForUrl);
 }
 
-QString QMPlay2CoreClass::writePlaylistResource(const QString &name, const PlaylistEntries &playlistEntries)
+QString QMPlay2CoreClass::writePlaylistResource(const QString &name, const QString &args, const PlaylistEntries &playlistEntries)
 {
     if (playlistEntries.isEmpty())
         return QString();
 
-    const QString resourceName = "QMPlay2://" + name + ".pls";
+    const QString resourceName = "QMPlay2://{" + name + ".pls}" + args;
     if (Playlist::write(playlistEntries, resourceName))
     {
         modResource(resourceName, true);
