@@ -257,7 +257,7 @@
     </message>
     <message>
         <source>&amp;Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Personalizado</translation>
     </message>
 </context>
 <context>
@@ -1895,11 +1895,11 @@
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Todo</translation>
     </message>
     <message>
         <source>Teletext page: </source>
-        <translation type="unfinished"></translation>
+        <translation>Página de teletexto: </translation>
     </message>
 </context>
 <context>
@@ -2022,51 +2022,51 @@
     <name>OpenSubtitles</name>
     <message>
         <source>Subtitles browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Navegador de subtítulos</translation>
     </message>
     <message>
         <source>Type the movie name and press enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Escriba el nombre de la película y presione Enter</translation>
     </message>
     <message>
         <source>Choose subtitles language</source>
-        <translation type="unfinished"></translation>
+        <translation>Elegir el idioma de los subtítulos</translation>
     </message>
     <message>
         <source>Download in default web browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Descargar con el navegador web predeterminado</translation>
     </message>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation>Cargando...</translation>
     </message>
     <message>
         <source>Movie name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de la película</translation>
     </message>
     <message>
         <source>Uploaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Subido</translation>
     </message>
     <message>
         <source>Downloaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Descargado</translation>
     </message>
     <message>
         <source>Search on OpenSubtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>Buscar en OpenSubtitles</translation>
     </message>
     <message>
         <source>%1 (Season %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (Temporada %2)</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Error</translation>
     </message>
     <message>
         <source>No subtitles found for the specified language</source>
-        <translation type="unfinished"></translation>
+        <translation>No se han encontrado subtítulos para el idioma especificado</translation>
     </message>
 </context>
 <context>
@@ -2279,11 +2279,11 @@
     </message>
     <message>
         <source>Custom aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Relación de aspecto personalizado</translation>
     </message>
     <message>
         <source>Set aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Establecer relación de aspecto</translation>
     </message>
 </context>
 <context>
