@@ -35,8 +35,16 @@ public:
     void setTitleBarVisible(bool v);
     void setGlobalTitleBarVisible(bool v);
 
+    void setResizingByMainWindow(bool r);
+
+protected:
+    void resizeEvent(QResizeEvent *e) override;
+    void showEvent(QShowEvent *e) override;
+    void closeEvent(QCloseEvent *e) override;
+
 signals:
     void dockVisibilityChanged(bool visible);
+    void shouldStoreSizes();
 
 private:
     QWidget *const m_emptyW;
@@ -44,5 +52,7 @@ private:
     bool m_titleBarVisible = true;
     bool m_globalTitleBarVisible = true;
     bool m_visible = false;
+    bool m_closed = true;
+    bool m_resizingByMainWindow = false;
     int m_lastVisible = -1;
 };
