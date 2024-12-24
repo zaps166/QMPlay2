@@ -24,7 +24,7 @@
     <name>AVThread</name>
     <message>
         <source>A/V thread has been incorrectly terminated!</source>
-        <translation>مسار الصوت/الفيديو تم إنهاؤه بشكل خاطئ!</translation>
+        <translation>معالجة الصوت/الفيديو تم إنهاؤه بشكل خاطئ!</translation>
     </message>
 </context>
 <context>
@@ -268,7 +268,7 @@
     </message>
     <message>
         <source>AudioCD</source>
-        <translation>القرص الصوتي</translation>
+        <translation>قرص صوتي</translation>
     </message>
     <message>
         <source>No CD/DVD drives found!</source>
@@ -704,7 +704,7 @@
     <name>EntryProperties</name>
     <message>
         <source>Properties</source>
-        <translation>الخصائص</translation>
+        <translation>خصائص</translation>
     </message>
     <message>
         <source>Incorrect path</source>
@@ -716,7 +716,7 @@
     </message>
     <message>
         <source>Error while writing tags, please check if you have permission to modify the file!</source>
-        <translation>خطأ أثناء كتابة العلامات، الرجاء التحقق إذا كان لديك الصلاحية لتعديل الملف!</translation>
+        <translation>خطأ أثناء كتابة المعلومات الرجاء التحقق إذا كان لديك الصلاحية لتعديل الملف!</translation>
     </message>
     <message>
         <source>Synchronize with file or directory</source>
@@ -988,11 +988,11 @@
     </message>
     <message>
         <source>Hide artist metadata</source>
-        <translation>إخفاء البيانات الوصفية للفنان</translation>
+        <translation>إخفاء بيانات الفنان</translation>
     </message>
     <message>
         <source>Automatically restore main window when new video file is loaded</source>
-        <translation>إستعادة النافذة الرئيسية عند تحميل ملف فيديو جديد تلقائيا</translation>
+        <translation>إستعادة النافذة الرئيسية عند تشغيل ملف فيديو جديد تلقائيا</translation>
     </message>
     <message>
         <source>Don&apos;t load playlist files within other files</source>
@@ -1004,7 +1004,7 @@
     </message>
     <message>
         <source>Subtitles and tags encoding</source>
-        <translation>ترميز الترجمات والعلامات</translation>
+        <translation>ترميز الترجمات والمعلومات</translation>
     </message>
     <message>
         <source>Output file path:</source>
@@ -1346,7 +1346,7 @@
     </message>
     <message>
         <source>Search on %1</source>
-        <translation>البحث على %1</translation>
+        <translation>البحث في %1</translation>
     </message>
 </context>
 <context>
@@ -1451,7 +1451,7 @@
     </message>
     <message>
         <source>Method of multithreaded decoding</source>
-        <translation>طريقة فك الترميز متعددة المسارات</translation>
+        <translation>طريقة فك الترميز متعددة المعالجات</translation>
     </message>
     <message>
         <source>Frames</source>
@@ -1483,7 +1483,7 @@
     </message>
     <message>
         <source>Sound equalizer quality</source>
-        <translation>دقة معادل الصوت</translation>
+        <translation>جودة معادل الصوت</translation>
     </message>
     <message>
         <source>Low</source>
@@ -1511,7 +1511,7 @@
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
-        <translation>صوت محول غير مضغوط</translation>
+        <translation>صوت PCM غير مضغوط</translation>
     </message>
     <message>
         <source>File extensions (semicolon separated)</source>
@@ -1575,7 +1575,7 @@
     </message>
     <message>
         <source>Set as default AudioCD player</source>
-        <translation>التعيين كمشغل الأقراص الصوتية الافتراضي</translation>
+        <translation>تعيين كمشغل الأقراص الصوتية الافتراضي</translation>
     </message>
     <message>
         <source>Skip some frames</source>
@@ -1591,15 +1591,15 @@
     </message>
     <message>
         <source>Hurry up</source>
-        <translation>بسرعة</translation>
+        <translation>خيارات تخطي الإطارات</translation>
     </message>
     <message>
         <source>Number of threads used to decode video</source>
-        <translation>عدد المسارات المستخدمة لفك تشفير الفيديو</translation>
+        <translation>عدد المعالجات المستخدمة لفك تشفير الفيديو</translation>
     </message>
     <message>
         <source>Demuxer</source>
-        <translation>مقسم الملفات</translation>
+        <translation>مزيل التشويش</translation>
     </message>
     <message>
         <source>Decoder</source>
@@ -1607,7 +1607,7 @@
     </message>
     <message>
         <source>hardware decoding</source>
-        <translation>فك التشفير باستخدام العتاد</translation>
+        <translation>فك التشفير باستخدام وحدة المعالجة الرسومية</translation>
     </message>
     <message>
         <source>Phase reverse</source>
@@ -1683,7 +1683,7 @@
     </message>
     <message>
         <source>Slider count in sound equalizer</source>
-        <translation>عدد أشرطة التمرير في معادل الصوت</translation>
+        <translation>عدد قنوات معادل الصوت</translation>
     </message>
     <message>
         <source>Minimum frequency</source>
@@ -1735,11 +1735,11 @@
     </message>
     <message>
         <source>Summary</source>
-        <translation>الخلاصة</translation>
+        <translation>نبذة</translation>
     </message>
     <message>
         <source>Body</source>
-        <translation>الجسد</translation>
+        <translation>المحتوى</translation>
     </message>
     <message>
         <source>Notification timeout</source>
@@ -1815,7 +1815,7 @@
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation>الدقة المفضلة</translation>
+        <translation>الجودة المفضلة</translation>
     </message>
     <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
@@ -2046,11 +2046,11 @@
     </message>
     <message>
         <source>Uploaded</source>
-        <translation>تم الرفع</translation>
+        <translation>تاريخ الرفع</translation>
     </message>
     <message>
         <source>Downloaded</source>
-        <translation>تم التنزيل</translation>
+        <translation>عدد التنزيلات</translation>
     </message>
     <message>
         <source>Search on OpenSubtitles</source>
@@ -2081,7 +2081,7 @@
     </message>
     <message>
         <source>&amp;Show tray icon</source>
-        <translation>إظهار أيقونة الدرج</translation>
+        <translation>إظهار أيقونة في مركز التنبيهات</translation>
     </message>
     <message>
         <source>&amp;Modules settings</source>
@@ -2167,7 +2167,7 @@
     </message>
     <message>
         <source>Set subtitles delay (sec.)</source>
-        <translation>تعيين تأخير الترجمة (ثانية.)</translation>
+        <translation>تعيين وقت الترجمة (ثانية.)</translation>
     </message>
     <message>
         <source>Loaded subtitles</source>
@@ -2191,7 +2191,7 @@
     </message>
     <message>
         <source>Set video delay (sec.)</source>
-        <translation>تعيين تأخير الفيديو (ثانية.)</translation>
+        <translation>تعيين وقت الفيديو (ثانية.)</translation>
     </message>
     <message>
         <source>Set playback speed</source>
@@ -2267,11 +2267,11 @@
     </message>
     <message>
         <source>Integer scaling: enabled</source>
-        <translation>أبعاد بعدد حقيقي: تفعيل</translation>
+        <translation>رفع دقة أبعاد الشاشة: تفعيل</translation>
     </message>
     <message>
         <source>Integer scaling: disabled</source>
-        <translation>أبعاد بعدد حقيقي: تعطيل</translation>
+        <translation>رفع دقة أبعاد الشاشة: تعطيل</translation>
     </message>
     <message>
         <source>Zoom: %1</source>
@@ -2302,7 +2302,7 @@
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>تعيين تأخير الفيديو</translation>
+        <translation>تعيين وقت الفيديو</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
@@ -2322,7 +2322,7 @@
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
-        <translation>تعيين تأخير الترجمة</translation>
+        <translation>تعيين وقت الترجمة</translation>
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
@@ -2513,7 +2513,7 @@
     </message>
     <message>
         <source>Desired video stream quality:</source>
-        <translation>دقة بث الفيديو المفضلة:</translation>
+        <translation>جودة بث الفيديو المرغوبة:</translation>
     </message>
     <message>
         <source>Default</source>
@@ -2600,11 +2600,11 @@
     </message>
     <message>
         <source>Toggle &amp;aspect ratio</source>
-        <translation>تفعيل أبعاد الشاشة</translation>
+        <translation>تبديل أبعاد الشاشة</translation>
     </message>
     <message>
         <source>Reset image &amp;settings</source>
-        <translation>إعادة ضبط إعدادات الشاشة</translation>
+        <translation>إعادة ضبط أبعاد الشاشة</translation>
     </message>
     <message>
         <source>&amp;Set speed</source>
@@ -2664,7 +2664,7 @@
     </message>
     <message>
         <source>&amp;Integer scaling</source>
-        <translation>أبعاد بعدد حقيقي</translation>
+        <translation>رفع دقة أبعاد الشاشة</translation>
     </message>
 </context>
 <context>
@@ -2707,7 +2707,7 @@
     </message>
     <message>
         <source>&amp;Find entries</source>
-        <translation>العثور على المدخلات</translation>
+        <translation>البحث عن المدخلات</translation>
     </message>
     <message>
         <source>&amp;Collapse all</source>
@@ -2782,7 +2782,7 @@
     </message>
     <message>
         <source>Visible entries</source>
-        <translation>المدخلات الظاهرة</translation>
+        <translation>لائحة التشغيل</translation>
     </message>
     <message>
         <source>Are you sure you want to clear the list?</source>
@@ -2973,7 +2973,7 @@ QMPlay2 لن يقوم بتكبير الأيقونات!</translation>
     </message>
     <message>
         <source>State</source>
-        <translation>الولاية</translation>
+        <translation>المنطقة</translation>
     </message>
     <message>
         <source>Type the station name and press Enter</source>
@@ -3008,7 +3008,7 @@ QMPlay2 لن يقوم بتكبير الأيقونات!</translation>
     </message>
     <message>
         <source>Tags</source>
-        <translation>العلامات</translation>
+        <translation>التصنيفات</translation>
     </message>
     <message>
         <source>Clicks</source>
@@ -3140,7 +3140,7 @@ QMPlay2 لن يقوم بتكبير الأيقونات!</translation>
     </message>
     <message>
         <source>OSD</source>
-        <translation>العرض على الشاشة</translation>
+        <translation>عرض على شاشة</translation>
     </message>
     <message>
         <source>Colors and borders</source>
@@ -3164,7 +3164,7 @@ QMPlay2 لن يقوم بتكبير الأيقونات!</translation>
     </message>
     <message>
         <source>OSD enabled</source>
-        <translation>تفعيل العرض على الشاشة</translation>
+        <translation>تفعيل</translation>
     </message>
     <message>
         <source>Choose directory</source>
@@ -3242,7 +3242,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Hardware-accelerated video filters</source>
-        <translation>مرشحات فيديو تستخدم العتاد</translation>
+        <translation>مرشحات فيديو مسرعة بوحدة المعالجة الرسومية</translation>
     </message>
     <message>
         <source>Changing OpenGL mode</source>
@@ -3290,7 +3290,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation>تجاوز المؤلف في الشاشة الكاملة</translation>
+        <translation>تجاوز المؤثرات في الشاشة الكاملة</translation>
     </message>
     <message>
         <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
@@ -3330,11 +3330,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>High quality image scaling down</source>
-        <translation>تصغير أبعاد صورة عالية الدقة</translation>
+        <translation>تصغير أبعاد صورة عالية الجودة</translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation>تكبير أبعاد صورة عالية الدقة</translation>
+        <translation>تكبير أبعاد صورة عالية الجودة</translation>
     </message>
     <message>
         <source>First available device</source>
@@ -3366,7 +3366,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
-        <translation>إجبار إلغاء تشابك Vulkan Yadif لكل أنواع فك التشفير المسرعة بالعتاد</translation>
+        <translation>إجبار إلغاء تشابك Vulkan Yadif لكل أنواع فك التشفير المسرعة بوحدة المعالجة الرسومية</translation>
     </message>
     <message>
         <source>Force audio content to use the specified number of channels.
@@ -3382,7 +3382,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation>أبعاد صورة منخفضة الدقة (أقرب جار)</translation>
+        <translation>أبعاد صورة منخفضة الجودة (أقرب جار)</translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
@@ -3412,7 +3412,7 @@ Partially checked only if the content has less channels than the specified value
     <name>SimpleVisW</name>
     <message>
         <source>Simple visualization</source>
-        <translation>التصوير البسيط</translation>
+        <translation>الطيف المبسط</translation>
     </message>
 </context>
 <context>
@@ -3485,7 +3485,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&amp;Subtitles streams</source>
-        <translation>مسارات الترجمات</translation>
+        <translation>مسارات الترجمة</translation>
     </message>
     <message>
         <source>&amp;Chapters</source>
@@ -3500,7 +3500,7 @@ Partially checked only if the content has less channels than the specified value
     <name>TagEditor</name>
     <message>
         <source>Add tags</source>
-        <translation>إضافة علامة</translation>
+        <translation>إضافة معلومات</translation>
     </message>
     <message>
         <source>Title</source>
@@ -3540,7 +3540,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Load cover picture</source>
-        <translation>تحميل صورة الألبوم</translation>
+        <translation>اختيار صورة الألبوم</translation>
     </message>
     <message>
         <source>Save cover picture</source>
@@ -3640,7 +3640,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
-        <translation>مضاعفة معدل الإطارات. مفيد للدخول إلى مجال FreeSync. هذا المرشح يعمل مع الفيديوهات المسرعة بالعتاد.</translation>
+        <translation>مضاعفة معدل الإطارات. مفيد للدخول إلى مجال FreeSync. هذا المرشح يعمل مع الفيديوهات المسرعة بوحدة المعالجة الرسومية.</translation>
     </message>
 </context>
 <context>
@@ -3741,11 +3741,11 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&amp;Horizontal flip</source>
-        <translation>العكس الأفقي</translation>
+        <translation>أفقي مقلوب</translation>
     </message>
     <message>
         <source>&amp;Vertical flip</source>
-        <translation>العكس العمودي</translation>
+        <translation>عمودي مقلوب</translation>
     </message>
     <message>
         <source>&amp;More filters</source>
@@ -3879,7 +3879,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Preferred quality</source>
-        <translation>الدقة المفضلة</translation>
+        <translation>الجودة المفضلة</translation>
     </message>
     <message>
         <source>Publish time</source>
