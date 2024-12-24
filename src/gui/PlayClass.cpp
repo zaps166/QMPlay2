@@ -952,7 +952,8 @@ void PlayClass::zoomReset()
     if (zoom != 1.0)
     {
         zoom = 1.0;
-        applyZoom(true);
+        if (vThr)
+            applyZoom(true);
     }
 }
 void PlayClass::otherReset()
