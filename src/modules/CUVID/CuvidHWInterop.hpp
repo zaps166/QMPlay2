@@ -19,7 +19,7 @@ public:
         return m_cuCtx;
     }
 
-    inline void setAvailableSurface(quintptr surfaceId)
+    inline void setAvailableSurface(int surfaceId)
     {
         // Mutex is not needed, because "m_cuCtx" is already locked
         m_validPictures.insert(surfaceId);
