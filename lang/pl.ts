@@ -1038,6 +1038,10 @@
         <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
         <translation>parametr &quot;-f&quot;, proszę zapoznać się z dokumentacją yt-dlp</translation>
     </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation>Zachowaj rozmiar paneli podczas zmiany rozmiaru okna głównego (eksperymentalne)</translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1894,12 +1898,16 @@
         <translation>Przydatne do włączenia napisów HLS</translation>
     </message>
     <message>
-        <source>All</source>
-        <translation>Wszystko</translation>
-    </message>
-    <message>
         <source>Teletext page: </source>
         <translation>Strona w telegazecie: </translation>
+    </message>
+    <message>
+        <source>Transparent teletext background</source>
+        <translation>Przezroczyste tło telegazety</translation>
+    </message>
+    <message>
+        <source>Subtitles</source>
+        <translation>Napisy</translation>
     </message>
 </context>
 <context>

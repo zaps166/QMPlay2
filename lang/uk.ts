@@ -1038,6 +1038,10 @@
         <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
         <translation>параметр &quot;-f&quot;, зверніться до документації yt-dlp</translation>
     </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1894,12 +1898,16 @@
         <translation>Корисно для ввімкнення субтитрів HLS</translation>
     </message>
     <message>
-        <source>All</source>
+        <source>Teletext page: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Teletext page: </source>
+        <source>Transparent teletext background</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles</source>
+        <translation type="unfinished">Субтитри</translation>
     </message>
 </context>
 <context>

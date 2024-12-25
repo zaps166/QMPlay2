@@ -356,7 +356,7 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     {
         m_teletextPageB = new QSpinBox;
         m_teletextPageB->setRange(99, 899);
-        m_teletextPageB->setSpecialValueText(tr("Subtitle"));
+        m_teletextPageB->setSpecialValueText(tr("Subtitles"));
         m_teletextPageB->setValue(sets().getInt("TeletextPage"));
 
         m_teletextTransparentB = new QCheckBox(tr("Transparent teletext background"));

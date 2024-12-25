@@ -1042,6 +1042,10 @@
         <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1899,12 +1903,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>All</source>
+        <source>Teletext page: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Teletext page: </source>
+        <source>Transparent teletext background</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitles</source>
+        <translation type="unfinished">Legendas</translation>
     </message>
 </context>
 <context>
