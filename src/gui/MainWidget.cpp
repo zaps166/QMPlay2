@@ -33,6 +33,7 @@
 #include <QWindow>
 #include <QScreen>
 #include <QActionGroup>
+#include <QProxyStyle>
 #ifdef Q_OS_MACOS
     #include <QProcess>
 #endif
@@ -82,14 +83,18 @@ using Functions::timeToStr;
 #include <cmath>
 
 /* MainWidgetTmpStyle -  dock widget separator extent must be larger for touch screens */
-class MainWidgetTmpStyle final : public QCommonStyle
+class MainWidgetTmpStyle final : public QProxyStyle
 {
 public:
+    MainWidgetTmpStyle(QObject *parent)
+    {
+        setParent(parent);
+    }
     ~MainWidgetTmpStyle() = default;
 
     int pixelMetric(PixelMetric metric, const QStyleOption *option, const QWidget *widget) const override
     {
-        const int pM = QCommonStyle::pixelMetric(metric, option, widget);
+        const int pM = QProxyStyle::pixelMetric(metric, option, widget);
         if (metric == QStyle::PM_DockWidgetSeparatorExtent)
             return pM * 5 / 2;
         return pM;
@@ -146,8 +151,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     /* Looking for touch screen */
     if (Functions::hasTouchScreen())
     {
-        MainWidgetTmpStyle mainWidgetTmpStyle;
-        setStyle(&mainWidgetTmpStyle);
+        setStyle(new MainWidgetTmpStyle(this));
     }
 
     setObjectName("MainWidget");
