@@ -156,14 +156,21 @@ void D3D11VAVulkan::map(Frame &frame)
     if (m_error || frame.vulkanImage() || !frame.isHW())
         return;
 
+    unique_lock<mutex> locker;
+    if (!m_hasKMT)
+        locker = unique_lock<mutex>(m_mutex);
+
+    const auto textureIntPtr = frame.hwData(0);
+
+    if (m_availableTextures.count(textureIntPtr) == 0)
+        return;
+
+    const auto texture = reinterpret_cast<ID3D11Texture2D *>(textureIntPtr);
+
     m_formatVk = (frame.depth() > 8)
         ? vk::Format::eG16B16R162Plane420Unorm
         : vk::Format::eG8B8R82Plane420Unorm
     ;
-
-    unique_lock<mutex> locker;
-    if (!m_hasKMT)
-        locker = unique_lock<mutex>(m_mutex);
 
     auto device = m_vkInstance->device();
 
@@ -209,7 +216,6 @@ void D3D11VAVulkan::map(Frame &frame)
 
     auto d3d11Frame = image->customData<D3D11Frame>();
 
-    const auto texture = reinterpret_cast<ID3D11Texture2D *>(frame.hwData(0));
     auto srv1 = createSRV(m_format1, textureIdx, texture);
     auto srv2 = createSRV(m_format2, textureIdx, texture);
     if (!srv1 || !srv2)
@@ -273,6 +279,7 @@ void D3D11VAVulkan::clear()
     unique_lock<mutex> locker;
     if (!m_hasKMT)
         locker = unique_lock<mutex>(m_mutex);
+    m_availableTextures.clear();
     m_images.clear();
 }
 
@@ -427,6 +434,14 @@ bool D3D11VAVulkan::init()
         return false;
 
     return true;
+}
+
+void D3D11VAVulkan::setAvailableTexture(quintptr texturePtr)
+{
+    unique_lock<mutex> locker;
+    if (!m_hasKMT)
+        locker = unique_lock<mutex>(m_mutex);
+    m_availableTextures.insert(texturePtr);
 }
 
 ComPtr<ID3D11UnorderedAccessView> D3D11VAVulkan::createUAV(DXGI_FORMAT format, UINT firstElement, UINT nElements, ID3D11Buffer *buffer)

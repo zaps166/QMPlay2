@@ -21,6 +21,7 @@
 #include <vulkan/VulkanHWInterop.hpp>
 
 #include <unordered_map>
+#include <unordered_set>
 #include <mutex>
 
 #include <wrl/client.h>
@@ -63,6 +64,8 @@ public:
     {
         return m_hasKMT;
     }
+
+    void setAvailableTexture(quintptr texturePtr);
 
 private:
     ComPtr<ID3D11UnorderedAccessView> createUAV(DXGI_FORMAT format, UINT firstElement, UINT nElements, ID3D11Buffer *buffer);
@@ -108,6 +111,7 @@ private:
     int m_lastLinesize1 = -1;
     int m_lastLinesize2 = -1;
 
+    std::unordered_set<quintptr> m_availableTextures;
     std::unordered_map<UINT, std::shared_ptr<QmVk::Image>> m_images;
 
     DXGI_FORMAT m_format1 = DXGI_FORMAT_UNKNOWN;

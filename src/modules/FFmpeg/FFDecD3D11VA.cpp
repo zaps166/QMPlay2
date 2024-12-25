@@ -157,6 +157,7 @@ int FFDecD3D11VA::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPix
     bool added = false;
     if (ret > -1 && !tmpDecoded.isEmpty())
     {
+        m_d3d11vaVulkan->setAvailableTexture(tmpDecoded.hwData(0));
         if (m_d3d11vaVulkan->hasKMT()) // Works better if non-KMT handler on Intel doesn't map here
         {
             m_d3d11vaVulkan->map(tmpDecoded);
