@@ -32,6 +32,7 @@ class InfoDock;
 class VideoDock;
 class VolWidget;
 class IPCSocket;
+class DockWidget;
 class QToolButton;
 class AboutWidget;
 class PlaylistDock;
@@ -149,6 +150,10 @@ private:
 
     void setContinuePlaybackVisibility();
 
+    inline const QList<DockWidget *> getDockWidgets() const;
+
+    void storeDockSizes();
+
     void keyPressEvent(QKeyEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
     void leaveEvent(QEvent *) override;
@@ -157,6 +162,7 @@ private:
     void showEvent(QShowEvent *) override;
     void hideEvent(QHideEvent *) override;
     void changeEvent(QEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
 
     bool event(QEvent *e) override;
 
@@ -213,4 +219,9 @@ private:
     QWinTaskbarButton *m_taskbarButton = nullptr;
     QWinThumbnailToolBar *m_thumbnailToolBar = nullptr;
 #endif
+
+    bool m_keepDocksSize = false;
+    QSize m_winSizeForDocks;
+    QTimer m_storeDockSizesTimer;
+    std::vector<std::pair<QDockWidget *, QSize>> m_dockSizes;
 };

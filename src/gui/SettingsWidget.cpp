@@ -172,6 +172,7 @@ void SettingsWidget::InitSettings()
 #ifdef UPDATES
     QMPSettings.init("AutoUpdates", []{return !QFile::exists(QMPlay2Core.getShareDir() + "noautoupdates");});
 #endif
+    QMPSettings.init("MainWidget/KeepDocksSize", false);
     QMPSettings.init("MainWidget/TabPositionNorth", false);
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
     QMPSettings.init("AllowOnlyOneInstance", false);
@@ -445,6 +446,8 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         delete generalSettingsPage->autoUpdatesB;
         generalSettingsPage->autoUpdatesB = nullptr;
 #endif
+
+        generalSettingsPage->keepDocksSizeB->setChecked(QMPSettings.getBool("MainWidget/KeepDocksSize"));
 
         if (Notifies::hasBoth())
             generalSettingsPage->trayNotifiesDefault->setChecked(QMPSettings.getBool("TrayNotifiesDefault"));
@@ -1310,6 +1313,11 @@ void SettingsWidget::apply()
 #ifdef UPDATES
             QMPSettings.set("AutoUpdates", generalSettingsPage->autoUpdatesB->isChecked());
 #endif
+            if (auto checked = generalSettingsPage->keepDocksSizeB->isChecked(); checked != QMPSettings.getBool("MainWidget/KeepDocksSize"))
+            {
+                QMPSettings.set("MainWidget/KeepDocksSize", checked);
+                emit keepDocksSizeChanged(checked);
+            }
             QMPSettings.set("MainWidget/TabPositionNorth", generalSettingsPage->tabsNorths->isChecked());
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
             QMPSettings.set("AllowOnlyOneInstance", generalSettingsPage->allowOnlyOneInstance->isChecked());

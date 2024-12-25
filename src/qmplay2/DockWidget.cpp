@@ -18,6 +18,7 @@
 
 #include <DockWidget.hpp>
 
+#include <qevent.h>
 #include <QTimer>
 
 class EmptyW final : public QWidget
@@ -49,6 +50,11 @@ DockWidget::DockWidget()
         if (!m_visibilityTimer->isActive())
             m_visibilityTimer->start();
     });
+
+    connect(this, &QDockWidget::dockLocationChanged, this, [this](Qt::DockWidgetArea area) {
+        Q_UNUSED(area)
+        emit shouldStoreSizes();
+    });
 }
 DockWidget::~DockWidget()
 {
@@ -64,4 +70,43 @@ void DockWidget::setGlobalTitleBarVisible(bool v)
 {
     m_globalTitleBarVisible = v;
     setTitleBarVisible(m_titleBarVisible);
+}
+
+void DockWidget::setResizingByMainWindow(bool r)
+{
+    m_resizingByMainWindow = true;
+}
+
+void DockWidget::resizeEvent(QResizeEvent *e)
+{
+    QDockWidget::resizeEvent(e);
+    if (m_resizingByMainWindow)
+    {
+        m_resizingByMainWindow = false;
+    }
+    else if (!isFloating())
+    {
+        emit shouldStoreSizes();
+    }
+}
+void DockWidget::showEvent(QShowEvent *e)
+{
+    QDockWidget::showEvent(e);
+    if (m_closed)
+    {
+        if (!isFloating())
+        {
+            emit shouldStoreSizes();
+        }
+        m_closed = false;
+    }
+}
+void DockWidget::closeEvent(QCloseEvent *e)
+{
+    QDockWidget::closeEvent(e);
+    if (!isFloating())
+    {
+        emit shouldStoreSizes();
+    }
+    m_closed = true;
 }

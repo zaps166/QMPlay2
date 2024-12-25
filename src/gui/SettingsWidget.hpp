@@ -112,4 +112,5 @@ signals:
     void settingsChanged(int, bool, bool initFilters);
     void setWheelStep(int);
     void setVolMax(int);
+    void keepDocksSizeChanged(bool keepDocksSize);
 };

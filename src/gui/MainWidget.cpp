@@ -254,6 +254,19 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
 #endif
     infoDock->show();
 
+    m_keepDocksSize = settings.getBool("MainWidget/KeepDocksSize");
+
+    for (auto &&dock : getDockWidgets())
+    {
+        connect(dock, &DockWidget::shouldStoreSizes, this, [this] {
+            m_storeDockSizesTimer.start();
+        });
+    }
+
+    m_storeDockSizesTimer.setSingleShot(true);
+    m_storeDockSizesTimer.setInterval(0);
+    connect(&m_storeDockSizesTimer, &QTimer::timeout, this, &MainWidget::storeDockSizes);
+
     /* ToolBar and MenuBar */
     createMenuBar();
 
@@ -518,8 +531,9 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
         playStateChanged(false);
     }
 
-#ifdef Q_OS_MACOS
     qApp->installEventFilter(this);
+
+#ifdef Q_OS_MACOS
     fileOpenTimer.setSingleShot(true);
     connect(&fileOpenTimer, &QTimer::timeout, this, &MainWidget::fileOpenTimerTimeout);
     if (QMPlay2GUI.pipe) // Register media keys only for first QMPlay2 instance
@@ -1438,6 +1452,10 @@ void MainWidget::showSettings(const QString &moduleName)
         connect(settingsW, SIGNAL(settingsChanged(int, bool, bool)), &playC, SLOT(settingsChanged(int, bool, bool)));
         connect(settingsW, SIGNAL(setWheelStep(int)), seekS, SLOT(setWheelStep(int)));
         connect(settingsW, SIGNAL(setVolMax(int)), volW, SLOT(setMaximumVolume(int)));
+        connect(settingsW, &SettingsWidget::keepDocksSizeChanged, this, [this](bool keepDocksSize) {
+            m_keepDocksSize = keepDocksSize;
+            m_storeDockSizesTimer.start();
+        });
         connect(settingsW, SIGNAL(destroyed()), this, SLOT(showSettings()));
     }
     else
@@ -1847,6 +1865,44 @@ void MainWidget::setContinuePlaybackVisibility()
     menuBar->player->continuePlayback->setVisible(QMPlay2Core.getSettings().getBool("StoreUrlPos"));
 }
 
+inline const QList<DockWidget *> MainWidget::getDockWidgets() const
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 3, 0)
+    return findChildren<DockWidget *>(Qt::FindDirectChildrenOnly);
+#else
+    return findChildren<DockWidget *>(QString(), Qt::FindDirectChildrenOnly);
+#endif
+}
+
+void MainWidget::storeDockSizes()
+{
+    m_winSizeForDocks = size();
+    m_dockSizes.clear();
+
+    if (!m_keepDocksSize)
+        return;
+
+    if (!fullScreen && !isCompactView)
+    {
+        QList<QDockWidget *> tabified;
+        for (auto &&dock : getDockWidgets())
+        {
+            if (!dock->isVisible())
+                continue;
+
+            if (dock->isFloating())
+                continue;
+
+            tabified += tabifiedDockWidgets(dock);
+
+            if (tabified.contains(dock))
+                continue;
+
+            m_dockSizes.emplace_back(dock, dock->size());
+        }
+    }
+}
+
 #if defined(Q_OS_WIN)
 void MainWidget::setWindowsTaskBarFeatures()
 {
@@ -2202,6 +2258,39 @@ void MainWidget::changeEvent(QEvent *e)
     QMainWindow::changeEvent(e);
 }
 
+void MainWidget::resizeEvent(QResizeEvent *e)
+{
+    QMainWindow::resizeEvent(e);
+
+    if (m_keepDocksSize && !m_dockSizes.empty() && !m_winSizeForDocks.isEmpty() && e->spontaneous())
+    {
+        const double wRatio = static_cast<double>(width()) / static_cast<double>(m_winSizeForDocks.width());
+        const double hRatio = static_cast<double>(height()) / static_cast<double>(m_winSizeForDocks.height());
+
+        QList<QDockWidget *> docks;
+        QList<int> sizesW, sizesH;
+
+        for (auto &&dock : getDockWidgets())
+        {
+            dock->setResizingByMainWindow(true);
+        }
+
+        docks.reserve(m_dockSizes.size());
+        sizesW.reserve(m_dockSizes.size());
+        sizesH.reserve(m_dockSizes.size());
+
+        for (auto &&[dock, size] : m_dockSizes)
+        {
+            docks.push_back(dock);
+            sizesW.push_back(qRound(size.width() * wRatio));
+            sizesH.push_back(qRound(size.height() * hRatio));
+        }
+
+        resizeDocks(docks, sizesH, Qt::Vertical);
+        resizeDocks(docks, sizesW, Qt::Horizontal);
+    }
+}
+
 bool MainWidget::event(QEvent *e)
 {
 #ifdef WIN11_DARK_STYLE_WORKAROUND
@@ -2230,6 +2319,13 @@ bool MainWidget::eventFilter(QObject *obj, QEvent *event)
         fileOpenTimer.start(10);
     }
 #endif
+    else if (event->type() == QEvent::Resize && m_keepDocksSize && obj == windowHandle())
+    {
+        for (auto &&dock : getDockWidgets())
+        {
+            dock->setResizingByMainWindow(true);
+        }
+    }
     return QMainWindow::eventFilter(obj, event);
 }
 
