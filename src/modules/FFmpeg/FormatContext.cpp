@@ -885,6 +885,8 @@ bool FormatContext::open(const QString &_url, const QString &param)
     streamsOffset.resize(formatCtx->nb_streams);
     nextDts.resize(formatCtx->nb_streams);
 
+    const bool hasTeletextCodec = avcodec_find_decoder(AV_CODEC_ID_DVB_TELETEXT);
+    std::vector<StreamInfo *> subtitlesStreams;
     int nVideoStreams = 0;
     int nDefaultVideoStreams = 0;
     for (unsigned i = 0; i < formatCtx->nb_streams; ++i)
@@ -906,6 +908,12 @@ bool FormatContext::open(const QString &_url, const QString &param)
                     ++nDefaultVideoStreams;
                 ++nVideoStreams;
             }
+
+            else if (streamInfo->params->codec_type == AVMEDIA_TYPE_SUBTITLE)
+            {
+                if (hasTeletextCodec)
+                    subtitlesStreams.push_back(streamInfo);
+            }
         }
         if (!fixMkvAss && formatCtx->streams[i]->codecpar->codec_id == AV_CODEC_ID_ASS && !strncasecmp(formatCtx->iformat->name, "matroska", 8))
             fixMkvAss = true;
@@ -916,6 +924,12 @@ bool FormatContext::open(const QString &_url, const QString &param)
     }
     if (streamsInfo.isEmpty())
         return false;
+    if (subtitlesStreams.size() == 1 && subtitlesStreams[0]->params->codec_id == AV_CODEC_ID_DVB_TELETEXT)
+    {
+        // Don't skip teletext if we have decoder and it's the only stream
+        Q_ASSERT(hasTeletextCodec);
+        subtitlesStreams[0]->skip_auto_select = false;
+    }
 
     isOneStreamOgg = (name() == "ogg" && streamsInfo.count() == 1); //Workaround for OGG network streams
 

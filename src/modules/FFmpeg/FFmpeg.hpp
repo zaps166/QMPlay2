@@ -101,4 +101,5 @@ private:
     QSpinBox *threadsB;
     QComboBox *lowresB, *thrTypeB;
     QSpinBox *m_teletextPageB = nullptr;
+    QCheckBox *m_teletextTransparentB = nullptr;
 };

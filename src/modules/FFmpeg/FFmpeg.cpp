@@ -113,6 +113,7 @@ FFmpeg::FFmpeg() :
     init("LowresValue", static_cast<int>(0));
     init("ThreadTypeSlice", false);
     init("TeletextPage", static_cast<int>(0));
+    init("TeletextTransparent", false);
 
 #if defined(USE_OPENGL)
 
@@ -355,8 +356,11 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     {
         m_teletextPageB = new QSpinBox;
         m_teletextPageB->setRange(99, 899);
-        m_teletextPageB->setSpecialValueText(tr("All"));
+        m_teletextPageB->setSpecialValueText(tr("Subtitle"));
         m_teletextPageB->setValue(sets().getInt("TeletextPage"));
+
+        m_teletextTransparentB = new QCheckBox(tr("Transparent teletext background"));
+        m_teletextTransparentB->setChecked(sets().getBool("TeletextTransparent"));
     }
 
     QFormLayout *demuxerLayout = new QFormLayout(demuxerB);
@@ -369,6 +373,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dx
     decoderLayout->addRow(tr("Method of multithreaded decoding") + ": ", thrTypeB);
     if (m_teletextPageB)
         decoderLayout->addRow(tr("Teletext page: "), m_teletextPageB);
+    if (m_teletextTransparentB)
+        decoderLayout->addRow(m_teletextTransparentB);
     decoderLayout->addRow(hurryUpB);
 
     connect(skipFramesB, SIGNAL(clicked(bool)), forceSkipFramesB, SLOT(setEnabled(bool)));
@@ -412,6 +418,8 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("ThreadTypeSlice", thrTypeB->currentIndex());
     if (m_teletextPageB)
         sets().set("TeletextPage", (m_teletextPageB->value() == m_teletextPageB->minimum()) ? 0 : m_teletextPageB->value());
+    if (m_teletextTransparentB)
+        sets().set("TeletextTransparent", m_teletextTransparentB->isChecked());
 #ifdef QMPlay2_VKVIDEO
     if (decoderVKVIDEO)
         sets().set("DecoderVkVideoEnabled", decoderVKVIDEO->isChecked());
