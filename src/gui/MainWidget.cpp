@@ -1619,11 +1619,13 @@ void MainWidget::doRestoreState(const QByteArray &data, bool doToggleCompactView
         setUpdatesEnabled(false);
         QTimer::singleShot(0, this, [=] {
             QTimer::singleShot(0, this, [=] {
-                restoreState(data);
-                if (doToggleCompactView)
-                    menuBar->window->toggleCompactView->trigger();
-                setUpdatesEnabled(true);
-                repaint();
+                QTimer::singleShot(0, this, [=] {
+                    restoreState(data);
+                    if (doToggleCompactView)
+                        menuBar->window->toggleCompactView->trigger();
+                    setUpdatesEnabled(true);
+                    repaint();
+                });
             });
         });
     }
