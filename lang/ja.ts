@@ -1909,7 +1909,7 @@
     </message>
     <message>
         <source>Subtitles</source>
-        <translation type="unfinished">字幕</translation>
+        <translation>字幕</translation>
     </message>
 </context>
 <context>

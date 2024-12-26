@@ -1907,7 +1907,7 @@
     </message>
     <message>
         <source>Subtitles</source>
-        <translation type="unfinished">الترجمات</translation>
+        <translation>الترجمات</translation>
     </message>
 </context>
 <context>

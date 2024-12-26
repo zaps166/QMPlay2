@@ -1040,7 +1040,7 @@
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>调整主窗口大小时维持面板尺寸（实验）</translation>
     </message>
 </context>
 <context>
@@ -1903,11 +1903,11 @@
     </message>
     <message>
         <source>Transparent teletext background</source>
-        <translation type="unfinished"></translation>
+        <translation>透明图文电视背景</translation>
     </message>
     <message>
         <source>Subtitles</source>
-        <translation type="unfinished">字幕</translation>
+        <translation>字幕</translation>
     </message>
 </context>
 <context>
@@ -2676,7 +2676,7 @@
     </message>
     <message>
         <source>&amp;Precise zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>精确缩放(&amp;P)</translation>
     </message>
 </context>
 <context>
