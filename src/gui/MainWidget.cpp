@@ -991,8 +991,11 @@ void MainWidget::createMenuBar()
     connect(menuBar->player->speedUp, SIGNAL(triggered()), &playC, SLOT(speedUp()));
     connect(menuBar->player->slowDown, SIGNAL(triggered()), &playC, SLOT(slowDown()));
     connect(menuBar->player->setSpeed, SIGNAL(triggered()), &playC, SLOT(setSpeed()));
+    connect(menuBar->player->integerScaling, &QAction::toggled, menuBar->player->preciseZoom, &QAction::setDisabled);
     menuBar->player->integerScaling->setChecked(QMPSettings.getBool("IntegerScaling"));
+    menuBar->player->preciseZoom->setChecked(QMPSettings.getBool("PreciseZoom"));
     connect(menuBar->player->integerScaling, &QAction::triggered, &playC, &PlayClass::setIntegerScaling);
+    connect(menuBar->player->preciseZoom, &QAction::triggered, &playC, &PlayClass::setPreciseZoom);
     connect(menuBar->player->zoomIn, SIGNAL(triggered()), &playC, SLOT(zoomIn()));
     connect(menuBar->player->zoomOut, SIGNAL(triggered()), &playC, SLOT(zoomOut()));
     connect(menuBar->player->switchARatio, SIGNAL(triggered()), this, SLOT(switchARatio()));
