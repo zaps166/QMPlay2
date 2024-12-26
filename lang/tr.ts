@@ -1915,7 +1915,7 @@
     </message>
     <message>
         <source>Subtitles</source>
-        <translation type="unfinished">Altyazılar</translation>
+        <translation>Altyazılar</translation>
     </message>
 </context>
 <context>

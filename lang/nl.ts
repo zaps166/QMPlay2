@@ -1907,7 +1907,7 @@
     </message>
     <message>
         <source>Subtitles</source>
-        <translation type="unfinished">Ondertiteling</translation>
+        <translation>Ondertiteling</translation>
     </message>
 </context>
 <context>

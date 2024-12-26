@@ -1907,7 +1907,7 @@
     </message>
     <message>
         <source>Subtitles</source>
-        <translation type="unfinished">Titulky</translation>
+        <translation>Titulky</translation>
     </message>
 </context>
 <context>

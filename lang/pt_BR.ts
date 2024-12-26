@@ -1912,7 +1912,7 @@
     </message>
     <message>
         <source>Subtitles</source>
-        <translation type="unfinished">Legendas</translation>
+        <translation>Legendas</translation>
     </message>
 </context>
 <context>
