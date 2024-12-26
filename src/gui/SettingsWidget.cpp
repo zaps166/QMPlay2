@@ -1372,8 +1372,7 @@ void SettingsWidget::apply()
                 videoWriters += wI->text();
             QMPSettings.set("videoWriters", videoWriters);
 
-            if (initFilters)
-                page6->deintSettingsW->setSoftwareDeintEnabledDisabled();
+            page6->deintSettingsW->setDeintEnabledDisabled();
 
             break;
         }

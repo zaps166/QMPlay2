@@ -33,7 +33,7 @@ public:
     DeintSettingsW();
     ~DeintSettingsW();
 
-    void setSoftwareDeintEnabledDisabled();
+    void setDeintEnabledDisabled();
 
     void writeSettings();
 private slots:

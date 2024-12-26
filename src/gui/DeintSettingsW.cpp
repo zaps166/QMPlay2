@@ -104,14 +104,21 @@ DeintSettingsW::~DeintSettingsW()
     }
 }
 
-void DeintSettingsW::setSoftwareDeintEnabledDisabled()
+void DeintSettingsW::setDeintEnabledDisabled()
 {
 #ifdef USE_VULKAN
     if (QMPlay2Core.isVulkanRenderer())
     {
+        const bool vkCanFilter = QmVk::Instance::checkFiltersSupported(std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->physicalDevice());
         softwareMethodsCB->setEnabled(
-            !QMPlay2Core.getSettings().getBool("Vulkan/AlwaysGPUDeint") || !QmVk::Instance::checkFiltersSupported(std::static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->physicalDevice())
+            !QMPlay2Core.getSettings().getBool("Vulkan/AlwaysGPUDeint") || !vkCanFilter
         );
+        for (QWidget *w : QMPlay2Core.getVideoDeintMethods())
+        {
+            w->setEnabled(
+               !QMPlay2Core.getSettings().getBool("Vulkan/ForceVulkanYadif") || !vkCanFilter
+            );
+        }
     }
 #endif
 }
@@ -145,7 +152,7 @@ void DeintSettingsW::softwareMethods(bool doubler)
                 softwareMethodsCB->addItem(mod.name, mod.description);
     const int idx = softwareMethodsCB->findText(QMPlay2Core.getSettings().getString("Deinterlace/SoftwareMethod"));
     softwareMethodsCB->setCurrentIndex(idx < 0 ? 0 : idx);
-    setSoftwareDeintEnabledDisabled();
+    setDeintEnabledDisabled();
 }
 void DeintSettingsW::setSoftwareMethodsToolTip(int idx)
 {
