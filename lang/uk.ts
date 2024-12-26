@@ -2674,6 +2674,10 @@
         <source>&amp;Integer scaling</source>
         <translation>Ці&amp;лочисельне масштабування</translation>
     </message>
+    <message>
+        <source>&amp;Precise zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

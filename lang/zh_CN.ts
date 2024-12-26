@@ -2674,6 +2674,10 @@
         <source>&amp;Integer scaling</source>
         <translation>整数缩放(&amp;I)</translation>
     </message>
+    <message>
+        <source>&amp;Precise zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

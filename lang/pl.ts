@@ -2674,6 +2674,10 @@
         <source>&amp;Integer scaling</source>
         <translation>Ska&amp;lowanie całkowite</translation>
     </message>
+    <message>
+        <source>&amp;Precise zoom</source>
+        <translation>&amp;Dokładny zoom</translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>

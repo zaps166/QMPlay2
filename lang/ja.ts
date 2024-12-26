@@ -2676,6 +2676,10 @@
         <source>&amp;Integer scaling</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Precise zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
