@@ -105,8 +105,6 @@ public:
 
     void setIntegerScaling(bool integerScaling);
 
-    void setPreciseZoom(bool preciseZoom);
-
 private:
     inline bool hasVideoStream();
     inline bool hasAudioStream();
@@ -187,7 +185,6 @@ private:
     QSize m_videoSize;
 
     bool m_integerScaling = false;
-    bool m_preciseZoom = false;
 
 private slots:
     void suspendWhenFinished(bool b);

@@ -74,8 +74,6 @@ PlayClass::PlayClass() :
         fixZoomForIntegerScaling();
     }
 
-    m_preciseZoom = QMPlay2Core.getSettings().getBool("PreciseZoom");
-
     speed = subtitlesScale = 1.0;
     flip = 0;
     rotate90 = spherical = false;
@@ -487,12 +485,6 @@ void PlayClass::setIntegerScaling(bool integerScaling)
     QMPlay2Core.getSettings().set("IntegerScaling", m_integerScaling);
 }
 
-void PlayClass::setPreciseZoom(bool preciseZoom)
-{
-    m_preciseZoom = preciseZoom;
-    QMPlay2Core.getSettings().set("PreciseZoom", m_preciseZoom);
-}
-
 inline bool PlayClass::hasVideoStream()
 {
     return vThr && demuxThr && demuxThr->demuxer && videoStream > -1;
@@ -732,13 +724,9 @@ void PlayClass::applyZoom(bool message)
             const auto zoomRational = av_d2q(zoom, 10);
             messageAndOSD(text.arg(QStringLiteral("%1/%2").arg(zoomRational.num).arg(zoomRational.den)));
         }
-        else if (m_integerScaling)
-        {
-            messageAndOSD(text.arg(zoom));
-        }
         else
         {
-            messageAndOSD(text.arg(zoom, 0, 'f', 2));
+            messageAndOSD(text.arg(zoom));
         }
     }
     vThr->setZoom(getZoom());
@@ -936,10 +924,7 @@ void PlayClass::zoomIn()
         }
         else
         {
-            if (m_preciseZoom)
-                zoom += 0.01;
-            else
-                zoom += 0.05;
+            zoom += 0.05;
         }
         applyZoom(true);
     }
@@ -957,10 +942,7 @@ void PlayClass::zoomOut()
         }
         else
         {
-            if (m_preciseZoom)
-                zoom -= 0.01;
-            else
-                zoom -= 0.05;
+            zoom -= 0.05;
         }
         applyZoom(true);
     }
