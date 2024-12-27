@@ -2706,6 +2706,10 @@
         <source>&amp;Set zoom</source>
         <translation>&amp;Ustaw powiększenie</translation>
     </message>
+    <message>
+        <source>&amp;Precise zoom</source>
+        <translation>&amp;Dokładny zoom</translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3955,6 +3959,13 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     <message>
         <source>&quot;youtube-dl&quot; download has failed!</source>
         <translation>Pobieranie &quot;youtube-dl&quot; nie powiodło się!</translation>
+    </message>
+</context>
+<context>
+    <name>Zoom</name>
+    <message>
+        <source>&amp;Zoom</source>
+        <translation>Pow&amp;iększenie</translation>
     </message>
 </context>
 </TS>

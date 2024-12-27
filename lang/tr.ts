@@ -2717,6 +2717,10 @@
         <source>&amp;Set zoom</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Precise zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3976,6 +3980,13 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <message>
         <source>&quot;youtube-dl&quot; download has failed!</source>
         <translation>&quot;youtube-dl&quot; indirmesi başarısız oldu!</translation>
+    </message>
+</context>
+<context>
+    <name>Zoom</name>
+    <message>
+        <source>&amp;Zoom</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

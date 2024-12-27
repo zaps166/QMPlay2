@@ -2705,6 +2705,10 @@
         <source>&amp;Set zoom</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Precise zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3954,6 +3958,13 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
     <message>
         <source>&quot;youtube-dl&quot; download has failed!</source>
         <translation>&quot;youtube-dl&quot; Download fehlgeschlagen!</translation>
+    </message>
+</context>
+<context>
+    <name>Zoom</name>
+    <message>
+        <source>&amp;Zoom</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

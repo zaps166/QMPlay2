@@ -2706,6 +2706,10 @@
         <source>&amp;Set zoom</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Precise zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3955,6 +3959,13 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     <message>
         <source>&quot;youtube-dl&quot; update has been aborted!</source>
         <translation>De youtube-dl-update is afgebroken!</translation>
+    </message>
+</context>
+<context>
+    <name>Zoom</name>
+    <message>
+        <source>&amp;Zoom</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

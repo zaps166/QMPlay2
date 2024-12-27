@@ -2703,6 +2703,10 @@
         <source>&amp;Set zoom</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&amp;Precise zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playlist</name>
@@ -3945,6 +3949,13 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has failed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Zoom</name>
+    <message>
+        <source>&amp;Zoom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
