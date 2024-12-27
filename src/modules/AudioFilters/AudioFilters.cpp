@@ -154,6 +154,7 @@ QMPLAY2_EXPORT_MODULE(AudioFilters)
 #include <QFormLayout>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QMessageBox>
 #include <QGroupBox>
 #include <QComboBox>
 #include <QCheckBox>
@@ -398,6 +399,9 @@ void ModuleSettingsWidget::compressor()
 }
 void ModuleSettingsWidget::defaultSettings()
 {
+    if (QMessageBox::question(nullptr, QString(), tr("Do you want to restore the default settings?"), QMessageBox::Yes | QMessageBox::No) != QMessageBox::Yes)
+        return;
+
     restoringDefault = true;
 
     bs2bB->setChecked(false);
