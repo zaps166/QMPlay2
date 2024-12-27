@@ -38,6 +38,7 @@ class QPushButton;
 class QGroupBox;
 class QCheckBox;
 class QComboBox;
+class QLineEdit;
 class QSpinBox;
 class Slider;
 
@@ -79,6 +80,11 @@ private:
 
     QComboBox *eqQualityB;
     QSpinBox *eqSlidersB, *eqMinFreqB, *eqMaxFreqB;
+
+#ifdef USE_AVAUDIOFILTER
+    QGroupBox *m_avAudioFilterB = nullptr;
+    QLineEdit *m_avAudioFilterE = nullptr;
+#endif
 
     QPushButton *defaultB;
 };

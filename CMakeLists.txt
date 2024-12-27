@@ -204,6 +204,14 @@ add_feature_info(Visualizations USE_VISUALIZATIONS "Build with Visualizations mo
 option(USE_AUDIOFILTERS "Build with AudioFilters module" ON)
 add_feature_info(AudioFilters USE_AUDIOFILTERS "Build with AudioFilters module")
 
+if(USE_AUDIOFILTERS)
+    pkg_check_modules(LIBAVFILTER libavfilter)
+    set(DEFAULT_LIBAVFILTER ${LIBAVFILTER_FOUND})
+
+    option(USE_AVAUDIOFILTER "Build with AvAudioFilter support" ${DEFAULT_LIBAVFILTER})
+    add_feature_info(AvAAudioFilter USE_AVAUDIOFILTER "Build with AvAudioFilter support")
+endif()
+
 option(USE_VIDEOFILTERS "Build with VideoFilters module" ON)
 add_feature_info(VideoFilters USE_VIDEOFILTERS "Build with VideoFilters module")
 

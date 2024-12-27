@@ -25,6 +25,9 @@
 #include <SwapStereo.hpp>
 #include <Echo.hpp>
 #include <DysonCompressor.hpp>
+#ifdef USE_AVAUDIOFILTER
+# include <AVAudioFilter.hpp>
+#endif
 
 enum Defaults
 {
@@ -92,6 +95,11 @@ AudioFilters::AudioFilters() :
     init("Compressor/FastGainCompressionRatio", COMPRESSOR_FAST / 10.0);
     init("Compressor/OverallCompressionRatio", COMPRESSOR_OVERALL / 10.0);
 
+#ifdef USE_AVAUDIOFILTER
+    init("AVAudioFilter", false);
+    init("AVAudioFilter/Filters", QByteArray());
+#endif
+
     if (getBool("Equalizer"))
     {
         bool disableEQ = true;
@@ -116,6 +124,9 @@ QList<AudioFilters::Info> AudioFilters::getModulesInfo(const bool) const
     modulesInfo += Info(SwapStereoName, AUDIOFILTER);
     modulesInfo += Info(EchoName, AUDIOFILTER);
     modulesInfo += Info(DysonCompressorName, AUDIOFILTER);
+#ifdef USE_AVAUDIOFILTER
+    modulesInfo += Info(AVAudioFilterName, AUDIOFILTER);
+#endif
     return modulesInfo;
 }
 void *AudioFilters::createInstance(const QString &name)
@@ -136,6 +147,10 @@ void *AudioFilters::createInstance(const QString &name)
         return new Echo(*this);
     else if (name == DysonCompressorName)
         return new DysonCompressor(*this);
+#ifdef USE_AVAUDIOFILTER
+    else if (name == AVAudioFilterName)
+        return new AVAudioFilter(*this);
+#endif
     return nullptr;
 }
 
@@ -151,13 +166,17 @@ QMPLAY2_EXPORT_MODULE(AudioFilters)
 #include <Slider.hpp>
 
 #include <QDoubleSpinBox>
+#include <QTextBrowser>
 #include <QFormLayout>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QToolButton>
+#include <QBoxLayout>
 #include <QGroupBox>
 #include <QComboBox>
 #include <QCheckBox>
+#include <QLineEdit>
 #include <QSpinBox>
 #include <QLabel>
 
@@ -329,6 +348,49 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     eqLayout->setContentsMargins(3, 3, 3, 3);
 
 
+#ifdef USE_AVAUDIOFILTER
+    m_avAudioFilterB = new QGroupBox(tr("FFmpeg audio filters"));
+    m_avAudioFilterB->setCheckable(true);
+    m_avAudioFilterB->setChecked(sets().getBool("AVAudioFilter"));
+
+    auto audioFiltersInfoB = new QToolButton;
+    audioFiltersInfoB->setText("?");
+    audioFiltersInfoB->setToolTip(tr("Help"));
+    connect(audioFiltersInfoB, &QToolButton::clicked, this, [this] {
+        const auto sep = QStringLiteral("<br/>&nbsp;&nbsp;&nbsp;");
+        auto te = new QTextBrowser(window());
+        te->setWindowFlag(Qt::Window);
+        te->setOpenExternalLinks(true);
+        te->setAttribute(Qt::WA_DeleteOnClose);
+        te->setWindowTitle(m_avAudioFilterB->title());
+        te->setHtml(
+            tr("Not all audio filters are supported in QMPlay2. "
+               "To use some filters like 'surround' you need to use channel conversion and use channel conversion before filters option. "
+               "Please refer to the %1FFmpeg documentation%2.%3Available audio filters:"
+              )
+                .arg(QStringLiteral("<a href='https://ffmpeg.org/ffmpeg-filters.html#Audio-Filters'>"), QStringLiteral("</a>"), QStringLiteral("<br/><br/>"))
+                + sep + AVAudioFilter::getAvailableFilters().join(sep)
+        );
+        te->show();
+    });
+
+    m_avAudioFilterE = new QLineEdit;
+    m_avAudioFilterE->setPlaceholderText(
+        tr("FFmpeg audio filters, example: %1").arg(QStringLiteral("volume=0.6,extrastereo"))
+    );
+    connect(m_avAudioFilterE, &QLineEdit::textChanged, this, [this](const QString &text) {
+        auto font = m_avAudioFilterE->font();
+        font.setUnderline(!AVAudioFilter::validateFilters(text.toLatin1().trimmed()));
+        m_avAudioFilterE->setFont(font);
+    });
+    m_avAudioFilterE->setText(sets().getByteArray("AVAudioFilter/Filters"));
+
+    auto avAudioFilterLayout = new QHBoxLayout(m_avAudioFilterB);
+    avAudioFilterLayout->addWidget(m_avAudioFilterE);
+    avAudioFilterLayout->addWidget(audioFiltersInfoB);
+#endif
+
+
     defaultB = new QPushButton(tr("Default settings"));
     connect(defaultB, SIGNAL(clicked(bool)), this, SLOT(defaultSettings()));
 
@@ -341,6 +403,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     layout->addWidget(echoB);
     layout->addWidget(compressorB);
     layout->addWidget(eqGroupB);
+#ifdef USE_AVAUDIOFILTER
+    layout->addWidget(m_avAudioFilterB);
+#endif
     layout->addWidget(defaultB);
 }
 
@@ -432,10 +497,15 @@ void ModuleSettingsWidget::defaultSettings()
     compressorFastRatioS->setValue(COMPRESSOR_FAST * 2);
     compressorRatioS->setValue(COMPRESSOR_OVERALL * 2);
 
+#ifdef USE_AVAUDIOFILTER
+    m_avAudioFilterB->setChecked(false);
+    m_avAudioFilterE->clear();
+#endif
+
     restoringDefault = false;
 
     bs2b();
-    saveSettings(); //For equalizer
+    saveSettings(); // For equalizer and ffmpeg filters
     SetInstance<EqualizerGUI>();
     SetInstance<Equalizer>();
     voiceRemovalToggle();
@@ -451,4 +521,9 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("Equalizer/count", eqSlidersB->value());
     sets().set("Equalizer/minFreq", eqMinFreqB->value());
     sets().set("Equalizer/maxFreq", eqMaxFreqB->value());
+
+#ifdef USE_AVAUDIOFILTER
+    sets().set("AVAudioFilter", m_avAudioFilterB->isChecked());
+    sets().set("AVAudioFilter/Filters", m_avAudioFilterE->text().toLatin1());
+#endif
 }

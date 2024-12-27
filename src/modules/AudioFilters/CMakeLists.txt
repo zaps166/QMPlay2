@@ -28,6 +28,15 @@ set(AudioFilters_SRC
     bs2b/bs2b_lib.cpp
 )
 
+if(USE_AVAUDIOFILTER)
+    list(APPEND AudioFilters_HDR
+        AVAudioFilter.hpp
+    )
+    list(APPEND AudioFilters_SRC
+        AVAudioFilter.cpp
+    )
+endif()
+
 set(AudioFilters_RESOURCES
     icon.qrc
 )
@@ -37,6 +46,25 @@ add_library(${PROJECT_NAME} MODULE
     ${AudioFilters_SRC}
     ${AudioFilters_RESOURCES}
 )
+
+if(USE_AVAUDIOFILTER)
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE
+        -DUSE_AVAUDIOFILTER
+    )
+    target_include_directories(${PROJECT_NAME}
+        PRIVATE
+        ${LIBAVFILTER_INCLUDE_DIRS}
+    )
+    target_link_directories(${PROJECT_NAME}
+        PRIVATE
+        ${LIBAVFILTER_LIBRARY_DIRS}
+    )
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+        ${LIBAVFILTER_LIBRARIES}
+    )
+endif()
 
 if(USE_PCH)
     target_precompile_headers(${PROJECT_NAME} PRIVATE
