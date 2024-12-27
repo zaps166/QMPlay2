@@ -724,9 +724,13 @@ void PlayClass::applyZoom(bool message)
             const auto zoomRational = av_d2q(zoom, 10);
             messageAndOSD(text.arg(QStringLiteral("%1/%2").arg(zoomRational.num).arg(zoomRational.den)));
         }
-        else
+        else if (m_integerScaling)
         {
             messageAndOSD(text.arg(zoom));
+        }
+        else
+        {
+            messageAndOSD(text.arg(zoom, 0, 'f', 3));
         }
     }
     vThr->setZoom(getZoom());
@@ -943,8 +947,21 @@ void PlayClass::zoomOut()
         else
         {
             zoom -= 0.05;
+            if (zoom < 0.05)
+                zoom = 0.05;
         }
         applyZoom(true);
+    }
+}
+void PlayClass::setZoom()
+{
+    bool ok;
+    double z = QInputDialog::getDouble(nullptr, tr("Zoom"), tr("Set zoom"), zoom, 0.05, 20.0, 3, &ok, Qt::WindowFlags(), 0.01);
+    if (ok)
+    {
+        zoom = z;
+        if (vThr)
+            applyZoom(true);
     }
 }
 void PlayClass::zoomReset()

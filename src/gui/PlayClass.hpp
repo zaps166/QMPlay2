@@ -204,6 +204,9 @@ private slots:
     void setSpeed();
     void zoomIn();
     void zoomOut();
+public:
+    void setZoom();
+private slots:
     void zoomReset();
     void otherReset();
 public:

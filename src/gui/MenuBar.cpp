@@ -252,6 +252,7 @@ MenuBar::Player::Player(MenuBar *parent) :
     newAction(Player::tr("&Integer scaling"), this, integerScaling, false, QIcon(), true);
     newAction(Player::tr("Zoom i&n"), this, zoomIn, true, QIcon(), false);
     newAction(Player::tr("Zoom ou&t"), this, zoomOut, true, QIcon(), false);
+    newAction(Player::tr("&Set zoom"), this, setZoom, false, QIcon(), false);
     newAction(Player::tr("Toggle &aspect ratio"), this, switchARatio, true, QIcon(), false);
 
     aRatio = new AspectRatio(this);
@@ -626,6 +627,8 @@ void MenuBar::setKeyShortcuts()
     shortcuts->appendAction(player->integerScaling, "KeyBindings/Player-integerScaling", "Alt+Q");
     shortcuts->appendAction(player->zoomIn, "KeyBindings/Player-zoomIn", "E");
     shortcuts->appendAction(player->zoomOut, "KeyBindings/Player-zoomOut", "W");
+    shortcuts->appendAction(player->setZoom, "KeyBindings/Player-setZoom", "Shift+W");
+    shortcuts->appendAction(player->setSpeed, "KeyBindings/Player-setSpeed", "Shift+S");
     shortcuts->appendAction(player->switchARatio, "KeyBindings/Player-switchARatio", "A");
     shortcuts->appendAction(player->reset, "KeyBindings/Player-reset", "R");
     shortcuts->appendAction(player->volUp, "KeyBindings/Player-volUp", "*");
