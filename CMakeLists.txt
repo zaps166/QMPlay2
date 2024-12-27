@@ -358,11 +358,11 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
     endif()
 
     # Hide symbols, and also make sure that debugging symbols are disabled
-    set(CMAKE_CXX_FLAGS_RELEASE    "${RELEASE_DEBUG_FLAG} -fvisibility=hidden -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_RELEASE}")
-    set(CMAKE_CXX_FLAGS_MINSIZEREL "${RELEASE_DEBUG_FLAG} -fvisibility=hidden -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_MINSIZEREL}")
+    set(CMAKE_CXX_FLAGS_RELEASE    "${RELEASE_DEBUG_FLAG} -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_RELEASE}")
+    set(CMAKE_CXX_FLAGS_MINSIZEREL "${RELEASE_DEBUG_FLAG} -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_MINSIZEREL}")
     if(NOT USE_VULKAN)
-        set(CMAKE_CXX_FLAGS_RELEASE    "-fno-exceptions ${CMAKE_CXX_FLAGS_RELEASE}")
-        set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions ${CMAKE_CXX_FLAGS_MINSIZEREL}")
+        set(CMAKE_CXX_FLAGS_RELEASE    "-fno-exceptions -fvisibility=hidden ${CMAKE_CXX_FLAGS_RELEASE}")
+        set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions -fvisibility=hidden ${CMAKE_CXX_FLAGS_MINSIZEREL}")
     endif()
 
     if(NOT CMAKE_BUILD_TYPE MATCHES "Deb")
