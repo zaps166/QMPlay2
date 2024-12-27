@@ -1911,7 +1911,7 @@
     </message>
     <message>
         <source>FFmpeg audio filters</source>
-        <translation>Звукові фільтри FFmpeg</translation>
+        <translation>Аудіофільтри FFmpeg</translation>
     </message>
     <message>
         <source>Help</source>
@@ -1923,7 +1923,7 @@
     </message>
     <message>
         <source>FFmpeg audio filters, example: %1</source>
-        <translation>Звукові фільтри FFmpeg, наприклад: %1</translation>
+        <translation>Аудіофільтри FFmpeg, наприклад: %1</translation>
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos; you need to use channel conversion and use channel conversion before filters option. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
