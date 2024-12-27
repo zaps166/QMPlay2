@@ -2313,6 +2313,14 @@
         <source>Set aspect ratio</source>
         <translation>设置自定义纵横比</translation>
     </message>
+    <message>
+        <source>Zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>
@@ -2695,8 +2703,8 @@
         <translation>整数缩放(&amp;I)</translation>
     </message>
     <message>
-        <source>&amp;Precise zoom</source>
-        <translation>精确缩放(&amp;P)</translation>
+        <source>&amp;Set zoom</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

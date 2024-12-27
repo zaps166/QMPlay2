@@ -2313,6 +2313,14 @@
         <source>Set aspect ratio</source>
         <translation>Ustaw współczynnik proporcji</translation>
     </message>
+    <message>
+        <source>Zoom</source>
+        <translation>Powiększenie</translation>
+    </message>
+    <message>
+        <source>Set zoom</source>
+        <translation>Ustaw powiększenie</translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>
@@ -2695,8 +2703,8 @@
         <translation>Ska&amp;lowanie całkowite</translation>
     </message>
     <message>
-        <source>&amp;Precise zoom</source>
-        <translation>&amp;Dokładny zoom</translation>
+        <source>&amp;Set zoom</source>
+        <translation>&amp;Ustaw powiększenie</translation>
     </message>
 </context>
 <context>

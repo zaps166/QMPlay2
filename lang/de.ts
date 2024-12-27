@@ -2312,6 +2312,14 @@
         <source>Set aspect ratio</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Playback</name>
@@ -2694,7 +2702,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Precise zoom</source>
+        <source>&amp;Set zoom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
