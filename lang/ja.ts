@@ -1911,6 +1911,26 @@
         <source>Subtitles</source>
         <translation>字幕</translation>
     </message>
+    <message>
+        <source>FFmpeg audio filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to restore the default settings?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>FFmpeg audio filters, example: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos; you need to use channel conversion and use channel conversion before filters option. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModulesList</name>
