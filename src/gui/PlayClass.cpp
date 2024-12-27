@@ -738,7 +738,7 @@ void PlayClass::applyZoom(bool message)
         }
         else
         {
-            messageAndOSD(text.arg(zoom, 0, 'f', 3));
+            messageAndOSD(text.arg(zoom, 0, 'f', qRound(std::fmod(zoom * 100.0, 1.0) * 10.0) > 0 ? 3 : 2));
         }
     }
     vThr->setZoom(getZoom());
