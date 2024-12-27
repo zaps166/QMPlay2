@@ -293,7 +293,7 @@ void VideoDock::wheelEvent(QWheelEvent *e)
     const auto deltaY  = e->angleDelta().y();
     auto player = QMPlay2GUI.menuBar->player;
     if (deltaY != 0 && (e->buttons() & Qt::LeftButton))
-        deltaY > 0 ? player->zoomIn->trigger() : player->zoomOut->trigger();
+        deltaY > 0 ? player->zoom->zoomIn->trigger() : player->zoom->zoomOut->trigger();
     else
         QMPlay2Core.processWheelEvent(e);
     DockWidget::wheelEvent(e);
@@ -337,9 +337,9 @@ bool VideoDock::event(QEvent *e)
                     if (fabs(touchZoom) >= 0.1)
                     {
                         if (touchZoom > 0.00)
-                            QMPlay2GUI.menuBar->player->zoomIn->trigger();
+                            QMPlay2GUI.menuBar->player->zoom->zoomIn->trigger();
                         else if (touchZoom < 0.00)
-                            QMPlay2GUI.menuBar->player->zoomOut->trigger();
+                            QMPlay2GUI.menuBar->player->zoom->zoomOut->trigger();
                         touchZoom = 0.0;
                     }
                 }

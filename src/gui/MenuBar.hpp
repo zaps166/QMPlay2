@@ -89,6 +89,13 @@ public:
             QActionGroup *choice;
             QAction *repeatActions[RepeatModeCount];
         };
+        class Zoom : public QMenu
+        {
+            Q_DECLARE_TR_FUNCTIONS(Zoom)
+        public:
+            Zoom(QMenu *parent);
+            QAction *integerScaling, *preciseZoom, *zoomIn, *zoomOut, *setZoom;
+        };
         class AspectRatio : public QMenu
         {
             Q_DECLARE_TR_FUNCTIONS(AspectRatio)
@@ -103,7 +110,8 @@ public:
 
         Repeat *repeat;
         AspectRatio *aRatio;
-        QAction *togglePlay, *stop, *next, *prev, *rec, *prevFrame, *nextFrame, *abRepeat, *seekF, *seekB, *lSeekB, *lSeekF, *speedUp, *slowDown, *setSpeed, *switchARatio, *integerScaling, *preciseZoom, *zoomIn, *zoomOut, *setZoom, *reset, *continuePlayback, *volUp, *volDown, *toggleMute, *detach;
+        Zoom *zoom;
+        QAction *togglePlay, *stop, *next, *prev, *rec, *prevFrame, *nextFrame, *abRepeat, *seekF, *seekB, *lSeekB, *lSeekF, *speedUp, *slowDown, *setSpeed, *switchARatio, *reset, *continuePlayback, *volUp, *volDown, *toggleMute, *detach;
         QAction *suspend = nullptr;
     };
 

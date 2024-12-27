@@ -991,15 +991,15 @@ void MainWidget::createMenuBar()
     connect(menuBar->player->speedUp, SIGNAL(triggered()), &playC, SLOT(speedUp()));
     connect(menuBar->player->slowDown, SIGNAL(triggered()), &playC, SLOT(slowDown()));
     connect(menuBar->player->setSpeed, SIGNAL(triggered()), &playC, SLOT(setSpeed()));
-    connect(menuBar->player->integerScaling, &QAction::toggled, menuBar->player->setZoom, &QAction::setDisabled);
-    connect(menuBar->player->integerScaling, &QAction::toggled, menuBar->player->preciseZoom, &QAction::setDisabled);
-    menuBar->player->integerScaling->setChecked(QMPSettings.getBool("IntegerScaling"));
-    menuBar->player->preciseZoom->setChecked(QMPSettings.getBool("PreciseZoom"));
-    connect(menuBar->player->integerScaling, &QAction::triggered, &playC, &PlayClass::setIntegerScaling);
-    connect(menuBar->player->preciseZoom, &QAction::triggered, &playC, &PlayClass::setPreciseZoom);
-    connect(menuBar->player->zoomIn, SIGNAL(triggered()), &playC, SLOT(zoomIn()));
-    connect(menuBar->player->zoomOut, SIGNAL(triggered()), &playC, SLOT(zoomOut()));
-    connect(menuBar->player->setZoom, &QAction::triggered, &playC, &PlayClass::setZoom);
+    connect(menuBar->player->zoom->integerScaling, &QAction::toggled, menuBar->player->zoom->setZoom, &QAction::setDisabled);
+    connect(menuBar->player->zoom->integerScaling, &QAction::toggled, menuBar->player->zoom->preciseZoom, &QAction::setDisabled);
+    menuBar->player->zoom->integerScaling->setChecked(QMPSettings.getBool("IntegerScaling"));
+    menuBar->player->zoom->preciseZoom->setChecked(QMPSettings.getBool("PreciseZoom"));
+    connect(menuBar->player->zoom->integerScaling, &QAction::triggered, &playC, &PlayClass::setIntegerScaling);
+    connect(menuBar->player->zoom->preciseZoom, &QAction::triggered, &playC, &PlayClass::setPreciseZoom);
+    connect(menuBar->player->zoom->zoomIn, SIGNAL(triggered()), &playC, SLOT(zoomIn()));
+    connect(menuBar->player->zoom->zoomOut, SIGNAL(triggered()), &playC, SLOT(zoomOut()));
+    connect(menuBar->player->zoom->setZoom, &QAction::triggered, &playC, &PlayClass::setZoom);
     connect(menuBar->player->switchARatio, SIGNAL(triggered()), this, SLOT(switchARatio()));
     {
         const QString initialAspectRatio = QMPSettings.getBool("StoreARatioAndZoom") ? QMPSettings.getString("AspectRatio") : QString();

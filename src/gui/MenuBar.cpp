@@ -249,11 +249,10 @@ MenuBar::Player::Player(MenuBar *parent) :
     newAction(Player::tr("Slowe&r"), this, slowDown, true, QIcon(), false);
     newAction(Player::tr("&Set speed"), this, setSpeed, false, QIcon(), false);
     addSeparator();
-    newAction(Player::tr("&Integer scaling"), this, integerScaling, false, QIcon(), true);
-    newAction(Player::tr("&Precise zoom"), this, preciseZoom, false, QIcon(), true);
-    newAction(Player::tr("Zoom i&n"), this, zoomIn, true, QIcon(), false);
-    newAction(Player::tr("Zoom ou&t"), this, zoomOut, true, QIcon(), false);
-    newAction(Player::tr("&Set zoom"), this, setZoom, false, QIcon(), false);
+
+    zoom = new Zoom(this);
+    addMenu(zoom);
+
     newAction(Player::tr("Toggle &aspect ratio"), this, switchARatio, true, QIcon(), false);
 
     aRatio = new AspectRatio(this);
@@ -306,6 +305,15 @@ MenuBar::Player::Repeat::Repeat(QMenu *parent) :
 
     for (int i = 0; i < RepeatModeCount; ++i)
         repeatActions[i]->setProperty("enumValue", i);
+}
+MenuBar::Player::Zoom::Zoom(QMenu *parent)
+    : QMenu(Zoom::tr("&Zoom"), parent)
+{
+    newAction(Player::tr("&Integer scaling"), this, integerScaling, false, QIcon(), true);
+    newAction(Player::tr("&Precise zoom"), this, preciseZoom, false, QIcon(), true);
+    newAction(Player::tr("Zoom i&n"), this, zoomIn, true, QIcon(), false);
+    newAction(Player::tr("Zoom ou&t"), this, zoomOut, true, QIcon(), false);
+    newAction(Player::tr("&Set zoom"), this, setZoom, false, QIcon(), false);
 }
 MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
     QMenu(AspectRatio::tr("&Aspect ratio"), parent)
@@ -625,11 +633,11 @@ void MenuBar::setKeyShortcuts()
     shortcuts->appendAction(player->speedUp, "KeyBindings/Player-speedUp", "]");
     shortcuts->appendAction(player->slowDown, "KeyBindings/Player-slowDown", "[");
     shortcuts->appendAction(player->setSpeed, "KeyBindings/Player-setSpeed", "Shift+S");
-    shortcuts->appendAction(player->integerScaling, "KeyBindings/Player-integerScaling", "Alt+Q");
-    shortcuts->appendAction(player->preciseZoom, "KeyBindings/Player-preciseZoom", "");
-    shortcuts->appendAction(player->zoomIn, "KeyBindings/Player-zoomIn", "E");
-    shortcuts->appendAction(player->zoomOut, "KeyBindings/Player-zoomOut", "W");
-    shortcuts->appendAction(player->setZoom, "KeyBindings/Player-setZoom", "Shift+W");
+    shortcuts->appendAction(player->zoom->integerScaling, "KeyBindings/Player-integerScaling", "Alt+Q");
+    shortcuts->appendAction(player->zoom->preciseZoom, "KeyBindings/Player-preciseZoom", "");
+    shortcuts->appendAction(player->zoom->zoomIn, "KeyBindings/Player-zoomIn", "E");
+    shortcuts->appendAction(player->zoom->zoomOut, "KeyBindings/Player-zoomOut", "W");
+    shortcuts->appendAction(player->zoom->setZoom, "KeyBindings/Player-setZoom", "Shift+W");
     shortcuts->appendAction(player->setSpeed, "KeyBindings/Player-setSpeed", "Shift+S");
     shortcuts->appendAction(player->switchARatio, "KeyBindings/Player-switchARatio", "A");
     shortcuts->appendAction(player->reset, "KeyBindings/Player-reset", "R");
