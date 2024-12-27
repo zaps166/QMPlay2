@@ -30,20 +30,10 @@ class QGroupBox;
 class QComboBox;
 class QSettings;
 
-#if defined(Q_OS_WIN) && QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
-# define WIN11_DARK_STYLE_WORKAROUND
-#endif
-
 class Appearance : public QDialog
 {
     Q_OBJECT
 public:
-#ifdef WIN11_DARK_STYLE_WORKAROUND
-    static bool takeIgnorePaletteChange();
-
-    static void maybeSetSystemPalette();
-#endif
-
     static void init();
     static void applyPalette(const QPalette &pal, const QPalette &sliderButton_pal, const QPalette &mainW_pal);
 

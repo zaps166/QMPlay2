@@ -24,7 +24,6 @@
 #include <Settings.hpp>
 #include <Main.hpp>
 
-#include <QOperatingSystemVersion>
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
 #include <QApplication>
@@ -34,7 +33,6 @@
 #include <QMessageBox>
 #include <QGridLayout>
 #include <QFormLayout>
-#include <QStyleHints>
 #include <QMetaEnum>
 #include <QGroupBox>
 #include <QSettings>
@@ -45,7 +43,6 @@
 #include <QLabel>
 #include <QFile>
 
-#include <optional>
 #include <map>
 
 class WallpaperW : public QWidget
@@ -82,23 +79,7 @@ constexpr auto DEFAULT_QMPTXT = 0xFFFFFFFF;
 
 static const auto QMPlay2ColorExtension = QStringLiteral(".QMPlay2Color");
 static QPalette systemPalette;
-#ifdef WIN11_DARK_STYLE_WORKAROUND
-static std::optional<QPalette> g_systemPaletteDark;
-static bool g_ignorePaletteChange = false;
-static bool g_customPalette = false;
-#endif
 static QString colorsDir;
-
-static QPalette getSystemPalette()
-{
-#ifdef WIN11_DARK_STYLE_WORKAROUND
-    if (QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows11 && QApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark && g_systemPaletteDark.has_value())
-    {
-        return g_systemPaletteDark.value();
-    }
-#endif
-    return systemPalette;
-}
 
 template<bool sort = false, typename Fn>
 static void iterateRoles(Fn &&fn)
@@ -226,44 +207,11 @@ static QString getColorSchemePath(const QString &dir, QString name)
     return dir + name;
 }
 
-#ifdef WIN11_DARK_STYLE_WORKAROUND
-bool Appearance::takeIgnorePaletteChange()
-{
-    const bool ignorePaletteChange = g_ignorePaletteChange;
-    g_ignorePaletteChange = false;
-    return ignorePaletteChange;
-}
-
-void Appearance::maybeSetSystemPalette()
-{
-    if (!g_customPalette && QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows11)
-    {
-        const auto colorScheme = QApplication::styleHints()->colorScheme();
-        if (colorScheme == Qt::ColorScheme::Dark && (!g_systemPaletteDark.has_value() || g_systemPaletteDark != QApplication::palette()))
-        {
-            if (!g_systemPaletteDark.has_value())
-            {
-                g_systemPaletteDark = QApplication::palette();
-                g_systemPaletteDark->setColor(QPalette::AlternateBase, g_systemPaletteDark->color(QPalette::Base).darker(110));
-            }
-            g_ignorePaletteChange = true;
-            QApplication::setPalette(g_systemPaletteDark.value());
-        }
-        else if (colorScheme == Qt::ColorScheme::Light && systemPalette != QApplication::palette())
-        {
-            g_ignorePaletteChange = true;
-            QApplication::setPalette(systemPalette);
-        }
-    }
-}
-#endif
-
 void Appearance::init()
 {
     colorsDir = QMPlay2Core.getSettingsDir() + "Colors/";
 
     systemPalette = QApplication::palette();
-
     QDir dir(QMPlay2Core.getSettingsDir());
     dir.mkdir("Colors");
 
@@ -287,7 +235,7 @@ void Appearance::init()
             if (colorScheme.contains("VideoDock/QmpTxt"))
                 QMPlay2GUI.qmpTxt = colorScheme.value("VideoDock/QmpTxt").toUInt();
 
-            QPalette pal = getSystemPalette(), sliderButton_pal = getSystemPalette();
+            QPalette pal = systemPalette, sliderButton_pal = systemPalette;
             if (colorScheme.value("Colors/Use").toBool())
             {
                 iterateRoles([&](QPalette::ColorRole role, const char *name) {
@@ -339,24 +287,12 @@ void Appearance::init()
             }
 
             if (mustApplyPalette)
-            {
-#ifdef WIN11_DARK_STYLE_WORKAROUND
-                g_customPalette = true;
-#endif
                 applyPalette(pal, sliderButton_pal, mainW_pal);
-            }
         }
     }
-
-#ifdef WIN11_DARK_STYLE_WORKAROUND
-    maybeSetSystemPalette();
-#endif
 }
 void Appearance::applyPalette(const QPalette &pal, const QPalette &sliderButton_pal, const QPalette &mainW_pal)
 {
-#ifdef WIN11_DARK_STYLE_WORKAROUND
-    g_ignorePaletteChange = (pal != QApplication::palette());
-#endif
     QApplication::setPalette(pal);
     QMPlay2GUI.mainW->setPalette(mainW_pal);
     for (QWidget *w : QApplication::allWidgets())
@@ -465,7 +401,7 @@ Appearance::Appearance(QWidget *p) :
     int pos = schemesB->findText(QMPlay2Core.getSettings().getString("ColorScheme"));
     if (pos >= 2)
         schemesB->setCurrentIndex(pos);
-    else if (QApplication::palette() == getSystemPalette() && QMPlay2GUI.mainW->palette() == getSystemPalette() && QMPlay2GUI.grad1 == DEFAULT_GRAD1 && QMPlay2GUI.grad2 == DEFAULT_GRAD2 && QMPlay2GUI.qmpTxt == DEFAULT_QMPTXT)
+    else if (QApplication::palette() == systemPalette && QMPlay2GUI.mainW->palette() == systemPalette && QMPlay2GUI.grad1 == DEFAULT_GRAD1 && QMPlay2GUI.grad2 == DEFAULT_GRAD2 && QMPlay2GUI.qmpTxt == DEFAULT_QMPTXT)
         schemesB->setCurrentIndex(1);
     else
         loadCurrentPalette();
@@ -693,7 +629,7 @@ void Appearance::loadCurrentPalette()
     grad2C->setColor(QMPlay2GUI.grad2);
     qmpTxtC->setColor(QMPlay2GUI.qmpTxt);
 
-    useColorsB->setChecked(currentPalette != getSystemPalette());
+    useColorsB->setChecked(currentPalette != systemPalette);
     iterateRoles([&](QPalette::ColorRole role, const char *name) {
         Q_UNUSED(name)
         m_colorButtons.value(role)->setColor(currentPalette.brush(role).color());
@@ -717,10 +653,10 @@ void Appearance::loadDefaultPalette()
     useColorsB->setChecked(false);
     iterateRoles([&](QPalette::ColorRole role, const char *name) {
         Q_UNUSED(name)
-        m_colorButtons.value(role)->setColor(getSystemPalette().brush(role).color());
+        m_colorButtons.value(role)->setColor(systemPalette.brush(role).color());
     });
-    m_colorSliderButton->setColor(getSystemPalette().brush(QPalette::Button).color());
-    m_colorSliderHighlight->setColor(getSystemPalette().brush(QPalette::Highlight).color());
+    m_colorSliderButton->setColor(systemPalette.brush(QPalette::Button).color());
+    m_colorSliderHighlight->setColor(systemPalette.brush(QPalette::Highlight).color());
 
     useWallpaperB->setChecked(false);
     alphaB->setValue(DEFAULT_ALPHA);
@@ -739,16 +675,10 @@ void Appearance::apply()
     QPalette pal, sliderButton_pal;
     if (!useColorsB->isChecked())
     {
-#ifdef WIN11_DARK_STYLE_WORKAROUND
-        g_customPalette = false;
-#endif
-        pal = sliderButton_pal = getSystemPalette();
+        pal = sliderButton_pal = systemPalette;
     }
     else
     {
-#ifdef WIN11_DARK_STYLE_WORKAROUND
-        g_customPalette = true;
-#endif
         iterateRoles([&](QPalette::ColorRole role, const char *name) {
             Q_UNUSED(name)
             const auto color = m_colorButtons.value(role)->getColor();

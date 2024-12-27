@@ -164,8 +164,6 @@ private:
     void changeEvent(QEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
 
-    bool event(QEvent *e) override;
-
     bool eventFilter(QObject *obj, QEvent *event) override;
 
 #ifdef Q_OS_MACOS

@@ -2298,20 +2298,6 @@ void MainWidget::resizeEvent(QResizeEvent *e)
     }
 }
 
-bool MainWidget::event(QEvent *e)
-{
-#ifdef WIN11_DARK_STYLE_WORKAROUND
-    if (e->type() == QEvent::ApplicationPaletteChange)
-    {
-        if (!Appearance::takeIgnorePaletteChange())
-        {
-            Appearance::maybeSetSystemPalette();
-        }
-    }
-#endif
-    return QMainWindow::event(e);
-}
-
 bool MainWidget::eventFilter(QObject *obj, QEvent *event)
 {
     if (tray && obj == tray && event->type() == QEvent::Wheel)
