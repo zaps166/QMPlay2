@@ -54,6 +54,7 @@
 # include <lmcons.h>
 #endif
 
+#include <clocale>
 #include <csignal>
 #include <ctime>
 
@@ -673,6 +674,9 @@ int main(int argc, char *argv[])
 #endif
     {
         new QApplication(argc, argv);
+
+        // Workaround for some libraries (e.g. AVFilter uses comma as filter separator).
+        std::setlocale(LC_NUMERIC, "C");
     }
 #ifndef Q_OS_WIN
     else
