@@ -74,6 +74,8 @@ PlayClass::PlayClass() :
         fixZoomForIntegerScaling();
     }
 
+    m_preciseZoom = QMPlay2Core.getSettings().getBool("PreciseZoom");
+
     speed = subtitlesScale = 1.0;
     flip = 0;
     rotate90 = spherical = false;
@@ -483,6 +485,12 @@ void PlayClass::setIntegerScaling(bool integerScaling)
     messageAndOSD(m_integerScaling ? tr("Integer scaling: enabled") : tr("Integer scaling: disabled"));
 
     QMPlay2Core.getSettings().set("IntegerScaling", m_integerScaling);
+}
+
+void PlayClass::setPreciseZoom(bool preciseZoom)
+{
+    m_preciseZoom = preciseZoom;
+    QMPlay2Core.getSettings().set("PreciseZoom", m_preciseZoom);
 }
 
 inline bool PlayClass::hasVideoStream()
@@ -928,7 +936,10 @@ void PlayClass::zoomIn()
         }
         else
         {
-            zoom += 0.05;
+            if (m_preciseZoom)
+                zoom += 0.01;
+            else
+                zoom += 0.05;
         }
         applyZoom(true);
     }
@@ -946,7 +957,10 @@ void PlayClass::zoomOut()
         }
         else
         {
-            zoom -= 0.05;
+            if (m_preciseZoom)
+                zoom -= 0.01;
+            else
+                zoom -= 0.05;
             if (zoom < 0.05)
                 zoom = 0.05;
         }
