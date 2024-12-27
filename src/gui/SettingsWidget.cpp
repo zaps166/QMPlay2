@@ -49,6 +49,7 @@
 #include <QToolButton>
 #include <QGridLayout>
 #include <QMainWindow>
+#include <QScrollBar>
 #include <QBoxLayout>
 #include <QTextCodec>
 #include <QComboBox>
@@ -1457,7 +1458,9 @@ void SettingsWidget::apply()
                 settingsWidget->saveSettings();
                 settingsWidget->flushSettings();
                 page3->module->setInstances(forceRestartPlayback);
+                const int scroll = page3->scrollA->verticalScrollBar()->value();
                 chModule(page3->listW->currentItem());
+                page3->scrollA->verticalScrollBar()->setValue(scroll);
             }
             break;
         case 4:
