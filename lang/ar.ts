@@ -1040,7 +1040,7 @@
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>الحفاظ على حجم النوافذ الفرعية عند تغيير حجم النافذة الرئيسية (تجريبي)</translation>
     </message>
 </context>
 <context>
@@ -1903,7 +1903,7 @@
     </message>
     <message>
         <source>Transparent teletext background</source>
-        <translation type="unfinished"></translation>
+        <translation>خلفية المعلومات الإذاعية شفافة</translation>
     </message>
     <message>
         <source>Subtitles</source>
@@ -1911,23 +1911,23 @@
     </message>
     <message>
         <source>FFmpeg audio filters</source>
-        <translation type="unfinished"></translation>
+        <translation>مرشحات صوت FFmpeg</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>المساعدة</translation>
     </message>
     <message>
         <source>Do you want to restore the default settings?</source>
-        <translation type="unfinished"></translation>
+        <translation>هل تريد إستعادة الإعدادات الإفتراضية؟</translation>
     </message>
     <message>
         <source>FFmpeg audio filters, example: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>مرشحات صوت FFmpeg، مثال: %1</translation>
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos; you need to use channel conversion and use channel conversion before filters option. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation type="unfinished"></translation>
+        <translation>ليست كل مرشحات الصوت مدعومة في QMPlay2. لاستخدام بعض المرشحات مثل &apos;الصوت المحيطي&apos;، أنت بحاجة إلى تحويل القنوات قبل اختيار المرشحات. الرجاء الرجوع إلى وثائق %1FFmpeg%2.مرشحات الصوت %3المتوفرة:</translation>
     </message>
 </context>
 <context>
@@ -2303,7 +2303,7 @@
     </message>
     <message>
         <source>Zoom: %1</source>
-        <translation>تقريب: %1</translation>
+        <translation>تكبير: %1</translation>
     </message>
     <message>
         <source>Custom aspect ratio</source>
@@ -2315,11 +2315,11 @@
     </message>
     <message>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>تكبير</translation>
     </message>
     <message>
         <source>Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>تعيين التكبير</translation>
     </message>
 </context>
 <context>
@@ -2346,7 +2346,7 @@
     </message>
     <message>
         <source>&amp;Speed up video</source>
-        <translation>تسريع الفيديو</translation>
+        <translation>تقديم الفيديو</translation>
     </message>
     <message>
         <source>&amp;Enable subtitles</source>
@@ -2366,7 +2366,7 @@
     </message>
     <message>
         <source>&amp;Speed up subtitles</source>
-        <translation>تسريع الترجمة</translation>
+        <translation>تقديم الترجمة</translation>
     </message>
     <message>
         <source>Scale up subt&amp;itles</source>
@@ -2704,7 +2704,7 @@
     </message>
     <message>
         <source>&amp;Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>تعيين التكبير</translation>
     </message>
 </context>
 <context>
@@ -3200,7 +3200,7 @@ QMPlay2 لن يقوم بتكبير الأيقونات!</translation>
     </message>
     <message>
         <source>General settings</source>
-        <translation>إعدادات العامة</translation>
+        <translation>إعدادات عامة</translation>
     </message>
     <message>
         <source>OSD enabled</source>
