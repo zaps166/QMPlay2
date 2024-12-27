@@ -97,7 +97,7 @@ bool AVAudioFilter::setAudioParameters(uchar chn, uint srate)
     m_hasParameters = (chn > 0 && srate > 0);
     if (m_hasParameters)
     {
-        if (m_chn != chn || m_srate != srate)
+        if (m_chn != static_cast<int>(chn) || m_srate != static_cast<int>(srate))
         {
             m_paramsChanged = true;
         }
