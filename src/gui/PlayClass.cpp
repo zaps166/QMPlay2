@@ -36,7 +36,6 @@
 
 #include <QCoreApplication>
 #include <QVarLengthArray>
-#include <QInputDialog>
 #include <QMessageBox>
 #include <QRawFont>
 #include <QAction>
@@ -915,13 +914,23 @@ void PlayClass::slowDown()
 }
 void PlayClass::setSpeed()
 {
-    bool ok;
-    double s = QInputDialog::getDouble(nullptr, tr("Play speed"), tr("Set playback speed"), speed, 0.05, 100.0, 3, &ok);
-    if (ok)
-    {
-        speed = s;
-        speedMessageAndOSD();
-    }
+    Functions::getUserDoubleValue(
+        QMPlay2GUI.mainW,
+        tr("Play speed"),
+        tr("Set playback speed"),
+        speed,
+        0.05,
+        100.0,
+        3,
+        0.001,
+        [this](double s) {
+            if (!qFuzzyCompare(speed, s))
+            {
+                speed = s;
+                speedMessageAndOSD();
+            }
+        }
+    );
 }
 void PlayClass::zoomIn()
 {
@@ -969,14 +978,24 @@ void PlayClass::zoomOut()
 }
 void PlayClass::setZoom()
 {
-    bool ok;
-    double z = QInputDialog::getDouble(nullptr, tr("Zoom"), tr("Set zoom"), zoom, 0.05, 20.0, 3, &ok, Qt::WindowFlags(), 0.01);
-    if (ok)
-    {
-        zoom = z;
-        if (vThr)
-            applyZoom(true);
-    }
+    Functions::getUserDoubleValue(
+        QMPlay2GUI.mainW,
+        tr("Zoom"),
+        tr("Set zoom"),
+        zoom,
+        0.05,
+        20.0,
+        3,
+        0.001,
+        [this](double z) {
+            if (!qFuzzyCompare(zoom, z))
+            {
+                zoom = z;
+                if (vThr)
+                    applyZoom(true);
+            }
+        }
+    );
 }
 void PlayClass::zoomReset()
 {
@@ -1001,45 +1020,74 @@ void PlayClass::aRatio()
     Q_ASSERT(sender);
     bool custom = false;
     aRatioName = sender->objectName();
+    auto setARatio = [&] {
+        QString msgTxt = tr("Aspect ratio") + ": " + sender->text().remove('&');
+        if (custom)
+        {
+            msgTxt += QStringLiteral(" (%1)").arg(aRatioName);
+        }
+        if (hasVideoStream())
+        {
+            const double aspectRatio = getARatio();
+            if (ass)
+                ass->setARatio(aspectRatio);
+            messageAndOSD(msgTxt);
+            vThr->setARatio(aspectRatio, getSAR());
+            vThr->processParams();
+        }
+        else
+        {
+            messageAndOSD(msgTxt);
+        }
+    };
     if (aRatioName.startsWith(QStringLiteral("custom:")))
     {
         constexpr double min = 0.5;
         constexpr double max = 3.0;
         double value = qBound(min, aRatioName.right(aRatioName.size() - 7).toDouble(), max);
+        auto setCustomARatio = [&] {
+            aRatioName = QString::number(value);
+            custom = true;
+            setARatio();
+        };
         if (sender->property("SkipDialog").toBool())
         {
             sender->setProperty("SkipDialog", QVariant());
+            setCustomARatio();
         }
         else
         {
-            bool ok = false;
-            double valueNew = QInputDialog::getDouble(nullptr, tr("Custom aspect ratio"), tr("Set aspect ratio"), value, min, max, 6, &ok, Qt::WindowFlags(), 0.1);
-            if (ok)
-            {
-                value = valueNew;
-                sender->setObjectName(QStringLiteral("custom:%1").arg(value));
-                QMPlay2Core.getSettings().set("CustomAspectRatio", value);
-            }
+            bool first = true;
+            Functions::getUserDoubleValue(
+                QMPlay2GUI.mainW,
+                tr("Custom aspect ratio"),
+                tr("Set aspect ratio"),
+                value,
+                min,
+                max,
+                6,
+                0.001,
+                [&](double valueNew) {
+                    if (!qFuzzyCompare(value, valueNew))
+                    {
+                        value = valueNew;
+                        sender->setObjectName(QStringLiteral("custom:%1").arg(value));
+                        QMPlay2Core.getSettings().set("CustomAspectRatio", value);
+                        setCustomARatio();
+                    }
+                    else if (first)
+                    {
+                        setCustomARatio();
+                    }
+                    first = false;
+                }
+            );
         }
-        aRatioName = QString::number(value);
-        custom = true;
-    }
-    QString msg_txt = tr("Aspect ratio") + ": " + sender->text().remove('&');
-    if (custom)
-    {
-        msg_txt += QStringLiteral(" (%1)").arg(aRatioName);
-    }
-    if (hasVideoStream())
-    {
-        const double aspect_ratio = getARatio();
-        if (ass)
-            ass->setARatio(aspect_ratio);
-        messageAndOSD(msg_txt);
-        vThr->setARatio(aspect_ratio, getSAR());
-        vThr->processParams();
     }
     else
-        messageAndOSD(msg_txt);
+    {
+        setARatio();
+    }
 }
 void PlayClass::volume(int l, int r)
 {
@@ -1082,12 +1130,23 @@ void PlayClass::speedUpVideo()
 }
 void PlayClass::setVideoSync()
 {
-    bool ok;
-    double vs = QInputDialog::getDouble(nullptr, tr("Video delay"), tr("Set video delay (sec.)"), videoSync, -maxThreshold, maxThreshold, 1, &ok);
-    if (!ok)
-        return;
-    videoSync = vs;
-    messageAndOSD(tr("Video delay") + ": " + QString::number(videoSync) + "s");
+    Functions::getUserDoubleValue(
+        QMPlay2GUI.mainW,
+        tr("Video delay"),
+        tr("Set video delay (sec.)"),
+        videoSync,
+        -maxThreshold,
+        maxThreshold,
+        1,
+        0.1,
+        [this](double vs) {
+            if (!qFuzzyCompare(videoSync, vs))
+            {
+                videoSync = vs;
+                messageAndOSD(tr("Video delay") + ": " + QString::number(videoSync) + "s");
+            }
+        }
+    );
 }
 void PlayClass::slowDownSubs()
 {
@@ -1111,12 +1170,25 @@ void PlayClass::setSubtitlesSync()
 {
     if (subtitlesStream == -1)
         return;
-    bool ok;
-    double ss = QInputDialog::getDouble(nullptr, tr("Subtitles delay"), tr("Set subtitles delay (sec.)"), subtitlesSync, fileSubs.isEmpty() ? 0 : -2147483647, 2147483647, 2, &ok);
-    if (!ok)
-        return;
-    subtitlesSync = ss;
-    messageAndOSD(tr("Subtitles delay") + ": " + QString::number(subtitlesSync) + "s");
+
+    Functions::getUserDoubleValue(
+        QMPlay2GUI.mainW,
+        tr("Subtitles delay"),
+        tr("Set subtitles delay (sec.)"),
+        subtitlesSync,
+        fileSubs.isEmpty()
+            ? 0.0
+            : -2147483647.0,
+        2147483647.0,
+        2,
+        0.01,
+        [this](double ss) {
+            if (!qFuzzyCompare(subtitlesSync, ss))
+            {
+                subtitlesSync = ss;
+                messageAndOSD(tr("Subtitles delay") + ": " + QString::number(subtitlesSync) + "s");
+            }
+    });
 }
 void PlayClass::biggerSubs()
 {

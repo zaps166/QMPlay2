@@ -39,6 +39,7 @@
 #include <QTextCodec>
 #include <QMessageBox>
 #include <QStyleOption>
+#include <QInputDialog>
 #include <QGuiApplication>
 #include <QRegularExpression>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
@@ -1173,4 +1174,34 @@ std::pair<QString, QString> Functions::determineExtFmt(const QList<StreamInfo *>
     }
 
     return {ext, fmt};
+}
+
+void Functions::getUserDoubleValue(QWidget *parent, const QString &title, const QString &label, double value, double min, double max, int decimals, double step, const function<void(double)> &onChanged)
+{
+    Q_ASSERT(onChanged);
+
+    QInputDialog input;
+    input.setInputMode(QInputDialog::DoubleInput);
+    input.setWindowTitle(title);
+    input.setTextValue(label);
+    input.setDoubleDecimals(decimals);
+    input.setDoubleStep(step);
+    input.setDoubleRange(min, max);
+    input.setDoubleValue(value);
+
+    QObject::connect(&input, &QInputDialog::doubleValueChanged, parent, [&onChanged](double newValue) {
+        if (qFuzzyIsNull(newValue))
+            onChanged(0.0);
+        else if (qFuzzyCompare(newValue, 1.0))
+            onChanged(1.0);
+        else
+            onChanged(newValue);
+    });
+
+    onChanged(value);
+
+    if (input.exec() != QDialog::Accepted)
+    {
+        onChanged(value);
+    }
 }

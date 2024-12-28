@@ -169,4 +169,6 @@ namespace Functions
     QMPLAY2SHAREDLIB_EXPORT QString getSeqFile(const QString &dir, const QString &ext, const QString &frag);
 
     QMPLAY2SHAREDLIB_EXPORT std::pair<QString, QString> determineExtFmt(const QList<StreamInfo *> &streamsInfo);
+
+    QMPLAY2SHAREDLIB_EXPORT void getUserDoubleValue(QWidget *parent, const QString &title, const QString &label, double value, double min, double max, int decimals, double step, const std::function<void(double)> &onChanged);
 }
