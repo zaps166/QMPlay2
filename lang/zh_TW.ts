@@ -206,7 +206,7 @@
     </message>
     <message>
         <source>Do you want to remove</source>
-        <translation>您想要移除</translation>
+        <translation>您要移除</translation>
     </message>
     <message>
         <source>Loading wallpaper</source>
@@ -1911,23 +1911,23 @@
     </message>
     <message>
         <source>FFmpeg audio filters</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpeg 音訊濾鏡</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>說明</translation>
     </message>
     <message>
         <source>Do you want to restore the default settings?</source>
-        <translation type="unfinished"></translation>
+        <translation>您要還原預設設定嗎？</translation>
     </message>
     <message>
         <source>FFmpeg audio filters, example: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpeg 音訊濾鏡，範例：%1</translation>
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation type="unfinished"></translation>
+        <translation>QMPlay2 並不支援所有音訊濾鏡。若要使用如&apos;環繞&apos;等濾鏡，您需要在播放設定中啟用&quot;強制聲道數轉換&quot;及&quot;在濾鏡之前使用聲道轉換&quot;。請參閱 %1FFmpeg 文檔%2。%3可用的音訊濾鏡：</translation>
     </message>
 </context>
 <context>
@@ -2315,11 +2315,11 @@
     </message>
     <message>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>縮放</translation>
     </message>
     <message>
         <source>Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>設定縮放</translation>
     </message>
 </context>
 <context>
@@ -2513,7 +2513,7 @@
     </message>
     <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>在過濾器及視覺化之前使用音訊重取樣及聲道轉換</translation>
+        <translation>在濾鏡及視覺化之前使用音訊重取樣及聲道轉換</translation>
     </message>
     <message>
         <source>Middle mouse button on video dock toggles fullscreen</source>
@@ -2704,7 +2704,7 @@
     </message>
     <message>
         <source>&amp;Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>設定縮放(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;Precise zoom</source>
@@ -2842,7 +2842,7 @@
     </message>
     <message>
         <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
-        <translation>您確定要从磁碟刪除所選項目吗？非本機項目將僅從列表移除。</translation>
+        <translation>您確定要从磁碟刪除所選項目嗎？非本機項目將僅從列表移除。</translation>
     </message>
 </context>
 <context>
@@ -2920,7 +2920,7 @@
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation>QMPlay2 尚未更新。您想要更新嗎（推薦）？</translation>
+        <translation>QMPlay2 尚未更新。您要更新嗎（推薦）？</translation>
     </message>
     <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
@@ -3244,7 +3244,7 @@ QMPlay2 將不會放大圖示！</translation>
     </message>
     <message>
         <source>Do you want to delete all cached covers?</source>
-        <translation>您想要清除所有已快取封面？</translation>
+        <translation>您要清除所有已快取封面嗎？</translation>
     </message>
     <message>
         <source>Changing icons</source>
@@ -3276,7 +3276,7 @@ QMPlay2 將不會放大圖示！</translation>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
-        <translation>您想要移除 &quot;youtube-dl&quot; 軟體嗎？</translation>
+        <translation>您要移除 &quot;youtube-dl&quot; 軟體嗎？</translation>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
@@ -3965,7 +3965,7 @@ Partially checked only if the content has less channels than the specified value
     <name>Zoom</name>
     <message>
         <source>&amp;Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>縮放(&amp;Z)</translation>
     </message>
 </context>
 </TS>
