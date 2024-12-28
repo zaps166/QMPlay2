@@ -205,7 +205,7 @@ option(USE_AUDIOFILTERS "Build with AudioFilters module" ON)
 add_feature_info(AudioFilters USE_AUDIOFILTERS "Build with AudioFilters module")
 
 if(USE_AUDIOFILTERS)
-    pkg_check_modules(LIBAVFILTER libavfilter)
+    pkg_check_modules(LIBAVFILTER libavfilter>=8.44.100)
     set(DEFAULT_LIBAVFILTER ${LIBAVFILTER_FOUND})
 
     option(USE_AVAUDIOFILTER "Build with AvAudioFilter support" ${DEFAULT_LIBAVFILTER})
