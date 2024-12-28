@@ -253,10 +253,10 @@ MenuBar::Player::Player(MenuBar *parent) :
     zoom = new Zoom(this);
     addMenu(zoom);
 
-    newAction(Player::tr("Toggle &aspect ratio"), this, switchARatio, true, QIcon(), false);
-
     aRatio = new AspectRatio(this);
     addMenu(aRatio);
+
+    newAction(Player::tr("Toggle &aspect ratio"), this, switchARatio, true, QIcon(), false);
 
     newAction(Player::tr("Reset image &settings"), this, reset, false, QIcon(), false);
 
