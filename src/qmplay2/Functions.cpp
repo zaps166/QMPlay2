@@ -1180,7 +1180,7 @@ void Functions::getUserDoubleValue(QWidget *parent, const QString &title, const 
 {
     Q_ASSERT(onChanged);
 
-    QInputDialog input;
+    QInputDialog input(parent);
     input.setInputMode(QInputDialog::DoubleInput);
     input.setWindowTitle(title);
     input.setTextValue(label);
