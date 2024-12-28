@@ -488,6 +488,7 @@ bool FFDecSW::open(StreamInfo &streamInfo)
                 qDebug() << "Vulkan :: Zero-copy decoding is not supported";
             }
         }
+#endif
     }
     else if (codec_ctx->codec_type == AVMEDIA_TYPE_SUBTITLE)
     {
@@ -496,7 +497,7 @@ bool FFDecSW::open(StreamInfo &streamInfo)
             av_dict_set(&m_options, "txt_page", (m_teletextPage > 0) ? QByteArray::number(m_teletextPage).constData() : "subtitle", 0);
             av_dict_set(&m_options, "txt_transparent", QByteArray::number(m_teletextTransparent), 0);
         }
-
+#ifdef USE_VULKAN
         if (QMPlay2Core.isVulkanRenderer())
             m_vkBufferPool = static_pointer_cast<QmVk::Instance>(QMPlay2Core.gpuInstance())->createBufferPool();
 #endif
