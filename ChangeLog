@@ -1,3 +1,12 @@
+Changes in QMPlay2 24.12.xx:
+    - add option to maintain panels size when resizing main window,
+    - add input dialog for zoom and add precise zoom control,
+    - live update when changing values in input dialogs,
+    - add FFmpeg audio filters,
+    - teletext improvements,
+    - fix various crashes,
+    - other minor fixes,
+
 Changes in QMPlay2 24.12.23:
     - use relative paths in portable mode when QMPlay2 portable directory is chosen,
     - add option for experimental FFmpeg features (useful for HLS subtitles),
