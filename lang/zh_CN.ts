@@ -206,7 +206,7 @@
     </message>
     <message>
         <source>Do you want to remove</source>
-        <translation>您想要移除吗</translation>
+        <translation>您要移除</translation>
     </message>
     <message>
         <source>Loading wallpaper</source>
@@ -827,7 +827,7 @@
     </message>
     <message>
         <source>Do you want to associate files with QMPlay2</source>
-        <translation>您想让 QMPlay2 关联文件吗</translation>
+        <translation>您要让 QMPlay2 关联文件吗</translation>
     </message>
 </context>
 <context>
@@ -1911,23 +1911,23 @@
     </message>
     <message>
         <source>FFmpeg audio filters</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpeg 音频滤镜</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>帮助</translation>
     </message>
     <message>
         <source>Do you want to restore the default settings?</source>
-        <translation type="unfinished"></translation>
+        <translation>您要还原默认设置吗？</translation>
     </message>
     <message>
         <source>FFmpeg audio filters, example: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpeg 音频滤镜，示例：%1</translation>
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation type="unfinished"></translation>
+        <translation>QMPlay2 并不支持所有音频滤镜。若要使用如&apos;环绕&apos;等滤镜，您需要在回放设置中启用&quot;强制声道转换&quot;和&quot;在滤镜前使用声道转换&quot;。请参阅 %1FFmpeg 文档%2。%3可用音频滤镜：</translation>
     </message>
 </context>
 <context>
@@ -2315,11 +2315,11 @@
     </message>
     <message>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>缩放</translation>
     </message>
     <message>
         <source>Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>设置缩放</translation>
     </message>
 </context>
 <context>
@@ -2704,7 +2704,7 @@
     </message>
     <message>
         <source>&amp;Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>设置缩放(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;Precise zoom</source>
@@ -2920,7 +2920,7 @@
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation>QMPlay2 未更新。您想要运行更新吗（推荐）？</translation>
+        <translation>QMPlay2 未更新。您要运行更新吗（推荐）？</translation>
     </message>
     <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
@@ -3965,7 +3965,7 @@ Partially checked only if the content has less channels than the specified value
     <name>Zoom</name>
     <message>
         <source>&amp;Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>缩放(&amp;Z)</translation>
     </message>
 </context>
 </TS>
