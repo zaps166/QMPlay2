@@ -1,4 +1,4 @@
-Changes in QMPlay2 24.12.xx:
+Changes in QMPlay2 24.12.28:
     - add option to maintain panels size when resizing main window,
     - add input dialog for zoom and add precise zoom control,
     - live update when changing values in input dialogs,
