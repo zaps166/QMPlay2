@@ -1927,7 +1927,7 @@
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation type="unfinished"></translation>
+        <translation>ليست كل مرشحات الصوت مدعومة في QMPlay2. لاستخدام بعض المرشحات مثل &apos;الصوت المحيطي&apos;، أنت بحاجة إلى تفعيل &apos;إجبار تحويل القنوات&apos; &apos;استخدام تحويل القنوات قبل المرشحات&apos; في إعدادات التشغيل. الرجاء الرجوع إلى وثائق %1FFmpeg%2.مرشحات الصوت %3المتوفرة:</translation>
     </message>
 </context>
 <context>
@@ -2708,7 +2708,7 @@
     </message>
     <message>
         <source>&amp;Precise zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>تكبير دقيق</translation>
     </message>
 </context>
 <context>
@@ -3965,7 +3965,7 @@ Partially checked only if the content has less channels than the specified value
     <name>Zoom</name>
     <message>
         <source>&amp;Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>التكبير</translation>
     </message>
 </context>
 </TS>
