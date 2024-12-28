@@ -205,6 +205,7 @@ For CMake build be sure that you have CMake 3.16 or higher.
     - libswscale,
     - libavutil,
     - libswresample,
+    - libavfilter (FFmpeg >= 5.1) - for FFmpeg audio filters,
     - libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
 
 #### Important:
