@@ -1927,7 +1927,7 @@
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation type="unfinished"></translation>
+        <translation>У QMPlay2 підтримуються не всі аудіофільтри. Щоб використовувати деякі фільтри, як-от &quot;об&apos;ємний звук&quot;, потрібно увімкнути &quot;примусову конверсію каналів&quot; і &quot;задіяти конверсію каналів перед фільтрами&quot; в налаштуваннях відтворення. Зверніться до %1документації FFmpeg%2.%3Доступні аудіофільтри:</translation>
     </message>
 </context>
 <context>
@@ -2708,7 +2708,7 @@
     </message>
     <message>
         <source>&amp;Precise zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Точне масштабування</translation>
     </message>
 </context>
 <context>
@@ -3965,7 +3965,7 @@ Partially checked only if the content has less channels than the specified value
     <name>Zoom</name>
     <message>
         <source>&amp;Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Масштабування</translation>
     </message>
 </context>
 </TS>
