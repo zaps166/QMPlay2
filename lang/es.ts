@@ -1040,7 +1040,7 @@
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mantener el tamaño de los paneles al cambiar el tamaño de la ventana principal (experimental)</translation>
     </message>
 </context>
 <context>
@@ -1903,7 +1903,7 @@
     </message>
     <message>
         <source>Transparent teletext background</source>
-        <translation type="unfinished"></translation>
+        <translation>Fondo de teletexto transparente</translation>
     </message>
     <message>
         <source>Subtitles</source>
@@ -1911,23 +1911,23 @@
     </message>
     <message>
         <source>FFmpeg audio filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtros de audio FFmpeg</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Ayuda</translation>
     </message>
     <message>
         <source>Do you want to restore the default settings?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Deseas restablecer la configuración predeterminada?</translation>
     </message>
     <message>
         <source>FFmpeg audio filters, example: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtros de audio FFmpeg, por ejemplo: %1</translation>
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation type="unfinished"></translation>
+        <translation>No todos los filtros de audio son compatibles con QMPlay2. Para utilizar algunos filtros como &apos;surround&apos;, es necesario activar &quot;forzar la conversión de canales&quot; y &quot;utilizar la conversión de canales antes de los filtros&quot; en los ajustes de reproducción. Consulte la documentación%2 de %1FFmpeg.%3Filtros de audio disponibles:</translation>
     </message>
 </context>
 <context>
@@ -2315,11 +2315,11 @@
     </message>
     <message>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom</translation>
     </message>
     <message>
         <source>Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Establecer zoom</translation>
     </message>
 </context>
 <context>
@@ -2704,11 +2704,11 @@
     </message>
     <message>
         <source>&amp;Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Establecer zoom</translation>
     </message>
     <message>
         <source>&amp;Precise zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoom &amp;preciso</translation>
     </message>
 </context>
 <context>
@@ -2920,7 +2920,7 @@
     </message>
     <message>
         <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
-        <translation>QMPlay2 no ha sido actualizado. ¿Quiere efectuar la actualización (recomendado)?</translation>
+        <translation>QMPlay2 no ha sido actualizado. ¿Quieres efectuar la actualización (recomendado)?</translation>
     </message>
     <message>
         <source>QtSvg icon engine plugin doesn&apos;t exist.
@@ -3160,11 +3160,11 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Do you really want to clear all settings?</source>
-        <translation>¿Quiere borrar todos los ajustes?</translation>
+        <translation>¿Quieres borrar todos los ajustes?</translation>
     </message>
     <message>
         <source>Do you want to delete all cached covers?</source>
-        <translation>¿Quiere eliminar todas las portadas en caché?</translation>
+        <translation>¿Quieres eliminar todas las portadas en caché?</translation>
     </message>
     <message>
         <source>Close</source>
@@ -3276,7 +3276,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
-        <translation>¿Quiere borrar el software &quot;youtube-dl&quot;?</translation>
+        <translation>¿Quieres borrar el software &quot;youtube-dl&quot;?</translation>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
@@ -3965,7 +3965,7 @@ Parcialmente marcado sólo si el contenido tiene menos canales que el valor espe
     <name>Zoom</name>
     <message>
         <source>&amp;Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Zoom</translation>
     </message>
 </context>
 </TS>
