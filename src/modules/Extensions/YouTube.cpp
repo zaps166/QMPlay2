@@ -1317,6 +1317,8 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         auto subtitlesForLang = subtitles[lang].toArray();
         if (subtitlesForLang.isEmpty())
             subtitlesForLang = subtitles[QMPlay2Core.getLanguage()].toArray();
+        if (subtitlesForLang.isEmpty())
+            subtitlesForLang = subtitles["en"].toArray();
 
         for (auto &&subtitlesFmtVal : std::as_const(subtitlesForLang))
         {
