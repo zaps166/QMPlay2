@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="nl_NL" sourcelanguage="en">
+<TS version="2.1" language="nl_NL" sourcelanguage="en_US">
 <context>
     <name>ALSAWriter</name>
     <message>
@@ -234,7 +234,7 @@
     </message>
     <message>
         <source>Slider highlight color</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleur van schuifknop</translation>
     </message>
 </context>
 <context>
@@ -257,7 +257,7 @@
     </message>
     <message>
         <source>&amp;Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Aan&amp;gepast</translation>
     </message>
 </context>
 <context>
@@ -562,7 +562,7 @@
     </message>
     <message>
         <source>Playback and recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Afspelen en opnemen</translation>
     </message>
 </context>
 <context>
@@ -1008,39 +1008,39 @@
     </message>
     <message>
         <source>Output file path:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestandslocatie:</translation>
     </message>
     <message>
         <source>youtube-dl settings</source>
-        <translation type="unfinished"></translation>
+        <translation>youtube-dl-instellingen</translation>
     </message>
     <message>
         <source>Cookies from browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Browsercookies</translation>
     </message>
     <message>
         <source>Custom path</source>
-        <translation type="unfinished"></translation>
+        <translation>Zelfgekozen locatie</translation>
     </message>
     <message>
         <source>Don&apos;t auto-update</source>
-        <translation type="unfinished"></translation>
+        <translation>Niet automatisch bijwerken</translation>
     </message>
     <message>
         <source>Please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Bekijk de yt-dlp-documentatie</translation>
     </message>
     <message>
         <source>Default quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Standaardkwaliteit</translation>
     </message>
     <message>
         <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Optie ‘-f’ - bekijk de yt-dlp-documentatie</translation>
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Paneelafmetingen niet aanpassen na verkleinen/vergroten van hoofdvenster (experimenteel)</translation>
     </message>
 </context>
 <context>
@@ -1131,7 +1131,7 @@
     </message>
     <message>
         <source>Remove specified &lt;url&gt; from playlist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwijder de opgegeven &lt;url&gt; van de afspeellijst.</translation>
     </message>
 </context>
 <context>
@@ -1871,39 +1871,39 @@
     </message>
     <message>
         <source>Try to automatically reconnect the network connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch opnieuw verbinden</translation>
     </message>
     <message>
         <source>%1 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kHz</translation>
     </message>
     <message>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen limiet</translation>
     </message>
     <message>
         <source>Linear volume scale in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineaire volumeschaal in FFT-spectrum</translation>
     </message>
     <message>
         <source>Limit frequency in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>Frequentie beperken in FFT-spectrum</translation>
     </message>
     <message>
         <source>Allow experimental FFmpeg features</source>
-        <translation type="unfinished"></translation>
+        <translation>Experimentele FFmpeg-functies gebruiken</translation>
     </message>
     <message>
         <source>Useful for turning on HLS subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>Handig bij gebruik van hls-ondertiteling</translation>
     </message>
     <message>
         <source>Teletext page: </source>
-        <translation type="unfinished"></translation>
+        <translation>Teletekstpagina: </translation>
     </message>
     <message>
         <source>Transparent teletext background</source>
-        <translation type="unfinished"></translation>
+        <translation>Doorzichtige teletekstachtergrond</translation>
     </message>
     <message>
         <source>Subtitles</source>
@@ -1911,23 +1911,23 @@
     </message>
     <message>
         <source>FFmpeg audio filters</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpeg-audiofilters</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hulp</translation>
     </message>
     <message>
         <source>Do you want to restore the default settings?</source>
-        <translation type="unfinished"></translation>
+        <translation>Weet u zeker de standaardinstellingen wilt herstellen?</translation>
     </message>
     <message>
         <source>FFmpeg audio filters, example: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpeg-audio filters, bijvoorbeeld: %1</translation>
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation type="unfinished"></translation>
+        <translation>Let op: niet alle audiofilters worden ondersteund door QMPlay2. Filters als ‘ surround’ zijn alleen beschikbaar als ‘Kanalen converteren’ en ‘Kanaalconversie toepassen voorafgaand aan filters’ zijn ingeschakeld in de afspeelinstellingen. Bekijk voor meer informatie de %1FFmpeg-documentatie%2.%3Beschikbare audiofilters:</translation>
     </message>
 </context>
 <context>
@@ -2024,11 +2024,11 @@
     </message>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>Vetgedrukt</translation>
     </message>
     <message>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Achtergrond</translation>
     </message>
 </context>
 <context>
@@ -2050,51 +2050,51 @@
     <name>OpenSubtitles</name>
     <message>
         <source>Subtitles browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Ondertitelbeheer</translation>
     </message>
     <message>
         <source>Type the movie name and press enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Voer de naam van de film in en druk op enter</translation>
     </message>
     <message>
         <source>Choose subtitles language</source>
-        <translation type="unfinished"></translation>
+        <translation>Kies de ondertiteltaal</translation>
     </message>
     <message>
         <source>Download in default web browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Downloaden met standaard webbrowser</translation>
     </message>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met laden…</translation>
     </message>
     <message>
         <source>Movie name</source>
-        <translation type="unfinished"></translation>
+        <translation>Filmnaam</translation>
     </message>
     <message>
         <source>Uploaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Geüpload</translation>
     </message>
     <message>
         <source>Downloaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Gedownload</translation>
     </message>
     <message>
         <source>Search on OpenSubtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoeken op OpenSubtitles</translation>
     </message>
     <message>
         <source>%1 (Season %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (seizoen %2)</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Foutmelding</translation>
     </message>
     <message>
         <source>No subtitles found for the specified language</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen ondertiteling beschikbaar in deze taal</translation>
     </message>
 </context>
 <context>
@@ -2283,43 +2283,43 @@
     </message>
     <message>
         <source>Recording error</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnamefout</translation>
     </message>
     <message>
         <source>Recording started: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>De opname is gestart: %1</translation>
     </message>
     <message>
         <source>Recording stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>De opname is gestopt</translation>
     </message>
     <message>
         <source>Integer scaling: enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Schalen met gehele getallen: ingeschakeld</translation>
     </message>
     <message>
         <source>Integer scaling: disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Schalen met gehele getallen: uitgeschakeld</translation>
     </message>
     <message>
         <source>Zoom: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomniveau: %1</translation>
     </message>
     <message>
         <source>Custom aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Aangepaste beeldverhouding</translation>
     </message>
     <message>
         <source>Set aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Beeldverhouding instellen</translation>
     </message>
     <message>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomen</translation>
     </message>
     <message>
         <source>Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomniveau instellen</translation>
     </message>
 </context>
 <context>
@@ -2549,7 +2549,7 @@
     </message>
     <message>
         <source>Desired video stream quality:</source>
-        <translation type="unfinished"></translation>
+        <translation>Voorkeurskwaliteit van videostream:</translation>
     </message>
     <message>
         <source>Default</source>
@@ -2557,27 +2557,27 @@
     </message>
     <message>
         <source>SD</source>
-        <translation type="unfinished"></translation>
+        <translation>Sd</translation>
     </message>
     <message>
         <source>HD</source>
-        <translation type="unfinished"></translation>
+        <translation>Hd</translation>
     </message>
     <message>
         <source>Full HD</source>
-        <translation type="unfinished"></translation>
+        <translation>Full hd</translation>
     </message>
     <message>
         <source>4K</source>
-        <translation type="unfinished"></translation>
+        <translation>4K</translation>
     </message>
     <message>
         <source>Continue last playback when program starts</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorig bestand afspelen na opstarten</translation>
     </message>
     <message>
         <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation type="unfinished"></translation>
+        <translation>De duur dient minimaal 8 minuten te zijn en de afspeelpositie dient tussen [1% – 99%] te liggen. U kunt het afspelen hervatten door op het pictogram naast de schermvullendemodusknop te klikken.</translation>
     </message>
 </context>
 <context>
@@ -2692,23 +2692,23 @@
     </message>
     <message>
         <source>&amp;Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>O&amp;pname</translation>
     </message>
     <message>
         <source>Un&amp;mute</source>
-        <translation type="unfinished"></translation>
+        <translation>Ontde&amp;mpen</translation>
     </message>
     <message>
         <source>&amp;Integer scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>Scha&amp;len met gehele getallen</translation>
     </message>
     <message>
         <source>&amp;Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomniveau in&amp;stellen</translation>
     </message>
     <message>
         <source>&amp;Precise zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Nauwkeurig &amp;zoomen</translation>
     </message>
 </context>
 <context>
@@ -2795,19 +2795,19 @@
     </message>
     <message>
         <source>Pas&amp;te and play</source>
-        <translation type="unfinished"></translation>
+        <translation>Plakken en a&amp;fspelen</translation>
     </message>
     <message>
         <source>&amp;Remove from list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ve&amp;rwijderen van lijst</translation>
     </message>
     <message>
         <source>Remove from &amp;disk</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwij&amp;deren van schijf</translation>
     </message>
     <message>
         <source>Clear &amp;ungrouped entries</source>
-        <translation type="unfinished"></translation>
+        <translation>Ongegroepeerde items &amp;wissen</translation>
     </message>
 </context>
 <context>
@@ -2838,11 +2838,11 @@
     </message>
     <message>
         <source>Failed to delete one or more selected entries.</source>
-        <translation type="unfinished"></translation>
+        <translation>Een of meer items kunnen niet worden gewist.</translation>
     </message>
     <message>
         <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Weet u  zeker dat u de items wilt verwijderen van de schijf? Niet-lokale items worden alleen van de lijst verwijderd.</translation>
     </message>
 </context>
 <context>
@@ -3033,7 +3033,7 @@ Pictogrammen worden niet vergroot.</translation>
     </message>
     <message>
         <source>Search filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoekfilter</translation>
     </message>
 </context>
 <context>
@@ -3434,11 +3434,11 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     </message>
     <message>
         <source>Cannot change the directory</source>
-        <translation type="unfinished"></translation>
+        <translation>De map kan niet worden gewijzigd</translation>
     </message>
     <message>
         <source>Choose youtube-dl script or executable</source>
-        <translation type="unfinished"></translation>
+        <translation>Kies youtube-dl-script of uitvoerbaar bestand</translation>
     </message>
 </context>
 <context>
@@ -3759,15 +3759,15 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     </message>
     <message>
         <source>Negative</source>
-        <translation type="unfinished"></translation>
+        <translation>Negatief</translation>
     </message>
     <message>
         <source>Disable negative</source>
-        <translation type="unfinished"></translation>
+        <translation>Negatief uitschakelen</translation>
     </message>
     <message>
         <source>Enable negative</source>
-        <translation type="unfinished"></translation>
+        <translation>Negatief inschakelen</translation>
     </message>
 </context>
 <context>
@@ -3965,7 +3965,7 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     <name>Zoom</name>
     <message>
         <source>&amp;Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Zoomen</translation>
     </message>
 </context>
 </TS>
