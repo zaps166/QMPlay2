@@ -3940,7 +3940,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Sort search results by ...</source>
-        <translation>Arama sonuçlarını şuna göre sırala …<translation>
+        <translation>Arama sonuçlarını şuna göre sırala …</translation>
     </message>
     <message>
         <source>Preferred quality</source>
@@ -3963,7 +3963,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Updating &quot;youtube-dl&quot;, please wait...</source>
-        <translation>“youtube-dl” güncelleniyor, lütfen bekleyin…<translation>
+        <translation>“youtube-dl” güncelleniyor, lütfen bekleyin…</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; update has been aborted!</source>
