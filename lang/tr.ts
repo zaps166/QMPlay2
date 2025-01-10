@@ -1934,8 +1934,8 @@
         <translation>FFmpeg ses süzgeçleri, örnek: %1</translation>
     </message>
     <message>
-        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation>QMPlay2’de tüm ses süzgeçleri desteklenmez. “Çevresel” gibi ses süzgeçlerini kullanmak için “kanal dönüşümünü zorla” ve “Süzgeç öncesinde kanal dönüşümünü kullan” ayarlarını etkinleştirmelisiniz. Lütfen %1FFmpeg belgelendirmesine bakın%2.%3Kullanılabilir ses süzgeçleri:</translation>
+        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;%4&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
+        <translation>QMPlay2’de tüm ses süzgeçleri desteklenmez. “%4” gibi ses süzgeçlerini kullanmak için “kanal dönüşümünü zorla” ve “Süzgeç öncesinde kanal dönüşümünü kullan” ayarlarını etkinleştirmelisiniz. Lütfen %1FFmpeg belgelendirmesine bakın%2.%3Kullanılabilir ses süzgeçleri:</translation>
     </message>
 </context>
 <context>

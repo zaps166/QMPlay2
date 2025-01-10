@@ -1926,8 +1926,8 @@
         <translation>مرشحات صوت FFmpeg، مثال: %1</translation>
     </message>
     <message>
-        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation>ليست كل مرشحات الصوت مدعومة في QMPlay2. لاستخدام بعض المرشحات مثل &apos;الصوت المحيطي&apos;، أنت بحاجة إلى تفعيل &apos;إجبار تحويل القنوات&apos; &apos;استخدام تحويل القنوات قبل المرشحات&apos; في إعدادات التشغيل. الرجاء الرجوع إلى وثائق %1FFmpeg%2.مرشحات الصوت %3المتوفرة:</translation>
+        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;%4&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
+        <translation>ليست كل مرشحات الصوت مدعومة في QMPlay2. لاستخدام بعض المرشحات مثل &apos;%4&apos;، أنت بحاجة إلى تفعيل &quot;إجبار تحويل القنوات&quot; &quot;استخدام تحويل القنوات قبل المرشحات&quot; في إعدادات التشغيل. الرجاء الرجوع إلى وثائق %1FFmpeg%2.مرشحات الصوت %3المتوفرة:</translation>
     </message>
 </context>
 <context>

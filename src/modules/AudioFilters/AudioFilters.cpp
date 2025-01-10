@@ -365,10 +365,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
         te->setWindowTitle(m_avAudioFilterB->title());
         te->setHtml(
             tr("Not all audio filters are supported in QMPlay2. "
-               "To use some filters like 'surround', you need to enable \"force channels conversion\" and \"use channel conversion before filters\" in playback settings. "
+               "To use some filters like '%4', you need to enable \"force channels conversion\" and \"use channel conversion before filters\" in playback settings. "
                "Please refer to the %1FFmpeg documentation%2.%3Available audio filters:"
               )
-                .arg(QStringLiteral("<a href='https://ffmpeg.org/ffmpeg-filters.html#Audio-Filters'>"), QStringLiteral("</a>"), QStringLiteral("<br/><br/>"))
+                .arg(QStringLiteral("<a href='https://ffmpeg.org/ffmpeg-filters.html#Audio-Filters'>"), QStringLiteral("</a>"), QStringLiteral("<br/><br/>"), "surround")
                 + sep + AVAudioFilter::getAvailableFilters().join(sep)
         );
         te->show();
