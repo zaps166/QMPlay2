@@ -1926,8 +1926,8 @@
         <translation>FFmpeg 音訊濾鏡，範例：%1</translation>
     </message>
     <message>
-        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation>QMPlay2 並不支援所有音訊濾鏡。若要使用如&apos;環繞&apos;等濾鏡，您需要在播放設定中啟用&quot;強制聲道數轉換&quot;及&quot;在濾鏡之前使用聲道轉換&quot;。請參閱 %1FFmpeg 文檔%2。%3可用的音訊濾鏡：</translation>
+        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;%4&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
+        <translation>QMPlay2 並不支援所有音訊濾鏡。若要使用如 &apos;%4&apos; 等濾鏡，您需要在播放設定中啟用&quot;強制聲道數轉換&quot;及&quot;在濾鏡之前使用聲道轉換&quot;。請參閱 %1FFmpeg 文檔%2。%3可用的音訊濾鏡：</translation>
     </message>
 </context>
 <context>

@@ -1931,7 +1931,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
+        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;%4&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

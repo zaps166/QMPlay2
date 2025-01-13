@@ -1926,8 +1926,8 @@
         <translation>Filtros de audio FFmpeg, por ejemplo: %1</translation>
     </message>
     <message>
-        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;surround&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation>No todos los filtros de audio son compatibles con QMPlay2. Para utilizar algunos filtros como &apos;surround&apos;, es necesario activar &quot;forzar la conversión de canales&quot; y &quot;utilizar la conversión de canales antes de los filtros&quot; en los ajustes de reproducción. Consulte la documentación%2 de %1FFmpeg.%3Filtros de audio disponibles:</translation>
+        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;%4&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
+        <translation>No todos los filtros de audio son compatibles con QMPlay2. Para utilizar algunos filtros como &apos;%4&apos;, es necesario activar &quot;forzar la conversión de canales&quot; y &quot;utilizar la conversión de canales antes de los filtros&quot; en los ajustes de reproducción. Consulte la documentación%2 de %1FFmpeg.%3Filtros de audio disponibles:</translation>
     </message>
 </context>
 <context>
