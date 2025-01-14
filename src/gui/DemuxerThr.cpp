@@ -534,8 +534,7 @@ void DemuxerThr::run()
 
     QHash<int, int> recStreamsMap;
 
-    if (unknownLength)
-        emit allowRecording(true);
+    emit allowRecording(true);
 
     auto handleRecording = [&](bool startAndStop) {
         if (startAndStop && m_recording && !m_recMuxer)
@@ -790,17 +789,20 @@ void DemuxerThr::startRecordingInternal(QHash<int, int> &recStreamsMap)
     if (m_recMuxer->isOk())
     {
         emit recording(true, false, fileName);
-        auto writePackets = [&](PacketBuffer &packets, int packetsStreamIdx) {
-            if (int recStreamIdx = recStreamsMap.value(packetsStreamIdx, -1); recStreamIdx > -1)
-            {
-                packets.iterate([&](const Packet &packet) {
-                    m_recMuxer->write(packet, recStreamIdx);
-                });
-            }
-        };
-        writePackets(playC.vPackets, playC.videoStream);
-        writePackets(playC.aPackets, playC.audioStream);
-        writePackets(playC.sPackets, playC.subtitlesStream);
+        if (unknownLength)
+        {
+            auto writePackets = [&](PacketBuffer &packets, int packetsStreamIdx) {
+                if (int recStreamIdx = recStreamsMap.value(packetsStreamIdx, -1); recStreamIdx > -1)
+                {
+                    packets.iterate([&](const Packet &packet) {
+                        m_recMuxer->write(packet, recStreamIdx);
+                    });
+                }
+            };
+            writePackets(playC.vPackets, playC.videoStream);
+            writePackets(playC.aPackets, playC.audioStream);
+            writePackets(playC.sPackets, playC.subtitlesStream);
+        }
     }
     else
     {

@@ -64,9 +64,19 @@ StreamMuxer::StreamMuxer(const QString &fileName, const QList<StreamInfo *> &str
     bool isRawVideo = false;
     for (StreamInfo *streamInfo : streamsInfo)
     {
-        const AVCodec *codec = avcodec_find_decoder_by_name(streamInfo->codec_name);
-        if (!codec)
-            return;
+        AVCodecID codecId = streamInfo->params->codec_id;
+        if (codecId == AV_CODEC_ID_NONE)
+        {
+            if (streamInfo->params->codec_type == AVMEDIA_TYPE_AUDIO)
+            {
+                Q_ASSERT(format == QStringLiteral("wav"));
+                codecId = AV_CODEC_ID_PCM_F32LE;
+            }
+            else
+            {
+                return;
+            }
+        }
 
         AVStream *stream = avformat_new_stream(p.ctx, nullptr);
         if (!stream)
@@ -75,8 +85,8 @@ StreamMuxer::StreamMuxer(const QString &fileName, const QList<StreamInfo *> &str
         stream->time_base = streamInfo->time_base;
 
         stream->codecpar->codec_type = streamInfo->params->codec_type;
-        stream->codecpar->codec_id = codec->id;
-        if (codec->id == AV_CODEC_ID_RAWVIDEO)
+        stream->codecpar->codec_id = codecId;
+        if (stream->codecpar->codec_id == AV_CODEC_ID_RAWVIDEO)
         {
             stream->codecpar->codec_tag = streamInfo->params->codec_tag;
             isRawVideo = true;

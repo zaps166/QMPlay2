@@ -1133,6 +1133,9 @@ std::pair<QString, QString> Functions::determineExtFmt(const QList<StreamInfo *>
     {
         switch (streamsInfo.at(0)->params->codec_id)
         {
+            case AV_CODEC_ID_NONE:
+                ext = fmt = "wav";
+                break;
             case AV_CODEC_ID_MP3:
                 ext = fmt = "mp3";
                 break;
