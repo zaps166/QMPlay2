@@ -470,6 +470,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
         QMPlay2GUI.videoAdjustment->restoreValues();
 
     fullScreenDockWidgetState = settings.getByteArray("MainWidget/FullScreenDockWidgetState");
+    m_compactViewDockWidgetState = settings.getByteArray("MainWidget/CompactViewDockWidgetState");
     if (settings.getBool("MainWidget/AlwaysOnTop"))
         menuBar->window->alwaysOnTop->trigger();
 
@@ -1813,7 +1814,10 @@ void MainWidget::showToolBar(bool showTB)
 }
 void MainWidget::hideDocks()
 {
-    fullScreenDockWidgetState = saveState();
+    if (fullScreen)
+        fullScreenDockWidgetState = saveState();
+    if (isCompactView)
+        m_compactViewDockWidgetState = saveState();
     showToolBar(false);
     playlistDock->hide();
     infoDock->hide();
@@ -2021,7 +2025,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
     {
         const bool isToolbarVisible = mainTB->isVisible();
 
-        bool canDisplayLeftPanel = fullScreen;
+        bool canDisplayLeftPanel = fullScreen || isCompactView;
         if (canDisplayLeftPanel && !isToolbarVisible)
         {
             const auto winScreen = windowHandle()->screen();
@@ -2071,7 +2075,10 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
             showToolBar(true); //Before restoring dock widgets - show toolbar and status bar
 
             inRestoreState = true;
-            restoreState(fullScreenDockWidgetState);
+            if (fullScreen)
+                restoreState(fullScreenDockWidgetState);
+            if (isCompactView)
+                restoreState(m_compactViewDockWidgetState);
             inRestoreState = false;
 
             const QList<QDockWidget *> tDW = tabifiedDockWidgets(infoDock);
@@ -2114,8 +2121,10 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
             }
             showToolBar(true); //Ensures that status bar is visible
         }
-        else if (fullScreen && playlistDock->isVisible() && mPosX > trigger2)
+        else if ((fullScreen || isCompactView) && playlistDock->isVisible() && mPosX > trigger2)
+        {
             hideDocks();
+        }
     }
     QMainWindow::mouseMoveEvent(e);
 }
@@ -2165,6 +2174,7 @@ void MainWidget::closeEvent(QCloseEvent *e)
             settings.set("MainWidget/DockWidgetState", dockWidgetState);
     }
     settings.set("MainWidget/FullScreenDockWidgetState", fullScreenDockWidgetState);
+    settings.set("MainWidget/CompactViewDockWidgetState", m_compactViewDockWidgetState);
     settings.set("MainWidget/AlwaysOnTop", !!(windowFlags() & Qt::WindowStaysOnTopHint));
 #ifndef Q_OS_MACOS
     settings.set("MainWidget/isVisible", isVisible());

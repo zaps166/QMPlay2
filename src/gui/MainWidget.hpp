@@ -191,7 +191,7 @@ private:
 
     QSystemTrayIcon *tray;
 
-    QByteArray dockWidgetState, fullScreenDockWidgetState;
+    QByteArray dockWidgetState, fullScreenDockWidgetState, m_compactViewDockWidgetState;
     QList<QMPlay2Extensions *> visibleQMPlay2Extensions;
 #ifndef Q_OS_ANDROID
     QRect savedGeo;
