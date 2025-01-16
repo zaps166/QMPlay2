@@ -69,6 +69,10 @@
         <source>Can&apos;t clear log</source>
         <translation>Não foi possível limpar o log</translation>
     </message>
+    <message>
+        <source>GitHub download page</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -3669,6 +3673,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Error downloading the update</source>
         <translation>Erro ao baixar a atualização</translation>
+    </message>
+    <message>
+        <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

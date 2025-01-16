@@ -69,6 +69,10 @@
         <source>Contributors</source>
         <translation>Mitwirkende</translation>
     </message>
+    <message>
+        <source>GitHub download page</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -3662,6 +3666,10 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
     <message>
         <source>New QMPlay2 version: %1</source>
         <translation>Neue QMPlay2 Version: %1</translation>
+    </message>
+    <message>
+        <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

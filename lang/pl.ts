@@ -69,6 +69,10 @@
         <source>Contributors</source>
         <translation>Osoby wspierające</translation>
     </message>
+    <message>
+        <source>GitHub download page</source>
+        <translation>Strona pobierania w GitHub</translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -3663,6 +3667,10 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     <message>
         <source>New QMPlay2 version: %1</source>
         <translation>Nowa wersja QMPlay2: %1</translation>
+    </message>
+    <message>
+        <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
+        <translation>Strona pobierania jest w &quot;Pomoc-&gt;O QMPlay2&quot;</translation>
     </message>
 </context>
 <context>

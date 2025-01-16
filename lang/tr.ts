@@ -69,6 +69,10 @@
         <source>Contributors</source>
         <translation>Katkıda bulunanlar</translation>
     </message>
+    <message>
+        <source>GitHub download page</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -3683,6 +3687,10 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <message>
         <source>New QMPlay2 version: %1</source>
         <translation>Yeni QMPlay2 sürümü: %1</translation>
+    </message>
+    <message>
+        <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

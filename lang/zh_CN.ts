@@ -69,6 +69,10 @@
         <source>Contributors</source>
         <translation>协助开发</translation>
     </message>
+    <message>
+        <source>GitHub download page</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -3663,6 +3667,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>New QMPlay2 version: %1</source>
         <translation>新 QMPlay2 版本：%1</translation>
+    </message>
+    <message>
+        <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -69,6 +69,10 @@
         <source>Contributors</source>
         <translation>Colaboradores</translation>
     </message>
+    <message>
+        <source>GitHub download page</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -3663,6 +3667,10 @@ Parcialmente marcado sólo si el contenido tiene menos canales que el valor espe
     <message>
         <source>New QMPlay2 version: %1</source>
         <translation>Nueva versión de QMPlay2: %1</translation>
+    </message>
+    <message>
+        <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

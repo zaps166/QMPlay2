@@ -69,6 +69,10 @@
         <source>Can&apos;t clear log</source>
         <translation>Het logboek kan niet worden gewist</translation>
     </message>
+    <message>
+        <source>GitHub download page</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Add</name>
@@ -3663,6 +3667,10 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     <message>
         <source>Error downloading the update</source>
         <translation>De update kan niet worden gedownload</translation>
+    </message>
+    <message>
+        <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
