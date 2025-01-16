@@ -49,6 +49,7 @@ AboutWidget::AboutWidget()
     labelText += ", " + QGuiApplication::platformName();
 #endif
     labelText += ")";
+    labelText += "<br/><br/><a href='https://github.com/zaps166/QMPlay2/releases/latest'>" + tr("GitHub download page") + "</a>";
     QLabel *label = new QLabel(labelText);
 
     QLabel *iconL = new QLabel;

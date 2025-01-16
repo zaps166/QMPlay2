@@ -167,7 +167,7 @@ void Updater::infoFinished()
                     const QString updateIsAvailable = tr("Update is available for QMPlay2!");
 
                     const auto notify = [&] {
-                        Notifies::notify(updateIsAvailable, tr("New QMPlay2 version: %1").arg(NewVersion), 0, 1);
+                        Notifies::notify(updateIsAvailable, tr("New QMPlay2 version: %1").arg(NewVersion) + "\n\n" + tr("Download page is in \"Help->About QMPlay2\""), 0, 1);
                         settings.set("UpdateVersion", NewVersion);
                     };
 
