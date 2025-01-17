@@ -71,7 +71,7 @@
     </message>
     <message>
         <source>GitHub download page</source>
-        <translation type="unfinished"></translation>
+        <translation>GitHub 下載頁面</translation>
     </message>
 </context>
 <context>
@@ -3670,7 +3670,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>下載頁面位於&quot;說明-&gt;關於 QMPlay2&quot;</translation>
     </message>
 </context>
 <context>
