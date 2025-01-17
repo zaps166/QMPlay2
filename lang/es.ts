@@ -71,7 +71,7 @@
     </message>
     <message>
         <source>GitHub download page</source>
-        <translation type="unfinished"></translation>
+        <translation>Página de descarga de GitHub</translation>
     </message>
 </context>
 <context>
@@ -3670,7 +3670,7 @@ Parcialmente marcado sólo si el contenido tiene menos canales que el valor espe
     </message>
     <message>
         <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>La página de descarga está en &quot;Ayuda-&gt;Acerca de QMPlay2&quot;</translation>
     </message>
 </context>
 <context>
