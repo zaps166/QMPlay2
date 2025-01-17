@@ -1558,6 +1558,23 @@ static Decoder *loadStream(
                 if (params->codec_type != type)
                     continue;
 
+                switch (params->codec_id) // Skip codecs which are or which can be a still image (e.g. cover)
+                {
+                    case AV_CODEC_ID_MJPEG:
+                    case AV_CODEC_ID_MJPEGB:
+                    case AV_CODEC_ID_LJPEG:
+                    case AV_CODEC_ID_JPEGLS:
+                    case AV_CODEC_ID_GIF:
+                        continue;
+                    default:
+                        if (auto codec = avcodec_find_decoder(params->codec_id))
+                        {
+                            if (QByteArray::fromRawData(codec->long_name, qstrlen(codec->long_name)).contains(" image"))
+                                continue;
+                        }
+                        break;
+                }
+
                 if (defaultStream < 0 && streams[i]->is_default && !streams[i]->skip_auto_select)
                     defaultStream = i;
 
