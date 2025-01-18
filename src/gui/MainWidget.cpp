@@ -1239,9 +1239,6 @@ void MainWidget::toggleAlwaysOnTop(bool checked)
 void MainWidget::toggleFullScreen()
 {
     static bool visible, tb_movable;
-#ifndef Q_OS_ANDROID
-    static bool maximized;
-#endif
 #ifdef Q_OS_MACOS
     if (isFullScreen())
     {
@@ -1257,7 +1254,7 @@ void MainWidget::toggleFullScreen()
             toggleCompactView();
 
 #ifndef Q_OS_ANDROID
-        maximized = isMaximized();
+        m_maximizedBeforeFullScreen = isMaximized();
 
 #ifndef Q_OS_MACOS
 #ifndef Q_OS_WIN
@@ -1267,7 +1264,7 @@ void MainWidget::toggleFullScreen()
 #endif
 
         dockWidgetState = saveState();
-        if (!maximized)
+        if (!m_maximizedBeforeFullScreen)
             savedGeo = geometry();
 #else
         dockWidgetState = saveState();
@@ -1328,8 +1325,10 @@ void MainWidget::toggleFullScreen()
 #else
         showNormal();
 #endif // Q_OS_MACOS
-        if (maximized)
+        if (m_maximizedBeforeFullScreen)
+        {
             showMaximized();
+        }
         else
         {
 #ifdef Q_OS_MACOS
@@ -2256,7 +2255,7 @@ void MainWidget::hideEvent(QHideEvent *)
     if (wasShow)
     {
         QMPlay2Core.getSettings().set("MainWidget/Geometry", (!fullScreen && !isMaximized()) ? geometry() : savedGeo);
-        QMPlay2Core.getSettings().set("MainWidget/isMaximized", isMaximized());
+        QMPlay2Core.getSettings().set("MainWidget/isMaximized", fullScreen ? m_maximizedBeforeFullScreen : isMaximized());
     }
 #endif
     menuBar->window->toggleVisibility->setText(tr("&Show"));

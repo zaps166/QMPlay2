@@ -201,6 +201,9 @@ private:
     AboutWidget *aboutW;
     bool isCompactView, wasShow, fullScreen, seekSFocus, m_restoreWindowOnVideo = false;
     bool m_compactViewBeforeFullScreen = false;
+#ifndef Q_OS_ANDROID
+    bool m_maximizedBeforeFullScreen = false;
+#endif
     bool m_loaded = false;
 
 #if !defined Q_OS_MACOS && !defined Q_OS_ANDROID
