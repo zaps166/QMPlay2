@@ -840,12 +840,24 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool de
     else
     {
         const QByteArray cookies = setCookies ? QMPlay2Core.getCookies(url) : QByteArray();
-        const QByteArray rawHeaders = setRawHeaders ? QMPlay2Core.getRawHeaders(url) : QByteArray();
+        QByteArray rawHeaders = setRawHeaders ? QMPlay2Core.getRawHeaders(url) : QByteArray();
         const QByteArray userAgent = [&] {
             if (!userAgentArg.isNull())
                 return userAgentArg;
             return getUserAgent(defUserAgentWithMozilla);
         }();
+
+        if (!cookies.isEmpty())
+        {
+            if (const auto idx1 = rawHeaders.indexOf("Cookie: "); idx1 > -1)
+            {
+                if (const auto idx2 = rawHeaders.indexOf("\r\n", idx1 + 8); idx2 > -1)
+                {
+                    rawHeaders.remove(idx1, idx2 - idx1 + 2);
+                }
+            }
+            rawHeaders += QByteArray("Cookie: " + cookies + "\r\n");
+        }
 
         if (url.startsWith("mms:"))
             url.insert(3, 'h');
@@ -854,10 +866,8 @@ QString Functions::prepareFFmpegUrl(QString url, AVDictionary *&options, bool de
             av_dict_set(&options, "icy", icy ? "1" : "0", 0);
         av_dict_set(&options, "user_agent", userAgent, 0);
 
-        if (!cookies.isEmpty())
-            av_dict_set(&options, "headers", QByteArray("Cookie: " + cookies + "\r\n").constData(), 0);
         if (!rawHeaders.isEmpty())
-            av_dict_set(&options, "headers", rawHeaders, 0);
+            av_dict_set(&options, "headers", rawHeaders.constData(), 0);
 
         av_dict_set(&options, "reconnect", "1", 0);
     }
