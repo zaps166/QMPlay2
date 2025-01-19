@@ -59,6 +59,10 @@ sudo dnf install qmplay2
 
 - Run the following command: `emerge --ask media-video/qmplay2`
 
+#### Easy installation on Slackware Linux
+
+- Run the following command: `slpkg -i QMPlay2`
+
 ## YouTube
 
 You can change the default audio and video quality of YouTube contents. Click on the "Settings" icon on the left of the search bar, change the order of audio and/or video quality priorities and apply changes.
