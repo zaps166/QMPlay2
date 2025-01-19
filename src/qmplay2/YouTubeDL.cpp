@@ -121,10 +121,16 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
     if (!streamUrl && !name)
         return;
 
+    QByteArray refererHeader;
+
     QStringList paramList {"-e"};
     if (!param.isEmpty())
     {
-        paramList << (QUrl(param).host().isEmpty() ? "-f" : "--referer") << param;
+        if (!QUrl(param).host().isEmpty())
+        {
+            refererHeader = "Referer: " + param.toUtf8() + "\r\n";
+        }
+        paramList << (refererHeader.isEmpty() ? "-f" : "--referer") << param;
     }
     else
     {
@@ -153,6 +159,11 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
             for (const QString &tmpUrl : std::as_const(ytdlStdout))
                 *streamUrl += "[" + tmpUrl + "]";
             *streamUrl += "}";
+        }
+        if (!refererHeader.isEmpty())
+        {
+            for (const QString &url : std::as_const(ytdlStdout))
+                QMPlay2Core.addRawHeaders(url, refererHeader);
         }
     }
     if (name && !title.isEmpty())
