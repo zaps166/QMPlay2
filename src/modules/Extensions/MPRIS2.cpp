@@ -192,7 +192,7 @@ double MediaPlayer2Player::volume() const
 }
 void MediaPlayer2Player::setVolume(double value)
 {
-    emit QMPlay2Core.processParam("volume", QString::number((int)(value * 100)));
+    emit QMPlay2Core.processParam("volume", QString::number(qRound(value * 100.0)));
 }
 
 void MediaPlayer2Player::Next()
