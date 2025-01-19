@@ -1,3 +1,12 @@
+Changes in QMPlay2 25.01.19:
+    - store maximized state when closing from full screen,
+    - pass 'yt-dlp' URL argument as 'referer',
+    - improve still image stream detection,
+    - allow for local stream recording,
+    - show left panel in compact view,
+    - fix YouTube live streams,
+    - other minor fixes,
+
 Changes in QMPlay2 24.12.28:
     - add option to maintain panels size when resizing main window,
     - add input dialog for zoom and add precise zoom control,
