@@ -124,7 +124,7 @@ void YouTubeDL::addr(const QString &url, const QString &param, QString *streamUr
     QStringList paramList {"-e"};
     if (!param.isEmpty())
     {
-        paramList << "-f" << param;
+        paramList << (QUrl(param).host().isEmpty() ? "-f" : "--referer") << param;
     }
     else
     {
