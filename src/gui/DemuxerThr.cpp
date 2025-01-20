@@ -810,6 +810,7 @@ void DemuxerThr::startRecordingInternal(QHash<int, int> &recStreamsMap)
         m_recMuxer.reset();
         recStreamsMap.clear();
         emit recording(false, true);
+        QFile::remove(dir + "/" + fileName);
     }
     changeStatusText();
 }
