@@ -59,7 +59,7 @@
     </message>
     <message>
         <source>video and audio player</source>
-        <translation>video ve ses oynatıcısı</translation>
+        <translation>Video ve ses oynatıcısı</translation>
     </message>
     <message>
         <source>Programmer</source>
@@ -71,7 +71,7 @@
     </message>
     <message>
         <source>GitHub download page</source>
-        <translation type="unfinished"></translation>
+        <translation>GitHub indirme sayfası</translation>
     </message>
 </context>
 <context>
@@ -1056,11 +1056,11 @@
     </message>
     <message>
         <source>&amp;About QMPlay2</source>
-        <translation>QMPlay2 &amp;Hakkında</translation>
+        <translation>QMPlay2 &amp;hakkında</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
-        <translation>&amp;Qt Hakkında</translation>
+        <translation>&amp;Qt hakkında</translation>
     </message>
     <message>
         <source>&amp;Updates</source>
@@ -2679,7 +2679,7 @@
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
-        <translation>A&amp;–B yinelemesi</translation>
+        <translation>&amp;A–B yinelemesi</translation>
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
@@ -3690,7 +3690,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>İndirme sayfası “Yardım → QMPlay2 hakkında” bölümündedir</translation>
     </message>
 </context>
 <context>
@@ -3948,7 +3948,7 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     </message>
     <message>
         <source>Sort search results by ...</source>
-        <translation>Arama sonuçlarını şuna göre sırala …</translation>
+        <translation>Arama sonuçlarını şuna göre sırala…</translation>
     </message>
     <message>
         <source>Preferred quality</source>
