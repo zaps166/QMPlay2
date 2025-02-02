@@ -71,7 +71,7 @@
     </message>
     <message>
         <source>GitHub download page</source>
-        <translation type="unfinished"></translation>
+        <translation>صفحة التنزيل على GitHub</translation>
     </message>
 </context>
 <context>
@@ -1931,7 +1931,7 @@
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;%4&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation>ليست كل مرشحات الصوت مدعومة في QMPlay2. لاستخدام بعض المرشحات مثل &apos;%4&apos;، أنت بحاجة إلى تفعيل &quot;إجبار تحويل القنوات&quot; &quot;استخدام تحويل القنوات قبل المرشحات&quot; في إعدادات التشغيل. الرجاء الرجوع إلى وثائق %1FFmpeg%2.مرشحات الصوت %3المتوفرة:</translation>
+        <translation>ليست كل مرشحات الصوت مدعومة في QMPlay2. لاستخدام بعض المرشحات مثل &apos;%4&apos;، أنت بحاجة إلى تفعيل &quot;إجبار تحويل القنوات&quot; و&quot;استخدام تحويل القنوات قبل المرشحات&quot; في إعدادات التشغيل. الرجاء الرجوع إلى %1وثائق FFmpeg%2. %3مرشحات الصوت المتوفرة:</translation>
     </message>
 </context>
 <context>
@@ -3670,7 +3670,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>صفحة التنزيل موجودة في &quot;المساعدة-&gt;عن QMPlay2&quot;</translation>
     </message>
 </context>
 <context>
