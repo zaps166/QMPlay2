@@ -245,7 +245,7 @@ void Window::setConfig(
         m_hqScaleUp = hqScaleUp;
         maybeRequestUpdate();
     }
-    if (QGuiApplication::platformName() == "xcb")
+    if (m_platformName == QStringLiteral("xcb"))
     {
        setX11BypassCompositor(bypassCompositor);
     }
