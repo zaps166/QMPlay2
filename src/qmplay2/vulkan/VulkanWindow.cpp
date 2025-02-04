@@ -142,7 +142,11 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     , m_physicalDevice(m_instance->physicalDevice())
     , m_platformName(QGuiApplication::platformName())
     , m_isWayland(m_platformName.contains("wayland"))
-    , m_passEventsToParent(m_platformName != "xcb" && m_platformName != "android")
+    , m_passEventsToParent(
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+          !m_isWayland &&
+#endif
+          m_platformName != "xcb" && m_platformName != "android")
     , m_videoPipelineSpecializationData(sizeof(VideoPipelineSpecializationData) / sizeof(int))
     , m_frameProps(make_unique<FrameProps>())
 {
