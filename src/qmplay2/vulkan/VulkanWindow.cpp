@@ -262,7 +262,7 @@ void Window::setConfig(
         }
     }
 #endif
-    if (m_hdr != hdr)
+    if ((m_isWayland || m_platformName == QStringLiteral("windows")) && m_hdr != hdr)
     {
         m_hdr = hdr;
         m.checkSurfaceColorSpace = true;
