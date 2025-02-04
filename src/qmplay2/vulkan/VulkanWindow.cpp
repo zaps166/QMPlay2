@@ -261,6 +261,7 @@ void Window::setConfig(
             maybeRequestUpdate();
         }
     }
+#endif
     if (m_hdr != hdr)
     {
         m_hdr = hdr;
@@ -269,7 +270,6 @@ void Window::setConfig(
         m.mustUpdateVideoPipelineSpecialization = true;
         maybeRequestUpdate();
     }
-#endif
 }
 void Window::setParams(
     const QSize &imgSize,

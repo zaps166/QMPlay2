@@ -1043,7 +1043,7 @@ void SettingsWidget::createRendererSettings()
             bypassCompositor->setEnabled(!noExclusiveFullScreenDevIDs->contains(devices->itemData(idx).toByteArray()));
             hdr->setVisible(QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows10);
 #else
-            hdr->setVisible(false);
+            hdr->setVisible(QGuiApplication::platformName().contains("wayland"));
 #endif
         });
 
