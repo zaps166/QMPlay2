@@ -490,6 +490,9 @@ static QtMessageHandler g_defaultMsgHandler = nullptr;
 static QMutex g_messageHandlerMutex;
 static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &message)
 {
+    if (qstrcmp(context.category, "qt.qpa.wayland") == 0 && message.endsWith(QStringLiteral("Please fix the transient parent of the popup.")))
+        return;
+
     bool qmplay2Log = false;
     if (QCoreApplication::instance())
     {
