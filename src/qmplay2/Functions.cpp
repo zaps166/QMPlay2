@@ -793,6 +793,10 @@ quint32 Functions::getBestSampleRate()
 
 bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 {
+    static bool allowed = (QGuiApplication::platformName() == QStringLiteral("windows") || QGuiApplication::platformName() == QStringLiteral("xcb"));
+    if (!allowed)
+        return false;
+
     const QSize winSize = widget->size();
     bool doWrap = false;
 
