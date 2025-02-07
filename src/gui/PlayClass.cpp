@@ -34,7 +34,7 @@
 #include <Decoder.hpp>
 #include <Reader.hpp>
 
-#include <QCoreApplication>
+#include <QGuiApplication>
 #include <QVarLengthArray>
 #include <QMessageBox>
 #include <QRawFont>
@@ -435,8 +435,21 @@ void PlayClass::messageAndOSD(const QString &txt, bool onStatusBar, double durat
 {
     if (ass && QMPlay2Core.getSettings().getBool("OSD/Enabled"))
     {
+        QByteArray txtData;
+        if (QGuiApplication::layoutDirection() == Qt::RightToLeft && txt.size() >= 2)
+        {
+            // libass puts "%" and "x" character to the right, so swap it
+            if (txt.at(txt.size() - 2).isDigit() && (txt.at(txt.size() - 1).isLetter() || txt.at(txt.size() - 1) == QChar('%')))
+            {
+                txtData = (txt.at(txt.size() - 1) + txt.mid(0, txt.size() - 1)).toUtf8();
+            }
+        }
+        if (txtData.isNull())
+        {
+            txtData = txt.toUtf8();
+        }
         osdMutex.lock();
-        ass->getOSD(osd, txt.toUtf8(), duration);
+        ass->getOSD(osd, txtData, duration);
         osdMutex.unlock();
     }
     if (onStatusBar)
