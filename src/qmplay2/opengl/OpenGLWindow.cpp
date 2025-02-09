@@ -26,7 +26,11 @@
 
 OpenGLWindow::OpenGLWindow()
     : m_platformName(QGuiApplication::platformName())
-    , m_passEventsToParent(m_platformName != "xcb" && m_platformName != "android")
+    , m_passEventsToParent(
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+          !m_platformName.contains("wayland") &&
+#endif
+          m_platformName != "xcb" && m_platformName != "android")
 {
     connect(&updateTimer, SIGNAL(timeout()), this, SLOT(doUpdateGL()));
 
