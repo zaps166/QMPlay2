@@ -76,18 +76,28 @@ bool VideoOutputCommon::setSphericalView(bool sphericalView)
     return true;
 }
 
-QSize VideoOutputCommon::getRealWidgetSize() const
+QSize VideoOutputCommon::getRealWidgetSize(bool lh) const
 {
-    const auto widgetSizeF = m_widget->devicePixelRatioF() * QSizeF(m_widget->size());
+    const auto widgetSizeF = m_widget->devicePixelRatioF() * QSizeF(m_widget->size() + QSize(0, lh ? m_widget->property("loseHeight").toInt() : 0));
     return QSize(
         widgetSizeF.width(),
         widgetSizeF.height()
     );
 }
 
+QPointF VideoOutputCommon::getOsdOffset() const
+{
+    const auto realSize = getRealWidgetSize();
+    const auto lhSize = getRealWidgetSize(true);
+    return QPointF(
+        m_osdOffset.x(),
+        m_osdOffset.y() * lhSize.height() / realSize.height()
+    );
+}
+
 void VideoOutputCommon::updateSizes(bool transpose)
 {
-    const auto size = getRealWidgetSize();
+    const auto size = getRealWidgetSize(true);
 
     const auto scaledSize = m_zoom * (transpose
         ? QSizeF(1.0, m_aRatio).scaled(size, Qt::KeepAspectRatio)
@@ -109,19 +119,31 @@ void VideoOutputCommon::updateSizes(bool transpose)
 }
 void VideoOutputCommon::updateMatrix()
 {
-    const auto widgetSize = getRealWidgetSize();
+    QSize widgetSize;
+
     m_matrix.setToIdentity();
-    if (!m_sphericalView)
+
+    widgetSize = getRealWidgetSize();
+    m_matrix.scale(
+        static_cast<float>(m_scaledSize.width()) / static_cast<float>(widgetSize.width()),
+        static_cast<float>(m_scaledSize.height()) / static_cast<float>(widgetSize.height())
+    );
+    if (!m_videoOffset.isNull())
     {
-        m_matrix.scale(
-            m_scaledSize.width()  / static_cast<float>(widgetSize.width()),
-            m_scaledSize.height() / static_cast<float>(widgetSize.height())
-        );
-        if (!m_videoOffset.isNull())
-            m_matrix.translate(-m_videoOffset.x(), m_videoOffset.y() * m_yMultiplier);
+        m_matrix.translate(-m_videoOffset.x(), m_videoOffset.y() * m_yMultiplier);
     }
-    else
+    if (int loseHeight = m_widget->property("loseHeight").toInt())
     {
+        m_matrix.translate(0, -loseHeight * m_widget->devicePixelRatioF() * m_yMultiplier / m_scaledSize.height());
+    }
+
+    if (m_sphericalView)
+    {
+        widgetSize = getRealWidgetSize(true);
+        m_matrix.scale(
+            static_cast<float>(widgetSize.width())  / static_cast<float>(m_scaledSize.width()),
+            static_cast<float>(widgetSize.height()) / static_cast<float>(m_scaledSize.height())
+        );
         m_matrix.scale(1.0f, m_yMultiplier, 1.0f);
         m_matrix.perspective(68.0f, static_cast<float>(widgetSize.width()) / static_cast<float>(widgetSize.height()), 0.001f, 2.0f);
         m_matrix.translate(0.0f, 0.0f, qBound<float>(-1.0f, (m_zoom > 1.0f) ? log10(m_zoom) : m_zoom - 1.0f, 0.99f));

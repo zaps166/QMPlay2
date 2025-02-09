@@ -21,11 +21,11 @@
 #include <Functions.hpp>
 #include <Settings.hpp>
 
-#include <QGuiApplication>
 #ifdef Q_OS_WIN
 #   include <QApplication>
 #endif
 #include <QDockWidget>
+#include <qevent.h>
 #include <QPainter>
 #include <QVariant>
 
@@ -105,8 +105,16 @@ void InDockW::resizeEvent(QResizeEvent *)
         int W = width();
         int H = height();
 
-        if (!QGuiApplication::platformName().contains("wayland") || (qstrcmp(w->metaObject()->className(), "QWindowContainer") != 0))
+        const bool hasNonNativeWinContainer = (!w->testAttribute(Qt::WA_NativeWindow) && qstrcmp(w->metaObject()->className(), "QWindowContainer") == 0);
+
+        if (hasNonNativeWinContainer)
+        {
+            w->setProperty("loseHeight", loseHeight);
+        }
+        else
+        {
             H += loseHeight;
+        }
 
         const int mappedY = mapToParent(QPoint()).y();
         if (mappedY < 0)
@@ -127,7 +135,7 @@ void InDockW::resizeEvent(QResizeEvent *)
         if (w->geometry() != QRect(X, Y, W, H))
         {
             w->setGeometry(X, Y, W, H);
-            emit resized(QSize(W, H));
+            emit resized(QSize(W, H + (hasNonNativeWinContainer ? loseHeight : 0)));
         }
     }
     else

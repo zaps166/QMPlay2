@@ -703,6 +703,7 @@ void Window::renderVideo()
 void Window::renderOSD()
 {
     const auto winSize = getRealWidgetSize();
+    const auto osdOffset = getOsdOffset();
 
     vector<MemoryObjectDescrs> osdAvMemoryObjects;
     vector<MemoryObjectDescrs> osdAssMemoryObjects;
@@ -798,8 +799,8 @@ void Window::renderOSD()
 
         QMatrix4x4 mat;
         mat.translate(
-            (-1.0 - m_osdOffset.x()) + (m_subsRect.x() + imgRect.x() * multiplier.x()) * 2.0 / winSize.width(),
-            (-1.0 - m_osdOffset.y()) + (m_subsRect.y() + imgRect.y() * multiplier.y()) * 2.0 / winSize.height()
+            (-1.0 - osdOffset.x()) + (m_subsRect.x() + imgRect.x() * multiplier.x()) * 2.0 / winSize.width(),
+            (-1.0 - osdOffset.y()) + (m_subsRect.y() + imgRect.y() * multiplier.y()) * 2.0 / winSize.height()
         );
         mat.scale(
             imgRect.width()  * 2.0 * multiplier.x() / winSize.width(),

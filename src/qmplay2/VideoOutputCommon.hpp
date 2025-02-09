@@ -44,7 +44,9 @@ public:
     virtual bool setSphericalView(bool sphericalView);
 
 protected:
-    QSize getRealWidgetSize() const;
+    QSize getRealWidgetSize(bool lh = false) const;
+
+    QPointF getOsdOffset() const;
 
     void updateSizes(bool transpose);
     void updateMatrix();

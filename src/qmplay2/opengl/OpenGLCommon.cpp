@@ -658,10 +658,11 @@ void OpenGLCommon::paintGL()
         }
 
         const auto realWinSize = getRealWidgetSize();
-        const float left   = (bounds.left() + m_subsRect.x()) * 2.0f / realWinSize.width() - m_osdOffset.x();
-        const float right  = (bounds.right() + m_subsRect.x() + 1.0f) * 2.0f / realWinSize.width() - m_osdOffset.x();
-        const float top    = (bounds.top() + m_subsRect.y()) * 2.0f / realWinSize.height() - m_osdOffset.y();
-        const float bottom = (bounds.bottom() + m_subsRect.y() + 1.0f) * 2.0f / realWinSize.height() - m_osdOffset.y();
+        const auto osdOffset = getOsdOffset();
+        const float left   = (bounds.left() + m_subsRect.x()) * 2.0f / realWinSize.width() - osdOffset.x();
+        const float right  = (bounds.right() + m_subsRect.x() + 1.0f) * 2.0f / realWinSize.width() - osdOffset.x();
+        const float top    = (bounds.top() + m_subsRect.y()) * 2.0f / realWinSize.height() - osdOffset.y();
+        const float bottom = (bounds.bottom() + m_subsRect.y() + 1.0f) * 2.0f / realWinSize.height() - osdOffset.y();
         const float verticesOSD[8] = {
             left  - 1.0f, -bottom + 1.0f,
             right - 1.0f, -bottom + 1.0f,
