@@ -28,9 +28,9 @@ OpenGLWindow::OpenGLWindow()
     : m_platformName(QGuiApplication::platformName())
     , m_passEventsToParent(
 #if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
-          !m_platformName.contains("wayland") &&
+          !m_platformName.contains(QStringLiteral("wayland")) &&
 #endif
-          m_platformName != "xcb" && m_platformName != "android")
+          m_platformName != QStringLiteral("xcb") && m_platformName != QStringLiteral("android"))
 {
     connect(&updateTimer, SIGNAL(timeout()), this, SLOT(doUpdateGL()));
 
@@ -38,7 +38,7 @@ OpenGLWindow::OpenGLWindow()
         setFlags(Qt::WindowTransparentForInput);
 
     m_widget = QWidget::createWindowContainer(this);
-    if (!m_platformName.contains("wayland") && !m_platformName.contains("android"))
+    if (!m_platformName.contains(QStringLiteral("wayland")) && m_platformName != QStringLiteral("android"))
         m_widget->setAttribute(Qt::WA_NativeWindow);
     m_widget->installEventFilter(this);
     m_widget->setAcceptDrops(false);

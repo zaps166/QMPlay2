@@ -169,6 +169,7 @@ private:
     QTimer m_initResourcesTimer;
 
     const bool m_isWayland;
+    const bool m_isXcb;
 
     const bool m_passEventsToParent;
 

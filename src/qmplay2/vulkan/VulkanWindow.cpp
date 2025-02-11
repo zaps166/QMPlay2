@@ -141,19 +141,20 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     , m_instance(static_pointer_cast<Instance>(QMPlay2Core.gpuInstance()))
     , m_physicalDevice(m_instance->physicalDevice())
     , m_platformName(QGuiApplication::platformName())
-    , m_isWayland(m_platformName.contains("wayland"))
+    , m_isWayland(m_platformName.contains(QStringLiteral("wayland")))
+    , m_isXcb(m_platformName == QStringLiteral("xcb"))
     , m_passEventsToParent(
 #if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
           !m_isWayland &&
 #endif
-          m_platformName != "xcb" && m_platformName != "android")
+          !m_isXcb && m_platformName != QStringLiteral("android"))
     , m_videoPipelineSpecializationData(sizeof(VideoPipelineSpecializationData) / sizeof(int))
     , m_frameProps(make_unique<FrameProps>())
 {
     setSurfaceType(VulkanSurface);
     setVulkanInstance(m_instance->qVulkanInstance());
 
-    if (m_platformName == "xcb" && !qgetenv("WAYLAND_DISPLAY").isEmpty())
+    if (m_isXcb && !qgetenv("WAYLAND_DISPLAY").isEmpty())
     {
         m_useRenderPassClear = true;
     }
@@ -182,7 +183,7 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     });
 
     m_widget = QWidget::createWindowContainer(this);
-    if (!m_isWayland && !m_platformName.contains("android"))
+    if (!m_isWayland && m_platformName != QStringLiteral("android"))
         m_widget->setAttribute(Qt::WA_NativeWindow);
     m_widget->grabGesture(Qt::PinchGesture);
     m_widget->installEventFilter(this);
@@ -249,7 +250,7 @@ void Window::setConfig(
         m_hqScaleUp = hqScaleUp;
         maybeRequestUpdate();
     }
-    if (m_platformName == QStringLiteral("xcb"))
+    if (m_isXcb)
     {
        setX11BypassCompositor(bypassCompositor);
     }
