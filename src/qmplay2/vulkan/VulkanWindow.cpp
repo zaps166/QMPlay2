@@ -146,6 +146,7 @@ Window::Window(const shared_ptr<HWInterop> &hwInterop)
     , m_passEventsToParent(
 #if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
           !m_isWayland &&
+          m_platformName != QStringLiteral("windows") &&
 #endif
           !m_isXcb && m_platformName != QStringLiteral("android"))
     , m_videoPipelineSpecializationData(sizeof(VideoPipelineSpecializationData) / sizeof(int))

@@ -29,6 +29,7 @@ OpenGLWindow::OpenGLWindow()
     , m_passEventsToParent(
 #if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
           !m_platformName.contains(QStringLiteral("wayland")) &&
+          m_platformName != QStringLiteral("windows") &&
 #endif
           m_platformName != QStringLiteral("xcb") && m_platformName != QStringLiteral("android"))
 {
