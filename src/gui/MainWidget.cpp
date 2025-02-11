@@ -2264,8 +2264,11 @@ void MainWidget::changeEvent(QEvent *e)
 {
     if (e->type() == QEvent::WindowStateChange)
     {
-        if (isFullScreen() || isMaximized())
+        const bool fs = isFullScreen();
+        if (fs || isMaximized())
             videoDock->scheduleEnterEventWorkaround();
+        else if (!fs)
+            videoDock->maybeTriggerWidgetVisibility();
     }
 #if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
     else if (e->type() == QEvent::PaletteChange)

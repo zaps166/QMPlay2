@@ -115,6 +115,17 @@ void VideoDock::scheduleEnterEventWorkaround()
         });
     }
 }
+void VideoDock::maybeTriggerWidgetVisibility()
+{
+    if (auto w = iDW.getWidget(); w && w->property("loseHeight").isValid())
+    {
+        // Hide/show widget to not hide mouse cursor outside the window when native widgets are not used (workaround)
+        QTimer::singleShot(0, w, [w] {
+            w->setVisible(false);
+            w->setVisible(true);
+        });
+    }
+}
 
 void VideoDock::fullScreen(bool b)
 {

@@ -33,6 +33,7 @@ public:
     VideoDock();
 
     void scheduleEnterEventWorkaround();
+    void maybeTriggerWidgetVisibility();
 
     void fullScreen(bool);
     inline void setLoseHeight(int lh)
