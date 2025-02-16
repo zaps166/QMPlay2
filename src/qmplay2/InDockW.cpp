@@ -21,13 +21,13 @@
 #include <Functions.hpp>
 #include <Settings.hpp>
 
-#ifdef Q_OS_WIN
-#   include <QApplication>
-#endif
+#include <QApplication>
 #include <QDockWidget>
+#include <QStatusBar>
 #include <qevent.h>
 #include <QPainter>
 #include <QVariant>
+#include <QWindow>
 
 #include <cmath>
 
@@ -98,6 +98,8 @@ void InDockW::setWidget(QWidget *newW)
 
 void InDockW::resizeEvent(QResizeEvent *)
 {
+    bool hasNonNativeWinContainer = false;
+
     if (w)
     {
         int X = 0;
@@ -105,7 +107,7 @@ void InDockW::resizeEvent(QResizeEvent *)
         int W = width();
         int H = height();
 
-        const bool hasNonNativeWinContainer = (!w->testAttribute(Qt::WA_NativeWindow) && qstrcmp(w->metaObject()->className(), "QWindowContainer") == 0);
+        hasNonNativeWinContainer = (!w->testAttribute(Qt::WA_NativeWindow) && qstrcmp(w->metaObject()->className(), "QWindowContainer") == 0);
 
         if (hasNonNativeWinContainer)
         {
@@ -142,6 +144,34 @@ void InDockW::resizeEvent(QResizeEvent *)
     {
         emit resized(size());
     }
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0) && defined(Q_OS_UNIX) && !defined(Q_OS_MACOS) && !defined(Q_OS_ANDROID)
+    // Workaround to prevent direct scanout on KWin when panels are visible
+    static bool useWorkaround = QGuiApplication::platformName().contains(QStringLiteral("wayland")) && qEnvironmentVariableIntValue("KWIN_DRM_NO_DIRECT_SCANOUT") == 0;
+    bool mustResetMainTB = false;
+    if (useWorkaround && (hasNonNativeWinContainer || mustResetMainTB))
+    {
+        if (auto tlWidget = window(); loseHeight == 0 || tlWidget->property("fullScreen").toBool())
+        {
+            if (auto statusBar = tlWidget->findChild<QStatusBar *>(Qt::FindDirectChildrenOnly))
+            {
+                statusBar->setAttribute(Qt::WA_NativeWindow, (loseHeight > 0));
+                if (loseHeight > 0)
+                {
+                    mustResetMainTB = true;
+                }
+                else if (Q_LIKELY(!statusBar->isVisible()))
+                {
+                    if (auto statusBarWin = statusBar->windowHandle())
+                    {
+                        statusBarWin->destroy();
+                    }
+                    mustResetMainTB = false;
+                }
+            }
+        }
+    }
+#endif
 }
 void InDockW::paintEvent(QPaintEvent *)
 {
