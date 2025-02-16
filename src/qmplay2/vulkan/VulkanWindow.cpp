@@ -1528,7 +1528,6 @@ void Window::resetSurface()
 bool Window::eventFilter(QObject *o, QEvent *e)
 {
     Q_ASSERT(o == m_widget);
-#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
     switch (e->type())
     {
         case QEvent::Hide:
@@ -1546,7 +1545,6 @@ bool Window::eventFilter(QObject *o, QEvent *e)
         default:
             break;
     }
-#endif
     dispatchEvent(e, o);
     return QWindow::eventFilter(o, e);
 }
