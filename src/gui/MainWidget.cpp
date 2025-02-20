@@ -509,6 +509,8 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     }
     arguments.clear();
 
+    playStateChanged(false);
+
     if (!noplay)
     {
         const QString url = settings.getString("Url");
@@ -526,14 +528,6 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
                     seek(pos);
             }
         }
-        else
-        {
-            playStateChanged(false);
-        }
-    }
-    else
-    {
-        playStateChanged(false);
     }
 
     qApp->installEventFilter(this);
