@@ -68,25 +68,23 @@ void Slider::paintEvent(QPaintEvent *e)
         QStyleOptionSlider opt;
         initStyleOption(&opt);
 
+        p.setRenderHint(QPainter::Antialiasing);
+
         const int handleW_2 = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this).width() / 2;
 
-        const int o = style()->pixelMetric(QStyle::PM_SliderLength) - 1;
+        const int o = style()->pixelMetric(QStyle::PM_SliderLength);
         if (firstLine > -1)
         {
-            int X  = QStyle::sliderPositionFromValue(minimum(), maximum(), firstLine,  width() - o, false) + o / 2 - handleW_2;
-            if (X < 0)
-                X = 0;
-            p.drawLine(X, 0, X + handleW_2, 0);
-            p.drawLine(X, 0, X, height()-1);
+            const int X = qMax(1, QStyle::sliderPositionFromValue(minimum(), maximum(), firstLine, width() - o, false) + o / 2 - handleW_2 + 1);
+            p.drawLine(X, 1, X + handleW_2, 1);
+            p.drawLine(X, 1, X, height()-1);
             p.drawLine(X, height()-1, X + handleW_2, height()-1);
         }
         if (secondLine > -1)
         {
-            int X = QStyle::sliderPositionFromValue(minimum(), maximum(), secondLine, width() - o, false) + o / 2 + handleW_2 - 1;
-            if (X >= width())
-                X = width()-1;
-            p.drawLine(X, 0, X - handleW_2, 0);
-            p.drawLine(X, 0, X, height()-1);
+            const int X = qMin(QStyle::sliderPositionFromValue(minimum(), maximum(), secondLine, width() - o, false) + o / 2 + handleW_2 - 1, width() - 1);
+            p.drawLine(X, 1, X - handleW_2, 1);
+            p.drawLine(X, 1, X, height()-1);
             p.drawLine(X, height()-1, X - handleW_2, height()-1);
         }
     }
