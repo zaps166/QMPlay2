@@ -1264,6 +1264,7 @@ void PlaylistWidget::modifyMenu()
     const bool isLocked = (getFlags(currItem) & Playlist::Entry::Locked);
     const bool isItemGroup = isGroup(currItem);
     const bool syncVisible = (isItemGroup && !entryUrl.isEmpty());
+    const auto selectedCount = selectedItems().count();
 
     playlistMenu()->saveGroup->setVisible(isItemGroup);
     playlistMenu()->lock->setText(isLocked ? tr("Un&lock") : tr("&Lock"));
@@ -1275,9 +1276,11 @@ void PlaylistWidget::modifyMenu()
     playlistMenu()->quickSync->setVisible(syncVisible && QFileInfo(QString(entryUrl).remove("file://")).isDir());
     playlistMenu()->renameGroup->setVisible(isItemGroup);
     playlistMenu()->entryProperties->setVisible(currItem);
+    if (currItem)
+        playlistMenu()->entryProperties->setEnabled(selectedCount == 1);
     playlistMenu()->queue->setVisible(currItem && !isItemGroup);
     playlistMenu()->skip->setVisible(currItem && !isItemGroup);
     playlistMenu()->stopAfter->setVisible(currItem && !isItemGroup);
     playlistMenu()->goToPlayback->setVisible(currentPlaying);
-    playlistMenu()->copy->setVisible(selectedItems().count());
+    playlistMenu()->copy->setVisible(selectedCount > 0);
 }
