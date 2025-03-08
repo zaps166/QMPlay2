@@ -1750,14 +1750,6 @@
         <translation>Σώμα</translation>
     </message>
     <message>
-        <source>Send message</source>
-        <translation>Αποστολή μηνύματος</translation>
-    </message>
-    <message>
-        <source>Custom Message</source>
-        <translation>Προσαρμοσμένο Μήνυμα</translation>
-    </message>
-    <message>
         <source>Notification timeout</source>
         <translation>Χρόνος ειδοποίησης</translation>
     </message>
@@ -2210,165 +2202,128 @@
         <translation>Ορίστε την καθυστέρηση υποτίτλων (δευτ.)</translation>
     </message>
     <message>
-        <source>Enable subtitles</source>
-        <translation>Ενεργοποίηση υποτίτλων</translation>
+        <source>Recording error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Subtitles</source>
-        <translation>Υπότιτλοι</translation>
-    </message>
-</context>
-<context>
-    <name>PlayList</name>
-    <message>
-        <source>Remove from playlist</source>
-        <translation>Αφαίρεση από τη λίστα αναπαραγωγής</translation>
+        <source>Recording started: %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enqueue</source>
-        <translation>Προσθήκη στην ουρά</translation>
+        <source>Recording stopped</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Add to playlist</source>
-        <translation>Προσθήκη στη λίστα αναπαραγωγής</translation>
-    </message>
-</context>
-<context>
-    <name>Player</name>
-    <message>
-        <source>Exit full screen</source>
-        <translation>Έξοδος από την πλήρη οθόνη</translation>
+        <source>Loaded subtitles</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enter full screen</source>
-        <translation>Είσοδος στην πλήρη οθόνη</translation>
+        <source>Keep audio pitch during playback speed change</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Exit</source>
-        <translation>Έξοδος</translation>
+        <source>Don&apos;t keep audio pitch during playback speed change</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pause</source>
-        <translation>Παύση</translation>
+        <source>Integer scaling: enabled</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Stop</source>
-        <translation>Σταμάτημα</translation>
+        <source>Integer scaling: disabled</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Play</source>
-        <translation>Αναπαραγωγή</translation>
+        <source>No image rotation</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Player</source>
-        <translation>&amp;Προγραμματιστής</translation>
+        <source>Horizontal flip</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Stop</source>
-        <translation>&amp;Σταματήστε</translation>
+        <source>Vertical flip</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Next</source>
-        <translation>&amp;Επόμενο</translation>
+        <source>Rotation 270°</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Previous</source>
-        <translation>&amp;Προηγούμενο</translation>
+        <source>Rotation 180°</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Seek &amp;forward</source>
-        <translation>Προχωρήστε &amp;μπροστά</translation>
+        <source>Rotation 90°</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Seek &amp;backward</source>
-        <translation>Προχωρήστε &amp;πίσω</translation>
+        <source>disabled</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Long &amp;seek forward</source>
-        <translation>Μεγάλη αναζήτηση &amp;μπροστά</translation>
+        <source>from</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Long s&amp;eek backward</source>
-        <translation>Μεγάλη αναζήτηση &amp;πίσω</translation>
+        <source>to</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Fa&amp;ster</source>
-        <translation>Πιο &amp;γρήγορα</translation>
+        <source>A-B Repeat</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Slowe&amp;r</source>
-        <translation>Πιο αργά</translation>
+        <source>Zoom: %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Zoom i&amp;n</source>
-        <translation>Μεγέθυνση</translation>
+        <source>Set playback speed</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Zoom ou&amp;t</source>
-        <translation>Σμίκρυνση</translation>
+        <source>Zoom</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Mute</source>
-        <translation>&amp;Αναστολή ήχου</translation>
+        <source>Set zoom</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Toggle &amp;aspect ratio</source>
-        <translation>Εναλλαγή &amp;αναλογίας εικόνας</translation>
+        <source>Custom aspect ratio</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Reset image &amp;settings</source>
-        <translation>Επαναφορά ρυθμίσεων &amp;εικόνας</translation>
+        <source>Set aspect ratio</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Set speed</source>
-        <translation>&amp;Ορισμός ταχύτητας</translation>
+        <source>Set video delay (sec.)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Settings</source>
-        <translation>&amp;Ρυθμίσεις</translation>
+        <source>Audio off</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Audio</source>
-        <translation>&amp;Ήχος</translation>
+        <source>Video off</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Video</source>
-        <translation>&amp;Βίντεο</translation>
+        <source>Subtitles off</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Subtitles</source>
-        <translation>&amp;Υπότιτλοι</translation>
+        <source>Spherical view is not supported by this video output module</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Stream</source>
-        <translation>&amp;Ροή</translation>
-    </message>
-</context>
-<context>
-    <name>Settings</name>
-    <message>
-        <source>Playback</source>
-        <translation>Αναπαραγωγή</translation>
+        <source>Rotation is not supported by this video output module</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Audio</source>
-        <translation>Ήχος</translation>
-    </message>
-    <message>
-        <source>Video</source>
-        <translation>Βίντεο</translation>
-    </message>
-    <message>
-        <source>Subtitles</source>
-        <translation>Υπότιτλοι</translation>
-    </message>
-    <message>
-        <source>Renderer</source>
-        <translation>Αναπαραγωγέας</translation>
-    </message>
-    <message>
-        <source>Modules</source>
-        <translation>Μονάδες</translation>
+        <source>Playback has been incorrectly terminated!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2398,10 +2353,6 @@
         <translation>&amp;Ενεργοποίηση υποτίτλων</translation>
     </message>
     <message>
-        <source>&amp;Delay subtitles</source>
-        <translation>&amp;Καθυστέρηση υποτίτλων</translation>
-    </message>
-    <message>
         <source>&amp;Speed up subtitles</source>
         <translation>&amp;Ταχύτητα υποτίτλων</translation>
     </message>
@@ -2412,10 +2363,6 @@
     <message>
         <source>Scale down sub&amp;titles</source>
         <translation>Μείωση υποτίτ&amp;λων</translation>
-    </message>
-    <message>
-        <source>Add &amp;subtitles from file</source>
-        <translation>Προσθήκη &amp;υποτίτλων από αρχείο</translation>
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
@@ -2432,6 +2379,14 @@
     <message>
         <source>&amp;Keep audio pitch</source>
         <translation>&amp;Διατήρηση ύψους ήχου</translation>
+    </message>
+    <message>
+        <source>Add &amp;subtities from file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Delay subtitiles</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2627,6 +2582,137 @@
     <message>
         <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
         <translation>Η διάρκεια πρέπει να είναι τουλάχιστον 8 λεπτά. Η θέση αναπαραγωγής πρέπει να βρίσκεται στο [1% - 99%] του εύρους αναπαραγωγής. Μπορείτε να συνεχίσετε την αναπαραγωγή πατώντας το εικονίδιο δίπλα στο κουμπί πλήρους οθόνης.</translation>
+    </message>
+</context>
+<context>
+    <name>Player</name>
+    <message>
+        <source>&amp;Player</source>
+        <translation>&amp;Προγραμματιστής</translation>
+    </message>
+    <message>
+        <source>&amp;Stop</source>
+        <translation>&amp;Σταματήστε</translation>
+    </message>
+    <message>
+        <source>&amp;Next</source>
+        <translation>&amp;Επόμενο</translation>
+    </message>
+    <message>
+        <source>&amp;Previous</source>
+        <translation>&amp;Προηγούμενο</translation>
+    </message>
+    <message>
+        <source>Seek &amp;forward</source>
+        <translation>Προχωρήστε &amp;μπροστά</translation>
+    </message>
+    <message>
+        <source>Seek &amp;backward</source>
+        <translation>Προχωρήστε &amp;πίσω</translation>
+    </message>
+    <message>
+        <source>Long &amp;seek forward</source>
+        <translation>Μεγάλη αναζήτηση &amp;μπροστά</translation>
+    </message>
+    <message>
+        <source>Long s&amp;eek backward</source>
+        <translation>Μεγάλη αναζήτηση &amp;πίσω</translation>
+    </message>
+    <message>
+        <source>Fa&amp;ster</source>
+        <translation>Πιο &amp;γρήγορα</translation>
+    </message>
+    <message>
+        <source>Slowe&amp;r</source>
+        <translation>Πιο αργά</translation>
+    </message>
+    <message>
+        <source>Zoom i&amp;n</source>
+        <translation>Μεγέθυνση</translation>
+    </message>
+    <message>
+        <source>Zoom ou&amp;t</source>
+        <translation>Σμίκρυνση</translation>
+    </message>
+    <message>
+        <source>&amp;Mute</source>
+        <translation>&amp;Αναστολή ήχου</translation>
+    </message>
+    <message>
+        <source>Toggle &amp;aspect ratio</source>
+        <translation>Εναλλαγή &amp;αναλογίας εικόνας</translation>
+    </message>
+    <message>
+        <source>Reset image &amp;settings</source>
+        <translation>Επαναφορά ρυθμίσεων &amp;εικόνας</translation>
+    </message>
+    <message>
+        <source>&amp;Set speed</source>
+        <translation>&amp;Ορισμός ταχύτητας</translation>
+    </message>
+    <message>
+        <source>Un&amp;mute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Skip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Stop after playing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Previous &amp;frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next &amp;frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A&amp;-B Repeat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Continue playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume &amp;up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Volume &amp;down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continue playing from the last position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Detach from receiving &amp;commands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Suspend after playbac&amp;k is finished</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Integer scaling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Precise zoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Set zoom</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3303,8 +3389,56 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Πρώτη διαθέσιμη συσκευή</translation>
     </message>
     <message>
-        <source>Device</source>
-        <translation>Συσκευή</translation>
+        <source>Choose youtube-dl script or executable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force audio content to use the specified number of channels.
+Partially checked only if the content has less channels than the specified value
+	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Low quality image scaling (nearest neighbor)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Try to display HDR10 videos in HDR mode (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No supported devices found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Partially checked:
+  - MAILBOX (tear-free) is the preferred present mode
+  - FIFO (V-Sync) should not be used in windowed mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow for exclusive fullscreen. This can improve performance.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Very slow if used with sharpness</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot change the directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
