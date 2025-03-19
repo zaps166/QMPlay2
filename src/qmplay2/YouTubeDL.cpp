@@ -215,7 +215,7 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
         startProcess(processArgs);
     }
 
-    if (!m_process.waitForFinished() || m_aborted)
+    if (!m_process.waitForFinished(-1) || m_aborted)
         return {};
 
     QStringList result;
