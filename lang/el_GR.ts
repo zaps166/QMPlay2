@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="el_GR" sourcelanguage="en">
+<TS version="2.1" language="el_GR" sourcelanguage="en_US">
 <context>
     <name>ALSAWriter</name>
     <message>
@@ -831,7 +831,7 @@
     </message>
     <message>
         <source>Do you want to associate files with QMPlay2</source>
-        <translation>Θέλετε να συσχετίσετε αρχεία με το QMPlay2;</translation>
+        <translation>Θέλετε να συσχετίσετε αρχεία με το QMPlay2</translation>
     </message>
 </context>
 <context>
@@ -2203,127 +2203,127 @@
     </message>
     <message>
         <source>Recording error</source>
-        <translation type="unfinished"></translation>
+        <translation>Λάθος κατά την εγγραφή</translation>
     </message>
     <message>
         <source>Recording started: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Εναρξη εγγραφής: %1</translation>
     </message>
     <message>
         <source>Recording stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>Η εγγραφή σταμάτησε</translation>
     </message>
     <message>
         <source>Loaded subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>Εισαγωγή υποτίτλων</translation>
     </message>
     <message>
         <source>Keep audio pitch during playback speed change</source>
-        <translation type="unfinished"></translation>
+        <translation>Διατήρηση του τόνου κατά την αλλαγή της ταχύτητας αναπαραγωγής</translation>
     </message>
     <message>
         <source>Don&apos;t keep audio pitch during playback speed change</source>
-        <translation type="unfinished"></translation>
+        <translation>Να μην διατηρείται ο τόνος κατά την αλλαγή της ταχύτητας αναπαραγωγής</translation>
     </message>
     <message>
         <source>Integer scaling: enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Κλιμάκωση ακεραίων: ενεργοποιημένη</translation>
     </message>
     <message>
         <source>Integer scaling: disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Κλιμάκωση ακεραίων: απενεργοποιημένη</translation>
     </message>
     <message>
         <source>No image rotation</source>
-        <translation type="unfinished"></translation>
+        <translation>Χωρίς περιστροφή εικόνας</translation>
     </message>
     <message>
         <source>Horizontal flip</source>
-        <translation type="unfinished"></translation>
+        <translation>Οριζόντια αναστροφή</translation>
     </message>
     <message>
         <source>Vertical flip</source>
-        <translation type="unfinished"></translation>
+        <translation>Κατακόρυφη αναστροφή</translation>
     </message>
     <message>
         <source>Rotation 270°</source>
-        <translation type="unfinished"></translation>
+        <translation>Περιστροφή 270°</translation>
     </message>
     <message>
         <source>Rotation 180°</source>
-        <translation type="unfinished"></translation>
+        <translation>Περιστροφή 180°</translation>
     </message>
     <message>
         <source>Rotation 90°</source>
-        <translation type="unfinished"></translation>
+        <translation>Περιστροφή 90°</translation>
     </message>
     <message>
         <source>disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Απενεργοποιημένο</translation>
     </message>
     <message>
         <source>from</source>
-        <translation type="unfinished"></translation>
+        <translation>από</translation>
     </message>
     <message>
         <source>to</source>
-        <translation type="unfinished"></translation>
+        <translation>μεχρι</translation>
     </message>
     <message>
         <source>A-B Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>Επανάληψη A-B</translation>
     </message>
     <message>
         <source>Zoom: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ζουμ: %1</translation>
     </message>
     <message>
         <source>Set playback speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρύθμιση ταχύτητας αναπαραγωγής</translation>
     </message>
     <message>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Ζουμ</translation>
     </message>
     <message>
         <source>Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρυθμιση Ζουμ</translation>
     </message>
     <message>
         <source>Custom aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσαρμοσμένες αναλογίες εικόνας</translation>
     </message>
     <message>
         <source>Set aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρύθμιση αναλογίας εικόνας</translation>
     </message>
     <message>
         <source>Set video delay (sec.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ρύθμιση καθυστέρησης βίντεο (δευτ.)</translation>
     </message>
     <message>
         <source>Audio off</source>
-        <translation type="unfinished"></translation>
+        <translation>Ήχος απενεργοποιημένος</translation>
     </message>
     <message>
         <source>Video off</source>
-        <translation type="unfinished"></translation>
+        <translation>Εικόνα απενεργοποιημένη</translation>
     </message>
     <message>
         <source>Subtitles off</source>
-        <translation type="unfinished"></translation>
+        <translation>Υποτιτλοι απενεργοποιημένοι</translation>
     </message>
     <message>
         <source>Spherical view is not supported by this video output module</source>
-        <translation type="unfinished"></translation>
+        <translation>Η σφαιρική προβολή δεν υποστηρίζεται από αυτήν την μονάδα εξόδου βίντεο</translation>
     </message>
     <message>
         <source>Rotation is not supported by this video output module</source>
-        <translation type="unfinished"></translation>
+        <translation>Η περιστροφή δεν υποστηρίζεται από αυτήν την μονάδα εξόδου βίντεο</translation>
     </message>
     <message>
         <source>Playback has been incorrectly terminated!</source>
-        <translation type="unfinished"></translation>
+        <translation>Η αναπαραγωγή έχει τερματιστεί λανθασμένα!</translation>
     </message>
 </context>
 <context>
@@ -2382,11 +2382,11 @@
     </message>
     <message>
         <source>Add &amp;subtities from file</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσθήκη &amp;υποτίτλων από αρχείο</translation>
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Καθυστέρηση υποτίτλων</translation>
     </message>
 </context>
 <context>
@@ -2493,7 +2493,7 @@
     </message>
     <message>
         <source>sec</source>
-        <translation>δευτ.</translation>
+        <translation>δευτ</translation>
     </message>
     <message>
         <source>Amplify</source>
@@ -2624,15 +2624,15 @@
     </message>
     <message>
         <source>Slowe&amp;r</source>
-        <translation>Πιο αργά</translation>
+        <translation>Πιο &amp;αργά</translation>
     </message>
     <message>
         <source>Zoom i&amp;n</source>
-        <translation>Μεγέθυνση</translation>
+        <translation>&amp;Μεγέθυνση</translation>
     </message>
     <message>
         <source>Zoom ou&amp;t</source>
-        <translation>Σμίκρυνση</translation>
+        <translation>&amp;Σμίκρυνση</translation>
     </message>
     <message>
         <source>&amp;Mute</source>
@@ -2652,67 +2652,67 @@
     </message>
     <message>
         <source>Un&amp;mute</source>
-        <translation type="unfinished"></translation>
+        <translation>Ανα&amp;ενεργοποίηση ήχου</translation>
     </message>
     <message>
         <source>&amp;Skip</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Παράλειψη</translation>
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Τερματισμός μετά την αναπαραγωγή</translation>
     </message>
     <message>
         <source>&amp;Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Εγγραφή</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Προηγούμενο &amp;καρέ</translation>
     </message>
     <message>
         <source>Next &amp;frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Επόμενο &amp;καρέ</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>Επανάληψη A-&amp;B</translation>
     </message>
     <message>
         <source>&amp;Continue playback</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Συνέχιση αναπαραγωγής</translation>
     </message>
     <message>
         <source>Volume &amp;up</source>
-        <translation type="unfinished"></translation>
+        <translation>Αύξηση ήχου &amp;άνω</translation>
     </message>
     <message>
         <source>Volume &amp;down</source>
-        <translation type="unfinished"></translation>
+        <translation>Μείωση ήχου &amp;κάτω</translation>
     </message>
     <message>
         <source>Continue playing from the last position</source>
-        <translation type="unfinished"></translation>
+        <translation>Συνέχιση αναπαραγωγής από την τελευταία θέση</translation>
     </message>
     <message>
         <source>Detach from receiving &amp;commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Αποκόλληση από τη λήψη &amp;εντολών</translation>
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναστολή μετά την ολοκλήρωση της αναπαραγωγής&amp;</translation>
     </message>
     <message>
         <source>&amp;Integer scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Κλιμάκωση ακεραίων</translation>
     </message>
     <message>
         <source>&amp;Precise zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ακριβές ζουμ</translation>
     </message>
     <message>
         <source>&amp;Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ρύθμιση ζουμ</translation>
     </message>
 </context>
 <context>
@@ -3087,7 +3087,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>R&amp;andom</source>
-        <translation>Τυχαία σειρά</translation>
+        <translation>&amp;Τυχαίο</translation>
     </message>
     <message>
         <source>Random in &amp;group</source>
@@ -3099,7 +3099,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Random in group and repea&amp;t</source>
-        <translation>Τυχαία σειρά στην ομάδα και επανάληψη</translation>
+        <translation>Τυχαίο σε ομάδα και επανάληψη&amp;</translation>
     </message>
     <message>
         <source>&amp;Stop playback after every file</source>
@@ -3280,7 +3280,7 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
-        <translation>Θέλεις να αφαιρέσεις το λογισμικό &quot;youtube-dl&quot;</translation>
+        <translation>Θέλεις να αφαιρέσεις το λογισμικό &quot;youtube-dl&quot;?</translation>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
@@ -3390,55 +3390,59 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Choose youtube-dl script or executable</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιλέξτε το σενάριο ή εκτελέσιμο youtube-dl</translation>
     </message>
     <message>
         <source>Force audio content to use the specified number of channels.
 Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναγκάστε το ηχητικό περιεχόμενο να χρησιμοποιεί τον καθορισμένο αριθμό καναλιών.
+Εν μέρει επιλεγμένο μόνο εάν το περιεχόμενο έχει λιγότερα κανάλια από την καθορισμένη τιμή
+	(π.χ. αναβάθμιση μονοφωνικού σε στερεοφωνικό, αλλά όχι υποβάθμιση τετραφωνικού σε στερεοφωνικό)</translation>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
-        <translation type="unfinished"></translation>
+        <translation>Αναγκάστε την αποδιάταξη Vulkan Yadif για όλους τους αποκωδικοποιητές υλικού</translation>
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation type="unfinished"></translation>
+        <translation>Κλιμάκωση εικόνας χαμηλής ποιότητας (πλησιέστερος γείτονας)</translation>
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Προσπάθεια εμφάνισης βίντεο HDR10 σε λειτουργία HDR (πειραματικό)</translation>
     </message>
     <message>
         <source>No supported devices found</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν βρέθηκαν υποστηριζόμενες συσκευές</translation>
     </message>
     <message>
         <source>Partially checked:
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Μερικώς επιλεγμένο:
+  - MAILBOX (tear-free) είναι η προτιμώμενη λειτουργία παρουσίασης
+  - FIFO (V-Sync) δεν πρέπει να χρησιμοποιείται σε λειτουργία παραθύρου</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Επιτρέψτε την αποκλειστική πλήρη οθόνη. Αυτό μπορεί να βελτιώσει την απόδοση.</translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Χρήσιμο για κλιμάκωση retro. Μπορεί επίσης να χρησιμοποιηθεί για λογισμική υλοποίηση Vulkan για να μειώσει το φόρτο στην CPU.</translation>
     </message>
     <message>
         <source>Very slow if used with sharpness</source>
-        <translation type="unfinished"></translation>
+        <translation>Πολύ αργό αν χρησιμοποιηθεί με ευκρίνεια.</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Συσκευή:</translation>
     </message>
     <message>
         <source>Cannot change the directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Δεν είναι δυνατή η αλλαγή του καταλόγου</translation>
     </message>
 </context>
 <context>
@@ -3471,7 +3475,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&amp;Sort</source>
-        <translation>Ταξινόμηση</translation>
+        <translation>&amp;αξινόμηση</translation>
     </message>
     <message>
         <source>&amp;A-Z</source>
@@ -3785,31 +3789,31 @@ Partially checked only if the content has less channels than the specified value
     <name>VideoFilters</name>
     <message>
         <source>Video &amp;filters</source>
-        <translation>Φίλτρα βίντεο</translation>
+        <translation>&amp;Φίλτρα βίντεο</translation>
     </message>
     <message>
         <source>&amp;Horizontal flip</source>
-        <translation>Οριζόντια αναστροφή</translation>
+        <translation>&amp;Οριζόντια αναστροφή</translation>
     </message>
     <message>
         <source>&amp;Vertical flip</source>
-        <translation>Κάθετη αναστροφή</translation>
+        <translation>&amp;Κάθετη αναστροφή</translation>
     </message>
     <message>
         <source>&amp;More filters</source>
-        <translation>Περισσότερα φίλτρα</translation>
+        <translation>&amp;Περισσότερα φίλτρα</translation>
     </message>
     <message>
         <source>&amp;Rotate 90°</source>
-        <translation>Περιστροφή 90°</translation>
+        <translation>&amp;Περιστροφή 90°</translation>
     </message>
     <message>
         <source>&amp;Spherical view</source>
-        <translation>Σφαιρική προβολή</translation>
+        <translation>&amp;Σφαιρική προβολή</translation>
     </message>
     <message>
         <source>Video &amp;adjustment</source>
-        <translation>Ρυθμίσεις βίντεο</translation>
+        <translation>&amp;Ρυθμίσεις βίντεο</translation>
     </message>
 </context>
 <context>
