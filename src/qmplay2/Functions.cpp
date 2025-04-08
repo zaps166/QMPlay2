@@ -1167,26 +1167,8 @@ std::pair<QString, QString> Functions::determineExtFmt(const QList<StreamInfo *>
                 ext = "opus";
                 fmt  = "ogg";
                 break;
-            case AV_CODEC_ID_H264:
-            case AV_CODEC_ID_HEVC:
-                ext = "ts";
-                fmt = "mpegts";
-                break;
             default:
                 break;
-        }
-    }
-    else if (streamsInfo.size() == 2)
-    {
-        const QSet<AVCodecID> codecIDs {
-            streamsInfo.at(0)->params->codec_id,
-            streamsInfo.at(1)->params->codec_id,
-        };
-        if ((codecIDs.contains(AV_CODEC_ID_AAC) || codecIDs.contains(AV_CODEC_ID_MP3) || codecIDs.contains(AV_CODEC_ID_AC3))
-                && (codecIDs.contains(AV_CODEC_ID_H264) || codecIDs.contains(AV_CODEC_ID_HEVC)))
-        {
-            ext = "ts";
-            fmt = "mpegts";
         }
     }
 
