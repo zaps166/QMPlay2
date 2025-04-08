@@ -41,8 +41,8 @@ using namespace std;
 
 struct StreamData
 {
-    double firstDts = qQNaN();
     int64_t lastDts = AV_NOPTS_VALUE;
+    bool firstFrame = true;
 };
 
 struct StreamMuxer::Priv
@@ -51,6 +51,7 @@ struct StreamMuxer::Priv
     AVPacket *pkt = nullptr;
     bool streamRecording = false;
     unordered_map<int, StreamData> streamData;
+    double firstDts = 0.0;
 };
 
 StreamMuxer::StreamMuxer(const QString &fileName, const QList<StreamInfo *> &streamsInfo, const QString &format, bool streamRecording)
@@ -157,33 +158,39 @@ bool StreamMuxer::isOk() const
     return static_cast<bool>(p.pkt);
 }
 
+bool StreamMuxer::setFirstDts(const Packet &packet, const int idx)
+{
+    if (!p.streamRecording)
+        return false;
+
+    if (packet.hasKeyFrame() && packet.hasDts())
+        p.firstDts = max(p.firstDts, packet.dts());
+
+    return true;
+}
+
 bool StreamMuxer::write(const Packet &packet, const int idx)
 {
     const double timeBase = av_q2d(p.ctx->streams[idx]->time_base);
 
     auto &streamData = p.streamData[idx];
 
-    double tsSubtract = 0.0;
-    if (p.streamRecording)
+    if (streamData.firstFrame)
     {
-        if (qIsNaN(streamData.firstDts))
+        if (!packet.hasKeyFrame())
         {
-            if (packet.hasKeyFrame() && packet.hasDts())
-                streamData.firstDts = packet.dts();
+            qCDebug(mux) << "Skipping first packet, because it is not key frame, stream:" << idx;
+            return true; // Skip packet if we can't start with key frame
         }
-        tsSubtract = streamData.firstDts;
-        if (qIsNaN(tsSubtract))
-        {
-            qCDebug(mux) << "Skipping first packet, because it is not key frame or doesn't have valid dts" << idx;
-            return true; // Skip packet if we can't start with key frame with valid DTS
-        }
+
+        streamData.firstFrame = false;
     }
 
     p.pkt->duration = round(packet.duration() / timeBase);
     if (packet.hasDts())
-        p.pkt->dts = round((packet.dts() - tsSubtract) / timeBase);
+        p.pkt->dts = round((packet.dts() - p.firstDts) / timeBase);
     if (packet.hasPts())
-        p.pkt->pts = round((packet.pts() - tsSubtract) / timeBase);
+        p.pkt->pts = round((packet.pts() - p.firstDts) / timeBase);
     p.pkt->flags = packet.hasKeyFrame() ? AV_PKT_FLAG_KEY : 0;
     p.pkt->buf = packet.getBufferRef();
     p.pkt->data = packet.data();

@@ -27,7 +27,7 @@
 
 class QMPLAY2SHAREDLIB_EXPORT PacketBuffer : private std::deque<Packet>
 {
-    using IterateCallback = std::function<void(const Packet &)>;
+    using IterateCallback = std::function<bool(const Packet &)>;
 
     static double s_backwardTime;
 

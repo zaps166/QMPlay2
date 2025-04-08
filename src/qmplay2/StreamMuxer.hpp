@@ -39,6 +39,7 @@ public:
 
     bool isOk() const;
 
+    bool setFirstDts(const Packet &packet, const int idx);
     bool write(const Packet &packet, const int idx);
 
 private:

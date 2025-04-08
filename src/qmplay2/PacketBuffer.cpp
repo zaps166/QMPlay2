@@ -55,7 +55,10 @@ void PacketBuffer::iterate(const IterateCallback &cb)
         if (!hasKeyframe && packet.hasKeyFrame())
             hasKeyframe = true;
         if (hasKeyframe)
-            cb(packet);
+        {
+            if (!cb(packet))
+                break;
+        }
     }
 
     unlock();

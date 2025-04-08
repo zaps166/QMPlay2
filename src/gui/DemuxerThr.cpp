@@ -791,11 +791,25 @@ void DemuxerThr::startRecordingInternal(QHash<int, int> &recStreamsMap)
         emit recording(true, false, fileName);
         if (unknownLength)
         {
+            auto setFirstDts = [&](PacketBuffer &packets, int packetsStreamIdx) {
+                if (int recStreamIdx = recStreamsMap.value(packetsStreamIdx, -1); recStreamIdx > -1)
+                {
+                    packets.iterate([&](const Packet &packet) {
+                        m_recMuxer->setFirstDts(packet, recStreamIdx);
+                        return false;
+                    });
+                }
+            };
+            setFirstDts(playC.vPackets, playC.videoStream);
+            setFirstDts(playC.aPackets, playC.audioStream);
+            setFirstDts(playC.sPackets, playC.subtitlesStream);
+
             auto writePackets = [&](PacketBuffer &packets, int packetsStreamIdx) {
                 if (int recStreamIdx = recStreamsMap.value(packetsStreamIdx, -1); recStreamIdx > -1)
                 {
                     packets.iterate([&](const Packet &packet) {
                         m_recMuxer->write(packet, recStreamIdx);
+                        return true;
                     });
                 }
             };
