@@ -471,7 +471,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
 
     fullScreenDockWidgetState = settings.getByteArray("MainWidget/FullScreenDockWidgetState");
     m_compactViewDockWidgetState = settings.getByteArray("MainWidget/CompactViewDockWidgetState");
-    if (settings.getBool("MainWidget/AlwaysOnTop"))
+    if (menuBar->window->alwaysOnTop && settings.getBool("MainWidget/AlwaysOnTop"))
         menuBar->window->alwaysOnTop->trigger();
 
     if (testAttribute(Qt::WA_TranslucentBackground) || testAttribute(Qt::WA_NoSystemBackground))
@@ -918,8 +918,9 @@ void MainWidget::createMenuBar()
     connect(menuBar->window->toggleVisibility, SIGNAL(triggered()), this, SLOT(toggleVisibility()));
     connect(menuBar->window->toggleFullScreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
     connect(menuBar->window->toggleCompactView, SIGNAL(triggered()), this, SLOT(toggleCompactView()));
-    connect(menuBar->window->alwaysOnTop, &QAction::triggered, this, &MainWidget::toggleAlwaysOnTop);
 #ifndef Q_OS_ANDROID
+    if (menuBar->window->alwaysOnTop)
+        connect(menuBar->window->alwaysOnTop, &QAction::triggered, this, &MainWidget::toggleAlwaysOnTop);
     menuBar->window->hideOnClose->setChecked(QMPSettings.getBool("MainWidget/HideOnClose"));
     connect(menuBar->window->hideOnClose, &QAction::triggered,
             this, [](bool checked) {
@@ -1365,7 +1366,8 @@ void MainWidget::toggleFullScreen()
 
         setFocus();
     }
-    menuBar->window->alwaysOnTop->setEnabled(!fullScreen);
+    if (menuBar->window->alwaysOnTop)
+        menuBar->window->alwaysOnTop->setEnabled(!fullScreen);
     emit QMPlay2Core.fullScreenChanged(fullScreen);
 }
 void MainWidget::showMessage(const QString &msg, const QString &title, int messageIcon, int ms)

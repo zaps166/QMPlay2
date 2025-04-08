@@ -118,8 +118,9 @@ MenuBar::Window::Window(MenuBar *parent) :
     newAction(Window::tr("&Full screen"), this, toggleFullScreen, false, QMPlay2Core.getIconFromTheme("view-fullscreen"), false);
     newAction(Window::tr("&Compact view"), this, toggleCompactView, false, QIcon(), true);
     addSeparator();
-    newAction(Window::tr("&Always on top"), this, alwaysOnTop, false, QIcon(), true);
 #ifndef Q_OS_ANDROID
+    if (!QGuiApplication::platformName().contains(QStringLiteral("wayland")))
+        newAction(Window::tr("&Always on top"), this, alwaysOnTop, false, QIcon(), true);
     newAction(Window::tr("&Hide on close"), this, hideOnClose, false, QIcon(), true);
 #endif
     addSeparator();
