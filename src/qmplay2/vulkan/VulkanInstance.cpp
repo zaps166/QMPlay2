@@ -265,12 +265,12 @@ bool Instance::checkFiltersSupported(const shared_ptr<PhysicalDevice> &physicalD
 
 shared_ptr<Instance> Instance::create(bool doObtainPhysicalDevice)
 {
-    auto instance = make_shared<Instance>(Priv());
+    auto instance = make_shared<Instance>();
     instance->init(doObtainPhysicalDevice);
     return instance;
 }
 
-Instance::Instance(Priv)
+Instance::Instance()
     : m_qVulkanInstance(new QVulkanInstance)
 {}
 Instance::~Instance()

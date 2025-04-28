@@ -36,8 +36,6 @@ class ImagePool;
 
 class QMPLAY2SHAREDLIB_EXPORT Instance : public GPUInstance, public AbstractInstance
 {
-    struct Priv {};
-
 public: // Helpers
     static vector<uint32_t> readShader(const QString &fileName);
 
@@ -55,7 +53,7 @@ public:
     static shared_ptr<Instance> create(bool doObtainPhysicalDevice);
 
 public:
-    Instance(Priv);
+    Instance();
     ~Instance();
 
     void prepareDestroy() override;
