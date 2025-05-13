@@ -131,11 +131,8 @@ void VisWidget::paintEvent(QPaintEvent *)
             tlw = window();
         return tlw;
     };
-    if (m_wallpaper.isNull() || getTlw() == parentWidget())
-    {
-        p.fillRect(rect(), Qt::black);
-    }
-    else
+    p.fillRect(rect(), Qt::black);
+    if (!m_wallpaper.isNull() && getTlw() != parentWidget())
     {
         p.drawPixmap(rect(), m_wallpaper, QRect(mapTo(getTlw(), pos()), size()));
     }
