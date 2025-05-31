@@ -81,7 +81,7 @@ public:
     VideoAdjustmentW *videoAdjustment;
     ShortcutHandler *shortcutHandler;
 
-    bool restartApp, removeSettings, noAutoPlay;
+    bool restartApp, removeSettings, noAutoPlay, startInvisible;
     QString newProfileName, cmdLineProfile;
 private:
     QMPlay2GUIClass();

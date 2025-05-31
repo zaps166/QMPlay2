@@ -271,6 +271,7 @@ static QCommandLineParser *createCmdParser(bool descriptions)
         QT_TRANSLATE_NOOP("Help", "Terminate the application."),
         QT_TRANSLATE_NOOP("Help", "Display this help."),
         QT_TRANSLATE_NOOP("Help", "Remove specified <url> from playlist."),
+        QT_TRANSLATE_NOOP("Help", "Start in tray."),
     };
 
     const auto maybeGetTranslatedText = [&](const char *text) {
@@ -299,6 +300,9 @@ static QCommandLineParser *createCmdParser(bool descriptions)
         {"next", maybeGetTranslatedText(translations[13])},
         {"prev", maybeGetTranslatedText(translations[14])},
         {"quit", maybeGetTranslatedText(translations[15])},
+#if !(defined Q_OS_MACOS || defined Q_OS_ANDROID)
+        {"tray", maybeGetTranslatedText(translations[18])},
+#endif
         {{"h", "help"}, maybeGetTranslatedText(translations[16])},
     });
 
@@ -719,6 +723,8 @@ int main(int argc, char *argv[])
         return true;
     };
 
+    bool startInvisible = false;
+
     if (!help)
     {
         bool useSocket = true;
@@ -729,8 +735,13 @@ int main(int argc, char *argv[])
             {
                 argument.first = "open";
                 useSocket = false;
-                break;
             }
+#if !(defined Q_OS_MACOS || defined Q_OS_ANDROID)
+            else if (argument.first == "tray")
+            {
+                startInvisible = true;
+            }
+#endif
         }
 
         if (!createPipe() && useSocket)
@@ -941,6 +952,7 @@ int main(int argc, char *argv[])
         lastVer.clear();
 
         qmplay2Gui.restartApp = qmplay2Gui.removeSettings = qmplay2Gui.noAutoPlay = false;
+        qmplay2Gui.startInvisible = startInvisible;
         qmplay2Gui.newProfileName.clear();
         new MainWidget(arguments);
         do

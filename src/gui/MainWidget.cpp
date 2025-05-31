@@ -484,7 +484,7 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
 #if defined Q_OS_MACOS || defined Q_OS_ANDROID
     show();
 #else
-    setVisible(settings.getBool("MainWidget/isVisible", true) ? true : !isTrayVisible());
+    setVisible(!QMPlay2GUI.startInvisible && settings.getBool("MainWidget/isVisible", true) ? true : !isTrayVisible());
 #endif
 
     for (QObject *obj : children())
