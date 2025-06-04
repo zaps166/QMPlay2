@@ -266,11 +266,19 @@ void Frame::setTSInt(qint64 ts)
 
 bool Frame::isInterlaced() const
 {
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 29, 100)
+    return (m_frame->flags & AV_FRAME_FLAG_INTERLACED);
+#else
     return static_cast<bool>(m_frame->interlaced_frame);
+#endif
 }
 bool Frame::isTopFieldFirst() const
 {
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 29, 100)
+    return (m_frame->flags & AV_FRAME_FLAG_TOP_FIELD_FIRST);
+#else
     return static_cast<bool>(m_frame->top_field_first);
+#endif
 }
 bool Frame::isSecondField() const
 {
@@ -279,13 +287,25 @@ bool Frame::isSecondField() const
 
 void Frame::setInterlaced(bool topFieldFirst)
 {
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 29, 100)
+    m_frame->flags |= AV_FRAME_FLAG_INTERLACED;
+    if (topFieldFirst)
+        m_frame->flags |= AV_FRAME_FLAG_TOP_FIELD_FIRST;
+    else
+        m_frame->flags &= ~AV_FRAME_FLAG_TOP_FIELD_FIRST;
+#else
     m_frame->interlaced_frame = 1;
     m_frame->top_field_first = static_cast<int>(topFieldFirst);
+#endif
 }
 void Frame::setNoInterlaced()
 {
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 29, 100)
+    m_frame->flags &= ~(AV_FRAME_FLAG_INTERLACED | AV_FRAME_FLAG_TOP_FIELD_FIRST);
+#else
     m_frame->interlaced_frame = 0;
     m_frame->top_field_first = 0;
+#endif
 }
 void Frame::setIsSecondField(bool secondField)
 {
@@ -592,7 +612,11 @@ Frame Frame::downloadHwData(SwsContext **swsCtx, const AVPixelFormats &supported
             if (downloaded.isEmpty())
                 downloaded = Frame(dstFrame);
             av_frame_copy_props(downloaded.m_frame, m_frame);
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 29, 100)
+            downloaded.m_frame->flags = m_frame->flags;
+#else
             downloaded.m_frame->key_frame = m_frame->key_frame;
+#endif
             downloaded.setTimeBase(m_timeBase);
 
             if (dstFrame2)

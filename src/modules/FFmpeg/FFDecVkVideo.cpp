@@ -319,6 +319,23 @@ bool FFDecVkVideo::initHw()
             const uint32_t numQueues = m_device->numQueues(queueFamilyIndex);
             const auto &props = m_physicalDevice->getQueueProps(queueFamilyIndex);
 
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(59, 39, 100)
+            auto setQueue = [&](int qfIdx, vk::QueueFlagBits flag) {
+                auto &qf = vkDevCtx->qf[qfIdx];
+                if ((props.flags & flag) && (qf.num == 0 || (m_physicalDevice->getQueueProps(qf.idx).flags & vk::QueueFlagBits::eGraphics)))
+                {
+                    qf.idx = queueFamilyIndex;
+                    qf.num = numQueues;
+                    qf.flags = static_cast<VkQueueFlagBits>(flag);
+                    vkDevCtx->nb_qf = max(qfIdx + 1, vkDevCtx->nb_qf);
+                }
+            };
+
+            setQueue(0, vk::QueueFlagBits::eGraphics);
+            setQueue(1, vk::QueueFlagBits::eTransfer);
+            setQueue(2, vk::QueueFlagBits::eCompute);
+            setQueue(3, vk::QueueFlagBits::eVideoDecodeKHR);
+#else
             auto setQueue = [&](int &idx, int &nb, vk::QueueFlagBits flag) {
                 if ((props.flags & flag) && (nb == 0 || (m_physicalDevice->getQueueProps(idx).flags & vk::QueueFlagBits::eGraphics)))
                 {
@@ -331,6 +348,7 @@ bool FFDecVkVideo::initHw()
             setQueue(vkDevCtx->queue_family_tx_index, vkDevCtx->nb_tx_queues, vk::QueueFlagBits::eTransfer);
             setQueue(vkDevCtx->queue_family_comp_index, vkDevCtx->nb_comp_queues, vk::QueueFlagBits::eCompute);
             setQueue(vkDevCtx->queue_family_decode_index, vkDevCtx->nb_decode_queues, vk::QueueFlagBits::eVideoDecodeKHR);
+#endif
         }
 
         vkDevCtx->lock_queue = [](AVHWDeviceContext *ctx, uint32_t queueFamilyIndex, uint32_t index) {

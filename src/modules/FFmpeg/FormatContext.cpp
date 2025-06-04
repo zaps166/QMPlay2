@@ -395,9 +395,16 @@ bool FormatContext::getReplayGain(bool album, float &gain_db, float &peak) const
     const int streamIdx = av_find_best_stream(formatCtx, AVMEDIA_TYPE_AUDIO, -1, -1, nullptr, 0);
     if (streamIdx > -1)
     {
+        const auto stream = streams[streamIdx];
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 29, 100)
+        if (const auto sideData = av_packet_side_data_get(stream->codecpar->coded_side_data, stream->codecpar->nb_coded_side_data, AV_PKT_DATA_REPLAYGAIN))
+        {
+            auto replayGain = *(AVReplayGain *)sideData->data;
+#else
         if (void *sideData = av_stream_get_side_data(streams[streamIdx], AV_PKT_DATA_REPLAYGAIN, nullptr))
         {
             AVReplayGain replayGain = *(AVReplayGain *)sideData;
+#endif
             qint32  tmpGain;
             quint32 tmpPeak;
             if (replayGain.album_gain == INT32_MIN && replayGain.track_gain != INT32_MIN)
@@ -1122,9 +1129,15 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
             if (!stillImage)
                 streamInfo->fps = stream->r_frame_rate;
 
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 29, 100)
+            if (const auto sideData = av_packet_side_data_get(stream->codecpar->coded_side_data, stream->codecpar->nb_coded_side_data, AV_PKT_DATA_DISPLAYMATRIX))
+            {
+                const auto rotation = av_display_rotation_get(reinterpret_cast<const int32_t *>(sideData->data));
+#else
             if (void *sideData = av_stream_get_side_data(stream, AV_PKT_DATA_DISPLAYMATRIX, nullptr))
             {
                 const auto rotation = av_display_rotation_get(reinterpret_cast<const int32_t *>(sideData));
+#endif
                 if (!qIsNaN(rotation))
                 {
                     switch(qRound(rotation))
@@ -1143,10 +1156,17 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
                 }
             }
 
+#if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 29, 100)
+            if (const auto sideData = av_packet_side_data_get(stream->codecpar->coded_side_data, stream->codecpar->nb_coded_side_data, AV_PKT_DATA_SPHERICAL))
+            {
+                streamInfo->spherical = (((AVSphericalMapping *)sideData->data)->projection == AV_SPHERICAL_EQUIRECTANGULAR);
+            }
+#else
             if (void *sideData = av_stream_get_side_data(stream, AV_PKT_DATA_SPHERICAL, nullptr))
             {
                 streamInfo->spherical = (((AVSphericalMapping *)sideData)->projection == AV_SPHERICAL_EQUIRECTANGULAR);
             }
+#endif
 
             break;
         }
