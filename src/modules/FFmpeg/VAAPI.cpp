@@ -35,6 +35,7 @@ extern "C"
 }
 
 #include <QGuiApplication>
+#include <QVarLengthArray>
 #include <QVersionNumber>
 #include <QFileInfo>
 #include <QDebug>
@@ -309,8 +310,8 @@ void VAAPI::clearVPP(bool resetAllowFilters)
 void VAAPI::applyVideoAdjustment(int brightness, int contrast, int saturation, int hue)
 {
     int num_attribs = vaMaxNumDisplayAttributes(VADisp);
-    VADisplayAttribute attribs[num_attribs];
-    if (!vaQueryDisplayAttributes(VADisp, attribs, &num_attribs))
+    QVarLengthArray<VADisplayAttribute, 24> attribs(num_attribs);
+    if (!vaQueryDisplayAttributes(VADisp, attribs.data(), &num_attribs))
     {
         for (int i = 0; i < num_attribs; ++i)
         {
@@ -332,7 +333,7 @@ void VAAPI::applyVideoAdjustment(int brightness, int contrast, int saturation, i
                     break;
             }
         }
-        vaSetDisplayAttributes(VADisp, attribs, num_attribs);
+        vaSetDisplayAttributes(VADisp, attribs.data(), num_attribs);
     }
 }
 

@@ -41,6 +41,7 @@
 #include <QStyleOption>
 #include <QInputDialog>
 #include <QGuiApplication>
+#include <QVarLengthArray>
 #include <QRegularExpression>
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 # include <QInputDevice>
@@ -58,14 +59,6 @@ extern "C"
 #include <vector>
 
 using namespace std;
-
-static inline void swapArray(quint8 *a, quint8 *b, int size)
-{
-    quint8 t[size];
-    memcpy(t, a, size);
-    memcpy(a, b, size);
-    memcpy(b, t, size);
-}
 
 static inline QWindow *getNativeWindow(const QWidget *w)
 {
@@ -752,6 +745,14 @@ void Functions::vFlip(quint8 *data, int linesize, int height)
 {
     int size = linesize*height, chroma_size = linesize*height/4, chroma_width = linesize/2;
     quint8 *data_s;
+
+    QVarLengthArray<quint8, 8192> t(max(linesize, chroma_width));
+    auto swapArray = [&t](quint8 *a, quint8 *b, int size) {
+        Q_ASSERT(size <= t.size());
+        memcpy(t.data(), a, size);
+        memcpy(a, b, size);
+        memcpy(b, t.data(), size);
+    };
 
     for (data_s = data + size; data_s > data;)
     {

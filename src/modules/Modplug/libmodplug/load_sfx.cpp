@@ -20,7 +20,7 @@ BOOL CSoundFile::ReadSFX(const BYTE *lpStream, DWORD dwMemLength)
 	}
 	data = 0;
 
-	DWORD sample_size[m_nSamples];
+	DWORD sample_size[31];
 	for (BYTE i = 0; i < m_nSamples; ++i)
 		sample_size[i] = data.getDWORD();
 

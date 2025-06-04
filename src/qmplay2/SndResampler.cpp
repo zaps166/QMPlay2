@@ -18,6 +18,7 @@
 
 #include <SndResampler.hpp>
 
+#include <QVarLengthArray>
 #include <QByteArray>
 #include <QDebug>
 
@@ -147,14 +148,14 @@ bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate,
     av_opt_set_int(m_sndConvertCtx, "linear_interp", true, 0);
     if (m_dstChannels > m_srcChannels)
     {
-        double matrix[m_dstChannels][m_srcChannels];
-        memset(matrix, 0, sizeof matrix);
+        QVarLengthArray<double, 8 * 8> matrix(m_dstChannels * m_srcChannels);
+        memset(matrix.data(), 0, matrix.size() * sizeof(double));
         for (int i = 0, c = 0; i < m_dstChannels; i++)
         {
-            matrix[i][c] = 1.0;
+            matrix[i * m_srcChannels + c] = 1.0;
             c = (c + 1) % m_srcChannels;
         }
-        swr_set_matrix(m_sndConvertCtx, (const double *)matrix, m_srcChannels);
+        swr_set_matrix(m_sndConvertCtx, matrix.constData(), m_srcChannels);
     }
 
     if (swr_init(m_sndConvertCtx))
@@ -175,8 +176,8 @@ void SndResampler::convert(const QByteArray &src, QByteArray &dst, bool flush)
 #else
     if (m_keepPitch)
     {
-        vector<QByteArray> tmpQ(m_dstChannels);
-        quint8 *tmp[m_dstChannels];
+        QVarLengthArray<QByteArray, 8> tmpQ(m_dstChannels);
+        QVarLengthArray<quint8 *, 8> tmp(m_dstChannels);
 
         if (!m_rubberBandStretcher)
         {
@@ -209,20 +210,20 @@ void SndResampler::convert(const QByteArray &src, QByteArray &dst, bool flush)
                 tmp[i] = reinterpret_cast<quint8 *>(tmpQ[i].data());
             }
 
-            const int converted = swr_convert(m_sndConvertCtx, tmp, possibleSwrSize, in, inSize);
+            const int converted = swr_convert(m_sndConvertCtx, tmp.constData(), possibleSwrSize, in, inSize);
             if (converted <= 0)
             {
                 dst.clear();
                 return;
             }
 
-            m_rubberBandStretcher->process(reinterpret_cast<const float *const *>(tmp), converted, false);
+            m_rubberBandStretcher->process(reinterpret_cast<const float *const *>(tmp.constData()), converted, false);
         }
         else
         {
             for (int i = 0; i < m_dstChannels; ++i)
                 tmp[i] = nullptr;
-            m_rubberBandStretcher->process(reinterpret_cast<const float *const *>(tmp), 0, true);
+            m_rubberBandStretcher->process(reinterpret_cast<const float *const *>(tmp.constData()), 0, true);
         }
 
         const int available = m_rubberBandStretcher->available();
@@ -240,7 +241,7 @@ void SndResampler::convert(const QByteArray &src, QByteArray &dst, bool flush)
             tmp[i] = reinterpret_cast<quint8 *>(tmpQ[i].data());
         }
 
-        m_rubberBandStretcher->retrieve(reinterpret_cast<float *const *>(tmp), available);
+        m_rubberBandStretcher->retrieve(reinterpret_cast<float *const *>(tmp.constData()), available);
 
         dst = QByteArray(available * sizeof(float) * m_dstChannels, Qt::Uninitialized);
         auto dstF = reinterpret_cast<float *>(dst.data());
