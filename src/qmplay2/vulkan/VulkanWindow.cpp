@@ -580,7 +580,7 @@ void Window::render()
         const uint32_t imageIdx = m.swapChain->acquireNextImage(&suboptimal);
         if (!suboptimal || m.swapChain->maybeSuboptimal())
         {
-            auto submitInfo = m.swapChain->getSubmitInfo();
+            auto submitInfo = m.swapChain->getSubmitInfo(imageIdx);
             HWInterop::SyncDataPtr syncData;
             if (m_vkHwInterop)
                 syncData = m_vkHwInterop->sync({m_frame}, &submitInfo);
