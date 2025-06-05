@@ -113,6 +113,8 @@ Playlist::Entries PLS::read()
             entry.GID = value.toInt();
         else if (key == "QMPlay_parent")
             entry.parent = value.toInt();
+        else if (key.startsWith("QMPlay_param_"))
+            entry.params[key.mid(13)] = value;
     }
 
     ensureLastEntryHasName(list, lastEntryIdx);
@@ -155,6 +157,8 @@ bool PLS::write(const Entries &list)
             writer->write(QString("QMPlay_GID" + idx + "=" + QString::number(entry.GID) + "\r\n").toUtf8());
         if (entry.parent)
             writer->write(QString("QMPlay_parent" + idx + "=" + QString::number(entry.parent) + "\r\n").toUtf8());
+        for (auto it = entry.params.cbegin(), itEnd = entry.params.cend(); it != itEnd; ++it)
+            writer->write(QStringLiteral("QMPlay_param_%1%2=%3\r\n").arg(QString(it.key())).arg(idx).arg(QString(it.value().trimmed())).toUtf8());
     }
     return true;
 }

@@ -1001,6 +1001,7 @@ QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWid
     tWI->setFlags(tWI->flags() &~ Qt::ItemIsDropEnabled);
     tWI->setText(0, entry.name);
     tWI->setData(0, Qt::UserRole, entry.url);
+    tWI->setData(0, Qt::UserRole + 1, QVariant::fromValue(entry.params));
     tWI->setText(2, Functions::timeToStr(entry.length));
     tWI->setData(2, Qt::UserRole, entry.length);
 

@@ -126,6 +126,7 @@ bool PlaylistDock::save(const QString &_url, bool saveCurrentGroup)
         if (tWI == list->currentItem())
             entry.flags |= Playlist::Entry::Selected;
         entry.flags |= PlaylistWidget::getFlags(tWI); //Additional flags
+        entry.params = tWI->data(0, Qt::UserRole + 1).value<QHash<QByteArray, QByteArray>>();
         entries += entry;
     }
     return Playlist::write(entries, url);
@@ -341,7 +342,28 @@ void PlaylistDock::itemDoubleClicked(QTreeWidgetItem *tWI)
         list->refresh(PlaylistWidget::REFRESH_QUEUE);
     }
 
-    emit play(tWI->data(0, Qt::UserRole).toString());
+    const auto url = tWI->data(0, Qt::UserRole).toString();
+    const auto params = tWI->data(0, Qt::UserRole + 1).value<QHash<QByteArray, QByteArray>>();
+
+    QByteArray rawHeaders;
+    for (auto it = params.cbegin(), itEnd = params.cend(); it != itEnd; ++it)
+    {
+        const auto &key = it.key();
+        if (key == Playlist::Entry::UserAgentParam)
+        {
+            rawHeaders += "Referer: " + it.value() + "\r\n";
+        }
+        else if (key == Playlist::Entry::ReferrerParam)
+        {
+            rawHeaders += "User-Agent: " + it.value() + "\r\n";
+        }
+    }
+    if (!rawHeaders.isEmpty())
+    {
+        QMPlay2Core.addRawHeaders(url, rawHeaders);
+    }
+
+    emit play(url);
 }
 void PlaylistDock::addAndPlay(QTreeWidgetItem *tWI)
 {

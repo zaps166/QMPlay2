@@ -2,6 +2,7 @@
 
 #include <QString>
 #include <QVector>
+#include <QHash>
 
 class PlaylistEntry
 {
@@ -15,6 +16,9 @@ public:
         AlwaysSync = 0x10,
     };
 
+    static constexpr auto UserAgentParam = "UserAgent";
+    static constexpr auto ReferrerParam = "Referrer";
+
     PlaylistEntry() = default;
     inline PlaylistEntry(const QString &name, const QString &url, double length = -1.0)
         : name(name)
@@ -23,6 +27,7 @@ public:
     {}
 
     QString name, url;
+    QHash<QByteArray, QByteArray> params;
     double length = -1.0;
     qint32 flags = 0, queue = 0, GID = 0, parent = 0;
 };

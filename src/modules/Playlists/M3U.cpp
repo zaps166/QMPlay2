@@ -31,6 +31,7 @@ Playlist::Entries M3U::read()
 
     bool hasExtinf = false;
     QString extinf[2];
+    QHash<QByteArray, QByteArray> extvlcopt;
     for (const QByteArray &line : readLines())
     {
         if (line.simplified().isEmpty())
@@ -47,6 +48,15 @@ Playlist::Entries M3U::read()
             extinf[1] = line.right(line.length() - idx - 1);
             hasExtinf = true;
         }
+        if (line.startsWith("#EXTVLCOPT:"))
+        {
+            const int idx = line.indexOf('=');
+            if (idx < 0)
+            {
+                continue;
+            }
+            extvlcopt[line.mid(11, idx - 11)] = line.right(line.length() - idx - 1);
+        }
         else if (!line.startsWith("#"))
         {
             Entry entry;
@@ -58,6 +68,10 @@ Playlist::Entries M3U::read()
                 entry.name = extinf[1].replace('\001', '\n');
             }
             entry.url = Functions::Url(line, playlistPath);
+            if (const auto userAgent = extvlcopt.value("http-user-agent"); !userAgent.isEmpty())
+                entry.params[Entry::UserAgentParam] = userAgent;
+            if (const auto referrer = extvlcopt.value("http-referrer"); !referrer.isEmpty())
+                entry.params[Entry::ReferrerParam] = referrer;
             list += entry;
             hasExtinf = false;
         }
@@ -85,7 +99,20 @@ bool M3U::write(const Entries &list)
                 url.replace("/", "\\");
 #endif
             }
-            writer->write(QString("#EXTINF:" + length + "," + QString(entry.name).replace('\n', '\001') + "\r\n" + url + "\r\n").toUtf8());
+            writer->write(QString("#EXTINF:" + length + "," + QString(entry.name).replace('\n', '\001') + "\r\n").toUtf8());
+            for (auto it = entry.params.cbegin(), itEnd = entry.params.cend(); it != itEnd; ++it)
+            {
+                const auto &key = it.key();
+                if (key == Playlist::Entry::UserAgentParam)
+                {
+                    writer->write(QStringLiteral("#EXTVLCOPT:http-user-agent=%1\r\n").arg(QString(it.value().trimmed())).toUtf8());
+                }
+                else if (key == Playlist::Entry::ReferrerParam)
+                {
+                    writer->write(QStringLiteral("#EXTVLCOPT:http-referrer=%1\r\n").arg(QString(it.value().trimmed())).toUtf8());
+                }
+            }
+            writer->write((url + "\r\n").toUtf8());
         }
     }
     return true;
