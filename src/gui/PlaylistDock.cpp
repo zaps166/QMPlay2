@@ -343,24 +343,27 @@ void PlaylistDock::itemDoubleClicked(QTreeWidgetItem *tWI)
     }
 
     const auto url = tWI->data(0, Qt::UserRole).toString();
-    const auto params = tWI->data(0, Qt::UserRole + 1).value<QHash<QByteArray, QByteArray>>();
 
-    QByteArray rawHeaders;
-    for (auto it = params.cbegin(), itEnd = params.cend(); it != itEnd; ++it)
+    if (!url.startsWith("file://"))
     {
-        const auto &key = it.key();
-        if (key == Playlist::Entry::UserAgentParam)
+        const auto params = tWI->data(0, Qt::UserRole + 1).value<QHash<QByteArray, QByteArray>>();
+        QByteArray rawHeaders;
+        for (auto it = params.cbegin(), itEnd = params.cend(); it != itEnd; ++it)
         {
-            rawHeaders += "Referer: " + it.value() + "\r\n";
+            const auto &key = it.key();
+            if (key == Playlist::Entry::UserAgentParam)
+            {
+                rawHeaders += "Referer: " + it.value() + "\r\n";
+            }
+            else if (key == Playlist::Entry::ReferrerParam)
+            {
+                rawHeaders += "User-Agent: " + it.value() + "\r\n";
+            }
         }
-        else if (key == Playlist::Entry::ReferrerParam)
+        if (!rawHeaders.isEmpty())
         {
-            rawHeaders += "User-Agent: " + it.value() + "\r\n";
+            QMPlay2Core.addRawHeaders(url, rawHeaders);
         }
-    }
-    if (!rawHeaders.isEmpty())
-    {
-        QMPlay2Core.addRawHeaders(url, rawHeaders);
     }
 
     emit play(url);
