@@ -26,6 +26,7 @@
 #include <Settings.hpp>
 #include <Main.hpp>
 
+#include <QGuiApplication>
 #include <QWidgetAction>
 #include <QActionGroup>
 #include <QInputDialog>

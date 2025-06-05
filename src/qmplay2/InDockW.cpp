@@ -21,9 +21,7 @@
 #include <Functions.hpp>
 #include <Settings.hpp>
 
-#ifdef Q_OS_WIN
-#   include <QApplication>
-#endif
+#include <QApplication>
 #include <QDockWidget>
 #include <qevent.h>
 #include <QPainter>
