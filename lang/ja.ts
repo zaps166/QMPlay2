@@ -1138,6 +1138,10 @@
         <source>Remove specified &lt;url&gt; from playlist.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Start in tray.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InfoDock</name>

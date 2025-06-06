@@ -1137,6 +1137,10 @@
         <source>Remove specified &lt;url&gt; from playlist.</source>
         <translation>Αφαίρεση της καθορισμένης &lt;url&gt; από τη λίστα αναπαραγωγής.</translation>
     </message>
+    <message>
+        <source>Start in tray.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InfoDock</name>

@@ -1137,6 +1137,10 @@
         <source>Remove specified &lt;url&gt; from playlist.</source>
         <translation>Eliminar el &lt;url&gt; especificado de la lista de reproducción.</translation>
     </message>
+    <message>
+        <source>Start in tray.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>InfoDock</name>
