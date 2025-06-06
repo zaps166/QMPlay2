@@ -48,7 +48,7 @@ Playlist::Entries M3U::read()
             extinf[1] = line.right(line.length() - idx - 1);
             hasExtinf = true;
         }
-        if (line.startsWith("#EXTVLCOPT:"))
+        else if (line.startsWith("#EXTVLCOPT:"))
         {
             const int idx = line.indexOf('=');
             if (idx < 0)
