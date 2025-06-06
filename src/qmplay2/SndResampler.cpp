@@ -210,7 +210,7 @@ void SndResampler::convert(const QByteArray &src, QByteArray &dst, bool flush)
                 tmp[i] = reinterpret_cast<quint8 *>(tmpQ[i].data());
             }
 
-            const int converted = swr_convert(m_sndConvertCtx, tmp.constData(), possibleSwrSize, in, inSize);
+            const int converted = swr_convert(m_sndConvertCtx, tmp.data(), possibleSwrSize, in, inSize);
             if (converted <= 0)
             {
                 dst.clear();
