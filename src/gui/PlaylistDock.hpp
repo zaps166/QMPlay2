@@ -55,6 +55,8 @@ public:
         return (QWidget *)findE;
     }
 
+    void setMode();
+
 private:
     void showEvent(QShowEvent *e) override;
 

@@ -660,7 +660,6 @@ PlaylistWidget::PlaylistWidget() :
     header()->setSectionResizeMode(0, QHeaderView::Stretch);
     header()->hideSection(1);
     setItemsResizeToContents(true);
-    setIconSize({22, 22});
 
     currentPlaying = nullptr;
     selectAfterAdd = hasHiddenItems = dontUpdateAfterAdd = false;

@@ -21,6 +21,7 @@
 
 #include <EntryProperties.hpp>
 #include <LineEdit.hpp>
+#include <Settings.hpp>
 #include <Main.hpp>
 
 #include <QFileInfo>
@@ -56,6 +57,8 @@ PlaylistDock::PlaylistDock() :
     findE = new LineEdit;
     findE->setToolTip(tr("Filter entries"));
     statusL = new QLabel;
+
+    setMode();
 
     QGridLayout *layout = new QGridLayout(&mainW);
     layout->addWidget(list);
@@ -209,6 +212,25 @@ void PlaylistDock::remove(const QStringList &urls)
 void PlaylistDock::scrollToCurrectItem()
 {
     list->scrollToItem(list->currentItem());
+}
+
+void PlaylistDock::setMode()
+{
+    if (QMPlay2Core.getSettings().getBool("CompactPlaylist"))
+    {
+        list->setIconSize({16, 16});
+        findE->clear();
+        findE->hide();
+        statusL->hide();
+    }
+    else
+    {
+        list->setIconSize({22, 22});
+        if (findE->parentWidget())
+            findE->show();
+        if (statusL->parentWidget())
+            statusL->show();
+    }
 }
 
 void PlaylistDock::showEvent(QShowEvent *e)
