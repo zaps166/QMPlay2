@@ -1139,7 +1139,7 @@
     </message>
     <message>
         <source>Start in tray.</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciar en la bandeja.</translation>
     </message>
 </context>
 <context>
