@@ -55,7 +55,9 @@ private:
     QIcon vtbIcon;
 #endif
 
+#ifdef QMPlay2_VKVIDEO
     bool vkVideoHwDownload = false;
+#endif
     bool vkVideoSupported = false;
     bool dxva2Supported = false;
     bool d3d11vaSupported = false;
