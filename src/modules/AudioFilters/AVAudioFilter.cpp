@@ -39,13 +39,13 @@ QStringList AVAudioFilter::getAvailableFilters()
         if (filter->flags & AVFILTER_FLAG_METADATA_ONLY)
             continue;
 
-        if (filter->nb_inputs == 0)
+        if (!filter->inputs)
             continue;
 
-        if (filter->nb_inputs > 0 && avfilter_pad_get_type(filter->inputs, 0) != AVMEDIA_TYPE_AUDIO)
+        if (avfilter_pad_get_type(filter->inputs, 0) != AVMEDIA_TYPE_AUDIO)
             continue;
 
-        if (filter->nb_outputs > 0 && avfilter_pad_get_type(filter->outputs, 0) != AVMEDIA_TYPE_AUDIO)
+        if (filter->outputs && avfilter_pad_get_type(filter->outputs, 0) != AVMEDIA_TYPE_AUDIO)
             continue;
 
         const auto name = QString(filter->name);
