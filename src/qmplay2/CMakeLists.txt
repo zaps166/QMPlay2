@@ -388,10 +388,17 @@ target_link_libraries(${PROJECT_NAME}
     ${LIBQMPLAY2_LIBS}
 )
 if(USE_VULKAN)
-    target_link_libraries(${PROJECT_NAME}
-        PRIVATE
-        $<TARGET_LINKER_FILE:QmVk>
-    )
+    if(ANDROID)
+        target_link_libraries(${PROJECT_NAME}
+            PRIVATE
+            $<TARGET_OBJECTS:QmVk>
+        )
+    else()
+        target_link_libraries(${PROJECT_NAME}
+            PRIVATE
+            $<TARGET_LINKER_FILE:QmVk>
+        )
+    endif()
     target_compile_definitions(${PROJECT_NAME}
         PUBLIC
         $<TARGET_PROPERTY:QmVk,INTERFACE_COMPILE_DEFINITIONS>
