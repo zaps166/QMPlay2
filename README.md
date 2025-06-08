@@ -10,6 +10,7 @@ Table of Contents
 
 * [Installation](#installation)
 * [YouTube](#youtube)
+* [Streamlink](#streamlink)
 * [Spherical view](#spherical-view)
 * [ALSA](#alsa)
 * [Hardware acceleration](#hardware-acceleration)
@@ -74,6 +75,18 @@ YouTube videos don't work without external "yt-dlp" software, so QMPlay2 will do
 
 - Make sure that antivirus or firewall doesn't block "yt-dlp" and doesn't block executing external applications!
 - Vulkan might not switch to full screen exclusive on some configurations or obsolete drivers.
+
+## Streamlink
+
+Examples:
+
+```bash
+streamlink -p QMPlay2 --player-http "URL" best
+```
+
+```bash
+streamlink -p QMPlay2 -a /dev/stdin "URL" best
+```
 
 ## Spherical view
 
