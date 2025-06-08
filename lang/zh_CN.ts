@@ -1139,7 +1139,7 @@
     </message>
     <message>
         <source>Start in tray.</source>
-        <translation type="unfinished"></translation>
+        <translation>在托盘区启动。</translation>
     </message>
 </context>
 <context>
