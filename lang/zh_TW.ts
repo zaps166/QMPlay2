@@ -1139,7 +1139,7 @@
     </message>
     <message>
         <source>Start in tray.</source>
-        <translation type="unfinished"></translation>
+        <translation>在系統匣啟動。</translation>
     </message>
 </context>
 <context>
