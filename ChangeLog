@@ -1,3 +1,12 @@
+Changes in QMPlay2 25.06.11:
+    - M3U: Add support for "EXTVLCOPT" (User-Agent and Referer HTTP headers),
+    - Visualizations: Fix repaint issues with wallpaper,
+    - Add "CompactPlaylist" hidden setting,
+    - various Wayland improvements,
+    - add option to start in tray,
+    - fixes in stream recording,
+    - other minor fixes,
+
 Changes in QMPlay2 25.01.19:
     - store maximized state when closing from full screen,
     - pass 'yt-dlp' URL argument as 'referer',

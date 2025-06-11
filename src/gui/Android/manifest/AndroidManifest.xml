@@ -3,7 +3,7 @@
     package="org.zaps166.QMPlay2"
     android:installLocation="auto"
     android:versionCode="1"
-    android:versionName="25.01.19">
+    android:versionName="25.06.11">
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
