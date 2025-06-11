@@ -168,8 +168,7 @@
         {
           "type": "git",
           "url": "https://github.com/breakfastquay/rubberband.git",
-          "tag": "v4.0.0",
-          "sha256": "2be46b0dffb13273a67396c77bc9278736bb03d2"
+          "tag": "v4.0.0"
         }
       ]
     },
