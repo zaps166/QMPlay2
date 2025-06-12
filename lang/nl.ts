@@ -71,7 +71,7 @@
     </message>
     <message>
         <source>GitHub download page</source>
-        <translation type="unfinished"></translation>
+        <translation>GitHub-downloadpagina</translation>
     </message>
 </context>
 <context>
@@ -1139,7 +1139,7 @@
     </message>
     <message>
         <source>Start in tray.</source>
-        <translation type="unfinished"></translation>
+        <translation>Start QMPlay2 op in het systeemvak.</translation>
     </message>
 </context>
 <context>
@@ -3674,7 +3674,7 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     </message>
     <message>
         <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Open de downloadpagina via Hulp → Over QMPlay2</translation>
     </message>
 </context>
 <context>
