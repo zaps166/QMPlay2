@@ -208,17 +208,19 @@ void QMPlay2GUIClass::restoreGeometry(const QString &pth, QWidget *w, const int 
     const auto screen = window->screen();
     Q_ASSERT(screen);
 
-    const auto screenSize = screen->size();
-
     const QRect geo = settings->getRect(pth);
     if (geo.isValid())
     {
+        const auto screenGeo = screen->virtualGeometry();
+        if (const auto newScreen = screen->virtualSiblingAt(geo.center()); newScreen && newScreen != screen)
+            w->setScreen(newScreen);
         w->setGeometry(geo);
-        if (!screen->geometry().contains(w->pos()))
-            w->move(screenSize.width() / 2 - w->width() / 2, screenSize.height() / 2 - w->height() / 2);
+        if (!screenGeo.contains(w->pos()))
+            w->move(screenGeo.width() / 2 - w->width() / 2, screenGeo.height() / 2 - w->height() / 2);
     }
     else
     {
+        const auto screenSize = screen->size();
         const QSize defaultSize = screen->availableGeometry().size() * defaultSizePercent / 100;
         w->move(screenSize.width() / 2 - defaultSize.width() / 2, screenSize.height() / 2 - defaultSize.height() / 2);
         w->resize(defaultSize);
