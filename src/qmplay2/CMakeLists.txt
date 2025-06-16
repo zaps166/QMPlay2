@@ -390,7 +390,7 @@ target_link_libraries(${PROJECT_NAME}
 if(USE_VULKAN)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
-        $<TARGET_LINKER_FILE:QmVk>
+        $<FILTER:$<TARGET_OBJECTS:QmVk>,EXCLUDE,.*\\.[gp]ch>
     )
     target_compile_definitions(${PROJECT_NAME}
         PUBLIC
