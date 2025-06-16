@@ -2250,7 +2250,21 @@ void MainWidget::hideEvent(QHideEvent *)
 #ifndef Q_OS_ANDROID
     if (wasShow)
     {
-        QMPlay2Core.getSettings().set("MainWidget/Geometry", (!fullScreen && !isMaximized()) ? geometry() : savedGeo);
+        QRect geoToStore;
+        if (!fullScreen && !isMaximized())
+        {
+            geoToStore = geometry();
+        }
+        else if (!fullScreen) // isMaximized()
+        {
+            geoToStore.setTopLeft(geometry().topLeft());
+            geoToStore.setSize(savedGeo.size());
+        }
+        else // fullScreen
+        {
+            geoToStore = savedGeo;
+        }
+        QMPlay2Core.getSettings().set("MainWidget/Geometry", geoToStore);
         QMPlay2Core.getSettings().set("MainWidget/isMaximized", fullScreen ? m_maximizedBeforeFullScreen : isMaximized());
     }
 #endif
