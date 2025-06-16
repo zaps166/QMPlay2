@@ -462,7 +462,7 @@
              <string>Please refer to yt-dlp documentation</string>
             </property>
             <property name="maxLength">
-             <number>16</number>
+             <number>255</number>
             </property>
            </widget>
           </item>
@@ -479,7 +479,7 @@
              <string>&quot;-f&quot; parameter, please refer to yt-dlp documentation</string>
             </property>
             <property name="maxLength">
-             <number>16</number>
+             <number>255</number>
             </property>
            </widget>
           </item>
