@@ -212,8 +212,10 @@ void QMPlay2GUIClass::restoreGeometry(const QString &pth, QWidget *w, const int 
     if (geo.isValid())
     {
         const auto screenGeo = screen->virtualGeometry();
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         if (const auto newScreen = screen->virtualSiblingAt(geo.center()); newScreen && newScreen != screen)
             w->setScreen(newScreen);
+#endif
         w->setGeometry(geo);
         if (!screenGeo.contains(w->pos()))
             w->move(screenGeo.width() / 2 - w->width() / 2, screenGeo.height() / 2 - w->height() / 2);
