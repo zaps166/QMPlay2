@@ -152,6 +152,8 @@ private:
 
     inline const QList<DockWidget *> getDockWidgets() const;
 
+    inline QRect winGeo() const;
+
     void storeDockSizes();
 
     void keyPressEvent(QKeyEvent *) override;

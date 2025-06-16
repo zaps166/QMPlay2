@@ -1260,7 +1260,7 @@ void MainWidget::toggleFullScreen()
 
         dockWidgetState = saveState();
         if (!m_maximizedBeforeFullScreen)
-            savedGeo = geometry();
+            savedGeo = winGeo();
 #else
         dockWidgetState = saveState();
 #endif // Q_OS_ANDROID
@@ -1882,6 +1882,13 @@ inline const QList<DockWidget *> MainWidget::getDockWidgets() const
 #endif
 }
 
+inline QRect MainWidget::winGeo() const
+{
+    if (const auto win = windowHandle())
+        return win->geometry();
+    return geometry();
+}
+
 void MainWidget::storeDockSizes()
 {
     m_winSizeForDocks = size();
@@ -2230,7 +2237,7 @@ void MainWidget::showEvent(QShowEvent *)
     {
 #ifndef Q_OS_ANDROID
         QMPlay2GUI.restoreGeometry("MainWidget/Geometry", this, 80);
-        savedGeo = geometry();
+        savedGeo = winGeo();
         if (QMPlay2Core.getSettings().getBool("MainWidget/isMaximized"))
 #endif
             showMaximized();
@@ -2250,14 +2257,15 @@ void MainWidget::hideEvent(QHideEvent *)
 #ifndef Q_OS_ANDROID
     if (wasShow)
     {
+        const auto geo = winGeo();
         QRect geoToStore;
         if (!fullScreen && !isMaximized())
         {
-            geoToStore = geometry();
+            geoToStore = geo;
         }
         else if (!fullScreen) // isMaximized()
         {
-            geoToStore.setTopLeft(geometry().topLeft());
+            geoToStore.setTopLeft(geo.topLeft());
             geoToStore.setSize(savedGeo.size());
         }
         else // fullScreen
