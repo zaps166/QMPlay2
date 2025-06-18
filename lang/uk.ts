@@ -1139,7 +1139,7 @@
     </message>
     <message>
         <source>Start in tray.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запускати з трею.</translation>
     </message>
 </context>
 <context>
