@@ -191,7 +191,11 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     updateWindowTitle();
 
     statusBar = new QStatusBar;
+#ifdef Q_OS_WIN
+    statusBar->setSizeGripEnabled(true);
+#else
     statusBar->setSizeGripEnabled(false);
+#endif
     timeL = new QLabel;
     statusBar->addPermanentWidget(timeL);
     QLabel *stateL = new QLabel(tr("Stopped"));
