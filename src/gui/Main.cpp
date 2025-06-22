@@ -234,11 +234,11 @@ void QMPlay2GUIClass::updateInDockW()
     qobject_cast<MainWidget *>(mainW)->videoDock->updateIDW();
 }
 
-const QWidget *QMPlay2GUIClass::getVideoDock() const
+QWidget *QMPlay2GUIClass::getVideoDock() const
 {
     return qobject_cast<MainWidget *>(mainW)->videoDock;
 }
-const QWidget *QMPlay2GUIClass::getMainWindow() const
+QWidget *QMPlay2GUIClass::getMainWindow() const
 {
     return mainW;
 }
