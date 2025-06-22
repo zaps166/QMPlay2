@@ -98,8 +98,7 @@ Inputs::SettingsWidget *Inputs::getSettingsWidget()
 
 void Inputs::add()
 {
-    QWidget *parent = qobject_cast<QWidget *>(sender()->parent());
-    AddD d(*this, parent);
+    AddD d(*this, QMPlay2Core.getMainWindow());
     d.setWindowIcon(toneIcon);
     const QString params = d.execAndGet();
     if (!params.isEmpty())

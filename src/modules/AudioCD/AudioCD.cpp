@@ -79,7 +79,7 @@ AudioCD::SettingsWidget *AudioCD::getSettingsWidget()
 
 void AudioCD::add()
 {
-    QWidget *parent = qobject_cast<QWidget *>(sender()->parent());
+    QWidget *parent = QMPlay2Core.getMainWindow();
     QStringList drives = AudioCDDemux::getDevices();
     if (!drives.isEmpty())
     {
