@@ -658,6 +658,7 @@ int main(int argc, char *argv[])
     qputenv("QT_ANDROID_MINIMUM_MOUSE_DOUBLE_CLICK_DISTANCE", "1000"); // Otherwise double-tap doesn't work in Qt6
 #endif
     qputenv("QT_QPA_UPDATE_IDLE_TIME", "0");
+    qputenv("QT_WAYLAND_FRAME_CALLBACK_TIMEOUT", "0");
 
 #ifdef Q_OS_HAIKU
     setenv("HOME", "/boot/home", 1);
