@@ -1,7 +1,7 @@
 {
   "app-id": "io.github.zaps166.QMPlay2",
   "runtime": "org.kde.Platform",
-  "runtime-version": "6.8",
+  "runtime-version": "6.9",
   "sdk": "org.kde.Sdk",
   "add-extensions": {
       "org.freedesktop.Platform.ffmpeg-full": {
@@ -89,7 +89,7 @@
         {
           "type": "git",
           "url": "https://github.com/libgme/game-music-emu.git",
-          "commit": "cb2c1ccc7563ed58321cc3b6b8507b9015192b80"
+          "commit": "f0d9517c5c3e0b712f553baa62e213336587d52e"
         }
       ]
     },
@@ -153,8 +153,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/libsidplayfp/libsidplayfp/releases/download/v2.11.0/libsidplayfp-2.11.0.tar.gz",
-          "sha256": "46af5bdc36649dca8cda8631428c91946ba131824ca3b3eca37dc67e2530bc5c"
+          "url": "https://github.com/libsidplayfp/libsidplayfp/releases/download/v2.14.0/libsidplayfp-2.14.0.tar.gz",
+          "sha256": "0f49c87c3a4791b9709d502e605274ee5c4c20eabfdea0340917d27cbd685f53"
         }
       ]
     },
