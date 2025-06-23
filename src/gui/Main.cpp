@@ -501,8 +501,12 @@ static void messageHandler(QtMsgType type, const QMessageLogContext &context, co
     if (qstrcmp(context.category, "qt.qpa.wayland") == 0 && message.endsWith(QStringLiteral("Please fix the transient parent of the popup.")))
         return;
 
+    bool skip = false;
+    if (message.startsWith(QStringLiteral("load glyph failed")))
+        skip = true;
+
     bool qmplay2Log = false;
-    if (QCoreApplication::instance())
+    if (!skip && QCoreApplication::instance())
     {
         // Use QMPlay2 logger only when we have a "QApplication" instance (we're still executing "main()"),
         // so any static data including "QSystemLocaleSingleton" and "QMPlay2CoreClass" are still valid.
