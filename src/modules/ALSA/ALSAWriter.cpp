@@ -25,6 +25,19 @@
     #define HAVE_CHMAP
 #endif
 
+struct int24
+{
+    uint8_t v[3];
+
+    void operator =(unsigned other)
+    {
+        v[0] = (other >>  0) & 0xff;
+        v[1] = (other >>  8) & 0xff;
+        v[2] = (other >> 16) & 0xff;
+    }
+};
+static_assert(sizeof(int24) == 3);
+
 template<typename T>
 static void convert_samples(const float *src, const int samples, T *int_samples, unsigned channels)
 {
@@ -185,6 +198,11 @@ bool ALSAWriter::processParams(bool *paramsCorrected)
                     fmt = SND_PCM_FORMAT_S32;
                     sample_size = 4;
                 }
+                else if (snd_pcm_hw_params_test_format(snd, params, SND_PCM_FORMAT_S24_3LE) == 0)
+                {
+                    fmt = SND_PCM_FORMAT_S24_3LE;
+                    sample_size = 3;
+                }
                 else if (!snd_pcm_hw_params_test_format(snd, params, SND_PCM_FORMAT_S16))
                 {
                     fmt = SND_PCM_FORMAT_S16;
@@ -279,6 +297,9 @@ qint64 ALSAWriter::write(const QByteArray &arr)
     {
         case 4:
             convert_samples((const float *)arr.constData(), samples, (qint32 *)int_samples.constData(), mustSwapChn ? channels : 0);
+            break;
+        case 3:
+            convert_samples((const float *)arr.constData(), samples, (int24 *)int_samples.constData(), mustSwapChn ? channels : 0);
             break;
         case 2:
             convert_samples((const float *)arr.constData(), samples, (qint16 *)int_samples.constData(), mustSwapChn ? channels : 0);
