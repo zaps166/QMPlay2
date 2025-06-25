@@ -501,6 +501,17 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
         }
     }
 
+    m_hideDocksTimer.setSingleShot(true);
+    connect(&m_hideDocksTimer, &QTimer::timeout, this, [this] {
+        if (fullScreen || isCompactView)
+        {
+            if (playlistDock->isVisible())
+                hideDocks();
+            else
+                showToolBar(false);
+        }
+    });
+
     playlistDock->load(QMPlay2Core.getSettingsDir() + "Playlist.pls");
 
     bool noplay = false;
@@ -1629,16 +1640,6 @@ void MainWidget::lockWidgets(bool l)
     }
 }
 
-void MainWidget::hideDocksSlot()
-{
-    if ((fullScreen || isCompactView) && !geometry().contains(QCursor::pos()))
-    {
-        if (!playlistDock->isVisible())
-            showToolBar(false);
-        else
-            hideDocks();
-    }
-}
 void MainWidget::doRestoreState(const QByteArray &data, bool doToggleCompactView)
 {
     if (isMaximized())
@@ -2134,10 +2135,16 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
     }
     QMainWindow::mouseMoveEvent(e);
 }
+
+void MainWidget::enterEvent(Q_ENTER_EVENT *e)
+{
+    m_hideDocksTimer.stop();
+    QMainWindow::enterEvent(e);
+}
 void MainWidget::leaveEvent(QEvent *e)
 {
     if (fullScreen || isCompactView)
-        QMetaObject::invokeMethod(this, "hideDocksSlot", Qt::QueuedConnection); // Qt5 can't hide docks properly here (old comment, is it still relevant?)
+        m_hideDocksTimer.start(isCompactView ? 750 : 0);
     QMainWindow::leaveEvent(e);
 }
 void MainWidget::closeEvent(QCloseEvent *e)

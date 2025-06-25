@@ -118,7 +118,6 @@ private slots:
 #endif
     void lockWidgets(bool);
 
-    void hideDocksSlot();
     void doRestoreState(const QByteArray &data, bool doToggleCompactView = false);
 
     void uncheckSuspend();
@@ -158,6 +157,7 @@ private:
 
     void keyPressEvent(QKeyEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
+    void enterEvent(Q_ENTER_EVENT *e) override;
     void leaveEvent(QEvent *) override;
     void closeEvent(QCloseEvent *) override;
     void moveEvent(QMoveEvent *) override;
@@ -222,6 +222,8 @@ private:
     QWinTaskbarButton *m_taskbarButton = nullptr;
     QWinThumbnailToolBar *m_thumbnailToolBar = nullptr;
 #endif
+
+    QTimer m_hideDocksTimer;
 
     bool m_keepDocksSize = false;
     QSize m_winSizeForDocks;
