@@ -213,6 +213,10 @@ bool ALSAWriter::processParams(bool *paramsCorrected)
                     fmt = SND_PCM_FORMAT_S8;
                     sample_size = 1;
                 }
+                else
+                {
+                    QMPlay2Core.logError("ALSA :: " + tr("Unable to find supported sample format"));
+                }
 
                 unsigned delay_us = round(delay * 1000000.0);
                 if (fmt != SND_PCM_FORMAT_UNKNOWN && set_snd_pcm_hw_params(snd, params, fmt, channels, sample_rate, delay_us))
