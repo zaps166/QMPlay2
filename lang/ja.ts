@@ -19,6 +19,10 @@
         <source>back to</source>
         <translation>に戻る</translation>
     </message>
+    <message>
+        <source>Unable to find supported sample format</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AVThread</name>
