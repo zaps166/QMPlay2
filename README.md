@@ -62,7 +62,7 @@ sudo dnf install qmplay2
 
 #### Easy installation on Slackware Linux
 
-- Run the following command: `slpkg -i QMPlay2`
+- Run the following command: `slpkg install QMPlay2`
 
 ## YouTube
 
