@@ -1,3 +1,12 @@
+Changes in QMPlay2 25.06.27:
+    - Wayland: fix missing AudioCD and Tone generator context menus,
+    - always close panels with small delay when mouse leaves,
+    - fix window positioning on multi-monitor configuration,
+    - Wayland: fix video freeze on some compositors,
+    - remove character limit for yt-dlp parameters,
+    - ALSA: add SND_PCM_FORMAT_S24_3LE format,
+    - display size grip on Windows,
+
 Changes in QMPlay2 25.06.11:
     - M3U: Add support for "EXTVLCOPT" (User-Agent and Referer HTTP headers),
     - Visualizations: Fix repaint issues with wallpaper,
