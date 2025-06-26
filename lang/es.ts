@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Unable to find supported sample format</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede encontrar el formato de muestra compatible</translation>
     </message>
 </context>
 <context>
