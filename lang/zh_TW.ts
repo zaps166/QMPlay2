@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Unable to find supported sample format</source>
-        <translation type="unfinished"></translation>
+        <translation>無法找到支援的取樣格式</translation>
     </message>
 </context>
 <context>
