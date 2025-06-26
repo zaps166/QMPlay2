@@ -794,7 +794,13 @@ quint32 Functions::getBestSampleRate()
 
 bool Functions::wrapMouse(QWidget *widget, QPoint &mousePos, int margin)
 {
-    static bool allowed = (QGuiApplication::platformName() == QStringLiteral("windows") || QGuiApplication::platformName() == QStringLiteral("xcb"));
+    static bool allowed =
+            QGuiApplication::platformName() == QStringLiteral("windows")
+         || QGuiApplication::platformName() == QStringLiteral("xcb")
+#if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+         || QGuiApplication::platformName().contains(QStringLiteral("wayland"))
+#endif
+    ;
     if (!allowed)
         return false;
 
