@@ -339,6 +339,7 @@ void Instance::init(bool doObtainPhysicalDevice)
         "VK_KHR_wayland_surface",
         "VK_KHR_win32_surface",
         "VK_KHR_xcb_surface",
+        "VK_EXT_swapchain_colorspace",
 #if USE_VALIDATION_LAYER
         VK_EXT_DEBUG_UTILS_EXTENSION_NAME,
 #endif
