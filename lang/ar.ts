@@ -21,14 +21,14 @@
     </message>
     <message>
         <source>Unable to find supported sample format</source>
-        <translation type="unfinished"></translation>
+        <translation>غير قادر على إيجاد عينة الصيغة المدعومة</translation>
     </message>
 </context>
 <context>
     <name>AVThread</name>
     <message>
         <source>A/V thread has been incorrectly terminated!</source>
-        <translation>معالجة الصوت/الفيديو تم إنهاؤه بشكل خاطئ!</translation>
+        <translation>معالجة الصوت/الفيديو تم إنهاؤها بشكل خاطئ!</translation>
     </message>
 </context>
 <context>
@@ -1143,7 +1143,7 @@
     </message>
     <message>
         <source>Start in tray.</source>
-        <translation type="unfinished"></translation>
+        <translation>البدء في مركز التنبيهات.</translation>
     </message>
 </context>
 <context>
@@ -2121,7 +2121,7 @@
     </message>
     <message>
         <source>&amp;Show tray icon</source>
-        <translation>إظهار أيقونة في مركز التنبيهات</translation>
+        <translation>إظهار أيقونة مركز التنبيهات</translation>
     </message>
     <message>
         <source>&amp;Modules settings</source>
@@ -3240,7 +3240,7 @@ QMPlay2 لن يقوم بتكبير الأيقونات!</translation>
     </message>
     <message>
         <source>To set up a new language, the program will start again!</source>
-        <translation>البرمانج بحاجة إلى إعادة تشغيل لتعيين لغة جديدة!</translation>
+        <translation>البرنامج بحاجة إلى إعادة تشغيل لتعيين لغة جديدة!</translation>
     </message>
     <message>
         <source>Video filters</source>
