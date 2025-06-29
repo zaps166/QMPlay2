@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Unable to find supported sample format</source>
-        <translation type="unfinished"></translation>
+        <translation>Не вдалося знайти підтримуваний формат</translation>
     </message>
 </context>
 <context>
