@@ -31,6 +31,7 @@
 #include <QFileInfo>
 #include <QMutex>
 #include <QFile>
+#include <QDir>
 
 constexpr const char *g_name = "YouTubeDL";
 static bool g_mustUpdate = true;
@@ -112,7 +113,9 @@ YouTubeDL::YouTubeDL()
     : m_ytDlPath(getFilePath())
     , m_commonArgs(getCommonArgs())
     , m_aborted(false)
-{}
+{
+    m_process.setWorkingDirectory(QDir::tempPath()); // Ensure it's a writable directory
+}
 YouTubeDL::~YouTubeDL()
 {}
 
