@@ -1267,7 +1267,7 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
     const auto hlsItags = m_hlsItags;
     m_itagsMutex.unlock();
 
-    QHash<int, QPair<QString, QString>> itagsData;
+    QHash<int, QPair<QStringList, QStringList>> itagsData;
 
     for (auto &&formatVal : formats)
     {
@@ -1282,11 +1282,15 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
                 continue; // Skip DASH, because it doesn't work
         }
 
-        const auto itag = format["format_id"].toString().toInt();
+        const auto itagStr = format["format_id"].toString().split('-');
+        const auto itag = itagStr.value(0).toInt();
         const auto url = format["url"].toString();
         const auto ext = format["ext"].toString();
         if (itag != 0 && !url.isEmpty() && !ext.isEmpty())
-            itagsData[itag] = {url, "." + ext};
+        {
+            itagsData[itag].first += url;
+            itagsData[itag].second += "." + ext;
+        }
     }
 
     auto appendUrl = [&](const QVector<int> &itags) {
@@ -1306,7 +1310,7 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
     if (!audioOnly)
         appendUrl(videoItags);
 
-    if (urls.count() != 1 + (audioOnly ? 0 : 1))
+    if (urls.count() < 1 + (audioOnly ? 0 : 1))
     {
         urls.clear();
         exts.clear();
