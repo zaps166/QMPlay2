@@ -719,14 +719,14 @@ void YouTube::setItags(int qualityIdx)
         AV1_HFR_HIGH_720p = 698,
 
         // Live video (old)
-        H264_144p_AAC_48 = 91,
-        H264_240p_AAC_48 = 92,
-        H264_360p_AAC_128 = 93,
-        H264_480p_AAC_128 = 94,
-        H264_720p_AAC_256 = 95,
-        H264_1080p_AAC_256 = 96,
-        H264_720p60_AAC_128 = 300,
-        H264_1080p60_AAC_128 = 301,
+        H264_144p_AAC_48_LIVE = 91,
+        H264_240p_AAC_48_LIVE = 92,
+        H264_360p_AAC_128_LIVE = 93,
+        H264_480p_AAC_128_LIVE = 94,
+        H264_720p_AAC_256_LIVE = 95,
+        H264_1080p_AAC_256_LIVE = 96,
+        H264_720p60_AAC_128_LIVE = 300,
+        H264_1080p60_AAC_128_LIVE = 301,
 
         // Live video (new)
         H264_144p_LIVE = 269,
@@ -780,7 +780,7 @@ void YouTube::setItags(int qualityIdx)
         };
         if (m_preferredCodec == PreferredCodec::VP9)
         {
-            qualityPresets[Preset_480p]  << VP9_480p << H264_480p << VP9_360p << H264_360p << H264_360p_AAC_128 << VP9_240p << H264_240p << VP9_144p << H264_144p;
+            qualityPresets[Preset_480p]  << VP9_480p << H264_480p << VP9_360p << H264_360p << H264_360p_AAC_128_LIVE << VP9_240p << H264_240p << VP9_144p << H264_144p;
             qualityPresets[Preset_720p]  << VP9_720p << H264_720p << H264_720P_AAC_128 << qualityPresets[Preset_480p];
             qualityPresets[Preset_1080p] << VP9_1080p << H264_1080p << qualityPresets[Preset_720p];
             qualityPresets[Preset_1440p] << VP9_1440p << H264_1440p << qualityPresets[Preset_1080p];
@@ -795,7 +795,7 @@ void YouTube::setItags(int qualityIdx)
         }
         else if (m_preferredCodec == PreferredCodec::H264)
         {
-            qualityPresets[Preset_480p]  << H264_480p << VP9_480p << H264_360p << VP9_360p << H264_360p_AAC_128 << H264_240p << VP9_240p << H264_144p << VP9_144p;
+            qualityPresets[Preset_480p]  << H264_480p << VP9_480p << H264_360p << VP9_360p << H264_360p_AAC_128_LIVE << H264_240p << VP9_240p << H264_144p << VP9_144p;
             qualityPresets[Preset_720p]  << H264_720p << VP9_720p << H264_720P_AAC_128 << qualityPresets[Preset_480p];
             qualityPresets[Preset_1080p] << H264_1080p << VP9_1080p << qualityPresets[Preset_720p];
             qualityPresets[Preset_1440p] << H264_1440p << VP9_1440p << qualityPresets[Preset_1080p];
@@ -809,7 +809,7 @@ void YouTube::setItags(int qualityIdx)
         }
         else if (m_preferredCodec == PreferredCodec::AV1)
         {
-            qualityPresets[Preset_480p]  << AV1_480p << AV1_360p << VP9_480p << H264_480p << VP9_360p << H264_360p << H264_360p_AAC_128 << AV1_240p << VP9_240p << H264_240p << AV1_144p << VP9_144p << H264_144p;
+            qualityPresets[Preset_480p]  << AV1_480p << AV1_360p << VP9_480p << H264_480p << VP9_360p << H264_360p << H264_360p_AAC_128_LIVE << AV1_240p << VP9_240p << H264_240p << AV1_144p << VP9_144p << H264_144p;
             qualityPresets[Preset_720p]  << VP9_720p << H264_720p << H264_720P_AAC_128 << qualityPresets[Preset_480p];
             qualityPresets[Preset_1080p] << VP9_1080p << H264_1080p << qualityPresets[Preset_720p];
             qualityPresets[Preset_1440p] << VP9_1440p << H264_1440p << qualityPresets[Preset_1080p];
@@ -853,14 +853,14 @@ void YouTube::setItags(int qualityIdx)
 
     QVector<int> liveQualityPresets[PresetCount];
     { // XXX: Is it still needed?
-        liveQualityPresets[Preset_480p]  << H264_480p_AAC_128 << H264_360P_AAC_128 << H264_240p_AAC_48 << H264_144p_AAC_48;
-        liveQualityPresets[Preset_720p]  << H264_720p_AAC_256 << liveQualityPresets[Preset_480p];
-        liveQualityPresets[Preset_1080p] << H264_1080p_AAC_256 << liveQualityPresets[Preset_720p];
+        liveQualityPresets[Preset_480p]  << H264_480p_AAC_128_LIVE << H264_360P_AAC_128 << H264_240p_AAC_48_LIVE << H264_144p_AAC_48_LIVE;
+        liveQualityPresets[Preset_720p]  << H264_720p_AAC_256_LIVE << liveQualityPresets[Preset_480p];
+        liveQualityPresets[Preset_1080p] << H264_1080p_AAC_256_LIVE << liveQualityPresets[Preset_720p];
         liveQualityPresets[Preset_1440p] << liveQualityPresets[Preset_1080p];
         liveQualityPresets[Preset_2160p] << liveQualityPresets[Preset_1440p];
 
-        liveQualityPresets[Preset_720p60]  << H264_720p60_AAC_128;
-        liveQualityPresets[Preset_1080p60] << H264_1080p60_AAC_128 << liveQualityPresets[Preset_720p60];
+        liveQualityPresets[Preset_720p60]  << H264_720p60_AAC_128_LIVE;
+        liveQualityPresets[Preset_1080p60] << H264_1080p60_AAC_128_LIVE << liveQualityPresets[Preset_720p60];
         liveQualityPresets[Preset_1440p60] << liveQualityPresets[Preset_1080p60];
         liveQualityPresets[Preset_2160p60] << liveQualityPresets[Preset_1440p60];
         liveQualityPresets[Preset_4320p60] << liveQualityPresets[Preset_2160p60];
