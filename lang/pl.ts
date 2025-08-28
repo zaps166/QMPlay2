@@ -3528,6 +3528,11 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
         <source>Lyrics</source>
         <translation>Tekst piosenki</translation>
     </message>
+    <message>
+        <source>DRC</source>
+        <comment>Dynamic Range Compression</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Streams</name>

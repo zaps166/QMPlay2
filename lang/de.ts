@@ -3527,6 +3527,11 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
         <source>Lyrics</source>
         <translation>Liedtext</translation>
     </message>
+    <message>
+        <source>DRC</source>
+        <comment>Dynamic Range Compression</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Streams</name>

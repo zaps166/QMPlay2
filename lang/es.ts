@@ -3528,6 +3528,11 @@ Parcialmente marcado sólo si el contenido tiene menos canales que el valor espe
         <source>Lyrics</source>
         <translation>Letras</translation>
     </message>
+    <message>
+        <source>DRC</source>
+        <comment>Dynamic Range Compression</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Streams</name>

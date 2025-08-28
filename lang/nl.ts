@@ -3528,6 +3528,11 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
         <source>Lyrics</source>
         <translation>Songtekst</translation>
     </message>
+    <message>
+        <source>DRC</source>
+        <comment>Dynamic Range Compression</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Streams</name>

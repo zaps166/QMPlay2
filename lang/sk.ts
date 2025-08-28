@@ -3526,6 +3526,11 @@ Partially checked only if the content has less channels than the specified value
         <source>Lyrics</source>
         <translation>Text piesne</translation>
     </message>
+    <message>
+        <source>DRC</source>
+        <comment>Dynamic Range Compression</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Streams</name>

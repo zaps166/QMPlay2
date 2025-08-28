@@ -3548,6 +3548,11 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
         <source>Lyrics</source>
         <translation>Şarkı sözleri</translation>
     </message>
+    <message>
+        <source>DRC</source>
+        <comment>Dynamic Range Compression</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Streams</name>
