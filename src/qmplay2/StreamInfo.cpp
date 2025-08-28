@@ -28,7 +28,7 @@ QMPlay2Tags StreamInfo::getTag(const QString &tag)
 {
     bool ok;
     const int tagID = tag.toInt(&ok);
-    if (ok && tagID >= QMPLAY2_TAG_LANGUAGE && tagID <= QMPLAY2_TAG_DEFAULT)
+    if (ok && tagID >= QMPLAY2_TAG_LANGUAGE && tagID <= QMPLAY2_TAG_DRC)
         return (QMPlay2Tags)tagID;
     return QMPLAY2_TAG_UNKNOWN;
 }
@@ -53,6 +53,8 @@ QString StreamInfo::getTagName(const QString &tag)
             return tr("Comment");
         case QMPLAY2_TAG_LYRICS:
             return tr("Lyrics");
+        case QMPLAY2_TAG_DRC:
+            return tr("DRC", "Dynamic Range Compression");
         default:
             return tag;
     }

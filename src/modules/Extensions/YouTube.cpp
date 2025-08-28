@@ -1391,6 +1391,8 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         if (!urlNote.isEmpty())
         {
             tags += {{QString::number(QMPLAY2_TAG_DEFAULT), QString::number(urlNote.contains(QStringLiteral("(default)")))}};
+            if (urlNote.contains(QStringLiteral("DRC")))
+                tags += {{QString::number(QMPLAY2_TAG_DRC), tr("yes")}};
         }
         if (!urlLanguage.isEmpty())
         {

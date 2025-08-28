@@ -1099,6 +1099,10 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
             hasUrlTagLanguage = true;
             streamInfo->other_info += {QString::number(QMPLAY2_TAG_LANGUAGE), urlTag.second};
         }
+        else if (tag == QMPLAY2_TAG_DRC)
+        {
+            streamInfo->other_info += {QString::number(QMPLAY2_TAG_DRC), urlTag.second};
+        }
     }
 
     if (!hasUrlTagDefault)
