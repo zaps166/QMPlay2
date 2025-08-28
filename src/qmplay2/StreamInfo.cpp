@@ -28,7 +28,7 @@ QMPlay2Tags StreamInfo::getTag(const QString &tag)
 {
     bool ok;
     const int tagID = tag.toInt(&ok);
-    if (ok && tagID >= QMPLAY2_TAG_LANGUAGE && tagID <= QMPLAY2_TAG_LYRICS)
+    if (ok && tagID >= QMPLAY2_TAG_LANGUAGE && tagID <= QMPLAY2_TAG_DEFAULT)
         return (QMPlay2Tags)tagID;
     return QMPLAY2_TAG_UNKNOWN;
 }

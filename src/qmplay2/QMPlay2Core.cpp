@@ -110,8 +110,8 @@ static void avQMPlay2LogHandler(void *avcl, int level, const char *fmt, va_list 
 
 /**/
 
-template<typename Data>
-static void setDataToHash(const QString &url, const QByteArray &value, const bool removeAfterUse, Data &data)
+template<typename T, typename Data>
+static void setDataToHash(const QString &url, const T &value, const bool removeAfterUse, Data &data)
 {
     QMutexLocker locker(&data.mutex);
     if (value.isEmpty())
@@ -119,14 +119,14 @@ static void setDataToHash(const QString &url, const QByteArray &value, const boo
     else
         data.data[url] = {value, removeAfterUse};
 }
-template<typename Data>
-static QByteArray getDataFromHash(const QString &url, Data &data)
+template<typename T, typename Data>
+static T getDataFromHash(const QString &url, Data &data)
 {
     QMutexLocker locker(&data.mutex);
     auto it = data.data.find(url);
     if (it == data.data.end())
-        return QByteArray();
-    const QByteArray ret = it.value().first;
+        return T();
+    const T ret = std::any_cast<T>(it.value().first);
     if (it.value().second)
         data.data.erase(it);
     return ret;
@@ -622,7 +622,7 @@ void QMPlay2CoreClass::addCookies(const QString &url, const QByteArray &newCooki
 }
 QByteArray QMPlay2CoreClass::getCookies(const QString &url)
 {
-    return getDataFromHash(url, cookies);
+    return getDataFromHash<QByteArray>(url, cookies);
 }
 
 void QMPlay2CoreClass::addResource(const QString &url, const QByteArray &data)
@@ -644,7 +644,7 @@ bool QMPlay2CoreClass::hasResource(const QString &url) const
 }
 QByteArray QMPlay2CoreClass::getResource(const QString &url)
 {
-    return getDataFromHash(url, resources);
+    return getDataFromHash<QByteArray>(url, resources);
 }
 
 void QMPlay2CoreClass::addRawHeaders(const QString &url, const QByteArray &data, const bool removeAfterUse)
@@ -654,7 +654,7 @@ void QMPlay2CoreClass::addRawHeaders(const QString &url, const QByteArray &data,
 }
 QByteArray QMPlay2CoreClass::getRawHeaders(const QString &url)
 {
-    return getDataFromHash(url, rawHeaders);
+    return getDataFromHash<QByteArray>(url, rawHeaders);
 }
 
 void QMPlay2CoreClass::addNameForUrl(const QString &url, const QString &name, const bool removeAfterUse)
@@ -664,7 +664,7 @@ void QMPlay2CoreClass::addNameForUrl(const QString &url, const QString &name, co
 }
 QString QMPlay2CoreClass::getNameForUrl(const QString &url)
 {
-    return getDataFromHash(url, namesForUrl);
+    return getDataFromHash<QByteArray>(url, namesForUrl);
 }
 
 void QMPlay2CoreClass::addDescriptionForUrl(const QString &url, const QString &description, const bool removeAfterUse)
@@ -674,7 +674,17 @@ void QMPlay2CoreClass::addDescriptionForUrl(const QString &url, const QString &d
 }
 QString QMPlay2CoreClass::getDescriptionForUrl(const QString &url)
 {
-    return getDataFromHash(url, descriptionsForUrl);
+    return getDataFromHash<QByteArray>(url, descriptionsForUrl);
+}
+
+void QMPlay2CoreClass::addTagsForUrlStream(const QString &url, const QList<QMPlay2Tag> &tags, const bool removeAfterUse)
+{
+    if (!url.isEmpty() && !tags.isEmpty())
+        setDataToHash(url, tags, removeAfterUse, descriptionsForUrlStream);
+}
+QList<QMPlay2Tag> QMPlay2CoreClass::getTagsForUrlStream(const QString &url)
+{
+    return getDataFromHash<QList<QMPlay2Tag>>(url, descriptionsForUrlStream);
 }
 
 QString QMPlay2CoreClass::writePlaylistResource(const QString &name, const QString &args, const PlaylistEntries &playlistEntries)

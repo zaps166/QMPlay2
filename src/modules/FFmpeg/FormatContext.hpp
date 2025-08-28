@@ -93,6 +93,8 @@ private:
 
     OggHelper *oggHelper;
 
+    QList<QMPlay2Tag> m_urlTags;
+
     const bool m_reconnectNetwork;
     const bool m_allowExperimental;
     bool isPaused, fixMkvAss;

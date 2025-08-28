@@ -20,6 +20,7 @@
 
 #include <QMPlay2Lib.hpp>
 #include <PlaylistEntry.hpp>
+#include <StreamInfo.hpp>
 
 #include <QAtomicInt>
 #include <QObject>
@@ -30,6 +31,7 @@
 
 #include <functional>
 #include <memory>
+#include <any>
 
 enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8, DontShowInGUI = 0x10, LogOnce = 0x20};
 
@@ -211,6 +213,9 @@ public:
     void addDescriptionForUrl(const QString &url, const QString &description, const bool removeAfterUse = true);
     QString getDescriptionForUrl(const QString &url);
 
+    void addTagsForUrlStream(const QString &url, const QList<QMPlay2Tag> &tags, const bool removeAfterUse = true);
+    QList<QMPlay2Tag> getTagsForUrlStream(const QString &url);
+
     QString writePlaylistResource(const QString &name, const QString &args, const PlaylistEntries &playlistEntries);
 
     QString rendererName() const;
@@ -263,8 +268,8 @@ private:
     struct
     {
         mutable QMutex mutex;
-        QHash<QString, QPair<QByteArray, bool>> data;
-    } cookies, resources, rawHeaders, namesForUrl, descriptionsForUrl;
+        QHash<QString, QPair<std::any, bool>> data;
+    } cookies, resources, rawHeaders, namesForUrl, descriptionsForUrl, descriptionsForUrlStream;
 
     std::shared_ptr<GPUInstance> m_gpuInstance;
 

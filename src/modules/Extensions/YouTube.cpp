@@ -1260,6 +1260,8 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
 
     QStringList urls;
     QStringList exts;
+    QHash<QString, QString> urlLanguages;
+    QHash<QString, QString> urlNotes;
 
     m_itagsMutex.lock();
     const auto videoItags = m_videoItags;
@@ -1290,6 +1292,11 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         {
             itagsData[itag].first += url;
             itagsData[itag].second += "." + ext;
+            if (!itagStr.value(1).isEmpty())
+            {
+                urlLanguages[url] = format[QStringLiteral("language")].toString();
+                urlNotes[url] = format[QStringLiteral("format_note")].toString();
+            }
         }
     }
 
@@ -1375,6 +1382,32 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
 
     Q_ASSERT(!urls.isEmpty());
     Q_ASSERT(urls.count() == exts.count());
+
+    for (auto &&url : std::as_const(urls))
+    {
+        const auto urlNote = urlNotes.value(url).trimmed();
+        const auto urlLanguage = urlLanguages.value(url).trimmed();
+        QList<QMPlay2Tag> tags;
+        if (!urlNote.isEmpty())
+        {
+            tags += {{QString::number(QMPLAY2_TAG_DEFAULT), QString::number(urlNote.contains(QStringLiteral("(default)")))}};
+        }
+        if (!urlLanguage.isEmpty())
+        {
+            QString lang;
+            const int idx1 = urlLanguage.indexOf(QStringLiteral(","));
+            const int idx2 = urlLanguage.indexOf(QStringLiteral(" "));
+            int idx = qMin(idx1, idx2);
+            if (idx < 0)
+                idx = qMax(idx1, idx2);
+            lang = urlLanguage.mid(0, idx);
+            if (!lang.isEmpty())
+            {
+                tags += {{QString::number(QMPLAY2_TAG_LANGUAGE), QLocale::languageToString(QLocale(lang).language())}};
+            }
+        }
+        QMPlay2Core.addTagsForUrlStream(url, tags);
+    }
 
     QStringList result;
     if (urls.count() == 1)

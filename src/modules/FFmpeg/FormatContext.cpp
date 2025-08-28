@@ -696,6 +696,8 @@ bool FormatContext::open(const QString &_url, const QString &param)
         "vplayer",
     };
 
+    m_urlTags = QMPlay2Core.getTagsForUrlStream(_url);
+
     const QByteArray scheme = Functions::getUrlScheme(_url).toUtf8();
     if (scheme.isEmpty() || scheme == "sftp")
         return false;
@@ -1082,7 +1084,25 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
         streamInfo->skip_auto_select = true;
     }
 
-    streamInfo->is_default = stream->disposition & AV_DISPOSITION_DEFAULT;
+    bool hasUrlTagDefault = false;
+    bool hasUrlTagLanguage = false;
+    for (auto &&urlTag : std::as_const(m_urlTags))
+    {
+        const auto tag = StreamInfo::getTag(urlTag.first);
+        if (tag == QMPLAY2_TAG_DEFAULT)
+        {
+            hasUrlTagDefault = true;
+            streamInfo->is_default = urlTag.second.toInt();
+        }
+        else if (tag == QMPLAY2_TAG_LANGUAGE)
+        {
+            hasUrlTagLanguage = true;
+            streamInfo->other_info += {QString::number(QMPLAY2_TAG_LANGUAGE), urlTag.second};
+        }
+    }
+
+    if (!hasUrlTagDefault)
+        streamInfo->is_default = stream->disposition & AV_DISPOSITION_DEFAULT;
     streamInfo->time_base = stream->time_base;
     streamInfo->ts_discont_possible = (formatCtx->iformat->flags & AVFMT_TS_DISCONT);
 
@@ -1102,7 +1122,7 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
             if (!(value = getTag(stream->metadata, "comment")).isEmpty())
                 streamInfo->other_info += {QString::number(QMPLAY2_TAG_COMMENT), value};
         }
-        if (!(value = getTag(stream->metadata, "language", false)).isEmpty() && value != "und")
+        if (!hasUrlTagLanguage && !(value = getTag(stream->metadata, "language", false)).isEmpty() && value != "und")
             streamInfo->other_info += {QString::number(QMPLAY2_TAG_LANGUAGE), value};
         if (streamInfo->params->codec_type == AVMEDIA_TYPE_VIDEO)
         {
