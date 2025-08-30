@@ -3530,8 +3530,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>DRC</source>
-        <comment>Dynamic Range Compression</comment>
-        <translation type="unfinished"></translation>
+        <translation>動態範圍壓縮</translation>
     </message>
 </context>
 <context>
