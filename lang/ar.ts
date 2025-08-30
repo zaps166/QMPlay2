@@ -3531,7 +3531,7 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>DRC</source>
         <comment>Dynamic Range Compression</comment>
-        <translation type="unfinished"></translation>
+        <translation>نطاق ضغط حركي</translation>
     </message>
 </context>
 <context>
