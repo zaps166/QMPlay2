@@ -224,6 +224,19 @@ bool FFDecVkVideo::open(StreamInfo &streamInfo)
                 if (!(getVideoCodecOperations() & vk::VideoCodecOperationFlagBitsKHR::eDecodeH265))
                     return false;
                 break;
+            case AV_CODEC_ID_VP9:
+                if (avcodec_version() >= AV_VERSION_INT(62, 11, 100))
+                {
+                    if (!m_physicalDevice->checkExtension(VK_KHR_VIDEO_DECODE_VP9_EXTENSION_NAME))
+                        return false;
+                    if (!(getVideoCodecOperations() & vk::VideoCodecOperationFlagBitsKHR::eDecodeVp9))
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+                break;
             case AV_CODEC_ID_AV1:
                 if (avcodec_version() >= AV_VERSION_INT(61, 2, 100))
                 {

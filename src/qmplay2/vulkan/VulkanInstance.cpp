@@ -316,7 +316,7 @@ void Instance::init(bool doObtainPhysicalDevice)
     Q_UNUSED(envVarInitialized);
 #endif
 
-    static shared_ptr<vk::DynamicLoader> dl;
+    static shared_ptr<vk::detail::DynamicLoader> dl;
     const auto getInstanceProcAddr = dl
         ? setVulkanLibrary(dl)
         : loadVulkanLibrary(qEnvironmentVariable("QT_VULKAN_LIB").toStdString())
@@ -391,7 +391,7 @@ void Instance::init(bool doObtainPhysicalDevice)
             vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation |
             vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance
         ;
-        debugUtilsMessagngerCreateInfo.pfnUserCallback = reinterpret_cast<PFN_vkDebugUtilsMessengerCallbackEXT>(debugCallback);
+        debugUtilsMessagngerCreateInfo.pfnUserCallback = reinterpret_cast<vk::PFN_DebugUtilsMessengerCallbackEXT>(debugCallback);
         m_debugUtilsMessanger = createDebugUtilsMessengerEXTUnique(debugUtilsMessagngerCreateInfo, nullptr, dld());
     }
     else
@@ -496,6 +496,7 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
         physicalDeviceExtensions.push_back(VK_KHR_VIDEO_DECODE_H264_EXTENSION_NAME);
         physicalDeviceExtensions.push_back(VK_KHR_VIDEO_DECODE_H265_EXTENSION_NAME);
         physicalDeviceExtensions.push_back(VK_KHR_VIDEO_DECODE_AV1_EXTENSION_NAME);
+        physicalDeviceExtensions.push_back(VK_KHR_VIDEO_DECODE_VP9_EXTENSION_NAME);
 #if 0
         // Preferred when FFmpeg does a host-copy after decoding
         physicalDeviceExtensions.push_back(VK_EXT_EXTERNAL_MEMORY_HOST_EXTENSION_NAME);
@@ -517,19 +518,22 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     m_sycf.samplerYcbcrConversion = false;
     m_tsf.timelineSemaphore = false;
     m_s2f.synchronization2 = false;
+    m_vp9.videoDecodeVP9 = false;
     if (!isVk10() || checkExtension(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
     {
         vk::PhysicalDeviceFeatures2 features2;
-        tie(features2, m_sycf, m_tsf, m_s2f) = physicalDevice->getFeatures2KHR<
+        tie(features2, m_sycf, m_tsf, m_s2f, m_vp9) = physicalDevice->getFeatures2KHR<
             vk::PhysicalDeviceFeatures2,
             vk::PhysicalDeviceSamplerYcbcrConversionFeatures,
             vk::PhysicalDeviceTimelineSemaphoreFeatures,
-            vk::PhysicalDeviceSynchronization2Features
+            vk::PhysicalDeviceSynchronization2Features,
+            vk::PhysicalDeviceVideoDecodeVP9FeaturesKHR
         >(dld()).get<
             vk::PhysicalDeviceFeatures2,
             vk::PhysicalDeviceSamplerYcbcrConversionFeatures,
             vk::PhysicalDeviceTimelineSemaphoreFeatures,
-            vk::PhysicalDeviceSynchronization2Features
+            vk::PhysicalDeviceSynchronization2Features,
+            vk::PhysicalDeviceVideoDecodeVP9FeaturesKHR
         >();
         m_enabledDeviceFeatures.features.shaderStorageImageWriteWithoutFormat = features2.features.shaderStorageImageWriteWithoutFormat;
     }
@@ -540,7 +544,8 @@ shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &phys
     m_enabledDeviceFeatures.pNext = &m_sycf;
     m_sycf.pNext = &m_tsf;
     m_tsf.pNext = &m_s2f;
-    m_s2f.pNext = nullptr;
+    m_s2f.pNext = &m_vp9;
+    m_vp9.pNext = nullptr;
 
     const auto cq = physicalDevice->getQueuesFamily(vk::QueueFlagBits::eCompute);
     const auto dq = physicalDevice->getQueuesFamily(vk::QueueFlagBits::eVideoDecodeKHR);

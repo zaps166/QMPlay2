@@ -112,6 +112,7 @@ private:
     vk::PhysicalDeviceSamplerYcbcrConversionFeatures m_sycf;
     vk::PhysicalDeviceTimelineSemaphoreFeatures m_tsf;
     vk::PhysicalDeviceSynchronization2Features m_s2f;
+    vk::PhysicalDeviceVideoDecodeVP9FeaturesKHR m_vp9;
     vk::PhysicalDeviceFeatures2 m_enabledDeviceFeatures;
 
     shared_ptr<PhysicalDevice> m_physicalDevice;
