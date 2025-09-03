@@ -1292,7 +1292,7 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         {
             itagsData[itag].first += url;
             itagsData[itag].second += "." + ext;
-            if (!itagStr.value(1).isEmpty())
+            if (audioItags.contains(itag))
             {
                 urlLanguages[url] = format[QStringLiteral("language")].toString();
                 urlNotes[url] = format[QStringLiteral("format_note")].toString();
