@@ -1,3 +1,8 @@
+Changes in QMPlay2 25.09.03:
+    - add support for YouTube audio multi-language and DRC streams,
+    - add VP9 Vulkan decoder (requires FFmpeg 8.0),
+    - yt-dlp fixes,
+
 Changes in QMPlay2 25.06.27:
     - Wayland: fix missing AudioCD and Tone generator context menus,
     - always close panels with small delay when mouse leaves,
