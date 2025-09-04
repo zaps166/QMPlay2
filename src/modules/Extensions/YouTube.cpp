@@ -1285,17 +1285,18 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
         }
 
         const auto itagStr = format["format_id"].toString().split('-');
+        const auto note = format[QStringLiteral("format_note")].toString();
         const auto itag = itagStr.value(0).toInt();
         const auto url = format["url"].toString();
         const auto ext = format["ext"].toString();
-        if (itag != 0 && !url.isEmpty() && !ext.isEmpty())
+        if (itag != 0 && !url.isEmpty() && !ext.isEmpty() && (!note.contains(QStringLiteral("DRC")) || sets().getBool(QStringLiteral("YouTube/AllowDRC"))))
         {
             itagsData[itag].first += url;
             itagsData[itag].second += "." + ext;
             if (audioItags.contains(itag))
             {
                 urlLanguages[url] = format[QStringLiteral("language")].toString();
-                urlNotes[url] = format[QStringLiteral("format_note")].toString();
+                urlNotes[url] = note;
             }
         }
     }
