@@ -328,7 +328,7 @@ static QList<QPair<QString, QString>> parseArguments(const QCommandLineParser &p
     for (const QString &option : parser.optionNames())
     {
         QString value = parser.value(option);
-        if (option == "open" || option == "enqueue")
+        if (option == QStringLiteral("open") || option == QStringLiteral("enqueue") || option == QStringLiteral("opennew"))
             value = fileArg(value);
         arguments += {option, value};
     }
@@ -342,7 +342,7 @@ static QList<QPair<QString, QString>> parseArguments(const QCommandLineParser &p
         bool found = false;
         for (int i = arguments.count() - 1; i >= 0; --i)
         {
-            if (arguments.at(i).first == "open" || arguments.at(i).first == "enqueue")
+            if (arguments.at(i).first == QStringLiteral("open") || arguments.at(i).first == QStringLiteral("enqueue") || arguments.at(i).first == QStringLiteral("opennew"))
             {
                 arguments[i].second += "\n" + urlLines;
                 found = true;
