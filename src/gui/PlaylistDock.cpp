@@ -375,11 +375,11 @@ void PlaylistDock::itemDoubleClicked(QTreeWidgetItem *tWI)
             const auto &key = it.key();
             if (key == Playlist::Entry::UserAgentParam)
             {
-                rawHeaders += "Referer: " + it.value() + "\r\n";
+                rawHeaders += "User-Agent: " + it.value() + "\r\n";
             }
             else if (key == Playlist::Entry::ReferrerParam)
             {
-                rawHeaders += "User-Agent: " + it.value() + "\r\n";
+                rawHeaders += "Referer: " + it.value() + "\r\n";
             }
         }
         if (!rawHeaders.isEmpty())
