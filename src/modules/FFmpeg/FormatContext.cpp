@@ -771,6 +771,10 @@ bool FormatContext::open(const QString &_url, const QString &param)
             av_dict_set(&options, "reconnect_on_network_error", "1", 0);
             av_dict_set(&options, "reconnect_delay_max", "7", 0);
         }
+        if (!isLocal)
+        {
+            av_dict_set(&options, "extension_picky", "0", 0);
+        }
     }
 
     formatCtx = avformat_alloc_context();
