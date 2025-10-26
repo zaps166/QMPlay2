@@ -145,14 +145,14 @@ if(WIN32)
 
     # win extras
     list(APPEND GUI_SRC
-        "Windows/qt/QtWinExtras/qwinevent.cpp"
-        "Windows/qt/QtWinExtras/qwineventfilter.cpp"
-        "Windows/qt/QtWinExtras/qwinfunctions.cpp"
-        "Windows/qt/QtWinExtras/qwintaskbarbutton.cpp"
-        "Windows/qt/QtWinExtras/qwintaskbarprogress.cpp"
-        "Windows/qt/QtWinExtras/qwinthumbnailtoolbar.cpp"
-        "Windows/qt/QtWinExtras/qwinthumbnailtoolbutton.cpp"
-        "Windows/qt/QtWinExtras/windowsguidsdefs.cpp"
+        "Windows/qt/QtWinExtras/src/winextras/qwinevent.cpp"
+        "Windows/qt/QtWinExtras/src/winextras/qwineventfilter.cpp"
+        "Windows/qt/QtWinExtras/src/winextras/qwinfunctions.cpp"
+        "Windows/qt/QtWinExtras/src/winextras/qwintaskbarbutton.cpp"
+        "Windows/qt/QtWinExtras/src/winextras/qwintaskbarprogress.cpp"
+        "Windows/qt/QtWinExtras/src/winextras/qwinthumbnailtoolbar.cpp"
+        "Windows/qt/QtWinExtras/src/winextras/qwinthumbnailtoolbutton.cpp"
+        "Windows/qt/QtWinExtras/src/winextras/windowsguidsdefs.cpp"
     )
     if(NOT BUILD_WITH_QT6)
         set_source_files_properties("Windows/qt/QtWinExtras/qwinfunctions.cpp" PROPERTIES COMPILE_DEFINITIONS UNICODE)
@@ -200,6 +200,8 @@ set(GUI_FILES
     ${GUI_FORM_HDR}
     ${GUI_RESOURCES}
 )
+
+
 if(NOT ANDROID)
     add_executable(${PROJECT_NAME}
         ${WIN32_EXE}

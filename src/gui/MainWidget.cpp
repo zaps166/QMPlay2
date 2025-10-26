@@ -39,10 +39,10 @@
 #endif
 #if defined(Q_OS_WIN)
     #include <QOperatingSystemVersion>
-    #include <QtWinExtras/qwinthumbnailtoolbutton.h>
-    #include <QtWinExtras/qwinthumbnailtoolbar.h>
-    #include <QtWinExtras/qwintaskbarprogress.h>
-    #include <QtWinExtras/qwintaskbarbutton.h>
+    #include <QtWinExtras/src/winextras/qwinthumbnailtoolbutton.h>
+    #include <QtWinExtras/src/winextras/qwinthumbnailtoolbar.h>
+    #include <QtWinExtras/src/winextras/qwintaskbarprogress.h>
+    #include <QtWinExtras/src/winextras/qwintaskbarbutton.h>
 #endif
 #if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
     #include <dwmapi.h>
