@@ -216,23 +216,27 @@ bool AVAudioFilter::ensureFilters()
             qWarning() << "AVAudioFilter :: Unsupported channel count:" << m_chn;
             return false;
         }
-
-        const auto args = QStringLiteral("sample_rate=%1:sample_fmt=flt:channel_layout=%2").arg(m_srate).arg(chnLayout.constData()).toLatin1();
-
         m_filterGraph = avfilter_graph_alloc();
 
-        if (avfilter_graph_create_filter(&m_filtIn, avfilter_get_by_name("abuffer"), "in", args, nullptr, m_filterGraph) < 0)
+        const auto argsIn = QStringLiteral("sample_rate=%1:sample_fmt=flt:channel_layout=%2").arg(m_srate).arg(chnLayout.constData()).toLatin1();
+        if (avfilter_graph_create_filter(&m_filtIn, avfilter_get_by_name("abuffer"), "in", argsIn, nullptr, m_filterGraph) < 0)
         {
             qWarning() << "AVAudioFilter :: Can't create in filter";
             return false;
         }
 
-        if (avfilter_graph_create_filter(&m_filtOut, avfilter_get_by_name("abuffersink"), "out", nullptr, nullptr, m_filterGraph))
+#if LIBAVFILTER_VERSION_INT >= AV_VERSION_INT(11, 4, 100)
+        const auto argsOut = QStringLiteral("samplerates=%1:sample_formats=flt:channel_layouts=%2").arg(m_srate).arg(chnLayout.constData()).toLatin1();
+#else
+        const char *argsOut = nullptr;
+#endif
+        if (avfilter_graph_create_filter(&m_filtOut, avfilter_get_by_name("abuffersink"), "out", argsOut, nullptr, m_filterGraph))
         {
             qWarning() << "AVAudioFilter :: Can't create out filter";
             return false;
         }
 
+#if LIBAVFILTER_VERSION_INT < AV_VERSION_INT(11, 4, 100)
         const AVSampleFormat sampleFmts[] = {AV_SAMPLE_FMT_FLT, AV_SAMPLE_FMT_NONE};
         av_opt_set_int_list(m_filtOut, "sample_fmts", sampleFmts, AV_SAMPLE_FMT_NONE, AV_OPT_SEARCH_CHILDREN);
 
@@ -240,6 +244,7 @@ bool AVAudioFilter::ensureFilters()
         av_opt_set_int_list(m_filtOut, "sample_rates", sampleRates, 0, AV_OPT_SEARCH_CHILDREN);
 
         av_opt_set(m_filtOut, "ch_layouts", chnLayout.constData(), AV_OPT_SEARCH_CHILDREN);
+#endif
 
         m_inputs = avfilter_inout_alloc();
         m_inputs->name = av_strdup("out");
