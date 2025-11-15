@@ -39,10 +39,7 @@ QStringList AVAudioFilter::getAvailableFilters()
         if (filter->flags & AVFILTER_FLAG_METADATA_ONLY)
             continue;
 
-        if (!filter->inputs)
-            continue;
-
-        if (avfilter_pad_get_type(filter->inputs, 0) != AVMEDIA_TYPE_AUDIO)
+        if (filter->inputs && avfilter_pad_get_type(filter->inputs, 0) != AVMEDIA_TYPE_AUDIO)
             continue;
 
         if (filter->outputs && avfilter_pad_get_type(filter->outputs, 0) != AVMEDIA_TYPE_AUDIO)
