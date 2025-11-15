@@ -352,6 +352,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     m_avAudioFilterB = new QGroupBox(tr("FFmpeg audio filters"));
     m_avAudioFilterB->setCheckable(true);
     m_avAudioFilterB->setChecked(sets().getBool("AVAudioFilter"));
+    connect(m_avAudioFilterB, &QGroupBox::toggled, this, [this](bool checked) {
+        sets().set("AVAudioFilter", checked);
+        SetInstance<AVAudioFilter>();
+    });
 
     auto audioFiltersInfoB = new QToolButton;
     audioFiltersInfoB->setText("?");
@@ -379,9 +383,15 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
         tr("FFmpeg audio filters, example: %1").arg(QStringLiteral("volume=0.6,extrastereo"))
     );
     connect(m_avAudioFilterE, &QLineEdit::textChanged, this, [this](const QString &text) {
+        const bool ok = AVAudioFilter::validateFilters(text.toLatin1().trimmed());
         auto font = m_avAudioFilterE->font();
-        font.setUnderline(!AVAudioFilter::validateFilters(text.toLatin1().trimmed()));
+        font.setUnderline(!ok);
         m_avAudioFilterE->setFont(font);
+        if (ok)
+        {
+            sets().set("AVAudioFilter/Filters", m_avAudioFilterE->text().toLatin1());
+            SetInstance<AVAudioFilter>();
+        }
     });
     m_avAudioFilterE->setText(sets().getByteArray("AVAudioFilter/Filters"));
 
@@ -521,9 +531,4 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("Equalizer/count", eqSlidersB->value());
     sets().set("Equalizer/minFreq", eqMinFreqB->value());
     sets().set("Equalizer/maxFreq", eqMaxFreqB->value());
-
-#ifdef USE_AVAUDIOFILTER
-    sets().set("AVAudioFilter", m_avAudioFilterB->isChecked());
-    sets().set("AVAudioFilter/Filters", m_avAudioFilterE->text().toLatin1());
-#endif
 }
