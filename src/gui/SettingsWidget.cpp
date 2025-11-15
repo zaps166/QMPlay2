@@ -227,7 +227,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("Vulkan/HQScaleDown", false);
     QMPSettings.init("Vulkan/HQScaleUp", false);
     QMPSettings.init("Vulkan/BypassCompositor", true);
-    QMPSettings.init("Vulkan/HDR", false);
+    QMPSettings.init("Vulkan/HDR", QGuiApplication::platformName().contains(QStringLiteral("wayland")));
 
     QMPSettings.init("ShortSeek", 5);
     QMPSettings.init("LongSeek", 30);
