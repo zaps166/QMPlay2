@@ -41,6 +41,8 @@ QString StreamInfo::getTagName(const QString &tag)
             return tr("Language");
         case QMPLAY2_TAG_TITLE:
             return tr("Title");
+        case QMPLAY2_TAG_COMPOSER:
+            return tr("Composer");
         case QMPLAY2_TAG_ARTIST:
             return tr("Artist");
         case QMPLAY2_TAG_ALBUM:

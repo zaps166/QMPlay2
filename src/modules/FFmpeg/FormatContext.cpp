@@ -375,6 +375,8 @@ QList<QMPlay2Tag> FormatContext::tags() const
     {
         if (!(value = getTag(dict, "title")).isEmpty())
             tagList += {QString::number(QMPLAY2_TAG_TITLE), value};
+        if (!(value = getTag(dict, "composer")).isEmpty())
+            tagList += {QString::number(QMPLAY2_TAG_COMPOSER), value};
         if (!(value = getTag(dict, "artist")).isEmpty())
             tagList += {QString::number(QMPLAY2_TAG_ARTIST), value};
         if (!(value = getTag(dict, "album")).isEmpty())
@@ -1120,6 +1122,8 @@ StreamInfo *FormatContext::getStreamInfo(AVStream *stream) const
         if (streamsInfo.count() > 1)
         {
             streamInfo->title  = getTag(stream->metadata, "title");
+            if (!(value = getTag(stream->metadata, "composer")).isEmpty())
+                streamInfo->other_info += {QString::number(QMPLAY2_TAG_COMPOSER), value};
             streamInfo->artist = getTag(stream->metadata, "artist");
             if (!(value = getTag(stream->metadata, "album")).isEmpty())
                 streamInfo->other_info += {QString::number(QMPLAY2_TAG_ALBUM), value};
