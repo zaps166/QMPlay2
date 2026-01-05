@@ -44,6 +44,7 @@ enum QMPlay2Tags
     QMPLAY2_TAG_DESCRIPTION, //should be as second
     QMPLAY2_TAG_LANGUAGE,
     QMPLAY2_TAG_TITLE,
+    QMPLAY2_TAG_COMPOSER,
     QMPLAY2_TAG_ARTIST,
     QMPLAY2_TAG_ALBUM,
     QMPLAY2_TAG_GENRE,
@@ -109,7 +110,7 @@ public:
     QByteArray getColorTrcName() const;
     QByteArray getColorSpaceName() const;
 
-    QByteArray codec_name, title, artist;
+    QByteArray codec_name, title, composer, artist;
     QByteArray codec_name_backup;
     QVector<QMPlay2Tag> other_info;
     bool is_default = true;
