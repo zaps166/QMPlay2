@@ -23,6 +23,7 @@
     <launchable type="desktop-id">io.github.zaps166.QMPlay2.desktop</launchable>
     <screenshots>
         <screenshot type="default">
+            <caption>QMPlay2</caption>
             <image>https://raw.githubusercontent.com/zaps166/GitHubCommonContents/master/Screenshots/QMPlay2.png</image>
         </screenshot>
     </screenshots>

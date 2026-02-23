@@ -1,16 +1,8 @@
 {
   "app-id": "io.github.zaps166.QMPlay2",
   "runtime": "org.kde.Platform",
-  "runtime-version": "6.8",
+  "runtime-version": "6.10",
   "sdk": "org.kde.Sdk",
-  "add-extensions": {
-      "org.freedesktop.Platform.ffmpeg-full": {
-          "directory": "lib/ffmpeg",
-          "version": "24.08",
-          "add-ld-path": ".",
-          "autodelete": false
-      }
-  },
   "command": "QMPlay2",
   "rename-icon": "QMPlay2",
   "rename-desktop-file": "QMPlay2.desktop",
@@ -89,6 +81,7 @@
         {
           "type": "git",
           "url": "https://github.com/libgme/game-music-emu.git",
+          "tag": "0.6.4",
           "commit": "f0d9517c5c3e0b712f553baa62e213336587d52e"
         }
       ]
@@ -118,8 +111,8 @@
         {
           "type": "shell",
           "commands": [
-            "cp /usr/share/gnu-config/config.sub .",
-            "cp /usr/share/gnu-config/config.guess ."
+            "cp /usr/share/autoconf/build-aux/config.sub .",
+            "cp /usr/share/autoconf/build-aux/config.guess ."
           ]
         }
       ]
@@ -153,8 +146,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/libsidplayfp/libsidplayfp/releases/download/v2.15.0/libsidplayfp-2.15.0.tar.gz",
-          "sha256": "42c28b9ef57998ad66bbbb3dfab00c6684715c643d9ccc9ac8da4d7cf296dd00"
+          "url": "https://github.com/libsidplayfp/libsidplayfp/releases/download/v2.16.1/libsidplayfp-2.16.1.tar.gz",
+          "sha256": "ace0f73c2ef8645ab069ce1b298b10e31e36af7b5996109983b2b67ad60ff3ca"
         }
       ]
     },
@@ -168,7 +161,8 @@
         {
           "type": "git",
           "url": "https://github.com/breakfastquay/rubberband.git",
-          "tag": "v4.0.0"
+          "tag": "v4.0.0",
+          "commit": "1d95888bec3ae0a17c0c4af791810d5a63f6bc35"
         }
       ]
     },

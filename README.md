@@ -185,7 +185,7 @@ Don't forget to update submodules: `git submodule update --init`.
 
 Install required dependencies to build and run:
 ```sh
-flatpak install org.flatpak.Builder org.kde.Platform/$(uname -m)/6.8 org.kde.Sdk/$(uname -m)/6.8
+flatpak install org.flatpak.Builder org.kde.Platform/$(uname -m)/6.10 org.kde.Sdk/$(uname -m)/6.10
 ```
 
 Build QMPlay2:
@@ -193,10 +193,9 @@ Build QMPlay2:
 flatpak run org.flatpak.Builder build/flatpak --force-clean --ccache --user --install io.github.zaps166.QMPlay2.Devel.json
 ```
 
-Optionally you can install FFmpeg with all codecs and VA-API driver for Intel GPUs:
+Optionally you can install VA-API driver for Intel GPUs:
 ```sh
-flatpak install org.freedesktop.Platform.ffmpeg-full/$(uname -m)/24.08
-flatpak install org.freedesktop.Platform.VAAPI.Intel/$(uname -m)/24.08
+flatpak install org.freedesktop.Platform.VAAPI.Intel/$(uname -m)/25.08
 ```
 
 Clean build directories:
