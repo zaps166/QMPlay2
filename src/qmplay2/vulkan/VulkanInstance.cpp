@@ -477,6 +477,9 @@ bool Instance::hasStorage16bit() const
 shared_ptr<Device> Instance::createDevice(const shared_ptr<PhysicalDevice> &physicalDevice)
 {
     auto physicalDeviceExtensions = requiredPhysicalDeviceExtenstions();
+
+    physicalDeviceExtensions.push_back(VK_EXT_HDR_METADATA_EXTENSION_NAME);
+
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME);
     physicalDeviceExtensions.push_back(VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
 

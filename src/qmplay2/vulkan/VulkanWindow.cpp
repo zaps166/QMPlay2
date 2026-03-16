@@ -57,6 +57,14 @@ struct FrameProps
         return (colorPrimaries == AVCOL_PRI_BT2020 && colorTrc == AVCOL_TRC_SMPTE2084);
     }
 
+    struct HDR
+    {
+        float maxLuminance = 1000.0f;
+        float minLuminance = 0.05f;
+        array<QVector2D, 3> displayPrimaries;
+        QVector2D whitePoint;
+    };
+
     AVColorPrimaries colorPrimaries;
     AVColorTransferCharacteristic colorTrc;
     AVColorSpace colorSpace;
@@ -66,7 +74,7 @@ struct FrameProps
     bool rgb;
     int numPlanes;
     int paddingBits;
-    float maxLuminance;
+    HDR hdr;
 };
 
 struct VideoPipelineSpecializationData
@@ -361,6 +369,7 @@ void Window::setFrame(const Frame &frame, QMPlay2OSDList &&osdList)
     {
         // Frame properties changed
         m.checkSurfaceColorSpace = true;
+        m.mustUpdateHdrMetadata = true;
         m.mustUpdateVideoPipelineSpecialization = true;
         m.mustUpdateFragUniform = true;
     }
@@ -390,16 +399,39 @@ bool Window::obtainFrameProps()
     frameProps.rgb = m_frame.isRGB();
     frameProps.numPlanes = m_frame.numPlanes();
     frameProps.paddingBits = m_frame.paddingBits();
-    frameProps.maxLuminance = 1000.0f;
 
-    if (auto metadata = m_frame.masteringDisplayMetadata())
+    bool hasDisplayPrimaries = false;
+    if (auto metadata = m_frame.masteringDisplayMetadata(); metadata && (metadata->has_primaries || metadata->has_luminance))
     {
+        if (metadata->has_primaries)
+        {
+            for (int i = 0; i < 3; ++i)
+            {
+                frameProps.hdr.displayPrimaries[i].setX(av_q2d(metadata->display_primaries[i][0]));
+                frameProps.hdr.displayPrimaries[i].setY(av_q2d(metadata->display_primaries[i][1]));
+            }
+            frameProps.hdr.whitePoint.setX(av_q2d(metadata->white_point[0]));
+            frameProps.hdr.whitePoint.setY(av_q2d(metadata->white_point[1]));
+            hasDisplayPrimaries = true;
+        }
+
         if (metadata->has_luminance)
         {
             const float maxLuminance = av_q2d(metadata->max_luminance);
             if (maxLuminance > 1.0f && maxLuminance <= 10000.0f)
-                frameProps.maxLuminance = maxLuminance;
+            {
+                const float minLuminance = av_q2d(metadata->min_luminance);
+                frameProps.hdr.maxLuminance = maxLuminance;
+                if (minLuminance > 0.0f && minLuminance < maxLuminance)
+                {
+                    frameProps.hdr.minLuminance = minLuminance;
+                }
+            }
         }
+    }
+    if (!hasDisplayPrimaries && frameProps.isHdr10St2084())
+    {
+        Functions::fillColorPrimariesData(AVCOL_PRI_BT2020, frameProps.hdr.whitePoint, frameProps.hdr.displayPrimaries);
     }
 
     const auto comp = memcmp(m_frameProps.get(), &frameProps, sizeof(FrameProps));
@@ -429,6 +461,8 @@ void Window::initResources() try
     m.device = m_instance->createOrGetDevice(m_physicalDevice);
 
     m.queue = m.device->firstQueue();
+
+    m.supportsHdrMetadata = m.device->hasExtension(VK_EXT_HDR_METADATA_EXTENSION_NAME);
 
     m.vertexShaderModule = ShaderModule::create(
         m.device,
@@ -488,6 +522,32 @@ void Window::resetImages(bool resetImageOptimalTiling)
         m.imageOptimalTiling.reset();
     m.imageFromFrame = false;
     m.shouldUpdateImageOptimalTiling = false;
+}
+
+void Window::maybeSetHdrMetadata()
+{
+    if (!m.supportsHdrMetadata || !isHdr10St2084() || !m.mustUpdateHdrMetadata)
+        return;
+
+    vk::HdrMetadataEXT hdrMetadata;
+
+    static_assert(sizeof(QVector2D) == sizeof(vk::HdrMetadataEXT::whitePoint));
+    static_assert(sizeof(QVector2D) == sizeof(vk::HdrMetadataEXT::displayPrimaryRed));
+    static_assert(sizeof(QVector2D) == sizeof(vk::HdrMetadataEXT::displayPrimaryGreen));
+    static_assert(sizeof(QVector2D) == sizeof(vk::HdrMetadataEXT::displayPrimaryBlue));
+    static_assert(sizeof(QVector2D) * 2 == offsetof(vk::HdrMetadataEXT, displayPrimaryBlue) - offsetof(vk::HdrMetadataEXT, displayPrimaryRed));
+
+    auto &displayPrimaries = reinterpret_cast<array<QVector2D, 3> &>(hdrMetadata.displayPrimaryRed);
+    auto &whitePoint = reinterpret_cast<QVector2D &>(hdrMetadata.whitePoint);
+
+    displayPrimaries = m_frameProps->hdr.displayPrimaries;
+    whitePoint = m_frameProps->hdr.whitePoint;
+
+    hdrMetadata.maxLuminance = m_frameProps->hdr.maxLuminance;
+    hdrMetadata.minLuminance = m_frameProps->hdr.minLuminance;
+
+    m.swapChain->setHdrMetadata(hdrMetadata);
+    m.mustUpdateHdrMetadata = false;
 }
 
 void Window::render()
@@ -600,6 +660,7 @@ void Window::render()
 
             m.queueLocker = m.queue->lock();
             m.commandBuffer->endSubmitAndWait(false, [&] {
+                maybeSetHdrMetadata();
                 m.swapChain->present(imageIdx, &suboptimal);
                 vulkanInstance()->presentQueued(this);
             }, move(submitInfo));
@@ -964,6 +1025,7 @@ void Window::ensureSwapChain()
     ;
 #endif
     m.swapChain = SwapChain::create(createInfo);
+    m.mustUpdateHdrMetadata = true;
 }
 void Window::ensureVideoPipeline()
 {
@@ -1355,7 +1417,7 @@ void Window::fillVideoPipelineFragmentUniform()
     fragData->saturation = m_saturation;
     fragData->sharpness = m_sharpness;
 
-    fragData->maxLuminance = m_frameProps->maxLuminance;
+    fragData->maxLuminance = m_frameProps->hdr.maxLuminance;
 
     m.fragUniform->unmap();
 

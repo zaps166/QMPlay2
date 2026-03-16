@@ -113,6 +113,8 @@ private:
 
     void resetImages(bool resetImageOptimalTiling);
 
+    void maybeSetHdrMetadata();
+
     void render();
 
     vector<unique_lock<mutex>> prepareOSD(bool &changed);
@@ -186,6 +188,8 @@ private:
 
         vk::SurfaceKHR surface;
 
+        bool supportsHdrMetadata = false;
+
         bool hasHdr10St2084 = false;
 
         unique_lock<mutex> queueLocker;
@@ -205,6 +209,7 @@ private:
 
         bool checkSurfaceColorSpace = false;
         bool hdrSettingsChanged = false;
+        bool mustUpdateHdrMetadata = false;
         bool mustUpdateVideoPipelineSpecialization = false;
 
         vk::ColorSpaceKHR colorSpace = vk::ColorSpaceKHR::eSrgbNonlinear;
