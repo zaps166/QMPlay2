@@ -405,14 +405,16 @@ bool Window::obtainFrameProps()
     {
         if (metadata->has_primaries)
         {
+            hasDisplayPrimaries = true;
             for (int i = 0; i < 3; ++i)
             {
                 frameProps.hdr.displayPrimaries[i].setX(av_q2d(metadata->display_primaries[i][0]));
                 frameProps.hdr.displayPrimaries[i].setY(av_q2d(metadata->display_primaries[i][1]));
+                hasDisplayPrimaries &= !frameProps.hdr.displayPrimaries[i].isNull();
             }
             frameProps.hdr.whitePoint.setX(av_q2d(metadata->white_point[0]));
             frameProps.hdr.whitePoint.setY(av_q2d(metadata->white_point[1]));
-            hasDisplayPrimaries = true;
+            hasDisplayPrimaries &= !frameProps.hdr.whitePoint.isNull();
         }
 
         if (metadata->has_luminance)
@@ -1025,7 +1027,8 @@ void Window::ensureSwapChain()
     ;
 #endif
     m.swapChain = SwapChain::create(createInfo);
-    m.mustUpdateHdrMetadata = true;
+    if (!m_frame.isEmpty())
+        m.mustUpdateHdrMetadata = true;
 }
 void Window::ensureVideoPipeline()
 {
