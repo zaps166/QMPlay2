@@ -1047,6 +1047,10 @@
         <translation>&quot;-f” paraméter, kérjük, olvassa el az yt-dlp dokumentációját</translation>
     </message>
     <message>
+        <source>Additional params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>A panelek méretének megtartása a főablak átméretezésekor (kísérleti)</translation>
     </message>
@@ -3503,6 +3507,10 @@ Csak részben ellenőrzött, ha a tartalom a megadott értéknél kevesebb csato
     <message>
         <source>Title</source>
         <translation>Cím</translation>
+    </message>
+    <message>
+        <source>Composer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Artist</source>

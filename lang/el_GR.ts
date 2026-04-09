@@ -1047,6 +1047,10 @@
         <translation>παράμετρος &quot;-f&quot;, παρακαλώ ανατρέξτε στην τεκμηρίωση του yt-dlp</translation>
     </message>
     <message>
+        <source>Additional params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>Διατήρηση μεγέθους πλαισίων κατά την αλλαγή μεγέθους του κύριου παραθύρου (πειραματικό)</translation>
     </message>
@@ -3503,6 +3507,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Title</source>
         <translation>Τίτλος</translation>
+    </message>
+    <message>
+        <source>Composer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Artist</source>

@@ -1047,6 +1047,10 @@
         <translation>&quot;-f&quot; 參數，請參閱 yt-dlp 文檔</translation>
     </message>
     <message>
+        <source>Additional params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>調整主視窗大小時維持面板尺寸（實驗性）</translation>
     </message>
@@ -3505,6 +3509,10 @@ Partially checked only if the content has less channels than the specified value
         <translation>標題</translation>
     </message>
     <message>
+        <source>Composer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Artist</source>
         <translation>藝術家</translation>
     </message>
@@ -3530,7 +3538,8 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>DRC</source>
-        <translation>動態範圍壓縮</translation>
+        <comment>Dynamic Range Compression</comment>
+        <translation type="unfinished">動態範圍壓縮</translation>
     </message>
 </context>
 <context>

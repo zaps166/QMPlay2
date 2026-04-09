@@ -1047,6 +1047,10 @@
         <translation>Parámetro &quot;-f&quot;, consulte la documentación de yt-dlp</translation>
     </message>
     <message>
+        <source>Additional params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>Mantener el tamaño de los paneles al cambiar el tamaño de la ventana principal (experimental)</translation>
     </message>
@@ -3515,6 +3519,10 @@ Parcialmente marcado sólo si el contenido tiene menos canales que el valor espe
     <message>
         <source>Title</source>
         <translation>Título</translation>
+    </message>
+    <message>
+        <source>Composer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Artist</source>

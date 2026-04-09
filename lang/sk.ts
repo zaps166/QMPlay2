@@ -1047,6 +1047,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Additional params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3501,6 +3505,10 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Title</source>
         <translation>Názov</translation>
+    </message>
+    <message>
+        <source>Composer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Artist</source>

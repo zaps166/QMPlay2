@@ -1048,6 +1048,10 @@
         <translation>“-f” parametresi, lütfen yt-dlp belgelendirmesine başvurun</translation>
     </message>
     <message>
+        <source>Additional params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>Ana pencereyi yeniden boyutlandırırken panel boyutlarını koru (deneysel)</translation>
     </message>
@@ -3523,6 +3527,10 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <message>
         <source>Title</source>
         <translation>Başlık</translation>
+    </message>
+    <message>
+        <source>Composer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Artist</source>

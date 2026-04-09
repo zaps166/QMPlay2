@@ -1047,6 +1047,10 @@
         <translation>parametr &quot;-f&quot;, proszę zapoznać się z dokumentacją yt-dlp</translation>
     </message>
     <message>
+        <source>Additional params</source>
+        <translation>Dodatkowe parametry</translation>
+    </message>
+    <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>Zachowaj rozmiar paneli podczas zmiany rozmiaru okna głównego (eksperymentalne)</translation>
     </message>
@@ -3503,6 +3507,10 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     <message>
         <source>Title</source>
         <translation>Tytuł</translation>
+    </message>
+    <message>
+        <source>Composer</source>
+        <translation>Kompozytor</translation>
     </message>
     <message>
         <source>Artist</source>

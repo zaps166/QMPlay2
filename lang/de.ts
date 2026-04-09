@@ -1046,6 +1046,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Additional params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3502,6 +3506,10 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
     <message>
         <source>Title</source>
         <translation>Titel</translation>
+    </message>
+    <message>
+        <source>Composer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Artist</source>

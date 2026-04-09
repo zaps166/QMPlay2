@@ -1047,6 +1047,10 @@
         <translation>Optie ‘-f’ - bekijk de yt-dlp-documentatie</translation>
     </message>
     <message>
+        <source>Additional params</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>Paneelafmetingen niet aanpassen na verkleinen/vergroten van hoofdvenster (experimenteel)</translation>
     </message>
@@ -3503,6 +3507,10 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     <message>
         <source>Title</source>
         <translation>Titel</translation>
+    </message>
+    <message>
+        <source>Composer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Artist</source>
