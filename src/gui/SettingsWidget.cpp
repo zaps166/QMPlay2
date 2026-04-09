@@ -208,6 +208,8 @@ void SettingsWidget::InitSettings()
 # endif
     QMPSettings.init("YtDl/DefaultQualityEnabled", false);
     QMPSettings.init("YtDl/DefaultQuality", QString());
+    QMPSettings.init("YtDl/AdditionalParamsEnabled", false);
+    QMPSettings.init("YtDl/AdditionalParams", QString());
 #endif
 
     QMPSettings.init("OpenGL/OnWindow", false);
@@ -500,6 +502,9 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         generalSettingsPage->dfltYtDlQualCB->setChecked(QMPSettings.getBool("YtDl/DefaultQualityEnabled"));
         generalSettingsPage->dfltYtDlQualE->setText(QMPSettings.getString("YtDl/DefaultQuality"));
 
+        generalSettingsPage->additionalYtDlParamsCB->setChecked(QMPSettings.getBool("YtDl/AdditionalParamsEnabled"));
+        generalSettingsPage->additionalYtDlParamsE->setText(QMPSettings.getString("YtDl/AdditionalParams"));
+
         generalSettingsPage->dontUpdateYtDlCB->setChecked(QMPSettings.getBool("YtDl/DontAutoUpdate"));
 
         connect(generalSettingsPage->cookiesFromBrowserCB, &QCheckBox::toggled, this, [this](bool checked) {
@@ -518,10 +523,14 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         connect(generalSettingsPage->dfltYtDlQualCB, &QCheckBox::toggled, this, [this](bool checked) {
             generalSettingsPage->dfltYtDlQualE->setEnabled(checked);
         });
+        connect(generalSettingsPage->additionalYtDlParamsCB, &QCheckBox::toggled, this, [this](bool checked) {
+            generalSettingsPage->additionalYtDlParamsE->setEnabled(checked);
+        });
 
         emit generalSettingsPage->cookiesFromBrowserCB->toggled(generalSettingsPage->cookiesFromBrowserCB->isChecked());
         emit generalSettingsPage->customYtDlCB->toggled(generalSettingsPage->customYtDlCB->isChecked());
         emit generalSettingsPage->dfltYtDlQualCB->toggled(generalSettingsPage->dfltYtDlQualCB->isChecked());
+        emit generalSettingsPage->additionalYtDlParamsCB->toggled(generalSettingsPage->additionalYtDlParamsCB->isChecked());
 
         connect(generalSettingsPage->customYtDlCB, &QCheckBox::toggled, this, [this](bool checked) {
             generalSettingsPage->dontUpdateYtDlCB->setChecked(checked);
@@ -1349,6 +1358,8 @@ void SettingsWidget::apply()
             QMPSettings.set("YtDl/CustomPath", generalSettingsPage->customYtDlE->text());
             QMPSettings.set("YtDl/DefaultQualityEnabled", generalSettingsPage->dfltYtDlQualCB->isChecked() && !generalSettingsPage->dfltYtDlQualE->text().simplified().isEmpty());
             QMPSettings.set("YtDl/DefaultQuality", generalSettingsPage->dfltYtDlQualE->text());
+            QMPSettings.set("YtDl/AdditionalParamsEnabled", generalSettingsPage->additionalYtDlParamsCB->isChecked() && !generalSettingsPage->additionalYtDlParamsE->text().simplified().isEmpty());
+            QMPSettings.set("YtDl/AdditionalParams", generalSettingsPage->additionalYtDlParamsE->text());
             QMPSettings.set("YtDl/DontAutoUpdate", generalSettingsPage->dontUpdateYtDlCB->isChecked());
 #endif
 

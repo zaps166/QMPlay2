@@ -209,6 +209,13 @@ QStringList YouTubeDL::exec(const QString &url, const QStringList &args, QString
     processArgs += m_commonArgs;
     if (!rawOutput)
         processArgs += "-j";
+    if (auto &QMPSettings = QMPlay2Core.getSettings(); QMPSettings.getBool("YtDl/AdditionalParamsEnabled"))
+    {
+        if (auto ap = QMPSettings.getString("YtDl/AdditionalParams").simplified(); !ap.isEmpty())
+        {
+            processArgs += QProcess::splitCommand(ap);
+        }
+    }
 
     startProcess(processArgs);
     if (!m_process.waitForStarted() && !m_aborted)
