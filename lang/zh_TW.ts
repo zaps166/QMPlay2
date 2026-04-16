@@ -1048,7 +1048,7 @@
     </message>
     <message>
         <source>Additional params</source>
-        <translation type="unfinished"></translation>
+        <translation>附加參數</translation>
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
@@ -3510,7 +3510,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Composer</source>
-        <translation type="unfinished"></translation>
+        <translation>作曲者</translation>
     </message>
     <message>
         <source>Artist</source>
@@ -3538,8 +3538,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>DRC</source>
-        <comment>Dynamic Range Compression</comment>
-        <translation type="unfinished">動態範圍壓縮</translation>
+        <translation>動態範圍壓縮</translation>
     </message>
 </context>
 <context>

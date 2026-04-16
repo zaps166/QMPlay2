@@ -124,7 +124,7 @@
     </message>
     <message>
         <source>Additional module parameter</source>
-        <translation>额外模块参数</translation>
+        <translation>附加模块参数</translation>
     </message>
 </context>
 <context>
@@ -1048,7 +1048,7 @@
     </message>
     <message>
         <source>Additional params</source>
-        <translation type="unfinished"></translation>
+        <translation>附加参数</translation>
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
@@ -3510,7 +3510,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Composer</source>
-        <translation type="unfinished"></translation>
+        <translation>作曲者</translation>
     </message>
     <message>
         <source>Artist</source>
@@ -3538,8 +3538,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>DRC</source>
-        <comment>Dynamic Range Compression</comment>
-        <translation type="unfinished">动态范围压缩</translation>
+        <translation>动态范围压缩</translation>
     </message>
 </context>
 <context>
