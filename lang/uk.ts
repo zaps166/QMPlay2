@@ -1048,7 +1048,7 @@
     </message>
     <message>
         <source>Additional params</source>
-        <translation type="unfinished"></translation>
+        <translation>Додаткові параметри></translation>
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
@@ -3510,7 +3510,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Composer</source>
-        <translation type="unfinished"></translation>
+        <translation>Композитор</translation>
     </message>
     <message>
         <source>Artist</source>
@@ -3539,7 +3539,7 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>DRC</source>
         <comment>Dynamic Range Compression</comment>
-        <translation type="unfinished"></translation>
+        <translation>Стиснення динамічного діапазону</translation>
     </message>
 </context>
 <context>
