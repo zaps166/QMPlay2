@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Unable to find supported sample format</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не удалось найти поддерживаемый формат файла</translation>
     </message>
 </context>
 <context>
@@ -75,7 +75,7 @@
     </message>
     <message>
         <source>GitHub download page</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Страница загрузки на GitHub</translation>
     </message>
 </context>
 <context>
@@ -242,7 +242,7 @@
     </message>
     <message>
         <source>Slider highlight color</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Цвет выделения ползунка</translation>
     </message>
 </context>
 <context>
@@ -265,7 +265,7 @@
     </message>
     <message>
         <source>&amp;Custom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">По желанию</translation>
     </message>
 </context>
 <context>
@@ -566,11 +566,11 @@
     </message>
     <message>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Неизвестно</translation>
     </message>
     <message>
         <source>Playback and recording</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Воспроизведение и запись</translation>
     </message>
 </context>
 <context>
@@ -1012,47 +1012,47 @@
     </message>
     <message>
         <source>Subtitles and tags encoding</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Кодирование субтитров и тегов</translation>
     </message>
     <message>
         <source>Output file path:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Путь к выходному файлу</translation>
     </message>
     <message>
         <source>youtube-dl settings</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Настройки youtube-dl</translation>
     </message>
     <message>
         <source>Cookies from browser</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Файлы cookie из браузера</translation>
     </message>
     <message>
         <source>Custom path</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пользовательский путь</translation>
     </message>
     <message>
         <source>Don&apos;t auto-update</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не обновлять автоматически</translation>
     </message>
     <message>
         <source>Please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ознакомьтесь с документацией по yt-dlp</translation>
     </message>
     <message>
         <source>Default quality</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Качество по умолчанию</translation>
     </message>
     <message>
         <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Параметр «-f», см. документацию по yt-dlp</translation>
     </message>
     <message>
         <source>Additional params</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Дополнительные параметры</translation>
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Сохранять размер панелей при изменении размера главного окна (экспериментальная функция)</translation>
     </message>
 </context>
 <context>
@@ -1143,11 +1143,11 @@
     </message>
     <message>
         <source>Remove specified &lt;url&gt; from playlist.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить указанный &lt;url&gt; из плейлиста</translation>
     </message>
     <message>
         <source>Start in tray.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Запустите в лотке.</translation>
     </message>
 </context>
 <context>
@@ -1859,7 +1859,7 @@
     </message>
     <message>
         <source>Only in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Только в полноэкранном режиме</translation>
     </message>
     <message>
         <source>FPS</source>
@@ -1867,59 +1867,59 @@
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Минимальное количество кадров в секунду (FPS) для удвоения частоты кадров</translation>
     </message>
     <message>
         <source>Maximum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Максимальная частота кадров видео для удвоения частоты кадров</translation>
     </message>
     <message>
         <source>Minimum:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Минимум</translation>
     </message>
     <message>
         <source>Maximum:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Максимум</translation>
     </message>
     <message>
         <source>Allow HDR content for VP9 codec</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Разрешить HDR-контент для кодека VP9</translation>
     </message>
     <message>
         <source>Try to automatically reconnect the network connection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Попвтка автоматического восстановления сетевого соединения</translation>
     </message>
     <message>
         <source>%1 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 кГц</translation>
     </message>
     <message>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Без ограничений</translation>
     </message>
     <message>
         <source>Linear volume scale in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Линейная шкала интенсивности в спектре FFT</translation>
     </message>
     <message>
         <source>Limit frequency in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Предельная частота в спектре FFT</translation>
     </message>
     <message>
         <source>Allow experimental FFmpeg features</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Разрешить экспериментальные функции FFmpeg</translation>
     </message>
     <message>
         <source>Useful for turning on HLS subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Полезно для включения субтитров HLS</translation>
     </message>
     <message>
         <source>Teletext page: </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Страница телетекста: </translation>
     </message>
     <message>
         <source>Transparent teletext background</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Прозрачный фон телетекста</translation>
     </message>
     <message>
         <source>Subtitles</source>
@@ -1927,23 +1927,23 @@
     </message>
     <message>
         <source>FFmpeg audio filters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Аудиофильтры FFmpeg</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Помощь</translation>
     </message>
     <message>
         <source>Do you want to restore the default settings?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Хотите восстановить настройки по умолчанию?</translation>
     </message>
     <message>
         <source>FFmpeg audio filters, example: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Аудиофильтры FFmpeg, пример</translation>
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;%4&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">В QMPlay2 поддерживаются не все аудиофильтры. Чтобы использовать некоторые фильтры, такие как «apos», необходимо включить параметры «принудительное преобразование каналов» и «использовать преобразование каналов перед фильтрами» в настройках воспроизведения. Обратитесь к документации FFmpeg. Доступные аудиофильтры:</translation>
     </message>
 </context>
 <context>
@@ -2040,11 +2040,11 @@
     </message>
     <message>
         <source>Bold</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Жирный</translation>
     </message>
     <message>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Предыстория</translation>
     </message>
 </context>
 <context>
@@ -2066,39 +2066,39 @@
     <name>OpenSubtitles</name>
     <message>
         <source>Subtitles browser</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Программа для просмотра субтитров</translation>
     </message>
     <message>
         <source>Type the movie name and press enter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Введите название фильма и нажмите Enter</translation>
     </message>
     <message>
         <source>Choose subtitles language</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выберите язык субтитров</translation>
     </message>
     <message>
         <source>Download in default web browser</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Скачать в браузере по умолчанию</translation>
     </message>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Загрузка...</translation>
     </message>
     <message>
         <source>Movie name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Название фильма</translation>
     </message>
     <message>
         <source>Uploaded</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Загружено</translation>
     </message>
     <message>
         <source>Downloaded</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Скачано</translation>
     </message>
     <message>
         <source>Search on OpenSubtitles</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Поиск на OpenSubtitles</translation>
     </message>
     <message>
         <source>%1 (Season %2)</source>
@@ -2106,11 +2106,11 @@
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ошибка</translation>
     </message>
     <message>
         <source>No subtitles found for the specified language</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Субтитры на указанном языке не найдены</translation>
     </message>
 </context>
 <context>
@@ -2299,43 +2299,43 @@
     </message>
     <message>
         <source>Recording error</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Recording error</translation>
     </message>
     <message>
         <source>Recording started: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Запись началась</translation>
     </message>
     <message>
         <source>Recording stopped</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Запись остановлена</translation>
     </message>
     <message>
         <source>Integer scaling: enabled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Масштабирование целых чисел: включено</translation>
     </message>
     <message>
         <source>Integer scaling: disabled</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Масштабирование целых чисел: отключено</translation>
     </message>
     <message>
         <source>Zoom: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Масштаб: %1</translation>
     </message>
     <message>
         <source>Custom aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Пользовательское соотношение сторон</translation>
     </message>
     <message>
         <source>Set aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Установить соотношение сторон</translation>
     </message>
     <message>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Масштаб</translation>
     </message>
     <message>
         <source>Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Установить масштаб</translation>
     </message>
 </context>
 <context>
@@ -2553,19 +2553,19 @@
     </message>
     <message>
         <source>Network buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Длина сетевого буфера</translation>
     </message>
     <message>
         <source>Live stream buffer length</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Длина буфера прямой трансляции</translation>
     </message>
     <message>
         <source>Remember playback position for each playlist entry</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Запоминать позицию воспроизведения для каждого элемента плейлиста</translation>
     </message>
     <message>
         <source>Desired video stream quality:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Желаемое качество видеопотока:</translation>
     </message>
     <message>
         <source>Default</source>
@@ -2573,27 +2573,27 @@
     </message>
     <message>
         <source>SD</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SD</translation>
     </message>
     <message>
         <source>HD</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HD</translation>
     </message>
     <message>
         <source>Full HD</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">>Full HD</translation>
     </message>
     <message>
         <source>4K</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">4K</translation>
     </message>
     <message>
         <source>Continue last playback when program starts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Продолжить воспроизведение с того места, на котором оно было прервано, при запуске программы</translation>
     </message>
     <message>
         <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Продолжительность должна составлять не менее 8 минут. Положение воспроизведения должно находиться в диапазоне [1%–99%] от общего времени воспроизведения. Вы можете продолжить воспроизведение, нажав на значок рядом с кнопкой полного экрана.</translation>
     </message>
 </context>
 <context>
@@ -2700,31 +2700,31 @@
     </message>
     <message>
         <source>&amp;Continue playback</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Продолжить воспроизведение</translation>
     </message>
     <message>
         <source>Continue playing from the last position</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Продолжить воспроизведение с последней позиции</translation>
     </message>
     <message>
         <source>&amp;Recording</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Запись</translation>
     </message>
     <message>
         <source>Un&amp;mute</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Без звука</translation>
     </message>
     <message>
         <source>&amp;Integer scaling</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Целочисленное масштабирование</translation>
     </message>
     <message>
         <source>&amp;Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Установить масштаб</translation>
     </message>
     <message>
         <source>&amp;Precise zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Точное масштабирование</translation>
     </message>
 </context>
 <context>
@@ -2811,19 +2811,19 @@
     </message>
     <message>
         <source>Pas&amp;te and play</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Склеивай и играй</translation>
     </message>
     <message>
         <source>&amp;Remove from list</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить из списка</translation>
     </message>
     <message>
         <source>Remove from &amp;disk</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить с диска</translation>
     </message>
     <message>
         <source>Clear &amp;ungrouped entries</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Очистить и отменить группировку записей</translation>
     </message>
 </context>
 <context>
@@ -2854,11 +2854,11 @@
     </message>
     <message>
         <source>Failed to delete one or more selected entries.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не удалось удалить одну или несколько выбранных записей.</translation>
     </message>
     <message>
         <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вы уверены, что хотите удалить выбранные записи с диска? Записи, не относящиеся к данному диску, будут удалены только из списка</translation>
     </message>
 </context>
 <context>
@@ -3037,11 +3037,11 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Type the station name and press Enter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Введите название станции и нажмите Enter</translation>
     </message>
     <message>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выберите «%1» из раскрывающегося списка</translation>
     </message>
     <message>
         <source>Connection error</source>
@@ -3049,7 +3049,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Search filter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Фильтр поиска</translation>
     </message>
 </context>
 <context>
@@ -3438,23 +3438,23 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Попробуйте воспроизвести видео в формате HDR10 в режиме HDR (экспериментальная функция)</translation>
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Масштабирование изображения с низким качеством (метод ближайшего)</translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Полезно для ретро-масштабирования. Также может использоваться в программной реализации Vulkan для снижения нагрузки на ЦП</translation>
     </message>
     <message>
         <source>Cannot change the directory</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не удается сменить каталог</translation>
     </message>
     <message>
         <source>Choose youtube-dl script or executable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Выберите скрипт или исполняемый файл youtube-dl</translation>
     </message>
 </context>
 <context>
@@ -3510,7 +3510,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Composer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Композитор</translation>
     </message>
     <message>
         <source>Artist</source>
@@ -3691,7 +3691,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Страница загрузки находится в разделе «Справка» → «О программе QMPlay2»</translation>
     </message>
 </context>
 <context>
@@ -3788,15 +3788,15 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Negative</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отрицательный</translation>
     </message>
     <message>
         <source>Disable negative</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Отключить отрицательное</translation>
     </message>
     <message>
         <source>Enable negative</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Включить отрицательное</translation>
     </message>
 </context>
 <context>
@@ -3853,7 +3853,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Screenshot saved as: %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Снимок экрана сохранен как: %1</translation>
     </message>
 </context>
 <context>
@@ -3994,7 +3994,7 @@ Partially checked only if the content has less channels than the specified value
     <name>Zoom</name>
     <message>
         <source>&amp;Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Масштабирование</translation>
     </message>
 </context>
 </TS>
