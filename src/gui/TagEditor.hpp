@@ -26,6 +26,7 @@ namespace TagLib {
 }
 class QPushButton;
 class QLineEdit;
+class QPlainTextEdit;
 class QMimeData;
 class QSpinBox;
 class QLabel;
@@ -76,7 +77,8 @@ private:
     QByteArray pictureMimeType;
     bool pictureModificated, pictureBChecked;
 
-    QLineEdit *titleE, *artistE, *albumE, *commentE, *genreE;
+    QLineEdit *titleE, *artistE, *albumE, *genreE;
+    QPlainTextEdit *commentE;
     QSpinBox *yearB, *trackB;
     QGroupBox *pictureB;
     PictureW *pictureW;

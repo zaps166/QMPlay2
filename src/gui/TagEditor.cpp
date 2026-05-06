@@ -90,6 +90,7 @@ static inline Ogg::XiphComment *getXiphComment(File &file)
     return nullptr;
 }
 
+#include <QPlainTextEdit>
 #include <QImageReader>
 #include <QFileDialog>
 #include <QPushButton>
@@ -217,7 +218,7 @@ TagEditor::TagEditor() :
     tagsLayout->addRow(tr("Title") + ": ", titleE = new QLineEdit);
     tagsLayout->addRow(tr("Artist") + ": ", artistE = new QLineEdit);
     tagsLayout->addRow(tr("Album") + ": ", albumE = new QLineEdit);
-    tagsLayout->addRow(tr("Comment") + ": ", commentE = new QLineEdit);
+    tagsLayout->addRow(tr("Comment") + ": ", commentE = new QPlainTextEdit);
     tagsLayout->addRow(tr("Genre") + ": ", genreE = new QLineEdit);
     tagsLayout->addRow(tr("Year") + ": ", yearB);
     tagsLayout->addRow(tr("Track") + ": ", trackB);
@@ -289,7 +290,7 @@ bool TagEditor::open(const QString &fileName)
             titleE->setText(tag.title().toCString(true));
             artistE->setText(tag.artist().toCString(true));
             albumE->setText(tag.album().toCString(true));
-            commentE->setText(tag.comment().toCString(true));
+            commentE->setPlainText(tag.comment().toCString(true));
             genreE->setText(tag.genre().toCString(true));
             yearB->setValue(tag.year());
             trackB->setValue(tag.track());
@@ -442,9 +443,9 @@ bool TagEditor::save()
             tag.setAlbum(String(albumE->text().toUtf8().constData(), String::UTF8));
             mustSave = true;
         }
-        if (commentE->text() != tag.comment().toCString(true))
+        if (commentE->toPlainText() != tag.comment().toCString(true))
         {
-            tag.setComment(String(commentE->text().toUtf8().constData(), String::UTF8));
+            tag.setComment(String(commentE->toPlainText().toUtf8().constData(), String::UTF8));
             mustSave = true;
         }
         if (genreE->text() != tag.genre().toCString(true))
