@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Unable to find supported sample format</source>
-        <translation type="unfinished"></translation>
+        <translation>Αδύνατη η εύρεση υποστηριζόμενης μορφής δείγματος</translation>
     </message>
 </context>
 <context>
@@ -43,15 +43,15 @@
     </message>
     <message>
         <source>Clear log</source>
-        <translation>Καθαρισμός αρχείων</translation>
+        <translation>Καθάρισμα αρχείων</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Κλείσιμο</translation>
+        <translation>Κλείσε</translation>
     </message>
     <message>
         <source>Can&apos;t clear log</source>
-        <translation>Αδύνατη εκκαθάριση του αρχείου καταγραφής</translation>
+        <translation>Αδύναμια εκκαθάρισης αρχείων καταγραφής</translation>
     </message>
     <message>
         <source>Change log</source>
@@ -63,15 +63,15 @@
     </message>
     <message>
         <source>video and audio player</source>
-        <translation>συσκευή αναπαραγωγής ήχου και βίντεο</translation>
+        <translation>αναπαραγωγέας ήχου και εικόνας</translation>
     </message>
     <message>
         <source>Programmer</source>
-        <translation>Προγραμματιστης</translation>
+        <translation>Προγραμματιστής</translation>
     </message>
     <message>
         <source>Contributors</source>
-        <translation>Συν-συγγραφείς</translation>
+        <translation>Συνεισφέροντες</translation>
     </message>
     <message>
         <source>GitHub download page</source>
@@ -82,7 +82,7 @@
     <name>Add</name>
     <message>
         <source>&amp;Address</source>
-        <translation>&amp;Διεύθηνση</translation>
+        <translation>&amp;Διεύθυνση</translation>
     </message>
     <message>
         <source>&amp;Files</source>
@@ -94,7 +94,7 @@
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation>&amp;Πρόσθεσε</translation>
+        <translation>&amp;Πρόσθεση</translation>
     </message>
 </context>
 <context>
@@ -124,7 +124,7 @@
     </message>
     <message>
         <source>Additional module parameter</source>
-        <translation>Επιπλέον παράμετρος μονάδας</translation>
+        <translation>Πρόσθετη παράμετρος μονάδας</translation>
     </message>
 </context>
 <context>
@@ -260,7 +260,7 @@
         <translation>&amp;Αυτόματο</translation>
     </message>
     <message>
-        <source>D&amp;epends on size</source>
+        <source>&amp;Depends on size</source>
         <translation>&amp;Εξαρτάται από το μέγεθος</translation>
     </message>
     <message>
@@ -280,11 +280,11 @@
     </message>
     <message>
         <source>No CD/DVD drives found!</source>
-        <translation>Δεν βρέθηκαν οδηγίες CD/DVD!</translation>
+        <translation>Δεν βρέθηκαν οδηγοί CD/DVD!</translation>
     </message>
     <message>
         <source>Choose AudioCD image</source>
-        <translation>Επιλογή εικόνας AudioCD</translation>
+        <translation>Επιλέξτε εικόνα AudioCD</translation>
     </message>
     <message>
         <source>Supported AudioCD images</source>
@@ -303,11 +303,11 @@
     </message>
     <message>
         <source>Track</source>
-        <translation>Ήχος</translation>
+        <translation>Κομμάτι</translation>
     </message>
     <message>
         <source>Error reading track</source>
-        <translation>Σφάλμα κατά την ανάγνωση ήχου</translation>
+        <translation>Σφάλμα κατά την ανάγνωση Κομματιού</translation>
     </message>
     <message>
         <source>No CD</source>
@@ -1048,7 +1048,7 @@
     </message>
     <message>
         <source>Additional params</source>
-        <translation type="unfinished"></translation>
+        <translation>Πρόσθετες παραμέτρους</translation>
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
@@ -1147,7 +1147,7 @@
     </message>
     <message>
         <source>Start in tray.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ξεκινήστε από το δίσκο.</translation>
     </message>
 </context>
 <context>
@@ -3510,7 +3510,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Composer</source>
-        <translation type="unfinished"></translation>
+        <translation>Συνθέτης</translation>
     </message>
     <message>
         <source>Artist</source>
@@ -3539,7 +3539,7 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>DRC</source>
         <comment>Dynamic Range Compression</comment>
-        <translation type="unfinished"></translation>
+        <translation>Συμπίεση δυναμικού εύρους</translation>
     </message>
 </context>
 <context>
