@@ -260,7 +260,7 @@
         <translation>&amp;Αυτόματο</translation>
     </message>
     <message>
-        <source>&amp;Depends on size</source>
+        <source>D&amp;epends on size</source>
         <translation>&amp;Εξαρτάται από το μέγεθος</translation>
     </message>
     <message>
