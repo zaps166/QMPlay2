@@ -1048,7 +1048,7 @@
     </message>
     <message>
         <source>Additional params</source>
-        <translation type="unfinished"></translation>
+        <translation>معاملات إضافية</translation>
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
@@ -3510,7 +3510,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Composer</source>
-        <translation type="unfinished"></translation>
+        <translation>الملحن</translation>
     </message>
     <message>
         <source>Artist</source>
