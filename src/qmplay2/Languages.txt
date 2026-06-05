@@ -1,172 +1,164 @@
+aar:Afar
 abk:Abkhazian
 ace:Achinese
 ach:Acoli
 ada:Adangme
-ady:Adyghe; Adygei
-aar:Afar
+ady:Adyghe
+afa:Afro-Asiatic languages
 afh:Afrihili
 afr:Afrikaans
-afa:Afro-Asiatic languages
-ain:Ainu
+ain:Ainu (Japan)
 aka:Akan
 akk:Akkadian
 alb:Albanian
 ale:Aleut
 alg:Algonquian languages
-tut:Altaic languages
+alt:Southern Altai
 amh:Amharic
 anp:Angika
 apa:Apache languages
 ara:Arabic
 arg:Aragonese
-arp:Arapaho
-arw:Arawak
 arm:Armenian
-rup:Aromanian; Arumanian; Macedo-Romanian
+arn:Mapudungun
+arp:Arapaho
 art:Artificial languages
+arw:Arawak
 asm:Assamese
-ast:Asturian; Bable; Leonese; Asturleonese
+ast:Asturian
 ath:Athapascan languages
 aus:Australian languages
-map:Austronesian languages
 ava:Avaric
 ave:Avestan
 awa:Awadhi
 aym:Aymara
 aze:Azerbaijani
-ban:Balinese
-bat:Baltic languages
+bad:Banda languages
+bai:Bamileke languages
+bak:Bashkir
 bal:Baluchi
 bam:Bambara
-bai:Bamileke languages
-bad:Banda languages
-bnt:Bantu languages
-bas:Basa
-bak:Bashkir
+ban:Balinese
 baq:Basque
-btk:Batak languages
-bej:Beja; Bedawiyet
+bas:Basa (Cameroon)
+bat:Baltic languages
+bej:Beja
 bel:Belarusian
-bem:Bemba
+bem:Bemba (Zambia)
 ben:Bengali
 ber:Berber languages
 bho:Bhojpuri
 bih:Bihari languages
 bik:Bikol
-bin:Bini; Edo
+bin:Bini
 bis:Bislama
-byn:Blin; Bilin
-zbl:Blissymbols; Blissymbolics; Bliss
-nob:Bokmål, Norwegian; Norwegian Bokmål
+bla:Siksika
+bnt:Bantu languages
 bos:Bosnian
 bra:Braj
 bre:Breton
+btk:Batak languages
+bua:Buriat
 bug:Buginese
 bul:Bulgarian
-bua:Buriat
 bur:Burmese
+byn:Bilin
 cad:Caddo
-cat:Catalan; Valencian
+cai:Central American Indian languages
+car:Galibi Carib
+cat:Catalan
 cau:Caucasian languages
 ceb:Cebuano
 cel:Celtic languages
-cai:Central American Indian languages
-khm:Central Khmer
-chg:Chagatai
-cmc:Chamic languages
 cha:Chamorro
-che:Chechen
-chr:Cherokee
-chy:Cheyenne
 chb:Chibcha
-nya:Chichewa; Chewa; Nyanja
+che:Chechen
+chg:Chagatai
 chi:Chinese
-chn:Chinook jargon
-chp:Chipewyan; Dene Suline
-cho:Choctaw
-chu:Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic
 chk:Chuukese
+chm:Mari (Russia)
+chn:Chinook jargon
+cho:Choctaw
+chp:Chipewyan
+chr:Cherokee
+chu:Church Slavic
 chv:Chuvash
-nwc:Classical Newari; Old Newari; Classical Nepal Bhasa
-syc:Classical Syriac
+chy:Cheyenne
+cmc:Chamic languages
+cnr:Montenegrin
 cop:Coptic
 cor:Cornish
 cos:Corsican
-cre:Cree
-mus:Creek
-crp:Creoles and pidgins
 cpe:Creoles and pidgins, English based
 cpf:Creoles and pidgins, French-based
 cpp:Creoles and pidgins, Portuguese-based
-crh:Crimean Tatar; Crimean Turkish
-hrv:Croatian
+cre:Cree
+crh:Crimean Tatar
+crp:Creoles and pidgins
+csb:Kashubian
 cus:Cushitic languages
 cze:Czech
 dak:Dakota
 dan:Danish
 dar:Dargwa
+day:Land Dayak languages
 del:Delaware
+den:Slavey
+dgr:Tlicho
 din:Dinka
-div:Divehi; Dhivehi; Maldivian
-doi:Dogri
-dgr:Dogrib
+div:Dhivehi
+doi:Dogri (macrolanguage)
 dra:Dravidian languages
+dsb:Lower Sorbian
 dua:Duala
-dum:Dutch, Middle (ca.1050-1350)
-dut:Dutch; Flemish
+dut:Dutch
 dyu:Dyula
 dzo:Dzongkha
-frs:Eastern Frisian
 efi:Efik
-egy:Egyptian (Ancient)
 eka:Ekajuk
 elx:Elamite
 eng:English
-enm:English, Middle (1100-1500)
-ang:English, Old (ca.450-1100)
-myv:Erzya
 epo:Esperanto
 est:Estonian
 ewe:Ewe
 ewo:Ewondo
-fan:Fang
-fat:Fanti
+fan:Fang (Equatorial Guinea)
 fao:Faroese
+fat:Fanti
 fij:Fijian
-fil:Filipino; Pilipino
+fil:Filipino
 fin:Finnish
 fiu:Finno-Ugrian languages
 fon:Fon
 fre:French
-frm:French, Middle (ca.1400-1600)
-fro:French, Old (842-ca.1400)
-fur:Friulian
+frr:Northern Frisian
+frs:Eastern Frisian
+fry:Western Frisian
 ful:Fulah
+fur:Friulian
 gaa:Ga
-gla:Gaelic; Scottish Gaelic
-car:Galibi Carib
-glg:Galician
-lug:Ganda
 gay:Gayo
-gba:Gbaya
-gez:Geez
+gba:Gbaya (Central African Republic)
+gem:Germanic languages
 geo:Georgian
 ger:German
-gmh:German, Middle High (ca.1050-1500)
-goh:German, Old High (ca.750-1050)
-gem:Germanic languages
+gez:Geez
 gil:Gilbertese
+gla:Scottish Gaelic
+gle:Irish
+glg:Galician
+glv:Manx
 gon:Gondi
 gor:Gorontalo
 got:Gothic
 grb:Grebo
-grc:Greek, Ancient (to 1453)
-gre:Greek, Modern (1453-)
+gre:Greek
 grn:Guarani
+gsw:Swiss German
 guj:Gujarati
-gwi:Gwich'in
+gwi:Gwichʼin
 hai:Haida
-hat:Haitian; Haitian Creole
+hat:Haitian
 hau:Hausa
 haw:Hawaiian
 heb:Hebrew
@@ -174,286 +166,277 @@ her:Herero
 hil:Hiligaynon
 him:Himachali languages; Western Pahari languages
 hin:Hindi
-hmo:Hiri Motu
 hit:Hittite
-hmn:Hmong; Mong
+hmn:Hmong
+hmo:Hiri Motu
+hrv:Croatian
+hsb:Upper Sorbian
 hun:Hungarian
 hup:Hupa
 iba:Iban
+ibo:Igbo
 ice:Icelandic
 ido:Ido
-ibo:Igbo
+iii:Sichuan Yi
 ijo:Ijo languages
-ilo:Iloko
-smn:Inari Sami
-inc:Indic languages
-ine:Indo-European languages
-ind:Indonesian
-inh:Ingush
-ina:Interlingua (International Auxiliary Language Association)
-ile:Interlingue; Occidental
 iku:Inuktitut
+ile:Interlingue
+ilo:Iloko
+ina:Interlingua (IALA)
+inc:Indic languages
+ind:Indonesian
+ine:Indo-European languages
+inh:Ingush
 ipk:Inupiaq
 ira:Iranian languages
-gle:Irish
-mga:Irish, Middle (900-1200)
-sga:Irish, Old (to 900)
 iro:Iroquoian languages
 ita:Italian
-jpn:Japanese
 jav:Javanese
-jrb:Judeo-Arabic
+jbo:Lojban
+jpn:Japanese
 jpr:Judeo-Persian
-kbd:Kabardian
-kab:Kabyle
-kac:Kachin; Jingpho
-kal:Kalaallisut; Greenlandic
-xal:Kalmyk; Oirat
-kam:Kamba
-kan:Kannada
-kau:Kanuri
+jrb:Judeo-Arabic
 kaa:Kara-Kalpak
-krc:Karachay-Balkar
-krl:Karelian
+kab:Kabyle
+kac:Kachin
+kal:Kalaallisut
+kam:Kamba (Kenya)
+kan:Kannada
 kar:Karen languages
 kas:Kashmiri
-csb:Kashubian
+kau:Kanuri
 kaw:Kawi
 kaz:Kazakh
+kbd:Kabardian
 kha:Khasi
 khi:Khoisan languages
-kho:Khotanese; Sakan
-kik:Kikuyu; Gikuyu
-kmb:Kimbundu
+khm:Khmer
+kho:Khotanese
+kik:Kikuyu
 kin:Kinyarwanda
-kir:Kirghiz; Kyrgyz
-tlh:Klingon; tlhIngan-Hol
+kir:Kirghiz
+kmb:Kimbundu
+kok:Konkani (macrolanguage)
 kom:Komi
 kon:Kongo
-kok:Konkani
 kor:Korean
 kos:Kosraean
 kpe:Kpelle
+krc:Karachay-Balkar
+krl:Karelian
 kro:Kru languages
-kua:Kuanyama; Kwanyama
+kru:Kurukh
+kua:Kuanyama
 kum:Kumyk
 kur:Kurdish
-kru:Kurukh
-kut:Kutenai
+kut:Ktunaxa
 lad:Ladino
 lah:Lahnda
 lam:Lamba
-day:Land Dayak languages
 lao:Lao
 lat:Latin
 lav:Latvian
 lez:Lezghian
-lim:Limburgan; Limburger; Limburgish
+lim:Limburgan
 lin:Lingala
 lit:Lithuanian
-jbo:Lojban
-nds:Low German; Low Saxon; German, Low; Saxon, Low
-dsb:Lower Sorbian
+lol:Mongo
 loz:Lozi
-lub:Luba-Katanga
+ltz:Luxembourgish
 lua:Luba-Lulua
-lui:Luiseno
-smj:Lule Sami
+lub:Luba-Katanga
+lug:Ganda
+lui:Luiseño
 lun:Lunda
 luo:Luo (Kenya and Tanzania)
 lus:Lushai
-ltz:Luxembourgish; Letzeburgesch
 mac:Macedonian
 mad:Madurese
 mag:Magahi
+mah:Marshallese
 mai:Maithili
 mak:Makasar
-mlg:Malagasy
-may:Malay
 mal:Malayalam
+man:Mandingo
+mao:Maori
+map:Austronesian languages
+mar:Marathi
+mas:Masai
+may:Malay (macrolanguage)
+mdf:Moksha
+mdr:Mandar
+men:Mende (Sierra Leone)
+mic:Mi'kmaq
+min:Minangkabau
+mis:Uncoded languages
+mkh:Mon-Khmer languages
+mlg:Malagasy
 mlt:Maltese
 mnc:Manchu
-mdr:Mandar
-man:Mandingo
 mni:Manipuri
 mno:Manobo languages
-glv:Manx
-mao:Maori
-arn:Mapudungun; Mapuche
-mar:Marathi
-chm:Mari
-mah:Marshallese
-mwr:Marwari
-mas:Masai
-myn:Mayan languages
-men:Mende
-mic:Mi'kmaq; Micmac
-min:Minangkabau
-mwl:Mirandese
 moh:Mohawk
-mdf:Moksha
-mkh:Mon-Khmer languages
-lol:Mongo
 mon:Mongolian
 mos:Mossi
 mul:Multiple languages
 mun:Munda languages
-nqo:N'Ko
+mus:Creek
+mwl:Mirandese
+mwr:Marwari
+myn:Mayan languages
+myv:Erzya
 nah:Nahuatl languages
-nau:Nauru
-nav:Navajo; Navaho
-nde:Ndebele, North; North Ndebele
-nbl:Ndebele, South; South Ndebele
-ndo:Ndonga
+nai:North American Indian languages
 nap:Neapolitan
-new:Nepal Bhasa; Newari
-nep:Nepali
+nau:Nauru
+nav:Navajo
+nbl:South Ndebele
+nde:North Ndebele
+ndo:Ndonga
+nds:Low German
+nep:Nepali (macrolanguage)
+new:Nepal Bhasa
 nia:Nias
 nic:Niger-Kordofanian languages
-ssa:Nilo-Saharan languages
 niu:Niuean
-zxx:No linguistic content; Not applicable
+nno:Norwegian Nynorsk
+nob:Norwegian Bokmål
 nog:Nogai
-non:Norse, Old
-nai:North American Indian languages
-frr:Northern Frisian
-sme:Northern Sami
-nno:Norwegian Nynorsk; Nynorsk, Norwegian
+non:Old Norse
 nor:Norwegian
+nqo:N'Ko
+nso:Pedi
 nub:Nubian languages
+nwc:Classical Newari
+nya:Chichewa
 nym:Nyamwezi
 nyn:Nyankole
 nyo:Nyoro
 nzi:Nzima
-oci:Occitan (post 1500)
-arc:Official Aramaic (700-300 BCE); Imperial Aramaic (700-300 BCE)
+oci:Occitan
 oji:Ojibwa
-ori:Oriya
+ori:Oriya (macrolanguage)
 orm:Oromo
 osa:Osage
-oss:Ossetian; Ossetic
+oss:Iron Ossetic
 oto:Otomian languages
-pal:Pahlavi
-pau:Palauan
-pli:Pali
-pam:Pampanga; Kapampangan
-pag:Pangasinan
-pan:Panjabi; Punjabi
-pap:Papiamento
 paa:Papuan languages
-nso:Pedi; Sepedi; Northern Sotho
+pag:Pangasinan
+pal:Pahlavi
+pam:Pampanga
+pan:Panjabi
+pap:Papiamento
+pau:Palauan
 per:Persian
-peo:Persian, Old (ca.600-400 B.C.)
 phi:Philippine languages
 phn:Phoenician
-pon:Pohnpeian
+pli:Pali
 pol:Polish
+pon:Pohnpeian
 por:Portuguese
 pra:Prakrit languages
-pro:Provençal, Old (to 1500); Occitan, Old (to 1500)
-pus:Pushto; Pashto
+pus:Pushto
 que:Quechua
 raj:Rajasthani
 rap:Rapanui
-rar:Rarotongan; Cook Islands Maori
+rar:Rarotongan
 roa:Romance languages
-rum:Romanian; Moldavian; Moldovan
 roh:Romansh
 rom:Romany
+rum:Romanian
 run:Rundi
+rup:Macedo-Romanian
 rus:Russian
-sal:Salishan languages
-sam:Samaritan Aramaic
-smi:Sami languages
-smo:Samoan
 sad:Sandawe
 sag:Sango
+sah:Yakut
+sai:South American Indian languages
+sal:Salishan languages
+sam:Samaritan Aramaic
 san:Sanskrit
-sat:Santali
-srd:Sardinian
 sas:Sasak
+sat:Santali
+scn:Sicilian
 sco:Scots
 sel:Selkup
 sem:Semitic languages
-srp:Serbian
-srr:Serer
-shn:Shan
-sna:Shona
-iii:Sichuan Yi; Nuosu
-scn:Sicilian
-sid:Sidamo
 sgn:Sign Languages
-bla:Siksika
-snd:Sindhi
-sin:Sinhala; Sinhalese
-sit:Sino-Tibetan languages
+shn:Shan
+sid:Sidamo
+sin:Sinhala
 sio:Siouan languages
-sms:Skolt Sami
-den:Slave (Athapascan)
+sit:Sino-Tibetan languages
 sla:Slavic languages
 slo:Slovak
 slv:Slovenian
+sma:Southern Sami
+sme:Northern Sami
+smi:Sami languages
+smj:Lule Sami
+smn:Inari Sami
+smo:Samoan
+sms:Skolt Sami
+sna:Shona
+snd:Sindhi
+snk:Soninke
 sog:Sogdian
 som:Somali
 son:Songhai languages
-snk:Soninke
-wen:Sorbian languages
-sot:Sotho, Southern
-sai:South American Indian languages
-alt:Southern Altai
-sma:Southern Sami
-spa:Spanish; Castilian
+sot:Southern Sotho
+spa:Spanish
+srd:Sardinian
 srn:Sranan Tongo
-zgh:Standard Moroccan Tamazight
+srp:Serbian
+srr:Serer
+ssa:Nilo-Saharan languages
+ssw:Swati
 suk:Sukuma
-sux:Sumerian
 sun:Sundanese
 sus:Susu
-swa:Swahili
-ssw:Swati
+sux:Sumerian
+swa:Swahili (macrolanguage)
 swe:Swedish
-gsw:Swiss German; Alemannic; Alsatian
+syc:Classical Syriac
 syr:Syriac
-tgl:Tagalog
 tah:Tahitian
 tai:Tai languages
-tgk:Tajik
-tmh:Tamashek
 tam:Tamil
 tat:Tatar
 tel:Telugu
+tem:Timne
 ter:Tereno
 tet:Tetum
+tgk:Tajik
+tgl:Tagalog
 tha:Thai
 tib:Tibetan
 tig:Tigre
 tir:Tigrinya
-tem:Timne
 tiv:Tiv
-tli:Tlingit
-tpi:Tok Pisin
 tkl:Tokelau
+tlh:Klingon
+tli:Tlingit
+tmh:Tamashek
 tog:Tonga (Nyasa)
 ton:Tonga (Tonga Islands)
+tpi:Tok Pisin
 tsi:Tsimshian
-tso:Tsonga
 tsn:Tswana
+tso:Tsonga
+tuk:Turkmen
 tum:Tumbuka
 tup:Tupi languages
 tur:Turkish
-ota:Turkish, Ottoman (1500-1928)
-tuk:Turkmen
+tut:Altaic languages
 tvl:Tuvalu
-tyv:Tuvinian
 twi:Twi
+tyv:Tuvinian
 udm:Udmurt
 uga:Ugaritic
-uig:Uighur; Uyghur
+uig:Uighur
 ukr:Ukrainian
 umb:Umbundu
-mis:Uncoded languages
 und:Undetermined
-hsb:Upper Sorbian
 urd:Urdu
 uzb:Uzbek
 vai:Vai
@@ -462,24 +445,27 @@ vie:Vietnamese
 vol:Volapük
 vot:Votic
 wak:Wakashan languages
-wln:Walloon
-war:Waray
+wal:Wolaytta
+war:Waray (Philippines)
 was:Washo
 wel:Welsh
-fry:Western Frisian
-wal:Wolaitta; Wolaytta
+wen:Sorbian languages
+wln:Walloon
 wol:Wolof
+xal:Kalmyk
 xho:Xhosa
-sah:Yakut
 yao:Yao
 yap:Yapese
 yid:Yiddish
 yor:Yoruba
 ypk:Yupik languages
-znd:Zande languages
 zap:Zapotec
-zza:Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki
+zbl:Blissymbols
 zen:Zenaga
-zha:Zhuang; Chuang
+zgh:Standard Moroccan Tamazight
+zha:Zhuang
+znd:Zande languages
 zul:Zulu
 zun:Zuni
+zxx:No linguistic content
+zza:Zaza

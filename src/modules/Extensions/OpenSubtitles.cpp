@@ -136,7 +136,7 @@ OpenSubtitles::OpenSubtitles(Module &module, const QIcon &icon)
     });
 
     m_languages->setToolTip(tr("Choose subtitles language"));
-    m_languages->setMaximumSize(100, m_languages->maximumHeight());
+    m_languages->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     const auto lang = sets().getString(QStringLiteral("Language"), QStringLiteral("eng"));
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     const auto languagesMap = QMPlay2Core.getLanguagesMap();
@@ -148,17 +148,18 @@ OpenSubtitles::OpenSubtitles(Module &module, const QIcon &icon)
     for (auto &&[s, l] : QMPlay2Core.getLanguagesMap().asKeyValueRange())
     {
 #endif
-        if (!l.contains(",") && !l.contains(";") && !l.endsWith("languages"))
+        if (!l.endsWith("languages"))
         {
-            if (int i = l.indexOf("("); i > -1)
-            {
-                l.remove(i, l.size() - i);
-            }
             m_languages->addItem(l, s);
-            if (s == lang)
-            {
-                m_languages->setCurrentIndex(m_languages->count() - 1);
-            }
+        }
+    }
+    m_languages->model()->sort(0);
+    if (!lang.isEmpty())
+    {
+        const int idx = m_languages->findData(lang);
+        if (idx > -1)
+        {
+            m_languages->setCurrentIndex(idx);
         }
     }
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
