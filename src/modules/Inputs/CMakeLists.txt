@@ -5,14 +5,12 @@ set(Inputs_HDR
     Inputs.hpp
     ToneGenerator.hpp
     PCM.hpp
-    Rayman2.hpp
 )
 
 set(Inputs_SRC
     Inputs.cpp
     ToneGenerator.cpp
     PCM.cpp
-    Rayman2.cpp
 )
 
 set(Inputs_RESOURCES

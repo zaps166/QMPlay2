@@ -160,9 +160,6 @@ add_feature_info(RubberBand USE_RUBBERBAND "Build with RubberBand support")
 option(USE_INPUTS "Build with Inputs module" ON)
 add_feature_info(Inputs USE_INPUTS "Build with Inputs module")
 
-option(USE_MODPLUG "Build with Modplug module" ON)
-add_feature_info(Modplug USE_MODPLUG "Build with Modplug module")
-
 option(USE_EXTENSIONS "Build with Extensions module" ON)
 add_feature_info(Extensions USE_EXTENSIONS "Build with Extensions module")
 

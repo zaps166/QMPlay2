@@ -3,6 +3,5 @@
         <file alias="Inputs.svgz">Inputs.svgz</file>
         <file alias="PCM.svgz">PCM.svgz</file>
         <file alias="ToneGenerator.svgz">ToneGenerator.svgz</file>
-        <file alias="Rayman2">Rayman2.png</file>
     </qresource>
 </RCC>

@@ -195,11 +195,3 @@ private:
     const uint8_t *data, *const dataStart, *const dataEnd;
     const bool data_bigendian;
 };
-
-static inline uint32_t FourCC(const char str[5], const bool data_bigendian = false)
-{
-    if (data_bigendian)
-        return str[3] | str[2] << 8 | str[1] << 16 | str[0] << 24;
-    else
-        return str[0] | str[1] << 8 | str[2] << 16 | str[3] << 24;
-}

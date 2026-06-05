@@ -19,7 +19,6 @@
 #include <Inputs.hpp>
 #include <ToneGenerator.hpp>
 #include <PCM.hpp>
-#include <Rayman2.hpp>
 
 #include <QDialogButtonBox>
 #include <QGridLayout>
@@ -43,7 +42,7 @@ constexpr const char *g_formatName[PCM::FORMAT_COUNT] = {
 
 Inputs::Inputs() :
     Module("Inputs"),
-    toneIcon(":/ToneGenerator.svgz"), pcmIcon(":/PCM.svgz"), rayman2Icon(":/Rayman2")
+    toneIcon(":/ToneGenerator.svgz"), pcmIcon(":/PCM.svgz")
 {
     m_icon = QIcon(":/Inputs.svgz");
 
@@ -58,7 +57,6 @@ Inputs::Inputs() :
     init("PCM/srate", 44100);
     init("PCM/offset", static_cast<int>(0));
     init("PCM/BE", false);
-    init("Rayman2", true);
 }
 
 QList<Inputs::Info> Inputs::getModulesInfo(const bool showDisabled) const
@@ -67,8 +65,6 @@ QList<Inputs::Info> Inputs::getModulesInfo(const bool showDisabled) const
     modulesInfo += Info(ToneGeneratorName, DEMUXER, toneIcon);
     if (showDisabled || getBool("PCM"))
         modulesInfo += Info(PCMName, DEMUXER, getStringList("PCM/extensions"), pcmIcon);
-    if (showDisabled || getBool("Rayman2"))
-        modulesInfo += Info(Rayman2Name, DEMUXER, QStringList{"apm"}, rayman2Icon);
     return modulesInfo;
 }
 void *Inputs::createInstance(const QString &name)
@@ -77,8 +73,6 @@ void *Inputs::createInstance(const QString &name)
         return new ToneGenerator(*this);
     else if (name == PCMName)
         return new PCM(*this);
-    else if (name == Rayman2Name)
-        return new Rayman2(*this);
     return nullptr;
 }
 
@@ -294,13 +288,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     pcmLayout->addWidget(endianB, 4, 1, 1, 2);
     pcmLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding), 5, 1, 1, 2);
 
-    rayman2EB = new QCheckBox(tr("Rayman2 music (*.apm)"));
-    rayman2EB->setChecked(sets().getBool("Rayman2"));
-
     QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(toneGenerator);
     layout->addWidget(pcmB);
-    layout->addWidget(rayman2EB);
 }
 
 void ModuleSettingsWidget::applyFreqs()
@@ -326,5 +316,4 @@ void ModuleSettingsWidget::saveSettings()
     sets().set("PCM/srate", srateB->value());
     sets().set("PCM/offset", offsetB->value());
     sets().set("PCM/BE", (bool)endianB->currentIndex());
-    sets().set("Rayman2", rayman2EB->isChecked());
 }

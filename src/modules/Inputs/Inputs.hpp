@@ -33,7 +33,7 @@ private:
 
     SettingsWidget *getSettingsWidget() override;
 
-    QIcon toneIcon, pcmIcon, rayman2Icon;
+    QIcon toneIcon, pcmIcon;
 private slots:
     void add();
 };
@@ -111,6 +111,4 @@ private:
     QList<QRadioButton *> formatB;
     QSpinBox *chnB, *srateB, *offsetB;
     QComboBox *endianB;
-
-    QCheckBox *rayman2EB;
 };

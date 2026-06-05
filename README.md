@@ -3,7 +3,7 @@ QMPlay2 - Qt Media Player 2
 
 ![Screenshot](https://raw.githubusercontent.com/zaps166/GitHubCommonContents/master/Screenshots/QMPlay2.webp)
 
-QMPlay2 is a video and audio player. It can play all formats supported by FFmpeg, libmodplug (including J2B and SFX). It also supports Audio CD, raw files, Rayman 2 music and chiptunes. It contains YouTube and MyFreeMP3 browser.
+QMPlay2 is a video and audio player. It can play all formats supported by FFmpeg. It also supports Audio CD, raw files and chiptunes. It contains YouTube browser.
 
 Table of Contents
 =================
@@ -268,7 +268,6 @@ CMake options (option - default value: description):
     - `USE_FFMPEG_VAAPI`: autodetect: enabled if libva, libva-drm, and egl exist.
     - `USE_FFMPEG_AVDEVICE` - autodetect on Linux, `OFF` on non-Linux OS: it allows to use e.g. V4L2 devices.
     - `USE_INPUTS` - ON: enable/disable Inputs module.
-    - `USE_MODPLUG` - ON: enable/disable Modplug module.
     - `USE_EXTENSIONS` - ON: enable/disable Extensions module.
     - `USE_MPRIS2` - Linux/BSD only, `ON`: enable/disable MPRIS2 in Extensions module.
     - `USE_VISUALIZATIONS` - ON: enable/disable Visualizations module.
@@ -377,5 +376,4 @@ You can look at [Arch Linux PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tre
 
 ## Other information
 
-- QMPlay2 contains modified libmodplug sources which are used by Modplug module.
 - QMPlay2 uses Concept icons created by Alexey Varfolomeev.
