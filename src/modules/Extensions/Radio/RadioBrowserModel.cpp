@@ -425,7 +425,8 @@ void RadioBrowserModel::replyFinished(NetworkReply *reply)
                 {
                     column->icon = *icon;
                 }
-                emit dataChanged(QModelIndex(), QModelIndex());
+                const auto index = createIndex(r, 0);
+                emit dataChanged(index, index);
             }
         }
     }
