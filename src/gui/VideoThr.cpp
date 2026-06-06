@@ -673,7 +673,8 @@ void VideoThr::run()
                 }
             }
 
-            if (ptsIsValid || ts > playC.pos)
+            const bool audioControlsPos = playC.aThr && dec->isDummyDecoder();
+            if (!audioControlsPos && (ptsIsValid || ts > playC.pos))
                 playC.chPos(ts);
 
             double delay = ts - playC.frame_last_pts;
@@ -701,7 +702,7 @@ void VideoThr::run()
 
             if (tmp_time >= 1.0)
             {
-                emit playC.updateBitrateAndFPS(-1, round((tmp_br << 3) / (tmp_time * 1000.0)), frames / tmp_time, canSkipFrames ? framesDisplayed / framesDisplayedTime : qQNaN(), interlaced);
+                emit playC.updateBitrateAndFPS(-1, dec->isDummyDecoder() ? -1 : round((tmp_br << 3) / (tmp_time * 1000.0)), frames / tmp_time, canSkipFrames ? framesDisplayed / framesDisplayedTime : qQNaN(), interlaced);
                 frames = tmp_br = framesDisplayed = 0;
                 tmp_time = framesDisplayedTime = 0.0;
             }

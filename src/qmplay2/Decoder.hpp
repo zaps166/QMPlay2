@@ -64,6 +64,8 @@ public:
 
     virtual bool hasCriticalError() const;
 
+    virtual bool isDummyDecoder() const;
+
 private:
     virtual bool open(StreamInfo &streamInfo) = 0;
 };

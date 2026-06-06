@@ -59,11 +59,12 @@ Packet::~Packet()
 
 bool Packet::isEmpty() const
 {
-    return (m_packet->size <= 0);
+    return (m_packet->size <= 0 && !m_frame.has_value());
 }
 void Packet::clear()
 {
     av_packet_unref(m_packet);
+    m_frame.reset();
 }
 
 void Packet::setTimeBase(const AVRational &timeBase)
@@ -111,6 +112,19 @@ void Packet::setDuration(double duration)
 bool Packet::hasKeyFrame() const
 {
     return (m_packet->flags & AV_PKT_FLAG_KEY);
+}
+
+bool Packet::hasFrame() const
+{
+    return m_frame.has_value();
+}
+const Frame &Packet::frame() const
+{
+    return *m_frame;
+}
+void Packet::setFrame(Frame &&frame)
+{
+    m_frame = std::move(frame);
 }
 
 bool Packet::isTsValid() const
@@ -172,11 +186,13 @@ Packet &Packet::operator =(const Packet &other)
 {
     av_packet_ref(m_packet, other.m_packet);
     m_timeBase = other.m_timeBase;
+    m_frame = other.m_frame;
     return *this;
 }
 Packet &Packet::operator =(Packet &&other)
 {
     av_packet_move_ref(m_packet, other.m_packet);
     qSwap(m_timeBase, other.m_timeBase);
+    qSwap(m_frame, other.m_frame);
     return *this;
 }

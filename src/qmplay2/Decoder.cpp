@@ -32,6 +32,35 @@ class QMPlay2DummyDecoder : public Decoder
     {
         return true;
     }
+
+    int decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFormat &newPixFmt, bool flush, unsigned hurry_up) override
+    {
+        Q_UNUSED(newPixFmt)
+        Q_UNUSED(flush)
+        Q_UNUSED(hurry_up)
+        if (encodedPacket.hasFrame())
+        {
+            decoded = encodedPacket.frame();
+            decoded.setTS(encodedPacket.ts());
+            return encodedPacket.size();
+        }
+        return 0;
+    }
+
+    int decodeAudio(const Packet &encodedPacket, QByteArray &decoded, double &ts, quint8 &channels, quint32 &sampleRate, bool flush) override
+    {
+        Q_UNUSED(channels)
+        Q_UNUSED(sampleRate)
+        Q_UNUSED(flush)
+        decoded = QByteArray::fromRawData((const char *)encodedPacket.data(), encodedPacket.size());
+        ts = encodedPacket.ts();
+        return decoded.size();
+    }
+
+    bool isDummyDecoder() const override
+    {
+        return true;
+    }
 };
 
 Decoder *Decoder::create(
@@ -119,12 +148,13 @@ int Decoder::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
 }
 int Decoder::decodeAudio(const Packet &encodedPacket, QByteArray &decoded, double &ts, quint8 &channels, quint32 &sampleRate, bool flush)
 {
+    Q_UNUSED(encodedPacket)
+    Q_UNUSED(decoded)
+    Q_UNUSED(ts)
     Q_UNUSED(channels)
     Q_UNUSED(sampleRate)
     Q_UNUSED(flush)
-    decoded = QByteArray::fromRawData((const char *)encodedPacket.data(), encodedPacket.size());
-    ts = encodedPacket.ts();
-    return decoded.size();
+    return 0;
 }
 bool Decoder::decodeSubtitle(const QVector<Packet> &encodedPackets, double pos, std::shared_ptr<QMPlay2OSD> &osd, const QSize &size, bool flush)
 {
@@ -147,6 +177,11 @@ int Decoder::pendingFrames() const
 }
 
 bool Decoder::hasCriticalError() const
+{
+    return false;
+}
+
+bool Decoder::isDummyDecoder() const
 {
     return false;
 }

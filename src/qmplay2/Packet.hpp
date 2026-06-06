@@ -19,6 +19,9 @@
 #pragma once
 
 #include <QMPlay2Lib.hpp>
+#include <Frame.hpp>
+
+#include <optional>
 
 extern "C" {
     #include <libavcodec/version.h>
@@ -56,6 +59,10 @@ public:
 
     bool hasKeyFrame() const;
 
+    bool hasFrame() const;
+    const Frame &frame() const;
+    void setFrame(Frame &&frame);
+
     bool isTsValid() const;
     void setTsInvalid();
 
@@ -85,4 +92,5 @@ public: // Operators
 private:
     AVPacket *m_packet = nullptr;
     AVRational m_timeBase = {1, 10000};
+    std::optional<Frame> m_frame;
 };
