@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-	<mime-type type="audio/x-umx">
+	<mime-type type="audio/x-gme">
 		<comment>Game-Music-Emu files</comment>
 		<glob pattern="*.ay"/>
 		<glob pattern="*.gbs"/>
