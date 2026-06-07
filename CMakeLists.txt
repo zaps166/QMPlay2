@@ -268,6 +268,12 @@ endif()
 option(USE_AUDIOCD "Build with AudioCD module" ${LIBCD_FOUND})
 add_feature_info(AudioCD USE_AUDIOCD "Build with AudioCD module")
 
+if(NOT DEFINED USE_OPENMPT)
+    pkg_check_modules(OPENMPT libopenmpt)
+endif()
+option(USE_OPENMPT "Build with OpenMPT module" ${OPENMPT_FOUND})
+add_feature_info(OpenMPT USE_OPENMPT "Build with OpenMPT module")
+
 option(USE_ALSA "Build with ALSA module" ${DEFAULT_ALSA})
 add_feature_info(ALSA USE_ALSA "Build with ALSA module")
 
@@ -357,7 +363,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang"
     # Hide symbols, and also make sure that debugging symbols are disabled
     set(CMAKE_CXX_FLAGS_RELEASE    "${RELEASE_DEBUG_FLAG} -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_RELEASE}")
     set(CMAKE_CXX_FLAGS_MINSIZEREL "${RELEASE_DEBUG_FLAG} -fvisibility-inlines-hidden ${CMAKE_CXX_FLAGS_MINSIZEREL}")
-    if(NOT USE_VULKAN)
+    if(NOT USE_VULKAN AND NOT USE_OPENMPT)
         set(CMAKE_CXX_FLAGS_RELEASE    "-fno-exceptions -fvisibility=hidden ${CMAKE_CXX_FLAGS_RELEASE}")
         set(CMAKE_CXX_FLAGS_MINSIZEREL "-fno-exceptions -fvisibility=hidden ${CMAKE_CXX_FLAGS_MINSIZEREL}")
     endif()

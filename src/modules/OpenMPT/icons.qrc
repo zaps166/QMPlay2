@@ -1,0 +1,6 @@
+<RCC>
+    <qresource>
+        <file alias="MOD.svg">MOD.svg</file>
+        <file alias="OpenMPT.svg">OpenMPT.svg</file>
+    </qresource>
+</RCC>
