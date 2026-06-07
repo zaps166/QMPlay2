@@ -339,7 +339,7 @@ void AudioThr::run()
                 if (!qIsNaN(ts))
                 {
                     audio_pts = playC.audio_current_pts = ts - delay;
-                    if ((!playC.vThr || ((AVThread *)playC.vThr)->hasError() || (playC.vThr->dec && playC.vThr->dec->isDummyDecoder())) && playC.audioSeekPos <= 0)
+                    if ((!playC.vThr || ((AVThread *)playC.vThr)->hasError() || (((AVThread *)playC.vThr)->dec && ((AVThread *)playC.vThr)->dec->isDummyDecoder())) && playC.audioSeekPos <= 0)
                     {
                         playC.chPos(playC.audio_current_pts);
                     }
