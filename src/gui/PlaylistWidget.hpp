@@ -223,7 +223,6 @@ private:
 private slots:
     void insertItem(QTreeWidgetItem *, QTreeWidgetItem *, int insertChildAt);
     void popupContextMenu(const QPoint &);
-    void setItemIcon(QTreeWidgetItem *, const QIcon &icon);
     void animationUpdate();
     void addTimerElapsed();
 public slots:

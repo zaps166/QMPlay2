@@ -979,14 +979,17 @@ QTreeWidgetItem *PlaylistWidget::newGroup(const QString &name, const QString &ur
     QTreeWidgetItem *tWI = new PlaylistItem;
 
     tWI->setFlags(tWI->flags() | Qt::ItemIsEditable);
-    QMPlay2GUI.setTreeWidgetItemIcon(tWI, url.isEmpty() ? *QMPlay2GUI.groupIcon : *QMPlay2GUI.folderIcon, 0, this);
     tWI->setText(0, name);
     tWI->setData(0, Qt::UserRole, url);
 
     if (existingEntries)
         entryCreated(url, insertChildAt, *existingEntries);
 
-    QMetaObject::invokeMethod(this, "insertItem", Q_ARG(QTreeWidgetItem *, tWI), Q_ARG(QTreeWidgetItem *, parent), Q_ARG(int, insertChildAt));
+    QMetaObject::invokeMethod(this, [this, tWI, url, parent, insertChildAt] {
+        QMPlay2GUI.setTreeWidgetItemIcon(tWI, url.isEmpty() ? *QMPlay2GUI.groupIcon : *QMPlay2GUI.folderIcon, 0, this);
+        insertItem(tWI, parent, insertChildAt);
+    });
+
     return tWI;
 }
 QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWidgetItem *parent, const Functions::DemuxersInfo &demuxersInfo, int insertChildAt, QStringList *existingEntries)
@@ -995,7 +998,6 @@ QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWid
 
     QIcon icon;
     Functions::getDataIfHasPluginPrefix(entry.url, nullptr, nullptr, &icon, nullptr, demuxersInfo);
-    setEntryIcon(icon, tWI);
 
     tWI->setFlags(tWI->flags() &~ Qt::ItemIsDropEnabled);
     tWI->setText(0, entry.name);
@@ -1007,12 +1009,17 @@ QTreeWidgetItem *PlaylistWidget::newEntry(const Playlist::Entry &entry, QTreeWid
     if (existingEntries)
         entryCreated(entry.url, insertChildAt, *existingEntries);
 
-    QMetaObject::invokeMethod(this, "insertItem", Q_ARG(QTreeWidgetItem *, tWI), Q_ARG(QTreeWidgetItem *, parent), Q_ARG(int, insertChildAt));
+    QMetaObject::invokeMethod(this, [this, tWI, icon, parent, insertChildAt] {
+        setEntryIcon(icon, tWI);
+        insertItem(tWI, parent, insertChildAt);
+    });
+
     return tWI;
 }
 
 void PlaylistWidget::setEntryIcon(const QIcon &icon, QTreeWidgetItem *tWI)
 {
+    Q_ASSERT(QThread::currentThread() == thread());
     if (icon.isNull())
     {
         if (tWI == currentPlaying)
@@ -1022,7 +1029,10 @@ void PlaylistWidget::setEntryIcon(const QIcon &icon, QTreeWidgetItem *tWI)
     }
     else
     {
-        QMetaObject::invokeMethod(this, "setItemIcon", Q_ARG(QTreeWidgetItem *, (tWI == currentPlaying) ? nullptr : tWI), Q_ARG(QIcon, icon));
+        if (tWI == currentPlaying)
+            currentPlayingItemIcon = icon;
+        else
+            QMPlay2GUI.setTreeWidgetItemIcon(tWI, icon, 0, this);
     }
 }
 
@@ -1225,13 +1235,6 @@ void PlaylistWidget::insertItem(QTreeWidgetItem *tWI, QTreeWidgetItem *parent, i
 void PlaylistWidget::popupContextMenu(const QPoint &p)
 {
     playlistMenu()->popup(mapToGlobal(p));
-}
-void PlaylistWidget::setItemIcon(QTreeWidgetItem *tWI, const QIcon &icon)
-{
-    if (tWI)
-        QMPlay2GUI.setTreeWidgetItemIcon(tWI, icon, 0, this);
-    else
-        currentPlayingItemIcon = icon;
 }
 void PlaylistWidget::animationUpdate()
 {
