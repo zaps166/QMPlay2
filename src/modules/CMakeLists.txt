@@ -17,10 +17,6 @@ if(USE_INPUTS)
     add_subdirectory(Inputs)
 endif()
 
-if(USE_MODPLUG)
-    add_subdirectory(Modplug)
-endif()
-
 if(USE_EXTENSIONS)
     add_subdirectory(Extensions)
 endif()
