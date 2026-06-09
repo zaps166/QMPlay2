@@ -164,7 +164,7 @@ option(USE_EXTENSIONS "Build with Extensions module" ON)
 add_feature_info(Extensions USE_EXTENSIONS "Build with Extensions module")
 
 if(USE_EXTENSIONS)
-    option(USE_MEDIABROWSER "Build with MediaBrowser support" ON)
+    option(USE_MEDIABROWSER "Build with MediaBrowser support" OFF)
     add_feature_info(MediaBrowser USE_MEDIABROWSER "Build with MediaBrowser support")
 
     option(USE_LASTFM "Build with LastFM support" ON)
