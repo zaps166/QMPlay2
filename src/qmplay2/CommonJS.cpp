@@ -5,6 +5,7 @@
 #include <Functions.hpp>
 #include <YouTubeDL.hpp>
 
+#include <QMessageAuthenticationCode>
 #include <QTextDocumentFragment>
 #include <QLoggingCategory>
 #include <QJSEngine>
@@ -137,6 +138,11 @@ QByteArray CommonJS::toHex(const QByteArray &data)
 QByteArray CommonJS::fromHex(const QByteArray &data)
 {
     return QByteArray::fromHex(data);
+}
+
+QByteArray CommonJS::hmacSha256(const QByteArray &key, const QByteArray &data)
+{
+    return QMessageAuthenticationCode::hash(data, key, QCryptographicHash::Sha256);
 }
 
 QVariantMap CommonJS::youTubeDlFixUrl(const QString &url, const int ioControllerId, const bool nameAvail, const bool extensionAvail, const bool errorAvail)
