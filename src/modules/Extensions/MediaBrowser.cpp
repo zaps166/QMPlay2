@@ -804,10 +804,9 @@ void MediaBrowser::netFinished(NetworkReply *reply)
     }
     else
     {
-        const QByteArray replyData = reply->readAll();
         if (reply == m_autocompleteReply)
         {
-            const QStringList completions = m_mediaBrowser ? m_mediaBrowser->getCompletions(replyData) : QStringList();
+            const QStringList completions = m_mediaBrowser ? m_mediaBrowser->getCompletions(reply->readAll()) : QStringList();
             if (!completions.isEmpty())
             {
                 m_completerModel->setStringList(completions);
@@ -818,11 +817,11 @@ void MediaBrowser::netFinished(NetworkReply *reply)
         else if (reply == m_searchReply)
         {
             if (m_mediaBrowser)
-                loadSearchResults(replyData);
+                loadSearchResults(reply->readAll());
         }
         else if (reply == m_imageReply)
         {
-            const QImage img = QImage::fromData(replyData);
+            const QImage img = QImage::fromData(reply->readAll());
             if (!img.isNull())
             {
                 QTextDocument *doc = m_descr->document();
@@ -841,13 +840,13 @@ void MediaBrowser::netFinished(NetworkReply *reply)
         }
         else if (reply == m_jsonReply)
         {
-            downloadScripts(replyData);
+            downloadScripts(reply->readAll());
         }
         else if (m_scriptReplies.contains(reply))
         {
             const auto scriptPath = reply->property("scriptPath").toString();
             Q_ASSERT(!scriptPath.isEmpty());
-            saveScript(replyData, scriptPath);
+            saveScript(reply->readAll(), scriptPath);
             finalizeScriptsReply();
         }
     }
