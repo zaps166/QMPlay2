@@ -52,7 +52,7 @@
 Q_LOGGING_CATEGORY(mb, "MediaBrowser")
 
 constexpr const char *g_mediaBrowserBaseUrl = "https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/";
-constexpr int g_mediaBrowserApiVersion = 1;
+constexpr int g_mediaBrowserApiVersion = 2;
 
 static inline QString getScriptsPath()
 {
