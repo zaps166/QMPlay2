@@ -113,4 +113,5 @@ signals:
     void setWheelStep(int);
     void setVolMax(int);
     void keepDocksSizeChanged(bool keepDocksSize);
+    void fullscreenPanelsRightSideChanged(bool checked);
 };

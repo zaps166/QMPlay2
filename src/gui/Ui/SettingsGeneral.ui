@@ -302,7 +302,7 @@
          </property>
         </widget>
        </item>
-       <item row="15" column="0">
+       <item row="16" column="0">
         <widget class="QGroupBox" name="proxyB">
          <property name="title">
           <string>Use proxy server</string>
@@ -503,7 +503,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="1" rowspan="15">
+       <item row="1" column="1" rowspan="17">
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -533,6 +533,13 @@
         <widget class="QCheckBox" name="keepDocksSizeB">
          <property name="text">
           <string>Maintain panels size when resizing the main window (experimental)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
+        <widget class="QCheckBox" name="fullscreenPanelsRightSideB">
+         <property name="text">
+          <string>Fullscreen panels on the right side</string>
          </property>
         </widget>
        </item>
@@ -575,6 +582,7 @@
   <tabstop>stillImages</tabstop>
   <tabstop>trayNotifiesDefault</tabstop>
   <tabstop>autoDelNonGroupEntries</tabstop>
+  <tabstop>fullscreenPanelsRightSideB</tabstop>
   <tabstop>proxyB</tabstop>
   <tabstop>proxyLoginB</tabstop>
   <tabstop>proxyUserE</tabstop>

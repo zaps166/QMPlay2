@@ -175,6 +175,7 @@ void SettingsWidget::InitSettings()
 #endif
     QMPSettings.init("MainWidget/KeepDocksSize", false);
     QMPSettings.init("MainWidget/TabPositionNorth", false);
+    QMPSettings.init("FullscreenPanelsRightSide", false);
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
     QMPSettings.init("AllowOnlyOneInstance", false);
 #endif
@@ -451,6 +452,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 #endif
 
         generalSettingsPage->keepDocksSizeB->setChecked(QMPSettings.getBool("MainWidget/KeepDocksSize"));
+        generalSettingsPage->fullscreenPanelsRightSideB->setChecked(QMPSettings.getBool("FullscreenPanelsRightSide"));
 
         if (Notifies::hasBoth())
             generalSettingsPage->trayNotifiesDefault->setChecked(QMPSettings.getBool("TrayNotifiesDefault"));
@@ -1327,6 +1329,13 @@ void SettingsWidget::apply()
             {
                 QMPSettings.set("MainWidget/KeepDocksSize", checked);
                 emit keepDocksSizeChanged(checked);
+            }
+            if (auto checked = generalSettingsPage->fullscreenPanelsRightSideB->isChecked(); checked != QMPSettings.getBool("FullscreenPanelsRightSide"))
+            {
+                QMPSettings.set("FullscreenPanelsRightSide", checked);
+                QMPSettings.remove("MainWidget/FullScreenDockWidgetState");
+                QMPSettings.remove("MainWidget/CompactViewDockWidgetState");
+                emit fullscreenPanelsRightSideChanged(checked);
             }
             QMPSettings.set("MainWidget/TabPositionNorth", generalSettingsPage->tabsNorths->isChecked());
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE

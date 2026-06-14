@@ -262,6 +262,8 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
 #endif
     infoDock->show();
 
+    m_fullscreenPanelsRightSide = settings.getBool("FullscreenPanelsRightSide");
+
     m_keepDocksSize = settings.getBool("MainWidget/KeepDocksSize");
 
     for (auto &&dock : getDockWidgets())
@@ -1476,6 +1478,11 @@ void MainWidget::showSettings(const QString &moduleName)
             m_keepDocksSize = keepDocksSize;
             m_storeDockSizesTimer.start();
         });
+        connect(settingsW, &SettingsWidget::fullscreenPanelsRightSideChanged, this, [this](bool checked) {
+            m_fullscreenPanelsRightSide = checked;
+            fullScreenDockWidgetState.clear();
+            m_compactViewDockWidgetState.clear();
+        });
         connect(settingsW, SIGNAL(destroyed()), this, SLOT(showSettings()));
     }
     else
@@ -1773,7 +1780,12 @@ void MainWidget::hideDockWidgetsAndDisableFeatures()
     playlistDock->hide();
     playlistDock->setFeatures(DockWidget::NoDockWidgetFeatures);
 
-    addDockWidget(Qt::RightDockWidgetArea, videoDock);
+    addDockWidget(
+        m_fullscreenPanelsRightSide
+            ? Qt::LeftDockWidgetArea
+            : Qt::RightDockWidgetArea,
+        videoDock
+    );
     for (QMPlay2Extensions *QMPlay2Ext : QMPlay2Extensions::QMPlay2ExtensionsList())
     {
         if (DockWidget *dw = QMPlay2Ext->getDockWidget())
@@ -2032,34 +2044,35 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
     {
         const bool isToolbarVisible = mainTB->isVisible();
 
-        bool canDisplayLeftPanel = fullScreen || isCompactView;
-        if (canDisplayLeftPanel && !isToolbarVisible)
+        bool canDisplayPanel = fullScreen || isCompactView;
+        if (canDisplayPanel && !isToolbarVisible)
         {
             const auto winScreen = windowHandle()->screen();
             const auto winScreenGeo = winScreen->geometry();
-            if (winScreenGeo.x() != 0)
+            const auto screens = QGuiApplication::screens();
+            for (auto &&screen : screens)
             {
-                const auto screens = QGuiApplication::screens();
-                for (auto &&screen : screens)
+                if (screen == winScreen)
+                    continue;
+
+                auto geo = screen->geometry();
+                if (m_fullscreenPanelsRightSide
+                    ? (geo.x() <= winScreenGeo.x())
+                    : (geo.x() >= winScreenGeo.x()))
                 {
-                    if (screen == winScreen)
-                        continue;
+                    continue;
+                }
 
-                    auto geo = screen->geometry();
-                    if (geo.x() >= winScreenGeo.x())
-                        continue;
-
-                    geo.moveLeft(winScreenGeo.x());
-                    if (winScreenGeo.intersects(geo))
-                    {
-                        canDisplayLeftPanel = false;
-                        break;
-                    }
+                geo.moveLeft(winScreenGeo.x());
+                if (winScreenGeo.intersects(geo))
+                {
+                    canDisplayPanel = false;
+                    break;
                 }
             }
         }
 
-        const int trigger1 = canDisplayLeftPanel
+        const int trigger1 = canDisplayPanel
             ? qMax<int>(5, ceil(0.003 * (videoDock->isTouch ? 8 : 1) * width()))
             : 0
         ;
@@ -2070,14 +2083,18 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
 
         int mPosX = 0;
         if (videoDock->x() >= 0)
+        {
             mPosX = videoDock->mapFromGlobal(e->globalPos()).x();
+            if (m_fullscreenPanelsRightSide)
+                mPosX = videoDock->width() - mPosX;
+        }
 
         /* ToolBar */
         if (!playlistDock->isVisible() && mPosX >= trigger1)
             showToolBar(e->pos().y() >= height() - mainTB->height() - statusBar->height() + 10);
 
         /* DockWidgets */
-        if (canDisplayLeftPanel && !playlistDock->isVisible() && mPosX <= trigger1)
+        if (canDisplayPanel && !playlistDock->isVisible() && mPosX <= trigger1)
         {
             showToolBar(true); //Before restoring dock widgets - show toolbar and status bar
 
@@ -2112,8 +2129,8 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
                 infoDock->hide();
                 hideAllExtensions();
 
-                addDockWidget(Qt::LeftDockWidgetArea, playlistDock);
-                addDockWidget(Qt::LeftDockWidgetArea, infoDock);
+                addDockWidget(m_fullscreenPanelsRightSide ? Qt::RightDockWidgetArea : Qt::LeftDockWidgetArea, playlistDock);
+                addDockWidget(m_fullscreenPanelsRightSide ? Qt::RightDockWidgetArea : Qt::LeftDockWidgetArea, infoDock);
 
                 playlistDock->show();
                 infoDock->show();

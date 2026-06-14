@@ -202,6 +202,7 @@ private:
     SettingsWidget *settingsW;
     AboutWidget *aboutW;
     bool isCompactView, wasShow, fullScreen, seekSFocus, m_restoreWindowOnVideo = false;
+    bool m_fullscreenPanelsRightSide = false;
     bool m_compactViewBeforeFullScreen = false;
 #ifndef Q_OS_ANDROID
     bool m_maximizedBeforeFullScreen = false;
