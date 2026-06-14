@@ -86,6 +86,11 @@ int OpenMPDemux::bitrate() const
     return qRound(m_fileSize * 8.0 / m_overallLength / 1000.0);
 }
 
+bool OpenMPDemux::dontUseBuffer() const
+{
+    return m_visMode != OpenMPTVisBase::VisMode::Off;
+}
+
 bool OpenMPDemux::seek(double pos, bool)
 {
     pos = std::clamp(pos, 0.0, m_overallLength);

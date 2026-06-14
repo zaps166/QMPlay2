@@ -56,6 +56,8 @@ private:
     double length() const override;
     int bitrate() const override;
 
+    bool dontUseBuffer() const override;
+
     bool seek(double, bool) override;
     bool read(Packet &, int &) override;
     void abort() override;
