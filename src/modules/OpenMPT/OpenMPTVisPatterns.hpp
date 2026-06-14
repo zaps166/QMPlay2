@@ -37,7 +37,6 @@ private:
     int m_rowHeight{0};
     int m_maxCellWidth{0};
     int m_charWidth{0};
-    int m_ascent{0};
     QFont m_font;
     QStaticText m_charCache[127];
     int m_lastPattern{-1};

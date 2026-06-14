@@ -81,7 +81,6 @@ OpenMPTVisPatterns::OpenMPTVisPatterns(openmpt::module *module, int channels, in
     m_height = m_rows * m_rowHeight;
     m_maxCellWidth = maxCellWidth;
     m_charWidth = fm.horizontalAdvance("X");
-    m_ascent = fm.ascent();
 
     for (int i = 33; i <= 126; ++i)
     {
@@ -184,7 +183,7 @@ Frame OpenMPTVisPatterns::render(openmpt::module *module)
 
                 p.setPen(color);
 
-                const QPoint textPos(x + i * m_charWidth, y + m_ascent + 1);
+                const QPoint textPos(x + i * m_charWidth, y + 1);
                 if (Q_LIKELY(c.unicode() >= 33 && c.unicode() <= 126))
                     p.drawStaticText(textPos, m_charCache[c.unicode()]);
                 else
