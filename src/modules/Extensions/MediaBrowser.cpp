@@ -403,6 +403,9 @@ MediaBrowser::MediaBrowser(Module &module) :
     setLayout(layout);
 
     SetModule(module);
+
+    if (scanScripts())
+        m_canUpdateScripts = true;
 }
 MediaBrowser::~MediaBrowser()
 {}
@@ -420,7 +423,6 @@ bool MediaBrowser::canConvertAddress() const
 QList<QMPlay2Extensions::AddressPrefix> MediaBrowser::addressPrefixList(bool img) const
 {
     QList<AddressPrefix> ret;
-    const_cast<MediaBrowser *>(this)->initScripts();
     for (const auto &m : m_mediaBrowsers)
         ret.append(m->addressPrefix(img));
     return ret;
@@ -429,7 +431,6 @@ void MediaBrowser::convertAddress(const QString &prefix, const QString &url, con
 {
     if (streamUrl || icon)
     {
-        initScripts();
         for (const auto &m : m_mediaBrowsers)
         {
             if (m->convertAddress(prefix, url, param, streamUrl, name, icon, extension, ioCtrl))
@@ -443,7 +444,6 @@ QVector<QAction *> MediaBrowser::getActions(const QString &name, double, const Q
     QVector<QAction *> actions;
     if (name != url)
     {
-        initScripts();
         for (quint32 i = 0; i < m_mediaBrowsers.size(); ++i)
         {
             const auto m = m_mediaBrowsers[i];
@@ -461,16 +461,6 @@ QVector<QAction *> MediaBrowser::getActions(const QString &name, double, const Q
         }
     }
     return actions;
-}
-
-void MediaBrowser::initScripts()
-{
-    if (m_loadScripts)
-    {
-        m_loadScripts = false;
-        if (scanScripts())
-            m_canUpdateScripts = true;
-    }
 }
 
 inline void MediaBrowser::setCompleterListCallback()
@@ -637,7 +627,6 @@ void MediaBrowser::visibilityChanged(bool v)
     setEnabled(v);
     if (v)
     {
-        initScripts();
         if (m_canUpdateScripts && m_updateScripts)
         {
             m_updateScripts = false;

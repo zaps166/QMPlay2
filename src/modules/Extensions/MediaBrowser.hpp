@@ -133,8 +133,6 @@ private:
     QVector<QAction *> getActions(const QString &, double, const QString &, const QString &, const QString &) override;
 
 private:
-    void initScripts();
-
     inline void setCompleterListCallback();
     void completionsReady();
 
@@ -178,8 +176,7 @@ private:
     QSet<NetworkReply *> m_scriptReplies;
     NetworkAccess m_net;
 
-    bool m_loadScripts = true, m_canUpdateScripts = false, m_updateScripts = true;
-
+    bool m_canUpdateScripts = false, m_updateScripts = true;
     bool m_skipInit = false;
 };
 
