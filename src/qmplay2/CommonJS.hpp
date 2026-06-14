@@ -49,6 +49,9 @@ public:
 
     Q_INVOKABLE QByteArray hmacSha256(const QByteArray &key, const QByteArray &data);
 
+    Q_INVOKABLE QString base64Decode(const QByteArray &data);
+    Q_INVOKABLE QByteArray base64Encode(const QString &data);
+
     Q_INVOKABLE QVariantMap youTubeDlFixUrl(const QString &url, const int ioControllerId, const bool nameAvail, const bool extensionAvail, const bool errorAvail);
 
     Q_INVOKABLE QString timeToStr(const double t, const bool decimals = false);

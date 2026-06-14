@@ -145,6 +145,15 @@ QByteArray CommonJS::hmacSha256(const QByteArray &key, const QByteArray &data)
     return QMessageAuthenticationCode::hash(data, key, QCryptographicHash::Sha256);
 }
 
+QString CommonJS::base64Decode(const QByteArray &data)
+{
+    return QString::fromUtf8(QByteArray::fromBase64(data));
+}
+QByteArray CommonJS::base64Encode(const QString &data)
+{
+    return data.toUtf8().toBase64();
+}
+
 QVariantMap CommonJS::youTubeDlFixUrl(const QString &url, const int ioControllerId, const bool nameAvail, const bool extensionAvail, const bool errorAvail)
 {
     if (auto ioCtrl = getIOController(ioControllerId))
