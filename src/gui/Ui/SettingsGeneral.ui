@@ -591,6 +591,8 @@
   <tabstop>customYtDlB</tabstop>
   <tabstop>dfltYtDlQualCB</tabstop>
   <tabstop>dfltYtDlQualE</tabstop>
+  <tabstop>additionalYtDlParamsCB</tabstop>
+  <tabstop>additionalYtDlParamsE</tabstop>
   <tabstop>dontUpdateYtDlCB</tabstop>
   <tabstop>removeYtDlB</tabstop>
  </tabstops>
