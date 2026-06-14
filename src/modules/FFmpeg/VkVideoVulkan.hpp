@@ -45,7 +45,7 @@ public:
     void updateInfo(const std::vector<Frame> &frames) override;
 
 public:
-    void insertAvailableAvVkFrames(uintptr_t avVkFramePtr, int codedHeight);
+    void insertAvailableAvVkFrames(uintptr_t avVkFramePtr, int codedWidth, int codedHeight);
 
 private:
     const std::shared_ptr<QmVk::Instance> m_vkInstance;
@@ -55,5 +55,6 @@ private:
     std::unordered_map<uintptr_t, bool> m_availableAvVkFrames;
     std::unordered_map<uintptr_t, std::shared_ptr<QmVk::Image>> m_images;
 
+    int m_codedWidth = 0;
     int m_codedHeight = 0;
 };

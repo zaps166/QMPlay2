@@ -100,7 +100,7 @@ void VkVideoVulkan::map(Frame &frame)
             image = Image::createFromImage(
                 device,
                 {avVkFrame->img[0]},
-                vk::Extent2D(frame.width(), m_codedHeight),
+                vk::Extent2D(m_codedWidth, m_codedHeight),
                 format,
                 (avVkFrame->tiling == VK_IMAGE_TILING_LINEAR)
             );
@@ -118,7 +118,6 @@ void VkVideoVulkan::map(Frame &frame)
         image->imageLayout() = static_cast<vk::ImageLayout>(avVkFrame->layout[0]);
         image->accessFlags() = static_cast<vk::AccessFlagBits>(avVkFrame->access[0]);
 
-        frame.setHasBorders(true);
         frame.setVulkanImage(image);
     }
 }
@@ -226,9 +225,10 @@ void VkVideoVulkan::updateInfo(const std::vector<Frame> &frames)
     }
 }
 
-void VkVideoVulkan::insertAvailableAvVkFrames(uintptr_t avVkFramePtr, int codedHeight)
+void VkVideoVulkan::insertAvailableAvVkFrames(uintptr_t avVkFramePtr, int codedWidth, int codedHeight)
 {
     lock_guard<mutex> locker(m_mutex);
     m_availableAvVkFrames[avVkFramePtr] = false; // Set as not synchronized
+    m_codedWidth = codedWidth;
     m_codedHeight = codedHeight;
 }

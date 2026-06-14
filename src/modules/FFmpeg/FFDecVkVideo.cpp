@@ -94,7 +94,7 @@ int FFDecVkVideo::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPix
         m_vkVideoVulkan->clear();
     int ret = FFDecHWAccel::decodeVideo(encodedPacket, decoded, newPixFmt, flush, hurryUp);
     if (ret > -1)
-        m_vkVideoVulkan->insertAvailableAvVkFrames(decoded.hwData(0), codec_ctx->coded_height);
+        m_vkVideoVulkan->insertAvailableAvVkFrames(decoded.hwData(0), codec_ctx->coded_width, codec_ctx->coded_height);
     if (m_hasCriticalError && m_libError)
     {
         try
