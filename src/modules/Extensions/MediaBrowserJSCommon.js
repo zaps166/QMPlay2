@@ -53,6 +53,7 @@ const ItemDataRole = {
 (function() { return {
     getInfo: getInfo,
     prepareWidget: prepareWidget,
+    init: init,
     finalize: finalize,
     getQMPlay2Url: getQMPlay2Url,
     getSearchReply: getSearchReply,

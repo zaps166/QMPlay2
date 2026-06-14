@@ -736,6 +736,8 @@ void MediaBrowser::search()
         m_searchReply->deleteLater();
     if (m_imageReply)
         m_imageReply->deleteLater();
+    if (m_initReply && !m_skipInit)
+        m_initReply->deleteLater();
     if (m_mediaBrowser)
         m_mediaBrowser->finalize(false);
     m_resultsW->clear();
@@ -744,8 +746,17 @@ void MediaBrowser::search()
         if (m_lastName != name || sender() == searchW || sender() == m_searchB)
             m_pages->setPage(1, m_mediaBrowser && m_mediaBrowser->pagesMode() == MediaBrowserJS::PagesMode::Multi);
         if (m_mediaBrowser)
-            m_searchReply = m_mediaBrowser->getSearchReply(name, m_pages->getCurrentPage());
-        if (m_searchReply)
+        {
+            if (!m_initReply && !m_skipInit)
+            {
+                m_initReply = m_mediaBrowser->init();
+            }
+            if (!m_initReply || m_skipInit)
+            {
+                m_searchReply = m_mediaBrowser->getSearchReply(name, m_pages->getCurrentPage());
+            }
+        }
+        if (m_searchReply || m_initReply)
         {
             m_descr->clear();
             m_descr->hide();
@@ -780,7 +791,7 @@ void MediaBrowser::netFinished(NetworkReply *reply)
 
     if (reply->hasError())
     {
-        if (reply == m_searchReply)
+        if (reply == m_searchReply || reply == m_initReply)
         {
             m_lastName.clear();
             m_pages->hide();
@@ -804,7 +815,15 @@ void MediaBrowser::netFinished(NetworkReply *reply)
     }
     else
     {
-        if (reply == m_autocompleteReply)
+        if (reply == m_initReply)
+        {
+            QMetaObject::invokeMethod(this, [this] {
+                m_skipInit = true;
+                search();
+                m_skipInit = false;
+            }, Qt::QueuedConnection);
+        }
+        else if (reply == m_autocompleteReply)
         {
             const QStringList completions = m_mediaBrowser ? m_mediaBrowser->getCompletions(reply->readAll()) : QStringList();
             if (!completions.isEmpty())
@@ -851,7 +870,7 @@ void MediaBrowser::netFinished(NetworkReply *reply)
         }
     }
 
-    if (reply == m_searchReply)
+    if (reply == m_searchReply || reply == m_initReply)
         m_progressB->hide();
 
     reply->deleteLater();

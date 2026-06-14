@@ -14,6 +14,7 @@
 #include <QJSEngine>
 #include <QFileInfo>
 #include <QMetaEnum>
+#include <QThread>
 #include <QAction>
 #include <QTimer>
 #include <QDir>
@@ -23,47 +24,23 @@ Q_DECLARE_LOGGING_CATEGORY(mb)
 MediaBrowserJS::MediaBrowserJS(const QString &commonCode, const int lineNumber, const QString &scriptPath, NetworkAccess &net, QTreeWidget *treeW, QObject *parent)
     : QObject(parent)
     , m_scriptPath(scriptPath)
+    , m_scriptFileName(QFileInfo(m_scriptPath).fileName())
+    , m_lineNumber(lineNumber)
     , m_engine(*(new QJSEngine(this)))
     , m_commonJS(*QMPlay2Core.getCommonJS())
     , m_treeW(treeW)
     , m_network(m_engine.newQObject(new NetworkAccessJS(net, this)))
     , m_treeWidgetJS(m_engine.newQObject(new TreeWidgetJS(m_treeW, this)))
 {
-    m_engine.installExtensions(QJSEngine::ConsoleExtension);
-
-    auto globalObject = m_engine.globalObject();
-    globalObject.setProperty(
-        "NetworkAccess",
-        m_engine.newQMetaObject(&NetworkAccessJS::staticMetaObject)
-    );
-    globalObject.setProperty(
-        "QTreeWidgetItem",
-        m_engine.newQMetaObject(&TreeWidgetItemJS::staticMetaObject)
-    );
-    globalObject.setProperty(
-        "common",
-        m_engine.newQObject(&m_commonJS)
-    );
-    globalObject.setProperty(
-        "self",
-        m_engine.newQObject(this)
-    );
-
-    QFile scriptFile(m_scriptPath);
-    if (scriptFile.open(QFile::ReadOnly))
+    if (QFile scriptFile(m_scriptPath); scriptFile.open(QFile::ReadOnly))
     {
-        m_script = m_engine.evaluate(commonCode.arg(scriptFile.readAll().constData()), QFileInfo(m_scriptPath).fileName(), lineNumber);
-        if (m_script.isError())
-        {
-            qCWarning(mb).nospace().noquote()
-                << m_script.property("fileName").toString()
-                << ":"
-                << m_script.property("lineNumber").toInt()
-                << " "
-                << m_script.toString()
-            ;
-            return;
-        }
+        m_code = commonCode.arg(scriptFile.readAll().constData());
+    }
+
+    m_script = initEngine(m_engine, true);
+    if (m_script.isError())
+    {
+        return;
     }
 
     const auto map = callJS("getInfo").toVariant().toMap();
@@ -158,6 +135,11 @@ void MediaBrowserJS::finalize(bool providerChanged)
     if (providerChanged)
         disconnectHeaderConnections();
     callJS("finalize");
+}
+
+NetworkReply *MediaBrowserJS::init()
+{
+    return toNetworkReply(callJS("init"));
 }
 
 QString MediaBrowserJS::getQMPlay2Url(const QString &text) const
@@ -270,13 +252,32 @@ bool MediaBrowserJS::convertAddress(const QString &prefix,
     if (!streamUrl)
         return false;
 
+    QJSEngine engine;
+    const auto script = initEngine(engine, false);
+    if (script.isError())
+        return false;
+
     const int ioCtrlId = m_commonJS.insertIOController(ioCtrl);
     if (!ioCtrlId)
         return false;
 
-    m_mutex.lock();
-    const auto map = callJS("convertAddress", {prefix, url, param, !!name, !!extension, ioCtrlId}).toVariant().toMap();
-    m_mutex.unlock();
+    const auto thrId = QThread::currentThreadId();
+
+    {
+        auto networkAccessJS = new NetworkAccessJS;
+        networkAccessJS->setParent(&engine);
+        auto network = engine.newQObject(networkAccessJS);
+
+        QMutexLocker locker(&m_netPerThreadMutex);
+        m_netPerThread[thrId] = std::move(network);
+    }
+
+    const auto map = callJS(script, QStringLiteral("convertAddress"), {prefix, url, param, !!name, !!extension, ioCtrlId}).toVariant().toMap();
+
+    {
+        QMutexLocker locker(&m_netPerThreadMutex);
+        m_netPerThread.erase(thrId);
+    }
 
     m_commonJS.removeIOController(ioCtrlId);
     ioCtrl->reset();
@@ -308,26 +309,79 @@ bool MediaBrowserJS::convertAddress(const QString &prefix,
 
 QJSValue MediaBrowserJS::network() const
 {
-    return m_network;
+    if (QThread::currentThread() == thread())
+        return m_network;
+
+    QMutexLocker locker(&m_netPerThreadMutex);
+    return m_netPerThread.at(QThread::currentThreadId());
 }
 
 bool MediaBrowserJS::hasCompleterListCallback() const
 {
+    if (QThread::currentThread() != thread())
+        return false;
+
     return !!m_completerListCallback;
 }
 void MediaBrowserJS::resetCompleterListCallback()
 {
+    if (QThread::currentThread() != thread())
+        return;
+
     m_completerListCallback = nullptr;
 }
 void MediaBrowserJS::completerListCallback()
 {
+    if (QThread::currentThread() != thread())
+        return;
+
     if (m_completerListCallback)
         m_completerListCallback();
 }
 
-QJSValue MediaBrowserJS::callJS(const QString &funcName, const QJSValueList &args) const
+QJSValue MediaBrowserJS::initEngine(QJSEngine &engine, bool ui)
 {
-    const auto value = m_script.property(funcName).call(args);
+    engine.installExtensions(QJSEngine::ConsoleExtension);
+
+    auto globalObject = engine.globalObject();
+    globalObject.setProperty(
+        QStringLiteral("NetworkAccess"),
+        engine.newQMetaObject(&NetworkAccessJS::staticMetaObject)
+    );
+    if (ui)
+    {
+        globalObject.setProperty(
+            QStringLiteral("QTreeWidgetItem"),
+            engine.newQMetaObject(&TreeWidgetItemJS::staticMetaObject)
+        );
+    }
+    globalObject.setProperty(
+        QStringLiteral("common"),
+        engine.newQObject(&m_commonJS)
+    );
+    globalObject.setProperty(
+        QStringLiteral("self"),
+        engine.newQObject(this)
+    );
+
+    auto script = engine.evaluate(m_code, m_scriptFileName, m_lineNumber);
+    if (script.isError())
+    {
+        qCWarning(mb).nospace().noquote()
+            << script.property(QStringLiteral("fileName")).toString()
+            << ":"
+            << script.property(QStringLiteral("lineNumber")).toInt()
+            << " "
+            << script.toString()
+        ;
+    }
+
+    return script;
+}
+
+QJSValue MediaBrowserJS::callJS(const QJSValue &script, const QString &funcName, const QJSValueList &args) const
+{
+    const auto value = script.property(funcName).call(args);
     if (value.isError())
     {
         qCCritical(mb).nospace().noquote()
@@ -340,6 +394,10 @@ QJSValue MediaBrowserJS::callJS(const QString &funcName, const QJSValueList &arg
         return QJSValue();
     }
     return value;
+}
+QJSValue MediaBrowserJS::callJS(const QString &funcName, const QJSValueList &args) const
+{
+    return callJS(m_script, funcName, args);
 }
 
 void MediaBrowserJS::headerResized()

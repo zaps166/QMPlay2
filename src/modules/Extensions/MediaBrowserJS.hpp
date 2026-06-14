@@ -10,6 +10,7 @@
 
 #include <functional>
 
+class NetworkAccessJS;
 class NetworkAccess;
 class NetworkReply;
 class QTreeWidget;
@@ -72,6 +73,8 @@ public:
 
     void finalize(bool providerChanged);
 
+    NetworkReply *init();
+
     QString getQMPlay2Url(const QString &text) const;
 
     NetworkReply *getSearchReply(const QString &text, const qint32 page);
@@ -109,6 +112,9 @@ public:
     Q_INVOKABLE void completerListCallback();
 
 private:
+    QJSValue initEngine(QJSEngine &engine, bool ui);
+
+    QJSValue callJS(const QJSValue &script, const QString &funcName, const QJSValueList &args) const;
     QJSValue callJS(const QString &funcName, const QJSValueList &args = {}) const;
 
     void headerResized();
@@ -126,6 +132,9 @@ private:
 
 private:
     const QString m_scriptPath;
+    const QString m_scriptFileName;
+    const int m_lineNumber;
+    QString m_code;
 
     QString m_name;
     int m_version = 0;
@@ -144,7 +153,8 @@ private:
     QJSValue m_network;
     QJSValue m_treeWidgetJS;
 
-    QMutex m_mutex;
-
     CompleterReadyCallback m_completerListCallback;
+
+    mutable QMutex m_netPerThreadMutex;
+    std::unordered_map<Qt::HANDLE, QJSValue> m_netPerThread;
 };

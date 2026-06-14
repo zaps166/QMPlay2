@@ -174,11 +174,13 @@ private:
     QCompleter *m_completer;
     QString m_lastName;
 
-    QPointer<NetworkReply> m_jsonReply, m_autocompleteReply, m_searchReply, m_imageReply;
+    QPointer<NetworkReply> m_jsonReply, m_autocompleteReply, m_searchReply, m_imageReply, m_initReply;
     QSet<NetworkReply *> m_scriptReplies;
     NetworkAccess m_net;
 
     bool m_loadScripts = true, m_canUpdateScripts = false, m_updateScripts = true;
+
+    bool m_skipInit = false;
 };
 
 #define MediaBrowserName "MediaBrowser"
