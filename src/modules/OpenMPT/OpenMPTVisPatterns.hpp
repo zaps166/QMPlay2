@@ -20,6 +20,8 @@
 
 #include <OpenMPTVisBase.hpp>
 
+#include <QStaticText>
+
 class OpenMPTVisPatterns : public OpenMPTVisBase
 {
 public:
@@ -37,6 +39,7 @@ private:
     int m_charWidth{0};
     int m_ascent{0};
     QFont m_font;
+    QStaticText m_charCache[127];
     int m_lastPattern{-1};
     int m_lastRow{-1};
 };

@@ -82,6 +82,13 @@ OpenMPTVisPatterns::OpenMPTVisPatterns(openmpt::module *module, int channels, in
     m_maxCellWidth = maxCellWidth;
     m_charWidth = fm.horizontalAdvance("X");
     m_ascent = fm.ascent();
+
+    for (int i = 33; i <= 126; ++i)
+    {
+        QStaticText &st = m_charCache[i];
+        st.setText(QString(QChar(i)));
+        st.prepare(QTransform(), m_font);
+    }
 }
 
 Frame OpenMPTVisPatterns::render(openmpt::module *module)
@@ -128,11 +135,10 @@ Frame OpenMPTVisPatterns::render(openmpt::module *module)
     }
 
     QImage img(avFrame->data[0], m_width, m_height, avFrame->linesize[0], QImage::Format_RGB32);
+    img.fill(Qt::black);
 
     QPainter p(&img);
     p.setFont(m_font);
-
-    p.fillRect(0, 0, m_width, m_height, Qt::black);
 
     for (int row = firstRow; row <= lastRow; ++row)
     {
@@ -177,7 +183,12 @@ Frame OpenMPTVisPatterns::render(openmpt::module *module)
                     color = color.lighter(130);
 
                 p.setPen(color);
-                p.drawText(x + i * m_charWidth, y + m_ascent + 1, c);
+
+                const QPoint textPos(x + i * m_charWidth, y + m_ascent + 1);
+                if (Q_LIKELY(c.unicode() >= 33 && c.unicode() <= 126))
+                    p.drawStaticText(textPos, m_charCache[c.unicode()]);
+                else
+                    p.drawText(textPos, c);
             }
         }
     }
