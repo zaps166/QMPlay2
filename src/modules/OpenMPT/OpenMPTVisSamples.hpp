@@ -39,6 +39,7 @@ private:
     int m_channelWidth{0};
     int m_rowHeight{0};
     bool m_allowRender{true};
+    bool m_isReset{true};
     QImage m_textBuffer;
     std::vector<int> m_lastInstrument;
 };

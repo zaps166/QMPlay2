@@ -151,18 +151,35 @@ Frame OpenMPTVisSamples::render(openmpt::module *module)
     QPainter p(&img);
     for (int ch = 0; ch < m_numChannels; ++ch)
     {
+        int inst = module->get_pattern_row_channel_command(curPattern, curRow, ch, openmpt::module::command_instrument);
+        if (inst == 0 && m_isReset && curRow > 0)
+        {
+            for (int row = curRow - 1; row >= 0; --row)
+            {
+                inst = module->get_pattern_row_channel_command(curPattern, row, ch, openmpt::module::command_instrument);
+                if (inst > 0)
+                {
+                    break;
+                }
+            }
+        }
+        if (inst > 0)
+        {
+            m_lastInstrument[ch] = inst - 1;
+        }
+
         const float vuL = module->get_current_channel_vu_left(ch);
         const float vuR = module->get_current_channel_vu_right(ch);
         if (vuL < kSilentThreshold && vuR < kSilentThreshold)
+        {
             continue;
-
-        const int inst = module->get_pattern_row_channel_command(curPattern, curRow, ch, openmpt::module::command_instrument);
-        if (inst > 0)
-            m_lastInstrument[ch] = inst - 1;
+        }
 
         const int instIdx = m_lastInstrument[ch];
         if (instIdx < 0 || instIdx >= m_numSamples)
+        {
             continue;
+        }
 
         const int y = instIdx * m_rowHeight;
         const int chX = m_indexWidth + ch * m_channelWidth;
@@ -178,10 +195,13 @@ Frame OpenMPTVisSamples::render(openmpt::module *module)
     Frame frame(avFrame);
     av_frame_free(&avFrame);
 
+    m_isReset = false;
+
     return frame;
 }
 void OpenMPTVisSamples::reset()
 {
     m_allowRender = true;
+    m_isReset = true;
     std::fill(m_lastInstrument.begin(), m_lastInstrument.end(), -1);
 }
