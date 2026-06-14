@@ -2045,7 +2045,7 @@ void MainWidget::mouseMoveEvent(QMouseEvent *e)
         const bool isToolbarVisible = mainTB->isVisible();
 
         bool canDisplayPanel = fullScreen || isCompactView;
-        if (canDisplayPanel && !isToolbarVisible)
+        if (canDisplayPanel && !isToolbarVisible && fullScreen)
         {
             const auto winScreen = windowHandle()->screen();
             const auto winScreenGeo = winScreen->geometry();
