@@ -2160,7 +2160,7 @@ void MainWidget::enterEvent(Q_ENTER_EVENT *e)
 }
 void MainWidget::leaveEvent(QEvent *e)
 {
-    if ((fullScreen || isCompactView) && !QApplication::activePopupWidget())
+    if ((fullScreen || isCompactView) && !QApplication::activePopupWidget() && !geometry().contains(QCursor::pos(windowHandle()->screen())))
         m_hideDocksTimer.start(isCompactView ? 750 : 0);
     QMainWindow::leaveEvent(e);
 }
