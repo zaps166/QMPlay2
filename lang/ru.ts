@@ -1012,7 +1012,7 @@
     </message>
     <message>
         <source>Subtitles and tags encoding</source>
-        <translation>Кодирование субтитров и тегов</translation>
+        <translation>Кодировка субтитров и тегов</translation>
     </message>
     <message>
         <source>Output file path:</source>
@@ -1939,11 +1939,11 @@
     </message>
     <message>
         <source>FFmpeg audio filters, example: %1</source>
-        <translation>Аудиофильтры FFmpeg, пример</translation>
+        <translation>Аудиофильтры FFmpeg, пример: %1</translation>
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;%4&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation>В QMPlay2 поддерживаются не все аудиофильтры. Чтобы использовать некоторые фильтры, такие как «apos», необходимо включить параметры «принудительное преобразование каналов» и «использовать преобразование каналов перед фильтрами» в настройках воспроизведения. Обратитесь к документации FFmpeg. Доступные аудиофильтры:</translation>
+        <translation>В QMPlay2 поддерживаются не все аудиофильтры. Чтобы использовать некоторые фильтры, такие как «%4», необходимо включить параметры «принудительное преобразование каналов» и «использовать преобразование каналов перед фильтрами» в настройках воспроизведения. Обратитесь к %1документации FFmpeg%2.%3Доступные аудиофильтры:</translation>
     </message>
 </context>
 <context>
@@ -2044,7 +2044,7 @@
     </message>
     <message>
         <source>Background</source>
-        <translation>Предыстория</translation>
+        <translation>Фон</translation>
     </message>
 </context>
 <context>
@@ -2066,7 +2066,7 @@
     <name>OpenSubtitles</name>
     <message>
         <source>Subtitles browser</source>
-        <translation>Программа для просмотра субтитров</translation>
+        <translation>Браузер субтитров</translation>
     </message>
     <message>
         <source>Type the movie name and press enter</source>
@@ -2303,7 +2303,7 @@
     </message>
     <message>
         <source>Recording started: %1</source>
-        <translation>Запись началась</translation>
+        <translation>Запись началась: %1</translation>
     </message>
     <message>
         <source>Recording stopped</source>
@@ -3788,15 +3788,15 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Negative</source>
-        <translation>Отрицательный</translation>
+        <translation>Негатив</translation>
     </message>
     <message>
         <source>Disable negative</source>
-        <translation>Отключить отрицательное</translation>
+        <translation>Отключить негатив</translation>
     </message>
     <message>
         <source>Enable negative</source>
-        <translation>Включить отрицательное</translation>
+        <translation>Включить негатив</translation>
     </message>
 </context>
 <context>
