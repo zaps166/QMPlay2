@@ -1015,6 +1015,10 @@
         <translation>Não carregar arquivos de playlists junto com outros arquivos</translation>
     </message>
     <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Subtitles and tags encoding</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1234,21 +1238,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>Letras não encontrada</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Samples</source>
-        <translation>Exemplos</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>Padrões</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation>Canais</translation>
     </message>
 </context>
 <context>
@@ -1747,14 +1736,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Resampling method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Additional notifications</source>
         <translation>Notificações adicionais</translation>
     </message>
@@ -1799,8 +1780,80 @@
         <translation>Suporte para XSPF</translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>Padrão</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Padrões</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Exemplos</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Exclusive mode</source>
@@ -2064,6 +2117,33 @@
     </message>
     <message>
         <source>texture map error</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Exemplos</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Padrões</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">Canais</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished">Faixa</translation>
+    </message>
+    <message>
+        <source>Track %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -1055,6 +1055,10 @@
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>Ana pencereyi yeniden boyutlandırırken panel boyutlarını koru (deneysel)</translation>
     </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1231,21 +1235,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>Şarkı sözleri bulunamadı</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Samples</source>
-        <translation>Örnekler</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>Desenler</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation>Каnallar</translation>
     </message>
 </context>
 <context>
@@ -1439,8 +1428,80 @@
         <translation>XVideo çıktıları</translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>Öntanımlı</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Desenler</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Örnekler</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
@@ -1449,10 +1510,6 @@
     <message>
         <source>Playback device</source>
         <translation>Oynatma aygıtı</translation>
-    </message>
-    <message>
-        <source>Resampling method</source>
-        <translation>Yeniden örnekleme yöntemi</translation>
     </message>
     <message>
         <source>Autodetect</source>
@@ -1526,10 +1583,6 @@
     <message>
         <source>Very high</source>
         <translation>Çok yüksek</translation>
-    </message>
-    <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation>Rayman2 müziği (*.apm)</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
@@ -2068,6 +2121,33 @@
     <message>
         <source>texture map error</source>
         <translation>doku haritası hatası</translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Örnekler</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Desenler</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">Каnallar</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished">Parça</translation>
+    </message>
+    <message>
+        <source>Track %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

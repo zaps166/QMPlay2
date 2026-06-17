@@ -1054,6 +1054,10 @@
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>Διατήρηση μεγέθους πλαισίων κατά την αλλαγή μεγέθους του κύριου παραθύρου (πειραματικό)</translation>
     </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1230,21 +1234,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>Δεν βρέθηκαν οι στίχοι</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Samples</source>
-        <translation>Δείγματα</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>Πρότυπα</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation>Κανάλια</translation>
     </message>
 </context>
 <context>
@@ -1438,8 +1427,80 @@
         <translation>Εξόδους XVideo</translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>Προεπιλογή</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Πρότυπα</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Δείγματα</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
@@ -1448,10 +1509,6 @@
     <message>
         <source>Playback device</source>
         <translation>Συσκευή αναπαραγωγής</translation>
-    </message>
-    <message>
-        <source>Resampling method</source>
-        <translation>Μέθοδος αναδειγματοληψίας</translation>
     </message>
     <message>
         <source>Autodetect</source>
@@ -1524,10 +1581,6 @@
     <message>
         <source>Very high</source>
         <translation>Πολύ υψηλή</translation>
-    </message>
-    <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation>Μουσική Rayman2 (* .apm)</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
@@ -2060,6 +2113,33 @@
     <message>
         <source>texture map error</source>
         <translation>σφάλμα χάρτη υφής</translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Δείγματα</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Πρότυπα</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">Κανάλια</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

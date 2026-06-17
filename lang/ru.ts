@@ -1054,6 +1054,10 @@
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>Сохранять размер панелей при изменении размера главного окна (экспериментальная функция)</translation>
     </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1230,21 +1234,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>Текст песни не найден</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Samples</source>
-        <translation>Сэмплы</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>Шаблоны</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation>Каналы</translation>
     </message>
 </context>
 <context>
@@ -1438,8 +1427,80 @@
         <translation>Выводы XVideo</translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>По умолчанию</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Шаблоны</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Сэмплы</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
@@ -1448,10 +1509,6 @@
     <message>
         <source>Playback device</source>
         <translation>Устройство воспроизведения</translation>
-    </message>
-    <message>
-        <source>Resampling method</source>
-        <translation>Метод передискретизации</translation>
     </message>
     <message>
         <source>Autodetect</source>
@@ -1524,10 +1581,6 @@
     <message>
         <source>Very high</source>
         <translation>Очень высокое</translation>
-    </message>
-    <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation>Музыка Rayman2 (*.apm)</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
@@ -2060,6 +2113,33 @@
     <message>
         <source>texture map error</source>
         <translation>ошибка карты текстур</translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Сэмплы</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Шаблоны</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">Каналы</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished">Дорожка</translation>
+    </message>
+    <message>
+        <source>Track %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1007,6 +1007,10 @@
         <translation>Ne töltse be a lejátszási listákat más fájlokba</translation>
     </message>
     <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Enlarge small covers</source>
         <translation>Kis borítók nagyítása</translation>
     </message>
@@ -1230,21 +1234,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>A szöveg nem található</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Samples</source>
-        <translation>Minták</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>Kifejezések</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation>Csatornák</translation>
     </message>
 </context>
 <context>
@@ -1722,14 +1711,6 @@
         <translation>Nagy endian</translation>
     </message>
     <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation>Rayman2 zene (*.apm)</translation>
-    </message>
-    <message>
-        <source>Resampling method</source>
-        <translation>Újramintavételezési módszer</translation>
-    </message>
-    <message>
         <source>Additional notifications</source>
         <translation>További értesítések</translation>
     </message>
@@ -1774,8 +1755,80 @@
         <translation>XSPF támogatás</translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>Alapértelmezett</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Kifejezések</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Minták</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>SRT reading</source>
@@ -2060,6 +2113,33 @@
     <message>
         <source>texture map error</source>
         <translation>Textúra térkép hiba</translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Minták</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Kifejezések</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">Csatornák</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished">Szám</translation>
+    </message>
+    <message>
+        <source>Track %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -1048,11 +1048,15 @@
     </message>
     <message>
         <source>Additional params</source>
-        <translation>Додаткові параметри></translation>
+        <translation>Додаткові параметри&gt;</translation>
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>Зберігати розмір панелей при зміні розмірів головного вікна (експериментально)</translation>
+    </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1230,21 +1234,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>Тексту пісні не знайдено</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Samples</source>
-        <translation>Семпли</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>Шаблони</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation>Канали</translation>
     </message>
 </context>
 <context>
@@ -1438,8 +1427,80 @@
         <translation>Виведення XVideo</translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>За замовчуванням</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Шаблони</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Семпли</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
@@ -1448,10 +1509,6 @@
     <message>
         <source>Playback device</source>
         <translation>Пристрій відтворення</translation>
-    </message>
-    <message>
-        <source>Resampling method</source>
-        <translation>Метод ресеплювання</translation>
     </message>
     <message>
         <source>Autodetect</source>
@@ -1524,10 +1581,6 @@
     <message>
         <source>Very high</source>
         <translation>Дуже висока</translation>
-    </message>
-    <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation>Музика Rayman2 (* .apm)</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
@@ -2060,6 +2113,33 @@
     <message>
         <source>texture map error</source>
         <translation>помилка відображення текстури</translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Семпли</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Шаблони</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">Канали</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished">Доріжка</translation>
+    </message>
+    <message>
+        <source>Track %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

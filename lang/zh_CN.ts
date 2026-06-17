@@ -1054,6 +1054,10 @@
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>调整主窗口大小时维持面板尺寸（实验）</translation>
     </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1230,21 +1234,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>未发现歌词</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Samples</source>
-        <translation>示例</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>模式</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation>声道</translation>
     </message>
 </context>
 <context>
@@ -1438,8 +1427,80 @@
         <translation>XVideo 输出</translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>默认</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">模式</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">示例</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
@@ -1448,10 +1509,6 @@
     <message>
         <source>Playback device</source>
         <translation>回放设备</translation>
-    </message>
-    <message>
-        <source>Resampling method</source>
-        <translation>重采样方法</translation>
     </message>
     <message>
         <source>Autodetect</source>
@@ -1524,10 +1581,6 @@
     <message>
         <source>Very high</source>
         <translation>非常高</translation>
-    </message>
-    <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation>Rayman2 音乐 (*.apm)</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
@@ -2060,6 +2113,33 @@
     <message>
         <source>texture map error</source>
         <translation>纹理贴图错误</translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">示例</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">模式</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">声道</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished">音轨</translation>
+    </message>
+    <message>
+        <source>Track %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3538,7 +3618,8 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>DRC</source>
-        <translation>动态范围压缩</translation>
+        <comment>Dynamic Range Compression</comment>
+        <translation type="unfinished">动态范围压缩</translation>
     </message>
 </context>
 <context>

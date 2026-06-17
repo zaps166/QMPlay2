@@ -1054,6 +1054,10 @@
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>Mantener el tamaño de los paneles al cambiar el tamaño de la ventana principal (experimental)</translation>
     </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1230,21 +1234,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>Letras no encontradas</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Channels</source>
-        <translation>Canales</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>Patrones</translation>
-    </message>
-    <message>
-        <source>Samples</source>
-        <translation>Muestras</translation>
     </message>
 </context>
 <context>
@@ -1442,10 +1431,6 @@
         <translation>Soporte para M3U</translation>
     </message>
     <message>
-        <source>Resampling method</source>
-        <translation>Método de remuestreo</translation>
-    </message>
-    <message>
         <source>Set as default AudioCD player</source>
         <translation>Establecer como reproductor de CD de audio predeterminado</translation>
     </message>
@@ -1522,8 +1507,80 @@
         <translation>Big endian</translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>Predeterminado</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Patrones</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Muestras</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>XVideo outputs</source>
@@ -1576,10 +1633,6 @@
     <message>
         <source>Number of threads used to decode video</source>
         <translation>Número de procesos utilizados para decodificar vídeo</translation>
-    </message>
-    <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation>Música de Rayman 2 (*.apm)</translation>
     </message>
     <message>
         <source>AudioCD</source>
@@ -2060,6 +2113,33 @@
     <message>
         <source>texture map error</source>
         <translation>Error de mapeo de texturas</translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Muestras</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Patrones</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">Canales</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished">Pista</translation>
+    </message>
+    <message>
+        <source>Track %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

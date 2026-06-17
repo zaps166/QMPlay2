@@ -1054,6 +1054,10 @@
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation>調整主視窗大小時維持面板尺寸（實驗性）</translation>
     </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1230,21 +1234,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>沒有找到歌詞</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Samples</source>
-        <translation>樣本</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>樣式</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation>聲道數</translation>
     </message>
 </context>
 <context>
@@ -1438,8 +1427,80 @@
         <translation>XVideo 輸出</translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>預設</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">樣式</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">樣本</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
@@ -1448,10 +1509,6 @@
     <message>
         <source>Playback device</source>
         <translation>播放設備</translation>
-    </message>
-    <message>
-        <source>Resampling method</source>
-        <translation>重取樣方式</translation>
     </message>
     <message>
         <source>Autodetect</source>
@@ -1524,10 +1581,6 @@
     <message>
         <source>Very high</source>
         <translation>非常高</translation>
-    </message>
-    <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation>Rayman2 音樂 (*.apm)</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
@@ -2060,6 +2113,33 @@
     <message>
         <source>texture map error</source>
         <translation>材質貼圖錯誤</translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">樣本</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">樣式</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">聲道數</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3538,7 +3618,8 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>DRC</source>
-        <translation>動態範圍壓縮</translation>
+        <comment>Dynamic Range Compression</comment>
+        <translation type="unfinished">動態範圍壓縮</translation>
     </message>
 </context>
 <context>

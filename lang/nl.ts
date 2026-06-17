@@ -1011,6 +1011,10 @@
         <translation>Afspeellijstbestanden niet laden binnen andere bestanden</translation>
     </message>
     <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Subtitles and tags encoding</source>
         <translation>Ondertiteling- en tagencodering</translation>
     </message>
@@ -1230,21 +1234,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>Er is geen songtekst gevonden</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Samples</source>
-        <translation>Samples</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>Patronen</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation>Kanalen</translation>
     </message>
 </context>
 <context>
@@ -1742,14 +1731,6 @@
         <translation>Big endian</translation>
     </message>
     <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation>Rayman2-muziek (*.apm)</translation>
-    </message>
-    <message>
-        <source>Resampling method</source>
-        <translation>Resamplemethode</translation>
-    </message>
-    <message>
         <source>Additional notifications</source>
         <translation>Aanvullende meldingen</translation>
     </message>
@@ -1794,8 +1775,80 @@
         <translation>Xspf-ondersteuning</translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>Standaard</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Patronen</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Samples</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Exclusive mode</source>
@@ -2060,6 +2113,33 @@
     <message>
         <source>texture map error</source>
         <translation>Textuurtoewijzingsfout</translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Samples</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Patronen</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">Kanalen</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished">Volgnummer</translation>
+    </message>
+    <message>
+        <source>Track %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

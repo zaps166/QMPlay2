@@ -1055,6 +1055,10 @@
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1231,21 +1235,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>歌詞が見つかりませんでした</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Channels</source>
-        <translation>チャンネル</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>パターン</translation>
-    </message>
-    <message>
-        <source>Samples</source>
-        <translation>サンプル</translation>
     </message>
 </context>
 <context>
@@ -1443,10 +1432,6 @@
         <translation>M3Uを使用</translation>
     </message>
     <message>
-        <source>Resampling method</source>
-        <translation>再サンプリング関数</translation>
-    </message>
-    <message>
         <source>Set as default AudioCD player</source>
         <translation>デフォルトオーディオCDプレイヤーにする</translation>
     </message>
@@ -1523,8 +1508,80 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>デフォルト</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">パターン</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">サンプル</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>XVideo outputs</source>
@@ -1577,10 +1634,6 @@
     <message>
         <source>Number of threads used to decode video</source>
         <translation>ビデオのデコードに使用されるスレッドの数</translation>
-    </message>
-    <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation>Rayman2 music (*.apm)</translation>
     </message>
     <message>
         <source>AudioCD</source>
@@ -2062,6 +2115,33 @@
     <message>
         <source>texture map error</source>
         <translation>テクスチャマップエラー</translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">サンプル</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">パターン</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">チャンネル</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished">トラック</translation>
+    </message>
+    <message>
+        <source>Track %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

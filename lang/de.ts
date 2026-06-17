@@ -1053,6 +1053,10 @@
         <source>Maintain panels size when resizing the main window (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Help</name>
@@ -1229,21 +1233,6 @@
     <message>
         <source>Lyrics not found</source>
         <translation>Liedtext nicht gefunden</translation>
-    </message>
-</context>
-<context>
-    <name>MPDemux</name>
-    <message>
-        <source>Samples</source>
-        <translation>Probe</translation>
-    </message>
-    <message>
-        <source>Patterns</source>
-        <translation>Muster</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation>Kanäle</translation>
     </message>
 </context>
 <context>
@@ -1437,8 +1426,80 @@
         <translation>XVideo Ausgabe</translation>
     </message>
     <message>
+        <source>OpenMPT enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All sequentially</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Default</source>
         <translation>Standard</translation>
+    </message>
+    <message>
+        <source>Nearest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cubic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed sinc (8 taps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Muster</translation>
+    </message>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Probe</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Channels:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rows:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subsongs:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stereo separation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interpolation filter:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Visualization:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
@@ -1447,10 +1508,6 @@
     <message>
         <source>Playback device</source>
         <translation>Wiedergabegerät</translation>
-    </message>
-    <message>
-        <source>Resampling method</source>
-        <translation>Resampling Methode</translation>
     </message>
     <message>
         <source>Autodetect</source>
@@ -1523,10 +1580,6 @@
     <message>
         <source>Very high</source>
         <translation>Hervorragend</translation>
-    </message>
-    <message>
-        <source>Rayman2 music (*.apm)</source>
-        <translation>Rayman2 Musik (*.apm)</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
@@ -2059,6 +2112,33 @@
     <message>
         <source>texture map error</source>
         <translation>Textur-Map-Fehler</translation>
+    </message>
+</context>
+<context>
+    <name>OpenMPDemux</name>
+    <message>
+        <source>Samples</source>
+        <translation type="unfinished">Probe</translation>
+    </message>
+    <message>
+        <source>Patterns</source>
+        <translation type="unfinished">Muster</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="unfinished">Kanäle</translation>
+    </message>
+    <message>
+        <source>Instruments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Track %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
