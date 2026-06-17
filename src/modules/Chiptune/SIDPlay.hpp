@@ -20,8 +20,13 @@
 
 #include <Demuxer.hpp>
 
-#include <sidplayfp/builders/residfp.h>
 #include <sidplayfp/sidplayfp.h>
+
+#if LIBSIDPLAYFP_VERSION_MAJ >= 3
+#include <sidplayfp/builders/sidlite.h>
+#else
+#include <sidplayfp/builders/residfp.h>
+#endif
 
 class SidTuneInfo;
 class Reader;
@@ -65,7 +70,13 @@ private:
     QList<QMPlay2Tag> m_tags;
     QString m_url, m_title;
 
+    QByteArray m_mixBuf;
+
+#if LIBSIDPLAYFP_VERSION_MAJ >= 3
+    SIDLiteBuilder m_rs;
+#else
     ReSIDfpBuilder m_rs;
+#endif
     sidplayfp m_sidplay;
     SidTune *m_tune;
 };

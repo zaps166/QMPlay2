@@ -28,11 +28,15 @@
 #include <sidplayfp/SidTune.h>
 #include <sidplayfp/SidInfo.h>
 
+#include <cmath>
+
+static constexpr unsigned int CYCLES = 10509; // 512 samples @48kHz (PAL 985249 Hz), 10.67ms
+
 SIDPlay::SIDPlay(Module &module) :
     m_srate(Functions::getBestSampleRate()),
     m_aborted(false),
     m_time(-1.0),
-    m_rs(nullptr),
+    m_rs("QMPlay2"),
     m_tune(nullptr)
 {
     SetModule(module);
@@ -73,17 +77,14 @@ bool SIDPlay::seek(double s, bool backward)
 {
     m_time = -1.0;
 
-    if (backward && !m_sidplay.load(m_tune)) //backward
+    if (backward && !m_sidplay.reset())
         return false;
 
     if (s > 0.0)
     {
-        const int pos = s;
-        const int bufferSize = m_chn * m_srate;
-        qint16 *buff1sec = new qint16[bufferSize];
-        for (int i = m_sidplay.time(); i <= pos && !m_aborted; ++i)
-            m_sidplay.play(buff1sec, bufferSize);
-        delete[] buff1sec;
+        const auto posMs = static_cast<uint_least32_t>(s * 1000.0);
+        while (m_sidplay.timeMs() <= posMs && !m_aborted)
+            m_sidplay.play(CYCLES);
     }
 
     return true;
@@ -99,24 +100,43 @@ bool SIDPlay::read(Packet &decoded, int &idx)
     if (m_time > m_length)
         return false;
 
-    const int chunkSize = 1024 * m_chn;
+#if LIBSIDPLAYFP_VERSION_MAJ >= 3
+    const int bufSize = m_sidplay.getBufSize(CYCLES);
+#else
+    const double cpuSpeed = (m_tune->getInfo()->clockSpeed() == SidTuneInfo::CLOCK_NTSC)
+        ? 3579545.455 * 4.0 / 14.0   // NTSC
+        : 4433618.75  * 4.0 / 18.0;   // PAL
+    const int bufSize = static_cast<int>(std::ceil(static_cast<double>(m_srate) / cpuSpeed * CYCLES)) * m_chn;
+#endif
+    if (bufSize <= 0)
+        return false;
 
-    decoded.resize(chunkSize * sizeof(float));
+    const int requiredSize = bufSize * sizeof(int16_t);
+    if (m_mixBuf.size() < requiredSize)
+    {
+        m_mixBuf.clear();
+        m_mixBuf.resize(requiredSize);
+    }
+    int16_t *mixData = (int16_t *)m_mixBuf.data();
 
-    int16_t *srcData = (int16_t *)decoded.data();
+    const int res = m_sidplay.play(CYCLES);
+    if (res <= 0)
+        return false;
+
+    const int sampleCount = m_sidplay.mix(mixData, res);
+
+    decoded.resize(sampleCount * sizeof(float));
     float *dstData = (float *)decoded.data();
 
-    m_sidplay.play(srcData, chunkSize);
-
-    for (int i = chunkSize - 1; i >= 0; --i)
-        dstData[i] = srcData[i] / 16384.0;
+    for (int i = sampleCount - 1; i >= 0; --i)
+        dstData[i] = mixData[i] / 32768.0;
 
     const double fadePos = m_time - (m_length - 5);
     if (fadePos >= 0)
-        ChiptuneCommon::doFadeOut(dstData, chunkSize, m_chn, m_srate, fadePos, 5.0);
+        ChiptuneCommon::doFadeOut(dstData, sampleCount, m_chn, m_srate, fadePos, 5.0);
 
     decoded.setTS(m_time);
-    decoded.setDuration(chunkSize / m_chn / (double)m_srate);
+    decoded.setDuration(sampleCount / m_chn / (double)m_srate);
 
     idx = 0;
 
@@ -147,7 +167,7 @@ Playlist::Entries SIDPlay::fetchTracks(const QString &url, bool &ok)
             if (info)
             {
                 Playlist::Entry entry;
-                entry.url = SIDPlayName + QString("://{%1}%2").arg(m_url).arg(i);
+                entry.url = SIDPlayName + QStringLiteral("://{%1}%2").arg(m_url).arg(i);
                 entry.name = getTitle(info, i);
                 entry.length = m_length;
                 entries.append(entry);
@@ -215,23 +235,19 @@ bool SIDPlay::open(const QString &_url, bool tracksOnly)
         if (track >= (int)info->songs())
             return false;
 
-        m_rs.create(m_sidplay.info().maxsids());
-        if (!m_rs.getStatus())
-            return false;
-        m_rs.filter(true);
-
-#if ((LIBSIDPLAYFP_VERSION_MAJ << 16 | LIBSIDPLAYFP_VERSION_MIN << 8 | LIBSIDPLAYFP_VERSION_LEV) > 0x010800)
-        const bool isStereo = info->sidChips() > 1 ? true : false;
-#else
-        const bool isStereo = info->isStereo();
-#endif
+        const bool isStereo = info->sidChips() > 1;
 
         SidConfig cfg;
         cfg.frequency = m_srate;
         cfg.sidEmulation = &m_rs;
-        if (isStereo)
-            cfg.playback = SidConfig::STEREO;
         cfg.samplingMethod = SidConfig::INTERPOLATE;
+#if LIBSIDPLAYFP_VERSION_MAJ < 3
+        m_rs.create(m_sidplay.info().maxsids());
+        if (!m_rs.getStatus())
+            return false;
+        m_rs.filter(true);
+        cfg.playback = isStereo ? SidConfig::STEREO : SidConfig::MONO;
+#endif
         if (!m_sidplay.config(cfg))
             return false;
 
@@ -253,7 +269,10 @@ bool SIDPlay::open(const QString &_url, bool tracksOnly)
 
         streams_info += new StreamInfo(m_srate, m_chn);
 
-        return m_sidplay.load(m_tune);
+        if (!m_sidplay.load(m_tune))
+            return false;
+        m_sidplay.initMixer(isStereo);
+        return true;
     }
 
     return false;
@@ -269,6 +288,6 @@ QString SIDPlay::getTitle(const SidTuneInfo *info, int track) const
     else
         ret = title;
     if (info->songs() > 1)
-        return tr("Track") + QString(" %1%2").arg(track + 1).arg(ret.isEmpty() ? QString() : (" - " + ret));
+        return tr("Track") + QStringLiteral(" %1%2").arg(track + 1).arg(ret.isEmpty() ? QString() : (" - " + ret));
     return ret;
 }
