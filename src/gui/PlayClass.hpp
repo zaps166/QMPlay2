@@ -40,12 +40,9 @@ class Demuxer;
 class Slider;
 class LibASS;
 
-enum
-{
-    SEEK_NOWHERE = -1,
-    SEEK_STREAM_RELOAD = -2, /* Seeks to current position after stream reload */
-    SEEK_REPEAT = -3
-};
+inline constexpr double SEEK_NOWHERE = -1.0;
+inline constexpr double SEEK_STREAM_RELOAD = -2.0; // Seeks to current position after stream reload
+inline constexpr double SEEK_REPEAT = -3.0;
 
 class PlayClass final : public QObject
 {
