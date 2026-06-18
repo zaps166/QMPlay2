@@ -29,26 +29,23 @@
 # include <AVAudioFilter.hpp>
 #endif
 
-enum Defaults
-{
-    BS2B_FCUT = 700,
-    BS2B_FEED = 45,
+constexpr int BS2B_FCUT = 700;
+constexpr int BS2B_FEED = 45;
 
-    EQUALIZER_FFT_BITS = 10,
-    EQUALIZER_COUNT = 8,
-    EQUALIZER_MIN_FREQ = 200,
-    EQUALIZER_MAX_FREQ = 18000,
+constexpr int EQUALIZER_FFT_BITS = 10;
+constexpr int EQUALIZER_COUNT = 8;
+constexpr int EQUALIZER_MIN_FREQ = 200;
+constexpr int EQUALIZER_MAX_FREQ = 18000;
 
-    ECHO_DELAY = 500,
-    ECHO_VOLUME = 50,
-    ECHO_FEEDBACK = 50,
-    ECHO_SURROUND = 0,
+constexpr int ECHO_DELAY = 500;
+constexpr int ECHO_VOLUME = 50;
+constexpr int ECHO_FEEDBACK = 50;
+constexpr int ECHO_SURROUND = 0;
 
-    COMPRESSOR_PEEK_PERCENT = 90,
-    COMPRESSOR_RELEASE_TIME = 2,
-    COMPRESSOR_FAST = 9,
-    COMPRESSOR_OVERALL = 6
-};
+constexpr int COMPRESSOR_PEEK_PERCENT = 90;
+constexpr int COMPRESSOR_RELEASE_TIME = 2;
+constexpr int COMPRESSOR_FAST = 9;
+constexpr int COMPRESSOR_OVERALL = 6;
 
 AudioFilters::AudioFilters() :
     Module("AudioFilters")
