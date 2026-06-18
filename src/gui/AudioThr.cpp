@@ -142,9 +142,8 @@ void AudioThr::silence(bool invert, bool fromPause)
             for (int i = 0; i < 100; ++i)
             {
                 QCoreApplication::processEvents();
-                if (playC.doSilenceBreak)
+                if (playC.doSilenceBreak.exchange(false))
                 {
-                    playC.doSilenceBreak = false;
                     break;
                 }
                 Functions::s_wait(0.01);

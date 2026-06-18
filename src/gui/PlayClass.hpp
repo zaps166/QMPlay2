@@ -29,6 +29,7 @@
 #include <QStringList>
 #include <QWaitCondition>
 
+#include <atomic>
 #include <memory>
 
 class StreamInfo;
@@ -147,7 +148,7 @@ private:
     AudioThr *aThr;
 
     QWaitCondition emptyBufferCond;
-    volatile bool fillBufferB, doSilenceBreak;
+    std::atomic_bool fillBufferB, doSilenceBreak;
     QMutex loadMutex, stopPauseMutex;
 
     PacketBuffer aPackets, vPackets, sPackets;

@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <atomic>
+
 class BasicIO
 {
 public:
@@ -96,5 +98,5 @@ public:
         return static_cast<const T *>(get());
     }
 private:
-    volatile bool br = false;
+    std::atomic_bool br = false;
 };

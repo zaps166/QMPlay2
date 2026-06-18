@@ -54,9 +54,8 @@ bool ToneGenerator::set()
 
 bool ToneGenerator::metadataChanged() const
 {
-    if (metadata_changed)
+    if (metadata_changed.exchange(false))
     {
-        metadata_changed = false;
         return true;
     }
     return false;

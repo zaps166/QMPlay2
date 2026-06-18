@@ -23,6 +23,8 @@
 #include <QThread>
 #include <QMutex>
 
+#include <atomic>
+
 class PlayClass;
 class Decoder;
 class Writer;
@@ -69,7 +71,7 @@ protected:
 
     PlayClass &playC;
 
-    volatile bool br = false, br2 = false;
+    std::atomic_bool br = false, br2 = false;
     bool waiting = false;
     QRecursiveMutex mutex;
     QMutex updateMutex;

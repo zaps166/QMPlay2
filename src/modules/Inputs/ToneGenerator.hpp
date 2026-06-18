@@ -20,6 +20,8 @@
 
 #include <Demuxer.hpp>
 
+#include <atomic>
+
 class ToneGenerator final : public Demuxer
 {
     Q_DECLARE_TR_FUNCTIONS(ToneGenerator)
@@ -45,8 +47,8 @@ private:
 
     /**/
 
-    volatile bool aborted;
-    mutable volatile bool metadata_changed;
+    std::atomic_bool aborted;
+    mutable std::atomic_bool metadata_changed;
     bool fromUrl;
     double pos;
     quint32 srate;
