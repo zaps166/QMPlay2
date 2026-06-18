@@ -63,7 +63,7 @@ private:
 
     int tmp_br;
     double tmp_time, silence_step;
-    volatile double doSilence;
+    double doSilence;
     QMutex silenceChMutex;
     bool allowAudioDrain = false;
 
