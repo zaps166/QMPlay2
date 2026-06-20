@@ -38,10 +38,7 @@ else()
     find_package(DummyPkgConfig REQUIRED)
 endif()
 
-if((NOT DEFINED BUILD_WITH_QT6 OR BUILD_WITH_QT6) AND NOT DEFINED Qt6_FOUND AND (NOT DEFINED QT_QMAKE_EXECUTABLE OR QT_QMAKE_EXECUTABLE MATCHES "qmake6"))
-    find_package(Qt6 6.1)
-endif()
-option(BUILD_WITH_QT6 "Build with Qt6" ${Qt6_FOUND})
+option(BUILD_WITH_QT6 "Build with Qt6" ON)
 add_feature_info(Qt6 BUILD_WITH_QT6 "Build with Qt6")
 
 if(BUILD_WITH_QT6)
