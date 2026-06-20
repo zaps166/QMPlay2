@@ -171,21 +171,15 @@ if(USE_VULKAN)
         shaderscommon/hsl.glsl
     )
 
-    if(USE_GLSLC) # Shaders compilation
-        foreach(VULKAN_SHADER ${VULKAN_SHADERS})
-            qmvk_add_shader(${CMAKE_CURRENT_SOURCE_DIR}/${VULKAN_SHADER} ${VULKAN_SHADERS_INCLUDE})
-        endforeach()
+    foreach(VULKAN_SHADER ${VULKAN_SHADERS})
+        qmvk_add_shader(${CMAKE_CURRENT_SOURCE_DIR}/${VULKAN_SHADER} ${VULKAN_SHADERS_INCLUDE})
+    endforeach()
 
-        add_custom_target( # Needed to display GLSL files in QtCreator
-            VulkanShaders
-            SOURCES ${VULKAN_SHADERS} ${VULKAN_SHADERS_INCLUDE}
-            DEPENDS ${QMVK_SHADER_COMPILED_FILES}
-        )
-    else()
-        file(GLOB QMVK_SHADER_COMPILED_FILES
-            "${CMAKE_CURRENT_SOURCE_DIR}/vulkan/shaders/spv/*.spv"
-        )
-    endif()
+    add_custom_target( # Needed to display GLSL files in QtCreator
+        VulkanShaders
+        SOURCES ${VULKAN_SHADERS} ${VULKAN_SHADERS_INCLUDE}
+        DEPENDS ${QMVK_SHADER_COMPILED_FILES}
+    )
 
     # Compiled shaders QRC generation
 

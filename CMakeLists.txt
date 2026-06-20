@@ -137,9 +137,6 @@ if(USE_VULKAN)
     add_definitions(-DUSE_VULKAN)
 endif()
 
-option(USE_GLSLC "Compile Vulkan shaders" OFF)
-add_feature_info(GLSLC USE_GLSLC "Compile Vulkan shaders")
-
 if(NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
     option(USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications" ON)
     add_feature_info("Freedesktop notifications" USE_FREEDESKTOP_NOTIFICATIONS "Use Freedesktop notifications")

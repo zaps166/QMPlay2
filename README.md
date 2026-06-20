@@ -223,6 +223,7 @@ For CMake build be sure that you have CMake 3.16 or higher.
     - libswresample,
     - libavfilter (FFmpeg >= 5.1) - for FFmpeg audio filters,
     - libavdevice - for FFmpeg module only, optional (enabled on Linux as default),
+- glslc
 
 #### Important:
 - TagLib >= 1.11,
@@ -276,7 +277,6 @@ CMake options (option - default value: description):
     - `USE_VIDEOFILTERS` - ON: enable/disable VideoFilters module.
     - `USE_OPENGL` - `ON`: enable/disable OpenGL support.
     - `USE_VULKAN` - autodetect: enable/disable Vulkan support.
-    - `USE_GLSLC` - `OFF`: enable/disable GLSL -> SPIR-V shader compilation when building QMPlay2.
     - `USE_AUDIOCD` - autodetect: enabled if libcdio and libcddb exist: enable/disable AudioCD module.
     - `USE_ALSA` - `ON` on Linux: enable/disable ALSA module.
     - `USE_PORTAUDIO` - `ON` on non-Linux OS: enable/disable PortAudio module.
