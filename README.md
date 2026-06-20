@@ -233,6 +233,7 @@ For CMake build be sure that you have CMake 3.16 or higher.
 - Chiptune: libgme and libsidplayfp,
 - AudioCD: libcdio and libcddb,
 - ALSA (Linux only): libasound,
+- OpenMPT: libopenmpt,
 - PipeWire - libpipewire,
 - PulseAudio - libpulse-simple,
 - PortAudio: portaudio (v19),
