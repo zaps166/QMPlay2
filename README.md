@@ -27,14 +27,10 @@ Table of Contents
 
 - [Download](https://github.com/zaps166/QMPlay2/releases/latest) the Windows installer.
 
-#### Easy installation on Linux (AppImage)
-
-- [Download](https://github.com/zaps166/QMPlay2/releases/latest) the Linux AppImage.
-
-#### Easy installation on Arch Linux / Manjaro Linux
+#### Easy installation on Arch Linux
 
 - Install AUR client (e.g. yay),
-- run the following command: `yay -S qmplay2`
+- run the following command: `yay -S qmplay2-git`
 
 #### Easy installation on openSUSE
 - Don't mix FFmpeg from different repositories!
