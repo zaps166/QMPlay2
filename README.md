@@ -373,7 +373,7 @@ sudo ninja -C build uninstall
 
 ## Building package RPM, DEB or any other
 
-You can look at [Arch Linux PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=qmplay2).
+You can look at [Arch Linux PKGBUILD](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=qmplay2-git).
 
 ## Other information
 
