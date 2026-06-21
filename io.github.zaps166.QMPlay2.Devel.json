@@ -81,8 +81,8 @@
         {
           "type": "git",
           "url": "https://github.com/libgme/game-music-emu.git",
-          "tag": "0.6.4",
-          "commit": "f0d9517c5c3e0b712f553baa62e213336587d52e"
+          "tag": "0.6.5",
+          "commit": "9e23d10f9fd2a6a2f33b10912dd8dc7153258995"
         }
       ]
     },
@@ -146,8 +146,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/libsidplayfp/libsidplayfp/releases/download/v2.16.1/libsidplayfp-2.16.1.tar.gz",
-          "sha256": "ace0f73c2ef8645ab069ce1b298b10e31e36af7b5996109983b2b67ad60ff3ca"
+          "url": "https://github.com/libsidplayfp/libsidplayfp/releases/download/v3.0.1/libsidplayfp-3.0.1.tar.gz",
+          "sha256": "6b8ffedc2f631a4ca53258e60468eab3e6a2dc4e1369b2e59e3a5955f99a2143"
         }
       ]
     },
