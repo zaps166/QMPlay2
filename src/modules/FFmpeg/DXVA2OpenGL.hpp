@@ -26,10 +26,10 @@
 #include <functional>
 #include <memory>
 
-#include <GL/wglext.h>
-
 #include <d3d9.h>
 #include <dxva2api.h>
+
+#include <GL/wglext.h>
 
 struct AVBufferRef;
 
