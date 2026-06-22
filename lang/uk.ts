@@ -869,197 +869,6 @@
     </message>
 </context>
 <context>
-    <name>GeneralSettings</name>
-    <message>
-        <source>Browse</source>
-        <translation>Огляд</translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>Використовувати системний набір іконок</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>Встановити оформлення</translation>
-    </message>
-    <message>
-        <source>Show covers</source>
-        <translation>Показати обкладинки</translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation>Розмиті обкладинки в якості фону</translation>
-    </message>
-    <message>
-        <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>Показати обкладинки з каталогу, якщо вони не знаходяться в музичному файлі</translation>
-    </message>
-    <message>
-        <source>Automatically open video window</source>
-        <translation>Автоматичне відкриття вікна відео</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>Автоматично перевіряти і завантажувати оновлення</translation>
-    </message>
-    <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>Показати вкладки у верхній частині головного вікна</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>Дозволити лише одну копію програми</translation>
-    </message>
-    <message>
-        <source>Always only display file names in playlist</source>
-        <translation>Завжди відображати тільки імена файлів в списку відтворення</translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation>Пам&apos;ятати режим повтору</translation>
-    </message>
-    <message>
-        <source>Use proxy server</source>
-        <translation>Використовувати проксі-сервер</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>Проксі-сервер потребує авторизації</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Ім&apos;я користувача</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Пароль</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>Адреса проксі-сервера</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>Порт проксі-сервера</translation>
-    </message>
-    <message>
-        <source>Clear covers cache</source>
-        <translation>Очистити кеш обкладинок</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>Скинути параметри</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Мова</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>Стиль</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation>Мова аудіо за замовчуванням</translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation>Мова субтитрів за замовчуванням</translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>Шлях до знімків екрану</translation>
-    </message>
-    <message>
-        <source>Set key bindings</source>
-        <translation>Встановити сполучення клавіш</translation>
-    </message>
-    <message>
-        <source>Selected Profile</source>
-        <translation>Вибраний профіль</translation>
-    </message>
-    <message>
-        <source>Read and display still images</source>
-        <translation>Читати і відображувати статичні зображення</translation>
-    </message>
-    <message>
-        <source>Use tray notifications as default</source>
-        <translation>Сповіщення в системному треї за замовчуванням</translation>
-    </message>
-    <message>
-        <source>Remove youtube-dl</source>
-        <translation>Видалити youtube-dl</translation>
-    </message>
-    <message>
-        <source>Automatically delete ungrouped entries</source>
-        <translation>Автоматично видаляти незгруповані записи</translation>
-    </message>
-    <message>
-        <source>Hide artist metadata</source>
-        <translation>Приховати метадані виконавця</translation>
-    </message>
-    <message>
-        <source>Automatically restore main window when new video file is loaded</source>
-        <translation>Автоматично відновлювати головне вікно при завантаженні нового відеофайлу</translation>
-    </message>
-    <message>
-        <source>Don&apos;t load playlist files within other files</source>
-        <translation>Не завантажувати файли списку відтворення до інших файлів</translation>
-    </message>
-    <message>
-        <source>Enlarge small covers</source>
-        <translation>Збільшити маленькі обкладинки</translation>
-    </message>
-    <message>
-        <source>Subtitles and tags encoding</source>
-        <translation>Кодування субтитрів і тегів</translation>
-    </message>
-    <message>
-        <source>Output file path:</source>
-        <translation>Шлях вихідного файлу:</translation>
-    </message>
-    <message>
-        <source>youtube-dl settings</source>
-        <translation>Параметри youtube-dl</translation>
-    </message>
-    <message>
-        <source>Cookies from browser</source>
-        <translation>Куки з браузера</translation>
-    </message>
-    <message>
-        <source>Custom path</source>
-        <translation>Власний шлях</translation>
-    </message>
-    <message>
-        <source>Don&apos;t auto-update</source>
-        <translation>Не оновлювати автоматично</translation>
-    </message>
-    <message>
-        <source>Please refer to yt-dlp documentation</source>
-        <translation>Зверніться до документації yt-dlp</translation>
-    </message>
-    <message>
-        <source>Default quality</source>
-        <translation>Якість за замовчуванням</translation>
-    </message>
-    <message>
-        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation>параметр &quot;-f&quot;, зверніться до документації yt-dlp</translation>
-    </message>
-    <message>
-        <source>Additional params</source>
-        <translation>Додаткові параметри&gt;</translation>
-    </message>
-    <message>
-        <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation>Зберігати розмір панелей при зміні розмірів головного вікна (експериментально)</translation>
-    </message>
-    <message>
-        <source>Fullscreen panels on the right side</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
@@ -2000,21 +1809,6 @@
     </message>
 </context>
 <context>
-    <name>ModulesList</name>
-    <message>
-        <source>Move up</source>
-        <translation>Вище</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation>Нижче</translation>
-    </message>
-</context>
-<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2038,14 +1832,42 @@
     </message>
 </context>
 <context>
-    <name>OSDSettings</name>
+    <name>OSDSettingsW</name>
+    <message>
+        <source>Background</source>
+        <translation>Фон</translation>
+    </message>
     <message>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
+        <source>Size: </source>
+        <translation>Розмір: </translation>
+    </message>
+    <message>
+        <source>Spacing: </source>
+        <translation>Відстань: </translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>Жирний</translation>
+    </message>
+    <message>
         <source>Margins</source>
         <translation>Краї</translation>
+    </message>
+    <message>
+        <source>Left: </source>
+        <translation>Зліва: </translation>
+    </message>
+    <message>
+        <source>Right: </source>
+        <translation>Справа: </translation>
+    </message>
+    <message>
+        <source>Vertical: </source>
+        <translation>Вертикально: </translation>
     </message>
     <message>
         <source>Subtitles alignment</source>
@@ -2056,48 +1878,24 @@
         <translation>Рамка</translation>
     </message>
     <message>
+        <source>Outline: </source>
+        <translation>Контур: </translation>
+    </message>
+    <message>
+        <source>Shadow: </source>
+        <translation>Тінь: </translation>
+    </message>
+    <message>
         <source>Colors</source>
         <translation>Колір</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Розмір</translation>
+        <source>Text: </source>
+        <translation>Текст: </translation>
     </message>
     <message>
-        <source>Spacing</source>
-        <translation>Відстань</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Зліва</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Справа</translation>
-    </message>
-    <message>
-        <source>Vertical</source>
-        <translation>Вертикально</translation>
-    </message>
-    <message>
-        <source>Outline</source>
-        <translation>Контур</translation>
-    </message>
-    <message>
-        <source>Shadow</source>
-        <translation>Тінь</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation>Текст</translation>
-    </message>
-    <message>
-        <source>Bold</source>
-        <translation>Жирний</translation>
-    </message>
-    <message>
-        <source>Background</source>
-        <translation>Фон</translation>
+        <source>Border: </source>
+        <translation>Рамка: </translation>
     </message>
 </context>
 <context>
@@ -2479,201 +2277,6 @@
     <message>
         <source>&amp;Keep audio pitch</source>
         <translation>&amp;Зберігати висоту звуку</translation>
-    </message>
-</context>
-<context>
-    <name>PlaybackSettings</name>
-    <message>
-        <source>Maximum volume</source>
-        <translation>Максимальна гучність</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>Примусова частота дискретизації</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>Примусове перетворення каналів</translation>
-    </message>
-    <message>
-        <source>Use available replay gain</source>
-        <translation>По можливості вирівнювати гучність</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>Режим альбому для вирівнювання гучності</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>Приглушувати шипіння/тріск</translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation>Дія коліща миші у вікні відео</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>Коліща миші прокручує музику/фільм</translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation>Коліща миші змінює гучність</translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>Зберігати масштабування</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>Показувати індикатор буферизованих даних на повзунку</translation>
-    </message>
-    <message>
-        <source>Keep aspect ratio</source>
-        <translation>Зберігати співвідношення сторін</translation>
-    </message>
-    <message>
-        <source>Keep subtitles delay</source>
-        <translation>Зберігати затримку субтитрів</translation>
-    </message>
-    <message>
-        <source>Keep subtitles scale</source>
-        <translation>Зберігати масштаб субтитрів</translation>
-    </message>
-    <message>
-        <source>Keep speed</source>
-        <translation>Зберігати частоту кадрів</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>Зберігати затримку відео</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>Синхронізація аудіо і відео (пропуск кадрів)</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>Вимкнення звуку при зупинці відтворення</translation>
-    </message>
-    <message>
-        <source>Remember video equalizer settings</source>
-        <translation>Пам&apos;ятати параметри відеоеквалайзера</translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation>Відтворювати наступний при помилці відтворення</translation>
-    </message>
-    <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>Короткий пошук (ліві і праві стрілки)</translation>
-    </message>
-    <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>Довгий пошук (стрілки вгору і вниз)</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>Розмір локального буфера (кількість пакетів аудіо/відео)</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation>Відсоток пакетів аудіо/відео при зворотному перемотуванні</translation>
-    </message>
-    <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>Розпочинати відтворювати інтернет-потік при його буферизації</translation>
-    </message>
-    <message>
-        <source>sec</source>
-        <translation>сек</translation>
-    </message>
-    <message>
-        <source>Amplify</source>
-        <translation>Посилення</translation>
-    </message>
-    <message>
-        <source>Primary mouse button on video dock toggles playback</source>
-        <translation>Ліва кнопка миші у вікні відео перемикає відтворення</translation>
-    </message>
-    <message>
-        <source>Accurate seeking</source>
-        <translation>Точний пошук</translation>
-    </message>
-    <message>
-        <source>Store aspect ratio and zoom in config file</source>
-        <translation>Зберегти пропорції і масштаб у конфігураційний файл</translation>
-    </message>
-    <message>
-        <source>Unpause when seeking</source>
-        <translation>Поновити відтворення під час прокрутки</translation>
-    </message>
-    <message>
-        <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>Використовувати аудіоресемплер та перетворення каналів перед фільтрами та візуалізаціями</translation>
-    </message>
-    <message>
-        <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation>Середня кнопка миші у вікні відео перемикає повноекранний режим</translation>
-    </message>
-    <message>
-        <source>Disable subtitles at program startup</source>
-        <translation>Вимкнути субтитри при запуску програми</translation>
-    </message>
-    <message>
-        <source>Remember audio/video/subtitles enabled state</source>
-        <translation>Пам&apos;ятати, чи увімкнено аудіо/відео/субтитри</translation>
-    </message>
-    <message>
-        <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>Частково позначене означає, що є затримка між натисканням та паузою</translation>
-    </message>
-    <message>
-        <source>Amplify (no metadata)</source>
-        <translation>Посилення (без метаданих)</translation>
-    </message>
-    <message>
-        <source>Network buffer length</source>
-        <translation>Довжина мережевого буфера</translation>
-    </message>
-    <message>
-        <source>Live stream buffer length</source>
-        <translation>Довжина буфера прямої трансляції</translation>
-    </message>
-    <message>
-        <source>Remember playback position for each playlist entry</source>
-        <translation>Пам&apos;ятати позицію відтворення для кожного запису зі списку</translation>
-    </message>
-    <message>
-        <source>Desired video stream quality:</source>
-        <translation>Бажана якість відеопотоку:</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation>За замовчуванням</translation>
-    </message>
-    <message>
-        <source>SD</source>
-        <translation>SD</translation>
-    </message>
-    <message>
-        <source>HD</source>
-        <translation>HD</translation>
-    </message>
-    <message>
-        <source>Full HD</source>
-        <translation>Full HD</translation>
-    </message>
-    <message>
-        <source>4K</source>
-        <translation>4K</translation>
-    </message>
-    <message>
-        <source>Continue last playback when program starts</source>
-        <translation>Продовжити останнє відтворення після запуску програми</translation>
-    </message>
-    <message>
-        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation>Тривалість повинна бути не менше 8 хвилин. Позиція відтворення має бути в межах від 1% до 99% діапазону відтворення. Ви можете продовжити відтворення, натиснувши значок поруч із кнопкою на весь екран.</translation>
     </message>
 </context>
 <context>
@@ -3399,6 +3002,390 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Legacy video output priority</source>
         <translation>Спадковий пріоритет виведення відео</translation>
+    </message>
+    <message>
+        <source>Show covers</source>
+        <translation>Показати обкладинки</translation>
+    </message>
+    <message>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
+        <translation>Показати обкладинки з каталогу, якщо вони не знаходяться в музичному файлі</translation>
+    </message>
+    <message>
+        <source>Enlarge small covers</source>
+        <translation>Збільшити маленькі обкладинки</translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation>Розмиті обкладинки в якості фону</translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>Очистити кеш обкладинок</translation>
+    </message>
+    <message>
+        <source>Set key bindings</source>
+        <translation>Встановити сполучення клавіш</translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>Скинути параметри</translation>
+    </message>
+    <message>
+        <source>Language: </source>
+        <translation>Мова: </translation>
+    </message>
+    <message>
+        <source>Style: </source>
+        <translation>Стиль: </translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding: </source>
+        <translation>Кодування субтитрів і тегів: </translation>
+    </message>
+    <message>
+        <source>Default audio language: </source>
+        <translation>Мова аудіо за замовчуванням: </translation>
+    </message>
+    <message>
+        <source>Default subtitles language: </source>
+        <translation>Мова субтитрів за замовчуванням: </translation>
+    </message>
+    <message>
+        <source>Screenshots path: </source>
+        <translation>Шлях до знімків екрану: </translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>Огляд</translation>
+    </message>
+    <message>
+        <source>Output file path: </source>
+        <translation>Шлях вихідного файлу: </translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>Використовувати системний набір іконок</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>Встановити оформлення</translation>
+    </message>
+    <message>
+        <source>Selected Profile: </source>
+        <translation>Вибраний профіль: </translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>Автоматично перевіряти і завантажувати оновлення</translation>
+    </message>
+    <message>
+        <source>Automatically open video window</source>
+        <translation>Автоматичне відкриття вікна відео</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>Показати вкладки у верхній частині головного вікна</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>Дозволити лише одну копію програми</translation>
+    </message>
+    <message>
+        <source>Always only display file names in playlist</source>
+        <translation>Завжди відображати тільки імена файлів в списку відтворення</translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation>Пам&apos;ятати режим повтору</translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>Використовувати проксі-сервер</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>Проксі-сервер потребує авторизації</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>Ім&apos;я користувача</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Пароль</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>Адреса проксі-сервера</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>Порт проксі-сервера</translation>
+    </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation>Читати і відображувати статичні зображення</translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
+        <translation>Сповіщення в системному треї за замовчуванням</translation>
+    </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation>Автоматично видаляти незгруповані записи</translation>
+    </message>
+    <message>
+        <source>Hide artist metadata</source>
+        <translation>Приховати метадані виконавця</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>Автоматично відновлювати головне вікно при завантаженні нового відеофайлу</translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation>Не завантажувати файли списку відтворення до інших файлів</translation>
+    </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation>Параметри youtube-dl</translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation>Куки з браузера</translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation>Власний шлях</translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation>Не оновлювати автоматично</translation>
+    </message>
+    <message>
+        <source>Remove youtube-dl</source>
+        <translation>Видалити youtube-dl</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation>Зверніться до документації yt-dlp</translation>
+    </message>
+    <message>
+        <source>Default quality</source>
+        <translation>Якість за замовчуванням</translation>
+    </message>
+    <message>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation>параметр &quot;-f&quot;, зверніться до документації yt-dlp</translation>
+    </message>
+    <message>
+        <source>Additional params</source>
+        <translation>Додаткові параметри&gt;</translation>
+    </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation>Зберігати розмір панелей при зміні розмірів головного вікна (експериментально)</translation>
+    </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>Вище</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>Нижче</translation>
+    </message>
+    <message>
+        <source>Use available replay gain</source>
+        <translation>По можливості вирівнювати гучність</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>Режим альбому для вирівнювання гучності</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>Приглушувати шипіння/тріск</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation>Посилення</translation>
+    </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation>Посилення (без метаданих)</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>Частково позначене означає, що є затримка між натисканням та паузою</translation>
+    </message>
+    <message>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation>Ліва кнопка миші у вікні відео перемикає відтворення</translation>
+    </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation>Середня кнопка миші у вікні відео перемикає повноекранний режим</translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>Зберігати затримку відео</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>Вимкнення звуку при зупинці відтворення</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>Зберігати частоту кадрів</translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>Зберігати масштабування</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>Зберігати масштаб субтитрів</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>Зберігати затримку субтитрів</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>Синхронізація аудіо і відео (пропуск кадрів)</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows): </source>
+        <translation>Короткий пошук (ліві і праві стрілки): </translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation>сек</translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows): </source>
+        <translation>Довгий пошук (стрілки вгору і вниз): </translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count): </source>
+        <translation>Розмір локального буфера (кількість пакетів аудіо/відео): </translation>
+    </message>
+    <message>
+        <source>Network buffer length: </source>
+        <translation>Довжина мережевого буфера: </translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding: </source>
+        <translation>Відсоток пакетів аудіо/відео при зворотному перемотуванні: </translation>
+    </message>
+    <message>
+        <source>Live stream buffer length: </source>
+        <translation>Довжина буфера прямої трансляції: </translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered: </source>
+        <translation>Розпочинати відтворювати інтернет-потік при його буферизації: </translation>
+    </message>
+    <message>
+        <source>Desired video stream quality: </source>
+        <translation>Бажана якість відеопотоку: </translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation>SD</translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation>HD</translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation>Full HD</translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation>4K</translation>
+    </message>
+    <message>
+        <source>Maximum volume: </source>
+        <translation>Максимальна гучність: </translation>
+    </message>
+    <message>
+        <source>Force samplerate: </source>
+        <translation>Примусова частота дискретизації: </translation>
+    </message>
+    <message>
+        <source>Force channels conversion: </source>
+        <translation>Примусове перетворення каналів: </translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation>Використовувати аудіоресемплер та перетворення каналів перед фільтрами та візуалізаціями</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>Зберігати співвідношення сторін</translation>
+    </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation>Точний пошук</translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation>Відтворювати наступний при помилці відтворення</translation>
+    </message>
+    <message>
+        <source>Continue last playback when program starts</source>
+        <translation>Продовжити останнє відтворення після запуску програми</translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation>Дія коліща миші у вікні відео</translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>Коліща миші прокручує музику/фільм</translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation>Коліща миші змінює гучність</translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation>Пам&apos;ятати параметри відеоеквалайзера</translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>Показувати індикатор буферизованих даних на повзунку</translation>
+    </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation>Зберегти пропорції і масштаб у конфігураційний файл</translation>
+    </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>Поновити відтворення під час прокрутки</translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation>Вимкнути субтитри при запуску програми</translation>
+    </message>
+    <message>
+        <source>Remember audio/video/subtitles enabled state</source>
+        <translation>Пам&apos;ятати, чи увімкнено аудіо/відео/субтитри</translation>
+    </message>
+    <message>
+        <source>Remember playback position for each playlist entry</source>
+        <translation>Пам&apos;ятати позицію відтворення для кожного запису зі списку</translation>
+    </message>
+    <message>
+        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
+        <translation>Тривалість повинна бути не менше 8 хвилин. Позиція відтворення має бути в межах від 1% до 99% діапазону відтворення. Ви можете продовжити відтворення, натиснувши значок поруч із кнопкою на весь екран.</translation>
     </message>
     <message>
         <source>Legacy</source>

@@ -870,197 +870,6 @@
     </message>
 </context>
 <context>
-    <name>GeneralSettings</name>
-    <message>
-        <source>Browse</source>
-        <translation>Göz at</translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>Sistem simge kümesini kullan</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>Görünüşü ayarla</translation>
-    </message>
-    <message>
-        <source>Show covers</source>
-        <translation>Kapakları göster</translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation>Arka plan olarak bulanık kapaklar</translation>
-    </message>
-    <message>
-        <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>Müzik dosyasında yoksa dizindeki kapakları göster</translation>
-    </message>
-    <message>
-        <source>Automatically open video window</source>
-        <translation>Video penceresini kendiliğinden aç</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>Güncellemeleri kendiliğinden denetle ve indir</translation>
-    </message>
-    <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>Sekmeleri ana pencerenin üstünde göster</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>Yalnızca tek örneğe izin ver</translation>
-    </message>
-    <message>
-        <source>Always only display file names in playlist</source>
-        <translation>Çalma listesinde her zaman yalnızca dosya adlarını göster</translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation>Yinelema kipini anımsa</translation>
-    </message>
-    <message>
-        <source>Use proxy server</source>
-        <translation>Vekil sunucu kullan</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>Vekil sunucu oturum açma gerektiriyor</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Kullanıcı adı</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Parola</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>Vekil sunucu adresi</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>Vekil sunucu bağlantı noktası</translation>
-    </message>
-    <message>
-        <source>Clear covers cache</source>
-        <translation>Kapak önbelleğini temizle</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>Ayarları sıfırla</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Dil</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>Biçem</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation>Öntanımlı ses dili</translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation>Öntanımlı altyazı dili</translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>Ekran görüntüsü yolu</translation>
-    </message>
-    <message>
-        <source>Set key bindings</source>
-        <translation>Kısayolları ayarla</translation>
-    </message>
-    <message>
-        <source>Selected Profile</source>
-        <translation>Seçilen Profil</translation>
-    </message>
-    <message>
-        <source>Read and display still images</source>
-        <translation>Hareketsiz görüntüleri oku ve görüntüle</translation>
-    </message>
-    <message>
-        <source>Use tray notifications as default</source>
-        <translation>Sistem tepsisi bildirimlerini öntanımlı olarak kullan</translation>
-    </message>
-    <message>
-        <source>Remove youtube-dl</source>
-        <translation>youtube-dl’yi kaldır</translation>
-    </message>
-    <message>
-        <source>Automatically delete ungrouped entries</source>
-        <translation>Gruplanmamış girdileri kendiliğinden sil</translation>
-    </message>
-    <message>
-        <source>Hide artist metadata</source>
-        <translation>Sanatçı üst verisini gizle</translation>
-    </message>
-    <message>
-        <source>Automatically restore main window when new video file is loaded</source>
-        <translation>Yeni video dosyası yüklendiğinde ana pencereyi kendiliğinden geri yükle</translation>
-    </message>
-    <message>
-        <source>Don&apos;t load playlist files within other files</source>
-        <translation>Çalma listesi dosyalarını başka dosyalara yükleme</translation>
-    </message>
-    <message>
-        <source>Enlarge small covers</source>
-        <translation>Küçük kapakları büyüt</translation>
-    </message>
-    <message>
-        <source>Subtitles and tags encoding</source>
-        <translation>Altyazı ve etiket kodlama</translation>
-    </message>
-    <message>
-        <source>Output file path:</source>
-        <translation>Çıktı dosyası yolu:</translation>
-    </message>
-    <message>
-        <source>youtube-dl settings</source>
-        <translation>youtube-dl ayarları</translation>
-    </message>
-    <message>
-        <source>Cookies from browser</source>
-        <translation>Çerezleri tarayıcıdan al</translation>
-    </message>
-    <message>
-        <source>Custom path</source>
-        <translation>Özel yol</translation>
-    </message>
-    <message>
-        <source>Don&apos;t auto-update</source>
-        <translation>Kendiliğinden güncelleme yapma</translation>
-    </message>
-    <message>
-        <source>Please refer to yt-dlp documentation</source>
-        <translation>Lütfen yt-dlp belgelendirmesine başvurun</translation>
-    </message>
-    <message>
-        <source>Default quality</source>
-        <translation>Öntanımlı kalite</translation>
-    </message>
-    <message>
-        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation>“-f” parametresi, lütfen yt-dlp belgelendirmesine başvurun</translation>
-    </message>
-    <message>
-        <source>Additional params</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation>Ana pencereyi yeniden boyutlandırırken panel boyutlarını koru (deneysel)</translation>
-    </message>
-    <message>
-        <source>Fullscreen panels on the right side</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
@@ -2008,21 +1817,6 @@
     </message>
 </context>
 <context>
-    <name>ModulesList</name>
-    <message>
-        <source>Move up</source>
-        <translation>Yukarı taşı</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>…</translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation>Aşağı taşı</translation>
-    </message>
-</context>
-<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2046,14 +1840,42 @@
     </message>
 </context>
 <context>
-    <name>OSDSettings</name>
+    <name>OSDSettingsW</name>
+    <message>
+        <source>Background</source>
+        <translation>Arka plan</translation>
+    </message>
     <message>
         <source>Font</source>
         <translation>Yazıtipi</translation>
     </message>
     <message>
+        <source>Size: </source>
+        <translation>Boyut: </translation>
+    </message>
+    <message>
+        <source>Spacing: </source>
+        <translation>Boşluklandırma: </translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>Kalın</translation>
+    </message>
+    <message>
         <source>Margins</source>
         <translation>Kenar boşlukları</translation>
+    </message>
+    <message>
+        <source>Left: </source>
+        <translation>Sol: </translation>
+    </message>
+    <message>
+        <source>Right: </source>
+        <translation>Sağ: </translation>
+    </message>
+    <message>
+        <source>Vertical: </source>
+        <translation>Dikey: </translation>
     </message>
     <message>
         <source>Subtitles alignment</source>
@@ -2064,48 +1886,24 @@
         <translation>Kenarlık</translation>
     </message>
     <message>
+        <source>Outline: </source>
+        <translation>Ana hat: </translation>
+    </message>
+    <message>
+        <source>Shadow: </source>
+        <translation>Gölge: </translation>
+    </message>
+    <message>
         <source>Colors</source>
         <translation>Renkler</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Boyut</translation>
+        <source>Text: </source>
+        <translation>Metin: </translation>
     </message>
     <message>
-        <source>Spacing</source>
-        <translation>Boşluklandırma</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Sol</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Sağ</translation>
-    </message>
-    <message>
-        <source>Vertical</source>
-        <translation>Dikey</translation>
-    </message>
-    <message>
-        <source>Outline</source>
-        <translation>Ana hat</translation>
-    </message>
-    <message>
-        <source>Shadow</source>
-        <translation>Gölge</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation>Metin</translation>
-    </message>
-    <message>
-        <source>Bold</source>
-        <translation>Kalın</translation>
-    </message>
-    <message>
-        <source>Background</source>
-        <translation>Arka plan</translation>
+        <source>Border: </source>
+        <translation>Kenarlık: </translation>
     </message>
 </context>
 <context>
@@ -2487,202 +2285,6 @@
     <message>
         <source>&amp;Keep audio pitch</source>
         <translation>&amp;Ses perdesini koru</translation>
-    </message>
-</context>
-<context>
-    <name>PlaybackSettings</name>
-    <message>
-        <source>Maximum volume</source>
-        <translation>En yüksek ses düzeyi</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>Örnekleme hızını zorla</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>Kanalları dönüştürmeyi zorla</translation>
-    </message>
-    <message>
-        <source>Use available replay gain</source>
-        <translation>Var olan yeniden çalma kazancını kullan</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>Yeniden çalma kazancı için albüm kipi</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>Kırpmayı önle</translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation>Fare tekerleğinin video rıhtımındaki eylemi</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>Fare tekerleği müziği/filmi sarar</translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation>Fare tekerleği sesi açar/kısar</translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>Yakınlaştırmayı koru</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>Sürgüde arabelleklenmiş veri göstergesini göster</translation>
-    </message>
-    <message>
-        <source>Keep aspect ratio</source>
-        <translation>En–boy oranını koru</translation>
-    </message>
-    <message>
-        <source>Keep subtitles delay</source>
-        <translation>Altyazı gecikmesini koru</translation>
-    </message>
-    <message>
-        <source>Keep subtitles scale</source>
-        <translation>Altyazı ölçeğini koru</translation>
-    </message>
-    <message>
-        <source>Keep speed</source>
-        <translation>Hızı koru</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>Video gecikmesini koru</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>Video–ses eşzamanlaması (kare atlama)</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>Sesi soldur</translation>
-    </message>
-    <message>
-        <source>Remember video equalizer settings</source>
-        <translation>Video dengeleyicisi ayarlarını anımsa</translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation>Oynatma hatasından sonra sonraki girdiyi oynat</translation>
-    </message>
-    <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>Kısa arama (sol ve sağ oklar)</translation>
-    </message>
-    <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>Uzun arama (yukarı ve aşağı oklar)</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>Yerel arabellek boyutu (A/V paketleri sayısı)</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation>Geri sarılacak paketlerin yüzdesi</translation>
-    </message>
-    <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>Arabelleğe alınmışsa internet akışını oynatmayı başlat</translation>
-    </message>
-    <message>
-        <source>sec</source>
-        <translation>sn</translation>
-    </message>
-    <message>
-        <source>Amplify</source>
-        <translation>Genleştir</translation>
-    </message>
-    <message>
-        <source>Primary mouse button on video dock toggles playback</source>
-        <translatorcomment>Toogle için genelde aç/kapat veya değiştir çevirisi kullanıyoruz, fakat burada olayla uyumlu çeviri yapıldı.</translatorcomment>
-        <translation>Video rıhtımındaki birincil fare düğmesi oynatmayı duraklatır/sürdürür</translation>
-    </message>
-    <message>
-        <source>Accurate seeking</source>
-        <translation>Doğru arama</translation>
-    </message>
-    <message>
-        <source>Store aspect ratio and zoom in config file</source>
-        <translation>En–boy oranını ve yakınlaştırmayı yapılandırma dosyasına kaydet</translation>
-    </message>
-    <message>
-        <source>Unpause when seeking</source>
-        <translation>Ararken oynatmayı duraklatma</translation>
-    </message>
-    <message>
-        <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>Süzgeçlerden ve görselleştirmelerden önce ses yeniden örnekleyicisini ve kanal dönüştürmeyi kullan</translation>
-    </message>
-    <message>
-        <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation>Video rıhtımındaki orta fare düğmesi tam ekran kipini açar/kapatır</translation>
-    </message>
-    <message>
-        <source>Disable subtitles at program startup</source>
-        <translation>Program başlangıcında altyazıları devre dışı bırak</translation>
-    </message>
-    <message>
-        <source>Remember audio/video/subtitles enabled state</source>
-        <translation>Ses/video/altyazı etkinleştirme durumlarını anımsa</translation>
-    </message>
-    <message>
-        <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>Kısmen işaretli, tıklama ve duraklatma arasında gecikme olduğu anlamına gelir</translation>
-    </message>
-    <message>
-        <source>Amplify (no metadata)</source>
-        <translation>Yükselt (üstveri yok)</translation>
-    </message>
-    <message>
-        <source>Network buffer length</source>
-        <translation>Ağ arabelleği uzunluğu</translation>
-    </message>
-    <message>
-        <source>Live stream buffer length</source>
-        <translation>Canlı akış arabelleği uzunluğu</translation>
-    </message>
-    <message>
-        <source>Remember playback position for each playlist entry</source>
-        <translation>Her oynatma listesi girdisi için oynatma konumunu anımsa</translation>
-    </message>
-    <message>
-        <source>Desired video stream quality:</source>
-        <translation>İstenilen video akışı kalitesi:</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation>Öntanımlı</translation>
-    </message>
-    <message>
-        <source>SD</source>
-        <translation>SD</translation>
-    </message>
-    <message>
-        <source>HD</source>
-        <translation>HD</translation>
-    </message>
-    <message>
-        <source>Full HD</source>
-        <translation>Tam HD</translation>
-    </message>
-    <message>
-        <source>4K</source>
-        <translation>4K</translation>
-    </message>
-    <message>
-        <source>Continue last playback when program starts</source>
-        <translation>Program başlatıldığında son oynatmayı sürdür</translation>
-    </message>
-    <message>
-        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation>Uzunluk en az 8 dakika olmalıdır. Oynatma konumunuz, oynatmanın %​1–%​99 erimi arasında bulunmalıdır. Tam ekran düğmesinin yanındaki simgeye basarak oynatmayı sürdürebilirsiniz.</translation>
     </message>
 </context>
 <context>
@@ -3417,6 +3019,390 @@ Kısmen işaretli, sürgüde aramayı etkilemez.</translation>
     <message>
         <source>Legacy video output priority</source>
         <translation>Eski video çıkışı önceliği</translation>
+    </message>
+    <message>
+        <source>Show covers</source>
+        <translation>Kapakları göster</translation>
+    </message>
+    <message>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
+        <translation>Müzik dosyasında yoksa dizindeki kapakları göster</translation>
+    </message>
+    <message>
+        <source>Enlarge small covers</source>
+        <translation>Küçük kapakları büyüt</translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation>Arka plan olarak bulanık kapaklar</translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>Kapak önbelleğini temizle</translation>
+    </message>
+    <message>
+        <source>Set key bindings</source>
+        <translation>Kısayolları ayarla</translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>Ayarları sıfırla</translation>
+    </message>
+    <message>
+        <source>Language: </source>
+        <translation>Dil: </translation>
+    </message>
+    <message>
+        <source>Style: </source>
+        <translation>Biçem: </translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding: </source>
+        <translation>Altyazı ve etiket kodlama: </translation>
+    </message>
+    <message>
+        <source>Default audio language: </source>
+        <translation>Öntanımlı ses dili: </translation>
+    </message>
+    <message>
+        <source>Default subtitles language: </source>
+        <translation>Öntanımlı altyazı dili: </translation>
+    </message>
+    <message>
+        <source>Screenshots path: </source>
+        <translation>Ekran görüntüsü yolu: </translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>Göz at</translation>
+    </message>
+    <message>
+        <source>Output file path: </source>
+        <translation>Çıktı dosyası yolu: </translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>Sistem simge kümesini kullan</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>Görünüşü ayarla</translation>
+    </message>
+    <message>
+        <source>Selected Profile: </source>
+        <translation>Seçilen Profil: </translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>Güncellemeleri kendiliğinden denetle ve indir</translation>
+    </message>
+    <message>
+        <source>Automatically open video window</source>
+        <translation>Video penceresini kendiliğinden aç</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>Sekmeleri ana pencerenin üstünde göster</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>Yalnızca tek örneğe izin ver</translation>
+    </message>
+    <message>
+        <source>Always only display file names in playlist</source>
+        <translation>Çalma listesinde her zaman yalnızca dosya adlarını göster</translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation>Yinelema kipini anımsa</translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>Vekil sunucu kullan</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>Vekil sunucu oturum açma gerektiriyor</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>Kullanıcı adı</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Parola</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>Vekil sunucu adresi</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>Vekil sunucu bağlantı noktası</translation>
+    </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation>Hareketsiz görüntüleri oku ve görüntüle</translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
+        <translation>Sistem tepsisi bildirimlerini öntanımlı olarak kullan</translation>
+    </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation>Gruplanmamış girdileri kendiliğinden sil</translation>
+    </message>
+    <message>
+        <source>Hide artist metadata</source>
+        <translation>Sanatçı üst verisini gizle</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>Yeni video dosyası yüklendiğinde ana pencereyi kendiliğinden geri yükle</translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation>Çalma listesi dosyalarını başka dosyalara yükleme</translation>
+    </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation>youtube-dl ayarları</translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation>Çerezleri tarayıcıdan al</translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation>Özel yol</translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation>Kendiliğinden güncelleme yapma</translation>
+    </message>
+    <message>
+        <source>Remove youtube-dl</source>
+        <translation>youtube-dl’yi kaldır</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation>Lütfen yt-dlp belgelendirmesine başvurun</translation>
+    </message>
+    <message>
+        <source>Default quality</source>
+        <translation>Öntanımlı kalite</translation>
+    </message>
+    <message>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation>“-f” parametresi, lütfen yt-dlp belgelendirmesine başvurun</translation>
+    </message>
+    <message>
+        <source>Additional params</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation>Ana pencereyi yeniden boyutlandırırken panel boyutlarını koru (deneysel)</translation>
+    </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>Yukarı taşı</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>Aşağı taşı</translation>
+    </message>
+    <message>
+        <source>Use available replay gain</source>
+        <translation>Var olan yeniden çalma kazancını kullan</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>Yeniden çalma kazancı için albüm kipi</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>Kırpmayı önle</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation>Genleştir</translation>
+    </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation>Yükselt (üstveri yok)</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>Kısmen işaretli, tıklama ve duraklatma arasında gecikme olduğu anlamına gelir</translation>
+    </message>
+    <message>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation>Video rıhtımındaki birincil fare düğmesi oynatmayı duraklatır/sürdürür</translation>
+    </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation>Video rıhtımındaki orta fare düğmesi tam ekran kipini açar/kapatır</translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>Video gecikmesini koru</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>Sesi soldur</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>Hızı koru</translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>Yakınlaştırmayı koru</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>Altyazı ölçeğini koru</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>Altyazı gecikmesini koru</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>Video–ses eşzamanlaması (kare atlama)</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows): </source>
+        <translation>Kısa arama (sol ve sağ oklar): </translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation>sn</translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows): </source>
+        <translation>Uzun arama (yukarı ve aşağı oklar): </translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count): </source>
+        <translation>Yerel arabellek boyutu (A/V paketleri sayısı): </translation>
+    </message>
+    <message>
+        <source>Network buffer length: </source>
+        <translation>Ağ arabelleği uzunluğu: </translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding: </source>
+        <translation>Geri sarılacak paketlerin yüzdesi: </translation>
+    </message>
+    <message>
+        <source>Live stream buffer length: </source>
+        <translation>Canlı akış arabelleği uzunluğu: </translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered: </source>
+        <translation>Arabelleğe alınmışsa internet akışını oynatmayı başlat: </translation>
+    </message>
+    <message>
+        <source>Desired video stream quality: </source>
+        <translation>İstenilen video akışı kalitesi: </translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation>SD</translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation>HD</translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation>Tam HD</translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation>4K</translation>
+    </message>
+    <message>
+        <source>Maximum volume: </source>
+        <translation>En yüksek ses düzeyi: </translation>
+    </message>
+    <message>
+        <source>Force samplerate: </source>
+        <translation>Örnekleme hızını zorla: </translation>
+    </message>
+    <message>
+        <source>Force channels conversion: </source>
+        <translation>Kanalları dönüştürmeyi zorla: </translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation>Süzgeçlerden ve görselleştirmelerden önce ses yeniden örnekleyicisini ve kanal dönüştürmeyi kullan</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>En–boy oranını koru</translation>
+    </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation>Doğru arama</translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation>Oynatma hatasından sonra sonraki girdiyi oynat</translation>
+    </message>
+    <message>
+        <source>Continue last playback when program starts</source>
+        <translation>Program başlatıldığında son oynatmayı sürdür</translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation>Fare tekerleğinin video rıhtımındaki eylemi</translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>Fare tekerleği müziği/filmi sarar</translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation>Fare tekerleği sesi açar/kısar</translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation>Video dengeleyicisi ayarlarını anımsa</translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>Sürgüde arabelleklenmiş veri göstergesini göster</translation>
+    </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation>En–boy oranını ve yakınlaştırmayı yapılandırma dosyasına kaydet</translation>
+    </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>Ararken oynatmayı duraklatma</translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation>Program başlangıcında altyazıları devre dışı bırak</translation>
+    </message>
+    <message>
+        <source>Remember audio/video/subtitles enabled state</source>
+        <translation>Ses/video/altyazı etkinleştirme durumlarını anımsa</translation>
+    </message>
+    <message>
+        <source>Remember playback position for each playlist entry</source>
+        <translation>Her oynatma listesi girdisi için oynatma konumunu anımsa</translation>
+    </message>
+    <message>
+        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
+        <translation>Uzunluk en az 8 dakika olmalıdır. Oynatma konumunuz, oynatmanın %​1–%​99 erimi arasında bulunmalıdır. Tam ekran düğmesinin yanındaki simgeye basarak oynatmayı sürdürebilirsiniz.</translation>
     </message>
     <message>
         <source>Legacy</source>

@@ -869,197 +869,6 @@
     </message>
 </context>
 <context>
-    <name>GeneralSettings</name>
-    <message>
-        <source>Browse</source>
-        <translation>Prehliadať</translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>Použiť systémovú sadu ikon</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>Nastaviť vzhľad</translation>
-    </message>
-    <message>
-        <source>Show covers</source>
-        <translation>Zobraziť obaly</translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation>Rozmazané obaly ako pozadie</translation>
-    </message>
-    <message>
-        <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>Zobraziť obaly z adresára, ak sa nenachádzajú v súbore s hudbou</translation>
-    </message>
-    <message>
-        <source>Automatically open video window</source>
-        <translation>Automaticky otvoriť okno s videom</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>Automaticky kontrolovať a preberať aktualizácie</translation>
-    </message>
-    <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>Zobrazovať karty v hornej časti hlavného okna</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>Povoliť iba jednu inštanciu programu</translation>
-    </message>
-    <message>
-        <source>Always only display file names in playlist</source>
-        <translation>V playliste vždy zobrazovať iba názvy súborov</translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation>Pamätať si nastavenie opakovania</translation>
-    </message>
-    <message>
-        <source>Use proxy server</source>
-        <translation>Použiť server proxy</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>Server proxy vyžaduje prihlásenie</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Meno používateľa</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Heslo</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>Adresa servera proxy</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>Port servera proxy</translation>
-    </message>
-    <message>
-        <source>Clear covers cache</source>
-        <translation>Vyčistiť dočasnú pamäť obalov</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>Resetovať nastavenia</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Jazyk</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>Štýl</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation>Predvolený jazyk zvuku</translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation>Predvolený jazyk titulkov</translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>Cesta ku snímkam obrazovky</translation>
-    </message>
-    <message>
-        <source>Set key bindings</source>
-        <translation>Nastaviť klávesové skratky</translation>
-    </message>
-    <message>
-        <source>Selected Profile</source>
-        <translation>Vybraný profil</translation>
-    </message>
-    <message>
-        <source>Read and display still images</source>
-        <translation>Čítať a zobrazovať statické obrázky</translation>
-    </message>
-    <message>
-        <source>Use tray notifications as default</source>
-        <translation>Použiť oznámenia v systémovej lište ako predvolené</translation>
-    </message>
-    <message>
-        <source>Remove youtube-dl</source>
-        <translation>Odstrániť youtube-dl</translation>
-    </message>
-    <message>
-        <source>Automatically delete ungrouped entries</source>
-        <translation>Automaticky odstrániť nezoskupené položky</translation>
-    </message>
-    <message>
-        <source>Hide artist metadata</source>
-        <translation>Skryť metadáta autora</translation>
-    </message>
-    <message>
-        <source>Automatically restore main window when new video file is loaded</source>
-        <translation>Automaticky privolať hlavné okno po načítaní nového video súboru</translation>
-    </message>
-    <message>
-        <source>Don&apos;t load playlist files within other files</source>
-        <translation>Nenačítať súbory playlistov spolu s inými súbormi</translation>
-    </message>
-    <message>
-        <source>Enlarge small covers</source>
-        <translation>Zväčšiť obrázky obalov, ak sú malé</translation>
-    </message>
-    <message>
-        <source>Subtitles and tags encoding</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Output file path:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>youtube-dl settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cookies from browser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Don&apos;t auto-update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default quality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Additional params</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fullscreen panels on the right side</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
@@ -2000,21 +1809,6 @@
     </message>
 </context>
 <context>
-    <name>ModulesList</name>
-    <message>
-        <source>Move up</source>
-        <translation>Presunúť vyššie</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation>Presunúť nižšie</translation>
-    </message>
-</context>
-<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2038,14 +1832,42 @@
     </message>
 </context>
 <context>
-    <name>OSDSettings</name>
+    <name>OSDSettingsW</name>
+    <message>
+        <source>Background</source>
+        <translation></translation>
+    </message>
     <message>
         <source>Font</source>
         <translation>Písmo</translation>
     </message>
     <message>
+        <source>Size: </source>
+        <translation>Veľkosť: </translation>
+    </message>
+    <message>
+        <source>Spacing: </source>
+        <translation>Rozostupy: </translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation></translation>
+    </message>
+    <message>
         <source>Margins</source>
         <translation>Okraje</translation>
+    </message>
+    <message>
+        <source>Left: </source>
+        <translation>Vľavo: </translation>
+    </message>
+    <message>
+        <source>Right: </source>
+        <translation>Vpravo: </translation>
+    </message>
+    <message>
+        <source>Vertical: </source>
+        <translation>Zvislé: </translation>
     </message>
     <message>
         <source>Subtitles alignment</source>
@@ -2056,48 +1878,24 @@
         <translation>Orámovanie</translation>
     </message>
     <message>
+        <source>Outline: </source>
+        <translation>Obrysy: </translation>
+    </message>
+    <message>
+        <source>Shadow: </source>
+        <translation>Tieň: </translation>
+    </message>
+    <message>
         <source>Colors</source>
         <translation>Farby</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Veľkosť</translation>
+        <source>Text: </source>
+        <translation>Text: </translation>
     </message>
     <message>
-        <source>Spacing</source>
-        <translation>Rozostupy</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Vľavo</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Vpravo</translation>
-    </message>
-    <message>
-        <source>Vertical</source>
-        <translation>Zvislé</translation>
-    </message>
-    <message>
-        <source>Outline</source>
-        <translation>Obrysy</translation>
-    </message>
-    <message>
-        <source>Shadow</source>
-        <translation>Tieň</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation>Text</translation>
-    </message>
-    <message>
-        <source>Bold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Background</source>
-        <translation type="unfinished"></translation>
+        <source>Border: </source>
+        <translation>Orámovanie: </translation>
     </message>
 </context>
 <context>
@@ -2478,201 +2276,6 @@
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PlaybackSettings</name>
-    <message>
-        <source>Maximum volume</source>
-        <translation>Maximálna hlasitosť</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>Vynútiť frekvenciu vzorkovania</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>Vynútiť konverziu kanálov</translation>
-    </message>
-    <message>
-        <source>Use available replay gain</source>
-        <translation>Použiť vyrovnanie hlasitosti, ak je dostupné</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>Vyrovnanie hlasitosti v režime albumu</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>Zabrániť orezávaniu (clipping)</translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation>Akcia kolieska myši v okne videa</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>Koliesko myši pretáča hudbu/film</translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation>Koliesko myši mení hlasitosť</translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>Ponechávať nastavenie priblíženia medzi prehrávaniami</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>Zobrazovať ukazovateľ vyrovnávacej pamäte na posuvníku</translation>
-    </message>
-    <message>
-        <source>Keep aspect ratio</source>
-        <translation>Ponechávať pomer strán medzi prehrávaniami</translation>
-    </message>
-    <message>
-        <source>Keep subtitles delay</source>
-        <translation>Ponechávať oneskorenie titulkov medzi prehrávaniami</translation>
-    </message>
-    <message>
-        <source>Keep subtitles scale</source>
-        <translation>Ponechávať veľkosť titulkov medzi prehrávaniami</translation>
-    </message>
-    <message>
-        <source>Keep speed</source>
-        <translation>Ponechávať rýchlosť prehrávania medzi prehrávaniami</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>Ponechávať oneskorenie obrazu medzi prehrávaniami</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>Synchronizovať obraz s videom (preskakovať snímky)</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>Stišovať zvuk pri zastavení prehrávania</translation>
-    </message>
-    <message>
-        <source>Remember video equalizer settings</source>
-        <translation>Pamätať si nastavenia ekvalizéra videa</translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation>Pri chybe prehrávania pokračovať prehrávaním ďalšej položky</translation>
-    </message>
-    <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>Krátke pretáčanie (šípka vľavo a vpravo)</translation>
-    </message>
-    <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>Dlhé pretáčanie (šípka hore a dole)</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>Veľkosť miestneho buffera (počet A/V balíkov)</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation>Percento balíkov pre spätné pretáčanie</translation>
-    </message>
-    <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>Spustiť prehrávanie internetového prúdu, ak je uložený vo vyrovnávacej pamäti</translation>
-    </message>
-    <message>
-        <source>sec</source>
-        <translation>s</translation>
-    </message>
-    <message>
-        <source>Amplify</source>
-        <translation>Zosilnenie</translation>
-    </message>
-    <message>
-        <source>Primary mouse button on video dock toggles playback</source>
-        <translation>Ľavé tlačidlo v okne videa vypína/zapína prehrávanie</translation>
-    </message>
-    <message>
-        <source>Accurate seeking</source>
-        <translation>Presné pretáčanie</translation>
-    </message>
-    <message>
-        <source>Store aspect ratio and zoom in config file</source>
-        <translation>Zapísať pomer strán a priblíženie do súboru s nastaveniami</translation>
-    </message>
-    <message>
-        <source>Unpause when seeking</source>
-        <translation>Zrušiť pauzu počas pretáčania</translation>
-    </message>
-    <message>
-        <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>Použiť prevzorkovanie zvuku a konverziu kanálov pred filtrami a visualizáciami</translation>
-    </message>
-    <message>
-        <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation>Stredné tlačdilo myši v okne videa zapína/vypína zobrazenie na celú obrazovku</translation>
-    </message>
-    <message>
-        <source>Disable subtitles at program startup</source>
-        <translation>Vypnúť titulky pri spustení programu</translation>
-    </message>
-    <message>
-        <source>Remember audio/video/subtitles enabled state</source>
-        <translation>Pamätať si, či bol zvuk/video/titulky zapnuté alebo vypnuté</translation>
-    </message>
-    <message>
-        <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>Čiastočne aktivované znamená, že medzi kliknutím a pozastavením je prestávka</translation>
-    </message>
-    <message>
-        <source>Amplify (no metadata)</source>
-        <translation>Zosilniť (žiadne metadáta)</translation>
-    </message>
-    <message>
-        <source>Network buffer length</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Live stream buffer length</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remember playback position for each playlist entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Desired video stream quality:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>SD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Full HD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>4K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Continue last playback when program starts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3401,6 +3004,390 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Priorita výstupu videa staršieho typu (legacy)</translation>
     </message>
     <message>
+        <source>Show covers</source>
+        <translation>Zobraziť obaly</translation>
+    </message>
+    <message>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
+        <translation>Zobraziť obaly z adresára, ak sa nenachádzajú v súbore s hudbou</translation>
+    </message>
+    <message>
+        <source>Enlarge small covers</source>
+        <translation>Zväčšiť obrázky obalov, ak sú malé</translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation>Rozmazané obaly ako pozadie</translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>Vyčistiť dočasnú pamäť obalov</translation>
+    </message>
+    <message>
+        <source>Set key bindings</source>
+        <translation>Nastaviť klávesové skratky</translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>Resetovať nastavenia</translation>
+    </message>
+    <message>
+        <source>Language: </source>
+        <translation>Jazyk: </translation>
+    </message>
+    <message>
+        <source>Style: </source>
+        <translation>Štýl: </translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Default audio language: </source>
+        <translation>Predvolený jazyk zvuku: </translation>
+    </message>
+    <message>
+        <source>Default subtitles language: </source>
+        <translation>Predvolený jazyk titulkov: </translation>
+    </message>
+    <message>
+        <source>Screenshots path: </source>
+        <translation>Cesta ku snímkam obrazovky: </translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>Prehliadať</translation>
+    </message>
+    <message>
+        <source>Output file path: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>Použiť systémovú sadu ikon</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>Nastaviť vzhľad</translation>
+    </message>
+    <message>
+        <source>Selected Profile: </source>
+        <translation>Vybraný profil: </translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>Automaticky kontrolovať a preberať aktualizácie</translation>
+    </message>
+    <message>
+        <source>Automatically open video window</source>
+        <translation>Automaticky otvoriť okno s videom</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>Zobrazovať karty v hornej časti hlavného okna</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>Povoliť iba jednu inštanciu programu</translation>
+    </message>
+    <message>
+        <source>Always only display file names in playlist</source>
+        <translation>V playliste vždy zobrazovať iba názvy súborov</translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation>Pamätať si nastavenie opakovania</translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>Použiť server proxy</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>Server proxy vyžaduje prihlásenie</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>Meno používateľa</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Heslo</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>Adresa servera proxy</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>Port servera proxy</translation>
+    </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation>Čítať a zobrazovať statické obrázky</translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
+        <translation>Použiť oznámenia v systémovej lište ako predvolené</translation>
+    </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation>Automaticky odstrániť nezoskupené položky</translation>
+    </message>
+    <message>
+        <source>Hide artist metadata</source>
+        <translation>Skryť metadáta autora</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>Automaticky privolať hlavné okno po načítaní nového video súboru</translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation>Nenačítať súbory playlistov spolu s inými súbormi</translation>
+    </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Remove youtube-dl</source>
+        <translation>Odstrániť youtube-dl</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Default quality</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Additional params</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>Presunúť vyššie</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>Presunúť nižšie</translation>
+    </message>
+    <message>
+        <source>Use available replay gain</source>
+        <translation>Použiť vyrovnanie hlasitosti, ak je dostupné</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>Vyrovnanie hlasitosti v režime albumu</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>Zabrániť orezávaniu (clipping)</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation>Zosilnenie</translation>
+    </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation>Zosilniť (žiadne metadáta)</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>Čiastočne aktivované znamená, že medzi kliknutím a pozastavením je prestávka</translation>
+    </message>
+    <message>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation>Ľavé tlačidlo v okne videa vypína/zapína prehrávanie</translation>
+    </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation>Stredné tlačdilo myši v okne videa zapína/vypína zobrazenie na celú obrazovku</translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>Ponechávať oneskorenie obrazu medzi prehrávaniami</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>Stišovať zvuk pri zastavení prehrávania</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>Ponechávať rýchlosť prehrávania medzi prehrávaniami</translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>Ponechávať nastavenie priblíženia medzi prehrávaniami</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>Ponechávať veľkosť titulkov medzi prehrávaniami</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>Ponechávať oneskorenie titulkov medzi prehrávaniami</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>Synchronizovať obraz s videom (preskakovať snímky)</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows): </source>
+        <translation>Krátke pretáčanie (šípka vľavo a vpravo): </translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation>s</translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows): </source>
+        <translation>Dlhé pretáčanie (šípka hore a dole): </translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count): </source>
+        <translation>Veľkosť miestneho buffera (počet A/V balíkov): </translation>
+    </message>
+    <message>
+        <source>Network buffer length: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding: </source>
+        <translation>Percento balíkov pre spätné pretáčanie: </translation>
+    </message>
+    <message>
+        <source>Live stream buffer length: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered: </source>
+        <translation>Spustiť prehrávanie internetového prúdu, ak je uložený vo vyrovnávacej pamäti: </translation>
+    </message>
+    <message>
+        <source>Desired video stream quality: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Maximum volume: </source>
+        <translation>Maximálna hlasitosť: </translation>
+    </message>
+    <message>
+        <source>Force samplerate: </source>
+        <translation>Vynútiť frekvenciu vzorkovania: </translation>
+    </message>
+    <message>
+        <source>Force channels conversion: </source>
+        <translation>Vynútiť konverziu kanálov: </translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation>Použiť prevzorkovanie zvuku a konverziu kanálov pred filtrami a visualizáciami</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>Ponechávať pomer strán medzi prehrávaniami</translation>
+    </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation>Presné pretáčanie</translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation>Pri chybe prehrávania pokračovať prehrávaním ďalšej položky</translation>
+    </message>
+    <message>
+        <source>Continue last playback when program starts</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation>Akcia kolieska myši v okne videa</translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>Koliesko myši pretáča hudbu/film</translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation>Koliesko myši mení hlasitosť</translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation>Pamätať si nastavenia ekvalizéra videa</translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>Zobrazovať ukazovateľ vyrovnávacej pamäte na posuvníku</translation>
+    </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation>Zapísať pomer strán a priblíženie do súboru s nastaveniami</translation>
+    </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>Zrušiť pauzu počas pretáčania</translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation>Vypnúť titulky pri spustení programu</translation>
+    </message>
+    <message>
+        <source>Remember audio/video/subtitles enabled state</source>
+        <translation>Pamätať si, či bol zvuk/video/titulky zapnuté alebo vypnuté</translation>
+    </message>
+    <message>
+        <source>Remember playback position for each playlist entry</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
+        <translation></translation>
+    </message>
+    <message>
         <source>Legacy</source>
         <translation>Starší typ (legacy)</translation>
     </message>
@@ -3512,27 +3499,27 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>Force audio content to use the specified number of channels.
 Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Cannot change the directory</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Choose youtube-dl script or executable</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

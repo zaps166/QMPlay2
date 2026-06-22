@@ -23,19 +23,32 @@
 #include <functional>
 
 class QListWidgetItem;
-class QGridLayout;
+class QVBoxLayout;
+class QHBoxLayout;
+class QGroupBox;
+class QComboBox;
+class QLineEdit;
+class QDoubleSpinBox;
+class QSpinBox;
+class QCheckBox;
+class QRadioButton;
 class QPushButton;
+class QToolButton;
+class QListWidget;
 class QTabWidget;
 class Page3;
 class Page4;
 class Page5;
 class Page6;
 
-namespace Ui {
-    class GeneralSettings;
-    class PlaybackSettings;
-    class ModulesList;
-}
+struct UiModulesList
+{
+    QHBoxLayout *horizontalLayout;
+    QListWidget *list;
+    QVBoxLayout *buttonsW;
+    QToolButton *moveUp;
+    QToolButton *moveDown;
+};
 
 class SettingsWidget final : public QWidget
 {
@@ -54,6 +67,10 @@ private:
 
     void createRendererSettings();
 
+    void setupPlaybackUi(QWidget *w);
+    void setupGeneralUi(QWidget *w);
+    void setupModulesListUi(QGroupBox *groupB, UiModulesList &ml);
+
     void restoreVideoEq();
 
     void restartApp();
@@ -66,9 +83,105 @@ private:
     void closeEvent(QCloseEvent *) override;
 
 private:
-    Ui::GeneralSettings *generalSettingsPage;
-    Ui::PlaybackSettings *playbackSettingsPage;
-    Ui::ModulesList *modulesList[3];
+    UiModulesList modulesList[3];
+
+    QGroupBox *m_showCoversGB;
+    QCheckBox *m_showDirCoversB;
+    QCheckBox *m_enlargeSmallCoversB;
+    QCheckBox *m_blurCoversB;
+    QPushButton *m_clearCoversCache;
+    QPushButton *m_setKeyBindingsB;
+    QPushButton *m_resetSettingsB;
+    QComboBox *m_langBox;
+    QComboBox *m_styleBox;
+    QComboBox *m_encodingB;
+    QComboBox *m_audioLangB;
+    QComboBox *m_subsLangB;
+    QLineEdit *m_screenshotE;
+    QComboBox *m_screenshotFormatB;
+    QToolButton *m_screenshotB;
+    QLineEdit *m_outputFileE;
+    QToolButton *m_outputFileB;
+    QCheckBox *m_iconsFromTheme;
+    QPushButton *m_setAppearanceB;
+    QComboBox *m_profileB;
+    QToolButton *m_profileRemoveB;
+    QCheckBox *m_autoUpdatesB;
+    QCheckBox *m_autoOpenVideoWindowB;
+    QCheckBox *m_tabsNorths;
+    QCheckBox *m_allowOnlyOneInstance;
+    QCheckBox *m_displayOnlyFileName;
+    QCheckBox *m_restoreRepeatMode;
+    QGroupBox *m_proxyB;
+    QGroupBox *m_proxyLoginB;
+    QLineEdit *m_proxyUserE;
+    QLineEdit *m_proxyPasswordE;
+    QLineEdit *m_proxyHostE;
+    QSpinBox *m_proxyPortB;
+    QCheckBox *m_stillImages;
+    QCheckBox *m_trayNotifiesDefault;
+    QCheckBox *m_autoDelNonGroupEntries;
+    QCheckBox *m_hideArtistMetadata;
+    QCheckBox *m_autoRestoreMainWindowOnVideoB;
+    QCheckBox *m_skipPlaylistsWithinFiles;
+    QGroupBox *m_ytDlGB;
+    QCheckBox *m_cookiesFromBrowserCB;
+    QCheckBox *m_customYtDlCB;
+    QLineEdit *m_customYtDlE;
+    QToolButton *m_customYtDlB;
+    QCheckBox *m_dontUpdateYtDlCB;
+    QPushButton *m_removeYtDlB;
+    QLineEdit *m_cookiesFromBrowserE;
+    QCheckBox *m_dfltYtDlQualCB;
+    QLineEdit *m_dfltYtDlQualE;
+    QCheckBox *m_additionalYtDlParamsCB;
+    QLineEdit *m_additionalYtDlParamsE;
+    QCheckBox *m_keepDocksSizeB;
+    QCheckBox *m_fullscreenPanelsRightSideB;
+    QGroupBox *m_replayGain;
+    QCheckBox *m_replayGainAlbum;
+    QCheckBox *m_replayGainPreventClipping;
+    QDoubleSpinBox *m_replayGainPreamp;
+    QDoubleSpinBox *m_replayGainPreampNoMetadata;
+    QCheckBox *m_leftMouseTogglePlay;
+    QCheckBox *m_middleMouseToggleFullscreen;
+    QCheckBox *m_keepVideoDelay;
+    QCheckBox *m_silence;
+    QCheckBox *m_keepSpeed;
+    QCheckBox *m_keepZoom;
+    QCheckBox *m_keepSubtitlesScale;
+    QCheckBox *m_keepSubtitlesDelay;
+    QCheckBox *m_syncVtoA;
+    QSpinBox *m_shortSeekB;
+    QSpinBox *m_longSeekB;
+    QSpinBox *m_bufferLocalB;
+    QDoubleSpinBox *m_bufferNetworkB;
+    QComboBox *m_backwardBufferNetworkB;
+    QDoubleSpinBox *m_bufferLiveB;
+    QDoubleSpinBox *m_playIfBufferedB;
+    QComboBox *m_desiredVideoHeightB;
+    QSpinBox *m_maxVolB;
+    QCheckBox *m_forceSamplerate;
+    QSpinBox *m_samplerateB;
+    QCheckBox *m_forceChannels;
+    QSpinBox *m_channelsB;
+    QCheckBox *m_resamplerFirst;
+    QCheckBox *m_keepARatio;
+    QCheckBox *m_accurateSeekB;
+    QCheckBox *m_ignorePlaybackError;
+    QCheckBox *m_savePos;
+    QGroupBox *m_wheelActionB;
+    QRadioButton *m_wheelSeekB;
+    QRadioButton *m_wheelVolumeB;
+    QCheckBox *m_restoreVideoEq;
+    QCheckBox *m_showBufferedTimeOnSlider;
+    QCheckBox *m_storeARatioAndZoomB;
+    QCheckBox *m_unpauseWhenSeekingB;
+    QCheckBox *m_disableSubtitlesAtStartup;
+    QCheckBox *m_restoreAVSStateB;
+    QCheckBox *m_storeUrlPosB;
+    QHBoxLayout *m_modulesListLayout;
+
     Page3 *page3;
     Page4 *page4;
     Page5 *page5;

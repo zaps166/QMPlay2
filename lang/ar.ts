@@ -869,197 +869,6 @@
     </message>
 </context>
 <context>
-    <name>GeneralSettings</name>
-    <message>
-        <source>Browse</source>
-        <translation>تصفح</translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>استخدام أيقونات النظام</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>تعيين المظهر</translation>
-    </message>
-    <message>
-        <source>Show covers</source>
-        <translation>إظهار صور الألبوم</translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation>صور ألبوم ضبابية في الخلفية</translation>
-    </message>
-    <message>
-        <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>إظهار صور الألبوم من المجلد إذا لم تكن في الملف الصوتي</translation>
-    </message>
-    <message>
-        <source>Automatically open video window</source>
-        <translation>فتح نافذة الفيديو تلقائيا</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>التحقق وتنزيل التحديثات تلقائيا</translation>
-    </message>
-    <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>إظهار التبويبات أعلى النافذة الرئيسية</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>السماح بمثيل واحد فقط</translation>
-    </message>
-    <message>
-        <source>Always only display file names in playlist</source>
-        <translation>السماح بإظهار أسماء الملفات في لائحة التشغيل فقط</translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation>تذكر وضع التكرار</translation>
-    </message>
-    <message>
-        <source>Use proxy server</source>
-        <translation>استخدام الخادم الوكيل</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>الخادم الوكيل بحاجة إلى تسجيل الدخول</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>اسم المستخدم</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>رمز المرور</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>عنوان الخادم الوكيل</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>منفذ الخادم الوكيل</translation>
-    </message>
-    <message>
-        <source>Clear covers cache</source>
-        <translation>مسح صور الألبوم من التخزين المؤقت</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>إعادة ضبط الإعدادات</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>اللغة</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>النمط</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation>لغة الصوت الافتراضية</translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation>لغة الترجمة الافتراضية</translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>مسار لقطات الشاشة</translation>
-    </message>
-    <message>
-        <source>Set key bindings</source>
-        <translation>تعيين ارتباطات المفاتيح</translation>
-    </message>
-    <message>
-        <source>Selected Profile</source>
-        <translation>الملف التعريفي المختار</translation>
-    </message>
-    <message>
-        <source>Read and display still images</source>
-        <translation>قراءة وعرض الصور الثابتة</translation>
-    </message>
-    <message>
-        <source>Use tray notifications as default</source>
-        <translation>استخدام مركز التنبيهات افتراضيا</translation>
-    </message>
-    <message>
-        <source>Remove youtube-dl</source>
-        <translation>إزالة youtube-dl</translation>
-    </message>
-    <message>
-        <source>Automatically delete ungrouped entries</source>
-        <translation>حذف المدخلات الفردية تلقائيا</translation>
-    </message>
-    <message>
-        <source>Hide artist metadata</source>
-        <translation>إخفاء بيانات الفنان</translation>
-    </message>
-    <message>
-        <source>Automatically restore main window when new video file is loaded</source>
-        <translation>إستعادة النافذة الرئيسية عند تشغيل ملف فيديو جديد تلقائيا</translation>
-    </message>
-    <message>
-        <source>Don&apos;t load playlist files within other files</source>
-        <translation>عدم تضمين ملفات لائحة التشغيل إلى الملفات الأخرى</translation>
-    </message>
-    <message>
-        <source>Enlarge small covers</source>
-        <translation>تكبير صور الألبوم الصغيرة</translation>
-    </message>
-    <message>
-        <source>Subtitles and tags encoding</source>
-        <translation>ترميز الترجمات والمعلومات</translation>
-    </message>
-    <message>
-        <source>Output file path:</source>
-        <translation>مسار إخراج الملف:</translation>
-    </message>
-    <message>
-        <source>youtube-dl settings</source>
-        <translation>إعدادات youtube-dl</translation>
-    </message>
-    <message>
-        <source>Cookies from browser</source>
-        <translation>ملفات تعريف الإرتباط من المتصفح</translation>
-    </message>
-    <message>
-        <source>Custom path</source>
-        <translation>مسار مخصص</translation>
-    </message>
-    <message>
-        <source>Don&apos;t auto-update</source>
-        <translation>إيقاف التحديث التلقائي</translation>
-    </message>
-    <message>
-        <source>Please refer to yt-dlp documentation</source>
-        <translation>الرجاء الرجوع إلى وثائق yt-dlp</translation>
-    </message>
-    <message>
-        <source>Default quality</source>
-        <translation>الجودة الإفتراضية</translation>
-    </message>
-    <message>
-        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation>الخيار &quot;-f&quot;، الرجاء الرجوع إلى وثائق yt-dlp</translation>
-    </message>
-    <message>
-        <source>Additional params</source>
-        <translation>معاملات إضافية</translation>
-    </message>
-    <message>
-        <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation>الحفاظ على حجم النوافذ الفرعية عند تغيير حجم النافذة الرئيسية (تجريبي)</translation>
-    </message>
-    <message>
-        <source>Fullscreen panels on the right side</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
@@ -2000,21 +1809,6 @@
     </message>
 </context>
 <context>
-    <name>ModulesList</name>
-    <message>
-        <source>Move up</source>
-        <translation>تحرك للأعلى</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation>تحرك للأسفل</translation>
-    </message>
-</context>
-<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2038,14 +1832,42 @@
     </message>
 </context>
 <context>
-    <name>OSDSettings</name>
+    <name>OSDSettingsW</name>
+    <message>
+        <source>Background</source>
+        <translation>خلفية</translation>
+    </message>
     <message>
         <source>Font</source>
         <translation>الخط</translation>
     </message>
     <message>
+        <source>Size: </source>
+        <translation>الحجم: </translation>
+    </message>
+    <message>
+        <source>Spacing: </source>
+        <translation>التباعد: </translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>عريض</translation>
+    </message>
+    <message>
         <source>Margins</source>
         <translation>الهوامش</translation>
+    </message>
+    <message>
+        <source>Left: </source>
+        <translation>يسار: </translation>
+    </message>
+    <message>
+        <source>Right: </source>
+        <translation>يمين: </translation>
+    </message>
+    <message>
+        <source>Vertical: </source>
+        <translation>عمودي: </translation>
     </message>
     <message>
         <source>Subtitles alignment</source>
@@ -2056,48 +1878,24 @@
         <translation>الحواف</translation>
     </message>
     <message>
+        <source>Outline: </source>
+        <translation>الخطوط العريضة: </translation>
+    </message>
+    <message>
+        <source>Shadow: </source>
+        <translation>الظل: </translation>
+    </message>
+    <message>
         <source>Colors</source>
         <translation>الألوان</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>الحجم</translation>
+        <source>Text: </source>
+        <translation>النص: </translation>
     </message>
     <message>
-        <source>Spacing</source>
-        <translation>التباعد</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>يسار</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>يمين</translation>
-    </message>
-    <message>
-        <source>Vertical</source>
-        <translation>عمودي</translation>
-    </message>
-    <message>
-        <source>Outline</source>
-        <translation>الخطوط العريضة</translation>
-    </message>
-    <message>
-        <source>Shadow</source>
-        <translation>الظل</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation>النص</translation>
-    </message>
-    <message>
-        <source>Bold</source>
-        <translation>عريض</translation>
-    </message>
-    <message>
-        <source>Background</source>
-        <translation>خلفية</translation>
+        <source>Border: </source>
+        <translation>الحواف: </translation>
     </message>
 </context>
 <context>
@@ -2479,201 +2277,6 @@
     <message>
         <source>&amp;Keep audio pitch</source>
         <translation>الإبقاء على درجة الصوت</translation>
-    </message>
-</context>
-<context>
-    <name>PlaybackSettings</name>
-    <message>
-        <source>Maximum volume</source>
-        <translation>أقصى صوت</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>إجبار معدل العينة</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>إجبار تحويل القنوات</translation>
-    </message>
-    <message>
-        <source>Use available replay gain</source>
-        <translation>استخدام تطبيع الصوت المتوفر</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>تطبيع الصوت في وضع الألبوم</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>منع التقطيع</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>التنقل بين الموسيقى/الفيديو</translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>الإبقاء على التكبير</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>إظهار مؤشر البيانات المخزنة على شريط التمرير</translation>
-    </message>
-    <message>
-        <source>Keep aspect ratio</source>
-        <translation>الإبقاء على أبعاد الشاشة</translation>
-    </message>
-    <message>
-        <source>Keep subtitles delay</source>
-        <translation>الإبقاء على تأخير الترجمة</translation>
-    </message>
-    <message>
-        <source>Keep subtitles scale</source>
-        <translation>الإبقاء على حجم الترجمة</translation>
-    </message>
-    <message>
-        <source>Keep speed</source>
-        <translation>الإبقاء على السرعة</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>الإبقاء على تأخير الفيديو</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>مزامنة الفيديو والصوت (تخطي الإطارات)</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>تلاشي الصوت</translation>
-    </message>
-    <message>
-        <source>Remember video equalizer settings</source>
-        <translation>تذكر إعدادات معادل الفيديو</translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation>تشغيل الإدخال التالي عند حدوث خطأ</translation>
-    </message>
-    <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>سعي قصير المدى (الأسهم يمين ويسار)</translation>
-    </message>
-    <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>سعي طويل المدى (الأسهم أعلى وأسفل)</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>حجم التخزين المحلي (عدد حزم الصوت/الفيديو)</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation>نسبة الحزم أثناء التراجع للوراء</translation>
-    </message>
-    <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>بدأ تشغيل بث الإنترنت في حال تم تخزينه</translation>
-    </message>
-    <message>
-        <source>sec</source>
-        <translation>ثانية</translation>
-    </message>
-    <message>
-        <source>Amplify</source>
-        <translation>تضخيم</translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation>إجراء عجلة الفأرة في نافذة الفيديو</translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation>تغيير مستوى الصوت</translation>
-    </message>
-    <message>
-        <source>Primary mouse button on video dock toggles playback</source>
-        <translation>زر الفأرة الرئيسي يبدأ التشغيل في نافذة الفيديو</translation>
-    </message>
-    <message>
-        <source>Accurate seeking</source>
-        <translation>سعي دقيق</translation>
-    </message>
-    <message>
-        <source>Store aspect ratio and zoom in config file</source>
-        <translation>حفظ أبعاد الشاشة والتكبير في ملف</translation>
-    </message>
-    <message>
-        <source>Unpause when seeking</source>
-        <translation>إلغاء التوقف أثناء السعي</translation>
-    </message>
-    <message>
-        <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>استخدام إعادة التشكيل وتحويل قنوات الصوت قبل التصوير والمرشحات</translation>
-    </message>
-    <message>
-        <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation>الشاشة الكاملة في نافذة الفيديو باستخدام زر الفأرة الأوسط</translation>
-    </message>
-    <message>
-        <source>Disable subtitles at program startup</source>
-        <translation>تعطيل الترجمة عند بدأ تشغيل البرنامج</translation>
-    </message>
-    <message>
-        <source>Remember audio/video/subtitles enabled state</source>
-        <translation>تذكر حالة تفعيل الصوت/الفيديو/الترجمة</translation>
-    </message>
-    <message>
-        <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>التحقق الجزئي يعني أن هناك تأخير بين الضغط والتوقف</translation>
-    </message>
-    <message>
-        <source>Amplify (no metadata)</source>
-        <translation>تضخيم (بدون بيانات وصفية)</translation>
-    </message>
-    <message>
-        <source>Network buffer length</source>
-        <translation>طول تخزين الشبكة</translation>
-    </message>
-    <message>
-        <source>Live stream buffer length</source>
-        <translation>طول تخزين البث المباشر</translation>
-    </message>
-    <message>
-        <source>Remember playback position for each playlist entry</source>
-        <translation>تذكر زمن التشغيل لجميع المدخلات في اللائحة</translation>
-    </message>
-    <message>
-        <source>Desired video stream quality:</source>
-        <translation>جودة بث الفيديو المرغوبة:</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation>الافتراضية</translation>
-    </message>
-    <message>
-        <source>SD</source>
-        <translation>SD</translation>
-    </message>
-    <message>
-        <source>HD</source>
-        <translation>HD</translation>
-    </message>
-    <message>
-        <source>Full HD</source>
-        <translation>Full HD</translation>
-    </message>
-    <message>
-        <source>4K</source>
-        <translation>4K</translation>
-    </message>
-    <message>
-        <source>Continue last playback when program starts</source>
-        <translation>إستكمال آخر تشغيل عند بدء البرنامج</translation>
-    </message>
-    <message>
-        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation>الطول يجب أن يكون على الأقل 8 دقائق. موقع التشغيل يجب أن يكون في المجال [1% - 99%]. تستطيع إستكمال التشغيل بالضغط على الزر المحاذي لزر الشاشة الكاملة.</translation>
     </message>
 </context>
 <context>
@@ -3399,6 +3002,390 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Legacy video output priority</source>
         <translation>أولوية مخارج الفيديو الموروثة</translation>
+    </message>
+    <message>
+        <source>Show covers</source>
+        <translation>إظهار صور الألبوم</translation>
+    </message>
+    <message>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
+        <translation>إظهار صور الألبوم من المجلد إذا لم تكن في الملف الصوتي</translation>
+    </message>
+    <message>
+        <source>Enlarge small covers</source>
+        <translation>تكبير صور الألبوم الصغيرة</translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation>صور ألبوم ضبابية في الخلفية</translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>مسح صور الألبوم من التخزين المؤقت</translation>
+    </message>
+    <message>
+        <source>Set key bindings</source>
+        <translation>تعيين ارتباطات المفاتيح</translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>إعادة ضبط الإعدادات</translation>
+    </message>
+    <message>
+        <source>Language: </source>
+        <translation>اللغة: </translation>
+    </message>
+    <message>
+        <source>Style: </source>
+        <translation>النمط: </translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding: </source>
+        <translation>ترميز الترجمات والمعلومات: </translation>
+    </message>
+    <message>
+        <source>Default audio language: </source>
+        <translation>لغة الصوت الافتراضية: </translation>
+    </message>
+    <message>
+        <source>Default subtitles language: </source>
+        <translation>لغة الترجمة الافتراضية: </translation>
+    </message>
+    <message>
+        <source>Screenshots path: </source>
+        <translation>مسار لقطات الشاشة: </translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>تصفح</translation>
+    </message>
+    <message>
+        <source>Output file path: </source>
+        <translation>مسار إخراج الملف: </translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>استخدام أيقونات النظام</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>تعيين المظهر</translation>
+    </message>
+    <message>
+        <source>Selected Profile: </source>
+        <translation>الملف التعريفي المختار: </translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>التحقق وتنزيل التحديثات تلقائيا</translation>
+    </message>
+    <message>
+        <source>Automatically open video window</source>
+        <translation>فتح نافذة الفيديو تلقائيا</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>إظهار التبويبات أعلى النافذة الرئيسية</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>السماح بمثيل واحد فقط</translation>
+    </message>
+    <message>
+        <source>Always only display file names in playlist</source>
+        <translation>السماح بإظهار أسماء الملفات في لائحة التشغيل فقط</translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation>تذكر وضع التكرار</translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>استخدام الخادم الوكيل</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>الخادم الوكيل بحاجة إلى تسجيل الدخول</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>اسم المستخدم</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>رمز المرور</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>عنوان الخادم الوكيل</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>منفذ الخادم الوكيل</translation>
+    </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation>قراءة وعرض الصور الثابتة</translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
+        <translation>استخدام مركز التنبيهات افتراضيا</translation>
+    </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation>حذف المدخلات الفردية تلقائيا</translation>
+    </message>
+    <message>
+        <source>Hide artist metadata</source>
+        <translation>إخفاء بيانات الفنان</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>إستعادة النافذة الرئيسية عند تشغيل ملف فيديو جديد تلقائيا</translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation>عدم تضمين ملفات لائحة التشغيل إلى الملفات الأخرى</translation>
+    </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation>إعدادات youtube-dl</translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation>ملفات تعريف الإرتباط من المتصفح</translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation>مسار مخصص</translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation>إيقاف التحديث التلقائي</translation>
+    </message>
+    <message>
+        <source>Remove youtube-dl</source>
+        <translation>إزالة youtube-dl</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation>الرجاء الرجوع إلى وثائق yt-dlp</translation>
+    </message>
+    <message>
+        <source>Default quality</source>
+        <translation>الجودة الإفتراضية</translation>
+    </message>
+    <message>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation>الخيار &quot;-f&quot;، الرجاء الرجوع إلى وثائق yt-dlp</translation>
+    </message>
+    <message>
+        <source>Additional params</source>
+        <translation>معاملات إضافية</translation>
+    </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation>الحفاظ على حجم النوافذ الفرعية عند تغيير حجم النافذة الرئيسية (تجريبي)</translation>
+    </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>تحرك للأعلى</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>تحرك للأسفل</translation>
+    </message>
+    <message>
+        <source>Use available replay gain</source>
+        <translation>استخدام تطبيع الصوت المتوفر</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>تطبيع الصوت في وضع الألبوم</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>منع التقطيع</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation>تضخيم</translation>
+    </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation>تضخيم (بدون بيانات وصفية)</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>التحقق الجزئي يعني أن هناك تأخير بين الضغط والتوقف</translation>
+    </message>
+    <message>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation>زر الفأرة الرئيسي يبدأ التشغيل في نافذة الفيديو</translation>
+    </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation>الشاشة الكاملة في نافذة الفيديو باستخدام زر الفأرة الأوسط</translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>الإبقاء على تأخير الفيديو</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>تلاشي الصوت</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>الإبقاء على السرعة</translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>الإبقاء على التكبير</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>الإبقاء على حجم الترجمة</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>الإبقاء على تأخير الترجمة</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>مزامنة الفيديو والصوت (تخطي الإطارات)</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows): </source>
+        <translation>سعي قصير المدى (الأسهم يمين ويسار): </translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation>ثانية</translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows): </source>
+        <translation>سعي طويل المدى (الأسهم أعلى وأسفل): </translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count): </source>
+        <translation>حجم التخزين المحلي (عدد حزم الصوت/الفيديو): </translation>
+    </message>
+    <message>
+        <source>Network buffer length: </source>
+        <translation>طول تخزين الشبكة: </translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding: </source>
+        <translation>نسبة الحزم أثناء التراجع للوراء: </translation>
+    </message>
+    <message>
+        <source>Live stream buffer length: </source>
+        <translation>طول تخزين البث المباشر: </translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered: </source>
+        <translation>بدأ تشغيل بث الإنترنت في حال تم تخزينه: </translation>
+    </message>
+    <message>
+        <source>Desired video stream quality: </source>
+        <translation>جودة بث الفيديو المرغوبة: </translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation>SD</translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation>HD</translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation>Full HD</translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation>4K</translation>
+    </message>
+    <message>
+        <source>Maximum volume: </source>
+        <translation>أقصى صوت: </translation>
+    </message>
+    <message>
+        <source>Force samplerate: </source>
+        <translation>إجبار معدل العينة: </translation>
+    </message>
+    <message>
+        <source>Force channels conversion: </source>
+        <translation>إجبار تحويل القنوات: </translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation>استخدام إعادة التشكيل وتحويل قنوات الصوت قبل التصوير والمرشحات</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>الإبقاء على أبعاد الشاشة</translation>
+    </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation>سعي دقيق</translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation>تشغيل الإدخال التالي عند حدوث خطأ</translation>
+    </message>
+    <message>
+        <source>Continue last playback when program starts</source>
+        <translation>إستكمال آخر تشغيل عند بدء البرنامج</translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation>إجراء عجلة الفأرة في نافذة الفيديو</translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>التنقل بين الموسيقى/الفيديو</translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation>تغيير مستوى الصوت</translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation>تذكر إعدادات معادل الفيديو</translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>إظهار مؤشر البيانات المخزنة على شريط التمرير</translation>
+    </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation>حفظ أبعاد الشاشة والتكبير في ملف</translation>
+    </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>إلغاء التوقف أثناء السعي</translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation>تعطيل الترجمة عند بدأ تشغيل البرنامج</translation>
+    </message>
+    <message>
+        <source>Remember audio/video/subtitles enabled state</source>
+        <translation>تذكر حالة تفعيل الصوت/الفيديو/الترجمة</translation>
+    </message>
+    <message>
+        <source>Remember playback position for each playlist entry</source>
+        <translation>تذكر زمن التشغيل لجميع المدخلات في اللائحة</translation>
+    </message>
+    <message>
+        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
+        <translation>الطول يجب أن يكون على الأقل 8 دقائق. موقع التشغيل يجب أن يكون في المجال [1% - 99%]. تستطيع إستكمال التشغيل بالضغط على الزر المحاذي لزر الشاشة الكاملة.</translation>
     </message>
     <message>
         <source>Legacy</source>

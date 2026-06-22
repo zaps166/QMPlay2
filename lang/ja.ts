@@ -870,197 +870,6 @@
     </message>
 </context>
 <context>
-    <name>GeneralSettings</name>
-    <message>
-        <source>Browse</source>
-        <translation>ブラウズ</translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>システムデフォルトのアイコンセットを使用する</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>セットの外観</translation>
-    </message>
-    <message>
-        <source>Show covers</source>
-        <translation>カバー画像を表示</translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation>背景としてぼかしたたカバーを使用する</translation>
-    </message>
-    <message>
-        <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>音楽ファイルにない場合にディレクトリからカバー画像を取得します</translation>
-    </message>
-    <message>
-        <source>Automatically open video window</source>
-        <translation>ビデオウィンドウを自動的に開く</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>更新を自動的に確認してダウンロードします</translation>
-    </message>
-    <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>メインウィンドウの上部にタブを表示する</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>１つのインスタンスのみを許可する</translation>
-    </message>
-    <message>
-        <source>Always only display file names in playlist</source>
-        <translation>常にプレイリストにファイル名のみ表示する</translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation>リピートモードを記憶する</translation>
-    </message>
-    <message>
-        <source>Use proxy server</source>
-        <translation>プロキシサーバー</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>プロキシサーバーはログインを求めています</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>ユーザー名</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>パスワード</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>プロキシサーバーのアドレス</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>プロキシサーバーのポート</translation>
-    </message>
-    <message>
-        <source>Clear covers cache</source>
-        <translation>カバー画像のキャッシュをクリアする</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>設定をリセットする</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>言語</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>スタイル</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation>デフォルトのオーディオの言語</translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation>デフォルトの字幕の言語</translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>スクリーンショットの保存パス</translation>
-    </message>
-    <message>
-        <source>Set key bindings</source>
-        <translation>キーバインドをセットする</translation>
-    </message>
-    <message>
-        <source>Selected Profile</source>
-        <translation>選択されたプロファイル</translation>
-    </message>
-    <message>
-        <source>Read and display still images</source>
-        <translation>静止画を読み込んで表示する</translation>
-    </message>
-    <message>
-        <source>Use tray notifications as default</source>
-        <translation>トレイ通知をデフォルトとして使用する</translation>
-    </message>
-    <message>
-        <source>Remove youtube-dl</source>
-        <translation>youtube-dlを削除する</translation>
-    </message>
-    <message>
-        <source>Automatically delete ungrouped entries</source>
-        <translation>グループ化されていないエントリーを自動的に削除する</translation>
-    </message>
-    <message>
-        <source>Hide artist metadata</source>
-        <translation>アーティストのメタデータを隠す</translation>
-    </message>
-    <message>
-        <source>Automatically restore main window when new video file is loaded</source>
-        <translation>新しいビデオファイルがロードされたときメインウィンドウを自動的に復元する</translation>
-    </message>
-    <message>
-        <source>Don&apos;t load playlist files within other files</source>
-        <translation>他のファイル内にプレイリストファイルをロードしない</translation>
-    </message>
-    <message>
-        <source>Enlarge small covers</source>
-        <translation>小さなカバー画像を拡大</translation>
-    </message>
-    <message>
-        <source>Subtitles and tags encoding</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Output file path:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>youtube-dl settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cookies from browser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Don&apos;t auto-update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default quality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Additional params</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fullscreen panels on the right side</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Help</name>
     <message>
         <source>About &amp;Qt</source>
@@ -2002,21 +1811,6 @@
     </message>
 </context>
 <context>
-    <name>ModulesList</name>
-    <message>
-        <source>Move up</source>
-        <translation>上に移動</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation>下に移動</translation>
-    </message>
-</context>
-<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2040,14 +1834,42 @@
     </message>
 </context>
 <context>
-    <name>OSDSettings</name>
+    <name>OSDSettingsW</name>
+    <message>
+        <source>Background</source>
+        <translation></translation>
+    </message>
     <message>
         <source>Font</source>
         <translation>フォント</translation>
     </message>
     <message>
+        <source>Size: </source>
+        <translation>サイズ: </translation>
+    </message>
+    <message>
+        <source>Spacing: </source>
+        <translation>間隔: </translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation></translation>
+    </message>
+    <message>
         <source>Margins</source>
         <translation>隙間</translation>
+    </message>
+    <message>
+        <source>Left: </source>
+        <translation>左: </translation>
+    </message>
+    <message>
+        <source>Right: </source>
+        <translation>右: </translation>
+    </message>
+    <message>
+        <source>Vertical: </source>
+        <translation>垂直: </translation>
     </message>
     <message>
         <source>Subtitles alignment</source>
@@ -2058,48 +1880,24 @@
         <translation>ボーダー</translation>
     </message>
     <message>
+        <source>Outline: </source>
+        <translation>概要: </translation>
+    </message>
+    <message>
+        <source>Shadow: </source>
+        <translation>影: </translation>
+    </message>
+    <message>
         <source>Colors</source>
         <translation>色</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>サイズ</translation>
+        <source>Text: </source>
+        <translation>テキスト: </translation>
     </message>
     <message>
-        <source>Spacing</source>
-        <translation>間隔</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>左</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>右</translation>
-    </message>
-    <message>
-        <source>Vertical</source>
-        <translation>垂直</translation>
-    </message>
-    <message>
-        <source>Outline</source>
-        <translation>概要</translation>
-    </message>
-    <message>
-        <source>Shadow</source>
-        <translation>影</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation>テキスト</translation>
-    </message>
-    <message>
-        <source>Bold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Background</source>
-        <translation type="unfinished"></translation>
+        <source>Border: </source>
+        <translation>ボーダー: </translation>
     </message>
 </context>
 <context>
@@ -2480,201 +2278,6 @@
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PlaybackSettings</name>
-    <message>
-        <source>Maximum volume</source>
-        <translation>最大音量</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>強制的にサンプリング周期にする</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>強制的にチャンネル数を変換する</translation>
-    </message>
-    <message>
-        <source>Use available replay gain</source>
-        <translation>利用可能なリプレイゲインを使用する</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>リプレイゲインのアルバムモード</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>クリッピングを防ぐ</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>マウスホイールで音楽/動画をスクロールする</translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>倍率を維持する</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>スライダーにバッファーサイズを表示する</translation>
-    </message>
-    <message>
-        <source>Keep aspect ratio</source>
-        <translation>アスペクト比を維持する</translation>
-    </message>
-    <message>
-        <source>Keep subtitles delay</source>
-        <translation>字幕表示時間を維持する</translation>
-    </message>
-    <message>
-        <source>Keep subtitles scale</source>
-        <translation>字幕表示比率を維持する</translation>
-    </message>
-    <message>
-        <source>Keep speed</source>
-        <translation>速度を維持する</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>ビデオ時間を維持する</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>ビデオからオーディオへの動機(フレームスキップ)</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>音をフェードアウトする</translation>
-    </message>
-    <message>
-        <source>Remember video equalizer settings</source>
-        <translation>ビデオイコライザーの設定を記憶する</translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation>再生エラー後に次のエントリーに移動</translation>
-    </message>
-    <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>短いシーク（左、右キー）</translation>
-    </message>
-    <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>長いシーク(上、下キー)</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>ローカルバッファーサイズ(A/V&#x3000;パッケージ数)</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation>巻き戻し用のパッケージの割合</translation>
-    </message>
-    <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>バッファーが存在する場合もインターネットストリームより取得します</translation>
-    </message>
-    <message>
-        <source>sec</source>
-        <translation>秒</translation>
-    </message>
-    <message>
-        <source>Amplify</source>
-        <translation>増幅する</translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation>ビデオドック上でのマウスホイールの動作</translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation>マウスホイールで音量を変える</translation>
-    </message>
-    <message>
-        <source>Primary mouse button on video dock toggles playback</source>
-        <translation>マウスがビデオドックから出たら停止する</translation>
-    </message>
-    <message>
-        <source>Accurate seeking</source>
-        <translation>正確なシーク</translation>
-    </message>
-    <message>
-        <source>Store aspect ratio and zoom in config file</source>
-        <translation>アスペクト比を保存し設定ファイルを拡大します</translation>
-    </message>
-    <message>
-        <source>Unpause when seeking</source>
-        <translation>シーク時に一時停止しません</translation>
-    </message>
-    <message>
-        <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>フィルタと視覚化の前にオーディオリサンプラとチャンネル変換を使用する</translation>
-    </message>
-    <message>
-        <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation>中クリックでフルスクリーンに切り替える</translation>
-    </message>
-    <message>
-        <source>Disable subtitles at program startup</source>
-        <translation>起動時に字幕を無効にする</translation>
-    </message>
-    <message>
-        <source>Remember audio/video/subtitles enabled state</source>
-        <translation>オーディオ・ビデオ・字幕の設定を記憶する</translation>
-    </message>
-    <message>
-        <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>部分的にチェックするためクリックしてから一時停止までに遅延があります</translation>
-    </message>
-    <message>
-        <source>Amplify (no metadata)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Network buffer length</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Live stream buffer length</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remember playback position for each playlist entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Desired video stream quality:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation>デフォルト</translation>
-    </message>
-    <message>
-        <source>SD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Full HD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>4K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Continue last playback when program starts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3402,6 +3005,390 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>ビデオ出力の優先順位</translation>
     </message>
     <message>
+        <source>Show covers</source>
+        <translation>カバー画像を表示</translation>
+    </message>
+    <message>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
+        <translation>音楽ファイルにない場合にディレクトリからカバー画像を取得します</translation>
+    </message>
+    <message>
+        <source>Enlarge small covers</source>
+        <translation>小さなカバー画像を拡大</translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation>背景としてぼかしたたカバーを使用する</translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>カバー画像のキャッシュをクリアする</translation>
+    </message>
+    <message>
+        <source>Set key bindings</source>
+        <translation>キーバインドをセットする</translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>設定をリセットする</translation>
+    </message>
+    <message>
+        <source>Language: </source>
+        <translation>言語: </translation>
+    </message>
+    <message>
+        <source>Style: </source>
+        <translation>スタイル: </translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Default audio language: </source>
+        <translation>デフォルトのオーディオの言語: </translation>
+    </message>
+    <message>
+        <source>Default subtitles language: </source>
+        <translation>デフォルトの字幕の言語: </translation>
+    </message>
+    <message>
+        <source>Screenshots path: </source>
+        <translation>スクリーンショットの保存パス: </translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>ブラウズ</translation>
+    </message>
+    <message>
+        <source>Output file path: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>システムデフォルトのアイコンセットを使用する</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>セットの外観</translation>
+    </message>
+    <message>
+        <source>Selected Profile: </source>
+        <translation>選択されたプロファイル: </translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>更新を自動的に確認してダウンロードします</translation>
+    </message>
+    <message>
+        <source>Automatically open video window</source>
+        <translation>ビデオウィンドウを自動的に開く</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>メインウィンドウの上部にタブを表示する</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>１つのインスタンスのみを許可する</translation>
+    </message>
+    <message>
+        <source>Always only display file names in playlist</source>
+        <translation>常にプレイリストにファイル名のみ表示する</translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation>リピートモードを記憶する</translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>プロキシサーバー</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>プロキシサーバーはログインを求めています</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>ユーザー名</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>パスワード</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>プロキシサーバーのアドレス</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>プロキシサーバーのポート</translation>
+    </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation>静止画を読み込んで表示する</translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
+        <translation>トレイ通知をデフォルトとして使用する</translation>
+    </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation>グループ化されていないエントリーを自動的に削除する</translation>
+    </message>
+    <message>
+        <source>Hide artist metadata</source>
+        <translation>アーティストのメタデータを隠す</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>新しいビデオファイルがロードされたときメインウィンドウを自動的に復元する</translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation>他のファイル内にプレイリストファイルをロードしない</translation>
+    </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Remove youtube-dl</source>
+        <translation>youtube-dlを削除する</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Default quality</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Additional params</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>上に移動</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>下に移動</translation>
+    </message>
+    <message>
+        <source>Use available replay gain</source>
+        <translation>利用可能なリプレイゲインを使用する</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>リプレイゲインのアルバムモード</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>クリッピングを防ぐ</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation>増幅する</translation>
+    </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>部分的にチェックするためクリックしてから一時停止までに遅延があります</translation>
+    </message>
+    <message>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation>マウスがビデオドックから出たら停止する</translation>
+    </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation>中クリックでフルスクリーンに切り替える</translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>ビデオ時間を維持する</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>音をフェードアウトする</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>速度を維持する</translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>倍率を維持する</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>字幕表示比率を維持する</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>字幕表示時間を維持する</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>ビデオからオーディオへの動機(フレームスキップ)</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows): </source>
+        <translation>短いシーク（左、右キー）: </translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation>秒</translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows): </source>
+        <translation>長いシーク(上、下キー): </translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count): </source>
+        <translation>ローカルバッファーサイズ(A/V&#x3000;パッケージ数): </translation>
+    </message>
+    <message>
+        <source>Network buffer length: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding: </source>
+        <translation>巻き戻し用のパッケージの割合: </translation>
+    </message>
+    <message>
+        <source>Live stream buffer length: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered: </source>
+        <translation>バッファーが存在する場合もインターネットストリームより取得します: </translation>
+    </message>
+    <message>
+        <source>Desired video stream quality: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Maximum volume: </source>
+        <translation>最大音量: </translation>
+    </message>
+    <message>
+        <source>Force samplerate: </source>
+        <translation>強制的にサンプリング周期にする: </translation>
+    </message>
+    <message>
+        <source>Force channels conversion: </source>
+        <translation>強制的にチャンネル数を変換する: </translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation>フィルタと視覚化の前にオーディオリサンプラとチャンネル変換を使用する</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>アスペクト比を維持する</translation>
+    </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation>正確なシーク</translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation>再生エラー後に次のエントリーに移動</translation>
+    </message>
+    <message>
+        <source>Continue last playback when program starts</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation>ビデオドック上でのマウスホイールの動作</translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>マウスホイールで音楽/動画をスクロールする</translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation>マウスホイールで音量を変える</translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation>ビデオイコライザーの設定を記憶する</translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>スライダーにバッファーサイズを表示する</translation>
+    </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation>アスペクト比を保存し設定ファイルを拡大します</translation>
+    </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>シーク時に一時停止しません</translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation>起動時に字幕を無効にする</translation>
+    </message>
+    <message>
+        <source>Remember audio/video/subtitles enabled state</source>
+        <translation>オーディオ・ビデオ・字幕の設定を記憶する</translation>
+    </message>
+    <message>
+        <source>Remember playback position for each playlist entry</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
+        <translation></translation>
+    </message>
+    <message>
         <source>Legacy</source>
         <translation>Legacy</translation>
     </message>
@@ -3514,27 +3501,27 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>Force audio content to use the specified number of channels.
 Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Cannot change the directory</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Choose youtube-dl script or executable</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

@@ -70,10 +70,6 @@
 #include <MenuBar.hpp>
 #include <Module.hpp>
 
-#include "ui_SettingsGeneral.h"
-#include "ui_SettingsPlayback.h"
-#include "ui_SettingsPlaybackModulesList.h"
-
 #if !defined(Q_OS_WIN) && !defined(Q_OS_MACOS) && !defined(Q_OS_ANDROID)
     #define ICONS_FROM_THEME
 #endif
@@ -121,12 +117,6 @@ public:
     QGroupBox *videoEqContainer;
     OtherVFiltersW *otherVFiltersW;
 };
-
-template<typename TextWidget>
-static inline void appendColon(TextWidget *tw)
-{
-    tw->setText(tw->text() + ": ");
-}
 
 /**/
 
@@ -335,34 +325,25 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 
     {
         QWidget *generalSettingsWidget = new QWidget;
-        generalSettingsPage = new Ui::GeneralSettings;
-        generalSettingsPage->setupUi(generalSettingsWidget);
+        setupGeneralUi(generalSettingsWidget);
 
         for (const auto &fmt : QImageWriter::supportedImageFormats())
-            generalSettingsPage->screenshotFormatB->addItem(QString("." + fmt));
-
-        appendColon(generalSettingsPage->langL);
-        appendColon(generalSettingsPage->styleL);
-        appendColon(generalSettingsPage->encodingL);
-        appendColon(generalSettingsPage->audioLangL);
-        appendColon(generalSettingsPage->subsLangL);
-        appendColon(generalSettingsPage->screenshotL);
-        appendColon(generalSettingsPage->profileL);
+            m_screenshotFormatB->addItem(QString("." + fmt));
 
         tabW->addTab(generalSettingsWidget, tr("General settings"));
 
         int idx;
 
-        generalSettingsPage->langBox->addItem("English", "en");
-        generalSettingsPage->langBox->setCurrentIndex(0);
+        m_langBox->addItem("English", "en");
+        m_langBox->setCurrentIndex(0);
         const QStringList langs = QMPlay2Core.getLanguages();
         for (int i = 0; i < langs.count(); i++)
         {
-            generalSettingsPage->langBox->addItem(QMPlay2Core.getLongFromShortLanguage(langs[i]), langs[i]);
+            m_langBox->addItem(QMPlay2Core.getLongFromShortLanguage(langs[i]), langs[i]);
             if (QMPlay2Core.getLanguage() == langs[i])
-                generalSettingsPage->langBox->setCurrentIndex(i + 1);
+                m_langBox->setCurrentIndex(i + 1);
         }
-        generalSettingsPage->langBox->model()->sort(0);
+        m_langBox->model()->sort(0);
 
         const auto currStyle = QApplication::style()->objectName();
         auto styles = QStyleFactory::keys();
@@ -370,179 +351,179 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         if (QOperatingSystemVersion::current() < QOperatingSystemVersion::Windows11 && currStyle != "windows11")
             styles.removeOne("windows11");
 #endif
-        generalSettingsPage->styleBox->addItems(styles);
-        idx = generalSettingsPage->styleBox->findText(currStyle, Qt::MatchFixedString);
-        if (idx > -1 && idx < generalSettingsPage->styleBox->count())
-            generalSettingsPage->styleBox->setCurrentIndex(idx);
-        connect(generalSettingsPage->styleBox, SIGNAL(currentIndexChanged(int)), this, SLOT(chStyle()));
+        m_styleBox->addItems(styles);
+        idx = m_styleBox->findText(currStyle, Qt::MatchFixedString);
+        if (idx > -1 && idx < m_styleBox->count())
+            m_styleBox->setCurrentIndex(idx);
+        connect(m_styleBox, SIGNAL(currentIndexChanged(int)), this, SLOT(chStyle()));
 
         QStringList encodings;
         for (const QByteArray &item : QTextCodec::availableCodecs())
             encodings += QTextCodec::codecForName(item)->name();
         encodings.removeDuplicates();
-        generalSettingsPage->encodingB->addItems(encodings);
-        idx = generalSettingsPage->encodingB->findText(QMPSettings.getByteArray("FallbackSubtitlesEncoding"));
+        m_encodingB->addItems(encodings);
+        idx = m_encodingB->findText(QMPSettings.getByteArray("FallbackSubtitlesEncoding"));
         if (idx > -1)
-            generalSettingsPage->encodingB->setCurrentIndex(idx);
+            m_encodingB->setCurrentIndex(idx);
 
         const QString audioLang = QMPSettings.getString("AudioLanguage");
         const QString subsLang = QMPSettings.getString("SubtitlesLanguage");
-        generalSettingsPage->audioLangB->addItem(tr("Default or first stream"));
-        generalSettingsPage->subsLangB->addItem(tr("Default or first stream"));
+        m_audioLangB->addItem(tr("Default or first stream"));
+        m_subsLangB->addItem(tr("Default or first stream"));
         for (const QString &lang : QMPlay2Core.getLanguagesMap())
         {
-            generalSettingsPage->audioLangB->addItem(lang);
-            generalSettingsPage->subsLangB->addItem(lang);
+            m_audioLangB->addItem(lang);
+            m_subsLangB->addItem(lang);
             if (lang == audioLang)
-                generalSettingsPage->audioLangB->setCurrentIndex(generalSettingsPage->audioLangB->count() - 1);
+                m_audioLangB->setCurrentIndex(m_audioLangB->count() - 1);
             if (lang == subsLang)
-                generalSettingsPage->subsLangB->setCurrentIndex(generalSettingsPage->subsLangB->count() - 1);
+                m_subsLangB->setCurrentIndex(m_subsLangB->count() - 1);
         }
         {
             const QString currentProfile = QSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat).value("Profile").toString();
-            generalSettingsPage->profileB->addItem(tr("Default"));
+            m_profileB->addItem(tr("Default"));
             for (const QString &profile : QDir(QMPlay2Core.getSettingsDir() + "Profiles/").entryList(QDir::Dirs | QDir::NoDotAndDotDot))
             {
-                generalSettingsPage->profileB->addItem(profile);
+                m_profileB->addItem(profile);
                 if (profile == currentProfile)
-                    generalSettingsPage->profileB->setCurrentIndex(generalSettingsPage->profileB->count() - 1);
+                    m_profileB->setCurrentIndex(m_profileB->count() - 1);
             }
-            connect(generalSettingsPage->profileB, SIGNAL(currentIndexChanged(int)), this, SLOT(profileListIndexChanged(int)));
+            connect(m_profileB, SIGNAL(currentIndexChanged(int)), this, SLOT(profileListIndexChanged(int)));
 
-            generalSettingsPage->profileRemoveB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
-            generalSettingsPage->profileRemoveB->setEnabled(generalSettingsPage->profileB->currentIndex() != 0);
-            connect(generalSettingsPage->profileRemoveB, SIGNAL(clicked()), this, SLOT(removeProfile()));
+            m_profileRemoveB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+            m_profileRemoveB->setEnabled(m_profileB->currentIndex() != 0);
+            connect(m_profileRemoveB, SIGNAL(clicked()), this, SLOT(removeProfile()));
         }
 
-        generalSettingsPage->screenshotE->setText(QMPSettings.getString("screenshotPth"));
-        generalSettingsPage->screenshotFormatB->setCurrentIndex(generalSettingsPage->screenshotFormatB->findText(QMPSettings.getString("screenshotFormat")));
-        generalSettingsPage->screenshotB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
-        connect(generalSettingsPage->screenshotB, SIGNAL(clicked()), this, SLOT(chooseScreenshotDir()));
+        m_screenshotE->setText(QMPSettings.getString("screenshotPth"));
+        m_screenshotFormatB->setCurrentIndex(m_screenshotFormatB->findText(QMPSettings.getString("screenshotFormat")));
+        m_screenshotB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
+        connect(m_screenshotB, SIGNAL(clicked()), this, SLOT(chooseScreenshotDir()));
 
-        generalSettingsPage->outputFileE->setText(QMPSettings.getString("OutputFilePath"));
-        generalSettingsPage->outputFileB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
-        connect(generalSettingsPage->outputFileB, &QAbstractButton::clicked, this, &SettingsWidget::chooseOutputFileDir);
+        m_outputFileE->setText(QMPSettings.getString("OutputFilePath"));
+        m_outputFileB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
+        connect(m_outputFileB, &QAbstractButton::clicked, this, &SettingsWidget::chooseOutputFileDir);
 
-        connect(generalSettingsPage->setAppearanceB, SIGNAL(clicked()), this, SLOT(setAppearance()));
-        connect(generalSettingsPage->setKeyBindingsB, SIGNAL(clicked()), this, SLOT(setKeyBindings()));
+        connect(m_setAppearanceB, SIGNAL(clicked()), this, SLOT(setAppearance()));
+        connect(m_setKeyBindingsB, SIGNAL(clicked()), this, SLOT(setKeyBindings()));
 
 #ifdef ICONS_FROM_THEME
-        generalSettingsPage->iconsFromTheme->setChecked(QMPSettings.getBool("IconsFromTheme"));
+        m_iconsFromTheme->setChecked(QMPSettings.getBool("IconsFromTheme"));
 #else
-        delete generalSettingsPage->iconsFromTheme;
-        generalSettingsPage->iconsFromTheme = nullptr;
+        delete m_iconsFromTheme;
+        m_iconsFromTheme = nullptr;
 #endif
 
-        generalSettingsPage->showCoversGB->setChecked(QMPSettings.getBool("ShowCovers"));
-        generalSettingsPage->blurCoversB->setChecked(QMPSettings.getBool("BlurCovers"));
-        generalSettingsPage->showDirCoversB->setChecked(QMPSettings.getBool("ShowDirCovers"));
-        generalSettingsPage->enlargeSmallCoversB->setChecked(QMPSettings.getBool("EnlargeCovers"));
+        m_showCoversGB->setChecked(QMPSettings.getBool("ShowCovers"));
+        m_blurCoversB->setChecked(QMPSettings.getBool("BlurCovers"));
+        m_showDirCoversB->setChecked(QMPSettings.getBool("ShowDirCovers"));
+        m_enlargeSmallCoversB->setChecked(QMPSettings.getBool("EnlargeCovers"));
 
-        generalSettingsPage->autoOpenVideoWindowB->setChecked(QMPSettings.getBool("AutoOpenVideoWindow"));
-        generalSettingsPage->autoRestoreMainWindowOnVideoB->setChecked(QMPSettings.getBool("AutoRestoreMainWindowOnVideo"));
+        m_autoOpenVideoWindowB->setChecked(QMPSettings.getBool("AutoOpenVideoWindow"));
+        m_autoRestoreMainWindowOnVideoB->setChecked(QMPSettings.getBool("AutoRestoreMainWindowOnVideo"));
 
 #ifdef UPDATES
-        generalSettingsPage->autoUpdatesB->setChecked(QMPSettings.getBool("AutoUpdates"));
+        m_autoUpdatesB->setChecked(QMPSettings.getBool("AutoUpdates"));
 # ifndef UPDATER
-        generalSettingsPage->autoUpdatesB->setText(tr("Automatically check for updates"));
+        m_autoUpdatesB->setText(tr("Automatically check for updates"));
 # endif
 #else
-        delete generalSettingsPage->autoUpdatesB;
-        generalSettingsPage->autoUpdatesB = nullptr;
+        delete m_autoUpdatesB;
+        m_autoUpdatesB = nullptr;
 #endif
 
-        generalSettingsPage->keepDocksSizeB->setChecked(QMPSettings.getBool("MainWidget/KeepDocksSize"));
-        generalSettingsPage->fullscreenPanelsRightSideB->setChecked(QMPSettings.getBool("FullscreenPanelsRightSide"));
+        m_keepDocksSizeB->setChecked(QMPSettings.getBool("MainWidget/KeepDocksSize"));
+        m_fullscreenPanelsRightSideB->setChecked(QMPSettings.getBool("FullscreenPanelsRightSide"));
 
         if (Notifies::hasBoth())
-            generalSettingsPage->trayNotifiesDefault->setChecked(QMPSettings.getBool("TrayNotifiesDefault"));
+            m_trayNotifiesDefault->setChecked(QMPSettings.getBool("TrayNotifiesDefault"));
         else
         {
-            delete generalSettingsPage->trayNotifiesDefault;
-            generalSettingsPage->trayNotifiesDefault = nullptr;
+            delete m_trayNotifiesDefault;
+            m_trayNotifiesDefault = nullptr;
         }
 
-        generalSettingsPage->autoDelNonGroupEntries->setChecked(QMPSettings.getBool("AutoDelNonGroupEntries"));
+        m_autoDelNonGroupEntries->setChecked(QMPSettings.getBool("AutoDelNonGroupEntries"));
 
-        generalSettingsPage->tabsNorths->setChecked(QMPSettings.getBool("MainWidget/TabPositionNorth"));
+        m_tabsNorths->setChecked(QMPSettings.getBool("MainWidget/TabPositionNorth"));
 
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
-        generalSettingsPage->allowOnlyOneInstance->setChecked(QMPSettings.getBool("AllowOnlyOneInstance"));
+        m_allowOnlyOneInstance->setChecked(QMPSettings.getBool("AllowOnlyOneInstance"));
 #else
-        delete generalSettingsPage->allowOnlyOneInstance;
-        generalSettingsPage->allowOnlyOneInstance = nullptr;
+        delete m_allowOnlyOneInstance;
+        m_allowOnlyOneInstance = nullptr;
 #endif
 
-        generalSettingsPage->hideArtistMetadata->setChecked(QMPSettings.getBool("HideArtistMetadata"));
-        generalSettingsPage->displayOnlyFileName->setChecked(QMPSettings.getBool("DisplayOnlyFileName"));
-        generalSettingsPage->skipPlaylistsWithinFiles->setChecked(QMPSettings.getBool("SkipPlaylistsWithinFiles"));
-        generalSettingsPage->restoreRepeatMode->setChecked(QMPSettings.getBool("RestoreRepeatMode"));
-        generalSettingsPage->stillImages->setChecked(QMPSettings.getBool("StillImages"));
+        m_hideArtistMetadata->setChecked(QMPSettings.getBool("HideArtistMetadata"));
+        m_displayOnlyFileName->setChecked(QMPSettings.getBool("DisplayOnlyFileName"));
+        m_skipPlaylistsWithinFiles->setChecked(QMPSettings.getBool("SkipPlaylistsWithinFiles"));
+        m_restoreRepeatMode->setChecked(QMPSettings.getBool("RestoreRepeatMode"));
+        m_stillImages->setChecked(QMPSettings.getBool("StillImages"));
 
-        generalSettingsPage->proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
-        generalSettingsPage->proxyHostE->setText(QMPSettings.getString("Proxy/Host"));
-        generalSettingsPage->proxyPortB->setValue(QMPSettings.getInt("Proxy/Port"));
-        generalSettingsPage->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
-        generalSettingsPage->proxyUserE->setText(QMPSettings.getString("Proxy/User"));
-        generalSettingsPage->proxyPasswordE->setText(QByteArray::fromBase64(QMPSettings.getByteArray("Proxy/Password")));
+        m_proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
+        m_proxyHostE->setText(QMPSettings.getString("Proxy/Host"));
+        m_proxyPortB->setValue(QMPSettings.getInt("Proxy/Port"));
+        m_proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
+        m_proxyUserE->setText(QMPSettings.getString("Proxy/User"));
+        m_proxyPasswordE->setText(QByteArray::fromBase64(QMPSettings.getByteArray("Proxy/Password")));
 
         const QIcon viewRefresh = QMPlay2Core.getIconFromTheme("view-refresh");
-        generalSettingsPage->clearCoversCache->setIcon(viewRefresh);
-        connect(generalSettingsPage->clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
+        m_clearCoversCache->setIcon(viewRefresh);
+        connect(m_clearCoversCache, SIGNAL(clicked()), this, SLOT(clearCoversCache()));
 
-        generalSettingsPage->resetSettingsB->setIcon(viewRefresh);
-        connect(generalSettingsPage->resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
+        m_resetSettingsB->setIcon(viewRefresh);
+        connect(m_resetSettingsB, SIGNAL(clicked()), this, SLOT(resetSettings()));
 
 #ifdef USE_YOUTUBEDL
-        generalSettingsPage->cookiesFromBrowserCB->setChecked(QMPSettings.getBool("YtDl/CookiesFromBrowserEnabled"));
-        generalSettingsPage->cookiesFromBrowserE->setText(QMPSettings.getString("YtDl/CookiesFromBrowser"));
+        m_cookiesFromBrowserCB->setChecked(QMPSettings.getBool("YtDl/CookiesFromBrowserEnabled"));
+        m_cookiesFromBrowserE->setText(QMPSettings.getString("YtDl/CookiesFromBrowser"));
 
-        generalSettingsPage->customYtDlCB->setChecked(QMPSettings.getBool("YtDl/CustomPathEnabled"));
-        generalSettingsPage->customYtDlE->setText(QMPSettings.getString("YtDl/CustomPath"));
-        generalSettingsPage->customYtDlB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
+        m_customYtDlCB->setChecked(QMPSettings.getBool("YtDl/CustomPathEnabled"));
+        m_customYtDlE->setText(QMPSettings.getString("YtDl/CustomPath"));
+        m_customYtDlB->setIcon(QMPlay2Core.getIconFromTheme("folder-open"));
 
-        generalSettingsPage->dfltYtDlQualCB->setChecked(QMPSettings.getBool("YtDl/DefaultQualityEnabled"));
-        generalSettingsPage->dfltYtDlQualE->setText(QMPSettings.getString("YtDl/DefaultQuality"));
+        m_dfltYtDlQualCB->setChecked(QMPSettings.getBool("YtDl/DefaultQualityEnabled"));
+        m_dfltYtDlQualE->setText(QMPSettings.getString("YtDl/DefaultQuality"));
 
-        generalSettingsPage->additionalYtDlParamsCB->setChecked(QMPSettings.getBool("YtDl/AdditionalParamsEnabled"));
-        generalSettingsPage->additionalYtDlParamsE->setText(QMPSettings.getString("YtDl/AdditionalParams"));
+        m_additionalYtDlParamsCB->setChecked(QMPSettings.getBool("YtDl/AdditionalParamsEnabled"));
+        m_additionalYtDlParamsE->setText(QMPSettings.getString("YtDl/AdditionalParams"));
 
-        generalSettingsPage->dontUpdateYtDlCB->setChecked(QMPSettings.getBool("YtDl/DontAutoUpdate"));
+        m_dontUpdateYtDlCB->setChecked(QMPSettings.getBool("YtDl/DontAutoUpdate"));
 
-        connect(generalSettingsPage->cookiesFromBrowserCB, &QCheckBox::toggled, this, [this](bool checked) {
-            generalSettingsPage->cookiesFromBrowserE->setEnabled(checked);
+        connect(m_cookiesFromBrowserCB, &QCheckBox::toggled, this, [this](bool checked) {
+            m_cookiesFromBrowserE->setEnabled(checked);
         });
-        connect(generalSettingsPage->customYtDlCB, &QCheckBox::toggled, this, [this](bool checked) {
-            generalSettingsPage->customYtDlE->setEnabled(checked);
-            generalSettingsPage->customYtDlB->setEnabled(checked);
-            generalSettingsPage->removeYtDlB->setEnabled(!checked);
+        connect(m_customYtDlCB, &QCheckBox::toggled, this, [this](bool checked) {
+            m_customYtDlE->setEnabled(checked);
+            m_customYtDlB->setEnabled(checked);
+            m_removeYtDlB->setEnabled(!checked);
         });
-        connect(generalSettingsPage->customYtDlB, &QToolButton::clicked, this, [this] {
-            auto path = QFileDialog::getOpenFileName(this, tr("Choose youtube-dl script or executable"), generalSettingsPage->customYtDlE->text());
+        connect(m_customYtDlB, &QToolButton::clicked, this, [this] {
+            auto path = QFileDialog::getOpenFileName(this, tr("Choose youtube-dl script or executable"), m_customYtDlE->text());
             if (!path.isEmpty())
-                generalSettingsPage->customYtDlE->setText(path);
+                m_customYtDlE->setText(path);
         });
-        connect(generalSettingsPage->dfltYtDlQualCB, &QCheckBox::toggled, this, [this](bool checked) {
-            generalSettingsPage->dfltYtDlQualE->setEnabled(checked);
+        connect(m_dfltYtDlQualCB, &QCheckBox::toggled, this, [this](bool checked) {
+            m_dfltYtDlQualE->setEnabled(checked);
         });
-        connect(generalSettingsPage->additionalYtDlParamsCB, &QCheckBox::toggled, this, [this](bool checked) {
-            generalSettingsPage->additionalYtDlParamsE->setEnabled(checked);
-        });
-
-        emit generalSettingsPage->cookiesFromBrowserCB->toggled(generalSettingsPage->cookiesFromBrowserCB->isChecked());
-        emit generalSettingsPage->customYtDlCB->toggled(generalSettingsPage->customYtDlCB->isChecked());
-        emit generalSettingsPage->dfltYtDlQualCB->toggled(generalSettingsPage->dfltYtDlQualCB->isChecked());
-        emit generalSettingsPage->additionalYtDlParamsCB->toggled(generalSettingsPage->additionalYtDlParamsCB->isChecked());
-
-        connect(generalSettingsPage->customYtDlCB, &QCheckBox::toggled, this, [this](bool checked) {
-            generalSettingsPage->dontUpdateYtDlCB->setChecked(checked);
+        connect(m_additionalYtDlParamsCB, &QCheckBox::toggled, this, [this](bool checked) {
+            m_additionalYtDlParamsE->setEnabled(checked);
         });
 
-        generalSettingsPage->removeYtDlB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
-        connect(generalSettingsPage->removeYtDlB, &QPushButton::clicked, this, &SettingsWidget::removeYouTubeDl);
+        emit m_cookiesFromBrowserCB->toggled(m_cookiesFromBrowserCB->isChecked());
+        emit m_customYtDlCB->toggled(m_customYtDlCB->isChecked());
+        emit m_dfltYtDlQualCB->toggled(m_dfltYtDlQualCB->isChecked());
+        emit m_additionalYtDlParamsCB->toggled(m_additionalYtDlParamsCB->isChecked());
+
+        connect(m_customYtDlCB, &QCheckBox::toggled, this, [this](bool checked) {
+            m_dontUpdateYtDlCB->setChecked(checked);
+        });
+
+        m_removeYtDlB->setIcon(QMPlay2Core.getIconFromTheme("list-remove"));
+        connect(m_removeYtDlB, &QPushButton::clicked, this, &SettingsWidget::removeYouTubeDl);
 #else
-        generalSettingsPage->ytDlGB->deleteLater();
-        generalSettingsPage->ytDlGB = nullptr;
+        m_ytDlGB->deleteLater();
+        m_ytDlGB = nullptr;
 #endif
     }
 
@@ -557,15 +538,13 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
             auto groupB = new QGroupBox(modulesListTitle[m]);
             m_modulesListGroupBox[m] = groupB;
 
-            auto ml = new Ui::ModulesList;
-            modulesList[m] = ml;
-            ml->setupUi(groupB);
+            setupModulesListUi(groupB, modulesList[m]);
 
-            connect(ml->list, SIGNAL(itemDoubleClicked (QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
-            connect(ml->moveUp, SIGNAL(clicked()), this, SLOT(moveModule()));
-            connect(ml->moveDown, SIGNAL(clicked()), this, SLOT(moveModule()));
-            ml->moveUp->setProperty("idx", m);
-            ml->moveDown->setProperty("idx", m);
+            connect(modulesList[m].list, SIGNAL(itemDoubleClicked (QListWidgetItem *)), this, SLOT(openModuleSettings(QListWidgetItem *)));
+            connect(modulesList[m].moveUp, SIGNAL(clicked()), this, SLOT(moveModule()));
+            connect(modulesList[m].moveDown, SIGNAL(clicked()), this, SLOT(moveModule()));
+            modulesList[m].moveUp->setProperty("idx", m);
+            modulesList[m].moveDown->setProperty("idx", m);
         }
     }
 
@@ -586,114 +565,103 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
         };
 
         QWidget *playbackSettingsWidget = new QWidget;
-        playbackSettingsPage = new Ui::PlaybackSettings;
-        playbackSettingsPage->setupUi(playbackSettingsWidget);
+        setupPlaybackUi(playbackSettingsWidget);
 
-        appendColon(playbackSettingsPage->shortSeekL);
-        appendColon(playbackSettingsPage->longSeekL);
-        appendColon(playbackSettingsPage->bufferLocalL);
-        appendColon(playbackSettingsPage->bufferNetworkL);
-        appendColon(playbackSettingsPage->backwardBufferNetworkL);
-        appendColon(playbackSettingsPage->playIfBufferedL);
-        appendColon(playbackSettingsPage->maxVolL);
-        appendColon(playbackSettingsPage->forceSamplerate);
-        appendColon(playbackSettingsPage->forceChannels);
-
-        playbackSettingsPage->shortSeekB->setSuffix(" " + playbackSettingsPage->shortSeekB->suffix());
-        playbackSettingsPage->longSeekB->setSuffix(" " + playbackSettingsPage->longSeekB->suffix());
-        playbackSettingsPage->bufferNetworkB->setSuffix(" " + playbackSettingsPage->bufferNetworkB->suffix());
-        playbackSettingsPage->playIfBufferedB->setSuffix(" " + playbackSettingsPage->playIfBufferedB->suffix());
-        playbackSettingsPage->bufferLiveB->setSuffix(" " + playbackSettingsPage->bufferLiveB->suffix());
-        playbackSettingsPage->replayGainPreamp->setPrefix(playbackSettingsPage->replayGainPreamp->prefix() + ": ");
-        playbackSettingsPage->replayGainPreampNoMetadata->setPrefix(playbackSettingsPage->replayGainPreampNoMetadata->prefix() + ": ");
+        m_shortSeekB->setSuffix(" " + m_shortSeekB->suffix());
+        m_longSeekB->setSuffix(" " + m_longSeekB->suffix());
+        m_bufferNetworkB->setSuffix(" " + m_bufferNetworkB->suffix());
+        m_playIfBufferedB->setSuffix(" " + m_playIfBufferedB->suffix());
+        m_bufferLiveB->setSuffix(" " + m_bufferLiveB->suffix());
+        m_replayGainPreamp->setPrefix(m_replayGainPreamp->prefix() + ": ");
+        m_replayGainPreampNoMetadata->setPrefix(m_replayGainPreampNoMetadata->prefix() + ": ");
 
         tabW->addTab(playbackSettingsWidget, tr("Playback settings"));
 
-        playbackSettingsPage->shortSeekB->setValue(QMPSettings.getInt("ShortSeek"));
-        playbackSettingsPage->longSeekB->setValue(QMPSettings.getInt("LongSeek"));
-        playbackSettingsPage->bufferLocalB->setValue(QMPSettings.getInt("AVBufferLocal"));
-        playbackSettingsPage->bufferNetworkB->setValue(QMPSettings.getDouble("AVBufferTimeNetwork"));
-        playbackSettingsPage->backwardBufferNetworkB->setCurrentIndex(QMPSettings.getUInt("BackwardBuffer"));
-        playbackSettingsPage->bufferLiveB->setValue(QMPSettings.getDouble("AVBufferTimeNetworkLive"));
-        playbackSettingsPage->desiredVideoHeightB->setCurrentIndex(getDesiredVideoHeightIndex());
-        playbackSettingsPage->playIfBufferedB->setValue(QMPSettings.getDouble("PlayIfBuffered"));
-        playbackSettingsPage->maxVolB->setValue(QMPSettings.getInt("MaxVol"));
+        m_shortSeekB->setValue(QMPSettings.getInt("ShortSeek"));
+        m_longSeekB->setValue(QMPSettings.getInt("LongSeek"));
+        m_bufferLocalB->setValue(QMPSettings.getInt("AVBufferLocal"));
+        m_bufferNetworkB->setValue(QMPSettings.getDouble("AVBufferTimeNetwork"));
+        m_backwardBufferNetworkB->setCurrentIndex(QMPSettings.getUInt("BackwardBuffer"));
+        m_bufferLiveB->setValue(QMPSettings.getDouble("AVBufferTimeNetworkLive"));
+        m_desiredVideoHeightB->setCurrentIndex(getDesiredVideoHeightIndex());
+        m_playIfBufferedB->setValue(QMPSettings.getDouble("PlayIfBuffered"));
+        m_maxVolB->setValue(QMPSettings.getInt("MaxVol"));
 
-        playbackSettingsPage->forceSamplerate->setChecked(QMPSettings.getBool("ForceSamplerate"));
-        playbackSettingsPage->samplerateB->setValue(QMPSettings.getInt("Samplerate"));
-        connect(playbackSettingsPage->forceSamplerate, SIGNAL(toggled(bool)), playbackSettingsPage->samplerateB, SLOT(setEnabled(bool)));
-        playbackSettingsPage->samplerateB->setEnabled(playbackSettingsPage->forceSamplerate->isChecked());
+        m_forceSamplerate->setChecked(QMPSettings.getBool("ForceSamplerate"));
+        m_samplerateB->setValue(QMPSettings.getInt("Samplerate"));
+        connect(m_forceSamplerate, SIGNAL(toggled(bool)), m_samplerateB, SLOT(setEnabled(bool)));
+        m_samplerateB->setEnabled(m_forceSamplerate->isChecked());
 
-        playbackSettingsPage->forceChannels->setCheckState(QMPSettings.getWithBounds("ForceChannels", Qt::Unchecked, Qt::Checked));
-        playbackSettingsPage->forceChannels->setToolTip(tr("Force audio content to use the specified number of channels.\n"
+        m_forceChannels->setCheckState(QMPSettings.getWithBounds("ForceChannels", Qt::Unchecked, Qt::Checked));
+        m_forceChannels->setToolTip(tr("Force audio content to use the specified number of channels.\n"
             "Partially checked only if the content has less channels than the specified value\n"
             "\t(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)"));
-        playbackSettingsPage->channelsB->setValue(QMPSettings.getInt("Channels"));
-        connect(playbackSettingsPage->forceChannels, SIGNAL(toggled(bool)), playbackSettingsPage->channelsB, SLOT(setEnabled(bool)));
-        playbackSettingsPage->channelsB->setEnabled(playbackSettingsPage->forceChannels->checkState());
+        m_channelsB->setValue(QMPSettings.getInt("Channels"));
+        connect(m_forceChannels, SIGNAL(toggled(bool)), m_channelsB, SLOT(setEnabled(bool)));
+        m_channelsB->setEnabled(m_forceChannels->checkState());
 
-        playbackSettingsPage->resamplerFirst->setChecked(QMPSettings.getBool("ResamplerFirst"));
+        m_resamplerFirst->setChecked(QMPSettings.getBool("ResamplerFirst"));
 
-        playbackSettingsPage->replayGain->setChecked(QMPSettings.getBool("ReplayGain/Enabled"));
-        playbackSettingsPage->replayGainAlbum->setChecked(QMPSettings.getBool("ReplayGain/Album"));
-        playbackSettingsPage->replayGainPreventClipping->setChecked(QMPSettings.getBool("ReplayGain/PreventClipping"));
-        playbackSettingsPage->replayGainPreamp->setValue(QMPSettings.getDouble("ReplayGain/Preamp"));
-        playbackSettingsPage->replayGainPreampNoMetadata->setValue(QMPSettings.getDouble("ReplayGain/PreampNoMetadata"));
+        m_replayGain->setChecked(QMPSettings.getBool("ReplayGain/Enabled"));
+        m_replayGainAlbum->setChecked(QMPSettings.getBool("ReplayGain/Album"));
+        m_replayGainPreventClipping->setChecked(QMPSettings.getBool("ReplayGain/PreventClipping"));
+        m_replayGainPreamp->setValue(QMPSettings.getDouble("ReplayGain/Preamp"));
+        m_replayGainPreampNoMetadata->setValue(QMPSettings.getDouble("ReplayGain/PreampNoMetadata"));
 
-        playbackSettingsPage->wheelActionB->setChecked(QMPSettings.getBool("WheelAction"));
-        playbackSettingsPage->wheelSeekB->setChecked(QMPSettings.getBool("WheelSeek"));
-        playbackSettingsPage->wheelVolumeB->setChecked(QMPSettings.getBool("WheelVolume"));
+        m_wheelActionB->setChecked(QMPSettings.getBool("WheelAction"));
+        m_wheelSeekB->setChecked(QMPSettings.getBool("WheelSeek"));
+        m_wheelVolumeB->setChecked(QMPSettings.getBool("WheelVolume"));
 
-        playbackSettingsPage->storeARatioAndZoomB->setChecked(QMPSettings.getBool("StoreARatioAndZoom"));
-        connect(playbackSettingsPage->storeARatioAndZoomB, &QCheckBox::toggled, this, [this](bool checked) {
+        m_storeARatioAndZoomB->setChecked(QMPSettings.getBool("StoreARatioAndZoom"));
+        connect(m_storeARatioAndZoomB, &QCheckBox::toggled, this, [this](bool checked) {
             if (checked)
             {
-                playbackSettingsPage->keepZoom->setChecked(true);
-                playbackSettingsPage->keepARatio->setChecked(true);
+                m_keepZoom->setChecked(true);
+                m_keepARatio->setChecked(true);
             }
         });
 
-        playbackSettingsPage->keepZoom->setChecked(QMPSettings.getBool("KeepZoom"));
-        connect(playbackSettingsPage->keepZoom, &QCheckBox::toggled, this, [this](bool checked) {
-            if (!checked && !playbackSettingsPage->keepARatio->isChecked())
+        m_keepZoom->setChecked(QMPSettings.getBool("KeepZoom"));
+        connect(m_keepZoom, &QCheckBox::toggled, this, [this](bool checked) {
+            if (!checked && !m_keepARatio->isChecked())
             {
-                playbackSettingsPage->storeARatioAndZoomB->setChecked(false);
+                m_storeARatioAndZoomB->setChecked(false);
             }
         });
 
-        playbackSettingsPage->keepARatio->setChecked(QMPSettings.getBool("KeepARatio"));
-        connect(playbackSettingsPage->keepARatio, &QCheckBox::toggled, this, [this](bool checked) {
-            if (!checked && !playbackSettingsPage->keepZoom->isChecked())
+        m_keepARatio->setChecked(QMPSettings.getBool("KeepARatio"));
+        connect(m_keepARatio, &QCheckBox::toggled, this, [this](bool checked) {
+            if (!checked && !m_keepZoom->isChecked())
             {
-                playbackSettingsPage->storeARatioAndZoomB->setChecked(false);
+                m_storeARatioAndZoomB->setChecked(false);
             }
         });
 
-        playbackSettingsPage->showBufferedTimeOnSlider->setChecked(QMPSettings.getBool("ShowBufferedTimeOnSlider"));
-        playbackSettingsPage->savePos->setChecked(QMPSettings.getBool("SavePos"));
-        playbackSettingsPage->keepSubtitlesDelay->setChecked(QMPSettings.getBool("KeepSubtitlesDelay"));
-        playbackSettingsPage->keepSubtitlesScale->setChecked(QMPSettings.getBool("KeepSubtitlesScale"));
-        playbackSettingsPage->keepVideoDelay->setChecked(QMPSettings.getBool("KeepVideoDelay"));
-        playbackSettingsPage->keepSpeed->setChecked(QMPSettings.getBool("KeepSpeed"));
-        playbackSettingsPage->syncVtoA->setChecked(QMPSettings.getBool("SyncVtoA"));
-        playbackSettingsPage->silence->setChecked(QMPSettings.getBool("Silence"));
-        playbackSettingsPage->restoreVideoEq->setChecked(QMPSettings.getBool("RestoreVideoEqualizer"));
-        playbackSettingsPage->ignorePlaybackError->setChecked(QMPSettings.getBool("IgnorePlaybackError"));
-        playbackSettingsPage->leftMouseTogglePlay->setCheckState((Qt::CheckState)qBound(0, QMPSettings.getInt("LeftMouseTogglePlay"), 2));
-        playbackSettingsPage->middleMouseToggleFullscreen->setChecked(QMPSettings.getBool("MiddleMouseToggleFullscreen"));
+        m_showBufferedTimeOnSlider->setChecked(QMPSettings.getBool("ShowBufferedTimeOnSlider"));
+        m_savePos->setChecked(QMPSettings.getBool("SavePos"));
+        m_keepSubtitlesDelay->setChecked(QMPSettings.getBool("KeepSubtitlesDelay"));
+        m_keepSubtitlesScale->setChecked(QMPSettings.getBool("KeepSubtitlesScale"));
+        m_keepVideoDelay->setChecked(QMPSettings.getBool("KeepVideoDelay"));
+        m_keepSpeed->setChecked(QMPSettings.getBool("KeepSpeed"));
+        m_syncVtoA->setChecked(QMPSettings.getBool("SyncVtoA"));
+        m_silence->setChecked(QMPSettings.getBool("Silence"));
+        m_restoreVideoEq->setChecked(QMPSettings.getBool("RestoreVideoEqualizer"));
+        m_ignorePlaybackError->setChecked(QMPSettings.getBool("IgnorePlaybackError"));
+        m_leftMouseTogglePlay->setCheckState((Qt::CheckState)qBound(0, QMPSettings.getInt("LeftMouseTogglePlay"), 2));
+        m_middleMouseToggleFullscreen->setChecked(QMPSettings.getBool("MiddleMouseToggleFullscreen"));
 
-        playbackSettingsPage->accurateSeekB->setCheckState((Qt::CheckState)QMPSettings.getInt("AccurateSeek"));
-        playbackSettingsPage->accurateSeekB->setToolTip(tr("Slower, but more accurate seeking.\nPartially checked doesn't affect seeking on slider."));
+        m_accurateSeekB->setCheckState((Qt::CheckState)QMPSettings.getInt("AccurateSeek"));
+        m_accurateSeekB->setToolTip(tr("Slower, but more accurate seeking.\nPartially checked doesn't affect seeking on slider."));
 
-        playbackSettingsPage->unpauseWhenSeekingB->setChecked(QMPSettings.getBool("UnpauseWhenSeeking"));
+        m_unpauseWhenSeekingB->setChecked(QMPSettings.getBool("UnpauseWhenSeeking"));
 
-        playbackSettingsPage->restoreAVSStateB->setChecked(QMPSettings.getBool("RestoreAVSState"));
-        playbackSettingsPage->disableSubtitlesAtStartup->setChecked(QMPSettings.getBool("DisableSubtitlesAtStartup"));
+        m_restoreAVSStateB->setChecked(QMPSettings.getBool("RestoreAVSState"));
+        m_disableSubtitlesAtStartup->setChecked(QMPSettings.getBool("DisableSubtitlesAtStartup"));
 
-        playbackSettingsPage->storeUrlPosB->setChecked(QMPSettings.getBool("StoreUrlPos"));
+        m_storeUrlPosB->setChecked(QMPSettings.getBool("StoreUrlPos"));
 
         for (int m = 1; m < 3; ++m)
-            playbackSettingsPage->modulesListLayout->addWidget(m_modulesListGroupBox[m]);
+            m_modulesListLayout->addWidget(m_modulesListGroupBox[m]);
     }
 
     {
@@ -831,16 +799,12 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 }
 SettingsWidget::~SettingsWidget()
 {
-    for (int i = 0; i < 3; ++i)
-        delete modulesList[i];
-    delete playbackSettingsPage;
-    delete generalSettingsPage;
 }
 
 void SettingsWidget::setAudioChannels()
 {
-    playbackSettingsPage->forceChannels->setCheckState(QMPlay2Core.getSettings().getWithBounds("ForceChannels", Qt::Unchecked, Qt::Checked));
-    playbackSettingsPage->channelsB->setValue(QMPlay2Core.getSettings().getInt("Channels"));
+    m_forceChannels->setCheckState(QMPlay2Core.getSettings().getWithBounds("ForceChannels", Qt::Unchecked, Qt::Checked));
+    m_channelsB->setValue(QMPlay2Core.getSettings().getInt("Channels"));
 }
 
 void SettingsWidget::applyProxy()
@@ -873,6 +837,567 @@ void SettingsWidget::applyProxy()
         }
         qputenv("http_proxy", proxyEnv.toLocal8Bit());
     }
+}
+
+void SettingsWidget::setupGeneralUi(QWidget *GeneralSettings)
+{
+    QVBoxLayout *generalLayout = new QVBoxLayout(GeneralSettings);
+    generalLayout->setContentsMargins(0, 0, 0, 0);
+
+    QScrollArea *generalScrollArea = new QScrollArea(GeneralSettings);
+    generalScrollArea->setFrameShape(QFrame::NoFrame);
+    generalScrollArea->setFrameShadow(QFrame::Plain);
+    generalScrollArea->setLineWidth(0);
+    generalScrollArea->setWidgetResizable(true);
+
+    QWidget *generalScrollAreaWidgetContents = new QWidget();
+    generalScrollAreaWidgetContents->setGeometry(QRect(0, 0, 798, 1076));
+    QGridLayout *generalGridLayout = new QGridLayout(generalScrollAreaWidgetContents);
+    generalGridLayout->setSpacing(1);
+    generalGridLayout->setContentsMargins(1, 1, 1, 1);
+
+    QFormLayout *generalFormLayout = new QFormLayout();
+    generalFormLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+
+    QLabel *langL = new QLabel(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(0, QFormLayout::ItemRole::LabelRole, langL);
+    m_langBox = new QComboBox(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(0, QFormLayout::ItemRole::FieldRole, m_langBox);
+
+    QLabel *styleL = new QLabel(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(1, QFormLayout::ItemRole::LabelRole, styleL);
+    m_styleBox = new QComboBox(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(1, QFormLayout::ItemRole::FieldRole, m_styleBox);
+
+    QLabel *encodingL = new QLabel(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(2, QFormLayout::ItemRole::LabelRole, encodingL);
+    m_encodingB = new QComboBox(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(2, QFormLayout::ItemRole::FieldRole, m_encodingB);
+
+    QLabel *audioLangL = new QLabel(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(3, QFormLayout::ItemRole::LabelRole, audioLangL);
+    m_audioLangB = new QComboBox(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(3, QFormLayout::ItemRole::FieldRole, m_audioLangB);
+
+    QLabel *subsLangL = new QLabel(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(4, QFormLayout::ItemRole::LabelRole, subsLangL);
+    m_subsLangB = new QComboBox(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(4, QFormLayout::ItemRole::FieldRole, m_subsLangB);
+
+    QLabel *screenshotL = new QLabel(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(5, QFormLayout::ItemRole::LabelRole, screenshotL);
+    QHBoxLayout *generalHorizontalLayout = new QHBoxLayout();
+    generalHorizontalLayout->setSpacing(1);
+    m_screenshotE = new QLineEdit(generalScrollAreaWidgetContents);
+    m_screenshotE->setReadOnly(true);
+    generalHorizontalLayout->addWidget(m_screenshotE);
+    m_screenshotFormatB = new QComboBox(generalScrollAreaWidgetContents);
+    QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
+    sizePolicy.setHorizontalStretch(0);
+    sizePolicy.setVerticalStretch(0);
+    sizePolicy.setHeightForWidth(m_screenshotFormatB->sizePolicy().hasHeightForWidth());
+    m_screenshotFormatB->setSizePolicy(sizePolicy);
+    generalHorizontalLayout->addWidget(m_screenshotFormatB);
+    m_screenshotB = new QToolButton(generalScrollAreaWidgetContents);
+    generalHorizontalLayout->addWidget(m_screenshotB);
+    generalFormLayout->setLayout(5, QFormLayout::ItemRole::FieldRole, generalHorizontalLayout);
+
+    QLabel *outputFileL = new QLabel(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(6, QFormLayout::ItemRole::LabelRole, outputFileL);
+    QHBoxLayout *generalHorizontalLayout4 = new QHBoxLayout();
+    m_outputFileE = new QLineEdit(generalScrollAreaWidgetContents);
+    m_outputFileE->setReadOnly(true);
+    generalHorizontalLayout4->addWidget(m_outputFileE);
+    m_outputFileB = new QToolButton(generalScrollAreaWidgetContents);
+    generalHorizontalLayout4->addWidget(m_outputFileB);
+    generalFormLayout->setLayout(6, QFormLayout::ItemRole::FieldRole, generalHorizontalLayout4);
+
+    m_iconsFromTheme = new QCheckBox(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(7, QFormLayout::ItemRole::LabelRole, m_iconsFromTheme);
+    m_setAppearanceB = new QPushButton(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(7, QFormLayout::ItemRole::FieldRole, m_setAppearanceB);
+
+    QLabel *profileL = new QLabel(generalScrollAreaWidgetContents);
+    generalFormLayout->setWidget(8, QFormLayout::ItemRole::LabelRole, profileL);
+    QHBoxLayout *generalHorizontalLayout5 = new QHBoxLayout();
+    m_profileB = new QComboBox(generalScrollAreaWidgetContents);
+    generalHorizontalLayout5->addWidget(m_profileB);
+    m_profileRemoveB = new QToolButton(generalScrollAreaWidgetContents);
+    generalHorizontalLayout5->addWidget(m_profileRemoveB);
+    generalFormLayout->setLayout(8, QFormLayout::ItemRole::FieldRole, generalHorizontalLayout5);
+
+    m_showCoversGB = new QGroupBox(generalScrollAreaWidgetContents);
+    m_showCoversGB->setCheckable(true);
+    QGridLayout *showCoversGridLayout = new QGridLayout(m_showCoversGB);
+    showCoversGridLayout->setSpacing(3);
+    showCoversGridLayout->setContentsMargins(3, 3, 3, 3);
+    m_blurCoversB = new QCheckBox(m_showCoversGB);
+    showCoversGridLayout->addWidget(m_blurCoversB, 0, 0, 1, 2);
+    m_showDirCoversB = new QCheckBox(m_showCoversGB);
+    showCoversGridLayout->addWidget(m_showDirCoversB, 1, 0, 1, 2);
+    m_enlargeSmallCoversB = new QCheckBox(m_showCoversGB);
+    showCoversGridLayout->addWidget(m_enlargeSmallCoversB, 2, 0, 1, 2);
+
+    QSpacerItem *generalHorizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+    m_autoUpdatesB = new QCheckBox(generalScrollAreaWidgetContents);
+    m_autoOpenVideoWindowB = new QCheckBox(generalScrollAreaWidgetContents);
+    m_autoRestoreMainWindowOnVideoB = new QCheckBox(generalScrollAreaWidgetContents);
+    m_keepDocksSizeB = new QCheckBox(generalScrollAreaWidgetContents);
+    m_tabsNorths = new QCheckBox(generalScrollAreaWidgetContents);
+    m_allowOnlyOneInstance = new QCheckBox(generalScrollAreaWidgetContents);
+    m_hideArtistMetadata = new QCheckBox(generalScrollAreaWidgetContents);
+    m_displayOnlyFileName = new QCheckBox(generalScrollAreaWidgetContents);
+    m_skipPlaylistsWithinFiles = new QCheckBox(generalScrollAreaWidgetContents);
+    m_restoreRepeatMode = new QCheckBox(generalScrollAreaWidgetContents);
+    m_stillImages = new QCheckBox(generalScrollAreaWidgetContents);
+    m_trayNotifiesDefault = new QCheckBox(generalScrollAreaWidgetContents);
+    m_autoDelNonGroupEntries = new QCheckBox(generalScrollAreaWidgetContents);
+    m_fullscreenPanelsRightSideB = new QCheckBox(generalScrollAreaWidgetContents);
+
+    m_proxyB = new QGroupBox(generalScrollAreaWidgetContents);
+    m_proxyB->setCheckable(true);
+    QVBoxLayout *proxyLayout = new QVBoxLayout(m_proxyB);
+    m_proxyLoginB = new QGroupBox(m_proxyB);
+    m_proxyLoginB->setCheckable(true);
+    QVBoxLayout *proxyLoginLayout = new QVBoxLayout(m_proxyLoginB);
+    m_proxyUserE = new QLineEdit(m_proxyLoginB);
+    proxyLoginLayout->addWidget(m_proxyUserE);
+    m_proxyPasswordE = new QLineEdit(m_proxyLoginB);
+    m_proxyPasswordE->setEchoMode(QLineEdit::Password);
+    proxyLoginLayout->addWidget(m_proxyPasswordE);
+    proxyLayout->addWidget(m_proxyLoginB);
+    QHBoxLayout *generalHorizontalLayout2 = new QHBoxLayout();
+    m_proxyHostE = new QLineEdit(m_proxyB);
+    generalHorizontalLayout2->addWidget(m_proxyHostE);
+    m_proxyPortB = new QSpinBox(m_proxyB);
+    m_proxyPortB->setMinimum(1);
+    m_proxyPortB->setMaximum(65535);
+    generalHorizontalLayout2->addWidget(m_proxyPortB);
+    proxyLayout->addLayout(generalHorizontalLayout2);
+
+    QHBoxLayout *generalHorizontalLayout3 = new QHBoxLayout();
+    generalHorizontalLayout3->setSpacing(3);
+    generalHorizontalLayout3->setContentsMargins(-1, 3, -1, 3);
+    m_clearCoversCache = new QPushButton(generalScrollAreaWidgetContents);
+    generalHorizontalLayout3->addWidget(m_clearCoversCache);
+    m_setKeyBindingsB = new QPushButton(generalScrollAreaWidgetContents);
+    generalHorizontalLayout3->addWidget(m_setKeyBindingsB);
+    m_resetSettingsB = new QPushButton(generalScrollAreaWidgetContents);
+    generalHorizontalLayout3->addWidget(m_resetSettingsB);
+
+    m_ytDlGB = new QGroupBox(generalScrollAreaWidgetContents);
+    m_ytDlGB->setCheckable(false);
+    QGridLayout *ytDlGridLayout = new QGridLayout(m_ytDlGB);
+    m_cookiesFromBrowserCB = new QCheckBox(m_ytDlGB);
+    ytDlGridLayout->addWidget(m_cookiesFromBrowserCB, 0, 0, 1, 1);
+    m_cookiesFromBrowserE = new QLineEdit(m_ytDlGB);
+    m_cookiesFromBrowserE->setMaxLength(255);
+    ytDlGridLayout->addWidget(m_cookiesFromBrowserE, 0, 1, 1, 2);
+    m_customYtDlCB = new QCheckBox(m_ytDlGB);
+    ytDlGridLayout->addWidget(m_customYtDlCB, 1, 0, 1, 1);
+    m_customYtDlE = new QLineEdit(m_ytDlGB);
+    ytDlGridLayout->addWidget(m_customYtDlE, 1, 1, 1, 1);
+    m_customYtDlB = new QToolButton(m_ytDlGB);
+    ytDlGridLayout->addWidget(m_customYtDlB, 1, 2, 1, 1);
+    m_dfltYtDlQualCB = new QCheckBox(m_ytDlGB);
+    ytDlGridLayout->addWidget(m_dfltYtDlQualCB, 2, 0, 1, 1);
+    m_dfltYtDlQualE = new QLineEdit(m_ytDlGB);
+    m_dfltYtDlQualE->setMaxLength(255);
+    ytDlGridLayout->addWidget(m_dfltYtDlQualE, 2, 1, 1, 2);
+    m_additionalYtDlParamsCB = new QCheckBox(m_ytDlGB);
+    ytDlGridLayout->addWidget(m_additionalYtDlParamsCB, 3, 0, 1, 1);
+    m_additionalYtDlParamsE = new QLineEdit(m_ytDlGB);
+    m_additionalYtDlParamsE->setMaxLength(999);
+    ytDlGridLayout->addWidget(m_additionalYtDlParamsE, 3, 1, 1, 2);
+    m_dontUpdateYtDlCB = new QCheckBox(m_ytDlGB);
+    ytDlGridLayout->addWidget(m_dontUpdateYtDlCB, 4, 0, 1, 1);
+    m_removeYtDlB = new QPushButton(m_ytDlGB);
+    ytDlGridLayout->addWidget(m_removeYtDlB, 5, 0, 1, 1);
+
+    QSpacerItem *generalVerticalSpacer = new QSpacerItem(20, 17, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+    generalGridLayout->addLayout(generalFormLayout, 0, 0, 1, 2);
+    generalGridLayout->addWidget(m_showCoversGB, 1, 0, 1, 1);
+    generalGridLayout->addItem(generalHorizontalSpacer, 1, 1, 18, 1);
+    generalGridLayout->addWidget(m_autoUpdatesB, 2, 0, 1, 1);
+    generalGridLayout->addWidget(m_autoOpenVideoWindowB, 3, 0, 1, 1);
+    generalGridLayout->addWidget(m_autoRestoreMainWindowOnVideoB, 4, 0, 1, 1);
+    generalGridLayout->addWidget(m_keepDocksSizeB, 5, 0, 1, 1);
+    generalGridLayout->addWidget(m_tabsNorths, 6, 0, 1, 1);
+    generalGridLayout->addWidget(m_allowOnlyOneInstance, 7, 0, 1, 1);
+    generalGridLayout->addWidget(m_hideArtistMetadata, 8, 0, 1, 1);
+    generalGridLayout->addWidget(m_displayOnlyFileName, 9, 0, 1, 1);
+    generalGridLayout->addWidget(m_skipPlaylistsWithinFiles, 10, 0, 1, 1);
+    generalGridLayout->addWidget(m_restoreRepeatMode, 11, 0, 1, 1);
+    generalGridLayout->addWidget(m_stillImages, 12, 0, 1, 1);
+    generalGridLayout->addWidget(m_trayNotifiesDefault, 13, 0, 1, 1);
+    generalGridLayout->addWidget(m_autoDelNonGroupEntries, 14, 0, 1, 1);
+    generalGridLayout->addWidget(m_fullscreenPanelsRightSideB, 15, 0, 1, 1);
+    generalGridLayout->addWidget(m_proxyB, 16, 0, 1, 1);
+    generalGridLayout->addLayout(generalHorizontalLayout3, 17, 0, 1, 1);
+    generalGridLayout->addWidget(m_ytDlGB, 18, 0, 1, 1);
+    generalGridLayout->addItem(generalVerticalSpacer, 19, 0, 1, 2);
+
+    generalScrollArea->setWidget(generalScrollAreaWidgetContents);
+    generalLayout->addWidget(generalScrollArea);
+
+    m_showCoversGB->setTitle(tr("Show covers"));
+    m_showDirCoversB->setText(tr("Show covers from directory if they aren't in the music file"));
+    m_enlargeSmallCoversB->setText(tr("Enlarge small covers"));
+    m_blurCoversB->setText(tr("Blurred covers as background"));
+    m_clearCoversCache->setText(tr("Clear covers cache"));
+    m_setKeyBindingsB->setText(tr("Set key bindings"));
+    m_resetSettingsB->setText(tr("Reset settings"));
+    langL->setText(tr("Language: "));
+    styleL->setText(tr("Style: "));
+    encodingL->setText(tr("Subtitles and tags encoding: "));
+    audioLangL->setText(tr("Default audio language: "));
+    subsLangL->setText(tr("Default subtitles language: "));
+    screenshotL->setText(tr("Screenshots path: "));
+    m_screenshotB->setToolTip(tr("Browse"));
+    outputFileL->setText(tr("Output file path: "));
+    m_outputFileB->setToolTip(tr("Browse"));
+    m_iconsFromTheme->setText(tr("Use system icon set"));
+    m_setAppearanceB->setText(tr("Set appearance"));
+    profileL->setText(tr("Selected Profile: "));
+    m_autoUpdatesB->setText(tr("Automatically check and download updates"));
+    m_autoOpenVideoWindowB->setText(tr("Automatically open video window"));
+    m_tabsNorths->setText(tr("Show tabs at the top of the main window"));
+    m_allowOnlyOneInstance->setText(tr("Allow only one instance"));
+    m_displayOnlyFileName->setText(tr("Always only display file names in playlist"));
+    m_restoreRepeatMode->setText(tr("Remember repeat mode"));
+    m_proxyB->setTitle(tr("Use proxy server"));
+    m_proxyLoginB->setTitle(tr("Proxy server needs login"));
+    m_proxyUserE->setPlaceholderText(tr("User name"));
+    m_proxyPasswordE->setPlaceholderText(tr("Password"));
+    m_proxyHostE->setPlaceholderText(tr("Proxy server address"));
+    m_proxyPortB->setToolTip(tr("Proxy server port"));
+    m_stillImages->setText(tr("Read and display still images"));
+    m_trayNotifiesDefault->setText(tr("Use tray notifications as default"));
+    m_autoDelNonGroupEntries->setText(tr("Automatically delete ungrouped entries"));
+    m_hideArtistMetadata->setText(tr("Hide artist metadata"));
+    m_autoRestoreMainWindowOnVideoB->setText(tr("Automatically restore main window when new video file is loaded"));
+    m_skipPlaylistsWithinFiles->setText(tr("Don't load playlist files within other files"));
+    m_ytDlGB->setTitle(tr("youtube-dl settings"));
+    m_cookiesFromBrowserCB->setText(tr("Cookies from browser"));
+    m_customYtDlCB->setText(tr("Custom path"));
+    m_customYtDlB->setToolTip(tr("Browse"));
+    m_dontUpdateYtDlCB->setText(tr("Don't auto-update"));
+    m_removeYtDlB->setText(tr("Remove youtube-dl"));
+    m_cookiesFromBrowserE->setToolTip(tr("Please refer to yt-dlp documentation"));
+    m_dfltYtDlQualCB->setText(tr("Default quality"));
+    m_dfltYtDlQualE->setToolTip(tr("\"-f\" parameter, please refer to yt-dlp documentation"));
+    m_additionalYtDlParamsCB->setText(tr("Additional params"));
+    m_additionalYtDlParamsE->setToolTip(tr("Please refer to yt-dlp documentation"));
+    m_keepDocksSizeB->setText(tr("Maintain panels size when resizing the main window (experimental)"));
+    m_fullscreenPanelsRightSideB->setText(tr("Fullscreen panels on the right side"));
+}
+void SettingsWidget::setupModulesListUi(QGroupBox *ModulesList, UiModulesList &ml)
+{
+    ml.horizontalLayout = new QHBoxLayout(ModulesList);
+    ml.horizontalLayout->setSpacing(3);
+    ml.horizontalLayout->setContentsMargins(3, 3, 3, 3);
+
+    ml.list = new QListWidget(ModulesList);
+    QSizePolicy sizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Preferred);
+    sizePolicy.setHorizontalStretch(0);
+    sizePolicy.setVerticalStretch(0);
+    sizePolicy.setHeightForWidth(ml.list->sizePolicy().hasHeightForWidth());
+    ml.list->setSizePolicy(sizePolicy);
+    ml.list->setDragDropMode(QAbstractItemView::InternalMove);
+    ml.list->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    ml.list->setIconSize(QSize(32, 32));
+    ml.horizontalLayout->addWidget(ml.list);
+
+    ml.buttonsW = new QVBoxLayout();
+    ml.buttonsW->setSpacing(3);
+    ml.moveUp = new QToolButton(ModulesList);
+    QSizePolicy sizePolicy1(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+    sizePolicy1.setHorizontalStretch(0);
+    sizePolicy1.setVerticalStretch(0);
+    sizePolicy1.setHeightForWidth(ml.moveUp->sizePolicy().hasHeightForWidth());
+    ml.moveUp->setSizePolicy(sizePolicy1);
+    ml.moveUp->setArrowType(Qt::UpArrow);
+    ml.buttonsW->addWidget(ml.moveUp);
+
+    ml.moveDown = new QToolButton(ModulesList);
+    sizePolicy1.setHeightForWidth(ml.moveDown->sizePolicy().hasHeightForWidth());
+    ml.moveDown->setSizePolicy(sizePolicy1);
+    ml.moveDown->setArrowType(Qt::DownArrow);
+    ml.buttonsW->addWidget(ml.moveDown);
+
+    ml.horizontalLayout->addLayout(ml.buttonsW);
+
+    ml.moveUp->setToolTip(tr("Move up"));
+    ml.moveUp->setText(QStringLiteral("..."));
+    ml.moveDown->setToolTip(tr("Move down"));
+    ml.moveDown->setText(QStringLiteral("..."));
+}
+
+void SettingsWidget::setupPlaybackUi(QWidget *PlaybackSettings)
+{
+    QVBoxLayout *playbackLayout = new QVBoxLayout(PlaybackSettings);
+    playbackLayout->setSpacing(0);
+    playbackLayout->setContentsMargins(0, 0, 0, 0);
+
+    QScrollArea *playbackScrollArea = new QScrollArea(PlaybackSettings);
+    playbackScrollArea->setFrameShape(QFrame::NoFrame);
+    playbackScrollArea->setFrameShadow(QFrame::Plain);
+    playbackScrollArea->setLineWidth(0);
+    playbackScrollArea->setWidgetResizable(true);
+
+    QWidget *playbackScrollAreaWidgetContents = new QWidget();
+    playbackScrollAreaWidgetContents->setGeometry(QRect(0, 0, 1086, 1002));
+    QGridLayout *playbackGridLayout = new QGridLayout(playbackScrollAreaWidgetContents);
+    playbackGridLayout->setContentsMargins(1, 1, 1, 1);
+    playbackGridLayout->setVerticalSpacing(1);
+
+    QFormLayout *playbackFormLayout = new QFormLayout();
+    playbackFormLayout->setFieldGrowthPolicy(QFormLayout::AllNonFixedFieldsGrow);
+    playbackFormLayout->setVerticalSpacing(1);
+
+    QLabel *shortSeekL = new QLabel(playbackScrollAreaWidgetContents);
+    playbackFormLayout->setWidget(0, QFormLayout::ItemRole::LabelRole, shortSeekL);
+    m_shortSeekB = new QSpinBox(playbackScrollAreaWidgetContents);
+    m_shortSeekB->setMinimum(2);
+    m_shortSeekB->setMaximum(20);
+    playbackFormLayout->setWidget(0, QFormLayout::ItemRole::FieldRole, m_shortSeekB);
+
+    QLabel *longSeekL = new QLabel(playbackScrollAreaWidgetContents);
+    playbackFormLayout->setWidget(1, QFormLayout::ItemRole::LabelRole, longSeekL);
+    m_longSeekB = new QSpinBox(playbackScrollAreaWidgetContents);
+    m_longSeekB->setMinimum(30);
+    m_longSeekB->setMaximum(300);
+    playbackFormLayout->setWidget(1, QFormLayout::ItemRole::FieldRole, m_longSeekB);
+
+    QLabel *bufferLocalL = new QLabel(playbackScrollAreaWidgetContents);
+    playbackFormLayout->setWidget(2, QFormLayout::ItemRole::LabelRole, bufferLocalL);
+    m_bufferLocalB = new QSpinBox(playbackScrollAreaWidgetContents);
+    m_bufferLocalB->setMinimum(10);
+    m_bufferLocalB->setMaximum(1000);
+    playbackFormLayout->setWidget(2, QFormLayout::ItemRole::FieldRole, m_bufferLocalB);
+
+    QLabel *bufferNetworkL = new QLabel(playbackScrollAreaWidgetContents);
+    playbackFormLayout->setWidget(3, QFormLayout::ItemRole::LabelRole, bufferNetworkL);
+    m_bufferNetworkB = new QDoubleSpinBox(playbackScrollAreaWidgetContents);
+    m_bufferNetworkB->setDecimals(1);
+    m_bufferNetworkB->setMinimum(0.1);
+    m_bufferNetworkB->setMaximum(10000.0);
+    m_bufferNetworkB->setSingleStep(0.1);
+    playbackFormLayout->setWidget(3, QFormLayout::ItemRole::FieldRole, m_bufferNetworkB);
+
+    QLabel *backwardBufferNetworkL = new QLabel(playbackScrollAreaWidgetContents);
+    playbackFormLayout->setWidget(4, QFormLayout::ItemRole::LabelRole, backwardBufferNetworkL);
+    m_backwardBufferNetworkB = new QComboBox(playbackScrollAreaWidgetContents);
+    m_backwardBufferNetworkB->addItem(QString::fromUtf8("10 %"));
+    m_backwardBufferNetworkB->addItem(QString::fromUtf8("25 %"));
+    m_backwardBufferNetworkB->addItem(QString::fromUtf8("50 %"));
+    m_backwardBufferNetworkB->addItem(QString::fromUtf8("75 %"));
+    m_backwardBufferNetworkB->addItem(QString::fromUtf8("100 %"));
+    playbackFormLayout->setWidget(4, QFormLayout::ItemRole::FieldRole, m_backwardBufferNetworkB);
+
+    QLabel *bufferLiveL = new QLabel(playbackScrollAreaWidgetContents);
+    playbackFormLayout->setWidget(5, QFormLayout::ItemRole::LabelRole, bufferLiveL);
+    m_bufferLiveB = new QDoubleSpinBox(playbackScrollAreaWidgetContents);
+    m_bufferLiveB->setDecimals(1);
+    m_bufferLiveB->setMinimum(0.1);
+    m_bufferLiveB->setMaximum(10000.0);
+    m_bufferLiveB->setSingleStep(0.1);
+    playbackFormLayout->setWidget(5, QFormLayout::ItemRole::FieldRole, m_bufferLiveB);
+
+    QLabel *playIfBufferedL = new QLabel(playbackScrollAreaWidgetContents);
+    playbackFormLayout->setWidget(6, QFormLayout::ItemRole::LabelRole, playIfBufferedL);
+    m_playIfBufferedB = new QDoubleSpinBox(playbackScrollAreaWidgetContents);
+    m_playIfBufferedB->setMaximum(5.0);
+    m_playIfBufferedB->setSingleStep(0.25);
+    playbackFormLayout->setWidget(6, QFormLayout::ItemRole::FieldRole, m_playIfBufferedB);
+
+    QLabel *desiredVideoHeightL = new QLabel(playbackScrollAreaWidgetContents);
+    playbackFormLayout->setWidget(7, QFormLayout::ItemRole::LabelRole, desiredVideoHeightL);
+    m_desiredVideoHeightB = new QComboBox(playbackScrollAreaWidgetContents);
+    m_desiredVideoHeightB->addItem(QString());
+    m_desiredVideoHeightB->addItem(QString());
+    m_desiredVideoHeightB->addItem(QString());
+    m_desiredVideoHeightB->addItem(QString());
+    m_desiredVideoHeightB->addItem(QString());
+    playbackFormLayout->setWidget(7, QFormLayout::ItemRole::FieldRole, m_desiredVideoHeightB);
+
+    QLabel *maxVolL = new QLabel(playbackScrollAreaWidgetContents);
+    playbackFormLayout->setWidget(8, QFormLayout::ItemRole::LabelRole, maxVolL);
+    m_maxVolB = new QSpinBox(playbackScrollAreaWidgetContents);
+    m_maxVolB->setSuffix(QString::fromUtf8(" %"));
+    m_maxVolB->setMinimum(100);
+    m_maxVolB->setMaximum(1000);
+    m_maxVolB->setSingleStep(50);
+    playbackFormLayout->setWidget(8, QFormLayout::ItemRole::FieldRole, m_maxVolB);
+
+    m_forceSamplerate = new QCheckBox(playbackScrollAreaWidgetContents);
+    playbackFormLayout->setWidget(9, QFormLayout::ItemRole::LabelRole, m_forceSamplerate);
+    m_samplerateB = new QSpinBox(playbackScrollAreaWidgetContents);
+    m_samplerateB->setMinimum(4000);
+    m_samplerateB->setMaximum(192000);
+    playbackFormLayout->setWidget(9, QFormLayout::ItemRole::FieldRole, m_samplerateB);
+
+    m_forceChannels = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_forceChannels->setTristate(true);
+    playbackFormLayout->setWidget(10, QFormLayout::ItemRole::LabelRole, m_forceChannels);
+    m_channelsB = new QSpinBox(playbackScrollAreaWidgetContents);
+    m_channelsB->setMinimum(1);
+    m_channelsB->setMaximum(8);
+    playbackFormLayout->setWidget(10, QFormLayout::ItemRole::FieldRole, m_channelsB);
+
+    m_resamplerFirst = new QCheckBox(playbackScrollAreaWidgetContents);
+    playbackFormLayout->setWidget(11, QFormLayout::ItemRole::SpanningRole, m_resamplerFirst);
+
+    m_replayGain = new QGroupBox(playbackScrollAreaWidgetContents);
+    m_replayGain->setCheckable(true);
+    QVBoxLayout *replayGainLayout = new QVBoxLayout(m_replayGain);
+    replayGainLayout->setSpacing(1);
+    replayGainLayout->setContentsMargins(3, 3, 3, 3);
+    m_replayGainAlbum = new QCheckBox(m_replayGain);
+    replayGainLayout->addWidget(m_replayGainAlbum);
+    m_replayGainPreventClipping = new QCheckBox(m_replayGain);
+    replayGainLayout->addWidget(m_replayGainPreventClipping);
+    m_replayGainPreamp = new QDoubleSpinBox(m_replayGain);
+    m_replayGainPreamp->setSuffix(QString::fromUtf8(" dB"));
+    m_replayGainPreamp->setMinimum(-15.0);
+    m_replayGainPreamp->setMaximum(15.0);
+    replayGainLayout->addWidget(m_replayGainPreamp);
+    QFrame *replayGainLine = new QFrame(m_replayGain);
+    replayGainLine->setFrameShape(QFrame::Shape::HLine);
+    replayGainLine->setFrameShadow(QFrame::Shadow::Sunken);
+    replayGainLayout->addWidget(replayGainLine);
+    m_replayGainPreampNoMetadata = new QDoubleSpinBox(m_replayGain);
+    m_replayGainPreampNoMetadata->setSuffix(QString::fromUtf8(" dB"));
+    m_replayGainPreampNoMetadata->setMinimum(-15.0);
+    m_replayGainPreampNoMetadata->setMaximum(0.0);
+    replayGainLayout->addWidget(m_replayGainPreampNoMetadata);
+
+    m_wheelActionB = new QGroupBox(playbackScrollAreaWidgetContents);
+    m_wheelActionB->setCheckable(true);
+    QVBoxLayout *wheelActionLayout = new QVBoxLayout(m_wheelActionB);
+    wheelActionLayout->setSpacing(1);
+    wheelActionLayout->setContentsMargins(3, 3, 3, 3);
+    m_wheelSeekB = new QRadioButton(m_wheelActionB);
+    wheelActionLayout->addWidget(m_wheelSeekB);
+    m_wheelVolumeB = new QRadioButton(m_wheelActionB);
+    wheelActionLayout->addWidget(m_wheelVolumeB);
+
+    QSpacerItem *playbackHorizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+    m_storeARatioAndZoomB = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_keepZoom = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_keepARatio = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_showBufferedTimeOnSlider = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_savePos = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_keepSubtitlesDelay = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_keepSubtitlesScale = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_keepSpeed = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_keepVideoDelay = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_syncVtoA = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_silence = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_restoreVideoEq = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_ignorePlaybackError = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_leftMouseTogglePlay = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_leftMouseTogglePlay->setTristate(true);
+    m_middleMouseToggleFullscreen = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_accurateSeekB = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_accurateSeekB->setTristate(true);
+    m_unpauseWhenSeekingB = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_restoreAVSStateB = new QCheckBox(playbackScrollAreaWidgetContents);
+    m_disableSubtitlesAtStartup = new QCheckBox(playbackScrollAreaWidgetContents);
+
+    QSpacerItem *playbackVerticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+    m_storeUrlPosB = new QCheckBox(playbackScrollAreaWidgetContents);
+
+    playbackGridLayout->addLayout(playbackFormLayout, 0, 0, 1, 2);
+    playbackGridLayout->addWidget(m_replayGain, 1, 0, 1, 1);
+    playbackGridLayout->addWidget(m_wheelActionB, 1, 1, 1, 1);
+    playbackGridLayout->addItem(playbackHorizontalSpacer, 1, 2, 1, 1);
+    playbackGridLayout->addWidget(m_storeARatioAndZoomB, 2, 0, 1, 1);
+    playbackGridLayout->addWidget(m_keepZoom, 3, 0, 1, 2);
+    playbackGridLayout->addWidget(m_keepARatio, 5, 0, 1, 2);
+    playbackGridLayout->addWidget(m_showBufferedTimeOnSlider, 7, 0, 1, 1);
+    playbackGridLayout->addWidget(m_savePos, 8, 0, 1, 2);
+    playbackGridLayout->addWidget(m_keepSubtitlesDelay, 9, 0, 1, 2);
+    playbackGridLayout->addWidget(m_keepSubtitlesScale, 10, 0, 1, 2);
+    playbackGridLayout->addWidget(m_keepSpeed, 11, 0, 1, 2);
+    playbackGridLayout->addWidget(m_keepVideoDelay, 12, 0, 1, 2);
+    playbackGridLayout->addWidget(m_syncVtoA, 13, 0, 1, 2);
+    playbackGridLayout->addWidget(m_silence, 14, 0, 1, 2);
+    playbackGridLayout->addWidget(m_restoreVideoEq, 15, 0, 1, 2);
+    playbackGridLayout->addWidget(m_ignorePlaybackError, 17, 0, 1, 2);
+    playbackGridLayout->addWidget(m_leftMouseTogglePlay, 18, 0, 1, 1);
+    playbackGridLayout->addWidget(m_middleMouseToggleFullscreen, 19, 0, 1, 1);
+    playbackGridLayout->addWidget(m_accurateSeekB, 20, 0, 1, 1);
+    playbackGridLayout->addWidget(m_unpauseWhenSeekingB, 21, 0, 1, 1);
+    playbackGridLayout->addWidget(m_restoreAVSStateB, 22, 0, 1, 1);
+    playbackGridLayout->addWidget(m_disableSubtitlesAtStartup, 23, 0, 1, 1);
+    playbackGridLayout->addItem(playbackVerticalSpacer, 24, 1, 1, 1);
+    playbackGridLayout->addWidget(m_storeUrlPosB, 25, 0, 1, 1);
+
+    playbackScrollArea->setWidget(playbackScrollAreaWidgetContents);
+    playbackLayout->addWidget(playbackScrollArea);
+
+    m_modulesListLayout = new QHBoxLayout();
+    playbackLayout->addLayout(m_modulesListLayout);
+
+    QObject::connect(m_restoreAVSStateB, &QCheckBox::toggled, m_disableSubtitlesAtStartup, &QCheckBox::setDisabled);
+
+    m_replayGain->setTitle(tr("Use available replay gain"));
+    m_replayGainAlbum->setText(tr("Album mode for replay gain"));
+    m_replayGainPreventClipping->setText(tr("Prevent clipping"));
+    m_replayGainPreamp->setPrefix(tr("Amplify"));
+    m_replayGainPreampNoMetadata->setPrefix(tr("Amplify (no metadata)"));
+    m_leftMouseTogglePlay->setToolTip(tr("Partially checked means that there is a delay between click and pausing"));
+    m_leftMouseTogglePlay->setText(tr("Primary mouse button on video dock toggles playback"));
+    m_middleMouseToggleFullscreen->setText(tr("Middle mouse button on video dock toggles fullscreen"));
+    m_keepVideoDelay->setText(tr("Keep video delay"));
+    m_silence->setText(tr("Fade sound"));
+    m_keepSpeed->setText(tr("Keep speed"));
+    m_keepZoom->setText(tr("Keep zoom"));
+    m_keepSubtitlesScale->setText(tr("Keep subtitles scale"));
+    m_keepSubtitlesDelay->setText(tr("Keep subtitles delay"));
+    m_syncVtoA->setText(tr("Video to audio sync (frame skipping)"));
+    shortSeekL->setText(tr("Short seeking (left and right arrows): "));
+    m_shortSeekB->setSuffix(tr("sec"));
+    longSeekL->setText(tr("Long seeking (up and down arrows): "));
+    m_longSeekB->setSuffix(tr("sec"));
+    bufferLocalL->setText(tr("Local buffer size (A/V packages count): "));
+    bufferNetworkL->setText(tr("Network buffer length: "));
+    m_bufferNetworkB->setSuffix(tr("sec"));
+    backwardBufferNetworkL->setText(tr("Percent of packages for backwards rewinding: "));
+    bufferLiveL->setText(tr("Live stream buffer length: "));
+    m_bufferLiveB->setSuffix(tr("sec"));
+    playIfBufferedL->setText(tr("Start playback internet stream if it is buffered: "));
+    m_playIfBufferedB->setSuffix(tr("sec"));
+    desiredVideoHeightL->setText(tr("Desired video stream quality: "));
+    m_desiredVideoHeightB->setItemText(0, tr("Default"));
+    m_desiredVideoHeightB->setItemText(1, tr("SD"));
+    m_desiredVideoHeightB->setItemText(2, tr("HD"));
+    m_desiredVideoHeightB->setItemText(3, tr("Full HD"));
+    m_desiredVideoHeightB->setItemText(4, tr("4K"));
+    maxVolL->setText(tr("Maximum volume: "));
+    m_forceSamplerate->setText(tr("Force samplerate: "));
+    m_forceChannels->setText(tr("Force channels conversion: "));
+    m_resamplerFirst->setText(tr("Use audio resampler and channel conversion before filters and visualizations"));
+    m_keepARatio->setText(tr("Keep aspect ratio"));
+    m_accurateSeekB->setText(tr("Accurate seeking"));
+    m_ignorePlaybackError->setText(tr("Play next entry after playback error"));
+    m_savePos->setText(tr("Continue last playback when program starts"));
+    m_wheelActionB->setTitle(tr("Mouse wheel action on video dock"));
+    m_wheelSeekB->setText(tr("Mouse wheel scrolls music/movie"));
+    m_wheelVolumeB->setText(tr("Mouse wheel changes the volume"));
+    m_restoreVideoEq->setText(tr("Remember video equalizer settings"));
+    m_showBufferedTimeOnSlider->setText(tr("Show buffered data indicator on slider"));
+    m_storeARatioAndZoomB->setText(tr("Store aspect ratio and zoom in config file"));
+    m_unpauseWhenSeekingB->setText(tr("Unpause when seeking"));
+    m_disableSubtitlesAtStartup->setText(tr("Disable subtitles at program startup"));
+    m_restoreAVSStateB->setText(tr("Remember audio/video/subtitles enabled state"));
+    m_storeUrlPosB->setText(tr("Remember playback position for each playlist entry"));
+    m_storeUrlPosB->setToolTip(tr("The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button."));
 }
 
 void SettingsWidget::createRendererSettings()
@@ -1254,7 +1779,7 @@ QString SettingsWidget::chooseDir(const QString &currPth)
 
 inline QString SettingsWidget::getSelectedProfile()
 {
-    return !generalSettingsPage->profileB->currentIndex() ? "/" : generalSettingsPage->profileB->currentText();
+    return !m_profileB->currentIndex() ? "/" : m_profileB->currentText();
 }
 
 void SettingsWidget::showEvent(QShowEvent *)
@@ -1274,7 +1799,7 @@ void SettingsWidget::closeEvent(QCloseEvent *)
 
 void SettingsWidget::chStyle()
 {
-    const QString newStyle = generalSettingsPage->styleBox->currentText().toLower();
+    const QString newStyle = m_styleBox->currentText().toLower();
     if (QApplication::style()->objectName() != newStyle)
     {
         QMPlay2Core.getSettings().set("Style", newStyle);
@@ -1292,17 +1817,17 @@ void SettingsWidget::apply()
     {
         case 0:
         {
-            if (QMPlay2Core.getLanguage() != generalSettingsPage->langBox->itemData(generalSettingsPage->langBox->currentIndex()).toString())
+            if (QMPlay2Core.getLanguage() != m_langBox->itemData(m_langBox->currentIndex()).toString())
             {
-                QMPSettings.set("Language", generalSettingsPage->langBox->itemData(generalSettingsPage->langBox->currentIndex()).toString());
+                QMPSettings.set("Language", m_langBox->itemData(m_langBox->currentIndex()).toString());
                 QMPlay2Core.setLanguage();
                 QMessageBox::information(this, tr("New language"), tr("To set up a new language, the program will start again!"));
                 restartApp();
             }
 #ifdef ICONS_FROM_THEME
-            if (generalSettingsPage->iconsFromTheme->isChecked() != QMPSettings.getBool("IconsFromTheme"))
+            if (m_iconsFromTheme->isChecked() != QMPSettings.getBool("IconsFromTheme"))
             {
-                QMPSettings.set("IconsFromTheme", generalSettingsPage->iconsFromTheme->isChecked());
+                QMPSettings.set("IconsFromTheme", m_iconsFromTheme->isChecked());
                 if (!QMPlay2GUI.restartApp)
                 {
                     QMessageBox::information(this, tr("Changing icons"), tr("To apply the icons change, the program will start again!"));
@@ -1310,70 +1835,70 @@ void SettingsWidget::apply()
                 }
             }
 #endif
-            QMPSettings.set("FallbackSubtitlesEncoding", generalSettingsPage->encodingB->currentText().toUtf8());
-            QMPSettings.set("AudioLanguage", generalSettingsPage->audioLangB->currentIndex() > 0 ? generalSettingsPage->audioLangB->currentText() : QString());
-            QMPSettings.set("SubtitlesLanguage", generalSettingsPage->subsLangB->currentIndex() > 0 ? generalSettingsPage->subsLangB->currentText() : QString());
-            QMPSettings.set("screenshotPth", generalSettingsPage->screenshotE->text());
-            QMPSettings.set("screenshotFormat", generalSettingsPage->screenshotFormatB->currentText());
-            QMPSettings.set("OutputFilePath", generalSettingsPage->outputFileE->text());
-            QMPSettings.set("ShowCovers", generalSettingsPage->showCoversGB->isChecked());
-            QMPSettings.set("BlurCovers", generalSettingsPage->blurCoversB->isChecked());
-            QMPSettings.set("ShowDirCovers", generalSettingsPage->showDirCoversB->isChecked());
-            QMPSettings.set("EnlargeCovers", generalSettingsPage->enlargeSmallCoversB->isChecked());
-            QMPSettings.set("AutoOpenVideoWindow", generalSettingsPage->autoOpenVideoWindowB->isChecked());
-            QMPSettings.set("AutoRestoreMainWindowOnVideo", generalSettingsPage->autoRestoreMainWindowOnVideoB->isChecked());
+            QMPSettings.set("FallbackSubtitlesEncoding", m_encodingB->currentText().toUtf8());
+            QMPSettings.set("AudioLanguage", m_audioLangB->currentIndex() > 0 ? m_audioLangB->currentText() : QString());
+            QMPSettings.set("SubtitlesLanguage", m_subsLangB->currentIndex() > 0 ? m_subsLangB->currentText() : QString());
+            QMPSettings.set("screenshotPth", m_screenshotE->text());
+            QMPSettings.set("screenshotFormat", m_screenshotFormatB->currentText());
+            QMPSettings.set("OutputFilePath", m_outputFileE->text());
+            QMPSettings.set("ShowCovers", m_showCoversGB->isChecked());
+            QMPSettings.set("BlurCovers", m_blurCoversB->isChecked());
+            QMPSettings.set("ShowDirCovers", m_showDirCoversB->isChecked());
+            QMPSettings.set("EnlargeCovers", m_enlargeSmallCoversB->isChecked());
+            QMPSettings.set("AutoOpenVideoWindow", m_autoOpenVideoWindowB->isChecked());
+            QMPSettings.set("AutoRestoreMainWindowOnVideo", m_autoRestoreMainWindowOnVideoB->isChecked());
 #ifdef UPDATES
-            QMPSettings.set("AutoUpdates", generalSettingsPage->autoUpdatesB->isChecked());
+            QMPSettings.set("AutoUpdates", m_autoUpdatesB->isChecked());
 #endif
-            if (auto checked = generalSettingsPage->keepDocksSizeB->isChecked(); checked != QMPSettings.getBool("MainWidget/KeepDocksSize"))
+            if (auto checked = m_keepDocksSizeB->isChecked(); checked != QMPSettings.getBool("MainWidget/KeepDocksSize"))
             {
                 QMPSettings.set("MainWidget/KeepDocksSize", checked);
                 emit keepDocksSizeChanged(checked);
             }
-            if (auto checked = generalSettingsPage->fullscreenPanelsRightSideB->isChecked(); checked != QMPSettings.getBool("FullscreenPanelsRightSide"))
+            if (auto checked = m_fullscreenPanelsRightSideB->isChecked(); checked != QMPSettings.getBool("FullscreenPanelsRightSide"))
             {
                 QMPSettings.set("FullscreenPanelsRightSide", checked);
                 QMPSettings.remove("MainWidget/FullScreenDockWidgetState");
                 QMPSettings.remove("MainWidget/CompactViewDockWidgetState");
                 emit fullscreenPanelsRightSideChanged(checked);
             }
-            QMPSettings.set("MainWidget/TabPositionNorth", generalSettingsPage->tabsNorths->isChecked());
+            QMPSettings.set("MainWidget/TabPositionNorth", m_tabsNorths->isChecked());
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
-            QMPSettings.set("AllowOnlyOneInstance", generalSettingsPage->allowOnlyOneInstance->isChecked());
+            QMPSettings.set("AllowOnlyOneInstance", m_allowOnlyOneInstance->isChecked());
 #endif
-            QMPSettings.set("HideArtistMetadata", generalSettingsPage->hideArtistMetadata->isChecked());
-            QMPSettings.set("DisplayOnlyFileName", generalSettingsPage->displayOnlyFileName->isChecked());
-            QMPSettings.set("SkipPlaylistsWithinFiles", generalSettingsPage->skipPlaylistsWithinFiles->isChecked());
-            QMPSettings.set("RestoreRepeatMode", generalSettingsPage->restoreRepeatMode->isChecked());
-            QMPSettings.set("StillImages", generalSettingsPage->stillImages->isChecked());
-            if (generalSettingsPage->trayNotifiesDefault)
-                QMPSettings.set("TrayNotifiesDefault", generalSettingsPage->trayNotifiesDefault->isChecked());
-            QMPSettings.set("AutoDelNonGroupEntries", generalSettingsPage->autoDelNonGroupEntries->isChecked());
-            QMPSettings.set("Proxy/Use", generalSettingsPage->proxyB->isChecked() && !generalSettingsPage->proxyHostE->text().isEmpty());
-            QMPSettings.set("Proxy/Host", generalSettingsPage->proxyHostE->text());
-            QMPSettings.set("Proxy/Port", generalSettingsPage->proxyPortB->value());
-            QMPSettings.set("Proxy/Login", generalSettingsPage->proxyLoginB->isChecked() && !generalSettingsPage->proxyUserE->text().isEmpty());
-            QMPSettings.set("Proxy/User", generalSettingsPage->proxyUserE->text());
-            QMPSettings.set("Proxy/Password", generalSettingsPage->proxyPasswordE->text().toUtf8().toBase64());
-            generalSettingsPage->proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
-            generalSettingsPage->proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
-            qobject_cast<QMainWindow *>(QMPlay2GUI.mainW)->setTabPosition(Qt::AllDockWidgetAreas, generalSettingsPage->tabsNorths->isChecked() ? QTabWidget::North : QTabWidget::South);
+            QMPSettings.set("HideArtistMetadata", m_hideArtistMetadata->isChecked());
+            QMPSettings.set("DisplayOnlyFileName", m_displayOnlyFileName->isChecked());
+            QMPSettings.set("SkipPlaylistsWithinFiles", m_skipPlaylistsWithinFiles->isChecked());
+            QMPSettings.set("RestoreRepeatMode", m_restoreRepeatMode->isChecked());
+            QMPSettings.set("StillImages", m_stillImages->isChecked());
+            if (m_trayNotifiesDefault)
+                QMPSettings.set("TrayNotifiesDefault", m_trayNotifiesDefault->isChecked());
+            QMPSettings.set("AutoDelNonGroupEntries", m_autoDelNonGroupEntries->isChecked());
+            QMPSettings.set("Proxy/Use", m_proxyB->isChecked() && !m_proxyHostE->text().isEmpty());
+            QMPSettings.set("Proxy/Host", m_proxyHostE->text());
+            QMPSettings.set("Proxy/Port", m_proxyPortB->value());
+            QMPSettings.set("Proxy/Login", m_proxyLoginB->isChecked() && !m_proxyUserE->text().isEmpty());
+            QMPSettings.set("Proxy/User", m_proxyUserE->text());
+            QMPSettings.set("Proxy/Password", m_proxyPasswordE->text().toUtf8().toBase64());
+            m_proxyB->setChecked(QMPSettings.getBool("Proxy/Use"));
+            m_proxyLoginB->setChecked(QMPSettings.getBool("Proxy/Login"));
+            qobject_cast<QMainWindow *>(QMPlay2GUI.mainW)->setTabPosition(Qt::AllDockWidgetAreas, m_tabsNorths->isChecked() ? QTabWidget::North : QTabWidget::South);
             applyProxy();
 
 #ifdef USE_YOUTUBEDL
-            QMPSettings.set("YtDl/CookiesFromBrowserEnabled", generalSettingsPage->cookiesFromBrowserCB->isChecked() && !generalSettingsPage->cookiesFromBrowserE->text().simplified().isEmpty());
-            QMPSettings.set("YtDl/CookiesFromBrowser", generalSettingsPage->cookiesFromBrowserE->text());
-            QMPSettings.set("YtDl/CustomPathEnabled", generalSettingsPage->customYtDlCB->isChecked() && !generalSettingsPage->customYtDlE->text().trimmed().isEmpty());
-            QMPSettings.set("YtDl/CustomPath", generalSettingsPage->customYtDlE->text());
-            QMPSettings.set("YtDl/DefaultQualityEnabled", generalSettingsPage->dfltYtDlQualCB->isChecked() && !generalSettingsPage->dfltYtDlQualE->text().simplified().isEmpty());
-            QMPSettings.set("YtDl/DefaultQuality", generalSettingsPage->dfltYtDlQualE->text());
-            QMPSettings.set("YtDl/AdditionalParamsEnabled", generalSettingsPage->additionalYtDlParamsCB->isChecked() && !generalSettingsPage->additionalYtDlParamsE->text().simplified().isEmpty());
-            QMPSettings.set("YtDl/AdditionalParams", generalSettingsPage->additionalYtDlParamsE->text());
-            QMPSettings.set("YtDl/DontAutoUpdate", generalSettingsPage->dontUpdateYtDlCB->isChecked());
+            QMPSettings.set("YtDl/CookiesFromBrowserEnabled", m_cookiesFromBrowserCB->isChecked() && !m_cookiesFromBrowserE->text().simplified().isEmpty());
+            QMPSettings.set("YtDl/CookiesFromBrowser", m_cookiesFromBrowserE->text());
+            QMPSettings.set("YtDl/CustomPathEnabled", m_customYtDlCB->isChecked() && !m_customYtDlE->text().trimmed().isEmpty());
+            QMPSettings.set("YtDl/CustomPath", m_customYtDlE->text());
+            QMPSettings.set("YtDl/DefaultQualityEnabled", m_dfltYtDlQualCB->isChecked() && !m_dfltYtDlQualE->text().simplified().isEmpty());
+            QMPSettings.set("YtDl/DefaultQuality", m_dfltYtDlQualE->text());
+            QMPSettings.set("YtDl/AdditionalParamsEnabled", m_additionalYtDlParamsCB->isChecked() && !m_additionalYtDlParamsE->text().simplified().isEmpty());
+            QMPSettings.set("YtDl/AdditionalParams", m_additionalYtDlParamsE->text());
+            QMPSettings.set("YtDl/DontAutoUpdate", m_dontUpdateYtDlCB->isChecked());
 #endif
 
-            if (generalSettingsPage->trayNotifiesDefault)
-                Notifies::setNativeFirst(!generalSettingsPage->trayNotifiesDefault->isChecked());
+            if (m_trayNotifiesDefault)
+                Notifies::setNativeFirst(!m_trayNotifiesDefault->isChecked());
 
             QSettings profileSettings(QMPlay2Core.getSettingsDir() + "Profile.ini", QSettings::IniFormat);
             const QString selectedProfile = getSelectedProfile();
@@ -1389,7 +1914,7 @@ void SettingsWidget::apply()
                 fn(initFilters);
 
             QStringList videoWriters;
-            for (QListWidgetItem *wI : modulesList[0]->list->findItems(QString(), Qt::MatchContains))
+            for (QListWidgetItem *wI : modulesList[0].list->findItems(QString(), Qt::MatchContains))
                 videoWriters += wI->text();
             QMPSettings.set("videoWriters", videoWriters);
 
@@ -1400,7 +1925,7 @@ void SettingsWidget::apply()
         case 2:
         {
             auto getDesiredVideoHeight = [this] {
-                switch (playbackSettingsPage->desiredVideoHeightB->currentIndex())
+                switch (m_desiredVideoHeightB->currentIndex())
                 {
                     case 1:
                         return 480;
@@ -1415,59 +1940,59 @@ void SettingsWidget::apply()
                 }
             };
 
-            QMPSettings.set("ShortSeek", playbackSettingsPage->shortSeekB->value());
-            QMPSettings.set("LongSeek", playbackSettingsPage->longSeekB->value());
-            QMPSettings.set("AVBufferLocal", playbackSettingsPage->bufferLocalB->value());
-            QMPSettings.set("AVBufferTimeNetwork", playbackSettingsPage->bufferNetworkB->value());
-            QMPSettings.set("BackwardBuffer", playbackSettingsPage->backwardBufferNetworkB->currentIndex());
-            QMPSettings.set("AVBufferTimeNetworkLive", playbackSettingsPage->bufferLiveB->value());
-            QMPSettings.set("PlayIfBuffered", playbackSettingsPage->playIfBufferedB->value());
+            QMPSettings.set("ShortSeek", m_shortSeekB->value());
+            QMPSettings.set("LongSeek", m_longSeekB->value());
+            QMPSettings.set("AVBufferLocal", m_bufferLocalB->value());
+            QMPSettings.set("AVBufferTimeNetwork", m_bufferNetworkB->value());
+            QMPSettings.set("BackwardBuffer", m_backwardBufferNetworkB->currentIndex());
+            QMPSettings.set("AVBufferTimeNetworkLive", m_bufferLiveB->value());
+            QMPSettings.set("PlayIfBuffered", m_playIfBufferedB->value());
             QMPSettings.set("DesiredVideoHeight", getDesiredVideoHeight());
-            QMPSettings.set("ForceSamplerate", playbackSettingsPage->forceSamplerate->isChecked());
-            QMPSettings.set("Samplerate", playbackSettingsPage->samplerateB->value());
-            QMPSettings.set("MaxVol", playbackSettingsPage->maxVolB->value());
-            QMPSettings.set("ForceChannels", playbackSettingsPage->forceChannels->checkState());
-            QMPSettings.set("Channels", playbackSettingsPage->channelsB->value());
-            QMPSettings.set("ResamplerFirst", playbackSettingsPage->resamplerFirst->isChecked());
-            QMPSettings.set("ReplayGain/Enabled", playbackSettingsPage->replayGain->isChecked());
-            QMPSettings.set("ReplayGain/Album", playbackSettingsPage->replayGainAlbum->isChecked());
-            QMPSettings.set("ReplayGain/PreventClipping", playbackSettingsPage->replayGainPreventClipping->isChecked());
-            QMPSettings.set("ReplayGain/Preamp", playbackSettingsPage->replayGainPreamp->value());
-            QMPSettings.set("ReplayGain/PreampNoMetadata", playbackSettingsPage->replayGainPreampNoMetadata->value());
-            QMPSettings.set("WheelAction", playbackSettingsPage->wheelActionB->isChecked());
-            QMPSettings.set("WheelSeek", playbackSettingsPage->wheelSeekB->isChecked());
-            QMPSettings.set("WheelVolume", playbackSettingsPage->wheelVolumeB->isChecked());
-            QMPSettings.set("ShowBufferedTimeOnSlider", playbackSettingsPage->showBufferedTimeOnSlider->isChecked());
-            QMPSettings.set("SavePos", playbackSettingsPage->savePos->isChecked());
-            QMPSettings.set("KeepZoom", playbackSettingsPage->keepZoom->isChecked());
-            QMPSettings.set("KeepARatio", playbackSettingsPage->keepARatio->isChecked());
-            QMPSettings.set("KeepSubtitlesDelay", playbackSettingsPage->keepSubtitlesDelay->isChecked());
-            QMPSettings.set("KeepSubtitlesScale", playbackSettingsPage->keepSubtitlesScale->isChecked());
-            QMPSettings.set("KeepVideoDelay", playbackSettingsPage->keepVideoDelay->isChecked());
-            QMPSettings.set("KeepSpeed", playbackSettingsPage->keepSpeed->isChecked());
-            QMPSettings.set("SyncVtoA", playbackSettingsPage->syncVtoA->isChecked());
-            QMPSettings.set("Silence", playbackSettingsPage->silence->isChecked());
-            QMPSettings.set("RestoreVideoEqualizer", playbackSettingsPage->restoreVideoEq->isChecked());
-            QMPSettings.set("IgnorePlaybackError", playbackSettingsPage->ignorePlaybackError->isChecked());
-            QMPSettings.set("LeftMouseTogglePlay", playbackSettingsPage->leftMouseTogglePlay->checkState());
-            QMPSettings.set("MiddleMouseToggleFullscreen", playbackSettingsPage->middleMouseToggleFullscreen->isChecked());
-            QMPSettings.set("AccurateSeek", playbackSettingsPage->accurateSeekB->checkState());
-            QMPSettings.set("UnpauseWhenSeeking", playbackSettingsPage->unpauseWhenSeekingB->isChecked());
-            QMPSettings.set("RestoreAVSState", playbackSettingsPage->restoreAVSStateB->isChecked());
-            QMPSettings.set("DisableSubtitlesAtStartup", playbackSettingsPage->disableSubtitlesAtStartup->isChecked());
-            QMPSettings.set("StoreUrlPos", playbackSettingsPage->storeUrlPosB->isChecked());
-            QMPSettings.set("StoreARatioAndZoom", playbackSettingsPage->storeARatioAndZoomB->isChecked());
+            QMPSettings.set("ForceSamplerate", m_forceSamplerate->isChecked());
+            QMPSettings.set("Samplerate", m_samplerateB->value());
+            QMPSettings.set("MaxVol", m_maxVolB->value());
+            QMPSettings.set("ForceChannels", m_forceChannels->checkState());
+            QMPSettings.set("Channels", m_channelsB->value());
+            QMPSettings.set("ResamplerFirst", m_resamplerFirst->isChecked());
+            QMPSettings.set("ReplayGain/Enabled", m_replayGain->isChecked());
+            QMPSettings.set("ReplayGain/Album", m_replayGainAlbum->isChecked());
+            QMPSettings.set("ReplayGain/PreventClipping", m_replayGainPreventClipping->isChecked());
+            QMPSettings.set("ReplayGain/Preamp", m_replayGainPreamp->value());
+            QMPSettings.set("ReplayGain/PreampNoMetadata", m_replayGainPreampNoMetadata->value());
+            QMPSettings.set("WheelAction", m_wheelActionB->isChecked());
+            QMPSettings.set("WheelSeek", m_wheelSeekB->isChecked());
+            QMPSettings.set("WheelVolume", m_wheelVolumeB->isChecked());
+            QMPSettings.set("ShowBufferedTimeOnSlider", m_showBufferedTimeOnSlider->isChecked());
+            QMPSettings.set("SavePos", m_savePos->isChecked());
+            QMPSettings.set("KeepZoom", m_keepZoom->isChecked());
+            QMPSettings.set("KeepARatio", m_keepARatio->isChecked());
+            QMPSettings.set("KeepSubtitlesDelay", m_keepSubtitlesDelay->isChecked());
+            QMPSettings.set("KeepSubtitlesScale", m_keepSubtitlesScale->isChecked());
+            QMPSettings.set("KeepVideoDelay", m_keepVideoDelay->isChecked());
+            QMPSettings.set("KeepSpeed", m_keepSpeed->isChecked());
+            QMPSettings.set("SyncVtoA", m_syncVtoA->isChecked());
+            QMPSettings.set("Silence", m_silence->isChecked());
+            QMPSettings.set("RestoreVideoEqualizer", m_restoreVideoEq->isChecked());
+            QMPSettings.set("IgnorePlaybackError", m_ignorePlaybackError->isChecked());
+            QMPSettings.set("LeftMouseTogglePlay", m_leftMouseTogglePlay->checkState());
+            QMPSettings.set("MiddleMouseToggleFullscreen", m_middleMouseToggleFullscreen->isChecked());
+            QMPSettings.set("AccurateSeek", m_accurateSeekB->checkState());
+            QMPSettings.set("UnpauseWhenSeeking", m_unpauseWhenSeekingB->isChecked());
+            QMPSettings.set("RestoreAVSState", m_restoreAVSStateB->isChecked());
+            QMPSettings.set("DisableSubtitlesAtStartup", m_disableSubtitlesAtStartup->isChecked());
+            QMPSettings.set("StoreUrlPos", m_storeUrlPosB->isChecked());
+            QMPSettings.set("StoreARatioAndZoom", m_storeARatioAndZoomB->isChecked());
 
             QStringList audioWriters, decoders;
-            for (QListWidgetItem *wI : modulesList[1]->list->findItems(QString(), Qt::MatchContains))
+            for (QListWidgetItem *wI : modulesList[1].list->findItems(QString(), Qt::MatchContains))
                 audioWriters += wI->text();
-            for (QListWidgetItem *wI : modulesList[2]->list->findItems(QString(), Qt::MatchContains))
+            for (QListWidgetItem *wI : modulesList[2].list->findItems(QString(), Qt::MatchContains))
                 decoders += wI->text();
             QMPSettings.set("audioWriters", audioWriters);
             QMPSettings.set("decoders", decoders);
 
-            emit setWheelStep(playbackSettingsPage->shortSeekB->value());
-            emit setVolMax(playbackSettingsPage->maxVolB->value());
+            emit setWheelStep(m_shortSeekB->value());
+            emit setVolMax(m_maxVolB->value());
 
             SetAudioChannelsMenu();
         } break;
@@ -1538,7 +2063,7 @@ void SettingsWidget::tabCh(int idx)
     if (idx == 1 && m_setRenderersCurrentIndexFn)
         m_setRenderersCurrentIndexFn();
 
-    if ((idx == 1 || idx == 2) && !modulesList[0]->list->count() && !modulesList[1]->list->count() && !modulesList[2]->list->count())
+    if ((idx == 1 || idx == 2) && !modulesList[0].list->count() && !modulesList[1].list->count() && !modulesList[2].list->count())
     {
         const QStringList writers[3] = {QMPlay2Core.getModules("videoWriters", 5), QMPlay2Core.getModules("audioWriters", 5), QMPlay2Core.getModules("decoders", 7)};
         QVector<QPair<Module *, Module::Info>> pluginsInstances[3];
@@ -1559,22 +2084,22 @@ void SettingsWidget::tabCh(int idx)
                 QListWidgetItem *wI = new QListWidgetItem(writers[m][i]);
                 wI->setData(Qt::UserRole, pluginsInstances[m][i].first->name());
                 wI->setIcon(QMPlay2GUI.getIcon(pluginsInstances[m][i].second.icon.isNull() ? pluginsInstances[m][i].first->icon() : pluginsInstances[m][i].second.icon));
-                modulesList[m]->list->addItem(wI);
+                modulesList[m].list->addItem(wI);
                 if (writers[m][i] == lastM[m])
-                    modulesList[m]->list->setCurrentItem(wI);
+                    modulesList[m].list->setCurrentItem(wI);
             }
-            if (modulesList[m]->list->currentRow() < 0)
-                modulesList[m]->list->setCurrentRow(0);
+            if (modulesList[m].list->currentRow() < 0)
+                modulesList[m].list->setCurrentRow(0);
         }
     }
     else if (idx == 3)
     {
         for (int m = 0; m < 3; ++m)
         {
-            QListWidgetItem *currI = modulesList[m]->list->currentItem();
+            QListWidgetItem *currI = modulesList[m].list->currentItem();
             if (currI)
                 lastM[m] = currI->text();
-            modulesList[m]->list->clear();
+            modulesList[m].list->clear();
         }
     }
 
@@ -1607,7 +2132,7 @@ void SettingsWidget::moveModule()
     {
         const bool moveDown = tB->arrowType() == Qt::DownArrow;
         const int idx = tB->property("idx").toInt();
-        QListWidget *mL = modulesList[idx]->list;
+        QListWidget *mL = modulesList[idx].list;
         int row = mL->currentRow();
         if (row > -1)
         {
@@ -1624,15 +2149,15 @@ void SettingsWidget::moveModule()
 }
 void SettingsWidget::chooseScreenshotDir()
 {
-    const QString dir = chooseDir(generalSettingsPage->screenshotE->text());
+    const QString dir = chooseDir(m_screenshotE->text());
     if (!dir.isEmpty())
-        generalSettingsPage->screenshotE->setText(dir);
+        m_screenshotE->setText(dir);
 }
 void SettingsWidget::chooseOutputFileDir()
 {
-    const QString dir = chooseDir(generalSettingsPage->outputFileE->text());
+    const QString dir = chooseDir(m_outputFileE->text());
     if (!dir.isEmpty())
-        generalSettingsPage->outputFileE->setText(dir);
+        m_outputFileE->setText(dir);
 }
 void SettingsWidget::setAppearance()
 {
@@ -1678,7 +2203,7 @@ void SettingsWidget::resetSettings()
 }
 void SettingsWidget::profileListIndexChanged(int index)
 {
-    generalSettingsPage->profileRemoveB->setEnabled(index != 0);
+    m_profileRemoveB->setEnabled(index != 0);
 }
 void SettingsWidget::removeProfile()
 {
@@ -1697,7 +2222,7 @@ void SettingsWidget::removeProfile()
             QFile::remove(settingsDir + fName);
         QDir(QMPlay2Core.getSettingsDir()).rmdir(selectedProfile);
 
-        generalSettingsPage->profileB->removeItem(generalSettingsPage->profileB->currentIndex());
+        m_profileB->removeItem(m_profileB->currentIndex());
         for (QAction *act : QMPlay2GUI.menuBar->options->profilesGroup->actions())
             if (act->text() == selectedProfileName)
             {

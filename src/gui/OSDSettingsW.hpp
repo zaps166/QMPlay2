@@ -20,14 +20,19 @@
 
 #include <QScrollArea>
 
+class QVBoxLayout;
+class QFontComboBox;
+class QDoubleSpinBox;
+class QCheckBox;
+class QLabel;
+class QSpinBox;
 class QRadioButton;
-
-namespace Ui {
-    class OSDSettings;
-}
+class ColorButton;
 
 class OSDSettingsW : public QScrollArea
 {
+    Q_OBJECT
+
 public:
     static void init(const QString &, int, int, int, int, int, int, double, double, const QColor &, const QColor &, const QColor &, bool l, bool m);
 
@@ -39,13 +44,30 @@ public:
     void writeSettings();
 
 private:
+    void setupUi(QWidget *w);
+
     void readSettings();
 
     inline void setShadowColorB();
 
 private:
-    QRadioButton *alignB[9];
-    Ui::OSDSettings *ui;
-    QString prefix;
+    QVBoxLayout *m_layout;
+    QFontComboBox *m_fontCB;
+    QSpinBox *m_fontSizeB;
+    QSpinBox *m_spacingB;
+    QCheckBox *m_boldCB;
+    QSpinBox *m_leftMarginB;
+    QSpinBox *m_rightMarginB;
+    QSpinBox *m_vMarginB;
+    QDoubleSpinBox *m_outlineB;
+    QLabel *m_shadowL;
+    QDoubleSpinBox *m_shadowB;
+    QCheckBox *m_backgroundCB;
+    ColorButton *m_textColorB;
+    ColorButton *m_outlineColorB;
+    QLabel *m_shadowColorL;
+    ColorButton *m_shadowColorB;
 
+    QRadioButton *alignB[9];
+    QString prefix;
 };

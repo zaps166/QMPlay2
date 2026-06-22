@@ -869,197 +869,6 @@
     </message>
 </context>
 <context>
-    <name>GeneralSettings</name>
-    <message>
-        <source>Browse</source>
-        <translation>浏览</translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>使用系统图标集</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>外观设置</translation>
-    </message>
-    <message>
-        <source>Show covers</source>
-        <translation>显示封面</translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation>将模糊封面作为背景</translation>
-    </message>
-    <message>
-        <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>如果音乐文件中不包含封面，从目录里显示</translation>
-    </message>
-    <message>
-        <source>Automatically open video window</source>
-        <translation>自动打开视频窗口</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>自动检查并下载更新</translation>
-    </message>
-    <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>在主窗口上面显示标签</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>仅允许运行一个实例</translation>
-    </message>
-    <message>
-        <source>Always only display file names in playlist</source>
-        <translation>只在播放列表里显示文件名</translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation>记住重复模式</translation>
-    </message>
-    <message>
-        <source>Use proxy server</source>
-        <translation>使用代理服务器</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>代理服务器需要登录</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>用户名</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>密码</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>代理服务器地址</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>代理服务器端口</translation>
-    </message>
-    <message>
-        <source>Clear covers cache</source>
-        <translation>清除封面缓存</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>重置设置</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>语言</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>样式</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation>默认音频语言</translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation>默认字幕语言</translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>截图路径</translation>
-    </message>
-    <message>
-        <source>Set key bindings</source>
-        <translation>设置键盘绑定</translation>
-    </message>
-    <message>
-        <source>Selected Profile</source>
-        <translation>选定的配置</translation>
-    </message>
-    <message>
-        <source>Read and display still images</source>
-        <translation>读取并显示静态图像</translation>
-    </message>
-    <message>
-        <source>Use tray notifications as default</source>
-        <translation>默认使用托盘区通知</translation>
-    </message>
-    <message>
-        <source>Remove youtube-dl</source>
-        <translation>移除 youtube-dl</translation>
-    </message>
-    <message>
-        <source>Automatically delete ungrouped entries</source>
-        <translation>自动删除未分组项目</translation>
-    </message>
-    <message>
-        <source>Hide artist metadata</source>
-        <translation>隐藏艺术家元数据</translation>
-    </message>
-    <message>
-        <source>Automatically restore main window when new video file is loaded</source>
-        <translation>新视频文件载入时自动重置主窗口</translation>
-    </message>
-    <message>
-        <source>Don&apos;t load playlist files within other files</source>
-        <translation>不在其它文件内载入播放列表</translation>
-    </message>
-    <message>
-        <source>Enlarge small covers</source>
-        <translation>放大小尺寸封面</translation>
-    </message>
-    <message>
-        <source>Subtitles and tags encoding</source>
-        <translation>字幕和标签编码</translation>
-    </message>
-    <message>
-        <source>Output file path:</source>
-        <translation>输出文件路径：</translation>
-    </message>
-    <message>
-        <source>youtube-dl settings</source>
-        <translation>youtube-dl 设置</translation>
-    </message>
-    <message>
-        <source>Cookies from browser</source>
-        <translation>浏览器 Cookies</translation>
-    </message>
-    <message>
-        <source>Custom path</source>
-        <translation>自定义路径</translation>
-    </message>
-    <message>
-        <source>Don&apos;t auto-update</source>
-        <translation>不自动更新</translation>
-    </message>
-    <message>
-        <source>Please refer to yt-dlp documentation</source>
-        <translation>请参阅 yt-dlp 文档</translation>
-    </message>
-    <message>
-        <source>Default quality</source>
-        <translation>默认质量</translation>
-    </message>
-    <message>
-        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation>&quot;-f&quot; 参数，请参阅 yt-dlp 文档</translation>
-    </message>
-    <message>
-        <source>Additional params</source>
-        <translation>附加参数</translation>
-    </message>
-    <message>
-        <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation>调整主窗口大小时维持面板尺寸（实验）</translation>
-    </message>
-    <message>
-        <source>Fullscreen panels on the right side</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
@@ -2000,21 +1809,6 @@
     </message>
 </context>
 <context>
-    <name>ModulesList</name>
-    <message>
-        <source>Move up</source>
-        <translation>上移</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation>下移</translation>
-    </message>
-</context>
-<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2038,14 +1832,42 @@
     </message>
 </context>
 <context>
-    <name>OSDSettings</name>
+    <name>OSDSettingsW</name>
+    <message>
+        <source>Background</source>
+        <translation>背景</translation>
+    </message>
     <message>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
+        <source>Size: </source>
+        <translation>尺寸: </translation>
+    </message>
+    <message>
+        <source>Spacing: </source>
+        <translation>间隔: </translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>粗体</translation>
+    </message>
+    <message>
         <source>Margins</source>
         <translation>页边距</translation>
+    </message>
+    <message>
+        <source>Left: </source>
+        <translation>左: </translation>
+    </message>
+    <message>
+        <source>Right: </source>
+        <translation>右: </translation>
+    </message>
+    <message>
+        <source>Vertical: </source>
+        <translation>垂直: </translation>
     </message>
     <message>
         <source>Subtitles alignment</source>
@@ -2056,48 +1878,24 @@
         <translation>边框</translation>
     </message>
     <message>
+        <source>Outline: </source>
+        <translation>轮廓: </translation>
+    </message>
+    <message>
+        <source>Shadow: </source>
+        <translation>阴影: </translation>
+    </message>
+    <message>
         <source>Colors</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>尺寸</translation>
+        <source>Text: </source>
+        <translation>文本: </translation>
     </message>
     <message>
-        <source>Spacing</source>
-        <translation>间隔</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>左</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>右</translation>
-    </message>
-    <message>
-        <source>Vertical</source>
-        <translation>垂直</translation>
-    </message>
-    <message>
-        <source>Outline</source>
-        <translation>轮廓</translation>
-    </message>
-    <message>
-        <source>Shadow</source>
-        <translation>阴影</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation>文本</translation>
-    </message>
-    <message>
-        <source>Bold</source>
-        <translation>粗体</translation>
-    </message>
-    <message>
-        <source>Background</source>
-        <translation>背景</translation>
+        <source>Border: </source>
+        <translation>边框: </translation>
     </message>
 </context>
 <context>
@@ -2479,201 +2277,6 @@
     <message>
         <source>&amp;Keep audio pitch</source>
         <translation>保持音频音调(&amp;K)</translation>
-    </message>
-</context>
-<context>
-    <name>PlaybackSettings</name>
-    <message>
-        <source>Maximum volume</source>
-        <translation>最大音量</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>强制采样率</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>强制声道转换</translation>
-    </message>
-    <message>
-        <source>Use available replay gain</source>
-        <translation>使用可用回放增益</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>回放增益使用专辑模式</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>防止削波</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>鼠标滚轮滚动音乐/电影</translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>保持比例</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>在滑块上显示缓冲数据</translation>
-    </message>
-    <message>
-        <source>Keep aspect ratio</source>
-        <translation>保持纵横比</translation>
-    </message>
-    <message>
-        <source>Keep subtitles delay</source>
-        <translation>保持字幕延时</translation>
-    </message>
-    <message>
-        <source>Keep subtitles scale</source>
-        <translation>保持字幕比例</translation>
-    </message>
-    <message>
-        <source>Keep speed</source>
-        <translation>保持速度</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>保持视频延时</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>音视频同步（跳帧）</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>声音渐变</translation>
-    </message>
-    <message>
-        <source>Remember video equalizer settings</source>
-        <translation>记住视频均衡器设置</translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation>回放错误后播放下一项</translation>
-    </message>
-    <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>短跳转（左右方向键）</translation>
-    </message>
-    <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>长跳转（上下方向键）</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>本地缓冲大小（音视频包计数）</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation>回退时数据包的百分比</translation>
-    </message>
-    <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>如果缓冲完毕，开始回放网络流</translation>
-    </message>
-    <message>
-        <source>sec</source>
-        <translation>秒</translation>
-    </message>
-    <message>
-        <source>Amplify</source>
-        <translation>放大</translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation>鼠标滚轮控制视频</translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation>鼠标滚轮更改音量</translation>
-    </message>
-    <message>
-        <source>Primary mouse button on video dock toggles playback</source>
-        <translation>鼠标主键点击视频切换回放</translation>
-    </message>
-    <message>
-        <source>Accurate seeking</source>
-        <translation>精确跳转</translation>
-    </message>
-    <message>
-        <source>Store aspect ratio and zoom in config file</source>
-        <translation>存储纵横比和放大配置文件</translation>
-    </message>
-    <message>
-        <source>Unpause when seeking</source>
-        <translation>跳转时不暂停</translation>
-    </message>
-    <message>
-        <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>在滤镜和可视化效果前使用音频重采样器和声道转换</translation>
-    </message>
-    <message>
-        <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation>鼠标中键点击视频切换全屏</translation>
-    </message>
-    <message>
-        <source>Disable subtitles at program startup</source>
-        <translation>程序开始时禁用字幕</translation>
-    </message>
-    <message>
-        <source>Remember audio/video/subtitles enabled state</source>
-        <translation>记住音频/视频/字幕启用状态</translation>
-    </message>
-    <message>
-        <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>半选中代表点击暂停延时</translation>
-    </message>
-    <message>
-        <source>Amplify (no metadata)</source>
-        <translation>放大（无元数据）</translation>
-    </message>
-    <message>
-        <source>Network buffer length</source>
-        <translation>网络缓冲长度</translation>
-    </message>
-    <message>
-        <source>Live stream buffer length</source>
-        <translation>直播流缓冲长度</translation>
-    </message>
-    <message>
-        <source>Remember playback position for each playlist entry</source>
-        <translation>记住每个播放列表项目的回放位置</translation>
-    </message>
-    <message>
-        <source>Desired video stream quality:</source>
-        <translation>预期视频流质量：</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation>默认</translation>
-    </message>
-    <message>
-        <source>SD</source>
-        <translation>标清</translation>
-    </message>
-    <message>
-        <source>HD</source>
-        <translation>高清</translation>
-    </message>
-    <message>
-        <source>Full HD</source>
-        <translation>全高清</translation>
-    </message>
-    <message>
-        <source>4K</source>
-        <translation>4K</translation>
-    </message>
-    <message>
-        <source>Continue last playback when program starts</source>
-        <translation>程序开始时继续上次回放</translation>
-    </message>
-    <message>
-        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation>长度必须至少 8 分钟。您的回放位置必须在回放范围的 [1% - 99%]。您可以按全屏按纽旁的图标继续回放。</translation>
     </message>
 </context>
 <context>
@@ -3399,6 +3002,390 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Legacy video output priority</source>
         <translation>传统视频输出优先级</translation>
+    </message>
+    <message>
+        <source>Show covers</source>
+        <translation>显示封面</translation>
+    </message>
+    <message>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
+        <translation>如果音乐文件中不包含封面，从目录里显示</translation>
+    </message>
+    <message>
+        <source>Enlarge small covers</source>
+        <translation>放大小尺寸封面</translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation>将模糊封面作为背景</translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>清除封面缓存</translation>
+    </message>
+    <message>
+        <source>Set key bindings</source>
+        <translation>设置键盘绑定</translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>重置设置</translation>
+    </message>
+    <message>
+        <source>Language: </source>
+        <translation>语言: </translation>
+    </message>
+    <message>
+        <source>Style: </source>
+        <translation>样式: </translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding: </source>
+        <translation>字幕和标签编码: </translation>
+    </message>
+    <message>
+        <source>Default audio language: </source>
+        <translation>默认音频语言: </translation>
+    </message>
+    <message>
+        <source>Default subtitles language: </source>
+        <translation>默认字幕语言: </translation>
+    </message>
+    <message>
+        <source>Screenshots path: </source>
+        <translation>截图路径: </translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>浏览</translation>
+    </message>
+    <message>
+        <source>Output file path: </source>
+        <translation>输出文件路径：</translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>使用系统图标集</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>外观设置</translation>
+    </message>
+    <message>
+        <source>Selected Profile: </source>
+        <translation>选定的配置: </translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>自动检查并下载更新</translation>
+    </message>
+    <message>
+        <source>Automatically open video window</source>
+        <translation>自动打开视频窗口</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>在主窗口上面显示标签</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>仅允许运行一个实例</translation>
+    </message>
+    <message>
+        <source>Always only display file names in playlist</source>
+        <translation>只在播放列表里显示文件名</translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation>记住重复模式</translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>使用代理服务器</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>代理服务器需要登录</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>用户名</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>密码</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>代理服务器地址</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>代理服务器端口</translation>
+    </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation>读取并显示静态图像</translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
+        <translation>默认使用托盘区通知</translation>
+    </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation>自动删除未分组项目</translation>
+    </message>
+    <message>
+        <source>Hide artist metadata</source>
+        <translation>隐藏艺术家元数据</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>新视频文件载入时自动重置主窗口</translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation>不在其它文件内载入播放列表</translation>
+    </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation>youtube-dl 设置</translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation>浏览器 Cookies</translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation>自定义路径</translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation>不自动更新</translation>
+    </message>
+    <message>
+        <source>Remove youtube-dl</source>
+        <translation>移除 youtube-dl</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation>请参阅 yt-dlp 文档</translation>
+    </message>
+    <message>
+        <source>Default quality</source>
+        <translation>默认质量</translation>
+    </message>
+    <message>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation>&quot;-f&quot; 参数，请参阅 yt-dlp 文档</translation>
+    </message>
+    <message>
+        <source>Additional params</source>
+        <translation>附加参数</translation>
+    </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation>调整主窗口大小时维持面板尺寸（实验）</translation>
+    </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>上移</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>下移</translation>
+    </message>
+    <message>
+        <source>Use available replay gain</source>
+        <translation>使用可用回放增益</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>回放增益使用专辑模式</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>防止削波</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation>放大</translation>
+    </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation>放大（无元数据）</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>半选中代表点击暂停延时</translation>
+    </message>
+    <message>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation>鼠标主键点击视频切换回放</translation>
+    </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation>鼠标中键点击视频切换全屏</translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>保持视频延时</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>声音渐变</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>保持速度</translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>保持比例</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>保持字幕比例</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>保持字幕延时</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>音视频同步（跳帧）</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows): </source>
+        <translation>短跳转（左右方向键）: </translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation>秒</translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows): </source>
+        <translation>长跳转（上下方向键）: </translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count): </source>
+        <translation>本地缓冲大小（音视频包计数）: </translation>
+    </message>
+    <message>
+        <source>Network buffer length: </source>
+        <translation>网络缓冲长度: </translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding: </source>
+        <translation>回退时数据包的百分比: </translation>
+    </message>
+    <message>
+        <source>Live stream buffer length: </source>
+        <translation>直播流缓冲长度: </translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered: </source>
+        <translation>如果缓冲完毕，开始回放网络流: </translation>
+    </message>
+    <message>
+        <source>Desired video stream quality: </source>
+        <translation>预期视频流质量： </translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation>标清</translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation>高清</translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation>全高清</translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation>4K</translation>
+    </message>
+    <message>
+        <source>Maximum volume: </source>
+        <translation>最大音量: </translation>
+    </message>
+    <message>
+        <source>Force samplerate: </source>
+        <translation>强制采样率: </translation>
+    </message>
+    <message>
+        <source>Force channels conversion: </source>
+        <translation>强制声道转换: </translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation>在滤镜和可视化效果前使用音频重采样器和声道转换</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>保持纵横比</translation>
+    </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation>精确跳转</translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation>回放错误后播放下一项</translation>
+    </message>
+    <message>
+        <source>Continue last playback when program starts</source>
+        <translation>程序开始时继续上次回放</translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation>鼠标滚轮控制视频</translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>鼠标滚轮滚动音乐/电影</translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation>鼠标滚轮更改音量</translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation>记住视频均衡器设置</translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>在滑块上显示缓冲数据</translation>
+    </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation>存储纵横比和放大配置文件</translation>
+    </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>跳转时不暂停</translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation>程序开始时禁用字幕</translation>
+    </message>
+    <message>
+        <source>Remember audio/video/subtitles enabled state</source>
+        <translation>记住音频/视频/字幕启用状态</translation>
+    </message>
+    <message>
+        <source>Remember playback position for each playlist entry</source>
+        <translation>记住每个播放列表项目的回放位置</translation>
+    </message>
+    <message>
+        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
+        <translation>长度必须至少 8 分钟。您的回放位置必须在回放范围的 [1% - 99%]。您可以按全屏按纽旁的图标继续回放。</translation>
     </message>
     <message>
         <source>Legacy</source>

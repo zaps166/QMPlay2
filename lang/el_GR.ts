@@ -869,197 +869,6 @@
     </message>
 </context>
 <context>
-    <name>GeneralSettings</name>
-    <message>
-        <source>Browse</source>
-        <translation>Αναζήτηση</translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>Χρησιμοποιήστε το σύνολο εικονιδίων του συστήματος</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>Ορισμός εμφάνισης</translation>
-    </message>
-    <message>
-        <source>Show covers</source>
-        <translation>Εμφάνιση εξώφυλλων</translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation>Θολωμένα εξώφυλλα ως φόντο</translation>
-    </message>
-    <message>
-        <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>Εμφάνιση εξώφυλλων από κατάλογο αν δεν υπάρχουν στο μουσικό αρχείο</translation>
-    </message>
-    <message>
-        <source>Automatically open video window</source>
-        <translation>Αυτόματο άνοιγμα παραθύρου βίντεο</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>Αυτόματη έλεγχος και λήψη ενημερώσεων</translation>
-    </message>
-    <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>Εμφάνιση καρτελών στην κορυφή του κύριου παραθύρου</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>Επιτρέψτε μόνο μία παρουσία</translation>
-    </message>
-    <message>
-        <source>Always only display file names in playlist</source>
-        <translation>Πάντα να εμφανίζονται μόνο τα ονόματα αρχείων στη λίστα αναπαραγωγής</translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation>Θυμήσου την λειτουργία επανάληψης</translation>
-    </message>
-    <message>
-        <source>Use proxy server</source>
-        <translation>Χρησιμοποιήστε διακομιστή μεσολάβησης</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>Ο διακομιστής μεσολάβησης απαιτεί σύνδεση</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Όνομα χρήστη</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Κωδικός πρόσβασης</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>Διεύθυνση διακομιστή μεσολάβησης</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>Θύρα διακομιστή μεσολάβησης</translation>
-    </message>
-    <message>
-        <source>Clear covers cache</source>
-        <translation>Εκκαθάριση της μνήμης cache εξώφυλλων</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>Επαναφορά ρυθμίσεων</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Γλώσσα</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>Στυλ</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation>Γλώσσα ήχου κατά προεπιλογή</translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation>Γλώσσα υπότιτλων κατά προεπιλογή</translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>Διαδρομή για στιγμιότυπα οθόνης</translation>
-    </message>
-    <message>
-        <source>Set key bindings</source>
-        <translation>Ορισμός συντομεύσεων πληκτρολογίου</translation>
-    </message>
-    <message>
-        <source>Selected Profile</source>
-        <translation>Επιλεγμένο προφίλ</translation>
-    </message>
-    <message>
-        <source>Read and display still images</source>
-        <translation>Ανάγνωση και εμφάνιση στατικών εικόνων</translation>
-    </message>
-    <message>
-        <source>Use tray notifications as default</source>
-        <translation>Χρήση ειδοποιήσεων δίσκου ως προεπιλογή</translation>
-    </message>
-    <message>
-        <source>Remove youtube-dl</source>
-        <translation>Αφαίρεση του youtube-dl</translation>
-    </message>
-    <message>
-        <source>Automatically delete ungrouped entries</source>
-        <translation>Αυτόματη διαγραφή μη ομαδοποιημένων εγγραφών</translation>
-    </message>
-    <message>
-        <source>Hide artist metadata</source>
-        <translation>Απόκρυψη μεταδεδομένων καλλιτέχνη</translation>
-    </message>
-    <message>
-        <source>Automatically restore main window when new video file is loaded</source>
-        <translation>Αυτόματη επαναφορά του κύριου παραθύρου όταν φορτωθεί νέο αρχείο βίντεο</translation>
-    </message>
-    <message>
-        <source>Don&apos;t load playlist files within other files</source>
-        <translation>Μην φορτώνετε αρχεία λίστας αναπαραγωγής μέσα σε άλλα αρχεία</translation>
-    </message>
-    <message>
-        <source>Enlarge small covers</source>
-        <translation>Μεγέθυνση μικρών εξώφυλλων</translation>
-    </message>
-    <message>
-        <source>Subtitles and tags encoding</source>
-        <translation>Κωδικοποίηση υποτίτλων και ετικετών</translation>
-    </message>
-    <message>
-        <source>Output file path:</source>
-        <translation>Διαδρομή αρχείου εξόδου:</translation>
-    </message>
-    <message>
-        <source>youtube-dl settings</source>
-        <translation>Ρυθμίσεις youtube-dl</translation>
-    </message>
-    <message>
-        <source>Cookies from browser</source>
-        <translation>Κουμπιά από τον περιηγητή</translation>
-    </message>
-    <message>
-        <source>Custom path</source>
-        <translation>Προσαρμοσμένη διαδρομή</translation>
-    </message>
-    <message>
-        <source>Don&apos;t auto-update</source>
-        <translation>Μην ανανεώνετε αυτόματα</translation>
-    </message>
-    <message>
-        <source>Please refer to yt-dlp documentation</source>
-        <translation>Παρακαλώ ανατρέξτε στην τεκμηρίωση του yt-dlp</translation>
-    </message>
-    <message>
-        <source>Default quality</source>
-        <translation>Προεπιλεγμένη ποιότητα</translation>
-    </message>
-    <message>
-        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation>παράμετρος &quot;-f&quot;, παρακαλώ ανατρέξτε στην τεκμηρίωση του yt-dlp</translation>
-    </message>
-    <message>
-        <source>Additional params</source>
-        <translation>Πρόσθετες παραμέτρους</translation>
-    </message>
-    <message>
-        <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation>Διατήρηση μεγέθους πλαισίων κατά την αλλαγή μεγέθους του κύριου παραθύρου (πειραματικό)</translation>
-    </message>
-    <message>
-        <source>Fullscreen panels on the right side</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
@@ -2000,21 +1809,6 @@
     </message>
 </context>
 <context>
-    <name>ModulesList</name>
-    <message>
-        <source>Move up</source>
-        <translation>Μετακίνηση επάνω</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation>Μετακίνηση κάτω</translation>
-    </message>
-</context>
-<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2038,14 +1832,42 @@
     </message>
 </context>
 <context>
-    <name>OSDSettings</name>
+    <name>OSDSettingsW</name>
+    <message>
+        <source>Background</source>
+        <translation>Φόντο</translation>
+    </message>
     <message>
         <source>Font</source>
         <translation>Γραμματοσειρά</translation>
     </message>
     <message>
+        <source>Size: </source>
+        <translation>Μέγεθος: </translation>
+    </message>
+    <message>
+        <source>Spacing: </source>
+        <translation>Απόσταση: </translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>Έντονα</translation>
+    </message>
+    <message>
         <source>Margins</source>
         <translation>Περιθώρια</translation>
+    </message>
+    <message>
+        <source>Left: </source>
+        <translation>Αριστερά: </translation>
+    </message>
+    <message>
+        <source>Right: </source>
+        <translation>Δεξιά: </translation>
+    </message>
+    <message>
+        <source>Vertical: </source>
+        <translation>Κατακόρυφα: </translation>
     </message>
     <message>
         <source>Subtitles alignment</source>
@@ -2056,48 +1878,24 @@
         <translation>Περιφέρεια</translation>
     </message>
     <message>
+        <source>Outline: </source>
+        <translation>Περίγραμμα: </translation>
+    </message>
+    <message>
+        <source>Shadow: </source>
+        <translation>Σκιά: </translation>
+    </message>
+    <message>
         <source>Colors</source>
         <translation>Χρώματα</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Μέγεθος</translation>
+        <source>Text: </source>
+        <translation>Κείμενο: </translation>
     </message>
     <message>
-        <source>Spacing</source>
-        <translation>Απόσταση</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Αριστερά</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Δεξιά</translation>
-    </message>
-    <message>
-        <source>Vertical</source>
-        <translation>Κατακόρυφα</translation>
-    </message>
-    <message>
-        <source>Outline</source>
-        <translation>Περίγραμμα</translation>
-    </message>
-    <message>
-        <source>Shadow</source>
-        <translation>Σκιά</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation>Κείμενο</translation>
-    </message>
-    <message>
-        <source>Bold</source>
-        <translation>Έντονα</translation>
-    </message>
-    <message>
-        <source>Background</source>
-        <translation>Φόντο</translation>
+        <source>Border: </source>
+        <translation>Περιφέρεια: </translation>
     </message>
 </context>
 <context>
@@ -2479,201 +2277,6 @@
     <message>
         <source>&amp;Delay subtitiles</source>
         <translation>&amp;Καθυστέρηση υποτίτλων</translation>
-    </message>
-</context>
-<context>
-    <name>PlaybackSettings</name>
-    <message>
-        <source>Maximum volume</source>
-        <translation>Μέγιστη ένταση</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>Αναγκαστική συχνότητα δείγματος</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>Αναγκαστική μετατροπή καναλιών</translation>
-    </message>
-    <message>
-        <source>Use available replay gain</source>
-        <translation>Χρήση διαθέσιμου gain επαναφοράς</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>Λειτουργία άλμπουμ για gain επαναφοράς</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>Αποφυγή υπερφόρτωσης ήχου</translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation>Δράση τροχού ποντικιού στο βίντεο</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>Ο τροχός του ποντικιού προχωρά τη μουσική/ταινία</translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation>Ο τροχός του ποντικιού αλλάζει την ένταση</translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>Διατήρηση ζουμ</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>Εμφάνιση ένδειξης αποθηκευμένων δεδομένων στον δείκτη</translation>
-    </message>
-    <message>
-        <source>Keep aspect ratio</source>
-        <translation>Διατήρηση αναλογίας εικόνας</translation>
-    </message>
-    <message>
-        <source>Keep subtitles delay</source>
-        <translation>Διατήρηση καθυστέρησης υποτίτλων</translation>
-    </message>
-    <message>
-        <source>Keep subtitles scale</source>
-        <translation>Διατήρηση κλίμακας υποτίτλων</translation>
-    </message>
-    <message>
-        <source>Keep speed</source>
-        <translation>Διατήρηση ταχύτητας</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>Διατήρηση καθυστέρησης βίντεο</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>Συγχρονισμός βίντεο με ήχο (παράλειψη καρέ)</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>Σταδιακή εξασθένηση ήχου</translation>
-    </message>
-    <message>
-        <source>Remember video equalizer settings</source>
-        <translation>Θυμήσου τις ρυθμίσεις ισοσταθμιστή βίντεο</translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation>Αναπαραγωγή επόμενης εγγραφής μετά από σφάλμα αναπαραγωγής</translation>
-    </message>
-    <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>Σύντομη αναζήτηση (βέλη αριστερά και δεξιά)</translation>
-    </message>
-    <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>Μακρά αναζήτηση (βέλη πάνω και κάτω)</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>Μέγεθος τοπικής προσωρινής μνήμης (αριθμός πακέτων A/V)</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation>Ποσοστό πακέτων για αναπαραγωγή προς τα πίσω</translation>
-    </message>
-    <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>Ξεκινήστε την αναπαραγωγή ροής διαδικτύου εάν είναι αποθηκευμένη</translation>
-    </message>
-    <message>
-        <source>sec</source>
-        <translation>δευτ</translation>
-    </message>
-    <message>
-        <source>Amplify</source>
-        <translation>Ενίσχυση</translation>
-    </message>
-    <message>
-        <source>Primary mouse button on video dock toggles playback</source>
-        <translation>Η κύρια κουμπί του ποντικιού στο παράθυρο βίντεο εναλλάσσει την αναπαραγωγή</translation>
-    </message>
-    <message>
-        <source>Accurate seeking</source>
-        <translation>Ακριβής αναζήτηση</translation>
-    </message>
-    <message>
-        <source>Store aspect ratio and zoom in config file</source>
-        <translation>Αποθήκευση αναλογίας και ζουμ στο αρχείο ρύθμισης</translation>
-    </message>
-    <message>
-        <source>Unpause when seeking</source>
-        <translation>Επαναφορά όταν αναζητείται</translation>
-    </message>
-    <message>
-        <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>Χρήση επαναδειγματοληπτικού ήχου και μετατροπή καναλιών πριν από φίλτρα και οπτικοποιήσεις</translation>
-    </message>
-    <message>
-        <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation>Η μεσαία κουμπί του ποντικιού στο παράθυρο βίντεο εναλλάσσει τη λειτουργία πλήρους οθόνης</translation>
-    </message>
-    <message>
-        <source>Disable subtitles at program startup</source>
-        <translation>Απενεργοποίηση υποτίτλων κατά την εκκίνηση του προγράμματος</translation>
-    </message>
-    <message>
-        <source>Remember audio/video/subtitles enabled state</source>
-        <translation>Θυμηθείτε την κατάσταση ενεργοποίησης ήχου/βίντεο/υποτίτλων</translation>
-    </message>
-    <message>
-        <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>Μερικώς ελεγμένο σημαίνει ότι υπάρχει καθυστέρηση μεταξύ του κλικ και της παύσης</translation>
-    </message>
-    <message>
-        <source>Amplify (no metadata)</source>
-        <translation>Ενίσχυση (χωρίς μεταδεδομένα)</translation>
-    </message>
-    <message>
-        <source>Network buffer length</source>
-        <translation>Μήκος προσωρινής μνήμης δικτύου</translation>
-    </message>
-    <message>
-        <source>Live stream buffer length</source>
-        <translation>Μήκος προσωρινής μνήμης ζωντανής ροής</translation>
-    </message>
-    <message>
-        <source>Remember playback position for each playlist entry</source>
-        <translation>Θυμηθείτε τη θέση αναπαραγωγής για κάθε εγγραφή της λίστας αναπαραγωγής</translation>
-    </message>
-    <message>
-        <source>Desired video stream quality:</source>
-        <translation>Επιθυμητή ποιότητα βίντεο:</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation>Προεπιλογή</translation>
-    </message>
-    <message>
-        <source>SD</source>
-        <translation>SD</translation>
-    </message>
-    <message>
-        <source>HD</source>
-        <translation>HD</translation>
-    </message>
-    <message>
-        <source>Full HD</source>
-        <translation>Full HD</translation>
-    </message>
-    <message>
-        <source>4K</source>
-        <translation>4K</translation>
-    </message>
-    <message>
-        <source>Continue last playback when program starts</source>
-        <translation>Συνεχίστε την τελευταία αναπαραγωγή όταν ξεκινά το πρόγραμμα</translation>
-    </message>
-    <message>
-        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation>Η διάρκεια πρέπει να είναι τουλάχιστον 8 λεπτά. Η θέση αναπαραγωγής πρέπει να βρίσκεται στο [1% - 99%] του εύρους αναπαραγωγής. Μπορείτε να συνεχίσετε την αναπαραγωγή πατώντας το εικονίδιο δίπλα στο κουμπί πλήρους οθόνης.</translation>
     </message>
 </context>
 <context>
@@ -3491,6 +3094,390 @@ Partially checked only if the content has less channels than the specified value
         <translation>Αναγκάστε το ηχητικό περιεχόμενο να χρησιμοποιεί τον καθορισμένο αριθμό καναλιών.
 Εν μέρει επιλεγμένο μόνο εάν το περιεχόμενο έχει λιγότερα κανάλια από την καθορισμένη τιμή
 	(π.χ. αναβάθμιση μονοφωνικού σε στερεοφωνικό, αλλά όχι υποβάθμιση τετραφωνικού σε στερεοφωνικό)</translation>
+    </message>
+    <message>
+        <source>Show covers</source>
+        <translation>Εμφάνιση εξώφυλλων</translation>
+    </message>
+    <message>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
+        <translation>Εμφάνιση εξώφυλλων από κατάλογο αν δεν υπάρχουν στο μουσικό αρχείο</translation>
+    </message>
+    <message>
+        <source>Enlarge small covers</source>
+        <translation>Μεγέθυνση μικρών εξώφυλλων</translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation>Θολωμένα εξώφυλλα ως φόντο</translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>Εκκαθάριση της μνήμης cache εξώφυλλων</translation>
+    </message>
+    <message>
+        <source>Set key bindings</source>
+        <translation>Ορισμός συντομεύσεων πληκτρολογίου</translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>Επαναφορά ρυθμίσεων</translation>
+    </message>
+    <message>
+        <source>Language: </source>
+        <translation>Γλώσσα: </translation>
+    </message>
+    <message>
+        <source>Style: </source>
+        <translation>Στυλ: </translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding: </source>
+        <translation>Κωδικοποίηση υποτίτλων και ετικετών: </translation>
+    </message>
+    <message>
+        <source>Default audio language: </source>
+        <translation>Γλώσσα ήχου κατά προεπιλογή: </translation>
+    </message>
+    <message>
+        <source>Default subtitles language: </source>
+        <translation>Γλώσσα υπότιτλων κατά προεπιλογή: </translation>
+    </message>
+    <message>
+        <source>Screenshots path: </source>
+        <translation>Διαδρομή για στιγμιότυπα οθόνης: </translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>Αναζήτηση</translation>
+    </message>
+    <message>
+        <source>Output file path: </source>
+        <translation>Διαδρομή αρχείου εξόδου: </translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>Χρησιμοποιήστε το σύνολο εικονιδίων του συστήματος</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>Ορισμός εμφάνισης</translation>
+    </message>
+    <message>
+        <source>Selected Profile: </source>
+        <translation>Επιλεγμένο προφίλ: </translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>Αυτόματη έλεγχος και λήψη ενημερώσεων</translation>
+    </message>
+    <message>
+        <source>Automatically open video window</source>
+        <translation>Αυτόματο άνοιγμα παραθύρου βίντεο</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>Εμφάνιση καρτελών στην κορυφή του κύριου παραθύρου</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>Επιτρέψτε μόνο μία παρουσία</translation>
+    </message>
+    <message>
+        <source>Always only display file names in playlist</source>
+        <translation>Πάντα να εμφανίζονται μόνο τα ονόματα αρχείων στη λίστα αναπαραγωγής</translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation>Θυμήσου την λειτουργία επανάληψης</translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>Χρησιμοποιήστε διακομιστή μεσολάβησης</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>Ο διακομιστής μεσολάβησης απαιτεί σύνδεση</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>Όνομα χρήστη</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Κωδικός πρόσβασης</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>Διεύθυνση διακομιστή μεσολάβησης</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>Θύρα διακομιστή μεσολάβησης</translation>
+    </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation>Ανάγνωση και εμφάνιση στατικών εικόνων</translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
+        <translation>Χρήση ειδοποιήσεων δίσκου ως προεπιλογή</translation>
+    </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation>Αυτόματη διαγραφή μη ομαδοποιημένων εγγραφών</translation>
+    </message>
+    <message>
+        <source>Hide artist metadata</source>
+        <translation>Απόκρυψη μεταδεδομένων καλλιτέχνη</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>Αυτόματη επαναφορά του κύριου παραθύρου όταν φορτωθεί νέο αρχείο βίντεο</translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation>Μην φορτώνετε αρχεία λίστας αναπαραγωγής μέσα σε άλλα αρχεία</translation>
+    </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation>Ρυθμίσεις youtube-dl</translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation>Κουμπιά από τον περιηγητή</translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation>Προσαρμοσμένη διαδρομή</translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation>Μην ανανεώνετε αυτόματα</translation>
+    </message>
+    <message>
+        <source>Remove youtube-dl</source>
+        <translation>Αφαίρεση του youtube-dl</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation>Παρακαλώ ανατρέξτε στην τεκμηρίωση του yt-dlp</translation>
+    </message>
+    <message>
+        <source>Default quality</source>
+        <translation>Προεπιλεγμένη ποιότητα</translation>
+    </message>
+    <message>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation>παράμετρος &quot;-f&quot;, παρακαλώ ανατρέξτε στην τεκμηρίωση του yt-dlp</translation>
+    </message>
+    <message>
+        <source>Additional params</source>
+        <translation>Πρόσθετες παραμέτρους</translation>
+    </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation>Διατήρηση μεγέθους πλαισίων κατά την αλλαγή μεγέθους του κύριου παραθύρου (πειραματικό)</translation>
+    </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>Μετακίνηση επάνω</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>Μετακίνηση κάτω</translation>
+    </message>
+    <message>
+        <source>Use available replay gain</source>
+        <translation>Χρήση διαθέσιμου gain επαναφοράς</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>Λειτουργία άλμπουμ για gain επαναφοράς</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>Αποφυγή υπερφόρτωσης ήχου</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation>Ενίσχυση</translation>
+    </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation>Ενίσχυση (χωρίς μεταδεδομένα)</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>Μερικώς ελεγμένο σημαίνει ότι υπάρχει καθυστέρηση μεταξύ του κλικ και της παύσης</translation>
+    </message>
+    <message>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation>Η κύρια κουμπί του ποντικιού στο παράθυρο βίντεο εναλλάσσει την αναπαραγωγή</translation>
+    </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation>Η μεσαία κουμπί του ποντικιού στο παράθυρο βίντεο εναλλάσσει τη λειτουργία πλήρους οθόνης</translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>Διατήρηση καθυστέρησης βίντεο</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>Σταδιακή εξασθένηση ήχου</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>Διατήρηση ταχύτητας</translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>Διατήρηση ζουμ</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>Διατήρηση κλίμακας υποτίτλων</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>Διατήρηση καθυστέρησης υποτίτλων</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>Συγχρονισμός βίντεο με ήχο (παράλειψη καρέ)</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows): </source>
+        <translation>Σύντομη αναζήτηση (βέλη αριστερά και δεξιά): </translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows): </source>
+        <translation>Μακρά αναζήτηση (βέλη πάνω και κάτω): </translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count): </source>
+        <translation>Μέγεθος τοπικής προσωρινής μνήμης (αριθμός πακέτων A/V): </translation>
+    </message>
+    <message>
+        <source>Network buffer length: </source>
+        <translation>Μήκος προσωρινής μνήμης δικτύου: </translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding: </source>
+        <translation>Ποσοστό πακέτων για αναπαραγωγή προς τα πίσω: </translation>
+    </message>
+    <message>
+        <source>Live stream buffer length: </source>
+        <translation>Μήκος προσωρινής μνήμης ζωντανής ροής: </translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered: </source>
+        <translation>Ξεκινήστε την αναπαραγωγή ροής διαδικτύου εάν είναι αποθηκευμένη: </translation>
+    </message>
+    <message>
+        <source>Desired video stream quality: </source>
+        <translation>Επιθυμητή ποιότητα βίντεο: </translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation>SD</translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation>HD</translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation>Full HD</translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation>4K</translation>
+    </message>
+    <message>
+        <source>Maximum volume: </source>
+        <translation>Μέγιστη ένταση: </translation>
+    </message>
+    <message>
+        <source>Force samplerate: </source>
+        <translation>Αναγκαστική συχνότητα δείγματος: </translation>
+    </message>
+    <message>
+        <source>Force channels conversion: </source>
+        <translation>Αναγκαστική μετατροπή καναλιών: </translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation>Χρήση επαναδειγματοληπτικού ήχου και μετατροπή καναλιών πριν από φίλτρα και οπτικοποιήσεις</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>Διατήρηση αναλογίας εικόνας</translation>
+    </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation>Ακριβής αναζήτηση</translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation>Αναπαραγωγή επόμενης εγγραφής μετά από σφάλμα αναπαραγωγής</translation>
+    </message>
+    <message>
+        <source>Continue last playback when program starts</source>
+        <translation>Συνεχίστε την τελευταία αναπαραγωγή όταν ξεκινά το πρόγραμμα</translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation>Δράση τροχού ποντικιού στο βίντεο</translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>Ο τροχός του ποντικιού προχωρά τη μουσική/ταινία</translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation>Ο τροχός του ποντικιού αλλάζει την ένταση</translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation>Θυμήσου τις ρυθμίσεις ισοσταθμιστή βίντεο</translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>Εμφάνιση ένδειξης αποθηκευμένων δεδομένων στον δείκτη</translation>
+    </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation>Αποθήκευση αναλογίας και ζουμ στο αρχείο ρύθμισης</translation>
+    </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>Επαναφορά όταν αναζητείται</translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation>Απενεργοποίηση υποτίτλων κατά την εκκίνηση του προγράμματος</translation>
+    </message>
+    <message>
+        <source>Remember audio/video/subtitles enabled state</source>
+        <translation>Θυμηθείτε την κατάσταση ενεργοποίησης ήχου/βίντεο/υποτίτλων</translation>
+    </message>
+    <message>
+        <source>Remember playback position for each playlist entry</source>
+        <translation>Θυμηθείτε τη θέση αναπαραγωγής για κάθε εγγραφή της λίστας αναπαραγωγής</translation>
+    </message>
+    <message>
+        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
+        <translation>Η διάρκεια πρέπει να είναι τουλάχιστον 8 λεπτά. Η θέση αναπαραγωγής πρέπει να βρίσκεται στο [1% - 99%] του εύρους αναπαραγωγής. Μπορείτε να συνεχίσετε την αναπαραγωγή πατώντας το εικονίδιο δίπλα στο κουμπί πλήρους οθόνης.</translation>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>

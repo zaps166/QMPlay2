@@ -866,197 +866,6 @@
     </message>
 </context>
 <context>
-    <name>GeneralSettings</name>
-    <message>
-        <source>Browse</source>
-        <translation>Parcourir</translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>Utilise le thème d&apos;icônes du système</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>Règle l&apos;apparence</translation>
-    </message>
-    <message>
-        <source>Show covers</source>
-        <translation>Montrer les pochettes</translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>Montrer la pochette depuis le dossier s&apos;ils ne sont pas dans le fichier</translation>
-    </message>
-    <message>
-        <source>Automatically open video window</source>
-        <translation>Ouvre automatiquement une fenêtre vidéo</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>Vérifier et télécharger automatiquement les mises à jour</translation>
-    </message>
-    <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>Montre les onglets en haut de la fenêtre principale</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>N&apos;autorise qu&apos;une seule instance</translation>
-    </message>
-    <message>
-        <source>Always only display file names in playlist</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use proxy server</source>
-        <translation>Utiliser un serveur proxy</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>Le serveur proxy nécessite une connexion</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Nom d&apos;utilisateur</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Mot de passe</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>Adresse du serveur proxy</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>Port du serveur proxy</translation>
-    </message>
-    <message>
-        <source>Clear covers cache</source>
-        <translation>Nettoie le cache des pochettes</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>Réinitialiser les réglages</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Langue</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>Style</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>Chemin des captures d&apos;écran</translation>
-    </message>
-    <message>
-        <source>Set key bindings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Selected Profile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Read and display still images</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use tray notifications as default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove youtube-dl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Automatically delete ungrouped entries</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide artist metadata</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Automatically restore main window when new video file is loaded</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Don&apos;t load playlist files within other files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enlarge small covers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Subtitles and tags encoding</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Output file path:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>youtube-dl settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cookies from browser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Custom path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Don&apos;t auto-update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default quality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Additional params</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fullscreen panels on the right side</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Help</name>
     <message>
         <source>&amp;Help</source>
@@ -1997,21 +1806,6 @@
     </message>
 </context>
 <context>
-    <name>ModulesList</name>
-    <message>
-        <source>Move up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>NotifyService</name>
     <message>
         <source>Volume: %1%</source>
@@ -2035,14 +1829,42 @@
     </message>
 </context>
 <context>
-    <name>OSDSettings</name>
+    <name>OSDSettingsW</name>
+    <message>
+        <source>Background</source>
+        <translation></translation>
+    </message>
     <message>
         <source>Font</source>
         <translation>Police</translation>
     </message>
     <message>
+        <source>Size: </source>
+        <translation>Taille: </translation>
+    </message>
+    <message>
+        <source>Spacing: </source>
+        <translation>Espacement: </translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation></translation>
+    </message>
+    <message>
         <source>Margins</source>
         <translation>Marges</translation>
+    </message>
+    <message>
+        <source>Left: </source>
+        <translation>Gauche: </translation>
+    </message>
+    <message>
+        <source>Right: </source>
+        <translation>Droite: </translation>
+    </message>
+    <message>
+        <source>Vertical: </source>
+        <translation>Vertical: </translation>
     </message>
     <message>
         <source>Subtitles alignment</source>
@@ -2053,48 +1875,24 @@
         <translation>Bordures</translation>
     </message>
     <message>
+        <source>Outline: </source>
+        <translation>contour: </translation>
+    </message>
+    <message>
+        <source>Shadow: </source>
+        <translation>Ombre: </translation>
+    </message>
+    <message>
         <source>Colors</source>
         <translation>Couleurs</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Taille</translation>
+        <source>Text: </source>
+        <translation>Texte: </translation>
     </message>
     <message>
-        <source>Spacing</source>
-        <translation>Espacement</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Gauche</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Droite</translation>
-    </message>
-    <message>
-        <source>Vertical</source>
-        <translation>Vertical</translation>
-    </message>
-    <message>
-        <source>Outline</source>
-        <translation>contour</translation>
-    </message>
-    <message>
-        <source>Shadow</source>
-        <translation>Ombre</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation>Texte</translation>
-    </message>
-    <message>
-        <source>Bold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Background</source>
-        <translation type="unfinished"></translation>
+        <source>Border: </source>
+        <translation>Bordures: </translation>
     </message>
 </context>
 <context>
@@ -2475,201 +2273,6 @@
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PlaybackSettings</name>
-    <message>
-        <source>Maximum volume</source>
-        <translation>Volume maxmimum</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>Forcer le taux d&apos;échantillonnage</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>Forcer la conversion des chaînes</translation>
-    </message>
-    <message>
-        <source>Use available replay gain</source>
-        <translation>Utilise replay gain si disponible</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>Mode album pour replay gain</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>Empêcher les coupures</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>La roule de la souris fait défiler la musique/le film</translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>Conserver le zoom</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>Montrer l&apos;indicateur de données en mémoire tampon dans la barre latérale</translation>
-    </message>
-    <message>
-        <source>Keep aspect ratio</source>
-        <translation>Conserver le ratio d&apos;aspect</translation>
-    </message>
-    <message>
-        <source>Keep subtitles delay</source>
-        <translation>Maintenir la durée entre les sous-titres</translation>
-    </message>
-    <message>
-        <source>Keep subtitles scale</source>
-        <translation>Maintenir les proportions des sous-titres</translation>
-    </message>
-    <message>
-        <source>Keep speed</source>
-        <translation>Maintenir la vitesse</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>Maintenir la durée entre les vidéos</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>Synchronisation audio/video (saut de trames)</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>Fondu du son</translation>
-    </message>
-    <message>
-        <source>Remember video equalizer settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>Recherche rapide (flèches droite/gauche)</translation>
-    </message>
-    <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>Recherche lente (flèches haut/bas)</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>Taille de la mémoire tampon locale (nombre de paquets A/V)</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>Démarrer la lecture du flux si mis en mémoire tampon</translation>
-    </message>
-    <message>
-        <source>sec</source>
-        <translation>sec</translation>
-    </message>
-    <message>
-        <source>Amplify</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Primary mouse button on video dock toggles playback</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Accurate seeking</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Store aspect ratio and zoom in config file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unpause when seeking</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disable subtitles at program startup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remember audio/video/subtitles enabled state</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Amplify (no metadata)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Network buffer length</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Live stream buffer length</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remember playback position for each playlist entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Desired video stream quality:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation>Par défaut</translation>
-    </message>
-    <message>
-        <source>SD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>HD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Full HD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>4K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Continue last playback when program starts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3344,15 +2947,15 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Default or first stream</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Audio output priority</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Decoders priority</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Default</source>
@@ -3360,32 +2963,32 @@ QMPlay2 will not scale up icons!</source>
     </message>
     <message>
         <source>Automatically check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Confirm &quot;youtube-dl&quot; deletion</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
 Partially checked doesn&apos;t affect seeking on slider.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Hardware-accelerated video filters</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Changing OpenGL mode</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>To set up a new OpenGL mode, the program will start again!</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>To apply the icons change, the program will start again!</source>
@@ -3393,139 +2996,523 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Show covers</source>
+        <translation>Montrer les pochettes</translation>
+    </message>
+    <message>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
+        <translation>Montrer la pochette depuis le dossier s&apos;ils ne sont pas dans le fichier</translation>
+    </message>
+    <message>
+        <source>Enlarge small covers</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>Nettoie le cache des pochettes</translation>
+    </message>
+    <message>
+        <source>Set key bindings</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>Réinitialiser les réglages</translation>
+    </message>
+    <message>
+        <source>Language: </source>
+        <translation>Langue: </translation>
+    </message>
+    <message>
+        <source>Style: </source>
+        <translation>Style: </translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Default audio language: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Default subtitles language: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Screenshots path: </source>
+        <translation>Chemin des captures d&apos;écran: </translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation>Parcourir</translation>
+    </message>
+    <message>
+        <source>Output file path: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>Utilise le thème d&apos;icônes du système</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>Règle l&apos;apparence</translation>
+    </message>
+    <message>
+        <source>Selected Profile: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>Vérifier et télécharger automatiquement les mises à jour</translation>
+    </message>
+    <message>
+        <source>Automatically open video window</source>
+        <translation>Ouvre automatiquement une fenêtre vidéo</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>Montre les onglets en haut de la fenêtre principale</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>N&apos;autorise qu&apos;une seule instance</translation>
+    </message>
+    <message>
+        <source>Always only display file names in playlist</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>Utiliser un serveur proxy</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>Le serveur proxy nécessite une connexion</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>Nom d&apos;utilisateur</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Mot de passe</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>Adresse du serveur proxy</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>Port du serveur proxy</translation>
+    </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Hide artist metadata</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Remove youtube-dl</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Default quality</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Additional params</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Use available replay gain</source>
+        <translation>Utilise replay gain si disponible</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>Mode album pour replay gain</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>Empêcher les coupures</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>Maintenir la durée entre les vidéos</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>Fondu du son</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>Maintenir la vitesse</translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>Conserver le zoom</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>Maintenir les proportions des sous-titres</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>Maintenir la durée entre les sous-titres</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>Synchronisation audio/video (saut de trames)</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows): </source>
+        <translation>Recherche rapide (flèches droite/gauche): </translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation>sec</translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows): </source>
+        <translation>Recherche lente (flèches haut/bas): </translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count): </source>
+        <translation>Taille de la mémoire tampon locale (nombre de paquets A/V): </translation>
+    </message>
+    <message>
+        <source>Network buffer length: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Live stream buffer length: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered: </source>
+        <translation>Démarrer la lecture du flux si mis en mémoire tampon: </translation>
+    </message>
+    <message>
+        <source>Desired video stream quality: </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Maximum volume: </source>
+        <translation>Volume maxmimum: </translation>
+    </message>
+    <message>
+        <source>Force samplerate: </source>
+        <translation>Forcer le taux d&apos;échantillonnage: </translation>
+    </message>
+    <message>
+        <source>Force channels conversion: </source>
+        <translation>Forcer la conversion des chaînes: </translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>Conserver le ratio d&apos;aspect</translation>
+    </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Continue last playback when program starts</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>La roule de la souris fait défiler la musique/le film</translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>Montrer l&apos;indicateur de données en mémoire tampon dans la barre latérale</translation>
+    </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Remember audio/video/subtitles enabled state</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Remember playback position for each playlist entry</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
+        <translation></translation>
     </message>
     <message>
         <source>Legacy</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>OpenGL</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>active</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>inactive</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Changing renderer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>To set up a new renderer, the program will start again!</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Vertical synchronization (V-Sync)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Bypass compositor in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>This can improve performance if X11 compositor supports it</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Renderer:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Renderer settings</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Vulkan</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Use GPU deinterlacing for CPU-decoded video</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>High quality image scaling down</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>First available device</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>No supported devices found</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Partially checked:
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Very slow if used with sharpness</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Force Vulkan Yadif deinterlacing for all hardware decoders</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Force audio content to use the specified number of channels.
 Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Cannot change the directory</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Choose youtube-dl script or executable</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>

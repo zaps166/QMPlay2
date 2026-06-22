@@ -24,9 +24,13 @@
 #include <QIcon>
 #include <QMap>
 
-namespace Ui {
-    class Radio;
-}
+class QSplitter;
+class QComboBox;
+class QLabel;
+class QListWidget;
+class QToolButton;
+class QTreeView;
+class LineEdit;
 
 class RadioBrowserModel;
 class QListWidgetItem;
@@ -57,25 +61,27 @@ private slots:
 
     void replyFinished(NetworkReply *reply);
 
-    void on_addMyRadioStationButton_clicked();
-    void on_editMyRadioStationButton_clicked();
-    void on_removeMyRadioStationButton_clicked();
-    void on_loadMyRadioStationButton_clicked();
-    void on_saveMyRadioStationButton_clicked();
-
-    void on_myRadioListWidget_itemDoubleClicked(QListWidgetItem *item);
-
-    void on_searchByComboBox_activated(int idx);
-    void on_addRadioBrowserStationButton_clicked();
-    void on_radioView_doubleClicked(const QModelIndex &index);
-    void on_radioView_customContextMenuRequested(const QPoint &pos);
-
     void radioBrowserPlay();
     void radioBrowserAdd();
     void radioBrowserEnqueue();
     void radioBrowserOpenHomePage();
 
 private:
+    void setupUi();
+
+    void addMyRadioStationButtonClicked();
+    void editMyRadioStationButtonClicked();
+    void removeMyRadioStationButtonClicked();
+    void loadMyRadioStationButtonClicked();
+    void saveMyRadioStationButtonClicked();
+
+    void myRadioListWidgetItemDoubleClicked(QListWidgetItem *item);
+
+    void searchByComboBoxActivated(int idx);
+    void addRadioBrowserStationButtonClicked();
+    void radioViewDoubleClicked(const QModelIndex &index);
+    void radioViewCustomContextMenuRequested(const QPoint &pos);
+
     QString getFileFilters(bool all) const;
 
     void radioBrowserPlayOrEnqueue(const QModelIndex &index, const QString &param);
@@ -99,10 +105,22 @@ private:
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
+    QSplitter *m_radioBrowserSplitter;
+    QLabel *m_label;
+    QListWidget *m_myRadioListWidget;
+    QToolButton *m_loadMyRadioStationButton;
+    QToolButton *m_saveMyRadioStationButton;
+    QToolButton *m_addMyRadioStationButton;
+    QToolButton *m_editMyRadioStationButton;
+    QToolButton *m_removeMyRadioStationButton;
+    QComboBox *m_searchByComboBox;
+    QComboBox *m_searchComboBox;
+    QToolButton *m_addRadioBrowserStationButton;
+    QTreeView *m_radioView;
+    LineEdit *m_filterEdit;
+
     const QString m_newStationTxt;
     const QIcon m_radioIcon;
-
-    Ui::Radio *ui;
 
     bool m_loaded = false;
     bool m_loadCurrentCountry = false;

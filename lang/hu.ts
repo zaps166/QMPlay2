@@ -869,197 +869,6 @@
     </message>
 </context>
 <context>
-    <name>GeneralSettings</name>
-    <message>
-        <source>Show covers</source>
-        <translation>Borítók mutatása</translation>
-    </message>
-    <message>
-        <source>Blurred covers as background</source>
-        <translation>Homályos borítókép háttérként</translation>
-    </message>
-    <message>
-        <source>Show covers from directory if they aren&apos;t in the music file</source>
-        <translation>Borítók használata a könyvtárból, ha a zenefájl nem tartalmazza</translation>
-    </message>
-    <message>
-        <source>Set key bindings</source>
-        <translation>Gyorsbillentyűk beállítása</translation>
-    </message>
-    <message>
-        <source>Clear covers cache</source>
-        <translation>Borító gyorsítótár törlése</translation>
-    </message>
-    <message>
-        <source>Remove youtube-dl</source>
-        <translation>youtube-dl eltávolítása</translation>
-    </message>
-    <message>
-        <source>Reset settings</source>
-        <translation>Beállítások visszaállítása</translation>
-    </message>
-    <message>
-        <source>Language</source>
-        <translation>Nyelv</translation>
-    </message>
-    <message>
-        <source>Style</source>
-        <translation>Stílus</translation>
-    </message>
-    <message>
-        <source>Default audio language</source>
-        <translation>Hang alapértelmezett nyelve</translation>
-    </message>
-    <message>
-        <source>Default subtitles language</source>
-        <translation>Feliratok alapértelmezett nyelve</translation>
-    </message>
-    <message>
-        <source>Screenshots path</source>
-        <translation>Pillanatképek elérési útvonala</translation>
-    </message>
-    <message>
-        <source>Browse</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Use system icon set</source>
-        <translation>Rendszer ikonkészletének használata</translation>
-    </message>
-    <message>
-        <source>Set appearance</source>
-        <translation>Megjelenés beállítása</translation>
-    </message>
-    <message>
-        <source>Selected Profile</source>
-        <translation>Kiválasztott profil</translation>
-    </message>
-    <message>
-        <source>Automatically check and download updates</source>
-        <translation>Frissítések automatikus keresése és letöltése</translation>
-    </message>
-    <message>
-        <source>Automatically open video window</source>
-        <translation>Új videóablak automatikus megnyitása</translation>
-    </message>
-    <message>
-        <source>Show tabs at the top of the main window</source>
-        <translation>Lapok mutatása a fő ablak tetején</translation>
-    </message>
-    <message>
-        <source>Allow only one instance</source>
-        <translation>Egyszerre csak egy példány engedélyezése</translation>
-    </message>
-    <message>
-        <source>Always only display file names in playlist</source>
-        <translation>Csak fájlnevek megjelenítése a lejátszási listában</translation>
-    </message>
-    <message>
-        <source>Remember repeat mode</source>
-        <translation>Ismétlési mód megjegyzése</translation>
-    </message>
-    <message>
-        <source>Use proxy server</source>
-        <translation>Proxy szerver használata</translation>
-    </message>
-    <message>
-        <source>Proxy server needs login</source>
-        <translation>Bejelentkezés a proxy szerverre</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Felhasználónév</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Jelszó</translation>
-    </message>
-    <message>
-        <source>Proxy server address</source>
-        <translation>Proxy szerver címe</translation>
-    </message>
-    <message>
-        <source>Proxy server port</source>
-        <translation>Proxy szerver hálózati port</translation>
-    </message>
-    <message>
-        <source>Read and display still images</source>
-        <translation>Állóképek olvasása és megjelenítése</translation>
-    </message>
-    <message>
-        <source>Use tray notifications as default</source>
-        <translation>Rendszertálca értesítések használata alapértelmezetten</translation>
-    </message>
-    <message>
-        <source>Automatically delete ungrouped entries</source>
-        <translation>A csoportosítatlan elemek automatikus törlése</translation>
-    </message>
-    <message>
-        <source>Hide artist metadata</source>
-        <translation>Előadó metaadat elrejtése</translation>
-    </message>
-    <message>
-        <source>Automatically restore main window when new video file is loaded</source>
-        <translation>Fő ablak visszaállítása, ha új videó fájl van betöltve</translation>
-    </message>
-    <message>
-        <source>Don&apos;t load playlist files within other files</source>
-        <translation>Ne töltse be a lejátszási listákat más fájlokba</translation>
-    </message>
-    <message>
-        <source>Fullscreen panels on the right side</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enlarge small covers</source>
-        <translation>Kis borítók nagyítása</translation>
-    </message>
-    <message>
-        <source>Subtitles and tags encoding</source>
-        <translation>Feliratok és címkék kódolása</translation>
-    </message>
-    <message>
-        <source>Output file path:</source>
-        <translation>Kimeneti fájl elérési útja:</translation>
-    </message>
-    <message>
-        <source>youtube-dl settings</source>
-        <translation>youtube-dl beállítások</translation>
-    </message>
-    <message>
-        <source>Cookies from browser</source>
-        <translation>Böngészőből származó cookie-k</translation>
-    </message>
-    <message>
-        <source>Custom path</source>
-        <translation>Egyéni elérési út</translation>
-    </message>
-    <message>
-        <source>Don&apos;t auto-update</source>
-        <translation>Ne frissítse automatikusan</translation>
-    </message>
-    <message>
-        <source>Please refer to yt-dlp documentation</source>
-        <translation>Kérjük, olvassa el az yt-dlp dokumentációját</translation>
-    </message>
-    <message>
-        <source>Default quality</source>
-        <translation>Alapértelmezett minőség</translation>
-    </message>
-    <message>
-        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation>&quot;-f” paraméter, kérjük, olvassa el az yt-dlp dokumentációját</translation>
-    </message>
-    <message>
-        <source>Additional params</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation>A panelek méretének megtartása a főablak átméretezésekor (kísérleti)</translation>
-    </message>
-</context>
-<context>
     <name>Help</name>
     <message>
         <source>Open and play specified &lt;url&gt;.</source>
@@ -2000,21 +1809,6 @@
     </message>
 </context>
 <context>
-    <name>ModulesList</name>
-    <message>
-        <source>Move up</source>
-        <translation>Felfelé mozgatás</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <source>Move down</source>
-        <translation>Lefelé mozgatás</translation>
-    </message>
-</context>
-<context>
     <name>NotifyService</name>
     <message>
         <source>Stopped</source>
@@ -2038,34 +1832,42 @@
     </message>
 </context>
 <context>
-    <name>OSDSettings</name>
+    <name>OSDSettingsW</name>
+    <message>
+        <source>Background</source>
+        <translation>Háttér</translation>
+    </message>
     <message>
         <source>Font</source>
         <translation>Betűtípus</translation>
     </message>
     <message>
-        <source>Size</source>
-        <translation>Méret</translation>
+        <source>Size: </source>
+        <translation>Méret: </translation>
     </message>
     <message>
-        <source>Spacing</source>
-        <translation>Távolság</translation>
+        <source>Spacing: </source>
+        <translation>Távolság: </translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>Félkövér</translation>
     </message>
     <message>
         <source>Margins</source>
         <translation>Margók</translation>
     </message>
     <message>
-        <source>Left</source>
-        <translation>Bal</translation>
+        <source>Left: </source>
+        <translation>Bal: </translation>
     </message>
     <message>
-        <source>Right</source>
-        <translation>Jobb</translation>
+        <source>Right: </source>
+        <translation>Jobb: </translation>
     </message>
     <message>
-        <source>Vertical</source>
-        <translation>Függőleges</translation>
+        <source>Vertical: </source>
+        <translation>Függőleges: </translation>
     </message>
     <message>
         <source>Subtitles alignment</source>
@@ -2076,28 +1878,24 @@
         <translation>Keret</translation>
     </message>
     <message>
-        <source>Outline</source>
-        <translation>Körvonal</translation>
+        <source>Outline: </source>
+        <translation>Körvonal: </translation>
     </message>
     <message>
-        <source>Shadow</source>
-        <translation>Árnyék</translation>
+        <source>Shadow: </source>
+        <translation>Árnyék: </translation>
     </message>
     <message>
         <source>Colors</source>
         <translation>Színek</translation>
     </message>
     <message>
-        <source>Text</source>
-        <translation>Szöveg</translation>
+        <source>Text: </source>
+        <translation>Szöveg: </translation>
     </message>
     <message>
-        <source>Bold</source>
-        <translation>Félkövér</translation>
-    </message>
-    <message>
-        <source>Background</source>
-        <translation>Háttér</translation>
+        <source>Border: </source>
+        <translation>Keret: </translation>
     </message>
 </context>
 <context>
@@ -2479,201 +2277,6 @@
     <message>
         <source>&amp;Keep audio pitch</source>
         <translation>&amp;Hangmagasság megtartása</translation>
-    </message>
-</context>
-<context>
-    <name>PlaybackSettings</name>
-    <message>
-        <source>Use available replay gain</source>
-        <translation>Lejátszási erősítés használata, ha elérhető</translation>
-    </message>
-    <message>
-        <source>Album mode for replay gain</source>
-        <translation>Album mód lejátszási erősítésnél</translation>
-    </message>
-    <message>
-        <source>Prevent clipping</source>
-        <translation>Levágás megelőzése</translation>
-    </message>
-    <message>
-        <source>Amplify</source>
-        <translation>Erősítés</translation>
-    </message>
-    <message>
-        <source>Mouse wheel action on video dock</source>
-        <translation>Egérgörgő művelet a videó dokkon</translation>
-    </message>
-    <message>
-        <source>Mouse wheel scrolls music/movie</source>
-        <translation>Az egérgörgő a videót/zenét tekeri</translation>
-    </message>
-    <message>
-        <source>Mouse wheel changes the volume</source>
-        <translation>Az egérgörgő a hangerőt szabályozza</translation>
-    </message>
-    <message>
-        <source>Play next entry after playback error</source>
-        <translation>Lejátszási hiba esetén folytassa a következő elemmel</translation>
-    </message>
-    <message>
-        <source>Remember video equalizer settings</source>
-        <translation>Videó equalizer beállítások megjegyzése</translation>
-    </message>
-    <message>
-        <source>Short seeking (left and right arrows)</source>
-        <translation>Rövid tekerés (bal és jobb iránybillentyűk)</translation>
-    </message>
-    <message>
-        <source>sec</source>
-        <translation>sec</translation>
-    </message>
-    <message>
-        <source>Long seeking (up and down arrows)</source>
-        <translation>Hosszú tekerés (fel és le iránybillentyűk)</translation>
-    </message>
-    <message>
-        <source>Local buffer size (A/V packages count)</source>
-        <translation>Helyi buffer mérete (A/V csomagok száma)</translation>
-    </message>
-    <message>
-        <source>Percent of packages for backwards rewinding</source>
-        <translation>Csomagok száma százalékban visszafelé léptetéshez</translation>
-    </message>
-    <message>
-        <source>Start playback internet stream if it is buffered</source>
-        <translation>Lejátszás indítása, ha az internetes adatfolyamból már ennyi be van töltve</translation>
-    </message>
-    <message>
-        <source>Maximum volume</source>
-        <translation>Maximum hangerő</translation>
-    </message>
-    <message>
-        <source>Force samplerate</source>
-        <translation>Erőltetett mintavételezési sebesség</translation>
-    </message>
-    <message>
-        <source>Force channels conversion</source>
-        <translation>Erőltetett hang csatorna szám</translation>
-    </message>
-    <message>
-        <source>Show buffered data indicator on slider</source>
-        <translation>Betöltött rész mutatása a csúszkán</translation>
-    </message>
-    <message>
-        <source>Keep aspect ratio</source>
-        <translation>Oldalarány megtartása</translation>
-    </message>
-    <message>
-        <source>Keep zoom</source>
-        <translation>Nagyítás megtartása</translation>
-    </message>
-    <message>
-        <source>Keep subtitles delay</source>
-        <translation>Felirat késleltetés megtartása</translation>
-    </message>
-    <message>
-        <source>Keep subtitles scale</source>
-        <translation>Felirat nagyításának megtartása</translation>
-    </message>
-    <message>
-        <source>Keep speed</source>
-        <translation>Sebesség megjegyzése</translation>
-    </message>
-    <message>
-        <source>Keep video delay</source>
-        <translation>Videó késleltetés mentése</translation>
-    </message>
-    <message>
-        <source>Video to audio sync (frame skipping)</source>
-        <translation>Videó és audió szinkronizálása (képkocka eldobás)</translation>
-    </message>
-    <message>
-        <source>Fade sound</source>
-        <translation>Hang lekeverése</translation>
-    </message>
-    <message>
-        <source>Primary mouse button on video dock toggles playback</source>
-        <translation>Bal egérgomb a video dokkon megállítja/elindítja a lejátszást</translation>
-    </message>
-    <message>
-        <source>Accurate seeking</source>
-        <translation>Pontos tekerés</translation>
-    </message>
-    <message>
-        <source>Store aspect ratio and zoom in config file</source>
-        <translation>Oldalarány és nagyítás tárolása a beállítófájlban</translation>
-    </message>
-    <message>
-        <source>Unpause when seeking</source>
-        <translation>Lejátszás indítása léptetéskor</translation>
-    </message>
-    <message>
-        <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>Hangmintavételező és csatornakonverzió használata szűrők és vizualizációk előtt</translation>
-    </message>
-    <message>
-        <source>Middle mouse button on video dock toggles fullscreen</source>
-        <translation>A középső egérgomb a videodokkolón a teljes képernyőt váltja</translation>
-    </message>
-    <message>
-        <source>Disable subtitles at program startup</source>
-        <translation>Feliratok letiltása a program indításakor</translation>
-    </message>
-    <message>
-        <source>Remember audio/video/subtitles enabled state</source>
-        <translation>Hang/videó/felirat engedélyezése</translation>
-    </message>
-    <message>
-        <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>Ha félig van bejelölve, akkor egy kis késleltetés van a kattintás és a szüneteltetés között</translation>
-    </message>
-    <message>
-        <source>Amplify (no metadata)</source>
-        <translation>Amplify (metaadatok nélkül)</translation>
-    </message>
-    <message>
-        <source>Network buffer length</source>
-        <translation>Hálózati puffer hossza</translation>
-    </message>
-    <message>
-        <source>Live stream buffer length</source>
-        <translation>Élő közvetítés puffer hossza</translation>
-    </message>
-    <message>
-        <source>Remember playback position for each playlist entry</source>
-        <translation>Emlékezzen a lejátszási pozícióra minden lejátszási lista bejegyzésnél</translation>
-    </message>
-    <message>
-        <source>Desired video stream quality:</source>
-        <translation>Kívánt video folyam minőség:</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation>Alapértelmezett</translation>
-    </message>
-    <message>
-        <source>SD</source>
-        <translation>SD</translation>
-    </message>
-    <message>
-        <source>HD</source>
-        <translation>HD</translation>
-    </message>
-    <message>
-        <source>Full HD</source>
-        <translation>Full HD</translation>
-    </message>
-    <message>
-        <source>4K</source>
-        <translation>4K</translation>
-    </message>
-    <message>
-        <source>Continue last playback when program starts</source>
-        <translation>Az utolsó lejátszás folytatása a program indításakor</translation>
-    </message>
-    <message>
-        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation>A hosszúságnak legalább 8 percnek kell lennie. A lejátszási pozíciónak a lejátszási tartomány [1% - 99%] részén kell lennie. A lejátszást a teljes képernyő gomb melletti ikon megnyomásával folytathatja.</translation>
     </message>
 </context>
 <context>
@@ -3339,6 +2942,390 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <message>
         <source>Software video filters</source>
         <translation>Szoftveres videoszűrők</translation>
+    </message>
+    <message>
+        <source>Show covers</source>
+        <translation>Borítók mutatása</translation>
+    </message>
+    <message>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
+        <translation>Borítók használata a könyvtárból, ha a zenefájl nem tartalmazza</translation>
+    </message>
+    <message>
+        <source>Enlarge small covers</source>
+        <translation>Kis borítók nagyítása</translation>
+    </message>
+    <message>
+        <source>Blurred covers as background</source>
+        <translation>Homályos borítókép háttérként</translation>
+    </message>
+    <message>
+        <source>Clear covers cache</source>
+        <translation>Borító gyorsítótár törlése</translation>
+    </message>
+    <message>
+        <source>Set key bindings</source>
+        <translation>Gyorsbillentyűk beállítása</translation>
+    </message>
+    <message>
+        <source>Reset settings</source>
+        <translation>Beállítások visszaállítása</translation>
+    </message>
+    <message>
+        <source>Language: </source>
+        <translation>Nyelv: </translation>
+    </message>
+    <message>
+        <source>Style: </source>
+        <translation>Stílus: </translation>
+    </message>
+    <message>
+        <source>Subtitles and tags encoding: </source>
+        <translation>Feliratok és címkék kódolása: </translation>
+    </message>
+    <message>
+        <source>Default audio language: </source>
+        <translation>Hang alapértelmezett nyelve: </translation>
+    </message>
+    <message>
+        <source>Default subtitles language: </source>
+        <translation>Feliratok alapértelmezett nyelve: </translation>
+    </message>
+    <message>
+        <source>Screenshots path: </source>
+        <translation>Pillanatképek elérési útvonala: </translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Output file path: </source>
+        <translation>Kimeneti fájl elérési útja: </translation>
+    </message>
+    <message>
+        <source>Use system icon set</source>
+        <translation>Rendszer ikonkészletének használata</translation>
+    </message>
+    <message>
+        <source>Set appearance</source>
+        <translation>Megjelenés beállítása</translation>
+    </message>
+    <message>
+        <source>Selected Profile: </source>
+        <translation>Kiválasztott profil: </translation>
+    </message>
+    <message>
+        <source>Automatically check and download updates</source>
+        <translation>Frissítések automatikus keresése és letöltése</translation>
+    </message>
+    <message>
+        <source>Automatically open video window</source>
+        <translation>Új videóablak automatikus megnyitása</translation>
+    </message>
+    <message>
+        <source>Show tabs at the top of the main window</source>
+        <translation>Lapok mutatása a fő ablak tetején</translation>
+    </message>
+    <message>
+        <source>Allow only one instance</source>
+        <translation>Egyszerre csak egy példány engedélyezése</translation>
+    </message>
+    <message>
+        <source>Always only display file names in playlist</source>
+        <translation>Csak fájlnevek megjelenítése a lejátszási listában</translation>
+    </message>
+    <message>
+        <source>Remember repeat mode</source>
+        <translation>Ismétlési mód megjegyzése</translation>
+    </message>
+    <message>
+        <source>Use proxy server</source>
+        <translation>Proxy szerver használata</translation>
+    </message>
+    <message>
+        <source>Proxy server needs login</source>
+        <translation>Bejelentkezés a proxy szerverre</translation>
+    </message>
+    <message>
+        <source>User name</source>
+        <translation>Felhasználónév</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Jelszó</translation>
+    </message>
+    <message>
+        <source>Proxy server address</source>
+        <translation>Proxy szerver címe</translation>
+    </message>
+    <message>
+        <source>Proxy server port</source>
+        <translation>Proxy szerver hálózati port</translation>
+    </message>
+    <message>
+        <source>Read and display still images</source>
+        <translation>Állóképek olvasása és megjelenítése</translation>
+    </message>
+    <message>
+        <source>Use tray notifications as default</source>
+        <translation>Rendszertálca értesítések használata alapértelmezetten</translation>
+    </message>
+    <message>
+        <source>Automatically delete ungrouped entries</source>
+        <translation>A csoportosítatlan elemek automatikus törlése</translation>
+    </message>
+    <message>
+        <source>Hide artist metadata</source>
+        <translation>Előadó metaadat elrejtése</translation>
+    </message>
+    <message>
+        <source>Automatically restore main window when new video file is loaded</source>
+        <translation>Fő ablak visszaállítása, ha új videó fájl van betöltve</translation>
+    </message>
+    <message>
+        <source>Don&apos;t load playlist files within other files</source>
+        <translation>Ne töltse be a lejátszási listákat más fájlokba</translation>
+    </message>
+    <message>
+        <source>youtube-dl settings</source>
+        <translation>youtube-dl beállítások</translation>
+    </message>
+    <message>
+        <source>Cookies from browser</source>
+        <translation>Böngészőből származó cookie-k</translation>
+    </message>
+    <message>
+        <source>Custom path</source>
+        <translation>Egyéni elérési út</translation>
+    </message>
+    <message>
+        <source>Don&apos;t auto-update</source>
+        <translation>Ne frissítse automatikusan</translation>
+    </message>
+    <message>
+        <source>Remove youtube-dl</source>
+        <translation>youtube-dl eltávolítása</translation>
+    </message>
+    <message>
+        <source>Please refer to yt-dlp documentation</source>
+        <translation>Kérjük, olvassa el az yt-dlp dokumentációját</translation>
+    </message>
+    <message>
+        <source>Default quality</source>
+        <translation>Alapértelmezett minőség</translation>
+    </message>
+    <message>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation>&quot;-f” paraméter, kérjük, olvassa el az yt-dlp dokumentációját</translation>
+    </message>
+    <message>
+        <source>Additional params</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Maintain panels size when resizing the main window (experimental)</source>
+        <translation>A panelek méretének megtartása a főablak átméretezésekor (kísérleti)</translation>
+    </message>
+    <message>
+        <source>Fullscreen panels on the right side</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Move up</source>
+        <translation>Felfelé mozgatás</translation>
+    </message>
+    <message>
+        <source>Move down</source>
+        <translation>Lefelé mozgatás</translation>
+    </message>
+    <message>
+        <source>Use available replay gain</source>
+        <translation>Lejátszási erősítés használata, ha elérhető</translation>
+    </message>
+    <message>
+        <source>Album mode for replay gain</source>
+        <translation>Album mód lejátszási erősítésnél</translation>
+    </message>
+    <message>
+        <source>Prevent clipping</source>
+        <translation>Levágás megelőzése</translation>
+    </message>
+    <message>
+        <source>Amplify</source>
+        <translation>Erősítés</translation>
+    </message>
+    <message>
+        <source>Amplify (no metadata)</source>
+        <translation>Amplify (metaadatok nélkül)</translation>
+    </message>
+    <message>
+        <source>Partially checked means that there is a delay between click and pausing</source>
+        <translation>Ha félig van bejelölve, akkor egy kis késleltetés van a kattintás és a szüneteltetés között</translation>
+    </message>
+    <message>
+        <source>Primary mouse button on video dock toggles playback</source>
+        <translation>Bal egérgomb a video dokkon megállítja/elindítja a lejátszást</translation>
+    </message>
+    <message>
+        <source>Middle mouse button on video dock toggles fullscreen</source>
+        <translation>A középső egérgomb a videodokkolón a teljes képernyőt váltja</translation>
+    </message>
+    <message>
+        <source>Keep video delay</source>
+        <translation>Videó késleltetés mentése</translation>
+    </message>
+    <message>
+        <source>Fade sound</source>
+        <translation>Hang lekeverése</translation>
+    </message>
+    <message>
+        <source>Keep speed</source>
+        <translation>Sebesség megjegyzése</translation>
+    </message>
+    <message>
+        <source>Keep zoom</source>
+        <translation>Nagyítás megtartása</translation>
+    </message>
+    <message>
+        <source>Keep subtitles scale</source>
+        <translation>Felirat nagyításának megtartása</translation>
+    </message>
+    <message>
+        <source>Keep subtitles delay</source>
+        <translation>Felirat késleltetés megtartása</translation>
+    </message>
+    <message>
+        <source>Video to audio sync (frame skipping)</source>
+        <translation>Videó és audió szinkronizálása (képkocka eldobás)</translation>
+    </message>
+    <message>
+        <source>Short seeking (left and right arrows): </source>
+        <translation>Rövid tekerés (bal és jobb iránybillentyűk): </translation>
+    </message>
+    <message>
+        <source>sec</source>
+        <translation>sec</translation>
+    </message>
+    <message>
+        <source>Long seeking (up and down arrows): </source>
+        <translation>Hosszú tekerés (fel és le iránybillentyűk): </translation>
+    </message>
+    <message>
+        <source>Local buffer size (A/V packages count): </source>
+        <translation>Helyi buffer mérete (A/V csomagok száma): </translation>
+    </message>
+    <message>
+        <source>Network buffer length: </source>
+        <translation>Hálózati puffer hossza: </translation>
+    </message>
+    <message>
+        <source>Percent of packages for backwards rewinding: </source>
+        <translation>Csomagok száma százalékban visszafelé léptetéshez: </translation>
+    </message>
+    <message>
+        <source>Live stream buffer length: </source>
+        <translation>Élő közvetítés puffer hossza: </translation>
+    </message>
+    <message>
+        <source>Start playback internet stream if it is buffered: </source>
+        <translation>Lejátszás indítása, ha az internetes adatfolyamból már ennyi be van töltve: </translation>
+    </message>
+    <message>
+        <source>Desired video stream quality: </source>
+        <translation>Kívánt video folyam minőség: </translation>
+    </message>
+    <message>
+        <source>SD</source>
+        <translation>SD</translation>
+    </message>
+    <message>
+        <source>HD</source>
+        <translation>HD</translation>
+    </message>
+    <message>
+        <source>Full HD</source>
+        <translation>Full HD</translation>
+    </message>
+    <message>
+        <source>4K</source>
+        <translation>4K</translation>
+    </message>
+    <message>
+        <source>Maximum volume: </source>
+        <translation>Maximum hangerő: </translation>
+    </message>
+    <message>
+        <source>Force samplerate: </source>
+        <translation>Erőltetett mintavételezési sebesség: </translation>
+    </message>
+    <message>
+        <source>Force channels conversion: </source>
+        <translation>Erőltetett hang csatorna szám: </translation>
+    </message>
+    <message>
+        <source>Use audio resampler and channel conversion before filters and visualizations</source>
+        <translation>Hangmintavételező és csatornakonverzió használata szűrők és vizualizációk előtt</translation>
+    </message>
+    <message>
+        <source>Keep aspect ratio</source>
+        <translation>Oldalarány megtartása</translation>
+    </message>
+    <message>
+        <source>Accurate seeking</source>
+        <translation>Pontos tekerés</translation>
+    </message>
+    <message>
+        <source>Play next entry after playback error</source>
+        <translation>Lejátszási hiba esetén folytassa a következő elemmel</translation>
+    </message>
+    <message>
+        <source>Continue last playback when program starts</source>
+        <translation>Az utolsó lejátszás folytatása a program indításakor</translation>
+    </message>
+    <message>
+        <source>Mouse wheel action on video dock</source>
+        <translation>Egérgörgő művelet a videó dokkon</translation>
+    </message>
+    <message>
+        <source>Mouse wheel scrolls music/movie</source>
+        <translation>Az egérgörgő a videót/zenét tekeri</translation>
+    </message>
+    <message>
+        <source>Mouse wheel changes the volume</source>
+        <translation>Az egérgörgő a hangerőt szabályozza</translation>
+    </message>
+    <message>
+        <source>Remember video equalizer settings</source>
+        <translation>Videó equalizer beállítások megjegyzése</translation>
+    </message>
+    <message>
+        <source>Show buffered data indicator on slider</source>
+        <translation>Betöltött rész mutatása a csúszkán</translation>
+    </message>
+    <message>
+        <source>Store aspect ratio and zoom in config file</source>
+        <translation>Oldalarány és nagyítás tárolása a beállítófájlban</translation>
+    </message>
+    <message>
+        <source>Unpause when seeking</source>
+        <translation>Lejátszás indítása léptetéskor</translation>
+    </message>
+    <message>
+        <source>Disable subtitles at program startup</source>
+        <translation>Feliratok letiltása a program indításakor</translation>
+    </message>
+    <message>
+        <source>Remember audio/video/subtitles enabled state</source>
+        <translation>Hang/videó/felirat engedélyezése</translation>
+    </message>
+    <message>
+        <source>Remember playback position for each playlist entry</source>
+        <translation>Emlékezzen a lejátszási pozícióra minden lejátszási lista bejegyzésnél</translation>
+    </message>
+    <message>
+        <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
+        <translation>A hosszúságnak legalább 8 percnek kell lennie. A lejátszási pozíciónak a lejátszási tartomány [1% - 99%] részén kell lennie. A lejátszást a teljes képernyő gomb melletti ikon megnyomásával folytathatja.</translation>
     </message>
     <message>
         <source>New language</source>

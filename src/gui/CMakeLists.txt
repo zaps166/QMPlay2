@@ -60,13 +60,6 @@ set(GUI_SRC
     KeyBindingsDialog.cpp
 )
 
-set(GUI_FORMS # *.ui files
-    Ui/SettingsGeneral.ui
-    Ui/SettingsPlayback.ui
-    Ui/SettingsPlaybackModulesList.ui
-    Ui/OSDSettings.ui
-)
-
 set(GUI_RESOURCES
     resources.qrc
 )
@@ -87,13 +80,6 @@ if(APPLE)
 
     include_directories("macOS")
 endif()
-
-if(BUILD_WITH_QT6)
-    qt6_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
-else()
-    qt5_wrap_ui(GUI_FORM_HDR ${GUI_FORMS})
-endif()
-set_property(SOURCE ${GUI_FORM_HDR} PROPERTY SKIP_AUTOMOC ON)
 
 if(USE_UPDATES)
     list(APPEND GUI_HDR Updater.hpp)
@@ -197,7 +183,6 @@ endif()
 set(GUI_FILES
     ${GUI_HDR}
     ${GUI_SRC}
-    ${GUI_FORM_HDR}
     ${GUI_RESOURCES}
 )
 if(NOT ANDROID)
@@ -229,7 +214,6 @@ if(USE_PCH)
     endif()
     target_precompile_headers(${PROJECT_NAME} PRIVATE
         ${GUI_HDR}
-        ${GUI_FORM_HDR}
     )
     set_source_files_properties(Windows/PanGestureEventFilter.cpp PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 endif()

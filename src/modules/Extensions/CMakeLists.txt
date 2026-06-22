@@ -50,9 +50,6 @@ if(USE_RADIO)
         Radio.cpp
         Radio/RadioBrowserModel.cpp
     )
-    set(Extensions_FORMS
-        Radio/Radio.ui
-    )
     add_definitions(-DUSE_RADIO)
 endif()
 
@@ -68,17 +65,9 @@ if(USE_OPENSUBTITLES)
     add_definitions(-DUSE_OPENSUBTITLES)
 endif()
 
-if(BUILD_WITH_QT6)
-    qt6_wrap_ui(Extensions_FORM_HDR ${Extensions_FORMS})
-else()
-    qt5_wrap_ui(Extensions_FORM_HDR ${Extensions_FORMS})
-endif()
-set_property(SOURCE ${Extensions_FORM_HDR} PROPERTY SKIP_AUTOMOC ON)
-
 add_library(${PROJECT_NAME} MODULE
     ${Extensions_HDR}
     ${Extensions_SRC}
-    ${Extensions_FORM_HDR}
     ${Extensions_RESOURCES}
 )
 
