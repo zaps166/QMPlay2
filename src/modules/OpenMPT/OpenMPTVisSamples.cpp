@@ -106,7 +106,7 @@ OpenMPTVisSamples::OpenMPTVisSamples(openmpt::module *module)
     {
         const int y = i * m_rowHeight;
         const QString indexStr = QString::number(i + 1, 16).toUpper().rightJustified(2, '0');
-        const QString name = (i < names.size()) ? QString::fromStdString(names[i]) : QString();
+        const QString name = (i < static_cast<int>(names.size())) ? QString::fromStdString(names[i]) : QString();
         const QString label = indexStr + ' ' + name;
 
         p.setPen(Qt::white);
