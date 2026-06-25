@@ -466,7 +466,7 @@ void DemuxerThr::run()
     time = localStream ? 0.0 : Functions::gettime();
 
     const int minBuffered = demuxer->dontUseBuffer()
-        ? 1
+        ? 2
         : localStream
           ? qMax(10, minBuffSizeLocal)
           : 0 // Use "forwardTime"
