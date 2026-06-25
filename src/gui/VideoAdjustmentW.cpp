@@ -172,8 +172,8 @@ void VideoAdjustmentW::setKeyShortcuts()
     appendAction(m_actions[SHARPNESS][0], tr("Sharpness down"), "sharpnessDown", "7");
     appendAction(m_actions[SHARPNESS][1], tr("Sharpness up"), "sharpnessUp", "9");
 
-    appendAction(m_actions[GAMMA][0], tr("Gamma down"), "gammaDown", "8");
-    appendAction(m_actions[GAMMA][1], tr("Gamma up"), "gammaUp", QString());
+    appendAction(m_actions[GAMMA][0], tr("Gamma down"), "gammaDown", "G");
+    appendAction(m_actions[GAMMA][1], tr("Gamma up"), "gammaUp", "H");
 
     appendAction(m_actions[NEGATIVE][0], tr("Disable negative"), "negativeDisable", QString());
     appendAction(m_actions[NEGATIVE][1], tr("Enable negative"), "negativeEnable", QString());
