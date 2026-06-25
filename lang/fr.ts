@@ -3802,6 +3802,10 @@ Partially checked only if the content has less channels than the specified value
         <translation>Contraste</translation>
     </message>
     <message>
+        <source>Gamma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Saturation</source>
         <translation>Saturation</translation>
     </message>
@@ -3859,6 +3863,14 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Negative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

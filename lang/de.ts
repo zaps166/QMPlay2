@@ -3810,6 +3810,10 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
         <translation>Kontrast</translation>
     </message>
     <message>
+        <source>Gamma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Saturation</source>
         <translation>Sättigung</translation>
     </message>
@@ -3867,6 +3871,14 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
     </message>
     <message>
         <source>Negative</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

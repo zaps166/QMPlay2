@@ -3811,6 +3811,10 @@ Partially checked only if the content has less channels than the specified value
         <translation>Контрастність</translation>
     </message>
     <message>
+        <source>Gamma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Saturation</source>
         <translation>Насиченість</translation>
     </message>
@@ -3869,6 +3873,14 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Negative</source>
         <translation>Негатив</translation>
+    </message>
+    <message>
+        <source>Gamma down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma up</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable negative</source>

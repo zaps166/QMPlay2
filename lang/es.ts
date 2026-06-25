@@ -3811,6 +3811,10 @@ Parcialmente marcado sólo si el contenido tiene menos canales que el valor espe
         <translation>Contraste</translation>
     </message>
     <message>
+        <source>Gamma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Saturation</source>
         <translation>Saturación</translation>
     </message>
@@ -3869,6 +3873,14 @@ Parcialmente marcado sólo si el contenido tiene menos canales que el valor espe
     <message>
         <source>Negative</source>
         <translation>Negativo</translation>
+    </message>
+    <message>
+        <source>Gamma down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma up</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable negative</source>

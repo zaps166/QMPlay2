@@ -3811,6 +3811,10 @@ Partially checked only if the content has less channels than the specified value
         <translation>التباين</translation>
     </message>
     <message>
+        <source>Gamma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Saturation</source>
         <translation>التشبع</translation>
     </message>
@@ -3869,6 +3873,14 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>Negative</source>
         <translation>النقيد</translation>
+    </message>
+    <message>
+        <source>Gamma down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma up</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable negative</source>

@@ -3807,6 +3807,10 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
         <translation>Contrast</translation>
     </message>
     <message>
+        <source>Gamma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Saturation</source>
         <translation>Verzadiging</translation>
     </message>
@@ -3869,6 +3873,14 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     <message>
         <source>Negative</source>
         <translation>Negatief</translation>
+    </message>
+    <message>
+        <source>Gamma down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma up</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable negative</source>

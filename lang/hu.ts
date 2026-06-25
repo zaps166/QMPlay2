@@ -3811,6 +3811,10 @@ Csak részben ellenőrzött, ha a tartalom a megadott értéknél kevesebb csato
         <translation>Kontraszt</translation>
     </message>
     <message>
+        <source>Gamma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Saturation</source>
         <translation>Telítettség</translation>
     </message>
@@ -3869,6 +3873,14 @@ Csak részben ellenőrzött, ha a tartalom a megadott értéknél kevesebb csato
     <message>
         <source>Negative</source>
         <translation>Negatív</translation>
+    </message>
+    <message>
+        <source>Gamma down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma up</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable negative</source>

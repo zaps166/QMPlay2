@@ -3831,6 +3831,10 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
         <translation>Karşıtlık</translation>
     </message>
     <message>
+        <source>Gamma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Saturation</source>
         <translation>Doygunluk</translation>
     </message>
@@ -3889,6 +3893,14 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <message>
         <source>Negative</source>
         <translation>Negatif</translation>
+    </message>
+    <message>
+        <source>Gamma down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma up</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable negative</source>

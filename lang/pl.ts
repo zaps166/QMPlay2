@@ -3811,6 +3811,10 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
         <translation>Kontrast</translation>
     </message>
     <message>
+        <source>Gamma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Saturation</source>
         <translation>Nasycenie</translation>
     </message>
@@ -3869,6 +3873,14 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     <message>
         <source>Negative</source>
         <translation>Negatyw</translation>
+    </message>
+    <message>
+        <source>Gamma down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gamma up</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable negative</source>
