@@ -8,6 +8,7 @@
 #include <QMPlay2Extensions.hpp>
 #include <IOController.hpp>
 
+#include <unordered_map>
 #include <functional>
 
 class NetworkAccessJS;
