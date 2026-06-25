@@ -46,7 +46,7 @@ void main()
     {
         colorspace_trc_smpte2084(RGB.rgb, uColorPrimariesMatrix, uMaxLuminance);
     }
-    else if (uTrc == AVCOL_TRC_SMPTE2084)
+    else if (uTrc == AVCOL_TRC_ARIB_STD_B67)
     {
         colorspace_trc_hlg(RGB.rgb, uColorPrimariesMatrix, uMaxLuminance);
     }
