@@ -90,6 +90,7 @@ struct VideoPipelineSpecializationData
     vk::Bool32 isGray;
     vk::Bool32 useBicubic;
     vk::Bool32 useBrightnessContrast;
+    vk::Bool32 useGamma;
     vk::Bool32 useHueSaturation;
     vk::Bool32 useSharpness;
     vk::Bool32 negative;
@@ -113,6 +114,7 @@ struct alignas(16) FragUniform
 
     float brightness;
     float contrast;
+    float gamma;
     float hue;
     float saturation;
     float sharpness;
@@ -294,6 +296,7 @@ void Window::setParams(
     bool rotate90,
     float brightness,
     float contrast,
+    float gamma,
     float hue,
     float saturation,
     float sharpness,
@@ -321,12 +324,14 @@ void Window::setParams(
     if (
         !qFuzzyCompare(m_brightness, brightness) ||
         !qFuzzyCompare(m_contrast, contrast) ||
+        !qFuzzyCompare(m_gamma, gamma) ||
         !qFuzzyCompare(m_hue, hue) ||
         !qFuzzyCompare(m_saturation, saturation) ||
         !qFuzzyCompare(m_sharpness, sharpness)
     ) {
         m_brightness = brightness;
         m_contrast = contrast;
+        m_gamma = gamma;
         m_hue = hue;
         m_saturation = saturation;
         m_sharpness = sharpness;
@@ -335,6 +340,7 @@ void Window::setParams(
 
     auto specializationData = getVideoPipelineSpecializationData();
     specializationData->useBrightnessContrast = (!qFuzzyIsNull(brightness) || !qFuzzyCompare(contrast, 1.0f));
+    specializationData->useGamma = !qFuzzyCompare(gamma, 1.0f);
     specializationData->useHueSaturation = (!qFuzzyIsNull(hue) || !qFuzzyCompare(saturation, 1.0f));
     specializationData->useSharpness = !qFuzzyIsNull(sharpness);
     specializationData->negative = m_negative;
@@ -1416,6 +1422,7 @@ void Window::fillVideoPipelineFragmentUniform()
 
     fragData->brightness = m_brightness;
     fragData->contrast = m_contrast;
+    fragData->gamma = m_gamma;
     fragData->hue = m_hue;
     fragData->saturation = m_saturation;
     fragData->sharpness = m_sharpness;

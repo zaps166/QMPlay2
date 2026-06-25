@@ -8,6 +8,7 @@ uniform int uTrc;
 uniform mat3 uColorPrimariesMatrix;
 uniform float uMaxLuminance;
 uniform int uNegative;
+uniform float uGamma;
 
 #ifdef GL3
 vec4 getRGBAtOffset(float x, float y)
@@ -55,5 +56,14 @@ void main()
         RGB = 1.0 - RGB;
     }
 #endif
-    gl_FragColor = clamp((RGB - 0.5) * contrast + 0.5, 0.0, 1.0) + brightness;
+    RGB = clamp((RGB - 0.5) * contrast + 0.5, 0.0, 1.0) + brightness;
+
+#ifdef GL3
+    if (uGamma != 1.0)
+    {
+        RGB = pow(clamp(RGB, 0.0, 1.0), vec4(vec3(1.0 / uGamma), 1.0));
+    }
+#endif
+
+    gl_FragColor = RGB;
 }

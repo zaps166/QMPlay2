@@ -113,6 +113,7 @@ bool OpenGLWriter::processParams(bool *)
     const VideoAdjustment videoAdjustment = {
         (qint16)getParam("Brightness").toInt(),
         (qint16)getParam("Contrast").toInt(),
+        (qint16)getParam("Gamma").toInt(),
         (qint16)getParam("Saturation").toInt(),
         (qint16)getParam("Hue").toInt(),
         (qint16)getParam("Sharpness").toInt(),
@@ -287,7 +288,7 @@ void OpenGLWriter::initialize(const shared_ptr<OpenGLHWInterop> &hwInterop)
     if (!readyWrite())
         return;
 
-    bool hasBrightness = false, hasContrast = false, hasSharpness = false;
+    bool hasBrightness = false, hasContrast = false, hasGamma = false, hasSharpness = false;
     if (!m_drawable->videoAdjustmentKeys.isEmpty())
     {
         for (const QString &key : std::as_const(m_drawable->videoAdjustmentKeys))
@@ -296,6 +297,8 @@ void OpenGLWriter::initialize(const shared_ptr<OpenGLHWInterop> &hwInterop)
                 hasBrightness = true;
             else if (key == "Contrast")
                 hasContrast = true;
+            else if (key == "Gamma")
+                hasGamma = true;
             else if (key == "Sharpness")
                 hasSharpness = true;
             addAdditionalParam(key);
@@ -313,6 +316,8 @@ void OpenGLWriter::initialize(const shared_ptr<OpenGLHWInterop> &hwInterop)
         addAdditionalParam("Contrast");
     if (!hasSharpness && m_drawable->m_gl3)
         addAdditionalParam("Sharpness");
+    if (!hasGamma && m_drawable->m_gl3)
+        addAdditionalParam("Gamma");
     if (m_drawable->m_gl3)
         addAdditionalParam("Negative");
 }

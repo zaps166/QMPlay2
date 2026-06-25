@@ -27,7 +27,7 @@ class QMPLAY2SHAREDLIB_EXPORT VideoAdjustment
 public:
     inline void unset()
     {
-        brightness = contrast = saturation = hue = sharpness = (qint16)0x8000;
+        brightness = contrast = saturation = hue = sharpness = gamma = (qint16)0x8000;
         negative = false;
     }
 
@@ -41,6 +41,6 @@ public:
         return memcmp(this, &other, sizeof *this);
     }
 
-    qint16 brightness, contrast, saturation, hue, sharpness;
+    qint16 brightness, contrast, gamma, saturation, hue, sharpness;
     bool negative;
 };

@@ -535,11 +535,14 @@ void OpenGLCommon::paintGL()
         const float brightness = videoAdjustment.brightness / 100.0f;
         const float contrast   = (videoAdjustment.contrast + 100) / 100.0f;
         const float sharpness  = videoAdjustment.sharpness / 50.0f;
+        float gamma = videoAdjustment.gamma / 100.0f;
+        gamma = (gamma >= 0.0f) ? (1.0f + gamma) : (1.0f + gamma * 0.9f);
         if (m_hwInterop && numPlanes == 1)
         {
             const bool hasBrightness = videoAdjustmentKeys.contains("Brightness");
             const bool hasContrast   = videoAdjustmentKeys.contains("Contrast");
             const bool hasSharpness  = videoAdjustmentKeys.contains("Sharpness");
+            const bool hasGamma      = videoAdjustmentKeys.contains("Gamma");
             shaderProgramVideo->setUniformValue
             (
                 "uVideoAdj",
@@ -547,6 +550,8 @@ void OpenGLCommon::paintGL()
                 hasContrast   ? 1.0f : contrast,
                 hasSharpness  ? 0.0f : sharpness
             );
+            if (hasGamma)
+                gamma = 1.0f;
         }
         else
         {
@@ -577,6 +582,7 @@ void OpenGLCommon::paintGL()
         }
 
         shaderProgramVideo->setUniformValue("uNegative", static_cast<int>(videoAdjustment.negative));
+        shaderProgramVideo->setUniformValue("uGamma", gamma);
 
         shaderProgramVideo->setUniformValue("uTextureSize", m_textureSize);
 

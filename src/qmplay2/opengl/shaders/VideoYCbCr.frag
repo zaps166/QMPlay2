@@ -24,6 +24,7 @@ uniform int uTrc;
 uniform mat3 uColorPrimariesMatrix;
 uniform float uMaxLuminance;
 uniform int uNegative;
+uniform float uGamma;
 uniform sampler uY;
 #ifdef NV12
     uniform sampler uCbCr;
@@ -110,5 +111,14 @@ void main()
     }
 #endif
 
-    gl_FragColor = vec4(rgb + brightness, 1.0);
+    rgb += brightness;
+
+#ifdef GL3
+    if (uGamma != 1.0)
+    {
+        rgb = pow(clamp(rgb, 0.0, 1.0), vec3(1.0 / uGamma));
+    }
+#endif
+
+    gl_FragColor = vec4(rgb, 1.0);
 }

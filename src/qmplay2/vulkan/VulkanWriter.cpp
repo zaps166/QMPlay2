@@ -40,6 +40,7 @@ Writer::Writer()
     addParam("Hue");
     addParam("Saturation");
     addParam("Sharpness");
+    addParam("Gamma");
     addParam("ColorPrimaries");
     addParam("ColorTrc");
     addParam("Negative");
@@ -109,6 +110,9 @@ bool Writer::processParams(bool *paramsCorrected)
     else if (sharpness > 0.0f)
         sharpness /= 40.0f;
 
+    float gamma = getParam("Gamma").toInt() / 100.0f;
+    gamma = (gamma >= 0.0f) ? (1.0f + gamma) : (1.0f + gamma * 0.9f);
+
     m_window->setParams(
         QSize(getParam("W").toInt(), getParam("H").toInt()),
         getParam("AspectRatio").toDouble(),
@@ -118,6 +122,7 @@ bool Writer::processParams(bool *paramsCorrected)
         getParam("Rotate90").toBool(),
         getParam("Brightness").toInt() / 100.0f,
         (getParam("Contrast").toInt() + 100.0f) / 100.0f,
+        gamma,
         getParam("Hue").toInt() / 200.0f,
         (getParam("Saturation").toInt() + 100.0f) / 100.0f,
         sharpness,

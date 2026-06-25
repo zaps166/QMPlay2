@@ -33,6 +33,7 @@ enum CONTROLS
 {
     BRIGHTNESS,
     CONTRAST,
+    GAMMA,
     SATURATION,
     HUE,
     SHARPNESS,
@@ -43,6 +44,7 @@ enum CONTROLS
 constexpr const char *g_controlsNames[CONTROLS_COUNT] = {
     QT_TRANSLATE_NOOP("VideoAdjustmentW", "Brightness"),
     QT_TRANSLATE_NOOP("VideoAdjustmentW", "Contrast"),
+    QT_TRANSLATE_NOOP("VideoAdjustmentW", "Gamma"),
     QT_TRANSLATE_NOOP("VideoAdjustmentW", "Saturation"),
     QT_TRANSLATE_NOOP("VideoAdjustmentW", "Hue"),
     QT_TRANSLATE_NOOP("VideoAdjustmentW", "Sharpness"),
@@ -169,6 +171,9 @@ void VideoAdjustmentW::setKeyShortcuts()
 
     appendAction(m_actions[SHARPNESS][0], tr("Sharpness down"), "sharpnessDown", "7");
     appendAction(m_actions[SHARPNESS][1], tr("Sharpness up"), "sharpnessUp", "9");
+
+    appendAction(m_actions[GAMMA][0], tr("Gamma down"), "gammaDown", "8");
+    appendAction(m_actions[GAMMA][1], tr("Gamma up"), "gammaUp", QString());
 
     appendAction(m_actions[NEGATIVE][0], tr("Disable negative"), "negativeDisable", QString());
     appendAction(m_actions[NEGATIVE][1], tr("Enable negative"), "negativeEnable", QString());

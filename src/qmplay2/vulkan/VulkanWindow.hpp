@@ -80,6 +80,7 @@ public:
         bool rotate90,
         float brightness,
         float contrast,
+        float gamma,
         float hue,
         float saturation,
         float sharpness,
@@ -254,6 +255,7 @@ private:
 
     float m_brightness = 0.0f;
     float m_contrast = 1.0f;
+    float m_gamma = 1.0f;
     float m_hue = 0.0f;
     float m_saturation = 1.0f;
     float m_sharpness = 0.0f;
