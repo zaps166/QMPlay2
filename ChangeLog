@@ -1,3 +1,20 @@
+Changes in QMPlay2 26.06.27:
+    - AVAudioFilter improvements and compatibility fix for FFmpeg 8.0,
+    - remove Rayman2 audio decoder (FFmpeg is able to play it),
+    - add OpenMPT with tracker-like optional visualizations,
+    - add option to YouTubeDL to add additional parameters,
+    - add gamma correction control for OpenGL and Vulkan,
+    - add option to move full screen panel to the right,
+    - multi-line text edit for comment in tag editor,
+    - fix possible crashes when loading playlist,
+    - fix popups on left panel on full screen,
+    - MediaBrowser fixes and improvements,
+    - add libsidplayfp 3.0 compatibility,
+    - Vulkan Video decoder fixes,
+    - added HDR metadata,
+    - remove Modplug,
+    - other minor fixes,
+
 Changes in QMPlay2 25.09.11:
     - fix swapped Referer and User-Agent parameters,
     - fix playing of some HLS streams,
