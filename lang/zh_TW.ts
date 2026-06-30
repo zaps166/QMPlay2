@@ -1237,19 +1237,19 @@
     </message>
     <message>
         <source>OpenMPT enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenMPT 啟用</translation>
     </message>
     <message>
         <source>Only first</source>
-        <translation type="unfinished"></translation>
+        <translation>僅第一個</translation>
     </message>
     <message>
         <source>All sequentially</source>
-        <translation type="unfinished"></translation>
+        <translation>全部順次</translation>
     </message>
     <message>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>群組</translation>
     </message>
     <message>
         <source>Default</source>
@@ -1257,59 +1257,59 @@
     </message>
     <message>
         <source>Nearest</source>
-        <translation type="unfinished"></translation>
+        <translation>最臨近</translation>
     </message>
     <message>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation>線性</translation>
     </message>
     <message>
         <source>Cubic</source>
-        <translation type="unfinished"></translation>
+        <translation>立方</translation>
     </message>
     <message>
         <source>Windowed sinc (8 taps)</source>
-        <translation type="unfinished"></translation>
+        <translation>加窗 sinc（8 點）</translation>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>關閉</translation>
     </message>
     <message>
         <source>Patterns</source>
-        <translation type="unfinished">樣式</translation>
+        <translation>樣式</translation>
     </message>
     <message>
         <source>Samples</source>
-        <translation type="unfinished">樣本</translation>
+        <translation>樣本</translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>全部</translation>
     </message>
     <message>
         <source>Channels:</source>
-        <translation type="unfinished"></translation>
+        <translation>聲道：</translation>
     </message>
     <message>
         <source>Rows:</source>
-        <translation type="unfinished"></translation>
+        <translation>行：</translation>
     </message>
     <message>
         <source>Subsongs:</source>
-        <translation type="unfinished"></translation>
+        <translation>子曲目：</translation>
     </message>
     <message>
         <source>Stereo separation:</source>
-        <translation type="unfinished"></translation>
+        <translation>立體聲分離：</translation>
     </message>
     <message>
         <source>Interpolation filter:</source>
-        <translation type="unfinished"></translation>
+        <translation>插值過濾器：</translation>
     </message>
     <message>
         <source>Visualization:</source>
-        <translation type="unfinished"></translation>
+        <translation>視覺化效果：</translation>
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
@@ -1917,27 +1917,27 @@
     <name>OpenMPDemux</name>
     <message>
         <source>Samples</source>
-        <translation type="unfinished">樣本</translation>
+        <translation>樣本</translation>
     </message>
     <message>
         <source>Patterns</source>
-        <translation type="unfinished">樣式</translation>
+        <translation>樣式</translation>
     </message>
     <message>
         <source>Channels</source>
-        <translation type="unfinished">聲道數</translation>
+        <translation>聲道數</translation>
     </message>
     <message>
         <source>Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>樂器</translation>
     </message>
     <message>
         <source>Track</source>
-        <translation type="unfinished"></translation>
+        <translation>軌道</translation>
     </message>
     <message>
         <source>Track %1</source>
-        <translation type="unfinished"></translation>
+        <translation>軌道 %1</translation>
     </message>
 </context>
 <context>
@@ -3189,7 +3189,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Fullscreen panels on the right side</source>
-        <translation></translation>
+        <translation>右側全螢幕面板</translation>
     </message>
     <message>
         <source>Move up</source>
@@ -3606,7 +3606,7 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>DRC</source>
         <comment>Dynamic Range Compression</comment>
-        <translation type="unfinished">動態範圍壓縮</translation>
+        <translation>動態範圍壓縮</translation>
     </message>
 </context>
 <context>
@@ -3799,7 +3799,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Gamma</source>
-        <translation type="unfinished"></translation>
+        <translation>伽瑪</translation>
     </message>
     <message>
         <source>Saturation</source>
@@ -3863,11 +3863,11 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Gamma down</source>
-        <translation type="unfinished"></translation>
+        <translation>降低伽瑪</translation>
     </message>
     <message>
         <source>Gamma up</source>
-        <translation type="unfinished"></translation>
+        <translation>升高伽瑪</translation>
     </message>
     <message>
         <source>Disable negative</source>
