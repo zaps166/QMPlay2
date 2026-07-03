@@ -18,6 +18,11 @@
 
 #include <Lyrics.hpp>
 
+#include <Functions.hpp>
+
+#include <QRegularExpression>
+#include <QFile>
+
 #include <algorithm>
 #include <vector>
 #include <tuple>
@@ -99,6 +104,9 @@ void Lyrics::updatePlaying(bool play, const QString &title, const QString &artis
 
     if (play)
     {
+        if (loadLrcFile(url))
+            return;
+
         if (!lyrics.isEmpty())
         {
             QString html = "<center>";
@@ -268,6 +276,84 @@ void Lyrics::finished(NetworkReply *reply)
             lyricsNotFound();
         }
     }
+}
+
+bool Lyrics::loadLrcFile(const QString &url)
+{
+    if (!url.startsWith(QStringLiteral("file://")))
+        return false;
+
+    const QString localPath = url.mid(7);
+    const QString filePath = Functions::filePath(localPath);
+    const QString baseName = Functions::fileName(localPath, false);
+    const QString lrcPath = filePath + baseName + QStringLiteral(".lrc");
+
+    QFile file(lrcPath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return false;
+
+    if (file.size() > 1024 * 1024)
+        return false;
+
+    const QByteArray rawData = file.readAll();
+    file.close();
+
+    if (rawData.isEmpty())
+        return false;
+
+    const QString data = Functions::textWithFallbackEncoding(rawData);
+    const QStringList lines = data.split('\n', Qt::SkipEmptyParts);
+
+    QString artist, title;
+    QStringList lyricsLines;
+
+    const QRegularExpression tagRegex(QStringLiteral(R"(^\[(\w+):(.*)\]$)"));
+    const QRegularExpression timeTagRegex(QStringLiteral(R"(\[\d{1,2}:\d{2}(?:\.\d{1,2})?\])"));
+
+    for (const QString &line : lines)
+    {
+        const QRegularExpressionMatch match = tagRegex.match(line.trimmed());
+        if (match.hasMatch())
+        {
+            const QString key = match.captured(1);
+            const QString value = match.captured(2).trimmed();
+
+            if (key == QStringLiteral("ar"))
+                artist = value;
+            else if (key == QStringLiteral("ti"))
+                title = value;
+        }
+        else
+        {
+            QString text = line.trimmed();
+            text.remove(timeTagRegex);
+
+            if (!text.isEmpty())
+                lyricsLines.append(text);
+        }
+    }
+
+    if (lyricsLines.isEmpty())
+        return false;
+
+    QString html = QStringLiteral("<center>");
+
+    if (!title.isEmpty() || !artist.isEmpty())
+    {
+        html += QStringLiteral("<b>");
+        if (!title.isEmpty() && !artist.isEmpty())
+            html += title + QStringLiteral(" - ") + artist;
+        else if (!title.isEmpty())
+            html += title;
+        else
+            html += artist;
+        html += QStringLiteral("</b><br/><br/>");
+    }
+
+    html += lyricsLines.join(QStringLiteral("<br/>")) + QStringLiteral("</center>");
+    setHtml(html);
+
+    return true;
 }
 
 void Lyrics::search()

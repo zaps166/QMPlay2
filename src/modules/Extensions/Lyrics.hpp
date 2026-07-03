@@ -45,6 +45,8 @@ private slots:
     void finished(NetworkReply *reply);
 
 private:
+    bool loadLrcFile(const QString &url);
+
     void search();
 
     void lyricsNotFound();
