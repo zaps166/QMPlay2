@@ -79,7 +79,7 @@ void Lyrics::visibilityChanged(bool v)
         search();
 }
 
-void Lyrics::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName, const QString &lyrics)
+void Lyrics::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName, const QString &url, const QString &lyrics)
 {
     Q_UNUSED(album)
     Q_UNUSED(length)

@@ -35,7 +35,7 @@ NotifyService::NotifyService(Settings &settings) :
 {
     if (settings.getBool("ShowTitle"))
     {
-        connect(&QMPlay2Core, SIGNAL(updatePlaying(bool, QString, QString, QString, int, bool, QString)), this, SLOT(updatePlaying(bool, QString, QString, QString, int, bool, QString)));
+        connect(&QMPlay2Core, &QMPlay2CoreClass::updatePlaying, this, &NotifyService::updatePlaying);
 
         //"coverDataFromMediaFile()" and "coverFile()" are emited before "updatePlaying()"
         connect(&QMPlay2Core, SIGNAL(coverDataFromMediaFile(QByteArray)), this, SLOT(coverDataFromMediaFile(QByteArray)));
@@ -55,8 +55,9 @@ NotifyService::NotifyService(Settings &settings) :
 NotifyService::~NotifyService()
 {}
 
-void NotifyService::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName)
+void NotifyService::updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName, const QString &url)
 {
+    Q_UNUSED(url)
     if (!play)
         return;
 

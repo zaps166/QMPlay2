@@ -30,8 +30,10 @@ public:
     NotifyService(Settings &settings);
     ~NotifyService();
 
+private:
+    void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName, const QString &url);
+
 private slots:
-    void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int, bool, const QString &fileName);
     void coverDataFromMediaFile(const QByteArray &cover);
     void coverFile(const QString &fileName);
 

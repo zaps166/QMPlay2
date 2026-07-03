@@ -115,8 +115,9 @@ public slots:
     void OpenUri(const QString &Uri);
 signals:
     void Seeked(qint64 Position);
+private:
+    void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName, const QString &url);
 private slots:
-    void updatePlaying(bool play, const QString &title, const QString &artist, const QString &album, int length, bool needCover, const QString &fileName);
     void coverDataFromMediaFile(const QByteArray &cover);
     void playStateChanged(const QString &plState);
     void coverFile(const QString &filePath);

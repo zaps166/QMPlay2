@@ -758,7 +758,7 @@ void DemuxerThr::run()
 
     emit allowRecording(false);
 
-    emit QMPlay2Core.updatePlaying(false, title, artist, album, round(demuxer->length()), false, updatePlayingName);
+    emit QMPlay2Core.updatePlaying(false, title, artist, album, round(demuxer->length()), false, updatePlayingName, url);
 
     playC.endOfStream = playC.canUpdatePos = false; //to musi tu być!
     end();
@@ -915,7 +915,7 @@ void DemuxerThr::updateCoverAndPlaying(bool doCompare)
         if (showCovers)
             loadImage();
         emitInfo();
-        emit QMPlay2Core.updatePlaying(true, title, artist, album, round(demuxer->length()), showCovers && !hasCover, updatePlayingName, lyrics);
+        emit QMPlay2Core.updatePlaying(true, title, artist, album, round(demuxer->length()), showCovers && !hasCover, updatePlayingName, url, lyrics);
     }
 }
 

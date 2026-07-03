@@ -43,7 +43,7 @@ LastFM::LastFM(Module &module) :
     loginTimer.setSingleShot(true);
     connect(&updateTim, SIGNAL(timeout()), this, SLOT(processScrobbleQueue()));
     connect(&loginTimer, SIGNAL(timeout()), this, SLOT(login()));
-    connect(&QMPlay2Core, SIGNAL(updatePlaying(bool, QString, QString, QString, int, bool, QString)), this, SLOT(updatePlaying(bool, QString, QString, QString, int, bool, QString)));
+    connect(&QMPlay2Core, &QMPlay2CoreClass::updatePlaying, this, &LastFM::updatePlaying);
 }
 
 bool LastFM::set()
@@ -218,9 +218,10 @@ void LastFM::clear()
     dontShowLoginError = false;
 }
 
-void LastFM::updatePlaying(bool play, QString title, QString artist, const QString &album, int length, bool needCover, const QString &fileName)
+void LastFM::updatePlaying(bool play, QString title, QString artist, const QString &album, int length, bool needCover, const QString &fileName, const QString &url)
 {
     Q_UNUSED(fileName)
+    Q_UNUSED(url)
     QString origTitle;
     if (!title.isEmpty() && artist.isEmpty())
     {

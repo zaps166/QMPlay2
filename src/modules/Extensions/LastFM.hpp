@@ -59,9 +59,10 @@ private:
     void updateNowPlayingAndScrobble(const Scrobble &scrobble);
 
     void clear();
-private slots:
-    void updatePlaying(bool play, QString title, QString artist, const QString &album, int length, bool needCover, const QString &fileName);
 
+    void updatePlaying(bool play, QString title, QString artist, const QString &album, int length, bool needCover, const QString &fileName, const QString &url);
+
+private slots:
     void albumFinished();
     void loginFinished();
     void scrobbleFinished();
