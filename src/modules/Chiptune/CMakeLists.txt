@@ -32,7 +32,7 @@ if(USE_CHIPTUNE_GME)
 endif()
 
 if(USE_CHIPTUNE_SID)
-    pkg_check_modules(LIBSIDPLAYFP REQUIRED libsidplayfp)
+    pkg_check_modules(LIBSIDPLAYFP REQUIRED libsidplayfp>=2.16)
     list(APPEND Chiptune_HDR SIDPlay.hpp)
     list(APPEND Chiptune_SRC SIDPlay.cpp)
     add_definitions(-DUSE_SIDPLAY)
