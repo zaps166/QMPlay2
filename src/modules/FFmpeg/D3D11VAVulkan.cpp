@@ -216,12 +216,17 @@ void D3D11VAVulkan::map(Frame &frame)
 
     auto d3d11Frame = image->customData<D3D11Frame>();
 
-    auto srv1 = createSRV(m_format1, textureIdx, texture);
-    auto srv2 = createSRV(m_format2, textureIdx, texture);
-    if (!srv1 || !srv2)
+    auto &cached = m_srvCache[textureIdx];
+    if (cached.texture != texture)
     {
-        m_error = true;
-        return;
+        cached.srv1 = createSRV(m_format1, textureIdx, texture);
+        cached.srv2 = createSRV(m_format2, textureIdx, texture);
+        cached.texture = texture;
+        if (!cached.srv1 || !cached.srv2)
+        {
+            m_error = true;
+            return;
+        }
     }
 
     if (m_constData1 && m_constData2)
@@ -249,13 +254,13 @@ void D3D11VAVulkan::map(Frame &frame)
 
     m_devCtx->device_context->CSSetShader(m_cs.Get(), nullptr, 0);
 
-    m_devCtx->device_context->CSSetShaderResources(0, 1, srv1.GetAddressOf());
+    m_devCtx->device_context->CSSetShaderResources(0, 1, cached.srv1.GetAddressOf());
     m_devCtx->device_context->CSSetUnorderedAccessViews(0, 1, d3d11Frame->uav1.GetAddressOf(), nullptr);
     if (m_constData1)
         m_devCtx->device_context->CSSetConstantBuffers(0, 1, m_constData1.GetAddressOf());
     m_devCtx->device_context->Dispatch(getThreadGroupCountX(frame.width(0)), getThreadGroupCountY(frame.height(0)), 1);
 
-    m_devCtx->device_context->CSSetShaderResources(0, 1, srv2.GetAddressOf());
+    m_devCtx->device_context->CSSetShaderResources(0, 1, cached.srv2.GetAddressOf());
     m_devCtx->device_context->CSSetUnorderedAccessViews(0, 1, d3d11Frame->uav2.GetAddressOf(), nullptr);
     if (m_constData2)
         m_devCtx->device_context->CSSetConstantBuffers(0, 1, m_constData2.GetAddressOf());
@@ -281,6 +286,7 @@ void D3D11VAVulkan::clear()
         locker = unique_lock<mutex>(m_mutex);
     m_availableTextures.clear();
     m_images.clear();
+    m_srvCache.clear();
 }
 
 HWInterop::SyncDataPtr D3D11VAVulkan::sync(

@@ -114,6 +114,13 @@ private:
     std::unordered_set<quintptr> m_availableTextures;
     std::unordered_map<UINT, std::shared_ptr<QmVk::Image>> m_images;
 
+    struct CachedSRV {
+        ComPtr<ID3D11ShaderResourceView> srv1;
+        ComPtr<ID3D11ShaderResourceView> srv2;
+        ID3D11Texture2D *texture = nullptr;
+    };
+    std::unordered_map<UINT, CachedSRV> m_srvCache;
+
     DXGI_FORMAT m_format1 = DXGI_FORMAT_UNKNOWN;
     DXGI_FORMAT m_format2 = DXGI_FORMAT_UNKNOWN;
     vk::Format m_formatVk = vk::Format::eUndefined;
