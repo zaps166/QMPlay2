@@ -574,7 +574,7 @@ void OpenGLCommon::paintGL()
         {
             shaderProgramVideo->setUniformValue("uTrc", m_colorTrc);
             shaderProgramVideo->setUniformValue("uMaxLuminance", m_maxLuminance);
-            shaderProgramVideo->setUniformValue("uColorPrimariesMatrix", Functions::getColorPrimariesTo709Matrix(m_colorPrimaries).toGenericMatrix<3, 3>());
+            shaderProgramVideo->setUniformValue("uColorPrimariesMatrix", Functions::getColorPrimariesToSpecifiedMatrix(m_colorPrimaries).toGenericMatrix<3, 3>());
         }
         else
         {

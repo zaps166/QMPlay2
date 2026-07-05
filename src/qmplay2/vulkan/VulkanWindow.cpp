@@ -1392,7 +1392,7 @@ void Window::fillVideoPipelineFragmentUniform()
 
     if (isTrcSupported(m_frameProps->colorTrc))
     {
-        fragData->colorPrimariesMatrix = Functions::getColorPrimariesTo709Matrix(
+        fragData->colorPrimariesMatrix = Functions::getColorPrimariesToSpecifiedMatrix(
             m_frameProps->colorPrimaries
         ).toGenericMatrix<3, 4>();
     }

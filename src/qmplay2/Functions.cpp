@@ -976,7 +976,7 @@ bool Functions::fillColorPrimariesData(AVColorPrimaries colorPrimaries, QVector2
     return true;
 }
 
-QMatrix4x4 Functions::getColorPrimariesTo709Matrix(const QVector2D &wp, array<QVector2D, 3> &primaries)
+QMatrix4x4 Functions::getColorPrimariesToSpecifiedMatrix(const QVector2D &wp, array<QVector2D, 3> &primaries, AVColorPrimaries dstColorPrimaries)
 {
     // D65 is only supported for now
 
@@ -1024,15 +1024,17 @@ QMatrix4x4 Functions::getColorPrimariesTo709Matrix(const QVector2D &wp, array<QV
 
     QVector2D dstWp;
     array<QVector2D, 3> dstPrimaries;
-    fillColorPrimariesData(AVCOL_PRI_BT709, dstWp, dstPrimaries);
+    const bool ok = fillColorPrimariesData(dstColorPrimaries, dstWp, dstPrimaries);
+    if (!ok)
+        return QMatrix4x4();
 
-    const auto xyzTo709 = getRgbToXyzMatrix(dstWp, dstPrimaries[0], dstPrimaries[1], dstPrimaries[2]).inverted();
+    const auto xyzToDst = getRgbToXyzMatrix(dstWp, dstPrimaries[0], dstPrimaries[1], dstPrimaries[2]).inverted();
     const auto srcToXyz = getRgbToXyzMatrix(wp, primaries[0], primaries[1], primaries[2]);
-    return xyzTo709 * srcToXyz;
+    return xyzToDst * srcToXyz;
 }
-QMatrix4x4 Functions::getColorPrimariesTo709Matrix(AVColorPrimaries colorPrimaries)
+QMatrix4x4 Functions::getColorPrimariesToSpecifiedMatrix(AVColorPrimaries colorPrimaries, AVColorPrimaries dstColorPrimaries)
 {
-    if (colorPrimaries == AVCOL_PRI_BT709)
+    if (colorPrimaries == dstColorPrimaries)
         return QMatrix4x4();
 
     QVector2D wp;
@@ -1045,7 +1047,7 @@ QMatrix4x4 Functions::getColorPrimariesTo709Matrix(AVColorPrimaries colorPrimari
     if (!ok)
         return QMatrix4x4();
 
-    return getColorPrimariesTo709Matrix(wp, primaries);
+    return getColorPrimariesToSpecifiedMatrix(wp, primaries, dstColorPrimaries);
 }
 
 bool Functions::compareText(const QString &a, const QString &b)
