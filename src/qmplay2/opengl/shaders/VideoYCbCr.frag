@@ -103,7 +103,7 @@ void main()
     }
     else if (uTrc == AVCOL_TRC_ARIB_STD_B67)
     {
-        colorspace_trc_hlg(rgb, uColorPrimariesMatrix, uMaxLuminance);
+        colorspace_trc_hlg(rgb, uColorPrimariesMatrix);
     }
     if (uNegative != 0)
     {

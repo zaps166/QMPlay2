@@ -219,7 +219,7 @@ void main()
     }
     else if (trc == AVCOL_TRC_ARIB_STD_B67)
     {
-        colorspace_trc_hlg(value, colorPrimariesMatrix, maxLuminance);
+        colorspace_trc_hlg(value, colorPrimariesMatrix);
     }
 
     if (negative)

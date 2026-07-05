@@ -17,16 +17,17 @@ vec3 smpte2084(in vec3 E)
 const float ARIB_B67_A = 0.17883277;
 const float ARIB_B67_B = 0.28466892;
 const float ARIB_B67_C = 0.55991073;
-vec3 arib_b67(in vec3 val)
+vec3 arib_b67_inverse_oetf(in vec3 val)
 {
-    for (int i = 0; i < 3; ++i)
-    {
-        if (val[i] <= 0.5)
-            val[i] = (val[i] * val[i]) * (1.0 / 3.0);
-        else
-            val[i] = (exp((val[i] - ARIB_B67_C) / ARIB_B67_A) + ARIB_B67_B) / 12.0;
-    }
-    return val;
+    vec3 low = (val * val) * (1.0 / 3.0);
+    vec3 high = (exp((val - ARIB_B67_C) / ARIB_B67_A) + ARIB_B67_B) / 12.0;
+    return mix(high, low, lessThanEqual(val, vec3(0.5)));
+}
+vec3 arib_b67_oetf(in vec3 val)
+{
+    vec3 low = sqrt(3.0 * val);
+    vec3 high = ARIB_B67_A * log(12.0 * max(val, vec3(1.0 / 12.0)) - ARIB_B67_B) + ARIB_B67_C;
+    return mix(high, low, lessThanEqual(val, vec3(1.0 / 12.0)));
 }
 
 // https://64.github.io/tonemapping/
@@ -111,6 +112,7 @@ void colorspace_trc_bt709(inout vec3 value, in mat3 colorPrimariesMatrix)
     value = clamp(colorPrimariesMatrix * value, 0.0, 1.0);
     value = pow(value, vec3(1.0 / 2.4));
 }
+
 void colorspace_trc_smpte2084(inout vec3 value, in mat3 colorPrimariesMatrix, in float maxLuminance)
 {
     value = smpte2084(value);
@@ -122,13 +124,9 @@ void colorspace_trc_smpte2084(inout vec3 value, in mat3 colorPrimariesMatrix, in
     value = pow(value, vec3(1.0 / 2.4));
 }
 
-void colorspace_trc_hlg(inout vec3 value, in mat3 colorPrimariesMatrix, in float maxLuminance)
+void colorspace_trc_hlg(inout vec3 value, in mat3 colorPrimariesMatrix)
 {
-    // TODO: maxLuminance
-    value = arib_b67(value);
-    value = clamp(value, 0.0, 1.0);
-    adobeFilmLikeUncharted2Filmic(value);
-    value = colorPrimariesMatrix * value;
-    value = clamp(value, 0.0, 1.0);
-    value = pow(value, vec3(1.0 / 1.8));
+    value = arib_b67_inverse_oetf(value);
+    value = max(colorPrimariesMatrix * value, vec3(0.0));
+    value = arib_b67_oetf(value);
 }
