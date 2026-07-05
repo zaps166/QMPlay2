@@ -366,7 +366,7 @@ AVPixelFormats Window::supportedPixelFormats() const
 
 void Window::setFrame(const Frame &frame, QMPlay2OSDList &&osdList)
 {
-    m_osd = move(osdList);
+    m_osd = std::move(osdList);
     if (m.imageFromFrame)
         resetImages(false);
     m_frame = frame;
@@ -671,7 +671,7 @@ void Window::render()
                 maybeSetHdrMetadata();
                 m.swapChain->present(imageIdx, &suboptimal);
                 vulkanInstance()->presentQueued(this);
-            }, move(submitInfo));
+            }, std::move(submitInfo));
             m.queueLocker.unlock(); // It is not unlocked in case of exception
         }
     }
@@ -703,7 +703,7 @@ void Window::render()
 
 vector<unique_lock<mutex>> Window::prepareOSD(bool &changed)
 {
-    const auto osdIDs = move(m_osdIDs);
+    const auto osdIDs = std::move(m_osdIDs);
 
     if (m_osd.empty())
     {
@@ -1023,8 +1023,8 @@ void Window::ensureSwapChain()
     createInfo.renderPass = m.renderPass;
     createInfo.surface = m.surface;
     createInfo.fallbackSize = vk::Extent2D(winSize.width(), winSize.height());
-    createInfo.presentModes = move(presentModes);
-    createInfo.oldSwapChain = move(m.oldSwapChain);
+    createInfo.presentModes = std::move(presentModes);
+    createInfo.oldSwapChain = std::move(m.oldSwapChain);
     createInfo.colorSpace = m.colorSpace;
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     createInfo.exclusiveFullScreen = m_widget->property("bypassCompositor").toBool()
@@ -1078,8 +1078,8 @@ void Window::ensureVideoPipeline()
         createInfo.renderPass = m.renderPass;
         createInfo.size = m.swapChain->size();
         createInfo.pushConstantsSize = sizeof(VertPushConstants);
-        createInfo.vertexBindingDescrs = move(vertexBindingDescrs);
-        createInfo.vertexAttrDescrs = move(vertexAttrDescrs);
+        createInfo.vertexBindingDescrs = std::move(vertexBindingDescrs);
+        createInfo.vertexAttrDescrs = std::move(vertexAttrDescrs);
         createInfo.colorBlendAttachment = &colorBlendAttachment;
         m.videoPipeline = GraphicsPipeline::create(createInfo);
     }
@@ -1152,7 +1152,7 @@ void Window::fillVerticesBuffer()
         );
         if (!m.verticesBuffer->isDeviceLocal())
         {
-            m.verticesStagingBuffer = move(m.verticesBuffer);
+            m.verticesStagingBuffer = std::move(m.verticesBuffer);
             m.verticesBuffer = Buffer::createVerticesWrite(
                 m.device,
                 m.verticesStagingBuffer->size(),
@@ -1268,7 +1268,7 @@ void Window::loadImage()
     {
         if (image->device() == m.device)
         {
-            m.image = move(image);
+            m.image = std::move(image);
             m.imageFromFrame = true;
         }
     }

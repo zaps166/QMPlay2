@@ -183,7 +183,7 @@ bool LibASS::addImgs(ass_image *img, QMPlay2OSD *osd)
             return false;
         }
 
-        osd->setReturnVkBufferFn(m_vkBufferPool, move(buffer));
+        osd->setReturnVkBufferFn(m_vkBufferPool, std::move(buffer));
 
         return true;
     }

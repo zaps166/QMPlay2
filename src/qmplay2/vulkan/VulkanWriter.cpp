@@ -141,7 +141,7 @@ AVPixelFormats Writer::supportedPixelFormats() const
 
 void Writer::writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList)
 {
-    m_window->setFrame(videoFrame, move(osdList));
+    m_window->setFrame(videoFrame, std::move(osdList));
 }
 
 void Writer::pause()

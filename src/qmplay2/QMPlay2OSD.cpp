@@ -115,7 +115,7 @@ void QMPlay2OSD::setReturnVkBufferFn(
 {
     m_returnVkBufferFn = [=]() mutable {
         if (auto vkBufferPool = bufferPoolWeak.lock())
-            vkBufferPool->put(move(buffer));
+            vkBufferPool->put(std::move(buffer));
         else
             buffer.reset();
     };

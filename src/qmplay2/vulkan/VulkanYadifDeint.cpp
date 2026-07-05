@@ -197,7 +197,7 @@ bool YadifDeint::filter(QQueue<Frame> &framesQueue)
             {
                 if (m_vkHwInterop)
                     m_vkHwInterop->updateInfo(syncFrames);
-                m.commandBuffer->endSubmitAndWait(move(submitInfo));
+                m.commandBuffer->endSubmitAndWait(std::move(submitInfo));
             }
 
             if (m_deintFlags & DoubleFramerate)
@@ -243,7 +243,7 @@ bool YadifDeint::ensureResources()
     if (m.device)
         m = {};
 
-    m.device = move(device);
+    m.device = std::move(device);
     if (!m.device)
         return false;
 

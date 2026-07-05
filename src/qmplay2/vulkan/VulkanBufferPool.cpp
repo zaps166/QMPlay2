@@ -62,7 +62,7 @@ shared_ptr<Buffer> BufferPool::take(vk::DeviceSize size)
 
     if (idx != noIdx)
     {
-        auto buffer = move(m_buffers[idx]);
+        auto buffer = std::move(m_buffers[idx]);
         m_buffers.erase(m_buffers.begin() + idx);
         return buffer;
     }
@@ -87,7 +87,7 @@ void BufferPool::put(shared_ptr<Buffer> &&buffer)
 {
     lock_guard<mutex> locker(m_mutex);
     maybeClear(buffer->device());
-    m_buffers.push_back(move(buffer));
+    m_buffers.push_back(std::move(buffer));
 }
 
 void BufferPool::maybeClear(const shared_ptr<Device> &device)

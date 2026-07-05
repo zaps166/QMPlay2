@@ -742,7 +742,7 @@ bool FFDecSW::getFromBitmapSubsBuffer(shared_ptr<QMPlay2OSD> &osd, double pos)
                     break;
                 }
 
-                osd->setReturnVkBufferFn(m_vkBufferPool, move(buffer));
+                osd->setReturnVkBufferFn(m_vkBufferPool, std::move(buffer));
             }
             else
 #endif

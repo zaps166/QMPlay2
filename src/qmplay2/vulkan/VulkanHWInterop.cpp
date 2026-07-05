@@ -42,7 +42,7 @@ bool HWInterop::syncNow(vk::SubmitInfo &submitInfo)
     }
 
     m_commandBuffer->resetAndBegin();
-    m_commandBuffer->endSubmitAndWait(move(submitInfo));
+    m_commandBuffer->endSubmitAndWait(std::move(submitInfo));
     return true;
 }
 

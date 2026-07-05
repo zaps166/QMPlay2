@@ -201,7 +201,7 @@ AVPixelFormats OpenGLWriter::supportedPixelFormats() const
 
 void OpenGLWriter::writeVideo(const Frame &videoFrame, QMPlay2OSDList &&osdList)
 {
-    m_drawable->osdList = move(osdList);
+    m_drawable->osdList = std::move(osdList);
     m_drawable->isPaused = false;
     m_drawable->videoFrame = videoFrame;
 

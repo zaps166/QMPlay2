@@ -193,7 +193,7 @@ Frame::Frame(const Frame &other)
 Frame::Frame(Frame &&other)
     : Frame()
 {
-    *this = move(other);
+    *this = std::move(other);
 }
 Frame::~Frame()
 {
@@ -688,7 +688,7 @@ Frame &Frame::operator =(Frame &&other)
     qSwap(m_timeBase, other.m_timeBase);
 
     qSwap(m_customData, other.m_customData);
-    m_onDestroyFn = move(other.m_onDestroyFn);
+    m_onDestroyFn = std::move(other.m_onDestroyFn);
 
     qSwap(m_pixelFormat, other.m_pixelFormat);
     qSwap(m_pixelFmtDescriptor, other.m_pixelFmtDescriptor);

@@ -168,13 +168,13 @@ int FFDecD3D11VA::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPix
                 return -1;
             }
         }
-        m_frames.emplace_back(move(tmpDecoded));
+        m_frames.emplace_back(std::move(tmpDecoded));
         added = true;
     }
 
     if (!m_frames.empty() && (m_frames.size() > g_delayedFrames || (!added && encodedPacket.isEmpty())))
     {
-        decoded = move(m_frames.front());
+        decoded = std::move(m_frames.front());
         m_frames.pop_front();
         if (ret < 0)
             ret = 0;

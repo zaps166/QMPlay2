@@ -481,7 +481,7 @@ void VideoThr::run()
         {
             auto packet = playC.sPackets.fetch();
             if (!packet.isEmpty())
-                sPackets.push_back(move(packet));
+                sPackets.push_back(std::move(packet));
         }
         playC.sPackets.unlock();
 
@@ -812,8 +812,8 @@ void VideoThr::run()
                     oneFrame = canWrite = false;
                     if (!osdList.isEmpty())
                         m_subsDisplayLocker = unique_lock<std::mutex>(m_subsDisplayMutex);
-                    QTimer::singleShot(0, this, [=, osdList = move(osdList)]() mutable {
-                        write(videoFrame, move(osdList), seq);
+                    QTimer::singleShot(0, this, [=, osdList = std::move(osdList)]() mutable {
+                        write(videoFrame, std::move(osdList), seq);
                         m_subsDisplayLocker = {};
                     });
                     if (canSkipFrames && !skipNonKey)
@@ -877,7 +877,7 @@ void VideoThr::write(const Frame &videoFrame, QMPlay2OSDList &&osdList, quint32 
     setHighTimerResolution<true>();
 #endif
 
-    videoWriter()->writeVideo(videoFrame, move(osdList));
+    videoWriter()->writeVideo(videoFrame, std::move(osdList));
 
     if (m_subsDisplayLocker.owns_lock())
         swap(m_subtitles, m_subtitlesBusy);

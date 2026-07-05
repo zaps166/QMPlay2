@@ -296,7 +296,7 @@ void CuvidVulkan::map(Frame &frame) try
         }
 
         cudaCustomData = cudaCustomDataUnique.get();
-        img->setCustomData(move(cudaCustomDataUnique));
+        img->setCustomData(std::move(cudaCustomDataUnique));
     }
 
     quintptr mappedFrame = 0;

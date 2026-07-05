@@ -693,9 +693,9 @@ void Instance::sortPhysicalDevices(vector<shared_ptr<PhysicalDevice>> &physicalD
         return; // Nothing to do
 
     auto setAsFirst = [&](auto &&it) {
-        auto primaryPhysicalDevice = move(*it);
+        auto primaryPhysicalDevice = std::move(*it);
         physicalDevices.erase(it);
-        physicalDevices.insert(physicalDevices.begin(), move(primaryPhysicalDevice));
+        physicalDevices.insert(physicalDevices.begin(), std::move(primaryPhysicalDevice));
     };
 
 #if defined(Q_OS_WIN)

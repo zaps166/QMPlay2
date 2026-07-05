@@ -253,7 +253,7 @@ shared_ptr<Image> ImagePool::takeCommon(Config &config)
 
     if (!images.empty())
     {
-        auto image = move(images.back());
+        auto image = std::move(images.back());
         images.pop_back();
         return image;
     }
@@ -334,14 +334,14 @@ vector<shared_ptr<Image>> ImagePool::takeImagesToClear(const Config &config)
         images[0]->format() != config.format ||
         images[0]->exportMemoryTypes() != config.exportMemoryTypes
     ) {
-        return move(images);
+        return std::move(images);
     }
 
     if (config.isLinear() && (
         images[0]->paddingHeight() != config.paddingHeight ||
         (config.deviceLocal && !images[0]->isDeviceLocal())
     )) {
-        return move(images);
+        return std::move(images);
     }
 
     return {};

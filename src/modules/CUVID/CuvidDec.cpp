@@ -590,7 +590,7 @@ bool CuvidDec::open(StreamInfo &streamInfo)
                 auto cuvidVulkan = make_shared<CuvidVulkan>(m_cuCtx);
                 if (cuvidVulkan->hasError())
                     return false;
-                cuvidHwInterop = move(cuvidVulkan);
+                cuvidHwInterop = std::move(cuvidVulkan);
             }
 #endif
         }
