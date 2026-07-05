@@ -200,7 +200,8 @@
       ],
       "config-opts": [
         "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON",
-        "-DCMAKE_INSTALL_LIBDIR=lib"
+        "-DCMAKE_INSTALL_LIBDIR=lib",
+        "-DUSE_CUVID=OFF"
       ],
       "sources": [
         {
