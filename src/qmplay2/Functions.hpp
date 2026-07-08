@@ -126,6 +126,7 @@ namespace Functions
 
     QMPLAY2SHAREDLIB_EXPORT void ImageEQ(int Contrast, int Brightness, quint8 *imageBits, unsigned bitsCount);
     QMPLAY2SHAREDLIB_EXPORT int scaleEQValue(int val, int min, int max);
+    QMPLAY2SHAREDLIB_EXPORT float sliderValueToGamma(int sliderValue);
 
     QMPLAY2SHAREDLIB_EXPORT QByteArray convertToASS(QString txt);
 

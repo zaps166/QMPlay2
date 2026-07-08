@@ -23,6 +23,7 @@
 #include <Settings.hpp>
 #include <Slider.hpp>
 #include <Main.hpp>
+#include <Functions.hpp>
 
 #include <QGridLayout>
 #include <QPushButton>
@@ -80,11 +81,15 @@ VideoAdjustmentW::VideoAdjustmentW()
             slider->setRange(-100, 100);
         }
         slider->setWheelStep(1);
-        slider->setValue(0);
         connect(slider, &Slider::valueChanged, this, [=](int v) {
-            valueL->setText(QString::number(v));
-            emit videoAdjustmentChanged(titleL->text() + QString::number(v));
+            const bool isGammaControl = (i == GAMMA);
+            const QString displayVal = isGammaControl
+                ? QString::number(Functions::sliderValueToGamma(v), 'f', 2)
+                : QString::number(v);
+            valueL->setText(displayVal);
+            emit videoAdjustmentChanged((isGammaControl ? tr("Gamma correction: ") : titleL->text()) + displayVal);
         });
+        slider->setValue(0);
         m_sliders.push_back(slider);
 
         QAction *actionDown = new QAction(this);

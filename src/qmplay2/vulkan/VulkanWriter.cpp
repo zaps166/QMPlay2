@@ -110,8 +110,7 @@ bool Writer::processParams(bool *paramsCorrected)
     else if (sharpness > 0.0f)
         sharpness /= 40.0f;
 
-    float gamma = getParam("Gamma").toInt() / 100.0f;
-    gamma = (gamma >= 0.0f) ? (1.0f + gamma) : (1.0f + gamma * 0.9f);
+    float gamma = Functions::sliderValueToGamma(getParam("Gamma").toInt());
 
     m_window->setParams(
         QSize(getParam("W").toInt(), getParam("H").toInt()),

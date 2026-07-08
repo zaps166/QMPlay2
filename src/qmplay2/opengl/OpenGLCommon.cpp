@@ -535,8 +535,7 @@ void OpenGLCommon::paintGL()
         const float brightness = videoAdjustment.brightness / 100.0f;
         const float contrast   = (videoAdjustment.contrast + 100) / 100.0f;
         const float sharpness  = videoAdjustment.sharpness / 50.0f;
-        float gamma = videoAdjustment.gamma / 100.0f;
-        gamma = (gamma >= 0.0f) ? (1.0f + gamma) : (1.0f + gamma * 0.9f);
+        float gamma = Functions::sliderValueToGamma(videoAdjustment.gamma);
         if (m_hwInterop && numPlanes == 1)
         {
             const bool hasBrightness = videoAdjustmentKeys.contains("Brightness");

@@ -570,6 +570,11 @@ int Functions::scaleEQValue(int val, int min, int max)
 {
     return (val + 100) * ((abs(min) + abs(max))) / 200 - abs(min);
 }
+float Functions::sliderValueToGamma(int sliderValue)
+{
+    float gamma = sliderValue / 100.0f;
+    return (gamma >= 0.0f) ? (1.0f + gamma) : (1.0f + gamma * 0.9f);
+}
 
 QByteArray Functions::convertToASS(QString txt)
 {
