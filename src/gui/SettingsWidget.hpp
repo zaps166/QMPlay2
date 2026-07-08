@@ -138,6 +138,7 @@ private:
     QLineEdit *m_additionalYtDlParamsE;
     QCheckBox *m_keepDocksSizeB;
     QCheckBox *m_fullscreenPanelsRightSideB;
+    QCheckBox *m_hideLogoB;
     QGroupBox *m_replayGain;
     QCheckBox *m_replayGainAlbum;
     QCheckBox *m_replayGainPreventClipping;

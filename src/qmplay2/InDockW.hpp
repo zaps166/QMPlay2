@@ -32,11 +32,15 @@ public:
     QWidget *getWidget();
     void setLoseHeight(int lh);
     void setCustomPixmap(const QPixmap &pix = QPixmap());
+
+    void updateSettings();
+
 private:
     const QColor &grad1, &grad2, &qmpTxt;
     Qt::TransformationMode blurredTransformation;
     QPixmap customPixmap, customPixmapBlurred;
     bool m_enlargeCovers = false;
+    bool m_hideLogo = false;
     bool hasWallpaper;
     int loseHeight;
     QPointer<QWidget> w;

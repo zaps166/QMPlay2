@@ -41,6 +41,7 @@ InDockW::InDockW(const QColor &grad1, const QColor &grad2, const QColor &qmpTxt)
     grabGesture(Qt::PinchGesture);
     setAutoFillBackground(true);
     setMouseTracking(true);
+    updateSettings();
 }
 
 QWidget *InDockW::getWidget()
@@ -64,6 +65,12 @@ void InDockW::setCustomPixmap(const QPixmap &pix)
     }
     m_enlargeCovers = QMPlay2Core.getSettings().getBool("EnlargeCovers");
     emit hasCoverImage(!customPixmap.isNull());
+    update();
+}
+
+void InDockW::updateSettings()
+{
+    m_hideLogo = QMPlay2Core.getSettings().getBool("HideLogo");
     update();
 }
 
@@ -169,7 +176,7 @@ void InDockW::paintEvent(QPaintEvent *)
             }
         }
 
-        if (customPixmap.isNull())
+        if (!m_hideLogo && customPixmap.isNull())
         {
             const QSize size(128, 128);
             QPixmap qmp2Pixmap = Functions::getPixmapFromIcon(QMPlay2Core.getQMPlay2Icon(), size, this);

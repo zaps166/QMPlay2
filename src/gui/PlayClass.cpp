@@ -808,6 +808,7 @@ void PlayClass::settingsChanged(int page, bool forceRestart, bool initFilters)
                 else
                     demuxThr->loadImage();
             }
+            QMPlay2GUI.updateInDockW();
             break;
         case 1: // Renderer settings
             if (vThr && !vThr->videoWriterSet())

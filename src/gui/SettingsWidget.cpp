@@ -166,6 +166,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("MainWidget/KeepDocksSize", false);
     QMPSettings.init("MainWidget/TabPositionNorth", false);
     QMPSettings.init("FullscreenPanelsRightSide", false);
+    QMPSettings.init("HideLogo", false);
 #ifdef QMPLAY2_ALLOW_ONLY_ONE_INSTANCE
     QMPSettings.init("AllowOnlyOneInstance", false);
 #endif
@@ -434,6 +435,7 @@ SettingsWidget::SettingsWidget(int page, const QString &moduleName, QWidget *vid
 
         m_keepDocksSizeB->setChecked(QMPSettings.getBool("MainWidget/KeepDocksSize"));
         m_fullscreenPanelsRightSideB->setChecked(QMPSettings.getBool("FullscreenPanelsRightSide"));
+        m_hideLogoB->setChecked(QMPSettings.getBool("HideLogo"));
 
         if (Notifies::hasBoth())
             m_trayNotifiesDefault->setChecked(QMPSettings.getBool("TrayNotifiesDefault"));
@@ -954,6 +956,7 @@ void SettingsWidget::setupGeneralUi(QWidget *GeneralSettings)
     m_trayNotifiesDefault = new QCheckBox(generalScrollAreaWidgetContents);
     m_autoDelNonGroupEntries = new QCheckBox(generalScrollAreaWidgetContents);
     m_fullscreenPanelsRightSideB = new QCheckBox(generalScrollAreaWidgetContents);
+    m_hideLogoB = new QCheckBox(generalScrollAreaWidgetContents);
 
     m_proxyB = new QGroupBox(generalScrollAreaWidgetContents);
     m_proxyB->setCheckable(true);
@@ -1019,7 +1022,7 @@ void SettingsWidget::setupGeneralUi(QWidget *GeneralSettings)
 
     generalGridLayout->addLayout(generalFormLayout, 0, 0, 1, 2);
     generalGridLayout->addWidget(m_showCoversGB, 1, 0, 1, 1);
-    generalGridLayout->addItem(generalHorizontalSpacer, 1, 1, 18, 1);
+    generalGridLayout->addItem(generalHorizontalSpacer, 1, 1, 19, 1);
     generalGridLayout->addWidget(m_autoUpdatesB, 2, 0, 1, 1);
     generalGridLayout->addWidget(m_autoOpenVideoWindowB, 3, 0, 1, 1);
     generalGridLayout->addWidget(m_autoRestoreMainWindowOnVideoB, 4, 0, 1, 1);
@@ -1034,10 +1037,11 @@ void SettingsWidget::setupGeneralUi(QWidget *GeneralSettings)
     generalGridLayout->addWidget(m_trayNotifiesDefault, 13, 0, 1, 1);
     generalGridLayout->addWidget(m_autoDelNonGroupEntries, 14, 0, 1, 1);
     generalGridLayout->addWidget(m_fullscreenPanelsRightSideB, 15, 0, 1, 1);
-    generalGridLayout->addWidget(m_proxyB, 16, 0, 1, 1);
-    generalGridLayout->addLayout(generalHorizontalLayout3, 17, 0, 1, 1);
-    generalGridLayout->addWidget(m_ytDlGB, 18, 0, 1, 1);
-    generalGridLayout->addItem(generalVerticalSpacer, 19, 0, 1, 2);
+    generalGridLayout->addWidget(m_hideLogoB, 16, 0, 1, 1);
+    generalGridLayout->addWidget(m_proxyB, 17, 0, 1, 1);
+    generalGridLayout->addLayout(generalHorizontalLayout3, 18, 0, 1, 1);
+    generalGridLayout->addWidget(m_ytDlGB, 19, 0, 1, 1);
+    generalGridLayout->addItem(generalVerticalSpacer, 20, 0, 1, 2);
 
     generalScrollArea->setWidget(generalScrollAreaWidgetContents);
     generalLayout->addWidget(generalScrollArea);
@@ -1092,6 +1096,7 @@ void SettingsWidget::setupGeneralUi(QWidget *GeneralSettings)
     m_additionalYtDlParamsE->setToolTip(tr("Please refer to yt-dlp documentation"));
     m_keepDocksSizeB->setText(tr("Maintain panels size when resizing the main window (experimental)"));
     m_fullscreenPanelsRightSideB->setText(tr("Fullscreen panels on the right side"));
+    m_hideLogoB->setText(tr("Hide QMPlay2 logo"));
 }
 void SettingsWidget::setupModulesListUi(QGroupBox *ModulesList, UiModulesList &ml)
 {
@@ -1855,6 +1860,7 @@ void SettingsWidget::apply()
                 QMPSettings.set("MainWidget/KeepDocksSize", checked);
                 emit keepDocksSizeChanged(checked);
             }
+            QMPSettings.set("HideLogo", m_hideLogoB->isChecked());
             if (auto checked = m_fullscreenPanelsRightSideB->isChecked(); checked != QMPSettings.getBool("FullscreenPanelsRightSide"))
             {
                 QMPSettings.set("FullscreenPanelsRightSide", checked);

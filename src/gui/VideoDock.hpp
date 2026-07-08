@@ -43,7 +43,7 @@ public:
 
     inline void updateIDW()
     {
-        iDW.update();
+        iDW.updateSettings();
     }
 
     bool isTouch, touchEnded;
