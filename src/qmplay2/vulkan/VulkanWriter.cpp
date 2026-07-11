@@ -20,6 +20,8 @@
 #include "VulkanWindow.hpp"
 #include "VulkanHWInterop.hpp"
 
+#include <Functions.hpp>
+
 #include <QDebug>
 
 namespace QmVk {
@@ -110,7 +112,7 @@ bool Writer::processParams(bool *paramsCorrected)
     else if (sharpness > 0.0f)
         sharpness /= 40.0f;
 
-    float gamma = Functions::sliderValueToGamma(getParam("Gamma").toInt());
+    const float gamma = Functions::sliderValueToGamma(getParam("Gamma").toInt());
 
     m_window->setParams(
         QSize(getParam("W").toInt(), getParam("H").toInt()),
