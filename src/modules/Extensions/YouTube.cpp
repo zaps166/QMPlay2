@@ -44,6 +44,10 @@
 #include <QMenu>
 #include <QUrl>
 
+#include <QDateTime>
+#include <QDeadlineTimer>
+#include <unistd.h>
+
 Q_LOGGING_CATEGORY(youtube, "Extensions/YouTube")
 
 #define YOUTUBE_URL "https://www.youtube.com"
@@ -1271,6 +1275,8 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
 
     QHash<int, QPair<QStringList, QStringList>> itagsData;
 
+    double latest_available_at = 0.0;
+
     for (auto &&formatVal : formats)
     {
         const auto format = formatVal.toObject();
@@ -1297,6 +1303,16 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
             {
                 urlLanguages[url] = format[QStringLiteral("language")].toString();
                 urlNotes[url] = note;
+            }
+            if (format.contains("available_at"))
+            {
+                auto available_at = format["available_at"].toDouble() * 1000.0;
+                qCDebug(youtube) << "url for format" << format["format_id"].toString() << "will be available at"
+                    << QDateTime::fromMSecsSinceEpoch(available_at) << "so in" << (available_at - QDateTime::currentMSecsSinceEpoch()) / 1000.0 << "s";
+                if (available_at > latest_available_at)
+                {
+                    latest_available_at = available_at;
+                }
             }
         }
     }
@@ -1436,6 +1452,28 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
 
     result += o["description"].toString();
 
+    if (latest_available_at > 0)
+    {
+        const auto dt = int( (latest_available_at - QDateTime::currentMSecsSinceEpoch()) / 1000.0 + 0.5);
+        if (dt > 0) {
+            QMPlay2Core.logInfo(QString::asprintf("Waiting for %ds as required by YouTube", dt));
+            // do an active wait; a less active clone of QTest::qWait():
+            auto remaining = dt * 1000;
+            QDeadlineTimer timer(remaining, Qt::PreciseTimer);
+            do
+            {
+                QCoreApplication::processEvents(QEventLoop::AllEvents, remaining);
+                QCoreApplication::sendPostedEvents(Q_NULLPTR, QEvent::DeferredDelete);
+                remaining = timer.remainingTime();
+                if (remaining <= 0)
+                {
+                    break;
+                }
+                usleep(qMin(100, remaining) * 1000);
+                remaining = timer.remainingTime();
+            } while (remaining > 0);
+        }
+    }
     return result;
 }
 
