@@ -70,7 +70,7 @@
         <translation>Bezárás</translation>
     </message>
     <message>
-        <source>Can't clear log</source>
+        <source>Can&apos;t clear log</source>
         <translation>A napló törlése sikertelen</translation>
     </message>
     <message>
@@ -655,8 +655,8 @@
         <translation>Konvertálási előbeállítás hozzáadásaa, módosítása, vagy törlése</translation>
     </message>
     <message>
-        <source>Download and convert to "%1"</source>
-        <translation>Letöltés és konvertálás "%1" formátumba</translation>
+        <source>Download and convert to &quot;%1&quot;</source>
+        <translation>Letöltés és konvertálás &quot;%1&quot; formátumba</translation>
     </message>
     <message>
         <source>Converter preset</source>
@@ -666,11 +666,11 @@
         <source>Command line to execute after download.
 
 &lt;input/&gt; - specifies downloaded file.
-&lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with "mp3" extension.</source>
+&lt;output&gt;%f.mp3&lt;/output&gt; - converted file will be input file with &quot;mp3&quot; extension.</source>
         <translation>Parancssor, ami letöltés után lesz futtatva.
 
 &lt;input/&gt; - megadja a letöltött fájlt
-&lt;output&gt;%f.mp3&lt;/output&gt; - a konvertált fájl a bemeneti fájl lesz, "mp3" kiterjesztéssel.</translation>
+&lt;output&gt;%f.mp3&lt;/output&gt; - a konvertált fájl a bemeneti fájl lesz, &quot;mp3&quot; kiterjesztéssel.</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -883,8 +883,8 @@
         <translation>Alkalmazás indítása a megadott &lt;profil név&gt;-vel.</translation>
     </message>
     <message>
-        <source>Don't play after run (bypass "Remember playback position" option).</source>
-        <translation>Ne kezdje el a lejátszást elindítás után (figyelmen kívül hagyja a "Lejátszás pozíciójának megjegyzése" opciót).</translation>
+        <source>Don&apos;t play after run (bypass &quot;Remember playback position&quot; option).</source>
+        <translation>Ne kezdje el a lejátszást elindítás után (figyelmen kívül hagyja a &quot;Lejátszás pozíciójának megjegyzése&quot; opciót).</translation>
     </message>
     <message>
         <source>Toggle playback.</source>
@@ -1155,7 +1155,7 @@
         <translation>Mindegyik lejátszása</translation>
     </message>
     <message>
-        <source>Website doesn't exist</source>
+        <source>Website doesn&apos;t exist</source>
         <translation>A webhely nem létezik</translation>
     </message>
     <message>
@@ -1804,7 +1804,7 @@
         <translation>FFmpeg hangszűrők, például: %1</translation>
     </message>
     <message>
-        <source>Not all audio filters are supported in QMPlay2. To use some filters like '%4', you need to enable "force channels conversion" and "use channel conversion before filters" in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
+        <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;%4&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
         <translation>A QMPlay2 nem minden audio szűrőt támogat. Az olyan szűrők használatához, mint a „%4”, engedélyeznie kell a „csatornák kényszerű konvertálása” és a „szűrők előtti csatornák konvertálása” opciókat a lejátszási beállításokban. Kérjük, olvassa el a %1FFmpeg dokumentációt%2.%3Elérhető audio szűrők:</translation>
     </message>
 </context>
@@ -1905,7 +1905,7 @@
         <translation>Shader fordítás/linkelési hiba</translation>
     </message>
     <message>
-        <source>Can't init %1</source>
+        <source>Can&apos;t init %1</source>
         <translation>%1 nem inicializálható</translation>
     </message>
     <message>
@@ -2172,7 +2172,7 @@
         <translation>A hang magasságának megtartása a lejátszási sebesség megváltoztatásakor</translation>
     </message>
     <message>
-        <source>Don't keep audio pitch during playback speed change</source>
+        <source>Don&apos;t keep audio pitch during playback speed change</source>
         <translation>Ne tartsa meg a hang magasságát a lejátszási sebesség módosításakor</translation>
     </message>
     <message>
@@ -2600,7 +2600,7 @@
         <translation>ismétlődő modul név</translation>
     </message>
     <message>
-        <source>Can't open log file</source>
+        <source>Can&apos;t open log file</source>
         <translation>Nem sikerült a naplófájl megnyitása</translation>
     </message>
 </context>
@@ -2614,7 +2614,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <source>QtSvg icon engine plugin doesn't exist.
+        <source>QtSvg icon engine plugin doesn&apos;t exist.
 QMPlay2 will not scale up icons!</source>
         <translation>A QtSvg ikon motor nem létezik.
 A QMPlay2 nem fogja az ikonokat méretezni!</translation>
@@ -2624,7 +2624,7 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
         <translation>A QMPlay2 frissítve lett a következő verzióra</translation>
     </message>
     <message>
-        <source>QMPlay2 hasn't been updated. Do you want to run the update (recommended)?</source>
+        <source>QMPlay2 hasn&apos;t been updated. Do you want to run the update (recommended)?</source>
         <translation>A QMPlay2 nincs frissítve. Szeretnéd elindítani a frissítést (ajánlott)?</translation>
     </message>
 </context>
@@ -2723,8 +2723,8 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
         <translation>Írja be az állomás nevét, és nyomja meg az Enter billentyűt</translation>
     </message>
     <message>
-        <source>Select a "%1" from the drop-down list</source>
-        <translation>Válasszon ki egy "%1" elemet a legördülő listából</translation>
+        <source>Select a &quot;%1&quot; from the drop-down list</source>
+        <translation>Válasszon ki egy &quot;%1&quot; elemet a legördülő listából</translation>
     </message>
     <message>
         <source>Connection error</source>
@@ -2887,7 +2887,7 @@ A QMPlay2 nem fogja az ikonokat méretezni!</translation>
     </message>
     <message>
         <source>Slower, but more accurate seeking.
-Partially checked doesn't affect seeking on slider.</source>
+Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>Lassabb, de pontosabb léptetés.
 Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.</translation>
     </message>
@@ -2948,7 +2948,7 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation>Borítók mutatása</translation>
     </message>
     <message>
-        <source>Show covers from directory if they aren't in the music file</source>
+        <source>Show covers from directory if they aren&apos;t in the music file</source>
         <translation>Borítók használata a könyvtárból, ha a zenefájl nem tartalmazza</translation>
     </message>
     <message>
@@ -3084,7 +3084,7 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation>Fő ablak visszaállítása, ha új videó fájl van betöltve</translation>
     </message>
     <message>
-        <source>Don't load playlist files within other files</source>
+        <source>Don&apos;t load playlist files within other files</source>
         <translation>Ne töltse be a lejátszási listákat más fájlokba</translation>
     </message>
     <message>
@@ -3100,7 +3100,7 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation>Egyéni elérési út</translation>
     </message>
     <message>
-        <source>Don't auto-update</source>
+        <source>Don&apos;t auto-update</source>
         <translation>Ne frissítse automatikusan</translation>
     </message>
     <message>
@@ -3116,8 +3116,8 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation>Alapértelmezett minőség</translation>
     </message>
     <message>
-        <source>"-f" parameter, please refer to yt-dlp documentation</source>
-        <translation>"-f” paraméter, kérjük, olvassa el az yt-dlp dokumentációját</translation>
+        <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
+        <translation>&quot;-f” paraméter, kérjük, olvassa el az yt-dlp dokumentációját</translation>
     </message>
     <message>
         <source>Additional params</source>
@@ -3130,6 +3130,10 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
     <message>
         <source>Fullscreen panels on the right side</source>
         <translation>Teljes képernyős panelek a jobb oldalon</translation>
+    </message>
+    <message>
+        <source>Hide QMPlay2 logo</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Move up</source>
@@ -3352,12 +3356,12 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation>Törölni szeretnéd az összes gyorsítótárazott borítót?</translation>
     </message>
     <message>
-        <source>Confirm "youtube-dl" deletion</source>
-        <translation>"youtube-dl" törlésének megerősítése</translation>
+        <source>Confirm &quot;youtube-dl&quot; deletion</source>
+        <translation>&quot;youtube-dl&quot; törlésének megerősítése</translation>
     </message>
     <message>
-        <source>Do you want to remove "youtube-dl" software?</source>
-        <translation>El szeretnéd távolítani a "youtube-dl" programot?</translation>
+        <source>Do you want to remove &quot;youtube-dl&quot; software?</source>
+        <translation>El szeretnéd távolítani a &quot;youtube-dl&quot; programot?</translation>
     </message>
     <message>
         <source>Confirm settings deletion</source>
@@ -3420,7 +3424,7 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation>Teljes képernyős kompozitor megkerülése</translation>
     </message>
     <message>
-        <source>Use QMPlay2 video output modules. This will also be used if other renderers aren't available.</source>
+        <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
         <translation>Használja a QMPlay2 videokimeneti modulokat. Ez akkor is használatos lesz, ha más renderelők nem állnak rendelkezésre.</translation>
     </message>
     <message>
@@ -3757,8 +3761,8 @@ Csak részben ellenőrzött, ha a tartalom a megadott értéknél kevesebb csato
         <translation>Hiba a frissítés letöltése közben</translation>
     </message>
     <message>
-        <source>Download page is in "Help-&gt;About QMPlay2"</source>
-        <translation>A letöltési oldal a "Súgó-&gt;A QMPlay2-ről" menüpontban található</translation>
+        <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
+        <translation>A letöltési oldal a &quot;Súgó-&gt;A QMPlay2-ről&quot; menüpontban található</translation>
     </message>
 </context>
 <context>
@@ -3812,6 +3816,10 @@ Csak részben ellenőrzött, ha a tartalom a megadott értéknél kevesebb csato
     <message>
         <source>Sharpness</source>
         <translation>Élesség</translation>
+    </message>
+    <message>
+        <source>Gamma correction: </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
@@ -4041,32 +4049,32 @@ Csak részben ellenőrzött, ha a tartalom a megadott értéknél kevesebb csato
 <context>
     <name>YouTubeDL</name>
     <message>
-        <source>Updating "youtube-dl", please wait...</source>
-        <translation>A "youtube-dl" frissítése folyamatban van, kérlek várj...</translation>
+        <source>Updating &quot;youtube-dl&quot;, please wait...</source>
+        <translation>A &quot;youtube-dl&quot; frissítése folyamatban van, kérlek várj...</translation>
     </message>
     <message>
-        <source>"youtube-dl" has been successfully updated!</source>
-        <translation>A "youtube-dl" sikeresen frissítve lett!</translation>
+        <source>&quot;youtube-dl&quot; has been successfully updated!</source>
+        <translation>A &quot;youtube-dl&quot; sikeresen frissítve lett!</translation>
     </message>
     <message>
-        <source>"youtube-dl" update has been aborted!</source>
-        <translation>A "youtube-dl" frissítése meg lett szakítva!</translation>
+        <source>&quot;youtube-dl&quot; update has been aborted!</source>
+        <translation>A &quot;youtube-dl&quot; frissítése meg lett szakítva!</translation>
     </message>
     <message>
-        <source>Downloading "youtube-dl", please wait...</source>
-        <translation>A "youtube-dl" letöltése folyamatban van, kérlek várj...</translation>
+        <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
+        <translation>A &quot;youtube-dl&quot; letöltése folyamatban van, kérlek várj...</translation>
     </message>
     <message>
-        <source>"youtube-dl" download has been aborted!</source>
-        <translation>A "youtube-dl" letöltése meg lett szakítva!</translation>
+        <source>&quot;youtube-dl&quot; download has been aborted!</source>
+        <translation>A &quot;youtube-dl&quot; letöltése meg lett szakítva!</translation>
     </message>
     <message>
-        <source>"youtube-dl" has been successfully downloaded!</source>
-        <translation>A "youtube-dl" letöltése sikeresen befejeződött!</translation>
+        <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
+        <translation>A &quot;youtube-dl&quot; letöltése sikeresen befejeződött!</translation>
     </message>
     <message>
-        <source>"youtube-dl" download has failed!</source>
-        <translation>A "youtube-dl" letöltése sikertelen!</translation>
+        <source>&quot;youtube-dl&quot; download has failed!</source>
+        <translation>A &quot;youtube-dl&quot; letöltése sikertelen!</translation>
     </message>
 </context>
 <context>

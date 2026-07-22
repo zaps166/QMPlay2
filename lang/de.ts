@@ -3191,6 +3191,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <translation></translation>
     </message>
     <message>
+        <source>Hide QMPlay2 logo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Move up</source>
         <translation>Erhöhen</translation>
     </message>
@@ -3811,6 +3815,10 @@ Bei teilweiser Aktivierung wird die Anzahl der Kanäle nicht reduziert.
     <message>
         <source>Sharpness</source>
         <translation>Schärfe</translation>
+    </message>
+    <message>
+        <source>Gamma correction: </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reset video adjustments</source>

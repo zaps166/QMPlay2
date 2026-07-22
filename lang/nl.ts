@@ -3140,6 +3140,10 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
         <translation></translation>
     </message>
     <message>
+        <source>Hide QMPlay2 logo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Move up</source>
         <translation>Omhoog verplaatsen</translation>
     </message>
@@ -3808,6 +3812,10 @@ Deels aankruisen = minder kanalen dan de opgegeven waarde
     <message>
         <source>Sharpness</source>
         <translation>Scherpte</translation>
+    </message>
+    <message>
+        <source>Gamma correction: </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reset</source>

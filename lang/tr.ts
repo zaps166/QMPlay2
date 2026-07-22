@@ -3209,6 +3209,10 @@ Kısmen işaretli, sürgüde aramayı etkilemez.</translation>
         <translation></translation>
     </message>
     <message>
+        <source>Hide QMPlay2 logo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Move up</source>
         <translation>Yukarı taşı</translation>
     </message>
@@ -3831,6 +3835,10 @@ Yalnızca içeriğin belirtilen değerden daha az kanalı varsa kısmen işaretl
     <message>
         <source>Sharpness</source>
         <translation>Keskinlik</translation>
+    </message>
+    <message>
+        <source>Gamma correction: </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reset video adjustments</source>

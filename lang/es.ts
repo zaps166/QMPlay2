@@ -3192,6 +3192,10 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
         <translation></translation>
     </message>
     <message>
+        <source>Hide QMPlay2 logo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Move up</source>
         <translation>Mover hacia arriba</translation>
     </message>
@@ -3812,6 +3816,10 @@ Parcialmente marcado sólo si el contenido tiene menos canales que el valor espe
     <message>
         <source>Sharpness</source>
         <translation>Nitidez</translation>
+    </message>
+    <message>
+        <source>Gamma correction: </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reset video adjustments</source>

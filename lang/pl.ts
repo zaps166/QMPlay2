@@ -3192,6 +3192,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <translation>Panel pełnoekranowy po prawej stronie</translation>
     </message>
     <message>
+        <source>Hide QMPlay2 logo</source>
+        <translation>Ukryj logo QMPlay2</translation>
+    </message>
+    <message>
         <source>Move up</source>
         <translation>Przenieś wyżej</translation>
     </message>
@@ -3812,6 +3816,10 @@ Częściowo zaznaczone nie spowoduje zmniejszenia liczby kanałów
     <message>
         <source>Sharpness</source>
         <translation>Ostrość</translation>
+    </message>
+    <message>
+        <source>Gamma correction: </source>
+        <translation>Korekcja gamma: </translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
