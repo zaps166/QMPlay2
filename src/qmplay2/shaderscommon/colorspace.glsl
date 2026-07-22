@@ -21,13 +21,13 @@ vec3 arib_b67_inverse_oetf(in vec3 val)
 {
     vec3 low = (val * val) * (1.0 / 3.0);
     vec3 high = (exp((val - ARIB_B67_C) / ARIB_B67_A) + ARIB_B67_B) / 12.0;
-    return mix(high, low, lessThanEqual(val, vec3(0.5)));
+    return mix(high, low, vec3(lessThanEqual(val, vec3(0.5))));
 }
 vec3 arib_b67_oetf(in vec3 val)
 {
     vec3 low = sqrt(3.0 * val);
     vec3 high = ARIB_B67_A * log(12.0 * max(val, vec3(1.0 / 12.0)) - ARIB_B67_B) + ARIB_B67_C;
-    return mix(high, low, lessThanEqual(val, vec3(1.0 / 12.0)));
+    return mix(high, low, vec3(lessThanEqual(val, vec3(1.0 / 12.0))));
 }
 
 // https://64.github.io/tonemapping/
