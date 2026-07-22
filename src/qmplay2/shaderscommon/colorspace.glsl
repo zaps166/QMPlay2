@@ -1,4 +1,6 @@
 const int AVCOL_TRC_BT709 = 1;
+const int AVCOL_TRC_BT2020_10 = 14;
+const int AVCOL_TRC_BT2020_12 = 15;
 const int AVCOL_TRC_SMPTE2084 = 16;
 const int AVCOL_TRC_ARIB_STD_B67 = 18;
 
@@ -106,7 +108,7 @@ void adobeFilmLikeUncharted2Filmic(inout vec3 rgb)
     }
 }
 
-void colorspace_trc_bt709(inout vec3 value, in mat3 colorPrimariesMatrix)
+void colorspace_trc_gamma24(inout vec3 value, in mat3 colorPrimariesMatrix)
 {
     value = pow(value, vec3(2.4));
     value = clamp(colorPrimariesMatrix * value, 0.0, 1.0);

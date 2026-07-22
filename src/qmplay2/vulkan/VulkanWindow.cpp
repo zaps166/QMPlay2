@@ -137,6 +137,8 @@ static inline bool isTrcSupported(AVColorTransferCharacteristic trc)
     switch (trc)
     {
         case AVCOL_TRC_BT709:
+        case AVCOL_TRC_BT2020_10:
+        case AVCOL_TRC_BT2020_12:
         case AVCOL_TRC_SMPTE2084:
         case AVCOL_TRC_ARIB_STD_B67:
             return true;
@@ -1376,7 +1378,9 @@ void Window::obtainVideoPipelineSpecializationFrameProps()
         !isHdr10St2084() &&
         (!isBt2020Linear() || m_frameProps->colorTrc == AVCOL_TRC_SMPTE2084) &&
         isTrcSupported(m_frameProps->colorTrc) && (
-            m_frameProps->colorTrc != AVCOL_TRC_BT709 || (
+            (m_frameProps->colorTrc != AVCOL_TRC_BT709 &&
+             m_frameProps->colorTrc != AVCOL_TRC_BT2020_10 &&
+             m_frameProps->colorTrc != AVCOL_TRC_BT2020_12) || (
                 Functions::isColorPrimariesSupported(m_frameProps->colorPrimaries) &&
                 m_frameProps->colorPrimaries != AVCOL_PRI_BT709
             )

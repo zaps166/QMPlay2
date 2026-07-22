@@ -39,9 +39,9 @@ void main()
         // Subtract blur from original image, multiply and then add it to the original image
         RGB = clamp(RGB + (RGB - blur) * sharpness, 0.0, 1.0);
     }
-    if (uTrc == AVCOL_TRC_BT709)
+    if (uTrc == AVCOL_TRC_BT709 || uTrc == AVCOL_TRC_BT2020_10 || uTrc == AVCOL_TRC_BT2020_12)
     {
-        colorspace_trc_bt709(RGB.rgb, uColorPrimariesMatrix);
+        colorspace_trc_gamma24(RGB.rgb, uColorPrimariesMatrix);
     }
     else if (uTrc == AVCOL_TRC_SMPTE2084)
     {

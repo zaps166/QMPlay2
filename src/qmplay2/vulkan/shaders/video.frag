@@ -210,18 +210,20 @@ void main()
         value = clamp(hsl2rgb(value), 0.0, 1.0);
     }
 
-    if (trc == AVCOL_TRC_BT709)
+    switch (trc)
     {
-        colorspace_trc_bt709(value, colorPrimariesMatrix);
-    }
-    else if (trc == AVCOL_TRC_SMPTE2084)
-    {
-        // "colorPrimariesMatrix" is identity when "isBt2020Linear" is set
-        colorspace_trc_smpte2084(value, colorPrimariesMatrix, maxLuminance);
-    }
-    else if (trc == AVCOL_TRC_ARIB_STD_B67)
-    {
-        colorspace_trc_hlg(value, colorPrimariesMatrix);
+        case AVCOL_TRC_BT709:
+        case AVCOL_TRC_BT2020_10:
+        case AVCOL_TRC_BT2020_12:
+            colorspace_trc_gamma24(value, colorPrimariesMatrix);
+            break;
+        case AVCOL_TRC_SMPTE2084:
+            // "colorPrimariesMatrix" is identity when "isBt2020Linear" is set
+            colorspace_trc_smpte2084(value, colorPrimariesMatrix, maxLuminance);
+            break;
+        case AVCOL_TRC_ARIB_STD_B67:
+            colorspace_trc_hlg(value, colorPrimariesMatrix);
+            break;
     }
 
     if (negative)

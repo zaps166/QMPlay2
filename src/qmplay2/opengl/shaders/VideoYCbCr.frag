@@ -93,9 +93,9 @@ void main()
     vec3 rgb = clamp(uYUVtRGB * ((YCbCr * uRangeMultiplier.xyy - vec3(0.5, 0.0, 0.0)) * contrastSaturation + vec3(0.5, 0.0, 0.0)), 0.0, 1.0);
 
 #ifdef GL3
-    if (uTrc == AVCOL_TRC_BT709)
+    if (uTrc == AVCOL_TRC_BT709 || uTrc == AVCOL_TRC_BT2020_10 || uTrc == AVCOL_TRC_BT2020_12)
     {
-        colorspace_trc_bt709(rgb, uColorPrimariesMatrix);
+        colorspace_trc_gamma24(rgb, uColorPrimariesMatrix);
     }
     else if (uTrc == AVCOL_TRC_SMPTE2084)
     {
