@@ -96,6 +96,7 @@ public:
     void setFrame(const Frame &frame, QMPlay2OSDList &&osdList);
 
     inline bool isHdr10St2084() const;
+    inline bool isBt2020Linear() const;
 
 private:
     inline VideoPipelineSpecializationData *getVideoPipelineSpecializationData();
@@ -191,8 +192,6 @@ private:
 
         bool supportsHdrMetadata = false;
 
-        bool hasHdr10St2084 = false;
-
         unique_lock<mutex> queueLocker;
 
         shared_ptr<ShaderModule> vertexShaderModule;
@@ -209,7 +208,6 @@ private:
         vk::UniqueSwapchainKHR oldSwapChain;
 
         bool checkSurfaceColorSpace = false;
-        bool hdrSettingsChanged = false;
         bool mustUpdateHdrMetadata = false;
         bool mustUpdateVideoPipelineSpecialization = false;
 
@@ -279,6 +277,10 @@ bool Window::hasError() const
 bool Window::isHdr10St2084() const
 {
     return (m.colorSpace == vk::ColorSpaceKHR::eHdr10St2084EXT);
+}
+bool Window::isBt2020Linear() const
+{
+    return (m.colorSpace == vk::ColorSpaceKHR::eBt2020LinearEXT);
 }
 
 }

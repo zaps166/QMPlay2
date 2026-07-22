@@ -95,6 +95,7 @@ struct VideoPipelineSpecializationData
     vk::Bool32 useSharpness;
     vk::Bool32 negative;
     int trc;
+    vk::Bool32 isBt2020Linear;
 };
 
 struct alignas(16) VertPushConstants
@@ -282,7 +283,6 @@ void Window::setConfig(
     {
         m_hdr = hdr;
         m.checkSurfaceColorSpace = true;
-        m.hdrSettingsChanged = true;
         m.mustUpdateVideoPipelineSpecialization = true;
         maybeRequestUpdate();
     }
@@ -584,14 +584,21 @@ void Window::render()
 
     if (m.checkSurfaceColorSpace)
     {
-        const bool surfaceMatchesFrameProps = (isHdr10St2084() == m_frameProps->isHdr10St2084());
-        if (m.renderPass && ((m.hasHdr10St2084 && !surfaceMatchesFrameProps) || (m.hdrSettingsChanged && m_hdr != surfaceMatchesFrameProps)))
+        const bool contentHdr10 = m_frameProps->isHdr10St2084();
+        const bool contentBt2020 = (m_frameProps->colorPrimaries == AVCOL_PRI_BT2020);
+
+        auto desiredColorSpace = vk::ColorSpaceKHR::eSrgbNonlinear;
+        if (m_hdr && contentHdr10)
+            desiredColorSpace = vk::ColorSpaceKHR::eHdr10St2084EXT;
+        else if (contentBt2020)
+            desiredColorSpace = vk::ColorSpaceKHR::eBt2020LinearEXT;
+
+        if (m.renderPass && m.colorSpace != desiredColorSpace)
         {
             resetSwapChainAndGraphicsPipelines(true);
             m.renderPass.reset();
         }
         m.checkSurfaceColorSpace = false;
-        m.hdrSettingsChanged = false;
     }
 
     try
@@ -949,11 +956,23 @@ bool Window::ensureSurfaceAndRenderPass()
         m.colorSpace = vk::ColorSpaceKHR::eHdr10St2084EXT;
         surfaceFormat = getSurfaceFormat();
     }
-    m.hasHdr10St2084 = (surfaceFormat != vk::Format::eUndefined);
-    if (!m.hasHdr10St2084 || !m_frameProps->isHdr10St2084())
+    if (surfaceFormat == vk::Format::eUndefined || !m_frameProps->isHdr10St2084())
     {
-        m.colorSpace = vk::ColorSpaceKHR::eSrgbNonlinear;
-        surfaceFormat = getSurfaceFormat();
+        bool mustGetSrgbSurfaceFormat = true;
+        if (m_frameProps->colorPrimaries == AVCOL_PRI_BT2020)
+        {
+            m.colorSpace = vk::ColorSpaceKHR::eBt2020LinearEXT;
+            surfaceFormat = getSurfaceFormat();
+            if (surfaceFormat != vk::Format::eUndefined)
+            {
+                mustGetSrgbSurfaceFormat = false;
+            }
+        }
+        if (mustGetSrgbSurfaceFormat)
+        {
+            m.colorSpace = vk::ColorSpaceKHR::eSrgbNonlinear;
+            surfaceFormat = getSurfaceFormat();
+        }
     }
     if (surfaceFormat == vk::Format::eUndefined)
     {
@@ -1350,10 +1369,12 @@ void Window::obtainVideoPipelineSpecializationFrameProps()
     }
     specializationData->hasLuma = !m_frameProps->rgb;
     specializationData->isGray = m_frameProps->gray;
+    specializationData->isBt2020Linear = isBt2020Linear();
 
     if (
         !m_frameProps->gray &&
         !isHdr10St2084() &&
+        (!isBt2020Linear() || m_frameProps->colorTrc == AVCOL_TRC_SMPTE2084) &&
         isTrcSupported(m_frameProps->colorTrc) && (
             m_frameProps->colorTrc != AVCOL_TRC_BT709 || (
                 Functions::isColorPrimariesSupported(m_frameProps->colorPrimaries) &&
@@ -1390,7 +1411,7 @@ void Window::fillVideoPipelineFragmentUniform()
         fragData->levels.setY(128.0 / 255.0f);
     }
 
-    if (isTrcSupported(m_frameProps->colorTrc))
+    if (!isBt2020Linear() && isTrcSupported(m_frameProps->colorTrc))
     {
         fragData->colorPrimariesMatrix = Functions::getColorPrimariesToSpecifiedMatrix(
             m_frameProps->colorPrimaries

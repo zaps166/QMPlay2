@@ -17,6 +17,7 @@ layout(constant_id = 12) const bool useHueSaturation = false;
 layout(constant_id = 13) const bool useSharpness = false;
 layout(constant_id = 14) const bool negative = false;
 layout(constant_id = 15) const int trc = 0;
+layout(constant_id = 16) const bool isBt2020Linear = false;
 
 layout(location = 0) in vec2 inTextureCoord;
 layout(location = 0) out vec4 outColor;
@@ -215,6 +216,7 @@ void main()
     }
     else if (trc == AVCOL_TRC_SMPTE2084)
     {
+        // "colorPrimariesMatrix" is identity when "isBt2020Linear" is set
         colorspace_trc_smpte2084(value, colorPrimariesMatrix, maxLuminance);
     }
     else if (trc == AVCOL_TRC_ARIB_STD_B67)
@@ -235,6 +237,11 @@ void main()
     if (useGamma)
     {
         value = pow(clamp(value, 0.0, 1.0), vec3(1.0 / gamma));
+    }
+
+    if (isBt2020Linear)
+    {
+        value = pow(value, vec3(2.2));
     }
 
     outColor = vec4(value, 1.0);

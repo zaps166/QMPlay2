@@ -158,6 +158,9 @@ QString Writer::name() const
     if (m_window->isHdr10St2084())
         additionalText += "HDR";
 
+    if (m_window->isBt2020Linear())
+        additionalText += QStringLiteral("BT.2020");
+
     if (m_vkHwInterop)
         additionalText += m_vkHwInterop->name();
 
