@@ -81,7 +81,8 @@ bool Writer::set()
         sets.getBool("Vulkan/HQScaleDown"),
         sets.getBool("Vulkan/HQScaleUp"),
         sets.getBool("Vulkan/BypassCompositor"),
-        sets.getBool("Vulkan/HDR")
+        sets.getBool("Vulkan/HDR"),
+        sets.getBool("Vulkan/BT2020")
     );
 
     return !mustRestart;

@@ -222,6 +222,7 @@ void SettingsWidget::InitSettings()
     QMPSettings.init("Vulkan/HQScaleUp", false);
     QMPSettings.init("Vulkan/BypassCompositor", true);
     QMPSettings.init("Vulkan/HDR", QGuiApplication::platformName().contains(QStringLiteral("wayland")));
+    QMPSettings.init("Vulkan/BT2020", QGuiApplication::platformName().contains(QStringLiteral("wayland")));
 
     QMPSettings.init("ShortSeek", 5);
     QMPSettings.init("LongSeek", 30);
@@ -1552,6 +1553,7 @@ void SettingsWidget::createRendererSettings()
         auto hqUpscale = new QCheckBox(tr("High quality image scaling up"));
         auto bypassCompositor = createBypassCompositor();
         auto hdr = new QCheckBox(tr("Try to display HDR10 videos in HDR mode (experimental)"));
+        auto bt2020 = new QCheckBox(tr("Try to display BT.2020 videos in BT.2020 color space (experimental)"));
 
         auto selectedDeviceFiltersEnabled = std::make_shared<int>(-1);
 
@@ -1583,8 +1585,10 @@ void SettingsWidget::createRendererSettings()
 #ifdef Q_OS_WIN
             bypassCompositor->setEnabled(!noExclusiveFullScreenDevIDs->contains(devices->itemData(idx).toByteArray()));
             hdr->setVisible(QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows10);
+            bt2020->setVisible(QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows10);
 #else
             hdr->setVisible(QGuiApplication::platformName().contains("wayland"));
+            bt2020->setVisible(QGuiApplication::platformName().contains("wayland"));
 #endif
         });
 
@@ -1652,6 +1656,7 @@ void SettingsWidget::createRendererSettings()
         hqUpscale->setChecked(settings->getBool("Vulkan/HQScaleUp"));
         bypassCompositor->setChecked(settings->getBool("Vulkan/BypassCompositor"));
         hdr->setChecked(settings->getBool("Vulkan/HDR"));
+        bt2020->setChecked(settings->getBool("Vulkan/BT2020"));
 
         nearestScaling->setToolTip(tr("Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead."));
         hqUpscale->setToolTip(tr("Very slow if used with sharpness"));
@@ -1667,6 +1672,7 @@ void SettingsWidget::createRendererSettings()
         layout->addRow(hqUpscale);
         layout->addRow(bypassCompositor);
         layout->addRow(hdr);
+        layout->addRow(bt2020);
 
         m_rendererApplyFunctions.push_back([=](bool &initFilters) {
             const bool filtersEnabled = gpuDeint->isEnabled();
@@ -1693,6 +1699,7 @@ void SettingsWidget::createRendererSettings()
             settings->set("Vulkan/HQScaleUp", hqUpscale->isChecked());
             settings->set("Vulkan/BypassCompositor", bypassCompositor->isChecked());
             settings->set("Vulkan/HDR", hdr->isChecked());
+            settings->set("Vulkan/BT2020", bt2020->isChecked());
             if (renderers->currentData().toString() == "vulkan")
                 settings->set("Vulkan/UserApplied", true);
 

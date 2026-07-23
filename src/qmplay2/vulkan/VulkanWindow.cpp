@@ -235,7 +235,8 @@ void Window::setConfig(
     bool hqScaleDown,
     bool hqScaleUp,
     bool bypassCompositor,
-    bool hdr)
+    bool hdr,
+    bool bt2020)
 {
     if (nearestScaling)
     {
@@ -281,9 +282,10 @@ void Window::setConfig(
         }
     }
 #endif
-    if ((m_isWayland || m_platformName == QStringLiteral("windows")) && m_hdr != hdr)
+    if ((m_isWayland || m_platformName == QStringLiteral("windows")) && (m_hdr != hdr || m_bt2020 != bt2020))
     {
         m_hdr = hdr;
+        m_bt2020 = bt2020;
         m.checkSurfaceColorSpace = true;
         m.mustUpdateVideoPipelineSpecialization = true;
         maybeRequestUpdate();
@@ -592,7 +594,7 @@ void Window::render()
         auto desiredColorSpace = vk::ColorSpaceKHR::eSrgbNonlinear;
         if (m_hdr && contentHdr10)
             desiredColorSpace = vk::ColorSpaceKHR::eHdr10St2084EXT;
-        else if (contentBt2020)
+        else if (m_bt2020 && contentBt2020)
             desiredColorSpace = vk::ColorSpaceKHR::eBt2020LinearEXT;
 
         if (m.renderPass && m.colorSpace != desiredColorSpace)
@@ -961,7 +963,7 @@ bool Window::ensureSurfaceAndRenderPass()
     if (surfaceFormat == vk::Format::eUndefined || !m_frameProps->isHdr10St2084())
     {
         bool mustGetSrgbSurfaceFormat = true;
-        if (m_frameProps->colorPrimaries == AVCOL_PRI_BT2020)
+        if (m_bt2020 && m_frameProps->colorPrimaries == AVCOL_PRI_BT2020)
         {
             m.colorSpace = vk::ColorSpaceKHR::eBt2020LinearEXT;
             surfaceFormat = getSurfaceFormat();

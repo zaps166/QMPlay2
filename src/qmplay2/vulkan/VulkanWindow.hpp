@@ -69,7 +69,8 @@ public:
         bool hqScaleDown,
         bool hqScaleUp,
         bool bypassCompositor,
-        bool hdr
+        bool hdr,
+        bool bt2020
     );
     void setParams(
         const QSize &size,
@@ -246,6 +247,7 @@ private:
     bool m_hqScaleDown = false;
     bool m_hqScaleUp = false;
     bool m_hdr = false;
+    bool m_bt2020 = false;
 
     QSize m_imgSize;
     int m_flip = 0;
