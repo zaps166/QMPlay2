@@ -288,6 +288,7 @@ void Window::setConfig(
         m_bt2020 = bt2020;
         m.checkSurfaceColorSpace = true;
         m.mustUpdateVideoPipelineSpecialization = true;
+        m.mustUpdateFragUniform = true;
         maybeRequestUpdate();
     }
 }
