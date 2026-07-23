@@ -3193,7 +3193,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Hide QMPlay2 logo</source>
-        <translation type="unfinished"></translation>
+        <translation>隐藏 QMPlay2 标志</translation>
     </message>
     <message>
         <source>Move up</source>
@@ -3819,7 +3819,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Gamma correction: </source>
-        <translation type="unfinished"></translation>
+        <translation>伽玛校正：</translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
