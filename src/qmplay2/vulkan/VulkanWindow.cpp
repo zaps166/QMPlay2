@@ -955,12 +955,12 @@ bool Window::ensureSurfaceAndRenderPass()
     const auto prevColorSpace = m.colorSpace;
 
     auto surfaceFormat = vk::Format::eUndefined;
-    if (m_hdr)
+    if (m_hdr && m_frameProps->isHdr10St2084())
     {
         m.colorSpace = vk::ColorSpaceKHR::eHdr10St2084EXT;
         surfaceFormat = getSurfaceFormat();
     }
-    if (surfaceFormat == vk::Format::eUndefined || !m_frameProps->isHdr10St2084())
+    if (surfaceFormat == vk::Format::eUndefined)
     {
         bool mustGetSrgbSurfaceFormat = true;
         if (m_bt2020 && m_frameProps->colorPrimaries == AVCOL_PRI_BT2020)
