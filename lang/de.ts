@@ -3467,6 +3467,10 @@ Teilweise geprüft wirkt sich nicht auf den Schieberegler aus.</translation>
         <translation>Hochwertige Bildskalierung</translation>
     </message>
     <message>
+        <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>First available device</source>
         <translation>Erstes verfügbares Gerät</translation>
     </message>

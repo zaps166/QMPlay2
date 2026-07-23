@@ -3468,6 +3468,10 @@ Parcialmente marcado no afecta a la búsqueda con la barra de progreso.</transla
         <translation>Ampliación de imagen de alta calidad</translation>
     </message>
     <message>
+        <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>First available device</source>
         <translation>Primer dispositivo disponible</translation>
     </message>

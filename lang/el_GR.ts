@@ -3496,6 +3496,10 @@ Partially checked only if the content has less channels than the specified value
         <translation>Προσπάθεια εμφάνισης βίντεο HDR10 σε λειτουργία HDR (πειραματικό)</translation>
     </message>
     <message>
+        <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>No supported devices found</source>
         <translation>Δεν βρέθηκαν υποστηριζόμενες συσκευές</translation>
     </message>

@@ -3468,6 +3468,10 @@ Częściowo zaznaczone nie wpływa na przeijanie na suwaku.</translation>
         <translation>Wysoka jakość skalowania obrazu w górę</translation>
     </message>
     <message>
+        <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
+        <translation>Spróbuj wyświetlić filmy BT.2020 w przestrzeni kolorów BT.2020 (eksperymentalne)</translation>
+    </message>
+    <message>
         <source>First available device</source>
         <translation>Pierwsze dostępne urządzenie</translation>
     </message>

@@ -3332,6 +3332,10 @@ Ha félig van bejelölve, nem befolyásolja a csúszkán történő léptetést.
         <translation>A hosszúságnak legalább 8 percnek kell lennie. A lejátszási pozíciónak a lejátszási tartomány [1% - 99%] részén kell lennie. A lejátszást a teljes képernyő gomb melletti ikon megnyomásával folytathatja.</translation>
     </message>
     <message>
+        <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>New language</source>
         <translation>Új nyelv</translation>
     </message>

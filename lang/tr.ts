@@ -3486,6 +3486,10 @@ Kısmen işaretli, sürgüde aramayı etkilemez.</translation>
         <translation>Yüksek kaliteli görüntü büyütme</translation>
     </message>
     <message>
+        <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>First available device</source>
         <translation>İlk kullanılabilir aygıt</translation>
     </message>

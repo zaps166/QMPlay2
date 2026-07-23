@@ -3420,6 +3420,10 @@ Kruis half aan om dit niet toe te passen op de schuifbalk.</translation>
         <translation>Afbeeldingen vergroten met hoge kwaliteit</translation>
     </message>
     <message>
+        <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>First available device</source>
         <translation>Eerste beschikbare apparaat</translation>
     </message>

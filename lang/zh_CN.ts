@@ -3468,6 +3468,10 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <translation>放大高质量图像</translation>
     </message>
     <message>
+        <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>First available device</source>
         <translation>首个可用设备</translation>
     </message>
