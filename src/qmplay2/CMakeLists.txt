@@ -206,12 +206,7 @@ if(USE_VULKAN)
         ${SHADER_QRC_CONTENT}
         " </qresource>\n</RCC>\n"
     )
-
-    add_custom_command(
-        OUTPUT ${VULKAN_SHADER_QRC_FILE}
-        DEPENDS ${QMVK_SHADER_COMPILED_FILES}
-        COMMAND ${CMAKE_COMMAND} -E copy ${VULKAN_SHADER_QRC_FILE_TMP} ${VULKAN_SHADER_QRC_FILE}
-    )
+    configure_file(${VULKAN_SHADER_QRC_FILE_TMP} ${VULKAN_SHADER_QRC_FILE} COPYONLY)
 
     # No need to add VulkanShaders target dependency to libqmplay2,
     # because generated QRC file is added into source file list.
