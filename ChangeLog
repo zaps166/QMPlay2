@@ -1,3 +1,12 @@
+Changes in QMPlay2 26.08.02:
+    - don't close panel when mouse is pressed inside window on full screen (regression fix),
+    - use BT.2020 surface for BT.2020 videos in Vulkan (enabled by default for Wayland),
+    - add support for BT.2020 TRC for sRGB conversion,
+    - display real gamma correction values,
+    - load and display LRC file contents,
+    - add option to hide QMPlay2 logo,
+    - fix HLG HDR display,
+
 Changes in QMPlay2 26.06.27:
     - AVAudioFilter improvements and compatibility fix for FFmpeg 8.0,
     - remove Rayman2 audio decoder (FFmpeg is able to play it),
