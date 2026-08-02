@@ -181,7 +181,7 @@ Don't forget to update submodules: `git submodule update --init`.
 
 Install required dependencies to build and run:
 ```sh
-flatpak install org.flatpak.Builder org.kde.Platform/$(uname -m)/6.10 org.kde.Sdk/$(uname -m)/6.10
+flatpak install org.flatpak.Builder org.kde.Platform/$(uname -m)/6.11 org.kde.Sdk/$(uname -m)/6.11
 ```
 
 Build QMPlay2:
