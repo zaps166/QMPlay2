@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Unable to find supported sample format</source>
-        <translation>Не удалось найти поддерживаемый формат файла</translation>
+        <translation>Не удалось найти поддерживаемый формат сэмплов</translation>
     </message>
 </context>
 <context>
@@ -124,7 +124,7 @@
     </message>
     <message>
         <source>Additional module parameter</source>
-        <translation>Дополнительный параметр модуль</translation>
+        <translation>Дополнительный параметр модуля</translation>
     </message>
 </context>
 <context>
@@ -162,7 +162,7 @@
     </message>
     <message>
         <source>Use custom colors</source>
-        <translation>Использовать пользовательский цвет</translation>
+        <translation>Применять пользовательские цвета</translation>
     </message>
     <message>
         <source>Text color</source>
@@ -210,7 +210,7 @@
     </message>
     <message>
         <source>Removing</source>
-        <translation>Удалено</translation>
+        <translation>Удаление</translation>
     </message>
     <message>
         <source>Do you want to remove</source>
@@ -265,7 +265,7 @@
     </message>
     <message>
         <source>&amp;Custom</source>
-        <translation>По желанию</translation>
+        <translation>Пользователь&amp;ский</translation>
     </message>
 </context>
 <context>
@@ -640,7 +640,7 @@
     </message>
     <message>
         <source>Download</source>
-        <translation>Загрузить</translation>
+        <translation>Скачать</translation>
     </message>
     <message>
         <source>Enter address</source>
@@ -716,7 +716,7 @@
     </message>
     <message>
         <source>Incorrect path</source>
-        <translation>Некорректный путь</translation>
+        <translation>Неверный путь</translation>
     </message>
     <message>
         <source>File size</source>
@@ -809,7 +809,7 @@
     <name>FFTSpectrumW</name>
     <message>
         <source>FFT Spectrum</source>
-        <translation>Спектр FFT</translation>
+        <translation>Спектр БПФ</translation>
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
@@ -1237,19 +1237,19 @@
     </message>
     <message>
         <source>OpenMPT enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Включена поддержка OpenMPT</translation>
     </message>
     <message>
         <source>Only first</source>
-        <translation type="unfinished"></translation>
+        <translation>Только первый</translation>
     </message>
     <message>
         <source>All sequentially</source>
-        <translation type="unfinished"></translation>
+        <translation>Все последовательно</translation>
     </message>
     <message>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Группа</translation>
     </message>
     <message>
         <source>Default</source>
@@ -1257,59 +1257,59 @@
     </message>
     <message>
         <source>Nearest</source>
-        <translation type="unfinished"></translation>
+        <translation>Ближайший</translation>
     </message>
     <message>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation>Линейный</translation>
     </message>
     <message>
         <source>Cubic</source>
-        <translation type="unfinished"></translation>
+        <translation>Кубический</translation>
     </message>
     <message>
         <source>Windowed sinc (8 taps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Оконный sinc (8 отводов)</translation>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Откл.</translation>
     </message>
     <message>
         <source>Patterns</source>
-        <translation type="unfinished">Шаблоны</translation>
+        <translation>Шаблоны</translation>
     </message>
     <message>
         <source>Samples</source>
-        <translation type="unfinished">Сэмплы</translation>
+        <translation>Сэмплы</translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Все</translation>
     </message>
     <message>
         <source>Channels:</source>
-        <translation type="unfinished"></translation>
+        <translation>Каналы:</translation>
     </message>
     <message>
         <source>Rows:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ряды:</translation>
     </message>
     <message>
         <source>Subsongs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Подпесни:</translation>
     </message>
     <message>
         <source>Stereo separation:</source>
-        <translation type="unfinished"></translation>
+        <translation>Стерео-разделение:</translation>
     </message>
     <message>
         <source>Interpolation filter:</source>
-        <translation type="unfinished"></translation>
+        <translation>Фильтр интерполяции:</translation>
     </message>
     <message>
         <source>Visualization:</source>
-        <translation type="unfinished"></translation>
+        <translation>Визуализация:</translation>
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
@@ -1377,7 +1377,7 @@
     </message>
     <message>
         <source>filter size</source>
-        <translation>размер</translation>
+        <translation>размер фильтра</translation>
     </message>
     <message>
         <source>Medium</source>
@@ -1449,11 +1449,11 @@
     </message>
     <message>
         <source>FFT spectrum size</source>
-        <translation>Размер спектра FFT</translation>
+        <translation>Размер спектра БПФ</translation>
     </message>
     <message>
         <source>Displayed sound length</source>
-        <translation>Выводить на экран продолжительность звука</translation>
+        <translation>Отображаемая длительность звука</translation>
     </message>
     <message>
         <source>Set as default AudioCD player</source>
@@ -1525,7 +1525,7 @@
     </message>
     <message>
         <source>Reverse the right channel phase</source>
-        <translation>Обратить фазу в правом канале</translation>
+        <translation>Обратить фазу правого канала</translation>
     </message>
     <message>
         <source>Use CDDB if CD-TEXT is not available</source>
@@ -1561,7 +1561,7 @@
     </message>
     <message>
         <source>Use the program via MPRIS2 interface</source>
-        <translation>Использование программы через интерфейс MPRIS2</translation>
+        <translation>Управлять программой через интерфейс MPRIS</translation>
     </message>
     <message>
         <source>Slider count in sound equalizer</source>
@@ -1593,7 +1593,7 @@
     </message>
     <message>
         <source>Use CUVID only when primary GPU is NVIDIA</source>
-        <translation>Использовать CUVID только тогда, когда основное ГПУ — NVIDIA</translation>
+        <translation>Использовать CUVID только тогда, когда основной ГП — NVIDIA</translation>
     </message>
     <message>
         <source>Infinite</source>
@@ -1749,7 +1749,7 @@
     </message>
     <message>
         <source>Try to automatically reconnect the network connection</source>
-        <translation>Попвтка автоматического восстановления сетевого соединения</translation>
+        <translation>Попытка автоматического восстановления сетевого соединения</translation>
     </message>
     <message>
         <source>%1 kHz</source>
@@ -1761,11 +1761,11 @@
     </message>
     <message>
         <source>Linear volume scale in FFT spectrum</source>
-        <translation>Линейная шкала интенсивности в спектре FFT</translation>
+        <translation>Линейная шкала интенсивности в спектре БПФ</translation>
     </message>
     <message>
         <source>Limit frequency in FFT spectrum</source>
-        <translation>Предельная частота в спектре FFT</translation>
+        <translation>Предельная частота в спектре БПФ</translation>
     </message>
     <message>
         <source>Allow experimental FFmpeg features</source>
@@ -1801,7 +1801,7 @@
     </message>
     <message>
         <source>FFmpeg audio filters, example: %1</source>
-        <translation>Аудиофильтры FFmpeg, пример: %1</translation>
+        <translation>Аудиофильтры FFmpeg, напр.: %1</translation>
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;%4&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
@@ -1917,27 +1917,27 @@
     <name>OpenMPDemux</name>
     <message>
         <source>Samples</source>
-        <translation type="unfinished">Сэмплы</translation>
+        <translation>Сэмплы</translation>
     </message>
     <message>
         <source>Patterns</source>
-        <translation type="unfinished">Шаблоны</translation>
+        <translation>Шаблоны</translation>
     </message>
     <message>
         <source>Channels</source>
-        <translation type="unfinished">Каналы</translation>
+        <translation>Каналы</translation>
     </message>
     <message>
         <source>Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Инструменты</translation>
     </message>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Дорожка</translation>
+        <translation>Дорожка</translation>
     </message>
     <message>
         <source>Track %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Дорожка %1</translation>
     </message>
 </context>
 <context>
@@ -1980,7 +1980,7 @@
     </message>
     <message>
         <source>%1 (Season %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (сезон %2)</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2011,7 +2011,7 @@
     </message>
     <message>
         <source>Create new profile</source>
-        <translation>Создать новый профиль</translation>
+        <translation>Создать профиль</translation>
     </message>
     <message>
         <source>&amp;Profiles</source>
@@ -2177,7 +2177,7 @@
     </message>
     <message>
         <source>Recording error</source>
-        <translation>Recording error</translation>
+        <translation>Ошибка записи</translation>
     </message>
     <message>
         <source>Recording started: %1</source>
@@ -2232,7 +2232,7 @@
     </message>
     <message>
         <source>Set &amp;video delay</source>
-        <translation>Установить з&amp;адержку видео</translation>
+        <translation>Задать з&amp;адержку видео</translation>
     </message>
     <message>
         <source>&amp;Delay video</source>
@@ -2240,11 +2240,11 @@
     </message>
     <message>
         <source>&amp;Speed up video</source>
-        <translation>&amp;Ускорение видео</translation>
+        <translation>Ус&amp;корение видео</translation>
     </message>
     <message>
         <source>&amp;Enable subtitles</source>
-        <translation>&amp;Субтитры включены</translation>
+        <translation>Включить с&amp;убтитры</translation>
     </message>
     <message>
         <source>Add &amp;subtities from file</source>
@@ -2252,7 +2252,7 @@
     </message>
     <message>
         <source>Set &amp;subtitles delay</source>
-        <translation>Установить за&amp;держку субтитров</translation>
+        <translation>Задать за&amp;держку субтитров</translation>
     </message>
     <message>
         <source>&amp;Delay subtitiles</source>
@@ -2359,7 +2359,7 @@
     </message>
     <message>
         <source>Suspend after playbac&amp;k is finished</source>
-        <translation>Перейти в ж&amp;дущий режим по окончании воспроизведения</translation>
+        <translation>Перевести ПК в сон пос&amp;ле проигрывания</translation>
     </message>
     <message>
         <source>A&amp;-B Repeat</source>
@@ -2395,19 +2395,19 @@
     </message>
     <message>
         <source>Un&amp;mute</source>
-        <translation>Без звука</translation>
+        <translation>Включит&amp;ь звук</translation>
     </message>
     <message>
         <source>&amp;Integer scaling</source>
-        <translation>Целочисленное масштабирование</translation>
+        <translation>Це&amp;лочисленное масштабирование</translation>
     </message>
     <message>
         <source>&amp;Set zoom</source>
-        <translation>Установить масштаб</translation>
+        <translation>&amp;Установить масштаб</translation>
     </message>
     <message>
         <source>&amp;Precise zoom</source>
-        <translation>Точное масштабирование</translation>
+        <translation>Точное мас&amp;штабирование</translation>
     </message>
 </context>
 <context>
@@ -2494,19 +2494,19 @@
     </message>
     <message>
         <source>Pas&amp;te and play</source>
-        <translation>Склеивай и играй</translation>
+        <translation>Вставить и воспроизв&amp;ести</translation>
     </message>
     <message>
         <source>&amp;Remove from list</source>
-        <translation>Удалить из списка</translation>
+        <translation>Удалить из спис&amp;ка</translation>
     </message>
     <message>
         <source>Remove from &amp;disk</source>
-        <translation>Удалить с диска</translation>
+        <translation>Удалить с дис&amp;ка</translation>
     </message>
     <message>
         <source>Clear &amp;ungrouped entries</source>
-        <translation>Очистить и отменить группировку записей</translation>
+        <translation>Очистить записи без &amp;групп</translation>
     </message>
 </context>
 <context>
@@ -2724,7 +2724,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
-        <translation>Выберите «%1» из раскрывающегося списка</translation>
+        <translation>Выберите «%1» из выпадающего списка</translation>
     </message>
     <message>
         <source>Connection error</source>
@@ -2755,7 +2755,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Clicks</source>
-        <translation type="unfinished"></translation>
+        <translation>Щелчки</translation>
     </message>
 </context>
 <context>
@@ -2778,7 +2778,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>&amp;Playlist repeating</source>
-        <translation>Повторение &amp;списка воспроизведения</translation>
+        <translation>Повторение плей&amp;листа</translation>
     </message>
     <message>
         <source>R&amp;andom</source>
@@ -2875,7 +2875,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>Contains</source>
-        <translation>Содержание</translation>
+        <translation>Содержит</translation>
     </message>
     <message>
         <source>Subtitles</source>
@@ -2907,7 +2907,7 @@ QMPlay2 не будет отображать значки!</translation>
     </message>
     <message>
         <source>OSD enabled</source>
-        <translation>OSD включено</translation>
+        <translation>Экранное меню включено</translation>
     </message>
     <message>
         <source>Choose directory</source>
@@ -3025,7 +3025,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Set key bindings</source>
-        <translation>Установить комбинации клавиш</translation>
+        <translation>Установить сочетания клавиш</translation>
     </message>
     <message>
         <source>Reset settings</source>
@@ -3069,7 +3069,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Set appearance</source>
-        <translation>Установить внешний вид</translation>
+        <translation>Настроить внешний вид</translation>
     </message>
     <message>
         <source>Selected Profile: </source>
@@ -3137,7 +3137,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Hide artist metadata</source>
-        <translation>Скрыть метаданные исполнителя</translation>
+        <translation>Скрывать метаданные исполнителя</translation>
     </message>
     <message>
         <source>Automatically restore main window when new video file is loaded</source>
@@ -3153,7 +3153,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Cookies from browser</source>
-        <translation>Файлы cookie из браузера</translation>
+        <translation>Файлы куки из браузера</translation>
     </message>
     <message>
         <source>Custom path</source>
@@ -3185,15 +3185,15 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation>Сохранять размер панелей при изменении размера главного окна (экспериментальная функция)</translation>
+        <translation>Сохранять размер панелей при изменении размера главного окна (экспериментально)</translation>
     </message>
     <message>
         <source>Fullscreen panels on the right side</source>
-        <translation></translation>
+        <translation>Панели в полноэкранном режиме справа</translation>
     </message>
     <message>
         <source>Hide QMPlay2 logo</source>
-        <translation type="unfinished"></translation>
+        <translation>Скрывать логотип QMPlay2</translation>
     </message>
     <message>
         <source>Move up</source>
@@ -3205,7 +3205,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Use available replay gain</source>
-        <translation>Использовать выравнивание громкости, если возможно</translation>
+        <translation>Применять выравнивание громкости по возможности</translation>
     </message>
     <message>
         <source>Album mode for replay gain</source>
@@ -3245,7 +3245,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Keep speed</source>
-        <translation>Сохранять частоту кадров</translation>
+        <translation>Сохранять скорость воспроизведения</translation>
     </message>
     <message>
         <source>Keep zoom</source>
@@ -3269,7 +3269,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>sec</source>
-        <translation></translation>
+        <translation>с</translation>
     </message>
     <message>
         <source>Long seeking (up and down arrows): </source>
@@ -3293,7 +3293,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Start playback internet stream if it is buffered: </source>
-        <translation>Начинать проигрывание интернет-потока, если он буферизован: </translation>
+        <translation>Начинать проигрывание интернет-потока, если в буфере: </translation>
     </message>
     <message>
         <source>Desired video stream quality: </source>
@@ -3329,7 +3329,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Use audio resampler and channel conversion before filters and visualizations</source>
-        <translation>Использовать передискретизатор звука и преобразование каналов раньше фильтров и визуализации</translation>
+        <translation>Применять передискретизатор звука и преобразование каналов до фильтров и визуализации</translation>
     </message>
     <message>
         <source>Keep aspect ratio</source>
@@ -3345,7 +3345,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Continue last playback when program starts</source>
-        <translation>Продолжить воспроизведение с того места, на котором оно было прервано, при запуске программы</translation>
+        <translation>Продолжить воспроизведение с прерванной позиции при запуске программы</translation>
     </message>
     <message>
         <source>Mouse wheel action on video dock</source>
@@ -3469,7 +3469,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Пытаться отображать видео BT.2020 в цветовом пространстве BT.2020 (экспериментально)</translation>
     </message>
     <message>
         <source>First available device</source>
@@ -3513,7 +3513,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation>Попробуйте воспроизвести видео в формате HDR10 в режиме HDR (экспериментальная функция)</translation>
+        <translation>Пытаться воспроизводить видео в формате HDR10 в режиме HDR (экспериментально)</translation>
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
@@ -3601,7 +3601,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Date</source>
-        <translation>Данные</translation>
+        <translation>Дата</translation>
     </message>
     <message>
         <source>Comment</source>
@@ -3614,7 +3614,7 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>DRC</source>
         <comment>Dynamic Range Compression</comment>
-        <translation type="unfinished"></translation>
+        <translation>Динамическая компрессия</translation>
     </message>
 </context>
 <context>
@@ -3788,7 +3788,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
-        <translation type="unfinished"></translation>
+        <translation>Удваивает частоту кадров. Полезно для попадания в диапазон FreeSync. Этот фильтр работает с аппаратно-ускоренным видео.</translation>
     </message>
 </context>
 <context>
@@ -3807,7 +3807,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Gamma</source>
-        <translation type="unfinished"></translation>
+        <translation>Гамма</translation>
     </message>
     <message>
         <source>Saturation</source>
@@ -3823,7 +3823,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Gamma correction: </source>
-        <translation type="unfinished"></translation>
+        <translation>Коррекция гаммы: </translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
@@ -3875,11 +3875,11 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Gamma down</source>
-        <translation type="unfinished"></translation>
+        <translation>Уменьшить гамму</translation>
     </message>
     <message>
         <source>Gamma up</source>
-        <translation type="unfinished"></translation>
+        <translation>Увеличить гамму</translation>
     </message>
     <message>
         <source>Disable negative</source>
