@@ -1925,7 +1925,7 @@
     </message>
     <message>
         <source>Channels</source>
-        <translation >Канали</translation>
+        <translation>Канали</translation>
     </message>
     <message>
         <source>Instruments</source>
