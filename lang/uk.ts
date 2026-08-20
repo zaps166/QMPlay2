@@ -1237,19 +1237,19 @@
     </message>
     <message>
         <source>OpenMPT enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenMPT увімкнено</translation>
     </message>
     <message>
         <source>Only first</source>
-        <translation type="unfinished"></translation>
+        <translation>Тільки перший</translation>
     </message>
     <message>
         <source>All sequentially</source>
-        <translation type="unfinished"></translation>
+        <translation>Усе послідовно</translation>
     </message>
     <message>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Група</translation>
     </message>
     <message>
         <source>Default</source>
@@ -1257,59 +1257,59 @@
     </message>
     <message>
         <source>Nearest</source>
-        <translation type="unfinished"></translation>
+        <translation>Найближчий</translation>
     </message>
     <message>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation>Лінійний</translation>
     </message>
     <message>
         <source>Cubic</source>
-        <translation type="unfinished"></translation>
+        <translation>Кубічний</translation>
     </message>
     <message>
         <source>Windowed sinc (8 taps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Віконний sinc (8 відліків)</translation>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Вимкнено</translation>
     </message>
     <message>
         <source>Patterns</source>
-        <translation type="unfinished">Шаблони</translation>
+        <translation>Шаблони</translation>
     </message>
     <message>
         <source>Samples</source>
-        <translation type="unfinished">Семпли</translation>
+        <translation>Семпли</translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Всі</translation>
     </message>
     <message>
         <source>Channels:</source>
-        <translation type="unfinished"></translation>
+        <translation>Канали:</translation>
     </message>
     <message>
         <source>Rows:</source>
-        <translation type="unfinished"></translation>
+        <translation>Рядки:</translation>
     </message>
     <message>
         <source>Subsongs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Підпісні:</translation>
     </message>
     <message>
         <source>Stereo separation:</source>
-        <translation type="unfinished"></translation>
+        <translation>Стереорозділення:</translation>
     </message>
     <message>
         <source>Interpolation filter:</source>
-        <translation type="unfinished"></translation>
+        <translation>Фільтр інтерполяції:</translation>
     </message>
     <message>
         <source>Visualization:</source>
-        <translation type="unfinished"></translation>
+        <translation>Візуалізація:</translation>
     </message>
     <message>
         <source>Automatic looking for multichannel device</source>
@@ -1917,27 +1917,27 @@
     <name>OpenMPDemux</name>
     <message>
         <source>Samples</source>
-        <translation type="unfinished">Семпли</translation>
+        <translation>Семпли</translation>
     </message>
     <message>
         <source>Patterns</source>
-        <translation type="unfinished">Шаблони</translation>
+        <translation>Шаблони</translation>
     </message>
     <message>
         <source>Channels</source>
-        <translation type="unfinished">Канали</translation>
+        <translation>Канали</translation>
     </message>
     <message>
         <source>Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>Інструменти</translation>
     </message>
     <message>
         <source>Track</source>
-        <translation type="unfinished">Доріжка</translation>
+        <translation>Доріжка</translation>
     </message>
     <message>
         <source>Track %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Доріжка %1</translation>
     </message>
 </context>
 <context>
@@ -3193,7 +3193,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Hide QMPlay2 logo</source>
-        <translation type="unfinished"></translation>
+        <translation>Приховати логотип QMPlay2</translation>
     </message>
     <message>
         <source>Move up</source>
@@ -3469,7 +3469,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Спробувати відтворювати відео BT.2020 у кольоровому просторі BT.2020 (експериментально)</translation>
     </message>
     <message>
         <source>First available device</source>
@@ -3807,7 +3807,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Gamma</source>
-        <translation type="unfinished"></translation>
+        <translation>Гамма</translation>
     </message>
     <message>
         <source>Saturation</source>
@@ -3823,11 +3823,11 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Gamma correction: </source>
-        <translation type="unfinished"></translation>
+        <translation>Гамма-корекція: </translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
-        <translation>Скинути регулювання відео</translation>
+        <translation>Скинути налаштування відео</translation>
     </message>
     <message>
         <source>Brightness down</source>
@@ -3875,11 +3875,11 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Gamma down</source>
-        <translation type="unfinished"></translation>
+        <translation>Зменшити гамму</translation>
     </message>
     <message>
         <source>Gamma up</source>
-        <translation type="unfinished"></translation>
+        <translation>Збільшити гамму</translation>
     </message>
     <message>
         <source>Disable negative</source>
@@ -3925,7 +3925,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Video &amp;adjustment</source>
-        <translation>Регулювання &amp;відео</translation>
+        <translation>Налаштування &amp;відео</translation>
     </message>
 </context>
 <context>
