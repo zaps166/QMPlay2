@@ -3469,7 +3469,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>嘗試在 BT.2020 色彩空間内顯示 BT.2020 視訊（實驗性）</translation>
     </message>
     <message>
         <source>First available device</source>
