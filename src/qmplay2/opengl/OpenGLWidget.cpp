@@ -22,6 +22,11 @@
 
 OpenGLWidget::OpenGLWidget()
 {
+    if (m_canUse16bitTexture && m_glInstance->glVer >= 30)
+    {
+        setTextureFormat(GL_RGB10_A2);
+    }
+
     m_widget = this;
     connect(&updateTimer, SIGNAL(timeout()), this, SLOT(update()));
 }

@@ -31,6 +31,7 @@
 #include <IPC.hpp>
 
 #include <QCommandLineParser>
+#include <QSurfaceFormat>
 #include <QVersionNumber>
 #include <QApplication>
 #include <QImageReader>
@@ -45,9 +46,6 @@
 #include <QDir>
 #ifdef CHECK_FOR_EGL
     #include <QLibrary>
-#endif
-#if defined(CHECK_FOR_EGL) || defined(Q_OS_MACOS)
-    #include <QSurfaceFormat>
 #endif
 
 #ifdef Q_OS_WIN
@@ -679,11 +677,16 @@ int main(int argc, char *argv[])
     QGuiApplication::setAttribute(Qt::AA_ForceRasterWidgets);
 #endif
 
-#ifdef Q_OS_MACOS
     auto fmt = QSurfaceFormat::defaultFormat();
-    fmt.setColorSpace(QSurfaceFormat::sRGBColorSpace);
-    QSurfaceFormat::setDefaultFormat(fmt);
+#ifdef USE_OPENGL
+    fmt.setBlueBufferSize(10);
+    fmt.setGreenBufferSize(10);
+    fmt.setRedBufferSize(10);
 #endif
+#ifdef Q_OS_MACOS
+    fmt.setColorSpace(QSurfaceFormat::sRGBColorSpace);
+#endif
+    QSurfaceFormat::setDefaultFormat(fmt);
 
 #ifndef Q_OS_WIN
     if (!setjmp(g_env))
