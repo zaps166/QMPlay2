@@ -544,20 +544,19 @@ void Window::maybeSetHdrMetadata()
 
     vk::HdrMetadataEXT hdrMetadata;
 
-    static_assert(sizeof(QVector2D) == sizeof(vk::HdrMetadataEXT::whitePoint));
-    static_assert(sizeof(QVector2D) == sizeof(vk::HdrMetadataEXT::displayPrimaryRed));
-    static_assert(sizeof(QVector2D) == sizeof(vk::HdrMetadataEXT::displayPrimaryGreen));
-    static_assert(sizeof(QVector2D) == sizeof(vk::HdrMetadataEXT::displayPrimaryBlue));
-    static_assert(sizeof(QVector2D) * 2 == offsetof(vk::HdrMetadataEXT, displayPrimaryBlue) - offsetof(vk::HdrMetadataEXT, displayPrimaryRed));
+    const auto &hdr = m_frameProps->hdr;
 
-    auto &displayPrimaries = reinterpret_cast<array<QVector2D, 3> &>(hdrMetadata.displayPrimaryRed);
-    auto &whitePoint = reinterpret_cast<QVector2D &>(hdrMetadata.whitePoint);
+    auto assignXY = [](vk::XYColorEXT &dst, const QVector2D &src) {
+        dst.x = src.x();
+        dst.y = src.y();
+    };
+    assignXY(hdrMetadata.displayPrimaryRed, hdr.displayPrimaries[0]);
+    assignXY(hdrMetadata.displayPrimaryGreen, hdr.displayPrimaries[1]);
+    assignXY(hdrMetadata.displayPrimaryBlue, hdr.displayPrimaries[2]);
+    assignXY(hdrMetadata.whitePoint, hdr.whitePoint);
 
-    displayPrimaries = m_frameProps->hdr.displayPrimaries;
-    whitePoint = m_frameProps->hdr.whitePoint;
-
-    hdrMetadata.maxLuminance = m_frameProps->hdr.maxLuminance;
-    hdrMetadata.minLuminance = m_frameProps->hdr.minLuminance;
+    hdrMetadata.maxLuminance = hdr.maxLuminance;
+    hdrMetadata.minLuminance = hdr.minLuminance;
 
     m.swapChain->setHdrMetadata(hdrMetadata);
     m.mustUpdateHdrMetadata = false;
