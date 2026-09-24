@@ -640,7 +640,6 @@ void MenuBar::setKeyShortcuts()
     shortcuts->appendAction(player->zoom->zoomIn, "KeyBindings/Player-zoomIn", "E");
     shortcuts->appendAction(player->zoom->zoomOut, "KeyBindings/Player-zoomOut", "W");
     shortcuts->appendAction(player->zoom->setZoom, "KeyBindings/Player-setZoom", "Shift+W");
-    shortcuts->appendAction(player->setSpeed, "KeyBindings/Player-setSpeed", "Shift+S");
     shortcuts->appendAction(player->switchARatio, "KeyBindings/Player-switchARatio", "A");
     shortcuts->appendAction(player->reset, "KeyBindings/Player-reset", "R");
     shortcuts->appendAction(player->volUp, "KeyBindings/Player-volUp", "*");
