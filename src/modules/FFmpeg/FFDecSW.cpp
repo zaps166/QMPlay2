@@ -313,6 +313,13 @@ int FFDecSW::decodeVideo(const Packet &encodedPacket, Frame &decoded, AVPixelFor
 
         if (frameFinished && ~hurry_up)
         {
+#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 85, 100)
+            if (codec_ctx->codec_id == AV_CODEC_ID_NOTCHLC && frame->colorspace == AVCOL_SPC_RGB)
+            {
+                // NotchLC decoder outputs BT.601 YCbCr, but tags it as RGB
+                frame->colorspace = AVCOL_SPC_SMPTE170M;
+            }
+#endif
             bool newFormat = false;
             if (codec_ctx->pix_fmt != lastPixFmt)
             {
