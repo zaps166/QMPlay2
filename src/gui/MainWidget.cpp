@@ -144,6 +144,11 @@ MainWidget::MainWidget(QList<QPair<QString, QString>> &arguments)
     : updater(this)
 #endif
 {
+    if (QGuiApplication::platformName().contains(QStringLiteral("wayland")))
+    {
+        setWindowRole(QCoreApplication::applicationName() + QStringLiteral("-") + metaObject()->className());
+    }
+
     QMPlay2GUI.videoAdjustment = new VideoAdjustmentW;
     QMPlay2GUI.shortcutHandler = new ShortcutHandler(this);
     QMPlay2GUI.mainW = this;
