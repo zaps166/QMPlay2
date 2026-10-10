@@ -20,6 +20,7 @@
 
 #include <YouTubeDL.hpp>
 #include <LineEdit.hpp>
+#include <Functions.hpp>
 
 #include <QLoggingCategory>
 #include <QStringListModel>
@@ -43,6 +44,8 @@
 #include <QLabel>
 #include <QMenu>
 #include <QUrl>
+#include <QDateTime>
+#include <QDeadlineTimer>
 
 Q_LOGGING_CATEGORY(youtube, "Extensions/YouTube")
 
@@ -1271,6 +1274,8 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
 
     QHash<int, QPair<QStringList, QStringList>> itagsData;
 
+    double latest_available_at = 0.0;
+
     for (auto &&formatVal : formats)
     {
         const auto format = formatVal.toObject();
@@ -1297,6 +1302,20 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
             {
                 urlLanguages[url] = format[QStringLiteral("language")].toString();
                 urlNotes[url] = note;
+            }
+            if (format.contains(QStringLiteral("available_at")))
+            {
+                auto available_at = format[QStringLiteral("available_at")].toDouble() * 1000.0;
+                double dt = (available_at - QDateTime::currentMSecsSinceEpoch()) / 1000.0;
+                if (dt < 0)
+                {
+                    qCDebug(youtube) << "url for format" << format["format_id"].toString() << "will be available at"
+                        << QDateTime::fromMSecsSinceEpoch(available_at) << "so in" << dt << "s";
+                }
+                if (available_at > latest_available_at)
+                {
+                    latest_available_at = available_at;
+                }
             }
         }
     }
@@ -1436,6 +1455,34 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
 
     result += o["description"].toString();
 
+    if (latest_available_at > 0)
+    {
+        // The number of whole seconds until the "slowest" stream is promised to be available, plus 1
+        // This interval can be <=0 if the stream is already available!
+        const auto dt = static_cast<int>((latest_available_at - QDateTime::currentMSecsSinceEpoch()) / 1000.0) + 1;
+        if (dt > 0 && !youTubeDL.isAborted() )
+        {
+            const auto waitMsg = QString::asprintf("Waiting for %ds as required by YouTube", dt);
+            qCInfo(youtube) << waitMsg;
+            emit QMPlay2Core.statusBarMessage(waitMsg, dt * 1000);
+            // do an active wait; a less active clone of QTest::qWait():
+            auto remaining = dt * 1000.0;
+            QDeadlineTimer timer(remaining, Qt::PreciseTimer);
+            do
+            {
+                remaining = timer.remainingTime();
+                if (remaining <= 0)
+                {
+                    break;
+                }
+                Functions::s_wait(qMin(100.0, remaining) / 1000.0);
+                remaining = timer.remainingTime();
+            } while (remaining > 0 && !youTubeDL.isAborted());
+            if (remaining > 0) {
+                QMPlay2Core.logInfo(QStringLiteral("Stopped"));
+            }
+        }
+    }
     return result;
 }
 
