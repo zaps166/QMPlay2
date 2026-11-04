@@ -5,7 +5,7 @@
     <name>ALSAWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>開けません</translation>
+        <translation>オーディオ出力ストリームを開けません</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Unable to find supported sample format</source>
-        <translation type="unfinished"></translation>
+        <translation>対応しているサンプルフォーマットが見つかりません</translation>
     </message>
 </context>
 <context>
@@ -63,7 +63,7 @@
     </message>
     <message>
         <source>video and audio player</source>
-        <translation>ビデオとオーディプレイヤー</translation>
+        <translation>ビデオとオーディオのプレイヤー</translation>
     </message>
     <message>
         <source>Programmer</source>
@@ -75,7 +75,7 @@
     </message>
     <message>
         <source>GitHub download page</source>
-        <translation type="unfinished"></translation>
+        <translation>GitHubのダウンロードページ</translation>
     </message>
 </context>
 <context>
@@ -113,7 +113,7 @@
     </message>
     <message>
         <source>Sample rate</source>
-        <translation>サンプリング周期</translation>
+        <translation>サンプリング周波数</translation>
     </message>
 </context>
 <context>
@@ -142,7 +142,7 @@
     <name>Appearance</name>
     <message>
         <source>New</source>
-        <translation>新しい</translation>
+        <translation>新規</translation>
     </message>
     <message>
         <source>Name</source>
@@ -174,7 +174,7 @@
     </message>
     <message>
         <source>Use custom colors</source>
-        <translation>カスタムカラーをしようする</translation>
+        <translation>カスタムカラーを使用する</translation>
     </message>
     <message>
         <source>The color on the top and bottom</source>
@@ -242,7 +242,7 @@
     </message>
     <message>
         <source>Slider highlight color</source>
-        <translation type="unfinished"></translation>
+        <translation>スライダーのハイライトの色</translation>
     </message>
 </context>
 <context>
@@ -265,14 +265,14 @@
     </message>
     <message>
         <source>&amp;Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>カスタム(&amp;C)</translation>
     </message>
 </context>
 <context>
     <name>AudioCD</name>
     <message>
         <source>Supported AudioCD images</source>
-        <translation>オーディオCDのカバー画像をサポート</translation>
+        <translation>対応するオーディオCDイメージ</translation>
     </message>
     <message>
         <source>No CD/DVD drives found!</source>
@@ -284,7 +284,7 @@
     </message>
     <message>
         <source>Choose AudioCD image</source>
-        <translation>オーディオCDのカバー画像を選んでください</translation>
+        <translation>オーディオCDのイメージを選んでください</translation>
     </message>
     <message>
         <source>Path</source>
@@ -326,7 +326,7 @@
     <name>AudioChannels</name>
     <message>
         <source>&amp;Other</source>
-        <translation>その他(&amp;D)</translation>
+        <translation>その他(&amp;O)</translation>
     </message>
     <message>
         <source>&amp;Mono</source>
@@ -380,7 +380,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation>インターレース解除関数</translation>
+        <translation>インターレース解除方式</translation>
     </message>
 </context>
 <context>
@@ -407,7 +407,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation>インターレース解除関数</translation>
+        <translation>インターレース解除方式</translation>
     </message>
     <message>
         <source>software decoding</source>
@@ -415,15 +415,15 @@
     </message>
     <message>
         <source>Vulkan Yadif spatial check</source>
-        <translation>VulKan Yadif スパチャルチェック</translation>
+        <translation>Vulkan Yadif空間チェック</translation>
     </message>
     <message>
         <source>Bottom field first</source>
-        <translation type="unfinished"></translation>
+        <translation>ボトムフィールド優先</translation>
     </message>
     <message>
         <source>Top field first</source>
-        <translation type="unfinished"></translation>
+        <translation>トップフィールド優先</translation>
     </message>
 </context>
 <context>
@@ -490,7 +490,7 @@
     </message>
     <message>
         <source>sample rate</source>
-        <translation>サンプリング周期</translation>
+        <translation>サンプリング周波数</translation>
     </message>
     <message>
         <source>stereo</source>
@@ -530,7 +530,7 @@
     </message>
     <message>
         <source>Attached files</source>
-        <translation>ファイルに接続中</translation>
+        <translation>添付ファイル</translation>
     </message>
     <message>
         <source>Chapters</source>
@@ -566,11 +566,11 @@
     </message>
     <message>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>不明</translation>
     </message>
     <message>
         <source>Playback and recording</source>
-        <translation type="unfinished"></translation>
+        <translation>再生と録画</translation>
     </message>
 </context>
 <context>
@@ -678,7 +678,7 @@
     </message>
     <message>
         <source>Preset name</source>
-        <translation>プレセットの名前</translation>
+        <translation>プリセットの名前</translation>
     </message>
     <message>
         <source>Command line</source>
@@ -690,12 +690,11 @@
     </message>
     <message>
         <source>Command must contain &lt;input/&gt; tag!</source>
-        <translation>ダウンロード後に実行するコマンド。
-コマンドには&lt;input/&gt;タグが含まれている必要があります!</translation>
+        <translation>コマンドには&lt;input/&gt;タグが含まれている必要があります!</translation>
     </message>
     <message>
         <source>Command must contain correct &lt;output&gt;file&lt;/output/&gt; tag!</source>
-        <translation>コマンドには正しい&lt;output&gt;ファイル&lt;output/&gt;タグが含まれている必要があります!</translation>
+        <translation>コマンドには正しい&lt;output&gt;ファイル&lt;/output/&gt;タグが含まれている必要があります!</translation>
     </message>
     <message>
         <source>Preset name already exists!</source>
@@ -772,11 +771,11 @@
     </message>
     <message>
         <source>Add new preset</source>
-        <translation>新しいプレセットを作成</translation>
+        <translation>新しいプリセットを作成</translation>
     </message>
     <message>
         <source>Presets</source>
-        <translation>プレセット</translation>
+        <translation>プリセット</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -784,11 +783,11 @@
     </message>
     <message>
         <source>New preset</source>
-        <translation>新しいプレセット</translation>
+        <translation>新しいプリセット</translation>
     </message>
     <message>
         <source>Enter new preset name</source>
-        <translation>新しいプレセットの名前を入力してください</translation>
+        <translation>新しいプリセットの名前を入力してください</translation>
     </message>
     <message>
         <source>Preamp</source>
@@ -814,7 +813,7 @@
     </message>
     <message>
         <source>Pointed frequency: %1 Hz</source>
-        <translation>%1 Hz</translation>
+        <translation>カーソル位置の周波数: %1 Hz</translation>
     </message>
 </context>
 <context>
@@ -825,7 +824,7 @@
     </message>
     <message>
         <source>Deinterlacing method</source>
-        <translation>インターレース解除関数</translation>
+        <translation>インターレース解除方式</translation>
     </message>
 </context>
 <context>
@@ -836,7 +835,7 @@
     </message>
     <message>
         <source>Do you want to associate files with QMPlay2</source>
-        <translation>ファイルをQMPlay2関連付けますか</translation>
+        <translation>ファイルをQMPlay2に関連付けますか</translation>
     </message>
 </context>
 <context>
@@ -893,7 +892,7 @@
     </message>
     <message>
         <source>Ensure that the window will be visible if the application is running.</source>
-        <translation>アプリケーションが実行されている場合はウィンドウが表示されること確認してください。</translation>
+        <translation>アプリケーションが実行中の場合、ウィンドウが確実に表示されるようにします。</translation>
     </message>
     <message>
         <source>Toggle fullscreen.</source>
@@ -953,15 +952,15 @@
     </message>
     <message>
         <source>Open new QMPlay2 instance and play specified &lt;url&gt;.</source>
-        <translation>新しくQMPlay２を開き&lt;url&gt;を再生します。</translation>
+        <translation>QMPlay2を新しく起動し、&lt;url&gt;を再生します。</translation>
     </message>
     <message>
         <source>Remove specified &lt;url&gt; from playlist.</source>
-        <translation type="unfinished"></translation>
+        <translation>指定した&lt;url&gt;をプレイリストから削除します。</translation>
     </message>
     <message>
         <source>Start in tray.</source>
-        <translation type="unfinished"></translation>
+        <translation>トレイで起動します。</translation>
     </message>
 </context>
 <context>
@@ -1006,7 +1005,7 @@
     </message>
     <message>
         <source>Some key shortcuts are duplicated!</source>
-        <translation type="unfinished"></translation>
+        <translation>一部のキーショートカットが重複しています!</translation>
     </message>
 </context>
 <context>
@@ -1050,7 +1049,7 @@
     <name>MainWidget</name>
     <message>
         <source>Pointed position</source>
-        <translation>現在</translation>
+        <translation>カーソル位置</translation>
     </message>
     <message>
         <source>Are you sure you want to quit?</source>
@@ -1191,7 +1190,7 @@
     <name>MediaKitWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>開けません</translation>
+        <translation>オーディオ出力ストリームを開けません</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -1222,7 +1221,7 @@
     </message>
     <message>
         <source>Slider count in sound equalizer</source>
-        <translation>イコライザー内のスライダー</translation>
+        <translation>イコライザーのスライダー数</translation>
     </message>
     <message>
         <source>Medium</source>
@@ -1266,7 +1265,7 @@
     </message>
     <message>
         <source>Enqueue in QMPlay2</source>
-        <translation>QMPlay2に関連付ける</translation>
+        <translation>QMPlay2のプレイリストに追加</translation>
     </message>
     <message>
         <source>Echo volume</source>
@@ -1278,7 +1277,7 @@
     </message>
     <message>
         <source>Minimum frequency</source>
-        <translation>中周波</translation>
+        <translation>最小周波数</translation>
     </message>
     <message>
         <source>Use the specified FPS in MicroDVD subtitles (if exists)</source>
@@ -1310,27 +1309,27 @@
     </message>
     <message>
         <source>Little endian</source>
-        <translation type="unfinished"></translation>
+        <translation>リトルエンディアン</translation>
     </message>
     <message>
         <source>Big endian</source>
-        <translation type="unfinished"></translation>
+        <translation>ビッグエンディアン</translation>
     </message>
     <message>
         <source>OpenMPT enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenMPTを有効にする</translation>
     </message>
     <message>
         <source>Only first</source>
-        <translation type="unfinished"></translation>
+        <translation>最初のみ</translation>
     </message>
     <message>
         <source>All sequentially</source>
-        <translation type="unfinished"></translation>
+        <translation>すべて順番に</translation>
     </message>
     <message>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>グループ</translation>
     </message>
     <message>
         <source>Default</source>
@@ -1338,59 +1337,59 @@
     </message>
     <message>
         <source>Nearest</source>
-        <translation type="unfinished"></translation>
+        <translation>最近傍</translation>
     </message>
     <message>
         <source>Linear</source>
-        <translation type="unfinished"></translation>
+        <translation>線形</translation>
     </message>
     <message>
         <source>Cubic</source>
-        <translation type="unfinished"></translation>
+        <translation>3次</translation>
     </message>
     <message>
         <source>Windowed sinc (8 taps)</source>
-        <translation type="unfinished"></translation>
+        <translation>窓関数付きsinc（8タップ）</translation>
     </message>
     <message>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>オフ</translation>
     </message>
     <message>
         <source>Patterns</source>
-        <translation type="unfinished">パターン</translation>
+        <translation>パターン</translation>
     </message>
     <message>
         <source>Samples</source>
-        <translation type="unfinished">サンプル</translation>
+        <translation>サンプル</translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>すべて</translation>
     </message>
     <message>
         <source>Channels:</source>
-        <translation type="unfinished"></translation>
+        <translation>チャンネル:</translation>
     </message>
     <message>
         <source>Rows:</source>
-        <translation type="unfinished"></translation>
+        <translation>行:</translation>
     </message>
     <message>
         <source>Subsongs:</source>
-        <translation type="unfinished"></translation>
+        <translation>サブソング:</translation>
     </message>
     <message>
         <source>Stereo separation:</source>
-        <translation type="unfinished"></translation>
+        <translation>ステレオセパレーション:</translation>
     </message>
     <message>
         <source>Interpolation filter:</source>
-        <translation type="unfinished"></translation>
+        <translation>補間フィルター:</translation>
     </message>
     <message>
         <source>Visualization:</source>
-        <translation type="unfinished"></translation>
+        <translation>視覚化:</translation>
     </message>
     <message>
         <source>XVideo outputs</source>
@@ -1466,7 +1465,7 @@
     </message>
     <message>
         <source>Scrobble</source>
-        <translation>スクランブル</translation>
+        <translation>スクロブル</translation>
     </message>
     <message>
         <source>Add entry to the directories context menu</source>
@@ -1507,7 +1506,7 @@
     </message>
     <message>
         <source>Method of multithreaded decoding</source>
-        <translation>マルチスレッドデコード関数</translation>
+        <translation>マルチスレッドデコード方式</translation>
     </message>
     <message>
         <source>Uncompressed PCM sound</source>
@@ -1547,7 +1546,7 @@
     </message>
     <message>
         <source>The maximum duration of subtitles without a specified length</source>
-        <translation>字幕のない最大時間</translation>
+        <translation>長さが指定されていない字幕の最大表示時間</translation>
     </message>
     <message>
         <source>Hurry up</source>
@@ -1567,7 +1566,7 @@
     </message>
     <message>
         <source>Associate files with QMPlay2</source>
-        <translation>ファイルをQMPlay２に関連付ける</translation>
+        <translation>ファイルをQMPlay2に関連付ける</translation>
     </message>
     <message>
         <source>Low resolution decoding (only some codecs)</source>
@@ -1575,7 +1574,7 @@
     </message>
     <message>
         <source>Sample rate</source>
-        <translation>サンプリング周期</translation>
+        <translation>サンプリング周波数</translation>
     </message>
     <message>
         <source>Very high</source>
@@ -1627,7 +1626,7 @@
     </message>
     <message>
         <source>Notification timeout</source>
-        <translation>タイムアウト通知</translation>
+        <translation>通知のタイムアウト</translation>
     </message>
     <message>
         <source>Peak limit</source>
@@ -1635,7 +1634,7 @@
     </message>
     <message>
         <source>Release time</source>
-        <translation>公開日時</translation>
+        <translation>リリースタイム</translation>
     </message>
     <message>
         <source>Fast compression ratio</source>
@@ -1675,7 +1674,7 @@
     </message>
     <message>
         <source>Decode MPEG4 videos</source>
-        <translation>MPEG4でデコードする</translation>
+        <translation>MPEG4ビデオをデコードする</translation>
     </message>
     <message>
         <source>Disable if you have problems with decoding MPEG4 (DivX5) videos</source>
@@ -1683,7 +1682,7 @@
     </message>
     <message>
         <source>Bit-perfect audio</source>
-        <translation>完全なビットオーディオ</translation>
+        <translation>ビットパーフェクトオーディオ</translation>
     </message>
     <message>
         <source>This sets the selected output device to the sample rate of the content being played</source>
@@ -1703,7 +1702,7 @@
     </message>
     <message>
         <source>Zero-copy decoding on Intel hardware (experimental)</source>
-        <translation>Intel cpuでのゼロコピーデコード</translation>
+        <translation>Intelハードウェアでのゼロコピーデコード（実験的）</translation>
     </message>
     <message>
         <source>Better performance, but can cause garbage or might not work at all.</source>
@@ -1711,19 +1710,19 @@
     </message>
     <message>
         <source>Exclusive mode</source>
-        <translation type="unfinished"></translation>
+        <translation>排他モード</translation>
     </message>
     <message>
         <source>Preferred video codec</source>
-        <translation type="unfinished"></translation>
+        <translation>優先するビデオコーデック</translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>遅延</translation>
     </message>
     <message>
         <source>Only in full screen</source>
-        <translation type="unfinished"></translation>
+        <translation>フルスクリーン時のみ</translation>
     </message>
     <message>
         <source>FPS</source>
@@ -1731,59 +1730,59 @@
     </message>
     <message>
         <source>Minimum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>フレームレートを倍にするビデオFPSの下限</translation>
     </message>
     <message>
         <source>Maximum video FPS to double the frame rate</source>
-        <translation type="unfinished"></translation>
+        <translation>フレームレートを倍にするビデオFPSの上限</translation>
     </message>
     <message>
         <source>Minimum:</source>
-        <translation type="unfinished"></translation>
+        <translation>最小:</translation>
     </message>
     <message>
         <source>Maximum:</source>
-        <translation type="unfinished"></translation>
+        <translation>最大:</translation>
     </message>
     <message>
         <source>Allow HDR content for VP9 codec</source>
-        <translation type="unfinished"></translation>
+        <translation>VP9コーデックでHDRコンテンツを許可する</translation>
     </message>
     <message>
         <source>Try to automatically reconnect the network connection</source>
-        <translation type="unfinished"></translation>
+        <translation>ネットワーク接続の自動再接続を試みる</translation>
     </message>
     <message>
         <source>%1 kHz</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kHz</translation>
     </message>
     <message>
         <source>No limit</source>
-        <translation type="unfinished"></translation>
+        <translation>制限なし</translation>
     </message>
     <message>
         <source>Linear volume scale in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>FFTスペクトラムの音量をリニアスケールにする</translation>
     </message>
     <message>
         <source>Limit frequency in FFT spectrum</source>
-        <translation type="unfinished"></translation>
+        <translation>FFTスペクトラムの周波数を制限する</translation>
     </message>
     <message>
         <source>Allow experimental FFmpeg features</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpegの実験的な機能を許可する</translation>
     </message>
     <message>
         <source>Useful for turning on HLS subtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>HLSの字幕を有効にする場合に役立ちます</translation>
     </message>
     <message>
         <source>Teletext page: </source>
-        <translation type="unfinished"></translation>
+        <translation>テレテキストのページ: </translation>
     </message>
     <message>
         <source>Transparent teletext background</source>
-        <translation type="unfinished"></translation>
+        <translation>テレテキストの背景を透明にする</translation>
     </message>
     <message>
         <source>Subtitles</source>
@@ -1791,23 +1790,23 @@
     </message>
     <message>
         <source>FFmpeg audio filters</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpegオーディオフィルター</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>ヘルプ</translation>
     </message>
     <message>
         <source>Do you want to restore the default settings?</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルト設定に戻しますか?</translation>
     </message>
     <message>
         <source>FFmpeg audio filters, example: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>FFmpegオーディオフィルター、例: %1</translation>
     </message>
     <message>
         <source>Not all audio filters are supported in QMPlay2. To use some filters like &apos;%4&apos;, you need to enable &quot;force channels conversion&quot; and &quot;use channel conversion before filters&quot; in playback settings. Please refer to the %1FFmpeg documentation%2.%3Available audio filters:</source>
-        <translation type="unfinished"></translation>
+        <translation>QMPlay2はすべてのオーディオフィルターに対応しているわけではありません。&apos;%4&apos;のような一部のフィルターを使うには、再生設定で&quot;強制的にチャンネル数を変換する&quot;と&quot;フィルタと視覚化の前にオーディオリサンプラとチャンネル変換を使用する&quot;を有効にする必要があります。%1FFmpegのドキュメント%2を参照してください。%3利用可能なオーディオフィルター:</translation>
     </message>
 </context>
 <context>
@@ -1837,7 +1836,7 @@
     <name>OSDSettingsW</name>
     <message>
         <source>Background</source>
-        <translation></translation>
+        <translation>背景</translation>
     </message>
     <message>
         <source>Font</source>
@@ -1853,7 +1852,7 @@
     </message>
     <message>
         <source>Bold</source>
-        <translation></translation>
+        <translation>太字</translation>
     </message>
     <message>
         <source>Margins</source>
@@ -1881,7 +1880,7 @@
     </message>
     <message>
         <source>Outline: </source>
-        <translation>概要: </translation>
+        <translation>輪郭: </translation>
     </message>
     <message>
         <source>Shadow: </source>
@@ -1919,78 +1918,78 @@
     <name>OpenMPDemux</name>
     <message>
         <source>Samples</source>
-        <translation type="unfinished">サンプル</translation>
+        <translation>サンプル</translation>
     </message>
     <message>
         <source>Patterns</source>
-        <translation type="unfinished">パターン</translation>
+        <translation>パターン</translation>
     </message>
     <message>
         <source>Channels</source>
-        <translation type="unfinished">チャンネル</translation>
+        <translation>チャンネル</translation>
     </message>
     <message>
         <source>Instruments</source>
-        <translation type="unfinished"></translation>
+        <translation>インストゥルメント</translation>
     </message>
     <message>
         <source>Track</source>
-        <translation type="unfinished">トラック</translation>
+        <translation>トラック</translation>
     </message>
     <message>
         <source>Track %1</source>
-        <translation type="unfinished"></translation>
+        <translation>トラック%1</translation>
     </message>
 </context>
 <context>
     <name>OpenSubtitles</name>
     <message>
         <source>Subtitles browser</source>
-        <translation type="unfinished"></translation>
+        <translation>字幕ブラウザー</translation>
     </message>
     <message>
         <source>Type the movie name and press enter</source>
-        <translation type="unfinished"></translation>
+        <translation>映画名を入力してEnterキーを押してください</translation>
     </message>
     <message>
         <source>Choose subtitles language</source>
-        <translation type="unfinished"></translation>
+        <translation>字幕の言語を選択</translation>
     </message>
     <message>
         <source>Download in default web browser</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルトのWebブラウザーでダウンロード</translation>
     </message>
     <message>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
+        <translation>読み込み中...</translation>
     </message>
     <message>
         <source>Movie name</source>
-        <translation type="unfinished"></translation>
+        <translation>映画名</translation>
     </message>
     <message>
         <source>Uploaded</source>
-        <translation type="unfinished"></translation>
+        <translation>アップロード日</translation>
     </message>
     <message>
         <source>Downloaded</source>
-        <translation type="unfinished"></translation>
+        <translation>ダウンロード数</translation>
     </message>
     <message>
         <source>Search on OpenSubtitles</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenSubtitlesで検索</translation>
     </message>
     <message>
         <source>%1 (Season %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1（シーズン%2）</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
         <source>No subtitles found for the specified language</source>
-        <translation type="unfinished"></translation>
+        <translation>指定した言語の字幕が見つかりません</translation>
     </message>
 </context>
 <context>
@@ -2001,7 +2000,7 @@
     </message>
     <message>
         <source>Op&amp;tions</source>
-        <translation>設定(&amp;T)</translation>
+        <translation>オプション(&amp;T)</translation>
     </message>
     <message>
         <source>&amp;Settings</source>
@@ -2021,7 +2020,7 @@
     </message>
     <message>
         <source>&amp;New Profile</source>
-        <translation>プロファイル(&amp;N)</translation>
+        <translation>新規プロファイル(&amp;N)</translation>
     </message>
     <message>
         <source>&amp;Copy Profile</source>
@@ -2052,7 +2051,7 @@
     <name>PipeWireWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>オーディオを開けません</translation>
+        <translation>オーディオ出力ストリームを開けません</translation>
     </message>
 </context>
 <context>
@@ -2171,51 +2170,51 @@
     </message>
     <message>
         <source>Keep audio pitch during playback speed change</source>
-        <translation type="unfinished"></translation>
+        <translation>再生速度を変更してもオーディオのピッチを維持する</translation>
     </message>
     <message>
         <source>Don&apos;t keep audio pitch during playback speed change</source>
-        <translation type="unfinished"></translation>
+        <translation>再生速度を変更してもオーディオのピッチを維持しない</translation>
     </message>
     <message>
         <source>Recording error</source>
-        <translation type="unfinished"></translation>
+        <translation>録画エラー</translation>
     </message>
     <message>
         <source>Recording started: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>録画を開始しました: %1</translation>
     </message>
     <message>
         <source>Recording stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>録画を停止しました</translation>
     </message>
     <message>
         <source>Integer scaling: enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>整数倍スケーリング: 有効</translation>
     </message>
     <message>
         <source>Integer scaling: disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>整数倍スケーリング: 無効</translation>
     </message>
     <message>
         <source>Zoom: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ズーム: %1</translation>
     </message>
     <message>
         <source>Custom aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>カスタムアスペクト比</translation>
     </message>
     <message>
         <source>Set aspect ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>アスペクト比の設定</translation>
     </message>
     <message>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>ズーム</translation>
     </message>
     <message>
         <source>Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>ズームの設定</translation>
     </message>
 </context>
 <context>
@@ -2278,7 +2277,7 @@
     </message>
     <message>
         <source>&amp;Keep audio pitch</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオのピッチを維持(&amp;K)</translation>
     </message>
 </context>
 <context>
@@ -2377,7 +2376,7 @@
     </message>
     <message>
         <source>&amp;Stop after playing</source>
-        <translation type="unfinished"></translation>
+        <translation>再生後に停止(&amp;S)</translation>
     </message>
     <message>
         <source>Previous &amp;frame</source>
@@ -2385,31 +2384,31 @@
     </message>
     <message>
         <source>&amp;Continue playback</source>
-        <translation type="unfinished"></translation>
+        <translation>再生を続ける(&amp;C)</translation>
     </message>
     <message>
         <source>Continue playing from the last position</source>
-        <translation type="unfinished"></translation>
+        <translation>前回の位置から再生を続ける</translation>
     </message>
     <message>
         <source>&amp;Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>録画(&amp;R)</translation>
     </message>
     <message>
         <source>Un&amp;mute</source>
-        <translation type="unfinished"></translation>
+        <translation>ミュート解除(&amp;M)</translation>
     </message>
     <message>
         <source>&amp;Integer scaling</source>
-        <translation type="unfinished"></translation>
+        <translation>整数倍スケーリング(&amp;I)</translation>
     </message>
     <message>
         <source>&amp;Set zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>ズームを設定(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;Precise zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>精密ズーム(&amp;P)</translation>
     </message>
 </context>
 <context>
@@ -2496,19 +2495,19 @@
     </message>
     <message>
         <source>Pas&amp;te and play</source>
-        <translation type="unfinished"></translation>
+        <translation>ペーストして再生(&amp;T)</translation>
     </message>
     <message>
         <source>&amp;Remove from list</source>
-        <translation type="unfinished"></translation>
+        <translation>リストから削除(&amp;R)</translation>
     </message>
     <message>
         <source>Remove from &amp;disk</source>
-        <translation type="unfinished"></translation>
+        <translation>ディスクから削除(&amp;D)</translation>
     </message>
     <message>
         <source>Clear &amp;ungrouped entries</source>
-        <translation type="unfinished"></translation>
+        <translation>グループ化されていないエントリーをクリア(&amp;U)</translation>
     </message>
 </context>
 <context>
@@ -2539,11 +2538,11 @@
     </message>
     <message>
         <source>Failed to delete one or more selected entries.</source>
-        <translation type="unfinished"></translation>
+        <translation>選択したエントリーのうち1つ以上を削除できませんでした。</translation>
     </message>
     <message>
         <source>Are you sure you want to delete selected entries from disk? Non-local entries will only be removed from the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>選択したエントリーをディスクから削除しますか? ローカルではないエントリーはリストからのみ削除されます。</translation>
     </message>
 </context>
 <context>
@@ -2561,7 +2560,7 @@
     <name>PortAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>オーディオを開けません</translation>
+        <translation>オーディオ出力ストリームを開けません</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -2572,7 +2571,7 @@
     <name>PulseAudioWriter</name>
     <message>
         <source>Cannot open audio output stream</source>
-        <translation>オーディオを開けません</translation>
+        <translation>オーディオ出力ストリームを開けません</translation>
     </message>
     <message>
         <source>Playback error</source>
@@ -2694,7 +2693,7 @@ QMPlay2はアイコンを拡大しません！</translation>
     </message>
     <message>
         <source>Save radio station list to file</source>
-        <translation>ファイルにラジオ局にリストを保存</translation>
+        <translation>ファイルにラジオ局のリストを保存</translation>
     </message>
     <message>
         <source>Load radio station list</source>
@@ -2722,11 +2721,11 @@ QMPlay2はアイコンを拡大しません！</translation>
     </message>
     <message>
         <source>Type the station name and press Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>ラジオ局の名前を入力してEnterキーを押してください</translation>
     </message>
     <message>
         <source>Select a &quot;%1&quot; from the drop-down list</source>
-        <translation type="unfinished"></translation>
+        <translation>ドロップダウンリストから&quot;%1&quot;を選択してください</translation>
     </message>
     <message>
         <source>Connection error</source>
@@ -2734,7 +2733,7 @@ QMPlay2はアイコンを拡大しません！</translation>
     </message>
     <message>
         <source>Search filter</source>
-        <translation type="unfinished"></translation>
+        <translation>検索フィルター</translation>
     </message>
 </context>
 <context>
@@ -2757,7 +2756,7 @@ QMPlay2はアイコンを拡大しません！</translation>
     </message>
     <message>
         <source>Clicks</source>
-        <translation type="unfinished"></translation>
+        <translation>クリック数</translation>
     </message>
 </context>
 <context>
@@ -2843,7 +2842,7 @@ QMPlay2はアイコンを拡大しません！</translation>
     </message>
     <message>
         <source>Show related</source>
-        <translation type="unfinished"></translation>
+        <translation>関連動画を表示</translation>
     </message>
 </context>
 <context>
@@ -2881,7 +2880,7 @@ QMPlay2はアイコンを拡大しません！</translation>
     </message>
     <message>
         <source>Decoders priority</source>
-        <translation>デコーダーのプロパティ</translation>
+        <translation>デコーダーの優先度</translation>
     </message>
     <message>
         <source>Fonts and spacing</source>
@@ -2913,7 +2912,7 @@ QMPlay2はアイコンを拡大しません！</translation>
     </message>
     <message>
         <source>Margins and alignment</source>
-        <translation>配置</translation>
+        <translation>隙間と配置</translation>
     </message>
     <message>
         <source>New language</source>
@@ -2982,7 +2981,8 @@ QMPlay2はアイコンを拡大しません！</translation>
     <message>
         <source>Slower, but more accurate seeking.
 Partially checked doesn&apos;t affect seeking on slider.</source>
-        <translation>正確なシーク。部分的にチェックしてもスライダーのシークには影響しません。ただし低速です。</translation>
+        <translation>低速ですが、より正確にシークします。
+部分的にチェックした場合、スライダーでのシークには影響しません。</translation>
     </message>
     <message>
         <source>Hardware-accelerated video filters</source>
@@ -3002,7 +3002,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Legacy video output priority</source>
-        <translation>ビデオ出力の優先順位</translation>
+        <translation>Legacyビデオ出力の優先順位</translation>
     </message>
     <message>
         <source>Show covers</source>
@@ -3018,7 +3018,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Blurred covers as background</source>
-        <translation>背景としてぼかしたたカバーを使用する</translation>
+        <translation>背景としてぼかしたカバーを使用する</translation>
     </message>
     <message>
         <source>Clear covers cache</source>
@@ -3042,7 +3042,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Subtitles and tags encoding: </source>
-        <translation></translation>
+        <translation>字幕とタグのエンコーディング: </translation>
     </message>
     <message>
         <source>Default audio language: </source>
@@ -3062,7 +3062,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Output file path: </source>
-        <translation></translation>
+        <translation>出力ファイルのパス: </translation>
     </message>
     <message>
         <source>Use system icon set</source>
@@ -3070,7 +3070,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Set appearance</source>
-        <translation>セットの外観</translation>
+        <translation>外観を設定</translation>
     </message>
     <message>
         <source>Selected Profile: </source>
@@ -3102,7 +3102,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Use proxy server</source>
-        <translation>プロキシサーバー</translation>
+        <translation>プロキシサーバーを使用する</translation>
     </message>
     <message>
         <source>Proxy server needs login</source>
@@ -3150,19 +3150,19 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>youtube-dl settings</source>
-        <translation></translation>
+        <translation>youtube-dlの設定</translation>
     </message>
     <message>
         <source>Cookies from browser</source>
-        <translation></translation>
+        <translation>ブラウザーからのCookie</translation>
     </message>
     <message>
         <source>Custom path</source>
-        <translation></translation>
+        <translation>カスタムパス</translation>
     </message>
     <message>
         <source>Don&apos;t auto-update</source>
-        <translation></translation>
+        <translation>自動更新しない</translation>
     </message>
     <message>
         <source>Remove youtube-dl</source>
@@ -3170,31 +3170,31 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Please refer to yt-dlp documentation</source>
-        <translation></translation>
+        <translation>yt-dlpのドキュメントを参照してください</translation>
     </message>
     <message>
         <source>Default quality</source>
-        <translation></translation>
+        <translation>デフォルトの画質</translation>
     </message>
     <message>
         <source>&quot;-f&quot; parameter, please refer to yt-dlp documentation</source>
-        <translation></translation>
+        <translation>&quot;-f&quot;パラメーター。yt-dlpのドキュメントを参照してください</translation>
     </message>
     <message>
         <source>Additional params</source>
-        <translation></translation>
+        <translation>追加パラメーター</translation>
     </message>
     <message>
         <source>Maintain panels size when resizing the main window (experimental)</source>
-        <translation></translation>
+        <translation>メインウィンドウのサイズ変更時にパネルのサイズを維持する（実験的）</translation>
     </message>
     <message>
         <source>Fullscreen panels on the right side</source>
-        <translation></translation>
+        <translation>フルスクリーン時のパネルを右側に表示する</translation>
     </message>
     <message>
         <source>Hide QMPlay2 logo</source>
-        <translation type="unfinished"></translation>
+        <translation>QMPlay2のロゴを隠す</translation>
     </message>
     <message>
         <source>Move up</source>
@@ -3222,15 +3222,15 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Amplify (no metadata)</source>
-        <translation></translation>
+        <translation>増幅する（メタデータなし）</translation>
     </message>
     <message>
         <source>Partially checked means that there is a delay between click and pausing</source>
-        <translation>部分的にチェックするためクリックしてから一時停止までに遅延があります</translation>
+        <translation>部分的にチェックすると、クリックしてから一時停止するまでに遅延があります</translation>
     </message>
     <message>
         <source>Primary mouse button on video dock toggles playback</source>
-        <translation>マウスがビデオドックから出たら停止する</translation>
+        <translation>ビデオドック上のマウスの主ボタンで再生と一時停止を切り替える</translation>
     </message>
     <message>
         <source>Middle mouse button on video dock toggles fullscreen</source>
@@ -3238,7 +3238,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Keep video delay</source>
-        <translation>ビデオ時間を維持する</translation>
+        <translation>ビデオの遅延を維持する</translation>
     </message>
     <message>
         <source>Fade sound</source>
@@ -3258,11 +3258,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Keep subtitles delay</source>
-        <translation>字幕表示時間を維持する</translation>
+        <translation>字幕の遅延を維持する</translation>
     </message>
     <message>
         <source>Video to audio sync (frame skipping)</source>
-        <translation>ビデオからオーディオへの動機(フレームスキップ)</translation>
+        <translation>ビデオをオーディオに同期(フレームスキップ)</translation>
     </message>
     <message>
         <source>Short seeking (left and right arrows): </source>
@@ -3282,7 +3282,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Network buffer length: </source>
-        <translation></translation>
+        <translation>ネットワークバッファーの長さ: </translation>
     </message>
     <message>
         <source>Percent of packages for backwards rewinding: </source>
@@ -3290,31 +3290,31 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Live stream buffer length: </source>
-        <translation></translation>
+        <translation>ライブストリームのバッファーの長さ: </translation>
     </message>
     <message>
         <source>Start playback internet stream if it is buffered: </source>
-        <translation>バッファーが存在する場合もインターネットストリームより取得します: </translation>
+        <translation>インターネットストリームがバッファーされたら再生を開始する: </translation>
     </message>
     <message>
         <source>Desired video stream quality: </source>
-        <translation></translation>
+        <translation>希望するビデオストリームの画質: </translation>
     </message>
     <message>
         <source>SD</source>
-        <translation></translation>
+        <translation>SD</translation>
     </message>
     <message>
         <source>HD</source>
-        <translation></translation>
+        <translation>HD</translation>
     </message>
     <message>
         <source>Full HD</source>
-        <translation></translation>
+        <translation>Full HD</translation>
     </message>
     <message>
         <source>4K</source>
-        <translation></translation>
+        <translation>4K</translation>
     </message>
     <message>
         <source>Maximum volume: </source>
@@ -3322,7 +3322,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Force samplerate: </source>
-        <translation>強制的にサンプリング周期にする: </translation>
+        <translation>強制的にサンプリング周波数にする: </translation>
     </message>
     <message>
         <source>Force channels conversion: </source>
@@ -3346,7 +3346,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Continue last playback when program starts</source>
-        <translation></translation>
+        <translation>起動時に前回の再生を続ける</translation>
     </message>
     <message>
         <source>Mouse wheel action on video dock</source>
@@ -3370,11 +3370,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Store aspect ratio and zoom in config file</source>
-        <translation>アスペクト比を保存し設定ファイルを拡大します</translation>
+        <translation>アスペクト比とズームを設定ファイルに保存する</translation>
     </message>
     <message>
         <source>Unpause when seeking</source>
-        <translation>シーク時に一時停止しません</translation>
+        <translation>シーク時に一時停止を解除する</translation>
     </message>
     <message>
         <source>Disable subtitles at program startup</source>
@@ -3386,11 +3386,11 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Remember playback position for each playlist entry</source>
-        <translation></translation>
+        <translation>プレイリストのエントリーごとに再生位置を記憶する</translation>
     </message>
     <message>
         <source>The length must be at least 8 minutes. Your playback position must be in [1% - 99%] of the playback range. You can continue playback by pressing the icon next to the full screen button.</source>
-        <translation></translation>
+        <translation>長さは8分以上である必要があります。再生位置は再生範囲の[1% - 99%]内にある必要があります。フルスクリーンボタンの隣のアイコンを押すと、再生を続けられます。</translation>
     </message>
     <message>
         <source>Legacy</source>
@@ -3426,7 +3426,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>Use QMPlay2 video output modules. This will also be used if other renderers aren&apos;t available.</source>
-        <translation>通常のQMPlay2ビデを出力モジュールを使用します。これは他のレンダラーが使用できない場合にも使用されます。</translation>
+        <translation>QMPlay2のビデオ出力モジュールを使用します。他のレンダラーが使用できない場合にも、これが使用されます。</translation>
     </message>
     <message>
         <source>Use OpenGL on entire window</source>
@@ -3434,15 +3434,15 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>This can improve performance if X11 compositor supports it</source>
-        <translation>X11コンポジターをサポートしている場合パフォーマンスを向上させることができます</translation>
+        <translation>X11コンポジターが対応している場合、パフォーマンスが向上することがあります</translation>
     </message>
     <message>
         <source>This can improve performance. Some video drivers can crash when enabled.</source>
-        <translation>ビデオドライバーがキャッシュを有効化している場合パフォーマンスを向上させることができます。</translation>
+        <translation>パフォーマンスが向上することがあります。有効にするとクラッシュするビデオドライバーもあります。</translation>
     </message>
     <message>
         <source>Use QOpenGLWidget (render-to-texture), also enable OpenGL for visualizations. Use with caution, it can reduce performance of video playback.</source>
-        <translation>QOpenGLWidgetを使用すると視覚的にOpenGLを有効することもできます。注意して使用しないとパフォーマンスが低下する可能性があります。</translation>
+        <translation>QOpenGLWidget（レンダートゥテクスチャ）を使用し、視覚化でもOpenGLを有効にします。注意して使用してください。ビデオ再生のパフォーマンスが低下する場合があります。</translation>
     </message>
     <message>
         <source>Renderer:</source>
@@ -3462,15 +3462,15 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     </message>
     <message>
         <source>High quality image scaling down</source>
-        <translation>高解像度画像を縮小する</translation>
+        <translation>画像の縮小を高品質にする</translation>
     </message>
     <message>
         <source>High quality image scaling up</source>
-        <translation>高解像度画像を拡大する</translation>
+        <translation>画像の拡大を高品質にする</translation>
     </message>
     <message>
         <source>Try to display BT.2020 videos in BT.2020 color space (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>BT.2020ビデオのBT.2020色空間での表示を試みる（実験的）</translation>
     </message>
     <message>
         <source>First available device</source>
@@ -3484,9 +3484,9 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>Partially checked:
   - MAILBOX (tear-free) is the preferred present mode
   - FIFO (V-Sync) should not be used in windowed mode</source>
-        <translation>部分的にチェック
-  - メールボックス(ティアフリー)が現在推奨されるモードです
-  - FIFO（垂直同期）はウィンドウモードでは使用しないでください</translation>
+        <translation>部分的にチェック:
+  - 優先される表示モードはMAILBOX（ティアフリー）になります
+  - ウィンドウモードではFIFO（垂直同期）を使用しません</translation>
     </message>
     <message>
         <source>Allow for exclusive fullscreen. This can improve performance.</source>
@@ -3495,7 +3495,7 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
     <message>
         <source>Very slow if used with sharpness</source>
         <translatorcomment>意味不明なので修正お願い</translatorcomment>
-        <translation>もし動作が遅いなら画像シャープ化と使うといい</translation>
+        <translation>シャープネスと併用すると非常に低速になります</translation>
     </message>
     <message>
         <source>Device:</source>
@@ -3509,27 +3509,29 @@ Partially checked doesn&apos;t affect seeking on slider.</source>
         <source>Force audio content to use the specified number of channels.
 Partially checked only if the content has less channels than the specified value
 	(e.g. upgrade mono to stereo but do not degrade quadrophonic to stereo)</source>
-        <translation></translation>
+        <translation>オーディオコンテンツのチャンネル数を、指定した数に強制します。
+部分的にチェックした場合は、コンテンツのチャンネル数が指定値より少ないときだけ強制します
+	（例: モノラルはステレオにしますが、4チャンネルはステレオにしません）</translation>
     </message>
     <message>
         <source>Try to display HDR10 videos in HDR mode (experimental)</source>
-        <translation></translation>
+        <translation>HDR10ビデオのHDRモードでの表示を試みる（実験的）</translation>
     </message>
     <message>
         <source>Low quality image scaling (nearest neighbor)</source>
-        <translation></translation>
+        <translation>画像のスケーリングを低品質にする（最近傍補間）</translation>
     </message>
     <message>
         <source>Useful for retro scaling. Can also be used for software Vulkan implementation to lower the CPU overhead.</source>
-        <translation></translation>
+        <translation>レトロな拡大表示に便利です。ソフトウェアのVulkan実装でも、CPUの負荷を下げるために使用できます。</translation>
     </message>
     <message>
         <source>Cannot change the directory</source>
-        <translation></translation>
+        <translation>ディレクトリを変更できません</translation>
     </message>
     <message>
         <source>Choose youtube-dl script or executable</source>
-        <translation></translation>
+        <translation>youtube-dlのスクリプトまたは実行ファイルを選択</translation>
     </message>
 </context>
 <context>
@@ -3577,7 +3579,7 @@ Partially checked only if the content has less channels than the specified value
     <name>StreamInfo</name>
     <message>
         <source>Date</source>
-        <translation>日</translation>
+        <translation>日付</translation>
     </message>
     <message>
         <source>Album</source>
@@ -3597,7 +3599,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Composer</source>
-        <translation type="unfinished"></translation>
+        <translation>作曲者</translation>
     </message>
     <message>
         <source>Artist</source>
@@ -3614,7 +3616,7 @@ Partially checked only if the content has less channels than the specified value
     <message>
         <source>DRC</source>
         <comment>Dynamic Range Compression</comment>
-        <translation type="unfinished"></translation>
+        <translation>DRC</translation>
     </message>
 </context>
 <context>
@@ -3696,7 +3698,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Genre</source>
-        <translation>Género</translation>
+        <translation>ジャンル</translation>
     </message>
 </context>
 <context>
@@ -3718,7 +3720,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>QMPlay2 updates</source>
-        <translation>QMPlay2アップデートされました</translation>
+        <translation>QMPlay2のアップデート</translation>
     </message>
     <message>
         <source>The update has been downloaded</source>
@@ -3766,7 +3768,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Download page is in &quot;Help-&gt;About QMPlay2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>ダウンロードページは&quot;ヘルプ-&gt;QMPlay2について&quot;にあります</translation>
     </message>
 </context>
 <context>
@@ -3788,7 +3790,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Doubles the frame rate. Useful to get into the FreeSync range. This filter works with hardware-accelerated videos.</source>
-        <translation type="unfinished"></translation>
+        <translation>フレームレートを倍にします。FreeSyncの動作範囲に入れるのに役立ちます。このフィルターはハードウェアアクセラレーションされたビデオで動作します。</translation>
     </message>
 </context>
 <context>
@@ -3807,7 +3809,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Gamma</source>
-        <translation type="unfinished"></translation>
+        <translation>ガンマ</translation>
     </message>
     <message>
         <source>Saturation</source>
@@ -3823,7 +3825,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Gamma correction: </source>
-        <translation type="unfinished"></translation>
+        <translation>ガンマ補正: </translation>
     </message>
     <message>
         <source>Reset video adjustments</source>
@@ -3843,7 +3845,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Saturation down</source>
-        <translation>彩度を上げる</translation>
+        <translation>彩度を下げる</translation>
     </message>
     <message>
         <source>Saturation up</source>
@@ -3871,23 +3873,23 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Negative</source>
-        <translation type="unfinished"></translation>
+        <translation>色反転</translation>
     </message>
     <message>
         <source>Gamma down</source>
-        <translation type="unfinished"></translation>
+        <translation>ガンマを下げる</translation>
     </message>
     <message>
         <source>Gamma up</source>
-        <translation type="unfinished"></translation>
+        <translation>ガンマを上げる</translation>
     </message>
     <message>
         <source>Disable negative</source>
-        <translation type="unfinished"></translation>
+        <translation>色反転を無効にする</translation>
     </message>
     <message>
         <source>Enable negative</source>
-        <translation type="unfinished"></translation>
+        <translation>色反転を有効にする</translation>
     </message>
 </context>
 <context>
@@ -3944,7 +3946,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Screenshot saved as: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>スクリーンショットを保存しました: %1</translation>
     </message>
 </context>
 <context>
@@ -3992,7 +3994,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&amp;Hide on close</source>
-        <translation type="unfinished"></translation>
+        <translation>閉じるときに隠す(&amp;H)</translation>
     </message>
 </context>
 <context>
@@ -4027,7 +4029,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Upload date</source>
-        <translation>最終更新日</translation>
+        <translation>アップロード日</translation>
     </message>
     <message>
         <source>View count</source>
@@ -4058,11 +4060,11 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>&quot;youtube-dl&quot; has been successfully downloaded!</source>
-        <translation>&quot;youtube-dl&quot;が正常にダウロードされました!</translation>
+        <translation>&quot;youtube-dl&quot;が正常にダウンロードされました!</translation>
     </message>
     <message>
         <source>Updating &quot;youtube-dl&quot;, please wait...</source>
-        <translation>&quot;youdube-dl&quot;を更新しています。しばらくお待ち下さい...</translation>
+        <translation>&quot;youtube-dl&quot;を更新しています。しばらくお待ちください...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; update has been aborted!</source>
@@ -4070,7 +4072,7 @@ Partially checked only if the content has less channels than the specified value
     </message>
     <message>
         <source>Downloading &quot;youtube-dl&quot;, please wait...</source>
-        <translation>&quot;youtube-dl&quot;をダウンロードしています。しばらくお待ち下さい...</translation>
+        <translation>&quot;youtube-dl&quot;をダウンロードしています。しばらくお待ちください...</translation>
     </message>
     <message>
         <source>&quot;youtube-dl&quot; download has been aborted!</source>
@@ -4085,7 +4087,7 @@ Partially checked only if the content has less channels than the specified value
     <name>Zoom</name>
     <message>
         <source>&amp;Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>ズーム(&amp;Z)</translation>
     </message>
 </context>
 </TS>
