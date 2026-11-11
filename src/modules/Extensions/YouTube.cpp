@@ -20,11 +20,13 @@
 
 #include <YouTubeDL.hpp>
 #include <LineEdit.hpp>
+#include <Functions.hpp>
 
 #include <QLoggingCategory>
 #include <QStringListModel>
 #include <QDesktopServices>
 #include <QJsonParseError>
+#include <QDeadlineTimer>
 #include <QActionGroup>
 #include <QTextDocument>
 #include <QJsonDocument>
@@ -37,6 +39,7 @@
 #include <QJsonArray>
 #include <QCompleter>
 #include <QClipboard>
+#include <QDateTime>
 #include <QMimeData>
 #include <QSpinBox>
 #include <QAction>
@@ -1271,6 +1274,8 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
 
     QHash<int, QPair<QStringList, QStringList>> itagsData;
 
+    double timeToWait = 0.0;
+
     for (auto &&formatVal : formats)
     {
         const auto format = formatVal.toObject();
@@ -1297,6 +1302,13 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
             {
                 urlLanguages[url] = format[QStringLiteral("language")].toString();
                 urlNotes[url] = note;
+            }
+            if (format.contains(QStringLiteral("available_at")))
+            {
+                if (const auto availableAt = format[QStringLiteral("available_at")].toDouble(); qIsFinite(availableAt))
+                {
+                    timeToWait = qMax(timeToWait, availableAt - QDateTime::currentMSecsSinceEpoch() / 1000.0);
+                }
             }
         }
     }
@@ -1436,6 +1448,24 @@ QStringList YouTube::getYouTubeVideo(const QString &param, const QString &url, I
 
     result += o["description"].toString();
 
+    // Wait the number of seconds until the stream is promised to be available
+    if (timeToWait > 0.0)
+    {
+        const auto timeToWaitMs = qRound64((timeToWait + 1.0) * 1e3); // Add 1s to be sure the time has elapsed on the server
+        const auto waitMsg = tr("Waiting %1 s as required by the stream").arg(qRound(timeToWaitMs / 1e3));
+        emit QMPlay2Core.statusBarMessage(waitMsg, timeToWaitMs);
+        qCDebug(youtube) << waitMsg;
+        QDeadlineTimer dt(timeToWaitMs);
+        do
+        {
+            if (youTubeDL.isAborted())
+            {
+                emit QMPlay2Core.statusBarMessage(QString(), 0);
+                break;
+            }
+            Functions::s_wait(qMin(0.1, dt.remainingTime() / 1e3));
+        } while (dt.remainingTime() > 0);
+    }
     return result;
 }
 
