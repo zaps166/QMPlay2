@@ -492,7 +492,9 @@ static LRESULT CALLBACK MMKeysHookProc(int code, WPARAM wparam, LPARAM lparam)
 }
 #endif
 
+#ifdef Q_OS_ANDROID
 static QtMessageHandler g_defaultMsgHandler = nullptr;
+#endif
 static QMutex g_messageHandlerMutex;
 static void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &message)
 {
@@ -707,7 +709,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("QMPlay2");
 
     QMPlay2GUIClass &qmplay2Gui = QMPlay2GUI; //Create "QMPlay2GUI" instance
-    g_defaultMsgHandler = qInstallMessageHandler(messageHandler);
+#ifdef Q_OS_ANDROID
+    g_defaultMsgHandler =
+#endif
+    qInstallMessageHandler(messageHandler);
 
     g_qAppOK = true;
 
