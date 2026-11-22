@@ -640,6 +640,18 @@ static void checkForEGL()
             fmt.setRenderableType(QSurfaceFormat::OpenGLES);
             QSurfaceFormat::setDefaultFormat(fmt);
         }
+
+#if QT_VERSION_MAJOR < 6
+        // Workaround for Qt5 crash
+        if (isEgl)
+        {
+            auto fmt = QSurfaceFormat::defaultFormat();
+            fmt.setRedBufferSize(8);
+            fmt.setGreenBufferSize(8);
+            fmt.setBlueBufferSize(8);
+            QSurfaceFormat::setDefaultFormat(fmt);
+        }
+#endif
     }
 }
 #endif
