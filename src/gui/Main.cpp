@@ -640,18 +640,6 @@ static void checkForEGL()
             fmt.setRenderableType(QSurfaceFormat::OpenGLES);
             QSurfaceFormat::setDefaultFormat(fmt);
         }
-
-#if QT_VERSION_MAJOR < 6
-        // Workaround for Qt5 crash
-        if (isEgl)
-        {
-            auto fmt = QSurfaceFormat::defaultFormat();
-            fmt.setRedBufferSize(8);
-            fmt.setGreenBufferSize(8);
-            fmt.setBlueBufferSize(8);
-            QSurfaceFormat::setDefaultFormat(fmt);
-        }
-#endif
     }
 }
 #endif
@@ -691,16 +679,19 @@ int main(int argc, char *argv[])
     QGuiApplication::setAttribute(Qt::AA_ForceRasterWidgets);
 #endif
 
-    auto fmt = QSurfaceFormat::defaultFormat();
+    if (QApplication::platformName() != QStringLiteral("xcb"))
+    {
+        auto fmt = QSurfaceFormat::defaultFormat();
 #ifdef USE_OPENGL
-    fmt.setBlueBufferSize(10);
-    fmt.setGreenBufferSize(10);
-    fmt.setRedBufferSize(10);
+        fmt.setBlueBufferSize(10);
+        fmt.setGreenBufferSize(10);
+        fmt.setRedBufferSize(10);
 #endif
 #ifdef Q_OS_MACOS
-    fmt.setColorSpace(QSurfaceFormat::sRGBColorSpace);
+        fmt.setColorSpace(QSurfaceFormat::sRGBColorSpace);
 #endif
-    QSurfaceFormat::setDefaultFormat(fmt);
+        QSurfaceFormat::setDefaultFormat(fmt);
+    }
 
 #ifndef Q_OS_WIN
     if (!setjmp(g_env))
