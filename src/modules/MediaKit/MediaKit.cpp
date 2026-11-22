@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2010-2026 Błażej Szczygieł
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 #include <MediaKit.hpp>
 #include <MediaKitWriter.hpp>
 

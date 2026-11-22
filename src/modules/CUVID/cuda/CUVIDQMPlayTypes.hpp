@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: 2010-2026 Błażej Szczygieł
+// SPDX-License-Identifier: LGPL-3.0-or-later
+
 /* Types from: cuviddec.h and nvcuvid.h */
 
 #pragma once
