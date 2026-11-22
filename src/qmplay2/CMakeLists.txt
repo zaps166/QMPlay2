@@ -273,7 +273,7 @@ endif()
 
 if(USE_RUBBERBAND)
     add_definitions(-DQMPLAY2_RUBBERBAND)
-    pkg_check_modules(RUBBERBAND REQUIRED rubberband>=3.0.0)
+    pkg_check_modules(RUBBERBAND REQUIRED rubberband>=3.1.0)
     include_directories(${RUBBERBAND_INCLUDE_DIRS})
     link_directories(${RUBBERBAND_LIBRARY_DIRS})
     list(APPEND LIBQMPLAY2_LIBS ${RUBBERBAND_LIBRARIES})
