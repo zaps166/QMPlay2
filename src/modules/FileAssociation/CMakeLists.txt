@@ -30,6 +30,6 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     shlwapi
 )
-libqmplay2_set_target_params()
+target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

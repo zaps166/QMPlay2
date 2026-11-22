@@ -404,22 +404,13 @@ if(USE_VULKAN AND NOT WIN32 AND NOT ANDROID)
     )
 endif()
 
-macro(libqmplay2_set_target_params)
-    target_link_libraries(${PROJECT_NAME}
-        PRIVATE
-        $<TARGET_PROPERTY:libqmplay2,INTERFACE_LINK_LIBRARIES>
-        $<TARGET_LINKER_FILE:libqmplay2>
+add_library(libqmplay2_iface INTERFACE)
+foreach(property IN ITEMS LINK_LIBRARIES LINK_DIRECTORIES INCLUDE_DIRECTORIES COMPILE_DEFINITIONS)
+    set_property(TARGET libqmplay2_iface PROPERTY INTERFACE_${property}
+        "$<TARGET_PROPERTY:${PROJECT_NAME},INTERFACE_${property}>"
     )
-    target_link_directories(${PROJECT_NAME}
-        PRIVATE
-        $<TARGET_PROPERTY:libqmplay2,INTERFACE_LINK_DIRECTORIES>
-    )
-    target_include_directories(${PROJECT_NAME}
-        PRIVATE
-        $<TARGET_PROPERTY:libqmplay2,INTERFACE_INCLUDE_DIRECTORIES>
-    )
-    target_compile_definitions(${PROJECT_NAME}
-        PRIVATE
-        $<TARGET_PROPERTY:libqmplay2,INTERFACE_COMPILE_DEFINITIONS>
-    )
-endmacro()
+endforeach()
+target_link_libraries(libqmplay2_iface
+    INTERFACE
+    $<TARGET_LINKER_FILE:${PROJECT_NAME}>
+)

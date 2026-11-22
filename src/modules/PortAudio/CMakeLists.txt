@@ -45,7 +45,7 @@ if(USE_PCH)
     )
 endif()
 
-libqmplay2_set_target_params()
+target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 
 if(WIN32)
     target_compile_definitions(${PROJECT_NAME} PRIVATE -DINITGUID)

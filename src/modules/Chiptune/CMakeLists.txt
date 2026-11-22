@@ -53,7 +53,7 @@ if(USE_PCH)
     )
 endif()
 
-libqmplay2_set_target_params()
+target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 
 if(WIN32)
     set(CUSTOM_CHIPTUNE_LIBRARIES "" CACHE STRING "Custom libraries for Chiptune")

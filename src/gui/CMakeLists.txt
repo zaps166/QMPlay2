@@ -206,7 +206,7 @@ else()
     set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/gui/Android/manifest")
 endif()
 
-libqmplay2_set_target_params()
+target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 
 if(USE_PCH)
     if(APPLE)
