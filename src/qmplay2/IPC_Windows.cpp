@@ -3,10 +3,6 @@
 
 #include "IPC.hpp"
 
-#include <QThread>
-
-#include <windows.h>
-
 class EventNotifier : public QThread
 {
 public:

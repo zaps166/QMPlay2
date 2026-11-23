@@ -3,17 +3,13 @@
 
 #pragma once
 
+#include <FFmpegHeaders.hpp>
+
 #include <FFDec.hpp>
 
-#include <deque>
-
 #ifdef USE_VULKAN
-#   include <vulkan/VulkanBufferPool.hpp>
+# include <vulkan/VulkanBufferPool.hpp>
 #endif
-
-extern "C" {
-    #include <libavcodec/avcodec.h>
-}
 
 class Subtitle : public AVSubtitle
 {
@@ -31,8 +27,6 @@ public:
 };
 
 /**/
-
-struct SwsContext;
 
 class FFMPEG_EXPORT FFDecSW final : public FFDec
 {

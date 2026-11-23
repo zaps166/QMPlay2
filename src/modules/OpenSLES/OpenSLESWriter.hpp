@@ -3,11 +3,9 @@
 
 #pragma once
 
+#include <OpenSLESHeaders.hpp>
+
 #include <Writer.hpp>
-
-#include <QSemaphore>
-
-#include <SLES/OpenSLES.h>
 
 class OpenSLESWriter final : public Writer
 {

@@ -5,14 +5,6 @@
 
 #include <Functions.hpp>
 
-#include <QSaveFile>
-#include <QBuffer>
-#ifdef Q_OS_ANDROID
-#   include <QFile>
-#endif
-
-#include <memory>
-
 class IODeviceWriter : public Writer
 {
     bool readyWrite() const override final

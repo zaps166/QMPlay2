@@ -10,24 +10,10 @@
 #include <Functions.hpp>
 
 #ifdef USE_VULKAN
-#   include "../qmvk/MemoryPropertyFlags.hpp"
-#   include "../qmvk/PhysicalDevice.hpp"
-#   include "../qmvk/Device.hpp"
-#   include "../qmvk/Image.hpp"
-#   include "../qmvk/Buffer.hpp"
-#   include "../qmvk/BufferView.hpp"
-
-#   include <vulkan/VulkanInstance.hpp>
-#   include <vulkan/VulkanImagePool.hpp>
-#   include <vulkan/VulkanBufferPool.hpp>
+# include <vulkan/VulkanInstance.hpp>
+# include <vulkan/VulkanImagePool.hpp>
+# include <vulkan/VulkanBufferPool.hpp>
 #endif
-
-extern "C"
-{
-    #include <libavformat/avformat.h>
-    #include <libswscale/swscale.h>
-    #include <libavutil/pixdesc.h>
-}
 
 using namespace std;
 
@@ -504,7 +490,6 @@ bool FFDecSW::open(StreamInfo &streamInfo)
     }
     return true;
 }
-
 
 void FFDecSW::setPixelFormat()
 {

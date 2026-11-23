@@ -3,13 +3,7 @@
 
 #pragma once
 
-#include <QByteArray>
-
-#include <SoundPlayer.h>
-
-#include <Window.h>
-#include <View.h>
-#include <TextControl.h>
+#include <MediaKitHeaders.hpp>
 
 #include "RingBuffer.hpp"
 

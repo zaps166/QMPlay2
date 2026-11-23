@@ -10,39 +10,6 @@
 #include <Reader.hpp>
 #include <StreamInfo.hpp>
 
-#include <QGraphicsDropShadowEffect>
-#include <QGraphicsBlurEffect>
-#include <QGraphicsPixmapItem>
-#include <QGraphicsScene>
-#include <QHeaderView>
-#include <QMimeData>
-#include <QPainter>
-#include <QDir>
-#include <QUrl>
-#include <QWindow>
-#include <QLibrary>
-#include <QTextCodec>
-#include <QMessageBox>
-#include <QStyleOption>
-#include <QInputDialog>
-#include <QGuiApplication>
-#include <QVarLengthArray>
-#include <QRegularExpression>
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-# include <QInputDevice>
-#else
-# include <QTouchDevice>
-#endif
-
-extern "C"
-{
-    #include <libavformat/version.h>
-    #include <libavutil/dict.h>
-}
-
-#include <cmath>
-#include <vector>
-
 using namespace std;
 
 static inline QWindow *getNativeWindow(const QWidget *w)

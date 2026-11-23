@@ -3,15 +3,6 @@
 
 #include <AVAudioFilter.hpp>
 
-#include <QDebug>
-
-extern "C"
-{
-    #include <libavfilter/buffersink.h>
-    #include <libavfilter/buffersrc.h>
-    #include <libavutil/opt.h>
-}
-
 QStringList AVAudioFilter::getAvailableFilters()
 {
     QStringList filters;

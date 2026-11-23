@@ -3,9 +3,6 @@
 
 #include <NotifiesAndroid.hpp>
 
-#include <QtAndroidExtras/QtAndroid>
-#include <QImage>
-
 enum Duration
 {
     SHORT = 0,

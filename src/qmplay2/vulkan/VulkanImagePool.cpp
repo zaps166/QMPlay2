@@ -1,18 +1,10 @@
 // SPDX-FileCopyrightText: 2010-2026 Błażej Szczygieł
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "../../qmvk/Device.hpp"
-#include "../../qmvk/Image.hpp"
-
 #include "VulkanImagePool.hpp"
 #include "VulkanInstance.hpp"
 
 #include <Frame.hpp>
-
-extern "C" {
-#include <libavutil/buffer.h>
-#include <libavutil/frame.h>
-}
 
 namespace QmVk {
 

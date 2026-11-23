@@ -3,8 +3,6 @@
 
 #include <DeintHWPrepareFilter.hpp>
 
-#include <QDebug>
-
 DeintHWPrepareFilter::DeintHWPrepareFilter()
     : VideoFilter(false)
 {

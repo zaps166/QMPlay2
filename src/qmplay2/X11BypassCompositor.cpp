@@ -4,10 +4,6 @@
 #include <X11BypassCompositor.hpp>
 #include <QMPlay2Core.hpp>
 
-#include <QLibrary>
-#include <QVariant>
-#include <QWidget>
-
 X11BypassCompositor::X11BypassCompositor()
 {
 }

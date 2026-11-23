@@ -3,8 +3,6 @@
 
 #include <FPSDoubler.hpp>
 
-#include <QDebug>
-
 FPSDoubler::FPSDoubler(Module &module, bool &fullScreen)
     : VideoFilter(false)
     , m_fullScreen(fullScreen)

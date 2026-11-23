@@ -4,8 +4,6 @@
 #include <PortAudioCommon.hpp>
 #include <QMPlay2Core.hpp>
 
-#include <portaudio.h>
-
 QString PortAudioCommon::getOutputDeviceName(const PaDeviceInfo *deviceInfo)
 {
     return QString("%1: %2").arg(Pa_GetHostApiInfo(deviceInfo->hostApi)->name, deviceInfo->name);

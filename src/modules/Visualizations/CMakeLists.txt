@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Visualizations)
 
 set(Visualizations_HDR
+    VisualizationsHeaders.hpp
     Visualizations.hpp
     SimpleVis.hpp
     FFTSpectrum.hpp
@@ -25,11 +26,7 @@ add_library(${PROJECT_NAME} MODULE
     ${Visualizations_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${Visualizations_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(VisualizationsHeaders.hpp ${Visualizations_HDR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 

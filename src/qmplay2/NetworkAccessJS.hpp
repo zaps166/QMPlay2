@@ -3,11 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QtQml/QJSValue>
-#include <QVariant>
-#include <QObject>
+#include <QMPlay2Headers.hpp>
 
 class NetworkAccess;
 

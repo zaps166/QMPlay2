@@ -3,15 +3,12 @@
 
 #pragma once
 
-#include <vulkan/VulkanHWInterop.hpp>
+#include <FFmpegHeaders.hpp>
 
-#include <unordered_map>
-#include <memory>
-#include <mutex>
+#include <vulkan/VulkanHWInterop.hpp>
 
 namespace QmVk {
 class Instance;
-class Image;
 }
 
 class VkVideoVulkan final : public QmVk::HWInterop

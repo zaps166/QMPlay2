@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(XVideo)
 
 set(XVideo_HDR
+    XVideoHeaders.hpp
     XVideoWriter.hpp
     XVideo.hpp
     xv.hpp
@@ -34,12 +35,6 @@ target_link_libraries(${PROJECT_NAME}
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-        ${XVideo_HDR}
-    )
-    set_source_files_properties(xv.cpp PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
-endif()
+qmplay2_add_precompile_headers(XVideoHeaders.hpp ${XVideo_HDR})
 
 install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION ${MODULES_INSTALL_PATH})

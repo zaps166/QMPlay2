@@ -7,19 +7,9 @@
 
 #include <NetworkAccess.hpp>
 
-#include <QTreeWidget>
-#include <QPointer>
-#include <QMutex>
-
 class NetworkReply;
-class QProgressBar;
-class QActionGroup;
-class QToolButton;
-class QCompleter;
 class YouTubeDL;
-class QSpinBox;
 class LineEdit;
-class QLabel;
 
 enum class PreferredCodec
 {

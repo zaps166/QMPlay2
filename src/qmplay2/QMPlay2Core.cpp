@@ -7,43 +7,11 @@
 #include <GPUInstance.hpp>
 #include <Functions.hpp>
 #ifdef USE_QML
-#   include <CommonJS.hpp>
+# include <CommonJS.hpp>
 #endif
 #include <Playlist.hpp>
 #include <Version.hpp>
 #include <Module.hpp>
-
-#include <QLoggingCategory>
-#include <QStandardPaths>
-#include <QApplication>
-#include <QLibraryInfo>
-#include <QTranslator>
-#include <QDateTime>
-#include <QLibrary>
-#include <QPointer>
-#include <QLocale>
-#include <QWindow>
-#include <QFile>
-#include <QDir>
-#if defined Q_OS_WIN
-    #include <windows.h>
-    #include <powrprof.h>
-#elif defined Q_OS_MACOS
-    #include <QOperatingSystemVersion>
-#elif !defined Q_OS_ANDROID && !defined Q_OS_HAIKU && defined DBUS_PM
-    #include <QDBusConnection>
-    #include <QDBusInterface>
-#endif
-
-#include <cstdarg>
-#include <cstdio>
-
-extern "C"
-{
-    #include <libavformat/avformat.h>
-    #include <libavutil/cpu.h>
-    #include <libavutil/log.h>
-}
 
 #if defined DBUS_PM
 class DBusSuspend

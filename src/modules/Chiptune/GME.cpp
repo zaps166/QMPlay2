@@ -129,7 +129,6 @@ Playlist::Entries GME::fetchTracks(const QString &url, bool &ok)
     return entries;
 }
 
-
 bool GME::open(const QString &_url, bool tracksOnly)
 {
     QString prefix, url, param;

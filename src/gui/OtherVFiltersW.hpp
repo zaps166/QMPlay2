@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <QListWidget>
+#include <GUIHeaders.hpp>
 
 class OtherVFiltersW : public QListWidget
 {

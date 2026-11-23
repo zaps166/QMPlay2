@@ -3,12 +3,8 @@
 
 #pragma once
 
-#include <Writer.hpp>
 #include <ALSACommon.hpp>
-
-#include <QCoreApplication>
-
-struct _snd_pcm;
+#include <Writer.hpp>
 
 class ALSAWriter final : public Writer
 {

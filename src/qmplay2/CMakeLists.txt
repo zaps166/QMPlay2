@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(libqmplay2)
 
 set(QMPLAY2_HDR
-    QMPlay2Lib.hpp
+    QMPlay2Headers.hpp
     QMPlay2Core.hpp
     Functions.hpp
     Settings.hpp
@@ -290,16 +290,10 @@ add_library(${PROJECT_NAME} SHARED
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
-if(USE_PCH)
-    if(APPLE)
-        set_source_files_properties(NotifiesMacOS.mm PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
-    endif()
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${QMPLAY2_HDR}
-        ${QMPLAY2_OPENGL_HDR}
-        ${QMPLAY2_VULKAN_HDR}
-    )
+if(USE_FULL_PCH AND APPLE)
+    set_source_files_properties(NotifiesMacOS.mm PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 endif()
+qmplay2_add_precompile_headers(QMPlay2Headers.hpp ${QMPLAY2_HDR} ${QMPLAY2_OPENGL_HDR} ${QMPLAY2_VULKAN_HDR})
 
 target_include_directories(
     ${PROJECT_NAME}

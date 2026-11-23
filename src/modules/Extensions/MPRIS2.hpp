@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include <QDBusAbstractAdaptor>
-#include <QDBusObjectPath>
-
-#include <memory>
+#include <ExtensionsHeaders.hpp>
 
 class MediaPlayer2Root final : public QDBusAbstractAdaptor
 {

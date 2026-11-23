@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include <cuda/CUDAQMPlayTypes.hpp>
-#include <cuda/CUVIDQMPlayTypes.hpp>
-
-#include <memory>
+#include <CUVIDHeaders.hpp>
 
 namespace cu {
 

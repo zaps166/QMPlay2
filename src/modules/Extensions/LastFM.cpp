@@ -12,11 +12,6 @@ Q_DECLARE_METATYPE(LastFM::Scrobble)
 
 /**/
 
-#include <QCryptographicHash>
-#include <QStringList>
-#include <QUrlQuery>
-#include <QImage>
-
 LastFM::LastFM(Module &module) :
     coverReply(nullptr),
     loginReply(nullptr),

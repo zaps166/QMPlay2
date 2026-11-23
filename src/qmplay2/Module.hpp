@@ -3,10 +3,6 @@
 
 #pragma once
 
-#include <QStringList>
-#include <QWidget>
-#include <QMutex>
-
 #include <Settings.hpp>
 
 class ModuleCommon;

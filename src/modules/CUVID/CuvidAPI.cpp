@@ -3,9 +3,6 @@
 
 #include <CuvidAPI.hpp>
 
-#include <QLibrary>
-#include <QMutex>
-
 namespace cu {
 
 static QRecursiveMutex mutex;

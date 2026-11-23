@@ -36,11 +36,6 @@ QMPLAY2_EXPORT_MODULE( MediaKit )
 
 /**/
 
-#include <QDoubleSpinBox>
-#include <QGridLayout>
-#include <QCheckBox>
-#include <QLabel>
-
 ModuleSettingsWidget::ModuleSettingsWidget( Module &module ) :
     Module::SettingsWidget( module )
 {

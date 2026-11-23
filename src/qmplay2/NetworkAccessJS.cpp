@@ -7,8 +7,6 @@
 #include <QMPlay2Core.hpp>
 #include <CommonJS.hpp>
 
-#include <QLoggingCategory>
-
 static void getStandardArgs(const QJSValue &args,
                             QString &url,
                             QByteArray &postData,

@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <VideoFilter.hpp>
+#include <VideoFiltersHeaders.hpp>
 
-#include <QThreadPool>
+#include <VideoFilter.hpp>
 
 class YadifDeint final : public VideoFilter
 {

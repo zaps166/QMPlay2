@@ -7,24 +7,7 @@
 #include <StreamInfo.hpp>
 #include <GPUInstance.hpp>
 
-#include "../../qmvk/PhysicalDevice.hpp"
-#include "../../qmvk/Device.hpp"
-#include "../../qmvk/Queue.hpp"
-#include "../../qmvk/CommandBuffer.hpp"
-
 #include <vulkan/VulkanInstance.hpp>
-
-#include <QVulkanInstance>
-#include <QThread>
-#include <QDebug>
-
-extern "C"
-{
-    #include <libavformat/avformat.h>
-    #include <libavutil/pixdesc.h>
-    #include <libavutil/hwcontext.h>
-    #include <libavutil/hwcontext_vulkan.h>
-}
 
 using namespace std;
 

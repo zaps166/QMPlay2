@@ -3,8 +3,7 @@
 
 #pragma once
 
-#include <QCommonStyle>
-#include <QTimer>
+#include <GUIHeaders.hpp>
 
 #include <DockWidget.hpp>
 #include <InDockW.hpp>

@@ -5,11 +5,6 @@
 #include <Functions.hpp>
 #include <LibASS.hpp>
 
-#include <QRegularExpression>
-#include <QStringList>
-
-#include <cstdio>
-
 bool SRT::toASS(const QByteArray &srt, LibASS *ass, double)
 {
     if (!ass)

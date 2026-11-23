@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <PipeWireHeaders.hpp>
+
 #include <Module.hpp>
 
 class PipeWire final : public Module
@@ -19,10 +21,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QCheckBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

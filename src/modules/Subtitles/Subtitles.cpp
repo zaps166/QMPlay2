@@ -44,11 +44,6 @@ QMPLAY2_EXPORT_MODULE(Subtitles)
 
 /**/
 
-#include <QDoubleSpinBox>
-#include <QGridLayout>
-#include <QCheckBox>
-#include <QLabel>
-
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
 {

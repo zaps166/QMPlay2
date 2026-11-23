@@ -3,10 +3,9 @@
 
 #pragma once
 
-#include <RepeatMode.hpp>
+#include <GUIHeaders.hpp>
 
-#include <QCoreApplication>
-#include <QMenuBar>
+#include <RepeatMode.hpp>
 
 class MenuBar : public QMenuBar
 {

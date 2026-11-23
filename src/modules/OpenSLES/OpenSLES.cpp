@@ -35,9 +35,6 @@ QMPLAY2_EXPORT_MODULE(OpenSLES)
 
 /**/
 
-#include <QGridLayout>
-#include <QCheckBox>
-
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
 {

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(FFmpeg)
 
 set(FFmpeg_HDR
+    FFmpegHeaders.hpp
     FFmpeg.hpp
     FFDemux.hpp
     FFDec.hpp
@@ -120,12 +121,7 @@ add_library(${PROJECT_NAME} MODULE
     ${FFmpeg_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-        ${FFmpeg_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(FFmpegHeaders.hpp ${FFmpeg_HDR})
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

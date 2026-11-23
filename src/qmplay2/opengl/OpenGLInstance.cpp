@@ -4,10 +4,6 @@
 #include "OpenGLInstance.hpp"
 #include "OpenGLWriter.hpp"
 
-#include <QOffscreenSurface>
-#include <QOpenGLFunctions>
-#include <QSet>
-
 bool OpenGLInstance::init()
 {
     QOffscreenSurface surface;

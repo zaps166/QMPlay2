@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include <QAbstractTableModel>
-#include <QCoreApplication>
-
-class QAction;
+#include <GUIHeaders.hpp>
 
 class ShortcutHandler final : public QAbstractTableModel
 {

@@ -3,29 +3,13 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QVector>
-
-#include <functional>
-#include <memory>
-
-extern "C" {
-    #include <libavutil/pixfmt.h>
-    #include <libavutil/rational.h>
-    #include <libavutil/mastering_display_metadata.h>
-}
+#include <QMPlay2Headers.hpp>
 
 #ifdef USE_VULKAN
 namespace QmVk {
 class Image;
 }
 #endif
-
-struct AVPixFmtDescriptor;
-struct AVBufferRef;
-struct SwsContext;
-struct AVFrame;
 
 using AVPixelFormats = QVector<AVPixelFormat>;
 

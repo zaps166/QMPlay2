@@ -3,20 +3,10 @@
 
 #include <Settings.hpp>
 
-#include "../../qmvk/Device.hpp"
-#include "../../qmvk/Queue.hpp"
-#include "../../qmvk/ComputePipeline.hpp"
-#include "../../qmvk/CommandBuffer.hpp"
-#include "../../qmvk/ShaderModule.hpp"
-#include "../../qmvk/Sampler.hpp"
-#include "../../qmvk/Image.hpp"
-
 #include "VulkanYadifDeint.hpp"
 #include "VulkanInstance.hpp"
 #include "VulkanImagePool.hpp"
 #include "VulkanHWInterop.hpp"
-
-#include <QDebug>
 
 namespace QmVk {
 

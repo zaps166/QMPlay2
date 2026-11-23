@@ -3,19 +3,9 @@
 
 #pragma once
 
+#include <GUIHeaders.hpp>
+
 #include <PacketBuffer.hpp>
-
-#include <QSet>
-#include <QSize>
-#include <QTimer>
-#include <QMutex>
-#include <QImage>
-#include <QObject>
-#include <QStringList>
-#include <QWaitCondition>
-
-#include <atomic>
-#include <memory>
 
 class StreamInfo;
 class QMPlay2OSD;

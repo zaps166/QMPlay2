@@ -6,10 +6,7 @@
 #include <Demuxer.hpp>
 #include <Playlist.hpp>
 
-#include <QAtomicInt>
-
-#include <cdio/cdio.h>
-#include <cddb/cddb.h>
+#include <AudioCDHeaders.hpp>
 
 class CDIODestroyTimer final : public QObject
 {

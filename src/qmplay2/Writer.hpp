@@ -7,8 +7,6 @@
 #include <ModuleParams.hpp>
 #include <IOController.hpp>
 
-#include <QStringList>
-
 class QMPLAY2SHAREDLIB_EXPORT Writer : public ModuleCommon, public ModuleParams, public BasicIO
 {
 public:

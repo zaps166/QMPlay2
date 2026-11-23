@@ -3,8 +3,9 @@
 
 #pragma once
 
-#include <Demuxer.hpp>
+#include <InputsHeaders.hpp>
 
+#include <Demuxer.hpp>
 #include <IOController.hpp>
 
 class Reader;

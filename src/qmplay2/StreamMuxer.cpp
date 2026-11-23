@@ -6,21 +6,7 @@
 #include <StreamInfo.hpp>
 #include <Packet.hpp>
 
-#include <QLoggingCategory>
-
-#include <unordered_map>
-
 Q_LOGGING_CATEGORY(mux, "StreamMuxer")
-
-extern "C"
-{
-    #include <libavformat/avformat.h>
-    #include <libavutil/samplefmt.h>
-    #include <libavcodec/avcodec.h>
-    #include <libavutil/pixdesc.h>
-}
-
-#include <cmath>
 
 using namespace std;
 

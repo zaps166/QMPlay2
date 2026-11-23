@@ -4,12 +4,6 @@
 #include <VideoOutputCommon.hpp>
 #include <Functions.hpp>
 
-#include <QCoreApplication>
-#include <qevent.h>
-#include <QWidget>
-
-#include <cmath>
-
 using namespace std;
 using namespace placeholders;
 

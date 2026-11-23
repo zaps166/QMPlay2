@@ -5,19 +5,13 @@
 
 #include <QMPlay2Extensions.hpp>
 
-#include <QPointer>
-
-class QTreeWidgetItem;
 class NetworkAccess;
 class NetworkReply;
-class QComboBox;
 class LineEdit;
-class QTimer;
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 class TreeWidget;
 #else
-class QTreeWidget;
 using TreeWidget = QTreeWidget;
 #endif
 

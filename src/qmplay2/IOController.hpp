@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <atomic>
+#include <QMPlay2Headers.hpp>
 
 class BasicIO
 {

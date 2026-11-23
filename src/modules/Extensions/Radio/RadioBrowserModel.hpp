@@ -3,11 +3,7 @@
 
 #pragma once
 
-#include <QAbstractItemModel>
-#include <QPointer>
-#include <QVector>
-
-#include <memory>
+#include <ExtensionsHeaders.hpp>
 
 constexpr const char *g_radioBrowserBaseApiUrl = "http://all.api.radio-browser.info/json";
 constexpr int g_nRetries = 10;

@@ -3,13 +3,9 @@
 
 #pragma once
 
+#include <OpenMPTHeaders.hpp>
+
 #include <Frame.hpp>
-
-#include <QFont>
-
-namespace openmpt {
-    class module;
-}
 
 class OpenMPTVisBase
 {

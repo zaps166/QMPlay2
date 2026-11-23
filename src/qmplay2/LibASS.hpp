@@ -3,13 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QByteArray>
-#include <QList>
-
-#include <memory>
-#include <set>
+#include <QMPlay2Headers.hpp>
 
 class Settings;
 class QMPlay2OSD;
@@ -25,8 +19,6 @@ namespace QmVk {
 class BufferPool;
 }
 #endif
-
-class QSize;
 
 class QMPLAY2SHAREDLIB_EXPORT LibASS
 {

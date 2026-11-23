@@ -6,55 +6,6 @@
 #include <Functions.hpp>
 #include <Main.hpp>
 
-#ifdef TAGLIB_FULL_INCLUDE_PATH
-    #include <taglib/taglib.h>
-#else
-    #include <taglib.h>
-#endif
-
-#ifdef TAGLIB_FULL_INCLUDE_PATH
-    #include <taglib/trueaudiofile.h>
-    #include <taglib/oggflacfile.h>
-    #include <taglib/wavpackfile.h>
-    #include <taglib/vorbisfile.h>
-    #include <taglib/speexfile.h>
-    #include <taglib/aifffile.h>
-    #include <taglib/mpegfile.h>
-    #include <taglib/flacfile.h>
-    #include <taglib/asffile.h>
-    #include <taglib/mpcfile.h>
-    #include <taglib/mp4file.h>
-    #include <taglib/wavfile.h>
-    #include <taglib/apefile.h>
-    #include <taglib/fileref.h>
-    #include <taglib/modfile.h>
-    #include <taglib/s3mfile.h>
-    #include <taglib/itfile.h>
-    #include <taglib/xmfile.h>
-    #include <taglib/opusfile.h>
-    #include <taglib/attachedpictureframe.h>
-#else
-    #include <trueaudiofile.h>
-    #include <oggflacfile.h>
-    #include <wavpackfile.h>
-    #include <vorbisfile.h>
-    #include <speexfile.h>
-    #include <aifffile.h>
-    #include <mpegfile.h>
-    #include <flacfile.h>
-    #include <asffile.h>
-    #include <mpcfile.h>
-    #include <mp4file.h>
-    #include <wavfile.h>
-    #include <apefile.h>
-    #include <fileref.h>
-    #include <modfile.h>
-    #include <s3mfile.h>
-    #include <itfile.h>
-    #include <xmfile.h>
-    #include <opusfile.h>
-    #include <attachedpictureframe.h>
-#endif
 using namespace TagLib;
 
 #define instanceOf(p, t) (dynamic_cast<t *>(&p) == &p)
@@ -74,19 +25,6 @@ static inline Ogg::XiphComment *getXiphComment(File &file)
         return ((Ogg::Opus::File &)file).tag();
     return nullptr;
 }
-
-#include <QPlainTextEdit>
-#include <QImageReader>
-#include <QFileDialog>
-#include <QPushButton>
-#include <QFormLayout>
-#include <QBoxLayout>
-#include <QLineEdit>
-#include <QMimeData>
-#include <QSpinBox>
-#include <QPainter>
-#include <qevent.h>
-#include <QLabel>
 
 PictureW::PictureW(ByteVector &picture) :
     picture(picture)

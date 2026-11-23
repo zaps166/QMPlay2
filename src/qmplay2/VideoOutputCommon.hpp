@@ -5,16 +5,6 @@
 
 #include <X11BypassCompositor.hpp>
 
-#include <QVariantAnimation>
-#include <QMatrix4x4>
-#include <QRect>
-
-#include <functional>
-
-class QMouseEvent;
-class QVariant;
-class QWidget;
-
 class VideoOutputCommon : public X11BypassCompositor
 {
 protected:

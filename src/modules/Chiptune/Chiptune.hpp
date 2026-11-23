@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <ChiptuneHeaders.hpp>
+
 #include <Module.hpp>
 
 class Chiptune final : public Module
@@ -19,11 +21,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QCheckBox;
-class QSpinBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

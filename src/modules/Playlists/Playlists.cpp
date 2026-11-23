@@ -45,9 +45,6 @@ QMPLAY2_EXPORT_MODULE(Playlists)
 
 /**/
 
-#include <QGridLayout>
-#include <QCheckBox>
-
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
 {

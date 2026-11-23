@@ -3,11 +3,8 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
+#include <QMPlay2Headers.hpp>
 #include <VideoWriter.hpp>
-
-#include <QCoreApplication>
-#include <QSet>
 
 class OpenGLHWInterop;
 class OpenGLCommon;

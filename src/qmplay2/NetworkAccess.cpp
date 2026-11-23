@@ -6,17 +6,6 @@
 #include <QMPlay2Core.hpp>
 #include <Functions.hpp>
 
-extern "C"
-{
-    #include <libavformat/avformat.h>
-    #include <libavformat/avio.h>
-    #include <libavutil/dict.h>
-    #include <libavutil/opt.h>
-}
-
-#include <QThread>
-#include <QMutex>
-
 static int interruptCB(bool *m_status)
 {
     m_status[1] = true;

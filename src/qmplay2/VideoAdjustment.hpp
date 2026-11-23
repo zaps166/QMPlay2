@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <string.h>
+#include <QMPlay2Headers.hpp>
 
 class QMPLAY2SHAREDLIB_EXPORT VideoAdjustment
 {

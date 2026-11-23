@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(OpenMPT)
 
 set(OpenMPT_HDR
+    OpenMPTHeaders.hpp
     OpenMPT.hpp
     OpenMPTDemux.hpp
     OpenMPTVisBase.hpp
@@ -27,11 +28,7 @@ add_library(${PROJECT_NAME} MODULE
     ${OpenMPT_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${OpenMPT_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(OpenMPTHeaders.hpp ${OpenMPT_HDR})
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE

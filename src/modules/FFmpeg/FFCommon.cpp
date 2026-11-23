@@ -3,13 +3,6 @@
 
 #include <FFCommon.hpp>
 
-#include <QRegularExpression>
-#include <QProcess>
-#include <QSysInfo>
-#include <QDebug>
-#include <QFile>
-#include <QDir>
-
 #ifdef FIND_HWACCEL_DRIVERS_PATH
 void FFCommon::setDriversPath(const QString &dirName, const QByteArray &envVar)
 {

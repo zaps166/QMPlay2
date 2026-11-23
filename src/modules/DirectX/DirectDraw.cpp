@@ -6,9 +6,6 @@
 #include <Frame.hpp>
 #include <Functions.hpp>
 
-#include <QCoreApplication>
-#include <QPainter>
-
 #define DWM_EC_DISABLECOMPOSITION 0
 #define DWM_EC_ENABLECOMPOSITION  1
 

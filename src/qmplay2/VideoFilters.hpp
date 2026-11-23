@@ -5,14 +5,6 @@
 
 #include <VideoFilter.hpp>
 
-#include <QWaitCondition>
-#include <QThread>
-#include <QVector>
-#include <QMutex>
-#include <QQueue>
-
-#include <memory>
-
 class VideoFiltersThr;
 
 class QMPLAY2SHAREDLIB_EXPORT VideoFilters

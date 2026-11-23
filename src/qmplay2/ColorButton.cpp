@@ -3,9 +3,6 @@
 
 #include <ColorButton.hpp>
 
-#include <QColorDialog>
-#include <QPainter>
-
 ColorButton::ColorButton(QWidget *parent) :
     QPushButton(parent)
 {

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <AudioFiltersHeaders.hpp>
+
 #include <AudioFilter.hpp>
 
 class PhaseReverse final : public AudioFilter

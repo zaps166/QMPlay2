@@ -6,22 +6,7 @@
 #include <Settings.hpp>
 #include <LibASS.hpp>
 
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QFormLayout>
-#include <QGroupBox>
-#include <QFontComboBox>
-#include <QDoubleSpinBox>
-#include <QCheckBox>
-#include <QSpacerItem>
-#include <QLabel>
-#include <QSpinBox>
-#include <QGuiApplication>
-#include <QRadioButton>
-#include <QCoreApplication>
-
-#include "ColorButton.hpp"
+#include <ColorButton.hpp>
 
 void OSDSettingsW::init(const QString &prefix, int a, int b, int c, int d, int e, int f, double g, double h, const QColor &i, const QColor &j, const QColor &k, bool l, bool m)
 {

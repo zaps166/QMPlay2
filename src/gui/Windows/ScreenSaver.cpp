@@ -3,8 +3,6 @@
 
 #include <ScreenSaver.hpp>
 
-#include <windows.h>
-
 class ScreenSaverPriv
 {
 public:

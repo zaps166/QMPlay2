@@ -3,11 +3,8 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
+#include <QMPlay2Headers.hpp>
 
-#include <QList>
-
-struct AVFormatContext;
 class StreamInfo;
 class Packet;
 

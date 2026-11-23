@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <Module.hpp>
+#include <AudioCDHeaders.hpp>
 
-#include <QCoreApplication>
+#include <Module.hpp>
 
 class CDIODestroyTimer;
 
@@ -32,10 +32,6 @@ private slots:
 };
 
 /**/
-
-class QGridLayout;
-class QGroupBox;
-class QCheckBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

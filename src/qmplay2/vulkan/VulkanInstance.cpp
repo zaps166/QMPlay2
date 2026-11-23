@@ -1,29 +1,10 @@
 // SPDX-FileCopyrightText: 2010-2026 Błażej Szczygieł
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "../../qmvk/PhysicalDevice.hpp"
-#include "../../qmvk/Device.hpp"
-#include "../../qmvk/MemoryPropertyFlags.hpp"
-#include "../../qmvk/Image.hpp"
-
 #include "VulkanInstance.hpp"
 #include "VulkanBufferPool.hpp"
 #include "VulkanImagePool.hpp"
 #include "VulkanWriter.hpp"
-
-#include <QGuiApplication>
-#include <QVulkanInstance>
-#include <QVersionNumber>
-#include <QResource>
-#include <QLibrary>
-#include <QWindow>
-
-#if defined(Q_OS_WIN)
-#   include <QRegularExpression>
-#elif defined(Q_OS_LINUX)
-#   include <QFile>
-#   include <QDir>
-#endif
 
 namespace QmVk {
 

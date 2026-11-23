@@ -26,9 +26,6 @@
     #include <OpenSubtitles.hpp>
 #endif
 
-#include <QCoreApplication>
-#include <QComboBox>
-
 Extensions::Extensions() :
     Module("Extensions"),
     downloader(":/downloader.svgz")
@@ -139,15 +136,6 @@ QMPLAY2_EXPORT_MODULE(Extensions)
 /**/
 
 #include "LineEdit.hpp"
-
-#include <QCryptographicHash>
-#include <QGridLayout>
-#include <QListWidget>
-#include <QToolButton>
-#include <QFileDialog>
-#include <QGroupBox>
-#include <QCheckBox>
-#include <QLabel>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)

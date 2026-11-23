@@ -4,13 +4,6 @@
 #include <CuvidOpenGL.hpp>
 #include <Frame.hpp>
 
-#include <QOpenGLContext>
-#include <QImage>
-
-extern "C" {
-    #include <libavutil/buffer.h>
-}
-
 #ifndef GL_R8
     #define GL_R8 0x8229
 #endif

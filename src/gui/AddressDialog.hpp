@@ -3,11 +3,9 @@
 
 #pragma once
 
-#include <AddressBox.hpp>
+#include <GUIHeaders.hpp>
 
-#include <QCoreApplication>
-#include <QCheckBox>
-#include <QDialog>
+#include <AddressBox.hpp>
 
 class AddressDialog final : public QDialog
 {

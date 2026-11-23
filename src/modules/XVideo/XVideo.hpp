@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <XVideoHeaders.hpp>
+
 #include <Module.hpp>
 
 class XVideo final : public Module
@@ -17,11 +19,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QCheckBox;
-class QComboBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

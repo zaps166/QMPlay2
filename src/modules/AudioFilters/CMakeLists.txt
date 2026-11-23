@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(AudioFilters)
 
 set(AudioFilters_HDR
+    AudioFiltersHeaders.hpp
     AudioFilters.hpp
     Equalizer.hpp
     EqualizerGUI.hpp
@@ -66,11 +67,7 @@ if(USE_AVAUDIOFILTER)
     )
 endif()
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${AudioFilters_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(AudioFiltersHeaders.hpp ${AudioFilters_HDR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 

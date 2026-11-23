@@ -1,10 +1,6 @@
 // SPDX-FileCopyrightText: 2010-2026 Błażej Szczygieł
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include "../../qmvk/CommandBuffer.hpp"
-#include "../../qmvk/Device.hpp"
-#include "../../qmvk/Queue.hpp"
-
 #include <vulkan/VulkanInstance.hpp>
 #include <vulkan/VulkanHWInterop.hpp>
 

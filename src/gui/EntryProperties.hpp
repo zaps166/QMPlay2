@@ -3,18 +3,12 @@
 
 #pragma once
 
-#include <QDialog>
+#include <GUIHeaders.hpp>
 
-class QTreeWidgetItem;
-class QTreeWidget;
-class QToolButton;
 class AddressBox;
-class QLineEdit;
-class QCheckBox;
 #ifdef QMPlay2_TagEditor
-    class TagEditor;
+class TagEditor;
 #endif
-class QLabel;
 
 class EntryProperties final : public QDialog
 {

@@ -8,7 +8,7 @@
 #include <DiscardDeint.hpp>
 #include <FPSDoubler.hpp>
 #ifdef MOTION_BLUR
-#   include <MotionBlur.hpp>
+# include <MotionBlur.hpp>
 #endif
 
 VFilters::VFilters() :
@@ -75,12 +75,6 @@ Module::SettingsWidget *VFilters::getSettingsWidget()
 QMPLAY2_EXPORT_MODULE(VFilters)
 
 /**/
-
-#include <QGridLayout>
-#include <QFormLayout>
-#include <QCheckBox>
-#include <QGroupBox>
-#include <QSpinBox>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module)
     : Module::SettingsWidget(module)

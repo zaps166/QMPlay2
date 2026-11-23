@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QPushButton>
+#include <QMPlay2Headers.hpp>
 
 class QMPLAY2SHAREDLIB_EXPORT ColorButton final : public QPushButton
 {

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <VideoFiltersHeaders.hpp>
+
 #include <VideoFilter.hpp>
 
 class DiscardDeint final : public VideoFilter

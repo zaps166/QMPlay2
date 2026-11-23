@@ -11,18 +11,6 @@
 #include <Frame.hpp>
 #include <Functions.hpp>
 
-#include <QOffscreenSurface>
-#include <QOpenGLContext>
-#include <QOpenGLShader>
-#include <QResizeEvent>
-#include <QResource>
-#include <QPainter>
-#include <QLibrary>
-#include <QWidget>
-#ifdef Q_OS_WIN
-#   include <QOperatingSystemVersion>
-#endif
-
 /* OpenGL|ES 2.0 doesn't have those definitions */
 #ifndef GL_MAP_WRITE_BIT
     #define GL_MAP_WRITE_BIT 0x0002

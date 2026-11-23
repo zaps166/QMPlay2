@@ -5,10 +5,6 @@
 
 #include <Functions.hpp>
 
-#include <QVBoxLayout>
-
-/**/
-
 VolWidget::VolWidget(int max) :
     menu(this)
 {

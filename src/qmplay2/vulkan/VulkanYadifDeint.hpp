@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
+#include <QMPlay2Headers.hpp>
 
 #include <VideoFilter.hpp>
 
@@ -12,8 +12,6 @@ namespace QmVk {
 using namespace std;
 
 class Instance;
-class Sampler;
-class ComputePipeline;
 
 class QMPLAY2SHAREDLIB_EXPORT YadifDeint : public VideoFilter
 {

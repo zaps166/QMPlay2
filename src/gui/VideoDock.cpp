@@ -11,16 +11,6 @@
 #include <Functions.hpp>
 #include <SubsDec.hpp>
 
-#include <QVersionNumber>
-#include <QMouseEvent>
-#include <QFileInfo>
-#include <QMimeData>
-#include <QPainter>
-#include <QGesture>
-#include <QMenu>
-
-#include <cmath>
-
 constexpr int g_hideCursorTimeout = 750;
 
 VideoDock::VideoDock() :

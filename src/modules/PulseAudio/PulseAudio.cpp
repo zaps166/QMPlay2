@@ -36,11 +36,6 @@ QMPLAY2_EXPORT_MODULE(PulseAudio)
 
 /**/
 
-#include <QDoubleSpinBox>
-#include <QFormLayout>
-#include <QCheckBox>
-#include <QLabel>
-
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
 {

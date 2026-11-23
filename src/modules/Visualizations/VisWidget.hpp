@@ -3,12 +3,7 @@
 
 #pragma once
 
-#include <QWidget>
-#include <QTimer>
-
-#ifdef USE_OPENGL
-#   include <QOpenGLWidget>
-#endif
+#include <VisualizationsHeaders.hpp>
 
 class DockWidget;
 

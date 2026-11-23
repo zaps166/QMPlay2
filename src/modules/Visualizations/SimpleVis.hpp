@@ -3,11 +3,10 @@
 
 #pragma once
 
+#include <VisualizationsHeaders.hpp>
+
 #include <QMPlay2Extensions.hpp>
 #include <VisWidget.hpp>
-
-#include <QCoreApplication>
-#include <QLinearGradient>
 
 class SimpleVis;
 

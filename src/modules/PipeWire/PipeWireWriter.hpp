@@ -3,15 +3,9 @@
 
 #pragma once
 
+#include <PipeWireHeaders.hpp>
+
 #include <Writer.hpp>
-
-#include <QCoreApplication>
-#include <QElapsedTimer>
-
-#include <atomic>
-
-#include <spa/param/audio/format-utils.h>
-#include <pipewire/pipewire.h>
 
 class PipeWireWriter final : public Writer
 {

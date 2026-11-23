@@ -38,12 +38,6 @@ QMPLAY2_EXPORT_MODULE(ALSA)
 
 /**/
 
-#include <QDoubleSpinBox>
-#include <QFormLayout>
-#include <QComboBox>
-#include <QCheckBox>
-#include <QLabel>
-
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
 {

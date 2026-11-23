@@ -4,24 +4,12 @@
 #include <EntryProperties.hpp>
 
 #ifdef QMPlay2_TagEditor
-    #include <TagEditor.hpp>
+# include <TagEditor.hpp>
 #endif
 #include <PlaylistWidget.hpp>
 #include <AddressBox.hpp>
 #include <Functions.hpp>
 #include <Main.hpp>
-
-#include <QDesktopServices>
-#include <QDialogButtonBox>
-#include <QFileDialog>
-#include <QToolButton>
-#include <QGridLayout>
-#include <QMessageBox>
-#include <QFileInfo>
-#include <QLineEdit>
-#include <QCheckBox>
-#include <QLabel>
-#include <QUrl>
 
 EntryProperties::EntryProperties(QWidget *p, QTreeWidget *treeWidget, bool &sync, bool &accepted)
     : QDialog(p)

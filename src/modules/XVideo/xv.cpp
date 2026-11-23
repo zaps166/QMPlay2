@@ -6,14 +6,6 @@
 #include <Frame.hpp>
 #include <Functions.hpp>
 
-#include <QPainter>
-
-#include <cmath>
-
-#include <sys/shm.h>
-#include <X11/Xlib.h>
-#include <X11/extensions/Xvlib.h>
-
 struct XVideoPrivate
 {
     XvImageFormatValues *fo;

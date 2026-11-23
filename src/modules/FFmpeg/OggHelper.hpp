@@ -3,12 +3,7 @@
 
 #pragma once
 
-#include <QString>
-#include <QVector>
-#include <QPair>
-
-struct AVIOInterruptCB;
-struct AVIOContext;
+#include <FFmpegHeaders.hpp>
 
 class OggHelper
 {

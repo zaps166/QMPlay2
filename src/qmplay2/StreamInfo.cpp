@@ -3,12 +3,6 @@
 
 #include <StreamInfo.hpp>
 
-extern "C" {
-    #include <libavutil/pixdesc.h>
-}
-
-#include <QDebug>
-
 QMPlay2Tags StreamInfo::getTag(const QString &tag)
 {
     bool ok;

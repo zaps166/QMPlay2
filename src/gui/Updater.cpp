@@ -11,17 +11,6 @@
 #else
     #include <Version.hpp>
     #include <Main.hpp>
-
-    #include <QProgressBar>
-    #include <QPushButton>
-    #include <QVBoxLayout>
-    #include <QLabel>
-#endif
-#include <QCoreApplication>
-#include <QDir>
-#ifdef Q_OS_WIN32
-#   include <QOperatingSystemVersion>
-#   include <QSysInfo>
 #endif
 
 #ifdef UPDATER

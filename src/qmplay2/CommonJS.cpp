@@ -8,12 +8,6 @@
 #include <Functions.hpp>
 #include <YouTubeDL.hpp>
 
-#include <QMessageAuthenticationCode>
-#include <QTextDocumentFragment>
-#include <QLoggingCategory>
-#include <QJSEngine>
-#include <QTimer>
-
 Q_LOGGING_CATEGORY(js, "JS")
 
 CommonJS::CommonJS(QObject *parent)

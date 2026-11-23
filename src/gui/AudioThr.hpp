@@ -3,11 +3,11 @@
 
 #pragma once
 
+#include <GUIHeaders.hpp>
+
 #include <AVThread.hpp>
 
 #include <SndResampler.hpp>
-
-#include <QVector>
 
 class QMPlay2Extensions;
 class PlayClass;

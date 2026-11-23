@@ -5,8 +5,6 @@
 
 #include <QMPlay2Core.hpp>
 
-#include <QAction>
-
 LineEdit::LineEdit(QWidget *parent)
     : QLineEdit(parent)
 {

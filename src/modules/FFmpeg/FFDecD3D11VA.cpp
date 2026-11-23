@@ -8,20 +8,7 @@
 #include <GPUInstance.hpp>
 #include <StreamInfo.hpp>
 
-#include "../../qmvk/PhysicalDevice.hpp"
-
 #include <vulkan/VulkanInstance.hpp>
-
-#include <QLibrary>
-#include <QDebug>
-
-#include <dxgi1_2.h>
-
-extern "C"
-{
-    #include <libavutil/hwcontext.h>
-    #include <libavutil/hwcontext_d3d11va.h>
-}
 
 using namespace std;
 

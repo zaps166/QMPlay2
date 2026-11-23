@@ -5,10 +5,6 @@
 
 #include <QMPlay2Core.hpp>
 
-#include <QGuiApplication>
-#include <QOpenGLContext>
-#include <QDockWidget>
-
 OpenGLWindow::OpenGLWindow()
     : m_platformName(QGuiApplication::platformName())
     , m_passEventsToParent(

@@ -14,10 +14,6 @@
     #include <NotifiesAndroid.hpp>
 #endif
 
-#include <QApplication>
-#include <QStyle>
-#include <QIcon>
-
 Notifies *Notifies::s_notifies[2];
 bool Notifies::s_nativeFirst;
 

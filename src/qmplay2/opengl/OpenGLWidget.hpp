@@ -5,9 +5,6 @@
 
 #include "OpenGLCommon.hpp"
 
-#include <QSurfaceFormat>
-#include <QOpenGLWidget>
-
 class OpenGLWidget final : public QOpenGLWidget, public OpenGLCommon
 {
     Q_OBJECT

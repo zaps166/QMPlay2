@@ -3,18 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <memory>
-
-class QByteArray;
-struct SwrContext;
-
-namespace RubberBand {
-
-class RubberBandStretcher;
-
-}
+#include <QMPlay2Headers.hpp>
 
 class QMPLAY2SHAREDLIB_EXPORT SndResampler
 {
@@ -42,7 +31,9 @@ public:
 
 private:
     SwrContext *m_sndConvertCtx = nullptr;
+#ifdef QMPLAY2_RUBBERBAND
     std::unique_ptr<RubberBand::RubberBandStretcher> m_rubberBandStretcher;
+#endif
     bool m_keepPitch = false;
     int m_srcSamplerate = 0;
     int m_srcChannels = 0;

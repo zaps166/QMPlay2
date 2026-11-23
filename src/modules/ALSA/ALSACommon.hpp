@@ -3,8 +3,7 @@
 
 #pragma once
 
-#include <QStringList>
-#include <QPair>
+#include <ALSAHeaders.hpp>
 
 namespace ALSACommon
 {

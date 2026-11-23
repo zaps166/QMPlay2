@@ -4,10 +4,7 @@
 #pragma once
 
 #include <IOController.hpp>
-#include <QMPlay2Lib.hpp>
-
-#include <QCoreApplication>
-#include <QProcess>
+#include <QMPlay2Headers.hpp>
 
 class NetworkReply;
 

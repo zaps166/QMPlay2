@@ -3,28 +3,15 @@
 
 #pragma once
 
+#include <FFmpegHeaders.hpp>
+
 #include <OpenThr.hpp>
 
 #include <ChapterProgramInfo.hpp>
 #include <StreamInfo.hpp>
 
-#include <QCoreApplication>
-
-extern "C"
-{
-    #include <libavformat/version.h>
-}
-
-struct AVFormatContext;
-struct AVDictionary;
-struct AVStream;
-struct AVPacket;
 class OggHelper;
 class Packet;
-#ifdef Q_OS_ANDROID
-class QFile;
-#endif
-
 class FormatContext
 {
     Q_DECLARE_TR_FUNCTIONS(FormatContext)

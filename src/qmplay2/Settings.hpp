@@ -5,13 +5,6 @@
 
 #include <QMPlay2Core.hpp>
 
-#include <QSettings>
-#include <QMutex>
-#include <QMap>
-#include <QSet>
-
-#include <functional>
-
 class QMPLAY2SHAREDLIB_EXPORT Settings : protected QSettings
 {
     using SettingsMap = QMap<QString, QVariant>;

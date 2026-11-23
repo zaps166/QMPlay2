@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(CUVID)
 
 set(CUVID_HDR
+    CUVIDHeaders.hpp
     Cuvid.hpp
     CuvidDec.hpp
     CuvidAPI.hpp
@@ -33,11 +34,7 @@ add_library(${PROJECT_NAME} MODULE
     ${CUVID_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${CUVID_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(CUVIDHeaders.hpp ${CUVID_HDR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 

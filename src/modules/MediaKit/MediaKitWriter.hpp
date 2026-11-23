@@ -3,10 +3,10 @@
 
 #pragma once
 
+#include <MediaKitHeaders.hpp>
+
 #include <Writer.hpp>
 #include <SndPlayer.hpp>
-
-#include <QCoreApplication>
 
 class MediaKitWriter : public Writer
 {

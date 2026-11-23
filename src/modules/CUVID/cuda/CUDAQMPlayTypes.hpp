@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <QtGlobal>
-
 #ifdef Q_OS_WIN
     #define CUDAAPI __stdcall
 #else
@@ -39,7 +37,6 @@ enum CUctx_flags
     CU_CTX_SCHED_YIELD         = 0x02,
     CU_CTX_SCHED_BLOCKING_SYNC = 0x04,
     CU_CTX_BLOCKING_SYNC       = 0x04,
-
 
     CU_CTX_SCHED_MASK          = 0x07,
     CU_CTX_MAP_HOST            = 0x08,

@@ -4,42 +4,11 @@
 #pragma once
 
 #include <IOController.hpp>
-#include <QMPlay2Lib.hpp>
+#include <QMPlay2Headers.hpp>
 #include <QMPlay2OSD.hpp>
 
-#include <QStringList>
-#include <QMatrix4x4>
-#include <QVector2D>
-#include <QIcon>
-#include <QDate>
-
-#include <array>
-
-extern "C" {
-    #include <libavutil/pixfmt.h>
-}
-
-struct AVDictionary;
-
-class QHeaderView;
 class StreamInfo;
-class QMimeData;
-class QPainter;
-class QPixmap;
 class Frame;
-class QIcon;
-class QRect;
-
-#ifdef Q_OS_WIN
-    #include <windows.h>
-#else
-    #ifdef Q_OS_MACOS
-        #include <mach/mach_time.h>
-    #else
-        #include <time.h>
-    #endif
-    #include <unistd.h>
-#endif
 
 namespace Functions
 {

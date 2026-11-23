@@ -41,11 +41,6 @@ QMPLAY2_EXPORT_MODULE(PipeWire)
 
 /**/
 
-#include <QDoubleSpinBox>
-#include <QFormLayout>
-#include <QCheckBox>
-#include <QLabel>
-
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
 {

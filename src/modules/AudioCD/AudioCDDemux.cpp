@@ -7,8 +7,6 @@
 #include <Packet.hpp>
 
 #ifdef Q_OS_WIN
-    #include <QRegularExpression>
-    #include <QDir>
     static const QRegularExpression cdaRegExp(R"(file:\/\/\D:\/track\d\d.cda)");
 #endif
 

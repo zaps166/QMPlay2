@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include <QByteArray>
-
-#include <pulse/simple.h>
-#include <pulse/pulseaudio.h>
+#include <PulseAudioHeaders.hpp>
 
 class Pulse
 {

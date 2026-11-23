@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <FFmpegHeaders.hpp>
+
 #include <FFDec.hpp>
 
 class FFMPEG_EXPORT FFDecHWAccel : public FFDec

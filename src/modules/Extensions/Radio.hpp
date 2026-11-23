@@ -5,23 +5,11 @@
 
 #include <QMPlay2Extensions.hpp>
 
-#include <QPointer>
-#include <QIcon>
-#include <QMap>
-
-class QSplitter;
-class QComboBox;
-class QLabel;
-class QListWidget;
-class QToolButton;
-class QTreeView;
 class LineEdit;
 
 class RadioBrowserModel;
-class QListWidgetItem;
 class NetworkAccess;
 class NetworkReply;
-class QTimer;
 
 class Radio final : public QWidget, public QMPlay2Extensions
 {

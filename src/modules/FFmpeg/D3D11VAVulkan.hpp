@@ -5,13 +5,6 @@
 
 #include <vulkan/VulkanHWInterop.hpp>
 
-#include <unordered_map>
-#include <unordered_set>
-#include <mutex>
-
-#include <wrl/client.h>
-#include <d3d11.h>
-
 using Microsoft::WRL::ComPtr;
 
 namespace QmVk {
@@ -19,9 +12,6 @@ class Instance;
 class Device;
 class Image;
 }
-
-struct AVD3D11VADeviceContext;
-struct AVBufferRef;
 
 class D3D11VAVulkan : public QmVk::HWInterop
 {

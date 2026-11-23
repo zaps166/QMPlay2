@@ -9,27 +9,6 @@
 #include <Settings.hpp>
 #include <Main.hpp>
 
-#include <QDialogButtonBox>
-#include <QDoubleSpinBox>
-#include <QApplication>
-#include <QInputDialog>
-#include <QScrollArea>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QGridLayout>
-#include <QFormLayout>
-#include <QMetaEnum>
-#include <QGroupBox>
-#include <QSettings>
-#include <QComboBox>
-#include <QPainter>
-#include <QSlider>
-#include <QStyle>
-#include <QLabel>
-#include <QFile>
-
-#include <map>
-
 class WallpaperW : public QWidget
 {
 public:

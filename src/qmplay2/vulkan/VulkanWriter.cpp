@@ -7,8 +7,6 @@
 
 #include <Functions.hpp>
 
-#include <QDebug>
-
 namespace QmVk {
 
 Writer::Writer()

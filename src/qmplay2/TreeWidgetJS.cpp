@@ -3,10 +3,6 @@
 
 #include <TreeWidgetJS.hpp>
 
-#include <QLoggingCategory>
-#include <QHeaderView>
-#include <QTreeWidget>
-
 TreeWidgetItemJS::TreeWidgetItemJS()
     : m_item(new QTreeWidgetItem)
 {}

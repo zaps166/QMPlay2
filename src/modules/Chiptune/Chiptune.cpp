@@ -59,10 +59,6 @@ QMPLAY2_EXPORT_MODULE(Chiptune)
 
 /**/
 
-#include <QGridLayout>
-#include <QCheckBox>
-#include <QSpinBox>
-
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
 {

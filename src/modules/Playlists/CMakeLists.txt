@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Playlists)
 
 set(Playlists_HDR
+    PlaylistsHeaders.hpp
     Playlists.hpp
     PLS.hpp
     M3U.hpp
@@ -25,11 +26,7 @@ add_library(${PROJECT_NAME} MODULE
     ${Playlists_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${Playlists_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(PlaylistsHeaders.hpp ${Playlists_HDR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 

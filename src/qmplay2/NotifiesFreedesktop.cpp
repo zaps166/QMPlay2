@@ -7,8 +7,6 @@
 
 #include <QMPlay2Core.hpp>
 
-#include <QDebug>
-
 QDBusArgument &operator<<(QDBusArgument &arg, const QImage &image)
 {
     QImage scaledImage;

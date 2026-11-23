@@ -3,11 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-class QSystemTrayIcon;
-class QPixmap;
-class QImage;
+#include <QMPlay2Headers.hpp>
 
 class QMPLAY2SHAREDLIB_EXPORT Notifies
 {

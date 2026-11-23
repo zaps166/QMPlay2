@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <PlaylistsHeaders.hpp>
+
 #include <Playlist.hpp>
 
 class PLS final : public Playlist

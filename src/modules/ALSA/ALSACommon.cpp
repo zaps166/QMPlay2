@@ -3,8 +3,6 @@
 
 #include <ALSACommon.hpp>
 
-#include <alsa/asoundlib.h>
-
 ALSACommon::DevicesList ALSACommon::getDevices()
 {
     DevicesList devices;

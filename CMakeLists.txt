@@ -64,8 +64,16 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOMOC_COMPILER_PREDEFINES OFF)
 
-option(USE_PCH "Use precompiled headers" OFF)
-add_feature_info(PCH USE_PCH "Use precompiled headers")
+option(USE_FULL_PCH "Use full precompiled headers (also with QMPlay2 headers)" OFF)
+add_feature_info("Full PCH" USE_FULL_PCH "Use full precompiled headers")
+
+macro(qmplay2_add_precompile_headers SingleHeader)
+    if(USE_FULL_PCH)
+        target_precompile_headers(${PROJECT_NAME} PRIVATE ${ARGN})
+    else()
+        target_precompile_headers(${PROJECT_NAME} PRIVATE ${SingleHeader})
+    endif()
+endmacro()
 
 option(CMAKE_INTERPROCEDURAL_OPTIMIZATION "Enable link-time code generation" OFF)
 add_feature_info("Interprocedural optimization" CMAKE_INTERPROCEDURAL_OPTIMIZATION "Enable link-time code generation")
@@ -91,6 +99,9 @@ else()
 endif()
 
 add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DQT_USE_QSTRINGBUILDER)
+if(WIN32)
+    add_definitions(-DUNICODE)
+endif()
 
 if (BUILD_WITH_QT6)
     add_definitions(-DQ_ENTER_EVENT=QEnterEvent)

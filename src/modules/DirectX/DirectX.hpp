@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <Module.hpp>
+#include <DirectXHeaders.hpp>
 
-#include <QCoreApplication>
+#include <Module.hpp>
 
 class DirectX final : public Module
 {
@@ -19,8 +19,6 @@ private:
 };
 
 /**/
-
-class QCheckBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

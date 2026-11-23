@@ -9,19 +9,6 @@
 
 #include <QMPlay2Core.hpp>
 
-#include <QCoreApplication>
-#include <QLoggingCategory>
-#include <QMimeDatabase>
-#include <QHeaderView>
-#include <QTreeWidget>
-#include <QJSEngine>
-#include <QFileInfo>
-#include <QMetaEnum>
-#include <QThread>
-#include <QAction>
-#include <QTimer>
-#include <QDir>
-
 Q_DECLARE_LOGGING_CATEGORY(mb)
 
 MediaBrowserJS::MediaBrowserJS(const QString &commonCode, const int lineNumber, const QString &scriptPath, NetworkAccess &net, QTreeWidget *treeW, QObject *parent)

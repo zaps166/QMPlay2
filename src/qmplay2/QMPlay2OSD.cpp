@@ -7,8 +7,6 @@
 #   include <vulkan/VulkanBufferPool.hpp>
 #endif
 
-#include <atomic>
-
 using namespace std;
 
 static atomic<uint64_t> g_id;

@@ -3,13 +3,6 @@
 
 #include <InfoDock.hpp>
 
-#include <QGuiApplication>
-#include <QMouseEvent>
-#include <QScrollBar>
-#include <QLabel>
-
-#include <cmath>
-
 void TextEdit::mouseMoveEvent(QMouseEvent *e)
 {
     if (!anchorAt(e->pos()).isEmpty())
@@ -46,8 +39,6 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
 /**/
 
 #include <Functions.hpp>
-
-#include <QGridLayout>
 
 InfoDock::InfoDock()
 {

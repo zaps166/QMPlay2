@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <OS.h>
+#include <MediaKitHeaders.hpp>
 
 class RingBuffer {
 

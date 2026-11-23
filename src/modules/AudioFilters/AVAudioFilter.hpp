@@ -3,12 +3,9 @@
 
 #pragma once
 
-#include <AudioFilter.hpp>
+#include <AudioFiltersHeaders.hpp>
 
-struct AVFilterContext;
-struct AVFilterGraph;
-struct AVFilterInOut;
-struct AVFrame;
+#include <AudioFilter.hpp>
 
 class AVAudioFilter final : public AudioFilter
 {

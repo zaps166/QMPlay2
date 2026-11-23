@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Subtitles)
 
 set(Subtitles_HDR
+    SubtitlesHeaders.hpp
     SRT.hpp
     Classic.hpp
     Subtitles.hpp
@@ -23,11 +24,7 @@ add_library(${PROJECT_NAME} MODULE
     ${Subtitles_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${Subtitles_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(SubtitlesHeaders.hpp ${Subtitles_HDR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 

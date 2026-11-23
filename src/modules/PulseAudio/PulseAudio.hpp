@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <PulseAudioHeaders.hpp>
+
 #include <Module.hpp>
 
 class PulseAudio final : public Module
@@ -17,11 +19,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QDoubleSpinBox;
-class QCheckBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

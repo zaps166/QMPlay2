@@ -4,9 +4,7 @@
 #pragma once
 
 #include <IOController.hpp>
-#include <QMPlay2Lib.hpp>
-
-#include <QObject>
+#include <QMPlay2Headers.hpp>
 
 class NetworkReplyPriv;
 struct NetworkAccessParams;

@@ -3,13 +3,6 @@
 
 #include <IPC.hpp>
 
-#include <QSocketNotifier>
-
-#include <sys/socket.h>
-#include <sys/ioctl.h>
-#include <unistd.h>
-#include <sys/un.h>
-
 static sockaddr_un getSockAddr(const QString &fileName)
 {
     sockaddr_un sockAddr;

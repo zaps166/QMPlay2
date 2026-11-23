@@ -3,11 +3,8 @@
 
 #include <ALSAWriter.hpp>
 
-#include <alsa/asoundlib.h>
-#include <cmath>
-
 #if SND_LIB_VERSION >= 0x1001B
-    #define HAVE_CHMAP
+# define HAVE_CHMAP
 #endif
 
 struct int24

@@ -3,19 +3,13 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
+#include <QMPlay2Headers.hpp>
 
 #include <HWDecContext.hpp>
-
-#include <vulkan/vulkan.hpp>
-
-#include <memory>
 
 namespace QmVk {
 
 using namespace std;
-
-class CommandBuffer;
 
 class QMPLAY2SHAREDLIB_EXPORT HWInterop : public HWDecContext
 {

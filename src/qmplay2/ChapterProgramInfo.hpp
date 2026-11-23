@@ -3,12 +3,7 @@
 
 #pragma once
 
-#include <QString>
-#include <QVector>
-
-extern "C" {
-    #include <libavutil/avutil.h>
-}
+#include <QMPlay2Headers.hpp>
 
 class ChapterInfo
 {

@@ -3,16 +3,10 @@
 
 #pragma once
 
+#include <ExtensionsHeaders.hpp>
+
 #include <QMPlay2Extensions.hpp>
-
 #include <NetworkAccess.hpp>
-
-#include <QTimer>
-#include <QQueue>
-
-#include <time.h>
-
-class QImage;
 
 class LastFM final : public QObject, public QMPlay2Extensions
 {

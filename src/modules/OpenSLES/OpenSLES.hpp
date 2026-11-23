@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <Module.hpp>
+#include <OpenSLESHeaders.hpp>
 
-#include <QCoreApplication>
+#include <Module.hpp>
 
 class OpenSLES : public Module
 {
@@ -19,8 +19,6 @@ private:
 };
 
 /**/
-
-class QCheckBox;
 
 class ModuleSettingsWidget : public Module::SettingsWidget
 {

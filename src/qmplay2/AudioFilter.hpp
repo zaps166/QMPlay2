@@ -5,8 +5,6 @@
 
 #include <ModuleCommon.hpp>
 
-#include <QVector>
-
 class QMPLAY2SHAREDLIB_EXPORT AudioFilter : public ModuleCommon
 {
 public:

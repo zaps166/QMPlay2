@@ -3,11 +3,9 @@
 
 #pragma once
 
+#include <CUVIDHeaders.hpp>
+
 #include <Module.hpp>
-
-#include <QCoreApplication>
-
-class QComboBox;
 
 class Cuvid final : public Module
 {
@@ -31,9 +29,6 @@ private:
 };
 
 /**/
-
-class QCheckBox;
-class QLabel;
 
 class ModuleSettingsWidget : public Module::SettingsWidget
 {

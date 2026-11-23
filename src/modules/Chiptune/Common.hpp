@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <ChiptuneHeaders.hpp>
+
 namespace ChiptuneCommon {
 
 void doFadeOut(float *data, int len, int chn, int srate, double fadePos, double fadeTime);

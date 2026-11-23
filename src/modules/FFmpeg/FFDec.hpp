@@ -3,15 +3,14 @@
 
 #pragma once
 
+#include <FFmpegHeaders.hpp>
+
 #include <Decoder.hpp>
 
-#include <QString>
-#include <QList>
-
 #if defined(FFMPEG_MODULE)
-    #define FFMPEG_EXPORT Q_DECL_EXPORT
+# define FFMPEG_EXPORT Q_DECL_EXPORT
 #else
-    #define FFMPEG_EXPORT Q_DECL_IMPORT
+# define FFMPEG_EXPORT Q_DECL_IMPORT
 #endif
 
 #ifdef USE_VULKAN
@@ -19,11 +18,6 @@ namespace QmVk {
 class ImagePool;
 }
 #endif
-
-struct AVCodecContext;
-struct AVPacket;
-struct AVCodec;
-struct AVFrame;
 
 class FFMPEG_EXPORT FFDec : public Decoder
 {

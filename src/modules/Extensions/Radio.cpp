@@ -8,32 +8,6 @@
 #include <Functions.hpp>
 #include <Playlist.hpp>
 
-#include <QDesktopServices>
-#include <QJsonDocument>
-#include <QInputDialog>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QJsonObject>
-#include <QScrollBar>
-#include <QJsonArray>
-#include <qevent.h>
-#include <QBuffer>
-#include <QTimer>
-#include <QMenu>
-#include <QUrl>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QSplitter>
-#include <QComboBox>
-#include <QLabel>
-#include <QListWidget>
-#include <QToolButton>
-#include <QTreeView>
-#include <QHeaderView>
-#include <QSpacerItem>
-#include <QCoreApplication>
-
 #include <LineEdit.hpp>
 
 enum SearchByIndexes

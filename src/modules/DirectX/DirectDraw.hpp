@@ -3,13 +3,10 @@
 
 #pragma once
 
+#include <DirectXHeaders.hpp>
+
 #include <VideoWriter.hpp>
 #include <QMPlay2OSD.hpp>
-
-#include <QWidget>
-#include <QTimer>
-
-#include <ddraw.h>
 
 class DirectDrawWriter;
 

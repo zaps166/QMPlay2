@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <QMPlay2Extensions.hpp>
+#include <NotifyHeaders.hpp>
 
-#include <memory>
+#include <QMPlay2Extensions.hpp>
 
 class NotifyService final : public QObject
 {

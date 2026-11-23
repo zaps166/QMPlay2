@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <opengl/OpenGLHWInterop.hpp>
+#include <FFmpegHeaders.hpp>
 
-struct AVBufferRef;
+#include <opengl/OpenGLHWInterop.hpp>
 
 class VTBOpenGL final : public OpenGLHWInterop
 {

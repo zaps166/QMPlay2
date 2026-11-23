@@ -8,32 +8,6 @@
 #include <LineEdit.hpp>
 #include <Playlist.hpp>
 
-#include <QStringListModel>
-#include <QDesktopServices>
-#include <QLoggingCategory>
-#include <QApplication>
-#include <QProgressBar>
-#include <QGridLayout>
-#include <QHeaderView>
-#include <QToolButton>
-#include <QCompleter>
-#include <QClipboard>
-#include <QTextFrame>
-#include <QTextEdit>
-#include <QComboBox>
-#include <QMimeData>
-#include <QSpinBox>
-#include <QFile>
-#include <QDir>
-#include <QUrl>
-
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonValue>
-#include <QJsonArray>
-
-#include <algorithm>
-
 Q_LOGGING_CATEGORY(mb, "MediaBrowser")
 
 constexpr const char *g_mediaBrowserBaseUrl = "https://raw.githubusercontent.com/zaps166/QMPlay2OnlineContents/master/";

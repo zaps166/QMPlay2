@@ -3,19 +3,12 @@
 
 #pragma once
 
+#include <GUIHeaders.hpp>
+
 #include <IOController.hpp>
 #include <Functions.hpp>
 #include <Playlist.hpp>
 
-#include <QTreeWidget>
-#include <QAtomicInt>
-#include <QThread>
-#include <QQueue>
-#include <QMutex>
-#include <QTimer>
-#include <QUrl>
-
-class QTreeWidgetItem;
 class PlaylistWidget;
 class Demuxer;
 

@@ -5,9 +5,6 @@
 
 #import <AppKit/AppKit.h>
 
-#include <QPixmap>
-#include <QTimer>
-
 @interface QMPlay2NotificationItem : NSObject<NSUserNotificationCenterDelegate>
 {}
 - (void)dealloc;

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <FFmpegHeaders.hpp>
+
 #define DecoderName "FFmpeg Decoder"
 #define DecoderVkVideoName "FFmpeg Vulkan Decoder"
 #define DecoderVAAPIName "FFmpeg VA-API Decoder"
@@ -13,11 +15,6 @@
 #define VAAPIWriterName "VA-API"
 #define VkVideoWriterName "VkVideo"
 #define FFReaderName "FFmpeg Reader"
-
-#ifdef FIND_HWACCEL_DRIVERS_PATH
-    class QByteArray;
-    class QString;
-#endif
 
 namespace FFCommon
 {

@@ -19,15 +19,6 @@
 #include <Decoder.hpp>
 #include <Reader.hpp>
 
-#include <QGuiApplication>
-#include <QVarLengthArray>
-#include <QMessageBox>
-#include <QRawFont>
-#include <QAction>
-#include <QDir>
-
-#include <cmath>
-
 PlayClass::PlayClass() :
     demuxThr(nullptr), vThr(nullptr), aThr(nullptr),
     aRatioName("auto"),

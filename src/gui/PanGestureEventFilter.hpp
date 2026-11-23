@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <GUIHeaders.hpp>
+
 namespace PanGestureEventFilter
 {
     void install();

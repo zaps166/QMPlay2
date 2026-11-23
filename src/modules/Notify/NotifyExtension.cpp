@@ -5,9 +5,6 @@
 
 #include <Notifies.hpp>
 
-#include <QCoreApplication>
-#include <QFile>
-
 constexpr const char *g_playState[3] = {
     QT_TRANSLATE_NOOP("NotifyService", "Stopped"),
     QT_TRANSLATE_NOOP("NotifyService", "Playing"),

@@ -9,8 +9,6 @@
 #include <OggHelper.hpp>
 #include <Packet.hpp>
 
-#include <QFile>
-
 FFDemux::FFDemux(Module &module) :
     abortFetchTracks(false),
     m_reconnectNetwork(false)

@@ -4,13 +4,7 @@
 #pragma once
 
 #include <GPUInstance.hpp>
-#include <QMPlay2Lib.hpp>
 #include <Frame.hpp>
-
-#include "../../qmvk/AbstractInstance.hpp"
-
-class QVulkanInstance;
-class QWindow;
 
 namespace QmVk {
 

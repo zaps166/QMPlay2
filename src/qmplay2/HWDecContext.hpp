@@ -3,10 +3,8 @@
 
 #pragma once
 
-#include <atomic>
+#include <QMPlay2Core.hpp>
 
-class QString;
-class QImage;
 class Frame;
 
 class HWDecContext

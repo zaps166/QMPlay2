@@ -4,17 +4,6 @@
 #include <AudioCD.hpp>
 #include <AudioCDDemux.hpp>
 
-#include <QDialogButtonBox>
-#include <QToolButton>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QGridLayout>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QDialog>
-#include <QAction>
-#include <QLabel>
-
 AudioCD::AudioCD() :
     Module("AudioCD"),
     CD(":/CD.svgz"),
@@ -119,10 +108,6 @@ void AudioCD::browseCDImage()
 QMPLAY2_EXPORT_MODULE(AudioCD)
 
 /**/
-
-#include <QRadioButton>
-#include <QGroupBox>
-#include <QCheckBox>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)

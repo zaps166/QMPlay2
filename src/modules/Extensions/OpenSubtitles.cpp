@@ -7,25 +7,6 @@
 #include <QMPlay2Core.hpp>
 #include <LineEdit.hpp>
 
-#include <QDesktopServices>
-#include <QXmlStreamReader>
-#include <QStringListModel>
-#include <QJsonDocument>
-#include <QGridLayout>
-#include <QTreeWidget>
-#include <QHeaderView>
-#include <QScrollBar>
-#include <QJsonArray>
-#include <QCompleter>
-#include <QComboBox>
-#include <QAction>
-#include <QTimer>
-#include <QDebug>
-#include <QFile>
-#include <QMenu>
-
-#include <vector>
-
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 class TreeWidget : public QTreeWidget
 {

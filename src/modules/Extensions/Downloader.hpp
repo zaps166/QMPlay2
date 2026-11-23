@@ -3,18 +3,11 @@
 
 #pragma once
 
+#include <ExtensionsHeaders.hpp>
+
 #include <QMPlay2Extensions.hpp>
 #include <IOController.hpp>
 
-#include <QTreeWidget>
-#include <QToolButton>
-#include <QThread>
-
-class QLabel;
-class QProcess;
-class QGridLayout;
-class QProgressBar;
-class QTreeWidgetItem;
 class DownloaderThread;
 
 class DownloadItemW final : public QWidget

@@ -3,8 +3,6 @@
 
 #include <NotifiesTray.hpp>
 
-#include <QSystemTrayIcon>
-
 NotifiesTray::NotifiesTray(QSystemTrayIcon *tray) :
     m_tray(tray)
 {}

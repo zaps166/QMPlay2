@@ -8,8 +8,6 @@
 #include <StreamInfo.hpp>
 #include <Playlist.hpp>
 
-#include <QString>
-
 class Packet;
 
 class QMPLAY2SHAREDLIB_EXPORT Demuxer : protected ModuleCommon, public BasicIO

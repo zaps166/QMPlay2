@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <SubtitlesHeaders.hpp>
+
 #include <SubsDec.hpp>
 
 class SRT final : public SubsDec

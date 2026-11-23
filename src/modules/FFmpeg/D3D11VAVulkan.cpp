@@ -3,28 +3,11 @@
 
 #include <D3D11VAVulkan.hpp>
 
-#include <QLibrary>
-#include <QDebug>
-#include <QFile>
-#include <QDir>
-
 #include <QMPlay2Core.hpp>
 #include <GPUInstance.hpp>
 #include <Frame.hpp>
 
-#include "../../qmvk/PhysicalDevice.hpp"
-#include "../../qmvk/Image.hpp"
-
 #include <vulkan/VulkanInstance.hpp>
-
-#include <d3dcompiler.h>
-#include <dxgi1_2.h>
-
-extern "C"
-{
-    #include <libavutil/hwcontext.h>
-    #include <libavutil/hwcontext_d3d11va.h>
-}
 
 using namespace QmVk;
 

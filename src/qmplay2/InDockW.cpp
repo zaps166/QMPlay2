@@ -6,14 +6,6 @@
 #include <Functions.hpp>
 #include <Settings.hpp>
 
-#include <QApplication>
-#include <QDockWidget>
-#include <qevent.h>
-#include <QPainter>
-#include <QVariant>
-
-#include <cmath>
-
 InDockW::InDockW(const QColor &grad1, const QColor &grad2, const QColor &qmpTxt) :
     grad1(grad1), grad2(grad2), qmpTxt(qmpTxt),
     hasWallpaper(false),

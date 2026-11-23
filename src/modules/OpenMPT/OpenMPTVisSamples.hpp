@@ -3,11 +3,9 @@
 
 #pragma once
 
+#include <OpenMPTHeaders.hpp>
+
 #include <OpenMPTVisBase.hpp>
-
-#include <QImage>
-
-#include <vector>
 
 class OpenMPTVisSamples : public OpenMPTVisBase
 {

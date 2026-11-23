@@ -5,15 +5,6 @@
 
 #include <Frame.hpp>
 
-#ifdef USE_VULKAN
-#   include "../qmvk/Image.hpp"
-#endif
-
-extern "C"
-{
-    #include <libswscale/swscale.h>
-}
-
 ImgScaler::ImgScaler() :
     m_swsCtx(nullptr),
     m_srcH(0), m_dstLinesize(0)

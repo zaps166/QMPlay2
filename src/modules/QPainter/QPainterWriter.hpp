@@ -3,20 +3,17 @@
 
 #pragma once
 
+#include <QPainterHeaders.hpp>
+
 #include <VideoWriter.hpp>
 #include <Frame.hpp>
 #include <ImgScaler.hpp>
 
-#include <QWidget>
-
-class QPainterWriter;
-class QMPlay2OSD;
-
-class Drawable final : public QWidget
+class OpenGLDrawable final : public QWidget
 {
 public:
-    Drawable(class QPainterWriter &);
-    ~Drawable();
+    OpenGLDrawable(class QPainterWriter &);
+    ~OpenGLDrawable();
 
     void draw(const Frame &newVideoFrame, bool, bool);
 
@@ -40,7 +37,7 @@ private:
 
 class QPainterWriter final : public VideoWriter
 {
-    friend class Drawable;
+    friend class OpenGLDrawable;
 public:
     QPainterWriter(Module &);
 private:
@@ -65,7 +62,7 @@ private:
     int outW, outH, flip;
     double aspect_ratio, zoom;
 
-    Drawable *drawable;
+    OpenGLDrawable *drawable;
 };
 
 #define QPainterWriterName "QPainter"

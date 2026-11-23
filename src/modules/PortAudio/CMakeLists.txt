@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(PortAudio)
 
 set(PortAudio_HDR
+    PortAudioHeaders.hpp
     PortAudio.hpp
     PortAudioCommon.hpp
     PortAudioWriter.hpp
@@ -35,15 +36,10 @@ add_library(${PROJECT_NAME} MODULE
     ${PortAudio_RESOURCES}
 )
 
-if(USE_PCH)
-    if(APPLE)
-        set_source_files_properties(3rdparty/CoreAudio/AudioDevice.mm PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
-    endif()
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-        ${PortAudio_HDR}
-    )
+if(USE_FULL_PCH AND APPLE)
+    set_source_files_properties(3rdparty/CoreAudio/AudioDevice.mm PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 endif()
+qmplay2_add_precompile_headers(PortAudioHeaders.hpp ${PortAudio_HDR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 

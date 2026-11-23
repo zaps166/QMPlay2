@@ -22,18 +22,6 @@
 #include <FFReader.hpp>
 #include <FFCommon.hpp>
 
-extern "C"
-{
-    #include <libavformat/avformat.h>
-#ifdef QMPlay2_libavdevice
-    #include <libavdevice/avdevice.h>
-#endif
-}
-
-#include <QOperatingSystemVersion>
-#include <QGuiApplication>
-#include <QComboBox>
-
 FFmpeg::FFmpeg() :
     Module("FFmpeg"),
     demuxIcon(":/FFDemux.svgz")
@@ -223,13 +211,6 @@ QMPLAY2_EXPORT_MODULE(FFmpeg)
 /**/
 
 #include <Slider.hpp>
-
-#include <QGridLayout>
-#include <QFormLayout>
-#include <QGroupBox>
-#include <QCheckBox>
-#include <QSpinBox>
-#include <QLabel>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module, bool vkVideo, bool dxva2, bool d3d11va)
     : Module::SettingsWidget(module)

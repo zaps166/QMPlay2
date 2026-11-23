@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include <functional>
-
-class QString;
-class QWindow;
+#include <GUIHeaders.hpp>
 
 namespace QMPlay2MacExtensions
 {

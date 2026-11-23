@@ -5,14 +5,6 @@
 #include <ToneGenerator.hpp>
 #include <PCM.hpp>
 
-#include <QDialogButtonBox>
-#include <QGridLayout>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QDialog>
-#include <QAction>
-#include <QLabel>
-
 constexpr const char *g_standartExts = "pcm;raw";
 constexpr const char *g_formatName[PCM::FORMAT_COUNT] = {
     "Unsigned 8bit PCM",
@@ -87,9 +79,6 @@ void Inputs::add()
 QMPLAY2_EXPORT_MODULE(Inputs)
 
 /**/
-
-#include <QPushButton>
-#include <QGroupBox>
 
 HzW::HzW(int c, const QStringList &freqs)
 {
@@ -202,9 +191,6 @@ void AddD::add()
 }
 
 /**/
-
-#include <QRadioButton>
-#include <QCheckBox>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)

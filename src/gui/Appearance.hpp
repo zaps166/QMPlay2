@@ -3,17 +3,10 @@
 
 #pragma once
 
-#include <QDialog>
-#include <QHash>
+#include <GUIHeaders.hpp>
 
-class QDialogButtonBox;
-class QAbstractButton;
-class QDoubleSpinBox;
 class ColorButton;
 class WallpaperW;
-class QGroupBox;
-class QComboBox;
-class QSettings;
 
 class Appearance : public QDialog
 {

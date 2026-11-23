@@ -3,11 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QDockWidget>
-
-class QTimer;
+#include <QMPlay2Headers.hpp>
 
 class QMPLAY2SHAREDLIB_EXPORT DockWidget : public QDockWidget
 {

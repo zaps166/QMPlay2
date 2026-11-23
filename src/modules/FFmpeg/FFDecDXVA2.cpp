@@ -10,17 +10,6 @@
 #   include <DXVA2OpenGL.hpp>
 #endif
 
-#include <QDebug>
-
-#include <d3d9.h>
-
-extern "C"
-{
-    #include <libavcodec/avcodec.h>
-    #include <libavutil/hwcontext.h>
-    #include <libavutil/hwcontext_dxva2.h>
-}
-
 using namespace std;
 
 static AVPixelFormat dxva2GetFormat(AVCodecContext *codecCtx, const AVPixelFormat *pixFmt)

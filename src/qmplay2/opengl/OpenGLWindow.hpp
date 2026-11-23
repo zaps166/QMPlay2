@@ -5,8 +5,6 @@
 
 #include "OpenGLCommon.hpp"
 
-#include <QOpenGLWindow>
-
 class OpenGLWindow final : private QOpenGLWindow, public OpenGLCommon
 {
     Q_OBJECT

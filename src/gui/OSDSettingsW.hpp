@@ -3,15 +3,8 @@
 
 #pragma once
 
-#include <QScrollArea>
+#include <GUIHeaders.hpp>
 
-class QVBoxLayout;
-class QFontComboBox;
-class QDoubleSpinBox;
-class QCheckBox;
-class QLabel;
-class QSpinBox;
-class QRadioButton;
 class ColorButton;
 
 class OSDSettingsW : public QScrollArea

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <FFmpegHeaders.hpp>
+
 #include <FFDecHWAccel.hpp>
 #include <VAAPI.hpp>
 

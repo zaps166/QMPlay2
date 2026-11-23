@@ -8,13 +8,6 @@
 #include <Reader.hpp>
 #include <Packet.hpp>
 
-#include <sidplayfp/SidTuneInfo.h>
-#include <sidplayfp/SidConfig.h>
-#include <sidplayfp/SidTune.h>
-#include <sidplayfp/SidInfo.h>
-
-#include <cmath>
-
 static constexpr unsigned int CYCLES = 10509; // 512 samples @48kHz (PAL 985249 Hz), 10.67ms
 
 SIDPlay::SIDPlay(Module &module) :
@@ -172,7 +165,6 @@ Playlist::Entries SIDPlay::fetchTracks(const QString &url, bool &ok)
     ok = !entries.isEmpty();
     return entries;
 }
-
 
 bool SIDPlay::open(const QString &_url, bool tracksOnly)
 {

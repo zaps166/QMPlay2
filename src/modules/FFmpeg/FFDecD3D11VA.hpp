@@ -5,12 +5,7 @@
 
 #include <FFDecHWAccel.hpp>
 
-#include <d3d11.h>
-
-#include <deque>
-
 class D3D11VAVulkan;
-struct SwsContext;
 
 class FFMPEG_EXPORT FFDecD3D11VA final : public FFDecHWAccel
 {

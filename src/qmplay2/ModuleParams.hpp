@@ -3,11 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QHash>
-#include <QString>
-#include <QVariant>
+#include <QMPlay2Headers.hpp>
 
 class QMPLAY2SHAREDLIB_EXPORT ModuleParams
 {

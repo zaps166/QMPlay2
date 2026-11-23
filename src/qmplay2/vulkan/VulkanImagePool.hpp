@@ -3,19 +3,8 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
+#include <QMPlay2Headers.hpp>
 
-#include <vulkan/vulkan.hpp>
-
-#include <memory>
-#include <mutex>
-
-extern "C" {
-#include <libavutil/pixfmt.h>
-}
-
-struct AVBufferRef;
-struct AVFrame;
 class Frame;
 
 namespace QmVk {
@@ -23,7 +12,6 @@ namespace QmVk {
 using namespace std;
 
 class Instance;
-class Image;
 
 class QMPLAY2SHAREDLIB_EXPORT ImagePool : public enable_shared_from_this<ImagePool>
 {

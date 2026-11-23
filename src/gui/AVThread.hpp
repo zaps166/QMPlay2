@@ -3,12 +3,7 @@
 
 #pragma once
 
-#include <QCoreApplication>
-#include <QStringList>
-#include <QThread>
-#include <QMutex>
-
-#include <atomic>
+#include <GUIHeaders.hpp>
 
 class PlayClass;
 class Decoder;

@@ -10,15 +10,6 @@
 #include <Reader.hpp>
 #include <Main.hpp>
 
-#include <QResizeEvent>
-#include <QHeaderView>
-#include <QFileInfo>
-#include <QMimeData>
-#include <QPainter>
-#include <QDrag>
-#include <QMenu>
-#include <QDir>
-
 static inline QStringList getDirEntries(const QString &pth)
 {
     auto entries = QDir(pth).entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);

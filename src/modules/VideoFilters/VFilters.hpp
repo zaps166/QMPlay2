@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <Module.hpp>
+#include <VideoFiltersHeaders.hpp>
 
-#include <QCoreApplication>
+#include <Module.hpp>
 
 class VFilters final : public Module
 {
@@ -23,9 +23,6 @@ private:
 };
 
 /**/
-
-class QDoubleSpinBox;
-class QCheckBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

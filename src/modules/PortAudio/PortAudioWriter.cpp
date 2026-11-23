@@ -4,19 +4,6 @@
 #include <PortAudioWriter.hpp>
 #include <QMPlay2Core.hpp>
 
-#include <QElapsedTimer>
-#include <QThread>
-#include <QDebug>
-
-#ifdef Q_OS_WIN
-#   include <audioclient.h>
-#endif
-
-#ifdef Q_OS_MACOS
-    #include "3rdparty/CoreAudio/AudioDeviceList.h"
-    #include "3rdparty/CoreAudio/AudioDevice.h"
-#endif
-
 #ifdef Q_OS_WIN
 WASAPINotifications::WASAPINotifications(PortAudioWriter *writer)
     : m_writer(writer)

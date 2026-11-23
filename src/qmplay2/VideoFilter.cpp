@@ -3,14 +3,8 @@
 
 #include <VideoFilter.hpp>
 
-#include <QDebug>
-
 #ifdef USE_VULKAN
 #   include <QMPlay2Core.hpp>
-
-#   include "../qmvk/PhysicalDevice.hpp"
-#   include "../qmvk/Device.hpp"
-#   include "../qmvk/Image.hpp"
 
 #   include <vulkan/VulkanInstance.hpp>
 #   include <vulkan/VulkanImagePool.hpp>

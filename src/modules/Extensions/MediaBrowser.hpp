@@ -3,16 +3,10 @@
 
 #pragma once
 
+#include <ExtensionsHeaders.hpp>
+
 #include <QMPlay2Extensions.hpp>
-
 #include <NetworkAccess.hpp>
-
-#include <QTreeWidget>
-#include <QPointer>
-#include <QMenu>
-#include <QSet>
-
-#include <vector>
 
 class MediaBrowserJS;
 
@@ -50,9 +44,6 @@ private:
 };
 
 /**/
-
-class QToolButton;
-class QComboBox;
 
 class MediaBrowserPages final : public QWidget
 {
@@ -93,10 +84,6 @@ private:
 
 /**/
 
-class QStringListModel;
-class QProgressBar;
-class QCompleter;
-class QTextEdit;
 class LineEdit;
 
 class MediaBrowser final : public QWidget, public QMPlay2Extensions

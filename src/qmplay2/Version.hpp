@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QByteArray>
+#include <QMPlay2Headers.hpp>
 
 namespace Version
 {

@@ -4,8 +4,6 @@
 #include <XVideo.hpp>
 #include <XVideoWriter.hpp>
 
-#include <QGuiApplication>
-
 XVideo::XVideo() :
     Module("XVideo")
 {
@@ -37,11 +35,6 @@ XVideo::SettingsWidget *XVideo::getSettingsWidget()
 QMPLAY2_EXPORT_MODULE(XVideo)
 
 /**/
-
-#include <QFormLayout>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QLabel>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)

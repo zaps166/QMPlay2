@@ -6,15 +6,11 @@
 
 #ifdef USE_OPENGL
 #   include <opengl/OpenGLInstance.hpp>
-#   include <QOffscreenSurface>
-#   include <QOpenGLFunctions>
 #endif
 #ifdef USE_VULKAN
 #   include <vulkan/VulkanInstance.hpp>
 #endif
 #include <VideoWriter.hpp>
-
-#include <QDebug>
 
 using namespace std;
 

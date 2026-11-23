@@ -5,10 +5,6 @@
 
 #include <PlaylistEntry.hpp>
 #include <IOController.hpp>
-#include <QMPlay2Lib.hpp>
-
-#include <QString>
-#include <QList>
 
 class QMPLAY2SHAREDLIB_EXPORT Playlist
 {

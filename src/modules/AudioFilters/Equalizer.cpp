@@ -3,8 +3,6 @@
 
 #include <Equalizer.hpp>
 
-#include <cmath>
-
 static inline float cosI(const float y1, const float y2, float p)
 {
     p = (1.0f - cos(p * static_cast<float>(M_PI))) / 2.0f;

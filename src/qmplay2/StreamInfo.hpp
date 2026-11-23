@@ -3,16 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QCoreApplication>
-#include <QByteArray>
-#include <QVector>
-#include <QPair>
-
-extern "C" {
-    #include <libavcodec/avcodec.h>
-}
+#include <QMPlay2Headers.hpp>
 
 #if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(57, 28, 100)
 #   define CODECPAR_NB_CHANNELS ch_layout.nb_channels

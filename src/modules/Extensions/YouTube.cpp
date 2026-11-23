@@ -7,31 +7,6 @@
 #include <LineEdit.hpp>
 #include <Functions.hpp>
 
-#include <QLoggingCategory>
-#include <QStringListModel>
-#include <QDesktopServices>
-#include <QJsonParseError>
-#include <QDeadlineTimer>
-#include <QActionGroup>
-#include <QTextDocument>
-#include <QJsonDocument>
-#include <QProgressBar>
-#include <QApplication>
-#include <QJsonObject>
-#include <QHeaderView>
-#include <QGridLayout>
-#include <QToolButton>
-#include <QJsonArray>
-#include <QCompleter>
-#include <QClipboard>
-#include <QDateTime>
-#include <QMimeData>
-#include <QSpinBox>
-#include <QAction>
-#include <QLabel>
-#include <QMenu>
-#include <QUrl>
-
 Q_LOGGING_CATEGORY(youtube, "Extensions/YouTube")
 
 #define YOUTUBE_URL "https://www.youtube.com"

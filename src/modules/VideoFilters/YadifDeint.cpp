@@ -10,11 +10,6 @@
 
 #include <QMPlay2Core.hpp>
 
-#include <QtConcurrent/QtConcurrentRun>
-
-#include <algorithm>
-#include <vector>
-
 using namespace std;
 
 /* Yadif algo */

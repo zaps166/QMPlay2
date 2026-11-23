@@ -3,20 +3,11 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
 #include <IOController.hpp>
-
-#include <QVariantMap>
-#include <QJSValue>
-#include <QObject>
-#include <QMutex>
-#include <QHash>
 
 class TreeWidgetItemJS;
 class NetworkAccessJS;
 class NetworkReply;
-class QTimer;
 
 class QMPLAY2SHAREDLIB_EXPORT CommonJS : public QObject
 {

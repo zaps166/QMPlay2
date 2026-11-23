@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include <QStringList>
-
-struct PaDeviceInfo;
+#include <PortAudioHeaders.hpp>
 
 namespace PortAudioCommon
 {

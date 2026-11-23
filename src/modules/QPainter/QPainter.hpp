@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <QPainterHeaders.hpp>
+
 #include <Module.hpp>
 
 class QPainterSW final : public Module
@@ -17,10 +19,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QCheckBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

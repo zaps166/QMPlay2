@@ -9,19 +9,6 @@
 #include <Settings.hpp>
 #include <Main.hpp>
 
-#include <QFileInfo>
-#include <QLabel>
-#include <QBuffer>
-#include <QLineEdit>
-#include <QGridLayout>
-#include <QClipboard>
-#include <QApplication>
-#include <QMimeData>
-#include <QPainter>
-#include <QAction>
-#include <QMessageBox>
-#include <QRandomGenerator>
-
 static bool urlMatchesWithItem(QTreeWidgetItem *item, const QString &url)
 {
     QString itemUrl = item->data(0, Qt::UserRole).toString();

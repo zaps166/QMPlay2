@@ -3,15 +3,11 @@
 
 #pragma once
 
+#include <XVideoHeaders.hpp>
+
 #include <QMPlay2OSD.hpp>
 
-#include <QString>
-#include <QVector>
-#include <QMutex>
-
-class QRect;
 class Frame;
-class QMPlay2OSD;
 struct XVideoPrivate;
 
 class XVIDEO

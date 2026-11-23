@@ -3,13 +3,9 @@
 
 #pragma once
 
-#include <QWidget>
-
-#include <vector>
-#include <array>
+#include <GUIHeaders.hpp>
 
 class ModuleParams;
-class QAction;
 class Slider;
 
 class VideoAdjustmentW final : public QWidget

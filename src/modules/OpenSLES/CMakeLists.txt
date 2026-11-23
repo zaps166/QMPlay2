@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(OpenSLES-QMPlay2)
 
 set(OpenSLES_HDR
+    OpenSLESHeaders.hpp
     OpenSLES.hpp
     OpenSLESWriter.hpp
 )
@@ -21,12 +22,7 @@ add_library(${PROJECT_NAME} MODULE
     ${OpenSLES_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-        ${OpenSLES_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(OpenSLESHeaders.hpp ${OpenSLES_HDR})
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

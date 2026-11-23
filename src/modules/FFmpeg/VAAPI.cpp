@@ -9,27 +9,8 @@
 #include <QMPlay2Core.hpp>
 
 #ifdef USE_VULKAN
-#   include "../../qmvk/PhysicalDevice.hpp"
-
-#   include <vulkan/VulkanInstance.hpp>
+# include <vulkan/VulkanInstance.hpp>
 #endif
-
-extern "C"
-{
-    #include <libavutil/buffer.h>
-}
-
-#include <QGuiApplication>
-#include <QVarLengthArray>
-#include <QVersionNumber>
-#include <QFileInfo>
-#include <QDebug>
-#include <QDir>
-
-#include <va/va_drm.h>
-
-#include <unistd.h>
-#include <fcntl.h>
 
 VAAPI::VAAPI()
 {

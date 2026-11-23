@@ -3,9 +3,6 @@
 
 #include <ScreenSaver.hpp>
 
-#include <QCoreApplication>
-#include <QJniObject>
-
 class ScreenSaverPriv
 {
 public:

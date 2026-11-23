@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(QPainter)
 
 set(QPainter_HDR
+    QPainterHeaders.hpp
     QPainterWriter.hpp
     QPainter.hpp
 )
@@ -21,11 +22,7 @@ add_library(${PROJECT_NAME} MODULE
     ${QPainter_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${QPainter_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(QPainterHeaders.hpp ${QPainter_HDR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 

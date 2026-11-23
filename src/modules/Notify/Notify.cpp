@@ -43,14 +43,6 @@ QMPLAY2_EXPORT_MODULE(Notify)
 
 /**/
 
-#include <QDoubleSpinBox>
-#include <QRadioButton>
-#include <QFormLayout>
-#include <QGridLayout>
-#include <QCheckBox>
-#include <QGroupBox>
-#include <QLineEdit>
-
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
 {
@@ -100,7 +92,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     customMsgL->addRow(tr("Body") + ":", m_customBody);
 
     /**/
-
 
     QVBoxLayout *layout = new QVBoxLayout(m_notify);
     layout->addLayout(generalL);

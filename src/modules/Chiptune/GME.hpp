@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <Demuxer.hpp>
+#include <ChiptuneHeaders.hpp>
 
-#include <gme/gme.h>
+#include <Demuxer.hpp>
 
 class Reader;
 
@@ -32,12 +32,10 @@ private:
 
     Playlist::Entries fetchTracks(const QString &url, bool &ok) override;
 
-
     bool open(const QString &url, bool tracksOnly);
 
     QString getTitle(gme_info_t *info, int track) const;
     int getLength(gme_info_t *info) const;
-
 
     IOController<Reader> m_reader;
     quint32 m_srate;

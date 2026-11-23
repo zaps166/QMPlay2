@@ -13,10 +13,6 @@
 #include <ScreenSaver.hpp>
 #include <QMPlay2Extensions.hpp>
 
-#include <QCoreApplication>
-
-#include <cmath>
-
 AudioThr::AudioThr(PlayClass &playC, const QStringList &pluginsName) :
     AVThread(playC)
 {

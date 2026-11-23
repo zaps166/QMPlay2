@@ -5,11 +5,6 @@
 
 #include <Version.hpp>
 
-#include <QDialogButtonBox>
-#include <QVBoxLayout>
-#include <QPushButton>
-#include <QMessageBox>
-
 #define VER 6
 
 FileAssociation::FileAssociation() :
@@ -70,9 +65,6 @@ void FileAssociation::firsttime()
 QMPLAY2_EXPORT_MODULE(FileAssociation)
 
 /**/
-
-#include <windows.h>
-#include <shlwapi.h>
 
 enum ShellContextMenu {DIRECTORY, DRIVE};
 
@@ -139,12 +131,6 @@ static void RemoveQMPlay2Keys()
 }
 
 /**/
-
-#include <QCoreApplication>
-#include <QListWidget>
-#include <QCheckBox>
-#include <QCheckBox>
-#include <QGroupBox>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module),

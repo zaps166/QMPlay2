@@ -6,13 +6,6 @@
 #include <DockWidget.hpp>
 #include <Functions.hpp>
 
-#include <QGuiApplication>
-#include <QMouseEvent>
-#include <QPainter>
-#include <QMenu>
-
-#include <cmath>
-
 void VisWidget::setValue(qreal &out, qreal in, qreal tDiffScaled)
 {
     if (in < out)

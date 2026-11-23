@@ -3,10 +3,8 @@
 
 #pragma once
 
-#include <QGroupBox>
+#include <GUIHeaders.hpp>
 
-class QCheckBox;
-class QComboBox;
 class Module;
 
 class DeintSettingsW final : public QGroupBox

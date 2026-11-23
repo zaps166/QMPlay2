@@ -5,15 +5,6 @@
 
 #include <Frame.hpp>
 
-#include <QOpenGLContext>
-#include <QImage>
-
-extern "C"
-{
-    #include <libavutil/hwcontext.h>
-    #include <libavutil/hwcontext_videotoolbox.h>
-}
-
 VTBOpenGL::VTBOpenGL(AVBufferRef *hwDeviceBufferRef)
     : m_hwDeviceBufferRef(av_buffer_ref(hwDeviceBufferRef))
 {}

@@ -147,21 +147,6 @@ QMPLAY2_EXPORT_MODULE(AudioFilters)
 
 #include <Slider.hpp>
 
-#include <QDoubleSpinBox>
-#include <QTextBrowser>
-#include <QFormLayout>
-#include <QGridLayout>
-#include <QPushButton>
-#include <QMessageBox>
-#include <QToolButton>
-#include <QBoxLayout>
-#include <QGroupBox>
-#include <QComboBox>
-#include <QCheckBox>
-#include <QLineEdit>
-#include <QSpinBox>
-#include <QLabel>
-
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module),
     restoringDefault(false)
@@ -193,11 +178,9 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     bs2bLayoutB->setSpacing(3);
     bs2bLayoutB->setContentsMargins(3, 3, 3, 3);
 
-
     voiceRemovalB = new QCheckBox(tr("Voice removal"));
     voiceRemovalB->setChecked(sets().getBool("VoiceRemoval"));
     connect(voiceRemovalB, SIGNAL(clicked()), this, SLOT(voiceRemovalToggle()));
-
 
     phaseReverseB = new QGroupBox(tr("Phase reverse"));
     phaseReverseB->setCheckable(true);
@@ -212,12 +195,10 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     phaseReverseLayout->addWidget(phaseReverseRightB);
     phaseReverseLayout->setContentsMargins(3, 3, 3, 3);
 
-
     swapStereoB = new QCheckBox(tr("Swap stereo channels"));
     swapStereoB->setCheckable(true);
     swapStereoB->setChecked(sets().getBool("SwapStereo"));
     connect(swapStereoB, SIGNAL(clicked()), this, SLOT(swapStereo()));
-
 
     echoB = new QGroupBox(tr("Echo"));
     echoB->setCheckable(true);
@@ -250,7 +231,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     echoBLayout->addRow(tr("Echo repeat") + ": ", echoFeedbackS);
     echoBLayout->addRow(echoSurroundB);
 
-
     compressorB = new QGroupBox(tr("Dynamic range compression"));
     compressorB->setCheckable(true);
     compressorB->setChecked(sets().getBool("Compressor"));
@@ -282,7 +262,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     compressorBLayout->addRow(tr("Release time") + ": ", compressorReleaseTimeS); //[s]
     compressorBLayout->addRow(tr("Fast compression ratio") + ": ", compressorFastRatioS);
     compressorBLayout->addRow(tr("Overall compression ratio") + ": ", compressorRatioS);
-
 
     QGroupBox *eqGroupB = new QGroupBox(tr("Equalizer"));
 
@@ -328,7 +307,6 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     eqLayout->addWidget(eqMinFreqB, 3, 0);
     eqLayout->addWidget(eqMaxFreqB, 3, 1);
     eqLayout->setContentsMargins(3, 3, 3, 3);
-
 
 #ifdef USE_AVAUDIOFILTER
     m_avAudioFilterB = new QGroupBox(tr("FFmpeg audio filters"));
@@ -382,10 +360,8 @@ ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     avAudioFilterLayout->addWidget(audioFiltersInfoB);
 #endif
 
-
     defaultB = new QPushButton(tr("Default settings"));
     connect(defaultB, SIGNAL(clicked(bool)), this, SLOT(defaultSettings()));
-
 
     QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(bs2bB);

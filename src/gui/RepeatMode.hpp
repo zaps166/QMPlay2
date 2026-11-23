@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <GUIHeaders.hpp>
+
 enum RepeatMode
 {
     RepeatNormal,

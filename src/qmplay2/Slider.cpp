@@ -3,11 +3,6 @@
 
 #include <Slider.hpp>
 
-#include <QStyleOptionSlider>
-#include <QMouseEvent>
-#include <QPainter>
-#include <QStyle>
-
 Slider::Slider() :
     QSlider(Qt::Horizontal),
     canSetValue(true), ignoreValueChanged(false),

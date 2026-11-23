@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <PlaylistsHeaders.hpp>
+
 #include <Module.hpp>
 
 class Playlists final : public Module
@@ -17,10 +19,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QCheckBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

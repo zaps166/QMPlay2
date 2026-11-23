@@ -6,13 +6,6 @@
 #include <Functions.hpp>
 #include <LibASS.hpp>
 
-#include <QRegularExpression>
-#include <QStringList>
-
-#include <algorithm>
-#include <cstdlib>
-#include <cstdio>
-
 /**
  * TMP      - hh:mm:ss:text    - "|" breaks line
  * MPL2     - [begin][end]text - deciseconds, divide by 10.0 for seconds, "|" breaks line

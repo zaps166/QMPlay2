@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <FileAssociationHeaders.hpp>
+
 #include <Module.hpp>
 
 class FileAssociation final : public Module
@@ -22,11 +24,6 @@ private slots:
 };
 
 /**/
-
-class QListWidget;
-class QPushButton;
-class QGroupBox;
-class QCheckBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

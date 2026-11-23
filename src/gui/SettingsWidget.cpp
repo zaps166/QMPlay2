@@ -8,44 +8,12 @@
 #include <OSDSettingsW.hpp>
 #include <Functions.hpp>
 #ifdef USE_YOUTUBEDL
-#   include <YouTubeDL.hpp>
+# include <YouTubeDL.hpp>
 #endif
 #include <Notifies.hpp>
 #include <Main.hpp>
 #ifdef USE_VULKAN
-#   include "../qmvk/PhysicalDevice.hpp"
-
-#   include <vulkan/VulkanInstance.hpp>
-#endif
-
-#include <QStackedWidget>
-#include <QStandardPaths>
-#include <QStyleFactory>
-#include <QImageWriter>
-#include <QRadioButton>
-#include <QActionGroup>
-#include <QApplication>
-#include <QFormLayout>
-#include <QFileDialog>
-#include <QPushButton>
-#include <QListWidget>
-#include <QMessageBox>
-#include <QScrollArea>
-#include <QToolButton>
-#include <QGridLayout>
-#include <QMainWindow>
-#include <QScrollBar>
-#include <QBoxLayout>
-#include <QTextCodec>
-#include <QComboBox>
-#include <QCheckBox>
-#include <QGroupBox>
-#include <QLineEdit>
-#include <QSpinBox>
-#include <QBuffer>
-#include <QLabel>
-#ifdef Q_OS_WIN
-#   include <QOperatingSystemVersion>
+# include <vulkan/VulkanInstance.hpp>
 #endif
 
 #include <KeyBindingsDialog.hpp>

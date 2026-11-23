@@ -3,24 +3,8 @@
 
 #pragma once
 
-#include <QWidget>
+#include <GUIHeaders.hpp>
 
-#include <functional>
-
-class QListWidgetItem;
-class QVBoxLayout;
-class QHBoxLayout;
-class QGroupBox;
-class QComboBox;
-class QLineEdit;
-class QDoubleSpinBox;
-class QSpinBox;
-class QCheckBox;
-class QRadioButton;
-class QPushButton;
-class QToolButton;
-class QListWidget;
-class QTabWidget;
 class Page3;
 class Page4;
 class Page5;

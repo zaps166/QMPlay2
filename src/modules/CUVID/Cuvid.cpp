@@ -4,8 +4,6 @@
 #include <Cuvid.hpp>
 #include <CuvidDec.hpp>
 
-#include <QComboBox>
-
 Cuvid::Cuvid() :
     Module("CUVID")
 {
@@ -63,10 +61,6 @@ void Cuvid::videoDeintSave()
 QMPLAY2_EXPORT_MODULE(Cuvid)
 
 /**/
-
-#include <QGridLayout>
-#include <QCheckBox>
-#include <QLabel>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)

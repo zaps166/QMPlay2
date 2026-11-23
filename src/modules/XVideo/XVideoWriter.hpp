@@ -3,18 +3,18 @@
 
 #pragma once
 
+#include <XVideoHeaders.hpp>
+
 #include <VideoWriter.hpp>
 
 #include <xv.hpp>
 
-#include <QWidget>
-
-class Drawable final : public QWidget
+class XVideoDrawable final : public QWidget
 {
     friend class XVideoWriter;
 public:
-    Drawable(class XVideoWriter &);
-    ~Drawable() final = default;
+    XVideoDrawable(class XVideoWriter &);
+    ~XVideoDrawable() final = default;
 private:
     void resizeEvent(QResizeEvent *) override;
     void paintEvent(QPaintEvent *) override;
@@ -29,11 +29,9 @@ private:
 
 /**/
 
-class QMPlay2OSD;
-
 class XVideoWriter final : public VideoWriter
 {
-    friend class Drawable;
+    friend class XVideoDrawable;
 public:
     XVideoWriter(Module &);
 private:
@@ -58,7 +56,7 @@ private:
     bool hasVideoSize;
     bool useSHM;
 
-    Drawable *drawable;
+    XVideoDrawable *drawable;
     XVIDEO *xv;
 
     QMPlay2OSDList osd_list;

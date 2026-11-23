@@ -7,11 +7,6 @@
 #include <ModuleCommon.hpp>
 #include <DockWidget.hpp>
 
-#include <QString>
-#include <QImage>
-
-class QMenu;
-
 class QMPLAY2SHAREDLIB_EXPORT QMPlay2Extensions : public ModuleCommon
 {
 public:

@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <AudioFilter.hpp>
+#include <AudioFiltersHeaders.hpp>
 
-#include <bs2b/bs2b.hpp>
+#include <AudioFilter.hpp>
 
 class BS2B final : public AudioFilter
 {

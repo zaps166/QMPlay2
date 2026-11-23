@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(MediaKit)
 
 set(MediaKit_HDR
+    MediaKitHeaders.hpp
     MediaKit.hpp
     MediaKitWriter.hpp
     RingBuffer.hpp
@@ -25,11 +26,7 @@ add_library(${PROJECT_NAME} MODULE
     ${MediaKit_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${MediaKit_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(MediaKitHeaders.hpp ${MediaKit_HDR})
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

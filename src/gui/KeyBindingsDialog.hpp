@@ -3,10 +3,7 @@
 
 #pragma once
 
-#include <QDialog>
-
-class QAbstractButton;
-class QDialogButtonBox;
+#include <GUIHeaders.hpp>
 
 class KeyBindingsDialog : public QDialog
 {

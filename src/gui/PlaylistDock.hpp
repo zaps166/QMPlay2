@@ -3,13 +3,13 @@
 
 #pragma once
 
+#include <GUIHeaders.hpp>
+
 #include <DockWidget.hpp>
 #include <RepeatMode.hpp>
 
-class QTreeWidgetItem;
 class PlaylistWidget;
 class LineEdit;
-class QLabel;
 
 class PlaylistDock : public DockWidget
 {

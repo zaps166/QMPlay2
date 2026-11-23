@@ -3,18 +3,7 @@
 
 #pragma once
 
-#include <QGroupBox>
-
-namespace TagLib {
-    class FileRef;
-    class ByteVector;
-}
-class QPushButton;
-class QLineEdit;
-class QPlainTextEdit;
-class QMimeData;
-class QSpinBox;
-class QLabel;
+#include <GUIHeaders.hpp>
 
 class PictureW final : public QWidget
 {

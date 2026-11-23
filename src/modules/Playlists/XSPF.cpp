@@ -7,10 +7,6 @@
 #include <Reader.hpp>
 #include <Writer.hpp>
 
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
-#include <QUrl>
-
 static void startExtension(QXmlStreamWriter &xmlWriter)
 {
     xmlWriter.writeStartElement("extension");

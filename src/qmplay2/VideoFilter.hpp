@@ -7,11 +7,7 @@
 #include <ModuleParams.hpp>
 #include <Frame.hpp>
 
-#include <QQueue>
-
 #ifdef USE_VULKAN
-#include <functional>
-
 namespace QmVk {
 class Device;
 class Queue;

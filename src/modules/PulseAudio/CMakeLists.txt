@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(PulseAudio)
 
 set(PulseAudio_HDR
+    PulseAudioHeaders.hpp
     PulseAudio.hpp
     PulseAudioWriter.hpp
     Pulse.hpp
@@ -28,11 +29,7 @@ add_library(${PROJECT_NAME} MODULE
     ${PulseAudio_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${PulseAudio_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(PulseAudioHeaders.hpp ${PulseAudio_HDR})
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

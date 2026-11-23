@@ -3,10 +3,10 @@
 
 #pragma once
 
+#include <AudioFiltersHeaders.hpp>
+
 #include <AudioFilter.hpp>
 #include <FFT.hpp>
-
-#include <vector>
 
 class Equalizer final : public AudioFilter
 {

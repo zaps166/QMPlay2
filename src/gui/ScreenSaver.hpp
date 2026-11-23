@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <QMap>
+#include <GUIHeaders.hpp>
 
 class ScreenSaverPriv;
 

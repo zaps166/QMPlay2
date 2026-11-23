@@ -8,12 +8,6 @@
 #include <Module.hpp>
 #include <Main.hpp>
 
-#include <QGuiApplication>
-#include <QGridLayout>
-#include <QClipboard>
-#include <QDir>
-#include <QUrl>
-
 AddressBox::AddressBox(Qt::Orientation o, QString url, const QString &choice)
 {
     pB.addItem(QMPlay2Core.getQMPlay2Icon(), tr("Direct address"), DIRECT);

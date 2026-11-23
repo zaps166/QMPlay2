@@ -5,15 +5,8 @@
 
 #include <Demuxer.hpp>
 
-#include <sidplayfp/sidplayfp.h>
+#include <ChiptuneHeaders.hpp>
 
-#if LIBSIDPLAYFP_VERSION_MAJ >= 3
-#include <sidplayfp/builders/sidlite.h>
-#else
-#include <sidplayfp/builders/residfp.h>
-#endif
-
-class SidTuneInfo;
 class Reader;
 
 class SIDPlay final : public Demuxer
@@ -39,11 +32,9 @@ private:
 
     Playlist::Entries fetchTracks(const QString &url, bool &ok) override;
 
-
     bool open(const QString &url, bool tracksOnly);
 
     QString getTitle(const SidTuneInfo *info, int track) const;
-
 
     IOController<Reader> m_reader;
     quint32 m_srate;

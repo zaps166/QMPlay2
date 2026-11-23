@@ -3,24 +3,15 @@
 
 #pragma once
 
-#include <QJSValue>
-#include <QObject>
-#include <QMutex>
-#include <QFile>
+#include <ExtensionsHeaders.hpp>
 
 #include <QMPlay2Extensions.hpp>
 #include <IOController.hpp>
 
-#include <unordered_map>
-#include <functional>
-
 class NetworkAccessJS;
 class NetworkAccess;
 class NetworkReply;
-class QTreeWidget;
-class QJSEngine;
 class CommonJS;
-class QAction;
 
 class MediaBrowserJS : public QObject
 {

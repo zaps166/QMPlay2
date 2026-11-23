@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include <QString>
-#include <QVector>
-#include <QHash>
+#include <QMPlay2Headers.hpp>
 
 class PlaylistEntry
 {

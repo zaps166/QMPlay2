@@ -7,13 +7,6 @@
 #include <QMPlay2Core.hpp>
 #include <Frame.hpp>
 
-#include <QOpenGLContext>
-
-#include <unistd.h>
-
-#include <EGL/egl.h>
-#include <EGL/eglext.h>
-
 #ifndef EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT
 #    define EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT 0x3443
 #endif

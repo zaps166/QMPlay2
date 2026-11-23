@@ -9,8 +9,6 @@
 
 #include <Frame.hpp>
 
-#include <QGuiApplication>
-
 using namespace std;
 
 OpenGLWriter::OpenGLWriter()

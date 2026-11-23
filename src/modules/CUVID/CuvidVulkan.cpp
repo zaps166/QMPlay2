@@ -5,22 +5,8 @@
 #include <QMPlay2Core.hpp>
 #include <Frame.hpp>
 
-#include "../qmvk/PhysicalDevice.hpp"
-#include "../qmvk/Device.hpp"
-#include "../qmvk/Image.hpp"
-#include "../qmvk/Semaphore.hpp"
-
 #include <vulkan/VulkanInstance.hpp>
 #include <vulkan/VulkanImagePool.hpp>
-
-#ifdef VK_USE_PLATFORM_WIN32_KHR
-#   include <QOperatingSystemVersion>
-#endif
-#include <QDebug>
-
-#ifndef VK_USE_PLATFORM_WIN32_KHR
-#   include <unistd.h>
-#endif
 
 using namespace QmVk;
 

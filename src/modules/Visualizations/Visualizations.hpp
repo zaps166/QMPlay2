@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <VisualizationsHeaders.hpp>
+
 #include <Module.hpp>
 
 class Visualizations final : public Module
@@ -17,12 +19,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QCheckBox;
-class QComboBox;
-class QSpinBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

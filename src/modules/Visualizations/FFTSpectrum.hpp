@@ -3,12 +3,11 @@
 
 #pragma once
 
+#include <VisualizationsHeaders.hpp>
+
 #include <QMPlay2Extensions.hpp>
 #include <VisWidget.hpp>
 #include <FFT.hpp>
-
-#include <QCoreApplication>
-#include <QLinearGradient>
 
 class FFTSpectrum;
 

@@ -7,22 +7,12 @@
 #include <StreamInfo.hpp>
 #include <GPUInstance.hpp>
 #ifdef USE_OPENGL
-#   include <VAAPIOpenGL.hpp>
+# include <VAAPIOpenGL.hpp>
 #endif
 #ifdef USE_VULKAN
-#   include <vulkan/VulkanInstance.hpp>
-#   include <VAAPIVulkan.hpp>
+# include <vulkan/VulkanInstance.hpp>
+# include <VAAPIVulkan.hpp>
 #endif
-
-#include <QDebug>
-
-extern "C"
-{
-    #include <libavformat/avformat.h>
-    #include <libavutil/pixdesc.h>
-    #include <libavutil/hwcontext.h>
-    #include <libavutil/hwcontext_vaapi.h>
-}
 
 using namespace std;
 

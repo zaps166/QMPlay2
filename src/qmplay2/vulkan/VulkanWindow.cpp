@@ -3,35 +3,11 @@
 
 #include "VulkanWindow.hpp"
 
-#include "../../qmvk/DescriptorSetLayout.hpp"
-#include "../../qmvk/MemoryObjectDescr.hpp"
-#include "../../qmvk/GraphicsPipeline.hpp"
-#include "../../qmvk/PhysicalDevice.hpp"
-#include "../../qmvk/DescriptorPool.hpp"
-#include "../../qmvk/CommandBuffer.hpp"
-#include "../../qmvk/ShaderModule.hpp"
-#include "../../qmvk/BufferView.hpp"
-#include "../../qmvk/RenderPass.hpp"
-#include "../../qmvk/SwapChain.hpp"
-#include "../../qmvk/Sampler.hpp"
-#include "../../qmvk/Device.hpp"
-#include "../../qmvk/Buffer.hpp"
-#include "../../qmvk/Queue.hpp"
-#include "../../qmvk/Image.hpp"
-
 #include "VulkanInstance.hpp"
 #include "VulkanHWInterop.hpp"
 
 #include <Functions.hpp>
 #include <Sphere.hpp>
-
-#include <QGuiApplication>
-#include <QVulkanInstance>
-#include <QElapsedTimer>
-#include <qevent.h>
-#include <QWidget>
-
-#include <cmath>
 
 namespace QmVk {
 

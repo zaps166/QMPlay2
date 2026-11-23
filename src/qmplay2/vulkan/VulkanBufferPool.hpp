@@ -3,21 +3,13 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <vulkan/vulkan.hpp>
-
-#include <memory>
-#include <deque>
-#include <mutex>
+#include <QMPlay2Headers.hpp>
 
 namespace QmVk {
 
 using namespace std;
 
 class Instance;
-class Device;
-class Buffer;
 
 class QMPLAY2SHAREDLIB_EXPORT BufferPool : public enable_shared_from_this<BufferPool>
 {

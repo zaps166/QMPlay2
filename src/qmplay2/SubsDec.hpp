@@ -3,9 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QStringList>
+#include <QMPlay2Headers.hpp>
 
 class LibASS;
 

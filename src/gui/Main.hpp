@@ -3,22 +3,16 @@
 
 #pragma once
 
-#define MUTEXWAIT_TIMEOUT 1250
-#define TERMINATE_TIMEOUT (MUTEXWAIT_TIMEOUT*3)
+#include <GUIHeaders.hpp>
 
 #include <QMPlay2Core.hpp>
 
-#include <QCoreApplication>
-
 class VideoAdjustmentW;
 class ShortcutHandler;
-class QTreeWidgetItem;
-class QTreeWidget;
 class ScreenSaver;
 class IPCServer;
 class VideoDock;
 class MenuBar;
-class QWidget;
 
 class QMPlay2GUIClass final : private QMPlay2CoreClass
 {

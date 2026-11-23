@@ -3,8 +3,6 @@
 
 #include <Sphere.hpp>
 
-#include <cmath>
-
 using namespace std;
 
 quint32 Sphere::getSizes(quint32 slices, quint32 stacks, quint32 &verticesSize, quint32 &texcoordsSize, quint32 &indicesSize)

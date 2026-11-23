@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(QMPlay2)
 
 set(GUI_HDR
+    GUIHeaders.hpp
     Main.hpp
     MenuBar.hpp
     MainWidget.hpp
@@ -140,9 +141,6 @@ if(WIN32)
         "Windows/qt/QtWinExtras/qwinthumbnailtoolbutton.cpp"
         "Windows/qt/QtWinExtras/windowsguidsdefs.cpp"
     )
-    if(NOT BUILD_WITH_QT6)
-        set_source_files_properties("Windows/qt/QtWinExtras/qwinfunctions.cpp" PROPERTIES COMPILE_DEFINITIONS UNICODE)
-    endif()
     include_directories("Windows/qt")
     add_definitions(-DQT_BUILD_WINEXTRAS_LIB)
 elseif(APPLE)
@@ -208,15 +206,10 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 
-if(USE_PCH)
-    if(APPLE)
-        set_source_files_properties(macOS/QMPlay2MacExtensions.mm PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
-    endif()
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${GUI_HDR}
-    )
-    set_source_files_properties(Windows/PanGestureEventFilter.cpp PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+if(USE_FULL_PCH AND APPLE)
+    set_source_files_properties(macOS/QMPlay2MacExtensions.mm PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 endif()
+qmplay2_add_precompile_headers(GUIHeaders.hpp ${GUI_HDR})
 
 if(WIN32)
     set(CUSTOM_GUI_LIBRARIES "" CACHE STRING "Custom libraries for GUI")

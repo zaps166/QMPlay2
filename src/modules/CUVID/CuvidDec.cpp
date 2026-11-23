@@ -10,32 +10,14 @@
 #include <StreamInfo.hpp>
 #include <CuvidAPI.hpp>
 #ifdef USE_OPENGL
-#   include <CuvidOpenGL.hpp>
+# include <CuvidOpenGL.hpp>
 #endif
 #ifdef USE_VULKAN
-#   include <vulkan/VulkanInstance.hpp>
-#   include <CuvidVulkan.hpp>
-#endif
-
-#include <QDebug>
-
-#ifdef Q_OS_WIN
-    #include <windows.h>
+# include <vulkan/VulkanInstance.hpp>
+# include <CuvidVulkan.hpp>
 #endif
 
 using namespace std;
-
-extern "C"
-{
-    #include <libavcodec/version.h>
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 91, 100)
-    #include <libavcodec/bsf.h>
-#else
-    #include <libavcodec/avcodec.h>
-#endif
-    #include <libavutil/pixdesc.h>
-    #include <libswscale/swscale.h>
-}
 
 namespace cuvid {
     static int CUDAAPI videoSequence(CuvidDec *cuvidDec, CUVIDEOFORMAT *format)

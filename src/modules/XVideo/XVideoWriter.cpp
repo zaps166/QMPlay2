@@ -5,13 +5,12 @@
 
 #include <QMPlay2OSD.hpp>
 #include <Functions.hpp>
-using Functions::getImageSize;
 
-#include <QCoreApplication>
+using Functions::getImageSize;
 
 /**/
 
-Drawable::Drawable(XVideoWriter &writer) :
+XVideoDrawable::XVideoDrawable(XVideoWriter &writer) :
     writer(writer)
 {
     setAttribute(Qt::WA_PaintOnScreen);
@@ -19,18 +18,18 @@ Drawable::Drawable(XVideoWriter &writer) :
     setMouseTracking(true);
 }
 
-void Drawable::resizeEvent(QResizeEvent *)
+void XVideoDrawable::resizeEvent(QResizeEvent *)
 {
     const qreal dpr = devicePixelRatioF();
     getImageSize(writer.aspect_ratio, writer.zoom, width() * dpr, height() * dpr, W, H, &X, &Y, &dstRect, &writer.outW, &writer.outH, &srcRect);
     update();
 }
-void Drawable::paintEvent(QPaintEvent *)
+void XVideoDrawable::paintEvent(QPaintEvent *)
 {
     const qreal dpr = devicePixelRatioF();
     writer.xv->redraw(srcRect, dstRect, X, Y, W, H, width() * dpr, height() * dpr);
 }
-bool Drawable::event(QEvent *e)
+bool XVideoDrawable::event(QEvent *e)
 {
     /* Pass gesture and touch event to the parent */
     switch (e->type())
@@ -45,7 +44,7 @@ bool Drawable::event(QEvent *e)
     }
 }
 
-QPaintEngine *Drawable::paintEngine() const
+QPaintEngine *XVideoDrawable::paintEngine() const
 {
     return nullptr;
 }
@@ -178,7 +177,7 @@ bool XVideoWriter::open()
     xv = new XVIDEO;
     if (xv->isOK())
     {
-        drawable = new Drawable(*this);
+        drawable = new XVideoDrawable(*this);
         return true;
     }
     delete xv;

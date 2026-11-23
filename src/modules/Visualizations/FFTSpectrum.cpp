@@ -4,11 +4,6 @@
 #include <FFTSpectrum.hpp>
 #include <Functions.hpp>
 
-#include <QPainter>
-#include <qevent.h>
-
-#include <cmath>
-
 static inline void fltmix(FFT::Complex *dest, const float *winFunc, const float *src, const int size, const uchar chn)
 {
     for (int i = 0, j = 0; i < size; i += chn)

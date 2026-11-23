@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <PortAudioHeaders.hpp>
+
 #include <Module.hpp>
 
 class PortAudio final : public Module
@@ -19,12 +21,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QDoubleSpinBox;
-class QCheckBox;
-class QComboBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

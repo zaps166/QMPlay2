@@ -3,8 +3,6 @@
 
 #include "OpenGLWidget.hpp"
 
-#include <QOpenGLContext>
-
 OpenGLWidget::OpenGLWidget()
 {
     if (m_canUse16bitTexture && m_glInstance->glVer >= 30)

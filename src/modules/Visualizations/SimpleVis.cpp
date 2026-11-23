@@ -4,11 +4,6 @@
 #include <SimpleVis.hpp>
 #include <Functions.hpp>
 
-#include <QPainter>
-#include <QPainterPath>
-
-#include <cmath>
-
 static inline float fltclip(float f)
 {
     if (f > 1.0f)

@@ -3,10 +3,10 @@
 
 #pragma once
 
+#include <PulseAudioHeaders.hpp>
+
 #include <Writer.hpp>
 #include <Pulse.hpp>
-
-#include <QCoreApplication>
 
 class PulseAudioWriter final : public Writer
 {

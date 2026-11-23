@@ -3,20 +3,12 @@
 
 #pragma once
 
+#include <CUVIDHeaders.hpp>
+
 #include <Decoder.hpp>
-
-#include <cuda/CUDAQMPlayTypes.hpp>
-#include <cuda/CUVIDQMPlayTypes.hpp>
-
-#include <QCoreApplication>
-#include <QQueue>
 
 class CuvidHWInterop;
 class VideoWriter;
-
-struct AVBSFContext;
-struct SwsContext;
-struct AVPacket;
 
 class CuvidDec final : public Decoder
 {

@@ -19,31 +19,16 @@
 #include <Functions.hpp>
 
 #ifdef USE_OPENGL
-#   include <opengl/OpenGLHWInterop.hpp>
+# include <opengl/OpenGLHWInterop.hpp>
 #endif
 #ifdef USE_VULKAN
-#   include <vulkan/VulkanInstance.hpp>
-#   include <vulkan/VulkanHWInterop.hpp>
-#   include <vulkan/VulkanYadifDeint.hpp>
+# include <vulkan/VulkanInstance.hpp>
+# include <vulkan/VulkanHWInterop.hpp>
+# include <vulkan/VulkanYadifDeint.hpp>
 #endif
-
-extern "C" {
-    #include <libavutil/cpu.h>
-    #include <libavutil/mem.h>
-}
 
 using Functions::gettime;
 using namespace std;
-
-#include <QDebug>
-#include <QImage>
-#include <QDir>
-
-#ifdef Q_OS_WIN
-#   include <windows.h>
-#endif
-
-#include <cmath>
 
 VideoThr::VideoThr(PlayClass &playC, const QStringList &pluginsName) :
     AVThread(playC),

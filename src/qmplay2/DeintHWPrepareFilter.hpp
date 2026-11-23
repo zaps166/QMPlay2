@@ -4,7 +4,6 @@
 #pragma once
 
 #include <VideoFilter.hpp>
-#include <QMPlay2Lib.hpp>
 
 class QMPLAY2SHAREDLIB_EXPORT DeintHWPrepareFilter : public VideoFilter
 {

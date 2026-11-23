@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <MediaKitHeaders.hpp>
+
 #include <Module.hpp>
 
 class MediaKit : public Module
@@ -17,11 +19,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QDoubleSpinBox;
-class QCheckBox;
 
 class ModuleSettingsWidget : public Module::SettingsWidget
 {

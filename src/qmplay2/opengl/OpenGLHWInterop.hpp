@@ -6,8 +6,6 @@
 #include <HWDecContext.hpp>
 #include <VideoAdjustment.hpp>
 
-#include <functional>
-
 class ImgScaler;
 
 class QMPLAY2SHAREDLIB_EXPORT OpenGLHWInterop : public HWDecContext

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(FileAssociation)
 
 set(FileAssociation_HDR
+    FileAssociationHeaders.hpp
     FileAssociation.hpp
 )
 
@@ -19,12 +20,7 @@ add_library(${PROJECT_NAME} MODULE
     ${FileAssociation_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-        ${FileAssociation_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(FileAssociationHeaders.hpp ${FileAssociation_HDR})
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

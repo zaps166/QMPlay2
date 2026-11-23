@@ -4,12 +4,6 @@
 #include <PanGestureEventFilter.hpp>
 #include <Functions.hpp>
 
-#include <QAbstractItemView>
-#include <QCoreApplication>
-#include <QScrollBar>
-#include <QScroller>
-#include <qevent.h>
-
 class PanGestureEventFilterPriv : public QObject
 {
     bool eventFilter(QObject *watched, QEvent *event) override final

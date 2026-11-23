@@ -3,20 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
 #include <Frame.hpp>
-
-#include <optional>
-
-extern "C" {
-    #include <libavcodec/version.h>
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(58, 91, 100)
-    #include <libavcodec/packet.h>
-#else
-    #include <libavcodec/avcodec.h>
-#endif
-    #include <libavutil/rational.h>
-}
 
 class QMPLAY2SHAREDLIB_EXPORT Packet
 {

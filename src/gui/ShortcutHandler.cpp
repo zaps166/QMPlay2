@@ -4,9 +4,6 @@
 #include <ShortcutHandler.hpp>
 #include <Settings.hpp>
 
-#include <QAction>
-#include <QDebug>
-
 ShortcutHandler::ShortcutHandler(QObject *parent) :
     QAbstractTableModel(parent)
 {}

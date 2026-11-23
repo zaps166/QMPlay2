@@ -8,16 +8,6 @@
 #include <Functions.hpp>
 #include <Settings.hpp>
 
-#include <QRegularExpression>
-#include <QStandardPaths>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QFileInfo>
-#include <QMutex>
-#include <QFile>
-#include <QDir>
-
 constexpr const char *g_name = "YouTubeDL";
 static bool g_mustUpdate = true;
 static QRecursiveMutex g_mutex;

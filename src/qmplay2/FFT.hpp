@@ -3,16 +3,7 @@
 
 #pragma once
 
-extern "C"
-{
-    #include <libavutil/version.h>
-    #include <libavutil/mem.h>
-    #if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(58, 29, 100)
-    #   include <libavutil/tx.h>
-    #else
-    #   include <libavcodec/avfft.h>
-    #endif
-}
+#include <QMPlay2Headers.hpp>
 
 class FFT
 {

@@ -7,15 +7,6 @@
 #include <QMPlay2OSD.hpp>
 #include <Frame.hpp>
 
-#include <QMatrix4x4>
-#include <QWindow>
-#include <QTimer>
-
-#include <vulkan/vulkan.hpp>
-
-#include <mutex>
-#include <set>
-
 namespace QmVk {
 
 using namespace std;
@@ -24,18 +15,6 @@ struct VideoPipelineSpecializationData;
 struct FrameProps;
 
 class Instance;
-class PhysicalDevice;
-class Device;
-class Queue;
-class ShaderModule;
-class CommandBuffer;
-class Sampler;
-class SwapChain;
-class GraphicsPipeline;
-class RenderPass;
-class Buffer;
-class Image;
-class DescriptorPool;
 class HWInterop;
 
 class Window : public QWindow, public VideoOutputCommon

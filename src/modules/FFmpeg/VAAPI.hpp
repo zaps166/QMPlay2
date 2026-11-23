@@ -3,20 +3,8 @@
 
 #pragma once
 
-#include <QCoreApplication>
-#include <QVersionNumber>
-#include <QVector>
-#include <QMutex>
-#include <QHash>
+#include <FFmpegHeaders.hpp>
 
-#include <memory>
-
-#include <va/va.h>
-#include <va/va_vpp.h>
-
-struct AVBufferRef;
-struct AVFrame;
-class QImage;
 class Frame;
 
 class VAAPI

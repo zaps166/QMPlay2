@@ -5,8 +5,6 @@
 
 #include <QMPlay2Core.hpp>
 
-#include <QFile>
-
 #ifndef QMPlay2GitHEAD
     #define QMPlay2GitHEAD
 #endif

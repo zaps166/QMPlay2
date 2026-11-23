@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <AudioFiltersHeaders.hpp>
+
 #include <Module.hpp>
 
 class AudioFilters final : public Module
@@ -18,13 +20,6 @@ private:
 
 /**/
 
-class QDoubleSpinBox;
-class QPushButton;
-class QGroupBox;
-class QCheckBox;
-class QComboBox;
-class QLineEdit;
-class QSpinBox;
 class Slider;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget

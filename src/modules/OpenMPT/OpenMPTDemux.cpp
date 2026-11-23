@@ -9,10 +9,6 @@
 #include <Packet.hpp>
 #include <Reader.hpp>
 
-#include <libopenmpt/libopenmpt.hpp>
-
-#include <algorithm>
-
 OpenMPDemux::OpenMPDemux(Module &module)
     : m_sampleRate(Functions::getBestSampleRate())
 {

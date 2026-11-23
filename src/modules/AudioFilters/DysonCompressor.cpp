@@ -33,10 +33,6 @@
 
 #include <DysonCompressor.hpp>
 
-#include <QVarLengthArray>
-
-#include <cmath>
-
 #define MAXLEVEL 1.0 //default: 0.9
 
 /* These filters should filter at least the lowest audio freq */

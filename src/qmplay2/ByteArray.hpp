@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <QMPlay2Headers.hpp>
 
 class ByteArray
 {

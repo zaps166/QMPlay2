@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <QTextEdit>
+#include <GUIHeaders.hpp>
 
 #include <DockWidget.hpp>
 

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
+#include <QMPlay2Headers.hpp>
 
 namespace Sphere
 {

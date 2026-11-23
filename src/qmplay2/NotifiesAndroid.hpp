@@ -5,8 +5,6 @@
 
 #include <Notifies.hpp>
 
-#include <QObject>
-
 class NotifiesAndroid final : public QObject, public Notifies
 {
     Q_OBJECT

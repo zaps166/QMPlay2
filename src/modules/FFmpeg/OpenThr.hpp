@@ -3,11 +3,7 @@
 
 #pragma once
 
-#include <QWaitCondition>
-#include <QThread>
-#include <QMutex>
-
-#include <memory>
+#include <FFmpegHeaders.hpp>
 
 class AbortContext
 {
@@ -20,10 +16,6 @@ public:
 };
 
 /**/
-
-struct AVFormatContext;
-struct AVInputFormat;
-struct AVDictionary;
 
 class OpenThr : public QThread
 {

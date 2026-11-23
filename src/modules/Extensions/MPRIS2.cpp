@@ -3,11 +3,6 @@
 
 #include <MPRIS2.hpp>
 
-#include <QCoreApplication>
-#include <QDBusConnection>
-#include <QDBusMessage>
-#include <QDir>
-
 static void propertyChanged(const QString &name, const QVariant &value)
 {
     QVariantMap map;

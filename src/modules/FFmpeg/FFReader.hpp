@@ -3,11 +3,10 @@
 
 #pragma once
 
+#include <FFmpegHeaders.hpp>
+
 #include <Reader.hpp>
-
 #include <OpenThr.hpp>
-
-struct AVIOContext;
 
 class FFReader final : public Reader
 {

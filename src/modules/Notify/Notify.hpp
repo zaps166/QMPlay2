@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <NotifyHeaders.hpp>
+
 #include <Module.hpp>
 
 class Notify final : public Module
@@ -18,13 +20,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QDoubleSpinBox;
-class QCheckBox;
-class QGroupBox;
-class QLineEdit;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

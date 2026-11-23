@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Extensions)
 
 set(Extensions_HDR
+    ExtensionsHeaders.hpp
     Extensions.hpp
     Downloader.hpp
 )
@@ -71,11 +72,7 @@ add_library(${PROJECT_NAME} MODULE
     ${Extensions_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${Extensions_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(ExtensionsHeaders.hpp ${Extensions_HDR})
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

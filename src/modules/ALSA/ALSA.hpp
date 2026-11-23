@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <ALSAHeaders.hpp>
+
 #include <Module.hpp>
 
 class ALSA final : public Module
@@ -17,12 +19,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QDoubleSpinBox;
-class QCheckBox;
-class QComboBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

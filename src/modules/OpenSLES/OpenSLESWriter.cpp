@@ -4,7 +4,6 @@
 #include <OpenSLESWriter.hpp>
 
 #ifdef Q_OS_ANDROID
-    #include <QJniEnvironment>
     static int getNativeOutputSampleRate()
     {
         enum AudioManager

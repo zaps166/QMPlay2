@@ -3,11 +3,7 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QObject>
-
-class QTreeWidgetItem;
+#include <QMPlay2Headers.hpp>
 
 class QMPLAY2SHAREDLIB_EXPORT TreeWidgetItemJS : public QObject
 {
@@ -30,8 +26,6 @@ private:
 };
 
 /**/
-
-class QTreeWidget;
 
 class QMPLAY2SHAREDLIB_EXPORT TreeWidgetJS : public QObject
 {

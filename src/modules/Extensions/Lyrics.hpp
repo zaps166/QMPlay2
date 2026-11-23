@@ -3,12 +3,10 @@
 
 #pragma once
 
+#include <ExtensionsHeaders.hpp>
+
 #include <QMPlay2Extensions.hpp>
-
 #include <NetworkAccess.hpp>
-
-#include <QTextEdit>
-#include <QPointer>
 
 class Lyrics final : public QTextEdit, public QMPlay2Extensions
 {

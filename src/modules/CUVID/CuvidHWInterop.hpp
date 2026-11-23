@@ -5,8 +5,6 @@
 
 #include <CuvidAPI.hpp>
 
-#include <unordered_set>
-
 class Frame;
 
 class CuvidHWInterop

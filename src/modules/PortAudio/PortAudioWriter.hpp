@@ -3,19 +3,9 @@
 
 #pragma once
 
-#include <Writer.hpp>
-
 #include <PortAudioCommon.hpp>
 
-#include <portaudio.h>
-#ifdef Q_OS_WIN
-#   include <mmdeviceapi.h>
-#   include <pa_win_wasapi.h>
-
-#   include <QMutex>
-#endif
-
-#include <QCoreApplication>
+#include <Writer.hpp>
 
 #ifdef Q_OS_WIN
 class PortAudioWriter;

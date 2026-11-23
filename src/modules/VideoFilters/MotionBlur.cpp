@@ -5,8 +5,6 @@
 #include <VideoFilters.hpp>
 #include <Frame.hpp>
 
-#include <algorithm>
-
 MotionBlur::MotionBlur()
     : VideoFilter(true)
 {

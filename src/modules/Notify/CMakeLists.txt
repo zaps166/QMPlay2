@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Notify)
 
 set(Notify_HDR
+    NotifyHeaders.hpp
     NotifyExtension.hpp
     Notify.hpp
 )
@@ -21,11 +22,7 @@ add_library(${PROJECT_NAME} MODULE
     ${Notify_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${Notify_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(NotifyHeaders.hpp ${Notify_HDR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 

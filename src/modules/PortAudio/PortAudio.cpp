@@ -48,13 +48,6 @@ QMPLAY2_EXPORT_MODULE(PortAudio)
 
 /**/
 
-#include <QDoubleSpinBox>
-#include <QFormLayout>
-#include <QPushButton>
-#include <QComboBox>
-#include <QCheckBox>
-#include <QLabel>
-
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)
 {

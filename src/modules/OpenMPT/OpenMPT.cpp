@@ -4,8 +4,6 @@
 #include <OpenMPT.hpp>
 #include <OpenMPTDemux.hpp>
 
-#include <libopenmpt/libopenmpt.hpp>
-
 OpenMPT::OpenMPT()
     : Module("OpenMPT")
 {
@@ -48,11 +46,6 @@ OpenMPT::SettingsWidget *OpenMPT::getSettingsWidget()
 QMPLAY2_EXPORT_MODULE(OpenMPT)
 
 /**/
-
-#include <QFormLayout>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QSpinBox>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module)
     : Module::SettingsWidget(module)

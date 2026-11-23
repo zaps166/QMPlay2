@@ -9,23 +9,9 @@
 #include <Functions.hpp>
 #include <Settings.hpp>
 
-#include <QColor>
-
-extern "C" {
-#include <ass/ass.h>
-}
-
-#include <cstring>
-#include <cmath>
-
 using namespace std;
 
 #ifdef USE_VULKAN
-#   include "../qmvk/PhysicalDevice.hpp"
-#   include "../qmvk/Device.hpp"
-#   include "../qmvk/Buffer.hpp"
-#   include "../qmvk/BufferView.hpp"
-
 #   include <vulkan/VulkanInstance.hpp>
 #   include <vulkan/VulkanBufferPool.hpp>
 #endif

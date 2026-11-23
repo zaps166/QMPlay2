@@ -3,11 +3,7 @@
 
 #pragma once
 
-#include <QWidget>
-#include <QFileSystemWatcher>
-
-class QPlainTextEdit;
-class QPushButton;
+#include <GUIHeaders.hpp>
 
 class AboutWidget final : public QWidget
 {

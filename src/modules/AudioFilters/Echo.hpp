@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <AudioFiltersHeaders.hpp>
+
 #include <AudioFilter.hpp>
 
 class Echo final : public AudioFilter

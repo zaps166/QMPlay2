@@ -5,8 +5,6 @@
 
 #include <VideoWriter.hpp>
 
-#include <QCoreApplication>
-
 namespace QmVk {
 
 using namespace std;

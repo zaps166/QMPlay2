@@ -3,13 +3,11 @@
 
 #pragma once
 
+#include <GUIHeaders.hpp>
+
 #include <AVThread.hpp>
 #include <VideoFilters.hpp>
 #include <QMPlay2OSD.hpp>
-
-extern "C" {
-    #include <libavutil/rational.h>
-}
 
 class VideoWriter;
 class HWDecContext;

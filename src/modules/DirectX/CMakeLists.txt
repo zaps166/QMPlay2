@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(DirectX)
 
 set(DirectX_HDR
+    DirectXHeaders.hpp
     DirectDraw.hpp
     DirectX.hpp
 )
@@ -21,12 +22,7 @@ add_library(${PROJECT_NAME} MODULE
     ${DirectX_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME}
-        PRIVATE
-        ${DirectX_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(DirectXHeaders.hpp ${DirectX_HDR})
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE

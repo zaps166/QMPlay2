@@ -3,15 +3,10 @@
 
 #pragma once
 
+#include <FFmpegHeaders.hpp>
+
 #include <opengl/OpenGLHWInterop.hpp>
 #include <VAAPI.hpp>
-
-#include <unordered_set>
-#include <unordered_map>
-#include <memory>
-#include <mutex>
-
-#include <va/va_drmcommon.h>
 
 class VAAPIOpenGL : public OpenGLHWInterop
 {

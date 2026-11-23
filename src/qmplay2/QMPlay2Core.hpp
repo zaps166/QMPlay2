@@ -3,33 +3,15 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
+#include <QMPlay2Headers.hpp>
 #include <PlaylistEntry.hpp>
 #include <StreamInfo.hpp>
 
-#include <QAtomicInt>
-#include <QObject>
-#include <QMutex>
-#include <QIcon>
-#include <QHash>
-#include <QMap>
-
-#include <functional>
-#include <memory>
-#include <any>
-
 enum LogFlags {InfoLog = 0x1, ErrorLog = 0x2, SaveLog = 0x4, AddTimeToLog = 0x8, DontShowInGUI = 0x10, LogOnce = 0x20};
 
-template<typename T>
-class QPointer;
-
 class GPUInstance;
-class QWheelEvent;
 class CommonJS;
-class QTranslator;
 class Settings;
-class QWidget;
-class QPixmap;
 class Module;
 
 class QMPLAY2SHAREDLIB_EXPORT QMPlay2CoreClass : public QObject

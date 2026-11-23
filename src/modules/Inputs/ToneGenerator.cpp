@@ -6,10 +6,6 @@
 #include <Functions.hpp>
 #include <Packet.hpp>
 
-#include <QUrlQuery>
-
-#include <cmath>
-
 ToneGenerator::ToneGenerator(Module &module) :
     aborted(false), metadata_changed(false), fromUrl(false), pos(0.0), srate(0)
 {

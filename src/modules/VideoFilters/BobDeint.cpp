@@ -4,8 +4,6 @@
 #include <BobDeint.hpp>
 #include <VideoFilters.hpp>
 
-#include <algorithm>
-
 BobDeint::BobDeint()
     : VideoFilter(true)
 {

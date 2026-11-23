@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <AudioFilter.hpp>
+#include <AudioFiltersHeaders.hpp>
 
-#include <QMutex>
+#include <AudioFilter.hpp>
 
 #define NFILT  12
 #define NEFILT 17

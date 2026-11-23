@@ -6,15 +6,6 @@
 #include <NetworkAccess.hpp>
 #include <Functions.hpp>
 
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QPainter>
-#include <QWidget>
-#include <QUrl>
-
-#include <algorithm>
-
 struct Column
 {
     QString url, homePageUrl, uuid;

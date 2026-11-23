@@ -15,12 +15,6 @@
 #include <Decoder.hpp>
 #include <Reader.hpp>
 
-#include <QCryptographicHash>
-#include <QCoreApplication>
-#include <QDir>
-
-#include <cmath>
-
 static inline bool getCurrentPlaying(int stream, const QList<StreamInfo *> &streamsInfo, const StreamInfo *streamInfo)
 {
     return (stream > -1 && streamsInfo.count() > stream) && streamsInfo[stream] == streamInfo;

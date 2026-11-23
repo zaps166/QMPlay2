@@ -6,17 +6,6 @@
 
 #include <Functions.hpp>
 
-#include <QMenu>
-#include <QLabel>
-#include <QSlider>
-#include <QPainter>
-#include <QPainterPath>
-#include <QCheckBox>
-#include <QScrollArea>
-#include <QGridLayout>
-#include <QToolButton>
-#include <QInputDialog>
-
 template <typename W>
 static W *setSmallerFont(W *w)
 {

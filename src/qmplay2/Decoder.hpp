@@ -7,11 +7,6 @@
 #include <Frame.hpp>
 #include <Packet.hpp>
 
-#include <QByteArray>
-#include <QString>
-
-#include <memory>
-
 class QMPlay2OSD;
 class VideoFilter;
 class StreamInfo;

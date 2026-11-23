@@ -1,40 +1,7 @@
 // SPDX-FileCopyrightText: 2010-2026 Błażej Szczygieł
 // SPDX-License-Identifier: LGPL-3.0-or-later
 
-#include <QApplication>
-#include <QToolBar>
-#include <QFrame>
-#include <QSlider>
-#include <QToolButton>
-#include <QStatusBar>
-#include <QMessageBox>
-#include <QHBoxLayout>
-#include <QInputDialog>
-#include <QLabel>
-#include <QShortcut>
-#include <QFileDialog>
-#include <QTreeWidget>
-#include <QListWidget>
-#include <QWindow>
-#include <QScreen>
-#include <QActionGroup>
-#include <QProxyStyle>
-#ifdef Q_OS_MACOS
-    #include <QProcess>
-#endif
-#if defined(Q_OS_WIN)
-    #include <QOperatingSystemVersion>
-    #include <QtWinExtras/qwinthumbnailtoolbutton.h>
-    #include <QtWinExtras/qwinthumbnailtoolbar.h>
-    #include <QtWinExtras/qwintaskbarprogress.h>
-    #include <QtWinExtras/qwintaskbarbutton.h>
-#endif
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 4, 0)
-    #include <dwmapi.h>
-#endif
-#include <qevent.h>
-
-/* QMPlay2 gui */
+/* QMPlay2 GUI */
 #include <Main.hpp>
 #include <Notifies.hpp>
 #include <Functions.hpp>
@@ -53,7 +20,7 @@
 #include <VolWidget.hpp>
 #include <ScreenSaver.hpp>
 #ifdef Q_OS_MACOS
-    #include <QMPlay2MacExtensions.hpp>
+# include <QMPlay2MacExtensions.hpp>
 #endif
 
 using Functions::timeToStr;
@@ -64,8 +31,6 @@ using Functions::timeToStr;
 #include <MenuBar.hpp>
 #include <SubsDec.hpp>
 #include <IPC.hpp>
-
-#include <cmath>
 
 /* MainWidgetTmpStyle -  dock widget separator extent must be larger for touch screens */
 class MainWidgetTmpStyle final : public QProxyStyle

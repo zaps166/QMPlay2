@@ -5,8 +5,6 @@
 
 #include <Notifies.hpp>
 
-#include <QList>
-
 class NotifiesMacOS final : public Notifies
 {
 public:

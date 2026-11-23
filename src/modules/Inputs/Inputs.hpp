@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <InputsHeaders.hpp>
+
 #include <Module.hpp>
 
 class Inputs final : public Module
@@ -25,9 +27,6 @@ private slots:
 
 /**/
 
-#include <QSpinBox>
-#include <QDialog>
-
 class HzW final : public QWidget
 {
 public:
@@ -42,8 +41,6 @@ public:
 private:
     QList<QSpinBox *> hzB;
 };
-
-class QGridLayout;
 
 class AddD final : public QDialog
 {
@@ -73,12 +70,6 @@ private:
     Settings &sets;
     HzW *hzW;
 };
-
-class QRadioButton;
-class QComboBox;
-class QGroupBox;
-class QCheckBox;
-class QLineEdit;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

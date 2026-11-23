@@ -7,14 +7,8 @@
 #include <StreamInfo.hpp>
 
 #ifdef USE_VULKAN
-#   include <vulkan/VulkanInstance.hpp>
+# include <vulkan/VulkanInstance.hpp>
 #endif
-
-extern "C"
-{
-    #include <libavformat/avformat.h>
-    #include <libavutil/pixdesc.h>
-}
 
 FFDec::FFDec() :
     codec_ctx(nullptr),
@@ -51,7 +45,6 @@ void FFDec::clearFrames()
         av_frame_free(&frame);
     m_frames.clear();
 }
-
 
 AVCodec *FFDec::init(StreamInfo &streamInfo)
 {

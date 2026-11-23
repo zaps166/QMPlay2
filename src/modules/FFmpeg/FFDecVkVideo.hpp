@@ -3,19 +3,14 @@
 
 #pragma once
 
-#include <FFDecHWAccel.hpp>
+#include <FFmpegHeaders.hpp>
 
-#include <unordered_map>
-#include <mutex>
+#include <FFDecHWAccel.hpp>
 
 class VkVideoVulkan;
 
 namespace QmVk {
-
 class Instance;
-class PhysicalDevice;
-class Device;
-
 }
 
 class FFMPEG_EXPORT FFDecVkVideo final : public FFDecHWAccel

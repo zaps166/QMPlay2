@@ -3,20 +3,9 @@
 
 #pragma once
 
+#include <FFmpegHeaders.hpp>
+
 #include <opengl/OpenGLHWInterop.hpp>
-
-#include <QOpenGLContext>
-#include <QHash>
-
-#include <functional>
-#include <memory>
-
-#include <d3d9.h>
-#include <dxva2api.h>
-
-#include <GL/wglext.h>
-
-struct AVBufferRef;
 
 using QMPlay2D3dDev9 = std::unique_ptr<IDirect3DDevice9, std::function<void(void *)>>;
 

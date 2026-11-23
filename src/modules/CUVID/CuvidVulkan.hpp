@@ -6,11 +6,8 @@
 #include <CuvidHWInterop.hpp>
 #include <vulkan/VulkanHWInterop.hpp>
 
-#include <mutex>
-
 namespace QmVk {
 class ImagePool;
-class Semaphore;
 }
 
 class CuvidVulkan final : public CuvidHWInterop, public QmVk::HWInterop

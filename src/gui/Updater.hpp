@@ -3,17 +3,9 @@
 
 #pragma once
 
+#include <GUIHeaders.hpp>
+
 #include <NetworkAccess.hpp>
-
-#include <QFile>
-
-#ifdef UPDATER
-    #include <QDialog>
-
-    class QProgressBar;
-    class QPushButton;
-    class QLabel;
-#endif
 
 class Updater final : public
 #ifdef UPDATER

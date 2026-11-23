@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <ExtensionsHeaders.hpp>
+
 #include <Module.hpp>
 
 class Extensions final : public Module
@@ -32,11 +34,6 @@ private:
 
 /**/
 
-class QToolButton;
-class QListWidget;
-class QComboBox;
-class QGroupBox;
-class QCheckBox;
 class LineEdit;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget

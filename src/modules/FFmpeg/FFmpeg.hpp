@@ -3,11 +3,9 @@
 
 #pragma once
 
+#include <FFmpegHeaders.hpp>
+
 #include <Module.hpp>
-
-#include <QCoreApplication>
-
-class QComboBox;
 
 class FFmpeg final : public Module
 {
@@ -50,9 +48,6 @@ private:
 
 /**/
 
-class QCheckBox;
-class QGroupBox;
-class QSpinBox;
 class Slider;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget

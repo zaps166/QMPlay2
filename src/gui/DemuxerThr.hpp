@@ -3,13 +3,10 @@
 
 #pragma once
 
+#include <GUIHeaders.hpp>
+
 #include <IOController.hpp>
 #include <StreamInfo.hpp>
-
-#include <QString>
-#include <QThread>
-#include <QMutex>
-#include <QTimer>
 
 class BufferInfo;
 class PlayClass;

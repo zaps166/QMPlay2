@@ -3,25 +3,11 @@
 
 #include <PanGestureEventFilter.hpp>
 
-#include <QAbstractNativeEventFilter>
-#include <QAbstractItemView>
-#include <QApplication>
-#include <QScrollBar>
-#include <QLibrary>
-#include <QPointer>
-#include <QEvent>
-#include <QTimer>
-
-#ifdef WINVER
-    #undef WINVER
-#endif
-#define WINVER 0x0601
-#include <windows.h>
 #ifndef WM_GESTURE
-    #define WM_GESTURE 0x0119
+# define WM_GESTURE 0x0119
 #endif
 #ifndef WM_GESTURENOTIFY
-    #define WM_GESTURENOTIFY 0x011A
+# define WM_GESTURENOTIFY 0x011A
 #endif
 
 #include <Functions.hpp>

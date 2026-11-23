@@ -5,10 +5,6 @@
 
 #include <Settings.hpp>
 
-#include <QDialogButtonBox>
-#include <QGridLayout>
-#include <QLineEdit>
-
 AddressDialog::AddressDialog(QWidget *p)
     : QDialog(p)
     , addrB(Qt::Vertical, QString(), QMPlay2Core.getSettings().getString("AddressDialog/Choice"))

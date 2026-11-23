@@ -3,20 +3,11 @@
 
 #include <VkVideoVulkan.hpp>
 
-#include "../qmvk/Image.hpp"
-
 #include <vulkan/VulkanInstance.hpp>
 
 #include <QMPlay2Core.hpp>
 #include <FFCommon.hpp>
 #include <Frame.hpp>
-
-#include <QDebug>
-
-extern "C"
-{
-    #include <libavutil/hwcontext_vulkan.h>
-}
 
 using namespace QmVk;
 

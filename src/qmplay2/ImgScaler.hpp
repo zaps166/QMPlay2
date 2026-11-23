@@ -3,11 +3,10 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
+#include <QMPlay2Headers.hpp>
 
 /* YUV planar to RGB32 */
 
-struct SwsContext;
 class Frame;
 
 class QMPLAY2SHAREDLIB_EXPORT ImgScaler

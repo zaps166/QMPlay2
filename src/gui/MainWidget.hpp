@@ -3,14 +3,11 @@
 
 #pragma once
 
-#include <QMainWindow>
-#include <QSystemTrayIcon>
+#include <GUIHeaders.hpp>
 
 #include <PlayClass.hpp>
 #include <Updater.hpp>
 
-class QFrame;
-class QLabel;
 class Slider;
 class MenuBar;
 class InfoDock;
@@ -18,17 +15,10 @@ class VideoDock;
 class VolWidget;
 class IPCSocket;
 class DockWidget;
-class QToolButton;
 class AboutWidget;
 class PlaylistDock;
 class SettingsWidget;
 class QMPlay2Extensions;
-
-#if defined(Q_OS_WIN)
-    class QWinTaskbarProgress;
-    class QWinTaskbarButton;
-    class QWinThumbnailToolBar;
-#endif
 
 class MainWidget final : public QMainWindow
 {

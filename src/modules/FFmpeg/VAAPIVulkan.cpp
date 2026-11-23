@@ -4,19 +4,11 @@
 #include <VAAPIVulkan.hpp>
 #include <VAAPI.hpp>
 
-#include "../qmvk/PhysicalDevice.hpp"
-#include "../qmvk/Image.hpp"
-
 #include <vulkan/VulkanInstance.hpp>
 
 #include <QMPlay2Core.hpp>
 #include <FFCommon.hpp>
 #include <Frame.hpp>
-
-#include <QDebug>
-
-#include <va/va_drmcommon.h>
-#include <unistd.h>
 
 // libdrm/drm_fourcc.h
 

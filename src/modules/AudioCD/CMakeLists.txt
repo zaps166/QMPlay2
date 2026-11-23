@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(AudioCD)
 
 set(AudioCD_HDR
+    AudioCDHeaders.hpp
     AudioCD.hpp
     AudioCDDemux.hpp
 )
@@ -26,11 +27,7 @@ add_library(${PROJECT_NAME} MODULE
     ${AudioCD_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${AudioCD_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(AudioCDHeaders.hpp ${AudioCD_HDR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 

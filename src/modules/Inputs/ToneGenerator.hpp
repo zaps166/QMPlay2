@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <Demuxer.hpp>
+#include <InputsHeaders.hpp>
 
-#include <atomic>
+#include <Demuxer.hpp>
 
 class ToneGenerator final : public Demuxer
 {

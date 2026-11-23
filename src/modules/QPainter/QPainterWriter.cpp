@@ -7,15 +7,7 @@
 #include <Frame.hpp>
 #include <Functions.hpp>
 
-#include <QCoreApplication>
-#include <QPainter>
-
-extern "C" {
-    #include <libavutil/cpu.h>
-    #include <libavutil/mem.h>
-}
-
-Drawable::Drawable(QPainterWriter &writer) :
+OpenGLDrawable::OpenGLDrawable(QPainterWriter &writer) :
     writer(writer)
 {
     grabGesture(Qt::PinchGesture);
@@ -23,10 +15,10 @@ Drawable::Drawable(QPainterWriter &writer) :
     setMouseTracking(true);
     setPalette(Qt::black);
 }
-Drawable::~Drawable()
+OpenGLDrawable::~OpenGLDrawable()
 {}
 
-void Drawable::draw(const Frame &newVideoFrame, bool canRepaint, bool entireScreen)
+void OpenGLDrawable::draw(const Frame &newVideoFrame, bool canRepaint, bool entireScreen)
 {
     if (!newVideoFrame.isEmpty())
         videoFrame = newVideoFrame;
@@ -64,7 +56,7 @@ void Drawable::draw(const Frame &newVideoFrame, bool canRepaint, bool entireScre
         update();
 }
 
-void Drawable::resizeEvent(QResizeEvent *e)
+void OpenGLDrawable::resizeEvent(QResizeEvent *e)
 {
     const qreal dpr = devicePixelRatioF();
     Functions::getImageSize(writer.aspect_ratio, writer.zoom, width(), height(), W, H, &X, &Y);
@@ -75,7 +67,7 @@ void Drawable::resizeEvent(QResizeEvent *e)
 
     draw(Frame(), e ? false : true, true);
 }
-void Drawable::paintEvent(QPaintEvent *)
+void OpenGLDrawable::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
 
@@ -93,7 +85,7 @@ void Drawable::paintEvent(QPaintEvent *)
         Functions::paintOSD(true, osd_list, W * dpr / writer.outW, H * dpr / writer.outH, p);
     }
 }
-bool Drawable::event(QEvent *e)
+bool OpenGLDrawable::event(QEvent *e)
 {
     /* Pass gesture and touch event to the parent */
     switch (e->type())
@@ -143,7 +135,7 @@ bool QPainterWriter::readyWrite() const
 bool QPainterWriter::processParams(bool *)
 {
     if (!drawable)
-        drawable = new Drawable(*this);
+        drawable = new OpenGLDrawable(*this);
 
     bool doResizeEvent = false;
 

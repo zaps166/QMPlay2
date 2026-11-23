@@ -3,23 +3,6 @@
 
 #include <Frame.hpp>
 
-#include <QDebug>
-
-#ifdef USE_VULKAN
-#   include "../qmvk/Image.hpp"
-#endif
-
-extern "C"
-{
-    #include <libavcodec/avcodec.h>
-    #include <libavutil/frame.h>
-    #include <libavutil/pixdesc.h>
-    #include <libavutil/imgutils.h>
-    #include <libswscale/swscale.h>
-}
-
-#include <cmath>
-
 using namespace std;
 
 AVPixelFormat Frame::convert3PlaneTo2Plane(AVPixelFormat fmt)

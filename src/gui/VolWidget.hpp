@@ -3,10 +3,9 @@
 
 #pragma once
 
-#include <Slider.hpp>
+#include <GUIHeaders.hpp>
 
-#include <QWidget>
-#include <QMenu>
+#include <Slider.hpp>
 
 class VolWidget : public QWidget
 {

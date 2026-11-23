@@ -11,21 +11,6 @@
 #include <Packet.hpp>
 
 #ifdef Q_OS_ANDROID
-#   include <QFile>
-#endif
-
-#include <limits>
-
-extern "C"
-{
-    #include <libavformat/avformat.h>
-    #include <libavutil/replaygain.h>
-    #include <libavutil/spherical.h>
-    #include <libavutil/display.h>
-    #include <libavutil/pixdesc.h>
-}
-
-#ifdef Q_OS_ANDROID
 static int readPacketQFile(void *opaque, uint8_t *buf, int bufSize)
 {
     auto &f = *static_cast<QFile *>(opaque);

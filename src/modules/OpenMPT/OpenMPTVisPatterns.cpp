@@ -3,15 +3,6 @@
 
 #include <OpenMPTVisPatterns.hpp>
 
-#include <QPainter>
-
-#include <libopenmpt/libopenmpt.hpp>
-
-extern "C" {
-    #include <libavutil/frame.h>
-    #include <libavutil/pixfmt.h>
-}
-
 static int computeMaxCellWidth(openmpt::module *module, int pattern, const QFontMetrics &fm)
 {
     const int numChannels = module->get_num_channels();

@@ -5,11 +5,6 @@
 
 #include <Functions.hpp>
 
-#include <QBuffer>
-#include <QFile>
-
-#include <memory>
-
 class IODeviceReader : public Reader
 {
     bool readyRead() const override final

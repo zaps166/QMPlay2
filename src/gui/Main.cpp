@@ -15,32 +15,6 @@
 #include <Module.hpp>
 #include <IPC.hpp>
 
-#include <QCommandLineParser>
-#include <QSurfaceFormat>
-#include <QVersionNumber>
-#include <QApplication>
-#include <QImageReader>
-#include <QTreeWidget>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QPainter>
-#include <QWindow>
-#include <QScreen>
-#include <QBuffer>
-#include <QFile>
-#include <QDir>
-#ifdef CHECK_FOR_EGL
-    #include <QLibrary>
-#endif
-
-#ifdef Q_OS_WIN
-# include <lmcons.h>
-#endif
-
-#include <clocale>
-#include <csignal>
-#include <ctime>
-
 static ScreenSaver *g_screenSaver = nullptr;
 static bool g_useGui = true;
 

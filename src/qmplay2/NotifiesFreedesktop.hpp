@@ -5,11 +5,7 @@
 
 #include <Notifies.hpp>
 
-#include <QDateTime>
-#include <QObject>
-
 class OrgFreedesktopNotificationsInterface;
-class QDBusPendingCallWatcher;
 
 class QMPLAY2SHAREDLIB_EXPORT NotifiesFreedesktop final : public QObject, public Notifies
 {

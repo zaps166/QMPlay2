@@ -10,16 +10,6 @@
 #include <VideoOutputCommon.hpp>
 #include <QMPlay2OSD.hpp>
 
-#include <QOpenGLShaderProgram>
-#if !defined(QT_OPENGL_ES_2) && !defined(QT_FEATURE_opengles2)
-#   include <QOpenGLFunctions_1_5>
-#endif
-#include <QOpenGLExtraFunctions>
-
-#include <QCoreApplication>
-#include <QImage>
-#include <QTimer>
-
 class OpenGLHWInterop;
 
 class OpenGLCommon : public VideoOutputCommon, public QOpenGLExtraFunctions

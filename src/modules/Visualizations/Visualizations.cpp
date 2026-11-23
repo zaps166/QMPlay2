@@ -6,7 +6,6 @@
 #include <SimpleVis.hpp>
 #include <FFTSpectrum.hpp>
 
-
 Visualizations::Visualizations() :
     Module("Visualizations")
 {
@@ -44,12 +43,6 @@ Visualizations::SettingsWidget *Visualizations::getSettingsWidget()
 QMPLAY2_EXPORT_MODULE(Visualizations)
 
 /**/
-
-#include <QFormLayout>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QSpinBox>
-#include <QLabel>
 
 ModuleSettingsWidget::ModuleSettingsWidget(Module &module) :
     Module::SettingsWidget(module)

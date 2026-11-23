@@ -3,20 +3,9 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QElapsedTimer>
-#include <QByteArray>
-#include <QRect>
-
-#include <functional>
-#include <memory>
-#include <vector>
-#include <mutex>
+#include <QMPlay2Headers.hpp>
 
 #ifdef USE_VULKAN
-#   include <QVector4D>
-
 namespace QmVk {
 
 class Buffer;

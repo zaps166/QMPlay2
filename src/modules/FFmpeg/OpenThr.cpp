@@ -3,13 +3,6 @@
 
 #include <OpenThr.hpp>
 
-#include <QCoreApplication>
-
-extern "C"
-{
-    #include <libavformat/avformat.h>
-}
-
 void AbortContext::abort()
 {
     QMutexLocker locker(&openMutex);

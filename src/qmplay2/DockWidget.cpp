@@ -3,9 +3,6 @@
 
 #include <DockWidget.hpp>
 
-#include <qevent.h>
-#include <QTimer>
-
 class EmptyW final : public QWidget
 {
     QSize sizeHint() const override

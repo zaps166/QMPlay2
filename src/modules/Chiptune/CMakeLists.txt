@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Chiptune)
 
 set(Chiptune_HDR
+    ChiptuneHeaders.hpp
     Chiptune.hpp
     Common.hpp
 )
@@ -47,11 +48,7 @@ add_library(${PROJECT_NAME} MODULE
     ${Chiptune_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${Chiptune_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(ChiptuneHeaders.hpp ${Chiptune_HDR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 

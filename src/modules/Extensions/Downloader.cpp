@@ -9,35 +9,6 @@
 #include <Packet.hpp>
 #include <Reader.hpp>
 
-#include <QSet>
-#include <QDir>
-#include <QHash>
-#include <QMenu>
-#include <QTimer>
-#include <QLabel>
-#include <QAction>
-#include <QScreen>
-#include <QWindow>
-#include <QProcess>
-#include <QMimeData>
-#include <QFileInfo>
-#include <QClipboard>
-#include <QTreeWidget>
-#include <QToolButton>
-#include <QGridLayout>
-#include <QTreeWidget>
-#include <QMessageBox>
-#include <QFormLayout>
-#include <QPushButton>
-#include <QInputDialog>
-#include <QProgressBar>
-#include <QApplication>
-#include <QElapsedTimer>
-#include <QLoggingCategory>
-#include <QDialogButtonBox>
-
-#include <functional>
-
 Q_LOGGING_CATEGORY(downloader, "Downloader")
 
 /**/

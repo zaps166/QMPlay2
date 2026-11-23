@@ -3,15 +3,6 @@
 
 #include <OpenMPTVisSamples.hpp>
 
-#include <QPainter>
-
-#include <libopenmpt/libopenmpt.hpp>
-
-extern "C" {
-    #include <libavutil/frame.h>
-    #include <libavutil/pixfmt.h>
-}
-
 static constexpr int kMaxRowHeight = 24;
 static constexpr float kSilentThreshold = 1.0f / 255.0f;
 

@@ -3,18 +3,13 @@
 
 #pragma once
 
-#include <QMPlay2Lib.hpp>
-
-#include <QIODevice>
-#include <QString>
+#include <QMPlay2Headers.hpp>
 
 class IPCSocketPriv;
 class IPCServerPriv;
 #ifdef Q_OS_WIN
     class PipeData;
 #endif
-
-class QSocketNotifier;
 
 class QMPLAY2SHAREDLIB_EXPORT IPCSocket final : public QIODevice
 {

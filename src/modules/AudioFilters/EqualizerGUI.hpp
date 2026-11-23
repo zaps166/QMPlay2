@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <AudioFiltersHeaders.hpp>
+
 #include <QMPlay2Extensions.hpp>
 
 class GraphW final : public QWidget
@@ -23,11 +25,6 @@ private:
 };
 
 /**/
-
-class QScrollArea;
-class QCheckBox;
-class QSlider;
-class QMenu;
 
 class EqualizerGUI final : public QWidget, public QMPlay2Extensions
 {

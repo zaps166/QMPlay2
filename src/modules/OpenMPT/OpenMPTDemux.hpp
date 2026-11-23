@@ -3,18 +3,15 @@
 
 #pragma once
 
+#include <OpenMPTHeaders.hpp>
+
 #include <Demuxer.hpp>
 #include <Packet.hpp>
 #include <OpenMPTVisBase.hpp>
 
 #include <IOController.hpp>
 
-#include <memory>
-
 class Reader;
-namespace openmpt {
-    class module;
-}
 
 class OpenMPDemux final : public Demuxer
 {

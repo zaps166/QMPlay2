@@ -5,11 +5,6 @@
 
 #include <Packet.hpp>
 
-#include <QMutex>
-
-#include <functional>
-#include <deque>
-
 class QMPLAY2SHAREDLIB_EXPORT PacketBuffer : private std::deque<Packet>
 {
     using IterateCallback = std::function<bool(const Packet &)>;

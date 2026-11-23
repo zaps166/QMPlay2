@@ -3,32 +3,10 @@
 
 #include <SndResampler.hpp>
 
-#include <QVarLengthArray>
-#include <QByteArray>
-#include <QDebug>
-
-#include <cmath>
-
-#ifdef QMPLAY2_RUBBERBAND
-#   include <rubberband/RubberBandStretcher.h>
-#else
-namespace RubberBand {
-
-class RubberBandStretcher
-{};
-
-}
-#endif
-
-extern "C"
-{
-    #include <libswresample/swresample.h>
-    #include <libavutil/channel_layout.h>
-    #include <libavutil/opt.h>
-}
-
 using namespace std;
+#ifdef QMPLAY2_RUBBERBAND
 using namespace RubberBand;
+#endif
 
 bool SndResampler::canKeepPitch()
 {

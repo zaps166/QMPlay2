@@ -11,17 +11,6 @@
 #include <Settings.hpp>
 #include <Main.hpp>
 
-#include <QGuiApplication>
-#include <QWidgetAction>
-#include <QActionGroup>
-#include <QInputDialog>
-#include <QMainWindow>
-#include <qevent.h>
-#include <QDir>
-#ifdef Q_OS_MACOS
-    #include <QTimer>
-#endif
-
 static QAction *newAction(const QString &txt, QMenu *parent, QAction *&act, bool autoRepeat, const QIcon &icon, bool checkable, QAction::MenuRole role = QAction::NoRole)
 {
     act = new QAction(txt, parent);

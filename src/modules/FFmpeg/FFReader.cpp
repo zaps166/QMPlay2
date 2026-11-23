@@ -6,11 +6,6 @@
 #include <Functions.hpp>
 #include <FFCommon.hpp>
 
-extern "C"
-{
-    #include <libavformat/avio.h>
-}
-
 static int interruptCB(bool &aborted)
 {
     return aborted;

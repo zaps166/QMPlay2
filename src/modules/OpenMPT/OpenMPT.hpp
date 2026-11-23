@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <OpenMPTHeaders.hpp>
+
 #include <Module.hpp>
 
 class OpenMPT final : public Module
@@ -20,12 +22,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QCheckBox;
-class QComboBox;
-class QSpinBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

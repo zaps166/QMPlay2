@@ -6,12 +6,6 @@
 #include <Functions.hpp>
 #include <Main.hpp>
 
-#include <QDialogButtonBox>
-#include <QMessageBox>
-#include <QHeaderView>
-#include <QTableView>
-#include <QBoxLayout>
-
 KeyBindingsDialog::KeyBindingsDialog(QWidget *p) :
     QDialog(p)
 {

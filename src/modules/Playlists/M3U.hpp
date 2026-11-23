@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <PlaylistsHeaders.hpp>
+
 #include <Playlist.hpp>
 
 class M3U final : public Playlist

@@ -8,19 +8,6 @@
 #include <Version.hpp>
 #include <Main.hpp>
 
-#include <QUrl>
-#include <QFile>
-#include <QLabel>
-#include <QSysInfo>
-#include <QTabWidget>
-#include <QPushButton>
-#include <QGridLayout>
-#include <QMouseEvent>
-#include <QMessageBox>
-#include <QPlainTextEdit>
-#include <QGuiApplication>
-#include <QDesktopServices>
-
 AboutWidget::AboutWidget()
 {
     setWindowTitle(tr("About QMPlay2"));

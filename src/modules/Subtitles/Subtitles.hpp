@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <SubtitlesHeaders.hpp>
+
 #include <Module.hpp>
 
 class Subtitles final : public Module
@@ -17,11 +19,6 @@ private:
 };
 
 /**/
-
-#include <QCoreApplication>
-
-class QCheckBox;
-class QDoubleSpinBox;
 
 class ModuleSettingsWidget final : public Module::SettingsWidget
 {

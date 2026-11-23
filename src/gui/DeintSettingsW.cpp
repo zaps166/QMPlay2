@@ -4,18 +4,12 @@
 #include <DeintSettingsW.hpp>
 
 #ifdef USE_VULKAN
-    #include <vulkan/VulkanInstance.hpp>
+# include <vulkan/VulkanInstance.hpp>
 #endif
 
 #include <Settings.hpp>
 #include <Module.hpp>
 #include <Main.hpp>
-
-#include <QFormLayout>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QLabel>
-#include <QSet>
 
 void DeintSettingsW::init()
 {

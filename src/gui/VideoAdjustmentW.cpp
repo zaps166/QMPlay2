@@ -10,11 +10,6 @@
 #include <Main.hpp>
 #include <Functions.hpp>
 
-#include <QGridLayout>
-#include <QPushButton>
-#include <QAction>
-#include <QLabel>
-
 enum CONTROLS
 {
     BRIGHTNESS,

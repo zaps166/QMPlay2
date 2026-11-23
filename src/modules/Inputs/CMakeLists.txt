@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(Inputs)
 
 set(Inputs_HDR
+    InputsHeaders.hpp
     Inputs.hpp
     ToneGenerator.hpp
     PCM.hpp
@@ -23,11 +24,7 @@ add_library(${PROJECT_NAME} MODULE
     ${Inputs_RESOURCES}
 )
 
-if(USE_PCH)
-    target_precompile_headers(${PROJECT_NAME} PRIVATE
-        ${Inputs_HDR}
-    )
-endif()
+qmplay2_add_precompile_headers(InputsHeaders.hpp ${Inputs_HDR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE libqmplay2_iface)
 

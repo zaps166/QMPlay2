@@ -3,8 +3,7 @@
 
 #pragma once
 
-#include <QComboBox>
-#include <QLineEdit>
+#include <GUIHeaders.hpp>
 
 class AddressBox : public QWidget
 {

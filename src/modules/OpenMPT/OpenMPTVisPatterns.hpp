@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <OpenMPTVisBase.hpp>
+#include <OpenMPTHeaders.hpp>
 
-#include <QStaticText>
+#include <OpenMPTVisBase.hpp>
 
 class OpenMPTVisPatterns : public OpenMPTVisBase
 {

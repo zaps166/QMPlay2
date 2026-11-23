@@ -6,12 +6,6 @@
 #include <StreamInfo.hpp>
 #include <Frame.hpp>
 
-extern "C"
-{
-    #include <libavcodec/avcodec.h>
-    #include <libswscale/swscale.h>
-}
-
 FFDecHWAccel::FFDecHWAccel()
 {}
 FFDecHWAccel::~FFDecHWAccel()

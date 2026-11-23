@@ -3,12 +3,6 @@
 
 #include <SndPlayer.hpp>
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <SoundPlayer.h>
-
-
 static void proc(void *cookie, void *buffer, size_t len, const media_raw_audio_format &format)
 {
     RingBuffer *ring = (RingBuffer*)cookie;

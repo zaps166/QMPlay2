@@ -3,14 +3,6 @@
 
 #include <ScreenSaver.hpp>
 
-#include <QGuiApplication>
-#include <QLibrary>
-
-#ifdef DBUS_PM
-# include <QDBusConnection>
-# include <QDBusInterface>
-#endif
-
 class ScreenSaverPriv : public QObject
 {
 public:

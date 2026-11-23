@@ -3,10 +3,6 @@
 
 #include <PacketBuffer.hpp>
 
-#include <cmath>
-
-#include <QDebug>
-
 double PacketBuffer::s_backwardTime;
 
 void PacketBuffer::iterate(const IterateCallback &cb)

@@ -11,18 +11,6 @@
 #   include <VTBOpenGL.hpp>
 #endif
 
-#include <QOperatingSystemVersion>
-#include <QDebug>
-
-extern "C"
-{
-    #include <libavutil/pixdesc.h>
-    #include <libavcodec/avcodec.h>
-    #include <libavutil/hwcontext.h>
-    #include <libavutil/hwcontext_videotoolbox.h>
-    #include <libavcodec/videotoolbox.h>
-}
-
 using namespace std;
 
 static bool isCodecSupported(const StreamInfo &streamInfo)
