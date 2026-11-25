@@ -310,11 +310,11 @@ MenuBar::Player::AspectRatio::AspectRatio(QMenu *parent) :
 
     _auto->setObjectName("auto");
     _1x1->setObjectName("1");
-    _4x3->setObjectName(QString::number(4.0 / 3.0));
-    _5x4->setObjectName(QString::number(5.0 / 4.0));
-    _16x9->setObjectName(QString::number(16.0 / 9.0));
-    _3x2->setObjectName(QString::number(3.0 / 2.0));
-    _21x9->setObjectName(QString::number(21.0 / 9.0));
+    _4x3->setObjectName(QString::number(4.0 / 3.0, 'g', std::numeric_limits<double>::max_digits10));
+    _5x4->setObjectName(QString::number(5.0 / 4.0, 'g', std::numeric_limits<double>::max_digits10));
+    _16x9->setObjectName(QString::number(16.0 / 9.0, 'g', std::numeric_limits<double>::max_digits10));
+    _3x2->setObjectName(QString::number(3.0 / 2.0, 'g', std::numeric_limits<double>::max_digits10));
+    _21x9->setObjectName(QString::number(21.0 / 9.0, 'g', std::numeric_limits<double>::max_digits10));
     sizeDep->setObjectName("sizeDep");
     custom->setObjectName(QStringLiteral("custom:%1").arg(QMPlay2Core.getSettings().getDouble("CustomAspectRatio", 1.0)));
     off->setObjectName("off");
