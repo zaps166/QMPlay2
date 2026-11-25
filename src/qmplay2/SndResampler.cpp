@@ -60,8 +60,7 @@ bool SndResampler::create(int srcSamplerate, int srcChannels, int dstSamplerate,
     if (m_srcSamplerate <= 0 || m_dstSamplerate <= 0 || m_srcChannels <= 0 || m_dstChannels <= 0)
         return false;
 
-    if (m_sndConvertCtx)
-        swr_close(m_sndConvertCtx);
+    swr_free(&m_sndConvertCtx);
 
 #if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(57, 28, 100)
     AVChannelLayout srcChnLayout, dstChnLayout;
