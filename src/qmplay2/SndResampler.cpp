@@ -6,6 +6,10 @@
 using namespace std;
 #ifdef QMPLAY2_RUBBERBAND
 using namespace RubberBand;
+#else
+namespace RubberBand {
+class RubberBandStretcher {};
+}
 #endif
 
 bool SndResampler::canKeepPitch()
