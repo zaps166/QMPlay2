@@ -5,6 +5,12 @@
 
 #include <QMPlay2Headers.hpp>
 
+#ifndef QMPLAY2_RUBBERBAND
+namespace RubberBand {
+class RubberBandStretcher;
+}
+#endif
+
 class QMPLAY2SHAREDLIB_EXPORT SndResampler
 {
 public:
@@ -31,9 +37,7 @@ public:
 
 private:
     SwrContext *m_sndConvertCtx = nullptr;
-#ifdef QMPLAY2_RUBBERBAND
     std::unique_ptr<RubberBand::RubberBandStretcher> m_rubberBandStretcher;
-#endif
     bool m_keepPitch = false;
     int m_srcSamplerate = 0;
     int m_srcChannels = 0;
