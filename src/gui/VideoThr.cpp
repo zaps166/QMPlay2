@@ -168,7 +168,7 @@ void VideoThr::setARatio(double aRatio, const AVRational &sar)
 void VideoThr::setZoom(double zoom)
 {
     updateSubs();
-    writer->modParam("Zoom", zoom);
+    writer->modParam("Zoom", round(zoom * 1e3) / 1e3);
 }
 
 void VideoThr::setSubtitlesScale(double subtitlesScale)
