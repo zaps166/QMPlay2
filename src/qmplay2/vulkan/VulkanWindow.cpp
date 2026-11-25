@@ -1465,12 +1465,19 @@ bool Window::ensureMipmaps(bool mustGenerateMipmaps)
 }
 bool Window::mustGenerateMipmaps()
 {
-    if (!m_hqScaleDown || m_sphericalView)
+    if (!m_hqScaleDown || m_sphericalView || !m.image)
         return false;
+
+    if (m.image->size() == vk::Extent2D(m_imgSize.width(), m_imgSize.height())
+            && m_scaledSize.width() * 2 == m_imgSize.width() && m_scaledSize.height() * 2 == m_imgSize.height())
+    {
+        // 2x downscale of an image doesn't need mipmaps
+        return false;
+    }
 
     const auto scaledSizeF = QSizeF(m_scaledSize);
     const auto imgSizeF = QSizeF(m_imgSize);
-    return (scaledSizeF.width() / imgSizeF.width() < 0.75 || scaledSizeF.height() / imgSizeF.height() < 0.75);
+    return (scaledSizeF.width() / imgSizeF.width() < 1.0 || scaledSizeF.height() / imgSizeF.height() < 1.0);
 }
 
 bool Window::ensureSupportedSampledImage(bool mustGenerateMipmaps)
